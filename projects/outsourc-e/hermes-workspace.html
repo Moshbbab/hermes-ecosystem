@@ -33,12 +33,14 @@
     <span>apr·2026</span>
     <span>93·repos</span>
     <span>hermes·v0.10.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
     <a href="/" class="active">map</a>
     <a href="/#curated-lists">lists</a>
     <a href="/guide/">handbook</a>
     <a href="/reports/state-of-hermes-april-2026">reports</a>
+    <a href="/#newsletter">newsletter</a>
     <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
   </nav>
   <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
@@ -59,11 +61,11 @@
   <p class="project-desc">Native web workspace for Hermes Agent — chat, terminal, memory, skills, inspector.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 2.0K</span>
+    <span class="stars">★ 2.1K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-21</span>
+    <span><span class="meta-label">updated</span>2026-04-22</span>
   </div>
 
   <div class="actions">
@@ -78,10 +80,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Workspace is a native web-based command center designed to manage and orchestrate Hermes Agents. It connects directly to the Hermes gateway via real-time SSE streaming to provide a unified interface for chat, terminal access, and tool call rendering. Users can browse and edit agent memory, manage over 2,000 skills, and monitor background jobs through a security-hardened dashboard. The workspace supports both a full-featured mode with the Hermes gateway and a portable mode for any OpenAI-compatible backend.</p>
+    <p class="summary-text">Hermes Workspace is a native web-based command center designed to provide a unified graphical interface for the Hermes Agent ecosystem. It integrates directly with the Hermes gateway via real-time SSE streaming to manage chat, terminal access, and tool call rendering. Users can browse and edit agent memory, manage over 2,000 skills, and orchestrate complex jobs through a security-hardened dashboard. The project follows a zero-fork architecture, allowing it to run on vanilla installations of the Nous Research hermes-agent without custom patches.</p>
     <ul class="summary-highlights">
-      <li>Real-time SSE streaming with integrated tool call rendering</li>
-      <li>Comprehensive management of agent memory and 2,000+ skills</li>
+      <li>Real-time SSE streaming for agent output and tool call rendering</li>
+      <li>Comprehensive management of agent memory, skills, and background jobs</li>
       <li>Security-hardened interface with execution approval prompts and auth middleware</li>
     </ul>
   </div>
@@ -187,21 +189,41 @@ cd hermes-workspace
 pnpm install
 cp .env.example .env
 
-# Point at your existing gateway. Local, Tailscale, LAN — whatever URL works.
+# Point at your existing Hermes services.
 echo &#39;HERMES_API_URL=http://127.0.0.1:8642&#39; &gt;&gt; .env
+# Zero-fork installs also need the separate dashboard API for config/sessions/skills/jobs.
+echo &#39;HERMES_DASHBOARD_URL=http://127.0.0.1:9119&#39; &gt;&gt; .env
 
 # If your gateway was started with API_SERVER_KEY (auth enabled), set the same value:
-# echo &#39;HERMES_API_TOKEN=&lt;your-key&gt;&#39; &gt;&gt; .env
+# echo &#39;HERMES_API_TOKEN=***&#39; &gt;&gt; .env
 
-pnpm dev                            # http://localhost:3000
+pnpm dev                            # http://localhost:3000 (override with PORT=4000 pnpm dev)
 </code></pre>
 <p>Requirements on the agent side:</p>
 <ul>
 <li>Gateway bound to an address the workspace can reach (typically <code>API_SERVER_HOST=0.0.0.0</code> + the port exposed).</li>
-<li><code>API_SERVER_ENABLED=true</code> in <code>~/.hermes/.env</code> (or the agent&#39;s env). Enhanced endpoints (<code>/api/sessions</code>, <code>/api/skills</code>, <code>/api/config</code>, <code>/api/jobs</code>) come online automatically when the API server is enabled.</li>
+<li><code>API_SERVER_ENABLED=true</code> in <code>~/.hermes/.env</code> (or the agent&#39;s env) so the gateway serves core APIs on <code>:8642</code>.</li>
+<li><code>hermes dashboard</code> running (default <code>http://127.0.0.1:9119</code>) for zero-fork installs. The dashboard provides config, sessions, skills, and jobs APIs.</li>
 <li>If <code>API_SERVER_KEY</code> is set, the workspace must pass the same value via <code>HERMES_API_TOKEN</code> — otherwise leave both unset.</li>
 </ul>
-<p>Verify: <code>curl http://127.0.0.1:8642/health</code> should return ok. Then start the workspace and complete onboarding — it&#39;ll detect the existing gateway and unlock the enhanced panes (sessions, memory, skills, dashboard) automatically.</p>
+<p>Verify both services before opening the workspace:</p>
+<ul>
+<li><code>curl http://127.0.0.1:8642/health</code> should return ok.</li>
+<li><code>curl http://127.0.0.1:9119/api/status</code> should return dashboard metadata.</li>
+</ul>
+<p>Then start the workspace and complete onboarding — it should detect the gateway + dashboard pair and unlock the enhanced panes automatically.</p>
+<h5>Running on a remote host (Tailscale / VPN / LAN)</h5>
+<p>If the workspace and its browser live on different machines — e.g. the workspace runs on a Pi/Mac/home server and you access it from your phone over Tailscale — point <code>HERMES_API_URL</code> at the <strong>reachable</strong> backend address, not <code>127.0.0.1</code>:</p>
+<pre><code class="language-bash"># On the server running the workspace + gateway:
+echo &#39;HERMES_API_URL=http://100.x.y.z:8642&#39; &gt;&gt; .env
+echo &#39;HERMES_DASHBOARD_URL=http://100.x.y.z:9119&#39; &gt;&gt; .env
+
+# Also tell the gateway to listen on all interfaces so Tailscale peers can reach it.
+# In ~/.hermes/.env (or wherever the gateway reads config):
+echo &#39;API_SERVER_HOST=0.0.0.0&#39; &gt;&gt; ~/.hermes/.env
+</code></pre>
+<p>Then restart the gateway, dashboard, and workspace. Hit the workspace from the remote device and the connection probe will use the Tailscale IP instead of localhost. Both <code>HERMES_API_URL</code> and <code>HERMES_DASHBOARD_URL</code> must be set to Tailscale/LAN-reachable URLs — setting only one will leave the other probing <code>127.0.0.1</code> and failing.</p>
+<p><strong>If you&#39;ve already started the workspace</strong>, you can update both URLs from <code>Settings → Connection</code> without restarting. The values are persisted to <code>~/.hermes/workspace-overrides.json</code> and take effect immediately (gateway capabilities are reprobed on save). Editing <code>.env</code> still works for pre-start config and for CI/containers.</p>
 <hr>
 <h4>Manual install</h4>
 <p>Hermes Workspace works with any OpenAI-compatible backend. If your backend also exposes Hermes gateway APIs, enhanced features like sessions, memory, skills, and jobs unlock automatically.</p>
@@ -310,11 +332,15 @@ custom_providers:
 <p><strong>2. Enable the API server in <code>~/.hermes/.env</code>:</strong></p>
 <pre><code class="language-env">API_SERVER_ENABLED=true
 </code></pre>
-<p><strong>3. Start the gateway and workspace:</strong></p>
-<pre><code class="language-bash">hermes gateway run          # Starts on :8642
-HERMES_API_URL=http://127.0.0.1:8642 pnpm dev
+<p><strong>3. Start the gateway, dashboard, and workspace:</strong></p>
+<pre><code class="language-bash">hermes gateway run          # Starts core APIs on :8642
+hermes dashboard            # Starts dashboard APIs on :9119
+HERMES_API_URL=http://127.0.0.1:8642 \
+HERMES_DASHBOARD_URL=http://127.0.0.1:9119 \
+pnpm dev
 </code></pre>
-<p>All workspace features unlock automatically — sessions persist, memory saves across chats, skills are available, and the dashboard shows real usage data.</p>
+<p>For authenticated gateways, also set <code>HERMES_API_TOKEN</code> in the workspace environment to the same value as <code>API_SERVER_KEY</code>.</p>
+<p>All workspace features unlock automatically once both services are reachable — sessions persist, memory saves across chats, skills are available, and the dashboard shows real usage data.</p>
 <blockquote>
 <p><strong>Works with any OpenAI-compatible server</strong> — Atomic Chat, Ollama, LM Studio, vLLM, llama.cpp, LocalAI, etc. Just change the <code>base_url</code> and <code>model</code> in the config above.</p>
 </blockquote>
@@ -690,35 +716,35 @@ docker compose up --build
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 342</div>
+        <div class="stars">★ 354</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
-        <div class="stars">★ 91</div>
+        <div class="stars">★ 92</div>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 51</div>
+        <div class="stars">★ 52</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 450</div>
+        <div class="stars">★ 454</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
-        <div class="stars">★ 526</div>
+        <div class="stars">★ 544</div>
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/nesquena/hermes-webui">
-        <div class="stars">★ 3.2K</div>
+        <div class="stars">★ 3.4K</div>
         <div class="name"><span class="org">nesquena /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
-        <div class="stars">★ 32</div>
+        <div class="stars">★ 33</div>
         <div class="name"><span class="org">pyrate-llama /</span> hermes-ui</div>
       </a>
       <a class="related-row" href="/projects/clawvader-tech/hermes-telegram-miniapp">
-        <div class="stars">★ 205</div>
+        <div class="stars">★ 207</div>
         <div class="name"><span class="org">clawvader-tech /</span> hermes-telegram-miniapp</div>
       </a>
     </div>
@@ -729,11 +755,12 @@ docker compose up --build
 </article>
 
 <footer class="page-footer">
-  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a></div>
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
   <div>v2 · 2026.04</div>
 </footer>
 
 <script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script>(function(){fetch('/api/stars').then(function(r){return r.ok&&r.json()}).then(function(d){var el=document.getElementById('meta-atlas');if(el&&d&&d.atlas&&d.atlas.stars)el.textContent='★ '+d.atlas.stars+' · star this repo'}).catch(function(){});})();</script>
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
         data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>

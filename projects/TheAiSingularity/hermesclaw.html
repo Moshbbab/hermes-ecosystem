@@ -33,12 +33,14 @@
     <span>apr·2026</span>
     <span>93·repos</span>
     <span>hermes·v0.10.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
     <a href="/" class="active">map</a>
     <a href="/#curated-lists">lists</a>
     <a href="/guide/">handbook</a>
     <a href="/reports/state-of-hermes-april-2026">reports</a>
+    <a href="/#newsletter">newsletter</a>
     <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
   </nav>
   <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
@@ -63,7 +65,7 @@
     <span><span class="meta-label">lang</span>Shell</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-21</span>
+    <span><span class="meta-label">updated</span>2026-04-22</span>
   </div>
 
   <div class="actions">
@@ -78,11 +80,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">HermesClaw is a deployment framework that runs the Hermes Agent within a hardware-enforced sandbox using NVIDIA OpenShell. It secures agent operations by intercepting system calls at the kernel level to block unauthorized network egress, filesystem writes, and dangerous syscalls. The system features three security policy presets—strict, gateway, and permissive—allowing users to toggle access to external services like Telegram, Discord, and web search. It supports over 40 built-in tools, including persistent memory, self-improving skills via DSPy, and multi-agent delegation.</p>
+    <p class="summary-text">HermesClaw is a deployment framework that runs the Hermes Agent within NVIDIA’s OpenShell sandbox to provide hardware-level security enforcement. It utilizes kernel-level mechanisms like Landlock LSM and Seccomp BPF to restrict network egress, filesystem access, and system calls. The environment supports persistent memory, self-improving skills, and multi-agent delegation while maintaining strict isolation from the host OS. Users can toggle between security policy presets to enable or disable external integrations like Telegram, Discord, and web searching.</p>
     <ul class="summary-highlights">
-      <li>Hardware-level enforcement of network, filesystem, and process boundaries.</li>
-      <li>Three security policy presets to control external service access.</li>
-      <li>Supports 40+ built-in tools including MCP integration and persistent memory.</li>
+      <li>Hardware-enforced sandboxing via NVIDIA OpenShell and kernel-level syscall blocking</li>
+      <li>Pre-configured security policies ranging from strict inference to permissive access</li>
+      <li>Integrated library of 40+ tools including terminal, vision, and messaging</li>
     </ul>
   </div>
 </section>
@@ -98,7 +100,7 @@
   <a href="https://github.com/TheAiSingularity/hermesclaw/actions/workflows/ci.yml"><img src="https://github.com/TheAiSingularity/hermesclaw/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/TheAiSingularity/hermesclaw/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/TheAiSingularity/hermesclaw/blob/main/CONTRIBUTING.md"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg" alt="Contributions welcome"></a>
-  <a href="https://github.com/TheAiSingularity/hermesclaw/blob/main/CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.3.0-orange.svg" alt="Version"></a>
+  <a href="https://github.com/TheAiSingularity/hermesclaw/blob/main/CHANGELOG.md"><img src="https://img.shields.io/badge/version-0.3.4-orange.svg" alt="Version"></a>
 </p>
 
 <p><strong>Hermes Agent (NousResearch) running inside NVIDIA OpenShell.</strong></p>
@@ -108,8 +110,9 @@
 <ul>
 <li><a href="#architecture">Architecture</a></li>
 <li><a href="#quick-start">Quick Start</a><ul>
-<li><a href="#path-1--docker-no-nvidia-hardware-required">Path 1 — Docker (no NVIDIA hardware)</a></li>
-<li><a href="#path-2--openshell-sandbox-full-hardware-enforcement">Path 2 — OpenShell Sandbox</a></li>
+<li><a href="#recommended--one-command-install">Recommended — one-command install</a></li>
+<li><a href="#build-from-source-if-you-want-to-modify-hermesclaw-itself">Build from source</a></li>
+<li><a href="#openshell-sandbox-full-hardware-enforcement">OpenShell sandbox (full hardware enforcement)</a></li>
 </ul>
 </li>
 <li><a href="#what-openshell-enforces">What OpenShell Enforces</a></li>
@@ -134,60 +137,49 @@
 <p>OpenShell intercepts every call to <code>inference.local</code> inside the sandbox and routes it to the configured backend. Hermes never knows it&#39;s sandboxed.</p>
 <hr>
 <h3>Quick Start</h3>
-<h4>Path 1 — Docker (no NVIDIA hardware required)</h4>
-<p>All Hermes features work. No kernel-level sandbox enforcement — Docker isolation only.</p>
-<p><strong>Step 1 — Clone and configure</strong></p>
-<pre><code class="language-bash">git clone https://github.com/TheAiSingularity/hermesclaw
-cd hermesclaw
-cp .env.example .env
+<h4>Recommended — one-command install</h4>
+<p>Installs the prebuilt image (multi-arch, <code>linux/amd64</code> + <code>linux/arm64</code>) from GitHub Container Registry, clones the repo to <code>~/.hermesclaw</code>, symlinks the <code>hermesclaw</code> CLI to <code>/usr/local/bin</code>, and prints your next steps:</p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/TheAiSingularity/hermesclaw/main/scripts/install.sh | bash
 </code></pre>
-<p>Edit <code>.env</code> and set <code>MODEL_FILE</code> to your model filename. Download a model into <code>models/</code>:</p>
-<pre><code class="language-bash"># Example — Qwen3 4B (2.5 GB):
-curl -L -o models/Qwen3-4B-Q4_K_M.gguf \
+<p>Prerequisites: <code>docker</code>, <code>git</code>, <code>curl</code>. Docker Desktop (macOS / Windows) or <code>dockerd</code> (Linux) must be running.</p>
+<p>After <code>install.sh</code> completes, three manual steps remain (model weights, llama-server, start the container):</p>
+<pre><code class="language-bash"># 1. Download a GGUF model (example: Qwen3 4B, ~2.5 GB)
+curl -L -o ~/.hermesclaw/models/Qwen3-4B-Q4_K_M.gguf \
   https://huggingface.co/bartowski/Qwen3-4B-GGUF/resolve/main/Qwen3-4B-Q4_K_M.gguf
-</code></pre>
-<p><strong>Step 2 — Build the image</strong></p>
-<pre><code class="language-bash">./scripts/setup.sh
-</code></pre>
-<p><strong>Step 3 — Start llama-server on your host</strong> (Hermes connects to it via <code>host.docker.internal</code>)</p>
-<p>macOS:</p>
-<pre><code class="language-bash">brew install llama.cpp
-llama-server -m models/your-model.gguf --port 8080 --ctx-size 32768 -ngl 99 --log-disable
-</code></pre>
-<p>Linux (<a href="https://github.com/ggerganov/llama.cpp#build">build instructions</a>):</p>
-<pre><code class="language-bash">llama-server -m models/your-model.gguf --port 8080 --ctx-size 32768 -ngl 99
+
+# 2. Start llama-server on the host  (macOS shown; Linux: build llama.cpp from source)
+brew install llama.cpp
+llama-server -m ~/.hermesclaw/models/Qwen3-4B-Q4_K_M.gguf --port 8080 --ctx-size 32768 -ngl 99
+
+# 3. Start HermesClaw
+cd ~/.hermesclaw &amp;&amp; docker compose up -d
+hermesclaw chat &quot;hello&quot;
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> <code>--ctx-size 32768</code> is required. Hermes&#39;s system prompt alone is ~11k tokens — lower values cause context overflow on every query.</p>
+<p><strong>Why <code>--ctx-size 32768</code>?</strong> Hermes&#39;s system prompt alone is ~11k tokens; lower context windows cause overflow on every query.</p>
 </blockquote>
-<p><strong>Step 4 — Start Hermes</strong></p>
-<pre><code class="language-bash">docker compose up -d
-docker exec -it hermesclaw hermes chat -q &quot;hello&quot;
+<hr>
+<h4>Build from source (if you want to modify HermesClaw itself)</h4>
+<pre><code class="language-bash">git clone https://github.com/TheAiSingularity/hermesclaw
+cd hermesclaw
+cp .env.example .env                 # edit MODEL_FILE and any messaging tokens
+./scripts/setup.sh                   # builds hermesclaw:latest locally
+# ... then steps 2 and 3 above
 </code></pre>
 <hr>
-<h4>Path 2 — OpenShell Sandbox (full hardware enforcement)</h4>
+<h4>OpenShell sandbox (full hardware enforcement)</h4>
 <p>Requires Linux + NVIDIA GPU + OpenShell installed.</p>
 <pre><code class="language-bash"># Install OpenShell (requires NVIDIA account)
 curl -fsSL https://www.nvidia.com/openshell.sh | bash
 
-git clone https://github.com/TheAiSingularity/hermesclaw
-cd hermesclaw
-
-# Build image + register OpenShell policy and profile
-./scripts/setup.sh
-
-# Start llama-server on the host
-llama-server -m models/your-model.gguf --port 8080 --ctx-size 32768 -ngl 99
-
-# Start Hermes inside the sandbox
-./scripts/start.sh
+# Install HermesClaw via the one-liner above, then:
+cd ~/.hermesclaw
+llama-server -m models/your-model.gguf --port 8080 --ctx-size 32768 -ngl 99 &amp;
+hermesclaw start                     # default: strict policy
+hermesclaw start --gpu --policy gateway  # GPU + messaging enabled
+hermesclaw chat &quot;hello&quot;
 </code></pre>
-<p>Or use the <code>hermesclaw</code> CLI:</p>
-<pre><code class="language-bash">./scripts/hermesclaw onboard       # check all prerequisites
-./scripts/hermesclaw start         # start with default (strict) policy
-./scripts/hermesclaw start --gpu --policy gateway  # GPU + messaging enabled
-./scripts/hermesclaw chat &quot;hello&quot;  # one-shot message
-</code></pre>
+<p>Full CLI reference: <a href="#hermesclaw-cli">hermesclaw CLI</a>. Diagnostics: <code>hermesclaw doctor</code>.</p>
 <hr>
 <h3>What OpenShell Enforces</h3>
 <table>
@@ -587,7 +579,7 @@ shellcheck scripts/hermesclaw  # lint before submitting
         <div class="name"><span class="org">numtide /</span> llm-agents.nix</div>
       </a>
       <a class="related-row" href="/projects/0xrsydn/nix-hermes-agent">
-        <div class="stars">★ 13</div>
+        <div class="stars">★ 14</div>
         <div class="name"><span class="org">0xrsydn /</span> nix-hermes-agent</div>
       </a>
       <a class="related-row" href="/projects/rookiemann/portable-hermes-agent">
@@ -599,7 +591,7 @@ shellcheck scripts/hermesclaw  # lint before submitting
         <div class="name"><span class="org">xmbshwll /</span> hermes-agent-docker</div>
       </a>
       <a class="related-row" href="/projects/JackTheGit/hermes-autonomous-server">
-        <div class="stars">★ 5</div>
+        <div class="stars">★ 6</div>
         <div class="name"><span class="org">JackTheGit /</span> hermes-autonomous-server</div>
       </a>
       <a class="related-row" href="/projects/ellickjohnson/portainer-stack-hermes">
@@ -614,11 +606,12 @@ shellcheck scripts/hermesclaw  # lint before submitting
 </article>
 
 <footer class="page-footer">
-  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a></div>
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
   <div>v2 · 2026.04</div>
 </footer>
 
 <script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script>(function(){fetch('/api/stars').then(function(r){return r.ok&&r.json()}).then(function(d){var el=document.getElementById('meta-atlas');if(el&&d&&d.atlas&&d.atlas.stars)el.textContent='★ '+d.atlas.stars+' · star this repo'}).catch(function(){});})();</script>
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
         data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
