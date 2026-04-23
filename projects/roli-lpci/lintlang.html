@@ -65,7 +65,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-04-20</span>
+    <span><span class="meta-label">updated</span>2026-04-23</span>
   </div>
 
   <div class="actions">
@@ -80,11 +80,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">lintlang is a static analysis tool designed to identify language-level failures in AI agent configurations, system prompts, and tool definitions. It employs seven structural detectors to catch issues like ambiguous tool descriptions and missing termination conditions without making any LLM calls. By running locally with zero latency, the tool prevents common runtime errors such as infinite loops and incorrect tool selection. It integrates into CI/CD pipelines to provide quality gates for YAML, JSON, and Markdown files before deployment.</p>
+    <p class="summary-text">lintlang is a static analysis tool designed to identify language-level failures in AI agent configurations, system prompts, and tool definitions. It employs seven structural detectors to catch issues like ambiguous tool descriptions and missing termination conditions without making any LLM calls. By running locally or in CI pipelines, the tool provides immediate feedback and concrete fix suggestions to prevent agent loops and incorrect tool selection. It supports multiple file formats including YAML, JSON, and Markdown, ensuring prompt quality before runtime testing.</p>
     <ul class="summary-highlights">
-      <li>Detects structural language bugs without using LLM API calls.</li>
-      <li>Identifies seven specific failure modes including tool ambiguity and loops.</li>
-      <li>Provides automated quality gates for CI/CD pipeline integration.</li>
+      <li>Identifies structural language bugs using seven specialized static detectors.</li>
+      <li>Operates with zero LLM calls, zero latency, and no API keys.</li>
+      <li>Provides automated quality gating for CI/CD pipelines with verdict-based exits.</li>
     </ul>
   </div>
 </section>
@@ -367,20 +367,42 @@ cd lintlang
 pip install -e &quot;.[dev]&quot;
 pytest
 </code></pre>
-<h3>Hermes Labs Ecosystem</h3>
-<p>lintlang is part of the <a href="https://hermes-labs.ai">Hermes Labs</a> open-source suite:</p>
-<ul>
-<li><a href="https://github.com/roli-lpci/little-canary"><strong>little-canary</strong></a> — Prompt injection detection</li>
-<li><a href="https://github.com/roli-lpci/zer0dex"><strong>zer0dex</strong></a> — Dual-layer memory for AI agents</li>
-<li><a href="https://github.com/roli-lpci/forgetted"><strong>forgetted</strong></a> — Selective memory governance</li>
-<li><a href="https://github.com/roli-lpci/zer0lint"><strong>zer0lint</strong></a> — mem0 extraction diagnostics</li>
-<li><a href="https://github.com/roli-lpci/suy-sideguy"><strong>suy-sideguy</strong></a> — Autonomous agent watchdog</li>
-<li><a href="https://github.com/roli-lpci/quickthink"><strong>quickthink</strong></a> — Planning scaffolding for local LLMs</li>
-</ul>
-<hr>
-<p>If lintlang saves you time, please <a href="https://github.com/roli-lpci/lintlang">star the repo</a> — it helps others find it.</p>
 <h3>License</h3>
 <p><a href="LICENSE">Apache 2.0</a></p>
+<hr>
+<h3>About Hermes Labs</h3>
+<p><a href="https://hermes-labs.ai">Hermes Labs</a> builds AI audit infrastructure for enterprise AI systems — EU AI Act readiness, ISO 42001 evidence bundles, continuous compliance monitoring, agent-level risk testing. We work with teams shipping AI into regulated environments.</p>
+<p><strong>Our OSS philosophy — read this if you&#39;re deciding whether to depend on us:</strong></p>
+<ul>
+<li><strong>Everything we release is free, forever.</strong> MIT or Apache-2.0. No &quot;open core,&quot; no SaaS tier upsell, no paid version with the features you actually need. You can run this repo commercially, without talking to us.</li>
+<li><strong>We open-source our own infrastructure.</strong> The tools we release are what Hermes Labs uses internally — we don&#39;t publish demo code, we publish production code.</li>
+<li><strong>We sell audit work, not licenses.</strong> If you want an ANNEX-IV pack, an ISO 42001 evidence bundle, gap analysis against the EU AI Act, or agent-level red-teaming delivered as a report, that&#39;s at <a href="https://hermes-labs.ai">hermes-labs.ai</a>. If you just want the code to run it yourself, it&#39;s right here.</li>
+</ul>
+<p><strong>The Hermes Labs OSS audit stack</strong> (public, production-grade, no SaaS):</p>
+<p><strong>Static audit</strong> (before deployment)</p>
+<ul>
+<li><a href="https://github.com/hermes-labs-ai/rule-audit"><strong>rule-audit</strong></a> — Static prompt audit — contradictions, coverage gaps, priority ambiguities. <code>pip install rule-audit</code></li>
+<li><a href="https://github.com/hermes-labs-ai/scaffold-lint"><strong>scaffold-lint</strong></a> — Scaffold budget + technique stacking (flags <code>SCAFFOLD_TOO_LONG</code>, <code>SCAFFOLD_STACKING</code>). <code>pip install scaffold-lint</code></li>
+<li><a href="https://github.com/hermes-labs-ai/intent-verify"><strong>intent-verify</strong></a> — Repo intent verification + spec-drift checks</li>
+</ul>
+<p><strong>Runtime observability</strong> (while the agent runs)</p>
+<ul>
+<li><a href="https://github.com/hermes-labs-ai/little-canary"><strong>little-canary</strong></a> — Prompt injection detection via sacrificial canary-model probes</li>
+<li><a href="https://github.com/hermes-labs-ai/suy-sideguy"><strong>suy-sideguy</strong></a> — Runtime policy guard — user-space enforcement + forensic reports</li>
+<li><a href="https://github.com/hermes-labs-ai/colony-probe"><strong>colony-probe</strong></a> — Prompt confidentiality audit — detects system-prompt reconstruction</li>
+</ul>
+<p><strong>Regression &amp; scoring</strong> (to prove what changed)</p>
+<ul>
+<li><a href="https://github.com/hermes-labs-ai/hermes-jailbench"><strong>hermes-jailbench</strong></a> — Jailbreak regression benchmark. <code>pip install hermes-jailbench</code></li>
+<li><a href="https://github.com/hermes-labs-ai/agent-convergence-scorer"><strong>agent-convergence-scorer</strong></a> — Score how similar N agent outputs are. <code>pip install agent-convergence-scorer</code></li>
+</ul>
+<p><strong>Supporting infra</strong></p>
+<ul>
+<li><a href="https://github.com/hermes-labs-ai/claude-router"><strong>claude-router</strong></a> · <a href="https://github.com/hermes-labs-ai/zer0dex"><strong>zer0dex</strong></a> · <a href="https://github.com/hermes-labs-ai/forgetted"><strong>forgetted</strong></a> · <a href="https://github.com/hermes-labs-ai/quick-gate-python"><strong>quick-gate-python</strong></a> · <a href="https://github.com/hermes-labs-ai/quick-gate-js"><strong>quick-gate-js</strong></a> · <a href="https://github.com/hermes-labs-ai/repo-audit"><strong>repo-audit</strong></a></li>
+</ul>
+<p>Natural pairing: lintlang catches <em>structural</em> problems in agent configs (H1-H7, HERM scoring). rule-audit catches <em>logical</em> contradictions in the rules inside. scaffold-lint catches <em>scaffold-level</em> bloat. Run all three in CI for full static coverage.</p>
+<hr>
+<p>If lintlang saves you time, please <a href="https://github.com/hermes-labs-ai/lintlang">star the repo</a> — it helps others find it.</p>
 
   </section>
 </details>
@@ -397,7 +419,7 @@ pytest
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 253</div>
+        <div class="stars">★ 255</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">

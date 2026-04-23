@@ -61,11 +61,11 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 262</span>
+    <span class="stars">★ 272</span>
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-04-21</span>
+    <span><span class="meta-label">updated</span>2026-04-23</span>
   </div>
 
   <div class="actions">
@@ -80,11 +80,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy summarization with a hierarchical Directed Acyclic Graph (DAG) engine that persists every message in an immutable-first SQLite store. When the context window fills, the system compacts history into multi-level summaries while providing the agent with specialized tools like lcm_grep and lcm_expand to retrieve original details. This approach ensures the agent maintains a direct, autonomous recall path for compacted data without relying on external cross-session retrieval.</p>
+    <p class="summary-text">Hermes-LCM is a Lossless Context Management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that persists every message in an immutable-first SQLite store. When context limits are reached, the engine uses three levels of escalation—from detailed summaries to deterministic truncation—while providing the agent with specialized tools to retrieve original details. This architecture allows agents to maintain a bounded active context window without losing the ability to drill back into compacted history through structured retrieval.</p>
     <ul class="summary-highlights">
-      <li>Hierarchical DAG-based compaction with three-level escalation logic</li>
-      <li>Immutable-first message persistence using profile-scoped SQLite databases</li>
-      <li>Agent tools for structured retrieval and expansion of compacted history</li>
+      <li>Hierarchical DAG summaries with three-level escalation for context compaction</li>
+      <li>Immutable-first SQLite storage ensures no message data is ever deleted</li>
+      <li>Agent tools for grep, description, and expansion of compacted history</li>
     </ul>
   </div>
 </section>
@@ -229,6 +229,26 @@ Provider Plugins:
 <li><code>lcm_status</code></li>
 <li><code>lcm_doctor</code></li>
 </ul>
+<h3>Troubleshooting signals</h3>
+<h4><code>hermes plugins</code> shows <code>lcm (not found)</code> but LCM tools still exist</h4>
+<p>If all of these are true:</p>
+<ul>
+<li><code>plugins.enabled</code> contains <code>hermes-lcm</code></li>
+<li><code>context.engine: lcm</code> is set</li>
+<li>the runtime exposes LCM tools (or <code>/lcm</code> if enabled)</li>
+</ul>
+<p>then LCM itself is loaded.</p>
+<p>In that situation, a <code>Context Engine: lcm (not found)</code> line in <code>hermes plugins</code> is a <strong>Hermes host discovery/UI issue</strong>, not proof that <code>hermes-lcm</code> failed to load.</p>
+<p>Treat it as a host-side mismatch between the picker/status surface and the live runtime. The fix belongs in Hermes host discovery/UI, not in LCM storage or compaction logic.</p>
+<h4><code>/lcm status</code> shows unbound / zero-looking session details right after restart</h4>
+<p>Right after a fresh Hermes restart, <code>/lcm status</code> may show things like:</p>
+<ul>
+<li><code>session_id: (unbound)</code></li>
+<li><code>session_platform: (unbound)</code></li>
+<li><code>threshold_tokens: (uninitialized)</code></li>
+</ul>
+<p>That means the current Hermes process has not yet bound LCM to a live session. It does <strong>not</strong> mean the database is empty or that LCM lost prior history.</p>
+<p>After restart, send one normal Hermes message first, then re-run <code>lcm_status</code> or <code>/lcm status</code> if you want live per-session fields such as <code>dag_nodes</code> and <code>store_messages</code>.</p>
 <h3>Legacy install path</h3>
 <p>Hermes still supports repo-shipped context engines under <code>plugins/context_engine/&lt;name&gt;/</code>, and older <code>hermes-lcm</code> installs may still live there.</p>
 <p>That path is now a compatibility fallback, not the preferred install model. The standalone general-plugin path above is canonical because it survives Hermes updates cleanly.</p>
@@ -365,6 +385,27 @@ context:
 </tr>
 </tbody></table>
 <p>The point-8 compaction knobs are intentionally opt-in. <code>cache_friendly_*</code> is a plugin-local prompt-stability heuristic, not a claim that Hermes currently passes true prompt-cache metrics into <code>hermes-lcm</code>.</p>
+<h4>Threshold ownership when <code>context.engine: lcm</code> is active</h4>
+<p>This is the easy place to get crossed wires.</p>
+<p>When Hermes is configured with:</p>
+<pre><code class="language-yaml">context:
+  engine: lcm
+</code></pre>
+<p><code>hermes-lcm</code> becomes the active context engine for compaction decisions.</p>
+<p>That means:</p>
+<ul>
+<li><code>LCM_CONTEXT_THRESHOLD</code> is the threshold that LCM uses to decide when to compact</li>
+<li>Hermes core <code>compression.threshold</code> belongs to the built-in <code>ContextCompressor</code>, not to LCM</li>
+<li>Hermes core <code>compression.enabled</code> is still the global on/off gate for whether compaction is allowed at all, so leave it enabled when using LCM</li>
+</ul>
+<p>Practical rule:</p>
+<ul>
+<li>if you want LCM to compact earlier or later, tune <code>LCM_CONTEXT_THRESHOLD</code></li>
+<li>do <strong>not</strong> expect changing Hermes <code>compression.threshold</code> to be the normal way to tune LCM behavior</li>
+</ul>
+<p>Important operator note:</p>
+<p>Some Hermes host builds still print the host-side compression percentage in startup/status surfaces even when LCM is the active engine. If that printed percentage disagrees with LCM, trust live LCM runtime status (<code>lcm_status</code> or <code>/lcm status</code>) after a normal message has initialized the session, not the startup banner text.</p>
+<p>If raising Hermes <code>compression.threshold</code> seems to change LCM behavior materially, that usually points to host-version confusion, a misleading host status surface, or another Hermes-side integration issue — not to the intended LCM threshold contract.</p>
 <h4>Large tool-output handling</h4>
 <p><code>hermes-lcm</code> now has a three-step opt-in path for oversized tool results:</p>
 <ol>
@@ -557,11 +598,11 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 10.2K</div>
+        <div class="stars">★ 10.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 901</div>
+        <div class="stars">★ 903</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
@@ -581,7 +622,7 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 10.3K</div>
+        <div class="stars">★ 10.6K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

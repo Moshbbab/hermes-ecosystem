@@ -61,11 +61,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 3.4K</span>
+    <span class="stars">★ 3.6K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-22</span>
+    <span><span class="meta-label">updated</span>2026-04-23</span>
   </div>
 
   <div class="actions">
@@ -80,11 +80,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed browser interface for the Hermes Agent, providing a graphical alternative to the command-line environment. It utilizes a three-panel layout built with Python and vanilla JavaScript to manage chat sessions, workspace files, and agent controls without requiring complex build steps or frameworks. The interface maintains full parity with the CLI, allowing users to manage persistent memory, self-improving skills, and scheduled cron jobs. It also features a circular context ring for real-time token usage monitoring and a dedicated control center for session management.</p>
+    <p class="summary-text">Hermes WebUI provides a lightweight, browser-based interface for the Hermes Agent, offering a visual alternative to the standard command-line environment. Built with Python and vanilla JavaScript, the application maintains full parity with the CLI without requiring complex build steps or frameworks. The interface features a three-panel layout for managing chat sessions, workspace files, and agent controls like model selection and token usage monitoring. It allows users to interact with their agent's persistent memory, self-improving skills, and scheduled jobs through a secure web or mobile-friendly portal.</p>
     <ul class="summary-highlights">
-      <li>Three-panel layout for chat, navigation, and workspace file browsing</li>
       <li>Full feature parity with the Hermes Agent CLI experience</li>
-      <li>Zero-framework architecture using only Python and vanilla JavaScript</li>
+      <li>Three-panel layout for chat, file browsing, and session management</li>
+      <li>Zero-build architecture using Python and vanilla JavaScript</li>
     </ul>
   </div>
 </section>
@@ -307,6 +307,14 @@ in a separate container:</p>
 <li><strong><code>hermes-agent-src</code></strong> — the agent&#39;s source code, mounted into the WebUI
 container so it can install the agent&#39;s Python dependencies at startup</li>
 </ul>
+<blockquote>
+<p><strong>Volume type:</strong> The compose files use named Docker volumes by default.
+If you prefer bind mounts to an existing directory (e.g. for sharing state
+with an agent container you already run), both containers must mount the
+same host path — the agent writes to <code>/root/.hermes</code>, the WebUI reads from
+<code>/home/hermeswebui/.hermes</code>. See <code>docker-compose.two-container.yml</code> for
+a bind-mount example.</p>
+</blockquote>
 <p>The WebUI&#39;s init script automatically installs hermes-agent and all its
 dependencies (openai, anthropic, etc.) into its own Python environment on
 first boot. Subsequent restarts reuse the installed packages.</p>
@@ -414,6 +422,7 @@ the one-time ownership fix:</p>
 <pre><code class="language-bash">export HERMES_WEBUI_AGENT_DIR=/path/to/hermes-agent
 export HERMES_WEBUI_PYTHON=/path/to/python
 export HERMES_WEBUI_PORT=9000
+export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disabled by default)
 ./start.sh
 </code></pre>
 <p>Or inline:</p>
@@ -540,7 +549,7 @@ pytest tests/ -v --timeout=60
 <pre><code class="language-bash">/path/to/hermes-agent/venv/bin/python -m pytest tests/ -v
 </code></pre>
 <p>Tests run against an isolated server on port 8788 with a separate state directory.
-Production data and real cron jobs are never touched. Current count: <strong>1858 tests</strong>
+Production data and real cron jobs are never touched. Current count: <strong>1898 tests</strong>
 across 53 test files.</p>
 <hr>
 <h3>Features</h3>
@@ -804,7 +813,7 @@ Added a streaming token buffer and post-run message scrub to <code>streaming.py<
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 354</div>
+        <div class="stars">★ 365</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -816,11 +825,11 @@ Added a streaming token buffer and post-run message scrub to <code>streaming.py<
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 454</div>
+        <div class="stars">★ 458</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
-        <div class="stars">★ 544</div>
+        <div class="stars">★ 576</div>
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
