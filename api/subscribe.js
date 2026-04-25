@@ -1,7 +1,13 @@
 const PUBLICATION_ID = "pub_cd668a5c-262b-4dd2-882b-6fb542d1a85a";
 const BEEHIIV_URL = `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/subscriptions`;
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Local part: letters/digits + the punctuation that actually appears in
+// real-world addresses (`. _ - + '`). RFC 5322 technically allows more
+// (`!#$%&*/=?^`{|}~`) but those are vanishingly rare and skipping them
+// blocks obvious garbage. Domain labels: letters/digits/hyphens; TLD:
+// ≥2 letters (rejects `.x` and `.123`). Beehiiv does its own validation
+// downstream — this just avoids wasted API calls on clearly bad input.
+const EMAIL_RE = /^[a-zA-Z0-9._'+\-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
 
 function json(res, status, body) {
   res.status(status).setHeader("Content-Type", "application/json");
