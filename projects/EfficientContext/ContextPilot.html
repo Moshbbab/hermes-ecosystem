@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContextPilot — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
+<meta name="description" content="Accelerating Long Context LLM Inference with Accuracy-Preserving Context Optimization in SGLang, vLLM, llama.cpp, OpenClaw, RAG, and Agentic AI.">
+<link rel="canonical" href="https://hermesatlas.com/projects/EfficientContext/ContextPilot">
+<meta property="og:title" content="ContextPilot — Hermes Atlas">
+<meta property="og:description" content="Accelerating Long Context LLM Inference with Accuracy-Preserving Context Optimization in SGLang, vLLM, llama.cpp, OpenClaw, RAG, and Agentic AI.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/EfficientContext/ContextPilot">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=ContextPilot&amp;subtitle=Accelerating+Long+Context+LLM+Inference+with+Accuracy-Preserving+Context+Optimization+in+SGLang%2C+vLLM%2C+llama.cpp%2C+OpenClaw%2C+RAG%2C+and+Agentic+AI.&amp;kind=project+%C2%B7+memory">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ContextPilot — Hermes Atlas">
+<meta name="twitter:description" content="Accelerating Long Context LLM Inference with Accuracy-Preserving Context Optimization in SGLang, vLLM, llama.cpp, OpenClaw, RAG, and Agentic AI.">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ContextPilot&amp;subtitle=Accelerating+Long+Context+LLM+Inference+with+Accuracy-Preserving+Context+Optimization+in+SGLang%2C+vLLM%2C+llama.cpp%2C+OpenClaw%2C+RAG%2C+and+Agentic+AI.&amp;kind=project+%C2%B7+memory">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "memory &amp; context", "item": "https://hermesatlas.com/lists/best-memory-providers" },
+    { "@type": "ListItem", "position": 3, "name": "contextpilot" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/EfficientContext/ContextPilot#software",
+  "name": "ContextPilot",
+  "description": "ContextPilot is an inference optimization layer designed to accelerate long-context LLM workloads by maximizing KV cache reuse. It maintains a context index to reorder and deduplicate overlapping context blocks, aligning shared content into common prefixes to trigger cache hits. This approach reduces redundant computation and token usage in RAG, agentic workflows, and multi-turn conversations. The tool integrates as a drop-in solution for vLLM, SGLang, llama.cpp, and major cloud APIs without com",
+  "url": "https://hermesatlas.com/projects/EfficientContext/ContextPilot",
+  "codeRepository": "https://github.com/EfficientContext/ContextPilot",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://spdx.org/licenses/Apache-2.0.html",
+  "author": {
+    "@type": "Organization",
+    "name": "EfficientContext",
+    "url": "https://github.com/EfficientContext"
+  },
+  "dateModified": "2026-04-21T15:44:58.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 82
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23d49a4f'/><text x='16' y='23' font-family='Space Grotesk,sans-serif' font-size='22' font-weight='700' fill='%230e0d0b' text-anchor='middle'>H</text></svg>">
+<script>(function(){try{var s=localStorage.getItem('theme');var o=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;var t=s||(o?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span>apr·2026</span>
+    <span id="meta-count">111·repos</span>
+    <span>hermes·v0.10.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/#curated-lists">lists</a>
+    <a href="/guide/">handbook</a>
+    <a href="/reports/state-of-hermes-april-2026">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-light">light</span><span class="tt-sep">/</span><span class="tt-dark">dark</span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/lists/best-memory-providers">memory &amp; context</a><span class="sep">/</span>contextpilot
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">EfficientContext</span><span class="slash">/</span>ContextPilot
+  </h1>
+  <p class="project-desc">Accelerating Long Context LLM Inference with Accuracy-Preserving Context Optimization in SGLang, vLLM, llama.cpp, OpenClaw, RAG, and Agentic AI.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 82</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    <span><span class="meta-label">license</span>Apache-2.0</span>
+    
+    <span><span class="meta-label">updated</span>2026-04-21</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/EfficientContext/ContextPilot" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    
+  </div>
+</section>
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">ContextPilot is an inference optimization layer designed to accelerate long-context LLM workloads by maximizing KV cache reuse. It maintains a context index to reorder and deduplicate overlapping context blocks, aligning shared content into common prefixes to trigger cache hits. This approach reduces redundant computation and token usage in RAG, agentic workflows, and multi-turn conversations. The tool integrates as a drop-in solution for vLLM, SGLang, llama.cpp, and major cloud APIs without compromising reasoning quality.</p>
+    <ul class="summary-highlights">
+      <li>Increases cache hits by 4–12× through prefix-aware context reordering</li>
+      <li>Reduces prefill latency by 1.5–3× across diverse hardware backends</li>
+      <li>Supports vLLM, SGLang, llama.cpp, OpenClaw, and OpenAI-compatible APIs</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <div align="center">
+  <img src="https://raw.githubusercontent.com/EfficientContext/ContextPilot/main/assets/about.png" alt="ContextPilot Logo" width="600"/>
+
+  <h2><strong>ContextPilot: Fast Long-Context Inference via Context Reuse</strong></h2>
+
+<p>  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-≥3.10-blue" alt="Python"></a>
+  <a href="https://pypi.org/project/contextpilot/"><img src="https://img.shields.io/pypi/v/contextpilot" alt="PyPI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License"></a></p>
+  <p><strong>4–12× cache hits | 1.5–3× faster prefill | ~36% token savings</strong> across vLLM, SGLang, RAG, AI Agents, and more.</p>
+
+</div>
+
+<hr>
+<p>| <a href="https://efficientcontext.github.io/contextpilot-docs/"><strong>Documentation</strong></a> | <a href="examples/"><strong>Examples</strong></a> | <a href="https://efficientcontext.github.io/contextpilot-docs/reference/benchmarks"><strong>Benchmarks</strong></a> | <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/docker"><strong>Docker</strong></a> | <a href="https://arxiv.org/abs/2511.03475"><strong>Paper</strong></a> |</p>
+<h3>News</h3>
+<ul>
+<li>[2026/03] Supports <a href="https://openclaw.ai">OpenClaw</a> — <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">guide</a> | <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/benchmarks/openclaw.md">benchmark</a></li>
+<li>[2026/03] Supports cloud APIs (OpenAI, Anthropic, MiniMax) — <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/cache_sync.md">cache sync</a></li>
+<li>[2026/03] ContextPilot now can run on <strong>macOS / Apple Silicon</strong> via <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/mac_llama_cpp.md">llama.cpp</a>.</li>
+<li>[2026/02] ContextPilot v0.3.2 released, supporting <a href="https://github.com/VectifyAI/PageIndex">PageIndex</a> and <a href="https://github.com/mem0ai/mem0">Mem0</a>.</li>
+<li>[2026/01] ContextPilot has been accepted to MLSys 2026 🎉! See you in Bellevue, WA, USA.</li>
+</ul>
+<h3>About</h3>
+<p>Long-context workloads (RAG, memory chat, tool-augmented agents) prepend many context blocks. Across requests, these blocks often overlap but get reordered or duplicated, changing token prefixes and triggering cache misses and redundant KV recomputation. Common examples include (1) Trending Topic QA, (2) Closed-Domain Long-Context QA, (3) Batched Long-Context Inference, (4) multi-turn conversations with long-term memory and many more.</p>
+<p>ContextPilot sits between context assembly and inference to maximize prefix reuse and remove duplicates:</p>
+<ol>
+<li><strong>Higher throughput &amp; cache hits</strong> — boosts prefill throughput and prefix cache hit ratio via context reuse.  </li>
+<li><strong>Drop-in solutions</strong> — supports <a href="https://openclaw.ai">OpenClaw</a> (<a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">guide</a>), <a href="https://github.com/VectifyAI/PageIndex">PageIndex</a>, <a href="https://github.com/mem0ai/mem0">Mem0</a>, <a href="https://github.com/LMCache/LMCache">LMCache</a>, <a href="https://github.com/vllm-project/vllm">vLLM</a>, <a href="https://github.com/sgl-project/sglang">SGLang</a>, <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/mac_llama_cpp.md">llama.cpp</a>, and cloud APIs (OpenAI, Anthropic).</li>
+<li><strong>No compromise in reasoning quality</strong> — can even improve with extremely long contexts.</li>
+<li><strong>Widely tested</strong> — validated across diverse RAG and agentic workloads.</li>
+</ol>
+<p>It maintains a <strong>Context Index</strong> of cached content, then per request applies <strong>Reorder</strong> (align shared blocks into a common prefix) and/or <strong>Deduplicate</strong> (replace repeats with reference hints), plus <strong>cache-aware scheduling</strong> to maximize prefix sharing. The optimized prompt is sent via the OpenAI-compatible API; <code>POST /evict</code> keeps the index synced when KV cache is reclaimed. See its design overview below.</p>
+<div align="center">
+<img src="https://raw.githubusercontent.com/EfficientContext/ContextPilot/main/assets/system_description.jpg" alt="ContextPilot Architecture" width="600"/>
+</div>
+
+<blockquote>
+<p>For more design details, see <a href="https://arxiv.org/abs/2511.03475">Paper</a> and <a href="https://efficientcontext.github.io/contextpilot-docs/">Documentation</a>.</p>
+</blockquote>
+<h3>Performance at a Glance</h3>
+<p><strong>OpenClaw Agent on RTX 5090</strong> — 60 enterprise document analysis tasks (<a href="https://github.com/EfficientContext/ClawTasks">claw-tasks</a>), Qwen3-4B-Instruct via SGLang. <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/benchmarks/openclaw.md">Full results →</a></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>OpenClaw + SGLang</th>
+<th>+ ContextPilot</th>
+<th>Δ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt tokens / request (avg)</td>
+<td>45,771</td>
+<td>33,622</td>
+<td><strong>-26.5%</strong></td>
+</tr>
+<tr>
+<td>Prompt tokens / request (P99)</td>
+<td>92,785</td>
+<td>51,581</td>
+<td><strong>-44.4%</strong></td>
+</tr>
+<tr>
+<td>Wall time (avg)</td>
+<td>26.1s</td>
+<td>20.8s</td>
+<td><strong>-20.4%</strong></td>
+</tr>
+<tr>
+<td>Wall time (P99)</td>
+<td>68.8s</td>
+<td>50.4s</td>
+<td><strong>-26.6%</strong></td>
+</tr>
+<tr>
+<td>Accuracy</td>
+<td>245/245</td>
+<td>245/245</td>
+<td>✓</td>
+</tr>
+</tbody></table>
+<p><strong>Qwen3-4B on 1×A6000</strong> — multi-turn memory chat with <a href="https://github.com/mem0ai/mem0">Mem0</a> on the <a href="https://github.com/snap-research/locomo">LoCoMo</a> benchmark.</p>
+<table>
+<thead>
+<tr>
+<th>Context Size</th>
+<th>Method</th>
+<th>TTFT (s)</th>
+<th>LLM Judge</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>5 (long context memory)</td>
+<td>SGLang</td>
+<td>0.1051</td>
+<td>0.418</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>SGLang + ContextPilot</strong></td>
+<td><strong>0.0548</strong></td>
+<td>0.414</td>
+</tr>
+<tr>
+<td>100 memories</td>
+<td>SGLang</td>
+<td>0.1012</td>
+<td>0.437</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>SGLang + ContextPilot</strong></td>
+<td><strong>0.0554</strong></td>
+<td>0.420</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>ContextPilot results in mem0 table are without context annotation — an optional feature that adds original importance ranking to reordered context blocks, which can further improve answer quality (see <a href="https://arxiv.org/abs/2511.03475">Paper</a>).</p>
+</blockquote>
+<p><strong>Llama-3.2-1B on Apple Silicon</strong> — MultihopRAG with llama.cpp, no GPU server required.</p>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Method</th>
+<th>Avg Latency (ms)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M3 (MacBook Air, 16 GB)</td>
+<td>llama.cpp</td>
+<td>3,315</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>llama.cpp + ContextPilot</strong></td>
+<td><strong>1,378</strong></td>
+</tr>
+<tr>
+<td>M5 (MacBook Air, 32 GB)</td>
+<td>llama.cpp</td>
+<td>2,157</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>llama.cpp + ContextPilot</strong></td>
+<td><strong>911</strong></td>
+</tr>
+</tbody></table>
+<p>Settings: <code>Llama-3.2-1B-Instruct-Q4_K_M.gguf</code>, Metal offload (<code>-ngl 99</code>), <code>--cache-reuse 256</code>, <code>--parallel 4</code>, context 32768 tokens. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/mac_llama_cpp.md">Mac + llama.cpp guide</a>.</p>
+<p>We also evaluated on academic RAG (Qwen3-32B, 4×A6000) and production MoE inference (DeepSeek-R1-671B, 16×H20) — see <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/benchmarks/rag.md">RAG benchmarks</a> and <a href="https://arxiv.org/abs/2511.03475">paper</a>.</p>
+<h3>Installation</h3>
+<p><strong>Requirements:</strong> Python &gt;= 3.10</p>
+<hr>
+<h4>OpenClaw</h4>
+<p><strong>Option A: Native Plugin</strong> (recommended — zero external dependencies)</p>
+<pre><code class="language-bash">openclaw plugins install @contextpilot-ai/contextpilot
+</code></pre>
+<p>Then enable in <code>~/.openclaw/openclaw.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;plugins&quot;: {
+    &quot;slots&quot;: { &quot;contextEngine&quot;: &quot;contextpilot&quot; },
+    &quot;entries&quot;: { &quot;contextpilot&quot;: { &quot;enabled&quot;: true } }
+  }
+}
+</code></pre>
+<p>Restart OpenClaw. Done — ContextPilot runs in-process, no proxy needed.</p>
+<p><strong>Option B: HTTP Proxy</strong> (for self-hosted models or custom backends)</p>
+<pre><code class="language-bash">pip install contextpilot
+
+python -m contextpilot.server.http_server \
+  --port 8765 --infer-api-url http://localhost:30000   # SGLang
+  # or: --infer-api-url https://api.anthropic.com      # Anthropic
+  # or: --infer-api-url https://api.openai.com         # OpenAI
+</code></pre>
+<p>Then set OpenClaw&#39;s base URL to <code>http://localhost:8765/v1</code>. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">full OpenClaw integration guide</a> for details.</p>
+<hr>
+<h4>vLLM / SGLang</h4>
+<p><strong>From PyPI</strong> — the vLLM and SGLang hooks are installed automatically:</p>
+<pre><code class="language-bash">pip install contextpilot          # CPU index computation
+pip install &quot;contextpilot[gpu]&quot;   # GPU index computation (CUDA 12.x)
+</code></pre>
+<p><strong>From source</strong> — run <code>install_hook</code> manually after install, since editable installs do not copy the <code>.pth</code> file to site-packages:</p>
+<pre><code class="language-bash">git clone https://github.com/EfficientContext/ContextPilot.git
+cd ContextPilot
+pip install -e .                  # CPU
+pip install -e &quot;.[gpu]&quot;           # GPU (CUDA 12.x)
+python -m contextpilot.install_hook   # one-time: enables automatic vLLM / SGLang integration
+</code></pre>
+<p>The <code>install_hook</code> step writes a <code>.pth</code> file into your site-packages so the vLLM and SGLang hooks load automatically at Python startup — no code changes required. To uninstall: <code>python -m contextpilot.install_hook --remove</code>.</p>
+<hr>
+<h4>Mac / Apple Silicon — llama.cpp</h4>
+<p><strong>From PyPI:</strong></p>
+<pre><code class="language-bash">pip install contextpilot
+xcode-select --install    # one-time: provides clang++ to compile the native hook
+</code></pre>
+<p><strong>From source:</strong></p>
+<pre><code class="language-bash">git clone https://github.com/EfficientContext/ContextPilot.git
+cd ContextPilot
+pip install -e .
+xcode-select --install    # one-time: provides clang++ to compile the native hook
+</code></pre>
+<blockquote>
+<p><strong>Why <code>xcode-select</code>?</strong> The llama.cpp integration uses a small C++ shared library injected into <code>llama-server</code> via <code>DYLD_INSERT_LIBRARIES</code>. It is compiled automatically on first use and requires <code>clang++</code> from Xcode Command Line Tools.</p>
+</blockquote>
+<hr>
+<p>More <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/installation">detailed installation instructions</a> are available in the docs.</p>
+<p>Docker images are also available for both all-in-one and standalone deployment. See the <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/docker">Docker guide</a>.</p>
+<h3>Getting Started</h3>
+<h4>Quick Start with OpenClaw</h4>
+<pre><code class="language-bash"># Ask OpenClaw to analyze vendor contracts (ContextPilot deduplicates shared content automatically)
+openclaw agent --message &quot;Read contracts/contract_alpha_cloud.txt and summarize the liability terms.&quot;
+openclaw agent --message &quot;Read contracts/contract_beta_ai.txt and compare its liability with Alpha.&quot;
+openclaw agent --message &quot;Read contracts/contract_gamma_security.txt. Rank all three by liability exposure.&quot;
+</code></pre>
+<p>When the agent reads multiple documents sharing content (contracts from the same template, proposals with shared methodology), ContextPilot automatically deduplicates identical blocks — reducing prefill tokens by ~27% with zero accuracy loss. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">integration guide</a> and <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/benchmarks/openclaw.md">benchmark</a>.</p>
+<hr>
+<h4>Quick Start with Context Ordering</h4>
+<p>Add <strong>one call</strong> (<code>cp_instance.optimize()</code>) before inference to rearrange context blocks so that shared content aligns into a common prefix, enabling cache reuse. An importance ranking in the prompt preserves accuracy.</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>When to Use</th>
+<th>How It Works</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Online</strong></td>
+<td>Multi-turn (e.g., chatbot + <a href="https://github.com/mem0ai/mem0">Mem0</a>)</td>
+<td>Tracks previously cached blocks; moves overlapping ones to the prefix each turn</td>
+</tr>
+<tr>
+<td><strong>Offline</strong></td>
+<td>Batch / single-shot</td>
+<td>Globally reorders and schedules all requests for maximum prefix sharing</td>
+</tr>
+</tbody></table>
+<p>Both modes work with any OpenAI-compatible endpoint (vLLM, SGLang, etc.) — no changes to your inference deployment. They support both direct API calls (shown below) and HTTP server deployment (see the <a href="https://efficientcontext.github.io/contextpilot-docs/guides/online_usage">online usage guide</a>).</p>
+<hr>
+<h5>Accelerating Online Inference</h5>
+<p>Multi-turn chatbot with Mem0 or RAG where each turn&#39;s context blocks partially overlap. <code>cp_instance.optimize()</code> moves shared blocks to the prefix so the engine reuses cached KV states.</p>
+<pre><code class="language-python">from openai import OpenAI
+# Step 1: Import ContextPilot
+import contextpilot as cp
+
+client = OpenAI(base_url=&quot;http://localhost:30000/v1&quot;, api_key=&quot;EMPTY&quot;)
+# Step 2: Create a ContextPilot instance
+cp_instance = cp.ContextPilot(use_gpu=False)
+
+for query in queries:
+    contexts = get_contexts(query)                         # Mem0, Retriever, ...
+    # Step 3: Optimize context ordering and build ready-to-use messages
+    messages = cp_instance.optimize(contexts, query)
+
+    response = client.chat.completions.create(
+        model=&quot;Qwen/Qwen3-4B&quot;,
+        messages=messages,
+    )
+    print(f&quot;Q: {query}\nA: {response.choices[0].message.content}\n&quot;)
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> When the engine evicts KV-cache entries under memory pressure, ContextPilot&#39;s index can go stale. Set <code>CONTEXTPILOT_INDEX_URL</code> when launching <a href="https://efficientcontext.github.io/contextpilot-docs/guides/online_usage#inference-engine-integration">SGLang or vLLM</a> to enable automatic eviction sync. For distributed setups, see <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/installation#distributed-setup">Distributed Setup</a>.</p>
+</blockquote>
+<hr>
+<h5>Accelerating Offline Inference</h5>
+<p>Batch of requests with overlapping context blocks. <code>cp_instance.optimize_batch()</code> globally reorders blocks and schedules execution order so queries with similar contexts run consecutively, maximizing cache reuse. See the <a href="https://efficientcontext.github.io/contextpilot-docs/guides/offline_usage">offline usage guide</a> for details. Offline mode can also be deployed as an HTTP server without eviction sync — see <a href="https://efficientcontext.github.io/contextpilot-docs/guides/online_usage#stateless-mode">Stateless Mode</a>.</p>
+<pre><code class="language-python">import asyncio
+import openai
+# Step 1: Import ContextPilot
+import contextpilot as cp
+
+BASE_URL = &quot;http://localhost:30000/v1&quot;
+# Step 2: Create a ContextPilot instance
+cp_instance = cp.ContextPilot(use_gpu=False)
+
+all_contexts = [get_contexts(q) for q in queries]          # Mem0, Retriever, ...
+# Step 3: Optimize — reorder, schedule, and build prompts in one call
+messages_batch, order = cp_instance.optimize_batch(all_contexts, queries)
+
+# Send all requests concurrently
+async def generate_all():
+    ac = openai.AsyncOpenAI(base_url=BASE_URL, api_key=&quot;EMPTY&quot;)
+    return await asyncio.gather(*[ac.chat.completions.create(
+        model=&quot;Qwen/Qwen3-4B&quot;, messages=m
+    ) for m in messages_batch])
+
+for resp, idx in zip(asyncio.run(generate_all()), order):
+    print(f&quot;Q: {queries[idx]}\nA: {resp.choices[0].message.content}\n&quot;)
+</code></pre>
+<p>For a detailed walkthrough with concrete examples, see the <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/quickstart">Quick Start Guide</a>. For more fine-grained control, you can also use <code>cp_instance.reorder()</code> and <code>cp_instance.deduplicate()</code> directly — see the <a href="https://efficientcontext.github.io/contextpilot-docs/reference/api">API reference</a> and <a href="https://efficientcontext.github.io/contextpilot-docs/guides/multi_turn">multi-turn deduplication guide</a>.</p>
+<h4>Adoption Examples</h4>
+<p>See many useful adoption examples: <a href="https://efficientcontext.github.io/contextpilot-docs/guides/mem0">Mem0 integration</a>, <a href="https://efficientcontext.github.io/contextpilot-docs/guides/pageindex">PageIndex RAG</a>, <a href="https://efficientcontext.github.io/contextpilot-docs/guides/offline_usage">offline batch scheduling</a>, and <a href="https://efficientcontext.github.io/contextpilot-docs/guides/multi_turn">multi-turn deduplication</a>.</p>
+<h3>Citation</h3>
+<pre><code class="language-bibtex">@inproceedings{contextpilot2026,
+  title     = {ContextPilot: Fast Long-Context Inference via Context Reuse},
+  author    = {Jiang, Yinsicheng and Huang, Yeqi and Cheng, Liang and Deng, Cheng and Sun, Xuan and Mai, Luo},
+  booktitle = {Proceedings of the 9th Conference on Machine Learning and Systems (MLSys 2026)},
+  year      = {2026},
+  url       = {https://arxiv.org/abs/2511.03475}
+}
+</code></pre>
+<h3>Contributing</h3>
+<p>We welcome and value all contributions! Please feel free to submit issues and pull requests.</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in memory &amp; context</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/mem0ai/mem0">
+        <div class="stars">★ 54.5K</div>
+        <div class="name"><span class="org">mem0ai /</span> mem0</div>
+      </a>
+      <a class="related-row" href="/projects/vectorize-io/hindsight">
+        <div class="stars">★ 11.7K</div>
+        <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
+      </a>
+      <a class="related-row" href="/projects/greyhaven-ai/autocontext">
+        <div class="stars">★ 947</div>
+        <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
+      </a>
+      <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
+        <div class="stars">★ 197</div>
+        <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
+      </a>
+      <a class="related-row" href="/projects/yoloshii/ClawMem">
+        <div class="stars">★ 143</div>
+        <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
+      </a>
+      <a class="related-row" href="/projects/plur-ai/plur">
+        <div class="stars">★ 59</div>
+        <div class="name"><span class="org">plur-ai /</span> plur</div>
+      </a>
+      <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
+        <div class="stars">★ 13</div>
+        <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
+      </a>
+      <a class="related-row" href="/projects/garrytan/gbrain">
+        <div class="stars">★ 12.6K</div>
+        <div class="name"><span class="org">garrytan /</span> gbrain</div>
+      </a>
+    </div>
+    <p class="list-link"><a href="/lists/best-memory-providers">see all memory &amp; context →</a></p>
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script>(function(){fetch('/api/stars').then(function(r){return r.ok&&r.json()}).then(function(d){if(!d)return;var a=document.getElementById('meta-atlas');if(a&&d.atlas&&d.atlas.stars)a.textContent='★ '+d.atlas.stars+' · star this repo';var c=document.getElementById('meta-count');if(c&&d.totals&&d.totals.count)c.textContent=d.totals.count+'·repos'}).catch(function(){});})();</script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

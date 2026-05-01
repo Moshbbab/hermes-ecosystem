@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "autocontext is a recursive self-improving harness designed to help LLM agents succeed on complex tasks by turning repeated work into validated, reusable knowledge. It operates through a structured multi-agent loop where competitors propose strategies, analysts evaluate outcomes, and coaches update playbooks to ensure agents improve across generations. The system supports various execution surfaces including simulations, evidence-driven investigations, and verifier-driven missions. Users can even",
+  "description": "Autocontext is a recursive self-improving harness that enables AI agents to iterate on complex tasks through structured evaluation and feedback loops. It operates by coordinating five specialized roles—competitor, analyst, coach, architect, and curator—to test strategies, analyze failures, and persist successful patterns into reusable playbooks. The system generates structured traces, datasets, and artifacts that allow future agent iterations to inherit accumulated knowledge. It supports major m",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-04-27T04:18:21.000Z",
+  "dateModified": "2026-05-01T15:42:37.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 932
+    "userInteractionCount": 947
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">100·repos</span>
+    <span id="meta-count">111·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">a recursive self-improving harness designed to help your agents (and future iterations of those agents) succeed on any task</p>
 
   <div class="meta-row">
-    <span class="stars">★ 932</span>
+    <span class="stars">★ 947</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-04-27</span>
+    <span><span class="meta-label">updated</span>2026-05-01</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">autocontext is a recursive self-improving harness designed to help LLM agents succeed on complex tasks by turning repeated work into validated, reusable knowledge. It operates through a structured multi-agent loop where competitors propose strategies, analysts evaluate outcomes, and coaches update playbooks to ensure agents improve across generations. The system supports various execution surfaces including simulations, evidence-driven investigations, and verifier-driven missions. Users can eventually distill stable agent behaviors into cheaper local runtimes using exported training data.</p>
+    <p class="summary-text">Autocontext is a recursive self-improving harness that enables AI agents to iterate on complex tasks through structured evaluation and feedback loops. It operates by coordinating five specialized roles—competitor, analyst, coach, architect, and curator—to test strategies, analyze failures, and persist successful patterns into reusable playbooks. The system generates structured traces, datasets, and artifacts that allow future agent iterations to inherit accumulated knowledge. It supports major model providers and integrates with agent frameworks like Hermes, Claude Code, and Pi via CLI or MCP.</p>
     <ul class="summary-highlights">
-      <li>Accumulates validated knowledge to improve agent performance across repeated runs</li>
-      <li>Multi-agent loop featuring competitor, analyst, coach, architect, and curator roles</li>
-      <li>Supports browser-integrated investigations and verifier-driven mission checkpoints</li>
+      <li>Recursive improvement through multi-role coordination and automated evaluation loops</li>
+      <li>Generates persistent playbooks and structured traces for knowledge transfer</li>
+      <li>Integrates with Hermes Agent via CLI-first skill and state inspection</li>
     </ul>
   </div>
 </section>
@@ -144,7 +144,7 @@
   <img src="https://raw.githubusercontent.com/greyhaven-ai/autocontext/main/autocontext/assets/banner.svg" alt="autocontext ASCII banner" style="max-width: 100%; height: auto;" />
 </p>
 
-<p align="center"><strong>turn repeated agent work into validated, reusable execution</strong></p>
+<p align="center"><strong>a recursive self-improving harness designed to help your agents (and future iterations of those agents) succeed on any task</strong></p>
 
 <p align="center">
   <a href="https://github.com/greyhaven-ai/autocontext/blob/main/LICENSE"><img src="https://img.shields.io/github/license/greyhaven-ai/autocontext" alt="License"></a>
@@ -156,130 +156,259 @@
 
 <!-- autocontext-readme-hero:end -->
 
-<p>autocontext runs LLM agents through structured scenarios, evaluates their outputs, and accumulates the knowledge that improved results — so repeated runs get better, not just different. Point the harness at a real task in plain language, let it work the problem, and then inspect the traces, reports, artifacts, datasets, playbooks, and optional distilled model it produces.</p>
-<h3>Table of Contents</h3>
+<p>Autocontext is a harness. You point it at a goal in plain language. It iterates against real evaluation, keeps what worked, throws out what didn&#39;t, and produces a structured trace of the work plus the artifacts, playbooks, datasets, and (optionally) a distilled local model that the next agent inherits. Repeated runs get better, not just different.</p>
+<h3>Try It In 30 Seconds</h3>
+<p>The fastest path uses our <strong>Pi runtime</strong>, a local coding agent that handles its own auth. No API key plumbing, no provider config: install Pi, install autocontext, point one at the other.</p>
+<pre><code class="language-bash">uv tool install autocontext==0.5.0
+
+AUTOCONTEXT_AGENT_PROVIDER=pi \
+AUTOCONTEXT_PI_COMMAND=pi \
+uv run autoctx solve \
+  &quot;improve customer-support replies for billing disputes&quot; \
+  --iterations 3
+</code></pre>
+<p>Pi runs locally as a subprocess and emits live traces back into the harness. For a hosted Pi, set <code>AUTOCONTEXT_AGENT_PROVIDER=pi-rpc</code> and <code>AUTOCONTEXT_PI_RPC_ENDPOINT</code> instead.</p>
+<p>Prefer TypeScript? Same surface, same command:</p>
+<pre><code class="language-bash">bun add -g autoctx@0.5.0
+AUTOCONTEXT_AGENT_PROVIDER=pi bunx autoctx solve \
+  &quot;improve customer-support replies for billing disputes&quot; \
+  --iterations 5 --json
+</code></pre>
+<p>Already on Anthropic, OpenAI, Gemini, Mistral, Groq, OpenRouter, Azure, Claude CLI, Codex CLI, or MLX? Set <code>AUTOCONTEXT_AGENT_PROVIDER</code> and the matching credential env var:</p>
+<pre><code class="language-bash">AUTOCONTEXT_AGENT_PROVIDER=anthropic \
+ANTHROPIC_API_KEY=sk-ant-... \
+uv run autoctx solve &quot;...&quot; --iterations 3
+</code></pre>
+<p>See <a href=".env.example"><code>.env.example</code></a> for every provider&#39;s variables. Prefer to clone and run a starter? <a href="https://github.com/greyhaven-ai/autocontext/blob/main/examples/README.md"><code>examples/README.md</code></a> has copy-paste recipes for Python CLI, Claude Code MCP, Python SDK, and TypeScript library usage.</p>
+<h3>Or Just Talk To Your Agent</h3>
+<p>If you already work inside a coding agent, you can wire autocontext in once and give the agent a natural-language entry point. Hermes and other terminal-capable agents should start with the CLI-backed skill; MCP remains available for clients that want a tool-catalog protocol.</p>
+<p><strong>Pi</strong> ships an autocontext skill out of the box. Install the published Pi package and Pi loads natural-language wrappers over live tools such as <code>autocontext_solve_scenario</code>, <code>autocontext_evaluate_output</code>, <code>autocontext_run_improvement_loop</code>, <code>autocontext_run_status</code>, and <code>autocontext_list_scenarios</code>.</p>
+<pre><code class="language-bash">pi install npm:pi-autocontext
+</code></pre>
+<p>Then you just ask:</p>
+<blockquote>
+<p>&quot;Solve: improve customer-support replies for billing disputes.&quot;</p>
+<p>&quot;Judge this output against this rubric and improve it until it scores 0.85.&quot;</p>
+</blockquote>
+<p><strong>Claude Code</strong> (and any other MCP client) gets the same surface by adding one entry to <code>.claude/settings.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;autocontext&quot;: {
+      &quot;command&quot;: &quot;uv&quot;,
+      &quot;args&quot;: [&quot;run&quot;, &quot;--directory&quot;, &quot;/path/to/autocontext&quot;, &quot;autoctx&quot;, &quot;mcp-serve&quot;],
+      &quot;env&quot;: { &quot;AUTOCONTEXT_AGENT_PROVIDER&quot;: &quot;pi&quot;, &quot;AUTOCONTEXT_PI_COMMAND&quot;: &quot;pi&quot; }
+    }
+  }
+}
+</code></pre>
+<p>After that, Python MCP exposes prefixed tools such as <code>autocontext_solve_scenario</code>, <code>autocontext_evaluate_output</code>, <code>autocontext_run_improvement_loop</code>, <code>autocontext_run_status</code>, <code>autocontext_list_scenarios</code>, <code>autocontext_export_skill</code>, and <code>autocontext_search_strategies</code>. The MCP server runs on stdio. The TypeScript package exposes the same capabilities with its documented tool names via <code>bunx autoctx mcp-serve</code>.</p>
+<p><strong>Hermes Agent</strong> can load a CLI-first skill and inspect Hermes Curator state without MCP:</p>
+<pre><code class="language-bash">cd autocontext
+uv run autoctx hermes export-skill --output ~/.hermes/skills/autocontext/SKILL.md --json
+uv run autoctx hermes inspect --json
+</code></pre>
+<p>Full integration guide: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/agent-integration.md">autocontext/docs/agent-integration.md</a>.</p>
+<h3>What You Get Back</h3>
+<p>Every run leaves a structured record on disk. Replay it, diff it, export it, feed it back into training.</p>
+<pre><code>runs/&lt;run_id&gt;/
+├── trace.jsonl              # every prompt, tool call, and outcome, in order
+├── generations/
+│   ├── gen_1/
+│   │   ├── strategy.json    # what the competitor proposed
+│   │   ├── analysis.md      # what the analyst observed
+│   │   └── score.json       # how it was evaluated
+│   └── gen_2/ ...
+├── report.md                # human-readable summary of the whole run
+└── artifacts/               # files, configs, packages the run produced
+
+knowledge/&lt;scenario&gt;/
+├── playbook.md              # accumulated lessons that carried forward
+├── hints.md                 # competitor hints that survived the curator
+└── tools/                   # any helper tools the architect generated
+</code></pre>
+<p>A <code>playbook.md</code> is plain markdown the next run reads as context:</p>
+<pre><code class="language-markdown">&lt;!-- PLAYBOOK_START --&gt;
+
+## Billing dispute replies
+
+- Always restate the disputed charge in the first sentence; refunds requested without
+  explicit confirmation cause loops.
+- &quot;Pending&quot; charges are not yet billable. Don&#39;t promise a refund until status flips
+  to `posted`. Verified gen_4, regressed in gen_7 when omitted.
+- Empathy + specific next step beats empathy alone. Escalation rate dropped from
+0.31 to 0.12 once the second sentence named the next-step owner.
+&lt;!-- PLAYBOOK_END --&gt;
+</code></pre>
+<p>A <code>trace.jsonl</code> line is one event:</p>
+<pre><code class="language-json">{
+  &quot;ts&quot;: &quot;2026-04-28T17:42:11Z&quot;,
+  &quot;gen&quot;: 4,
+  &quot;role&quot;: &quot;competitor&quot;,
+  &quot;event&quot;: &quot;strategy_proposed&quot;,
+  &quot;score&quot;: 0.78,
+  &quot;tokens_in&quot;: 1840,
+  &quot;tokens_out&quot;: 612,
+  &quot;strategy_id&quot;: &quot;s_4f2a&quot;
+}
+</code></pre>
+<p>Inspect, replay, or compare any of it:</p>
+<pre><code class="language-bash">uv run autoctx list
+uv run autoctx status &lt;run_id&gt;
+uv run autoctx replay &lt;run_id&gt; --generation 2
+</code></pre>
+<h3>How It Works</h3>
+<p>Inside each run, five roles cooperate:</p>
 <ul>
-<li><a href="#whats-new">What&#39;s New</a></li>
-<li><a href="#what-actually-is-autocontext">What actually is autocontext?</a></li>
-<li><a href="#how-people-use-it">How People Use It</a></li>
-<li><a href="#how-it-works">How It Works</a></li>
-<li><a href="#which-surface-fits-which-job">Which Surface Fits Which Job</a></li>
-<li><a href="#choose-an-entry-point">Choose An Entry Point</a></li>
-<li><a href="#scenario-families">Scenario Families</a></li>
-<li><a href="#core-capabilities">Core Capabilities</a></li>
-<li><a href="#quick-start-from-source">Quick Start From Source</a></li>
-<li><a href="#installable-packages">Installable Packages</a></li>
-<li><a href="#which-package-should-you-use">Which Package Should You Use?</a></li>
-<li><a href="#common-workflows">Common Workflows</a></li>
-<li><a href="#repository-layout">Repository Layout</a></li>
-<li><a href="#where-to-look-next">Where To Look Next</a></li>
+<li><strong>competitor</strong> proposes a strategy or artifact for the task</li>
+<li><strong>analyst</strong> explains what happened and why</li>
+<li><strong>coach</strong> turns that analysis into playbook updates and future hints</li>
+<li><strong>architect</strong> proposes tools or harness changes when the loop is stuck</li>
+<li><strong>curator</strong> gates what knowledge is allowed to persist across runs</li>
 </ul>
+<p>Strategies are evaluated through scenario execution, staged validation, and gating. Weak changes are rolled back. Successful changes accumulate as reusable knowledge that future runs (and future agents) inherit automatically.</p>
+<p>The full vocabulary (Scenario, Task, Mission, Campaign, Run, Verifier, Knowledge, Artifact, Budget, Policy) lives in <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/concept-model.md">docs/concept-model.md</a>.</p>
+<h3>Capture What&#39;s Happening In Production</h3>
+<p>Autocontext can sit alongside your live application and record what your agents do, then turn that into training data. Wrap your existing Anthropic or OpenAI client once:</p>
+<pre><code class="language-python">from anthropic import Anthropic
+from autocontext.production_traces import instrument_client
+
+client = instrument_client(Anthropic(), app=&quot;billing-bot&quot;, env=&quot;prod&quot;)
+# use `client` exactly like before; calls are captured to JSONL with content blocks,
+# cache-aware usage, and Anthropic-native outcome taxonomy.
+</code></pre>
+<pre><code class="language-ts">import Anthropic from &quot;@anthropic-ai/sdk&quot;;
+import { instrumentClient } from &quot;autoctx/production-traces&quot;;
+
+const client = instrumentClient(new Anthropic(), { app: &quot;billing-bot&quot;, env: &quot;prod&quot; });
+</code></pre>
+<p>Then build scoped datasets from the captured traces:</p>
+<pre><code class="language-bash">uv run autoctx build-dataset \
+  --app billing-bot --provider anthropic \
+  --env prod --outcome success \
+  --output training/billing.jsonl
+</code></pre>
+<p>And distill them into a smaller local model with MLX (Apple Silicon) or CUDA (Linux GPUs):</p>
+<pre><code class="language-bash">uv run autoctx train --scenario support_triage --data training/billing.jsonl --time-budget 300
+</code></pre>
 <!-- autocontext-whats-new:start -->
-<h3>What&#39;s New</h3>
+<h3>What&#39;s New in 0.5.0</h3>
 <ul>
-<li>Browser integration now spans Python and TypeScript CDP backends, investigations, queued tasks, and policy-gated evidence.</li>
-<li>Anthropic SDK instrumentation captures Python and TypeScript production traces, streaming outcomes, and cross-runtime parity.</li>
-<li>Production trace datasets gained provider/app/env/outcome filters and shared OpenAI/Anthropic E2E coverage.</li>
-<li>Scenario family designers now share parser logic across TypeScript families, preserving family-specific prompt semantics.</li>
-<li>Investigation evidence, secondary prompt reducers, migration ledgers, CLI dispatch, and proxy runtime plumbing were hardened.</li>
+<li><strong>Plain-language CLI continuity</strong> lets Python and TypeScript callers use positional goals/scenarios, <code>--iterations</code>, and run-scoped exports while preserving the existing flag forms.</li>
+<li><strong>Hermes Agent integration</strong> adds read-only Hermes v0.12 inspection plus an exportable CLI-first <code>autocontext</code> skill for Hermes agents.</li>
+<li><strong>Packaged CLI startup</strong> no longer crashes when installed without banner assets.</li>
+<li><strong>Release alignment</strong> bumps Python <code>autocontext</code> and npm <code>autoctx</code> to <code>0.5.0</code>, with <code>pi-autocontext</code> moving to <code>0.2.4</code> on its own lower-numbered line.</li>
 </ul>
 <!-- autocontext-whats-new:end -->
 
-<h3>What actually is autocontext?</h3>
-<p>Most agent systems still start every run cold. They do not reliably preserve what worked, separate signal from noise, or turn repeated success into a reusable asset.</p>
-<p>autocontext is built to close that loop:</p>
-<ul>
-<li>run a scenario, task, or mission</li>
-<li>evaluate what actually happened</li>
-<li>persist validated knowledge and artifacts</li>
-<li>replay, analyze, or compare results</li>
-<li>distill stable behavior into cheaper local runtimes when it is ready</li>
-</ul>
-<h3>How People Use It</h3>
-<ul>
-<li>hand the harness a real task, let it iterate mostly hands-off, and review the resulting traces, datasets, playbooks, artifacts, and optional distilled model</li>
-<li>improve agent behavior across repeated runs instead of prompting from scratch every time</li>
-<li>model and test environments through reusable scenarios</li>
-<li>run plain-language simulations with sweeps, replay, compare, and export</li>
-<li>run evidence-driven investigations and analyze the resulting artifacts</li>
-<li>operate verifier-driven missions for longer-running goals</li>
-<li>analyze runs, replays, and artifacts to understand regressions and stable wins</li>
-<li>export knowledge, artifacts, and training data for downstream systems</li>
-<li>expose the system over CLI, MCP, API, and TUI/operator surfaces for external agents and operator tooling</li>
-</ul>
-<h3>How It Works</h3>
-<p>The product model centers on a few stable ideas:</p>
-<ul>
-<li><code>Scenario</code>: a reusable environment or evaluation context with stable rules and scoring</li>
-<li><code>Task</code>: a prompt-centric unit of work that can be evaluated directly or embedded elsewhere</li>
-<li><code>Mission</code>: a long-running goal advanced step by step until a verifier says it is done</li>
-<li><code>Campaign</code>: a planned grouping of missions under long-term goals; today it has partial TypeScript CLI/API/MCP support but is not yet a Python package surface</li>
-<li><code>Run</code>: a concrete execution instance of a scenario or task</li>
-<li><code>Verifier</code>: the runtime check that decides whether a mission, step, or output is acceptable</li>
-<li><code>Knowledge</code>: validated lessons that should carry forward across runs</li>
-<li><code>Artifact</code>: persisted outputs such as replays, checkpoints, reports, packages, and exports</li>
-<li><code>Budget</code> and <code>Policy</code>: the constraints and rules that shape how runs and missions are allowed to proceed</li>
-</ul>
-<p>Inside a run, autocontext uses a structured multi-agent loop:</p>
-<ul>
-<li><code>competitor</code> proposes a strategy or artifact for the task</li>
-<li><code>analyst</code> explains what happened and why</li>
-<li><code>coach</code> turns that analysis into playbook updates and future hints</li>
-<li><code>architect</code> proposes tools, harness improvements, or structural changes</li>
-<li><code>curator</code> gates what knowledge is allowed to persist</li>
-</ul>
-<p>Strategies are then evaluated through scenario execution, staged validation, and gating. Weak changes are rolled back. Successful changes accumulate into reusable knowledge.</p>
-<h3>Which Surface Fits Which Job</h3>
+<h3>Choose Your Package</h3>
+<table>
+<thead>
+<tr>
+<th>If you want to...</th>
+<th>Start here</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Run the full multi-generation control plane (Python)</td>
+<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/README.md">autocontext/README.md</a></td>
+</tr>
+<tr>
+<td>Run from Node, or operate missions, simulations, investigations</td>
+<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a></td>
+</tr>
+<tr>
+<td>Install the Pi extension package</td>
+<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/pi/README.md">pi/README.md</a></td>
+</tr>
+<tr>
+<td>Wire an external coding agent into autocontext over MCP</td>
+<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/agent-integration.md">autocontext/docs/agent-integration.md</a></td>
+</tr>
+<tr>
+<td>Grab copy-paste integration snippets</td>
+<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/examples/README.md">examples/README.md</a></td>
+</tr>
+</tbody></table>
+<pre><code class="language-bash"># Python: library or CLI tool
+uv pip install autocontext==0.5.0
+uv tool install autocontext==0.5.0
+
+# TypeScript
+bun add -g autoctx@0.5.0
+
+# Pi extension
+pi install npm:pi-autocontext
+</code></pre>
+<blockquote>
+<p>The PyPI package is <code>autocontext</code>. The CLI entrypoint is <code>autoctx</code>. The npm packages are <code>autoctx</code> and <code>pi-autocontext</code> (note: an unrelated package on npm uses the name <code>autocontext</code>; that is not this project).</p>
+</blockquote>
+<h3>Surfaces</h3>
 <table>
 <thead>
 <tr>
 <th>Surface</th>
+<th>Command</th>
 <th>When to use it</th>
 </tr>
 </thead>
 <tbody><tr>
+<td><code>solve</code></td>
+<td><code>autoctx solve &quot;...&quot; --iterations 3</code></td>
+<td>Hand the harness a goal in plain language; it generates the scenario and runs the loop</td>
+</tr>
+<tr>
 <td><code>run</code></td>
-<td>Improve behavior inside a reusable scenario or task across generations</td>
+<td><code>autoctx run &lt;scenario&gt; --iterations 3</code></td>
+<td>Improve behavior inside a saved scenario across generations</td>
 </tr>
 <tr>
 <td><code>simulate</code></td>
-<td>Model a system, explore parameter sweeps, or compare replayable outcomes</td>
+<td><code>autoctx simulate -d &quot;...&quot;</code></td>
+<td>Model a system, sweep parameters, replay, compare</td>
 </tr>
 <tr>
 <td><code>investigate</code></td>
-<td>Evidence-driven diagnosis with hypotheses, confidence scoring, and optional browser context</td>
+<td><code>autoctx investigate -d &quot;...&quot;</code></td>
+<td>Evidence-driven diagnosis, either synthetic harness or live iterative LLM session</td>
 </tr>
 <tr>
 <td><code>analyze</code></td>
+<td><code>autoctx analyze --id &lt;id&gt; --type &lt;kind&gt;</code></td>
 <td>Inspect or compare runs, simulations, investigations, or missions after the fact</td>
 </tr>
 <tr>
 <td><code>mission</code></td>
-<td>Verifier-driven goal advanced step by step with checkpoints and completion criteria</td>
+<td><code>autoctx mission create --name &quot;...&quot; --goal &quot;...&quot;</code></td>
+<td>Verifier-driven goal advanced step by step until done</td>
 </tr>
 <tr>
 <td><code>campaign</code></td>
-<td>Coordinate multiple missions with budget tracking, dependencies, and progress aggregation</td>
+<td><code>bunx autoctx campaign ...</code> (TypeScript)</td>
+<td>Coordinate multiple missions with budgets, dependencies, progress aggregation</td>
+</tr>
+<tr>
+<td><code>export</code></td>
+<td><code>autoctx export &lt;run-id&gt;</code></td>
+<td>Share solved knowledge as JSON, skills, or Pi-local package directories</td>
 </tr>
 <tr>
 <td><code>train</code></td>
+<td><code>autoctx train --scenario &lt;name&gt; --data &lt;jsonl&gt;</code></td>
 <td>Distill stable exported data into a cheaper local runtime</td>
 </tr>
 <tr>
+<td><code>hermes</code></td>
+<td><code>uv run autoctx hermes inspect --json</code> (Python)</td>
+<td>Inspect Hermes v0.12 skill usage and Curator reports, or export the Hermes skill</td>
+</tr>
+<tr>
 <td><code>replay</code></td>
+<td><code>autoctx replay &lt;run_id&gt; --generation N</code></td>
 <td>Inspect what happened before deciding what knowledge should persist</td>
 </tr>
 </tbody></table>
-<p><code>campaign</code> now ships as a TypeScript CLI/API/MCP workflow for multi-mission coordination. The Python package still does not expose a campaign control-plane surface.</p>
-<h3>Choose An Entry Point</h3>
-<ul>
-<li>Want the full Python control plane for scenario execution, training, API serving, and operator workflows? Start with <code>autocontext/</code>.</li>
-<li>Want the Node/TypeScript package for simulations, investigations, analysis, mission control, operator tooling, and external integrations? Start with <code>ts/</code>.</li>
-<li>Want to wire another agent into autocontext? Start with the CLI-first guide in <code>autocontext/docs/agent-integration.md</code>.</li>
-<li>Want to contribute or point a coding agent at the repo? Read <code>CONTRIBUTING.md</code> and <code>AGENTS.md</code>.</li>
-</ul>
 <h3>Scenario Families</h3>
-<p>All 11 families are executable in both Python and TypeScript. TypeScript uses V8 isolate codegen for secure execution; Python uses subprocess-based executors.</p>
+<p>All 11 families execute in both Python and TypeScript. TypeScript uses V8 isolate codegen; Python uses subprocess executors.</p>
 <table>
 <thead>
 <tr>
@@ -344,184 +473,35 @@
 <td>Multi-agent partial context, handoff, merge, and duplication detection</td>
 </tr>
 </tbody></table>
-<h3>Core Capabilities</h3>
-<ul>
-<li>Persistent playbooks, hints, tools, reports, and progress snapshots across runs</li>
-<li>Staged validation, harness synthesis, and harness-aware execution</li>
-<li>Replays, checkpoints, reports, and exported artifacts for inspection and reuse</li>
-<li>Frontier-to-local distillation with MLX on Apple Silicon</li>
-<li>Notification hooks via Slack, HTTP webhooks, stdout, and composite routing (<code>AUTOCONTEXT_NOTIFY_*</code>)</li>
-<li>OpenClaw-facing APIs and agent integration surfaces</li>
-<li>CLI, API server, MCP, and TypeScript/TUI surfaces for operators and external agents</li>
-</ul>
-<h4>Providers</h4>
-<p>Runtime routing across multiple LLM backends:</p>
-<ul>
-<li><strong>Anthropic</strong> — native Anthropic API and Agent SDK</li>
-<li><strong>OpenAI-compatible</strong> — any OpenAI-compatible endpoint (vLLM, Ollama, Hermes)</li>
-<li><strong>Gemini, Mistral, Groq, OpenRouter, Azure OpenAI</strong> — env-driven config in TypeScript</li>
-<li><strong>MLX</strong> — Apple Silicon local inference</li>
-<li><strong>Pi</strong> — CLI and RPC-based Pi agent runtimes</li>
-<li><strong>Deterministic</strong> — reproducible testing without API keys</li>
-</ul>
-<h4>Runtimes</h4>
-<p>Agent runtimes control how agents execute during runs:</p>
-<ul>
-<li><strong>Claude CLI</strong> and <strong>Codex CLI</strong> — subprocess-based agent execution</li>
-<li><strong>Hermes CLI</strong> — Hermes gateway runtime</li>
-<li><strong>Direct API</strong> — in-process API calls</li>
-<li><strong>Pi CLI, Pi RPC, Pi Artifacts</strong> — Pi agent runtime variants</li>
-</ul>
-<h4>Executors</h4>
-<p>Strategy and code execution backends:</p>
-<ul>
-<li><strong>Local</strong> — subprocess execution with timeout and memory limits</li>
-<li><strong>SSH</strong> — remote execution over SSH</li>
-<li><strong>Monty</strong> — sandboxed execution via pydantic-monty (<code>AUTOCONTEXT_EXECUTOR_MODE=monty</code>)</li>
-<li><strong>PrimeIntellect</strong> — remote sandbox via PrimeIntellect SDK</li>
-</ul>
-<h3>Quick Start From Source</h3>
-<p>The Python application lives in <code>autocontext/</code>, and most <code>uv</code>, <code>pytest</code>, <code>ruff</code>, and <code>mypy</code> commands should be run from there.</p>
-<pre><code class="language-bash">cd autocontext
-uv venv
-source .venv/bin/activate
-uv sync --group dev
-
-AUTOCONTEXT_AGENT_PROVIDER=deterministic uv run autoctx solve \
-  --description &quot;improve customer-support replies for billing disputes&quot; \
-  --gens 3
-</code></pre>
-<p>That hands the harness a real task, materializes the working scenario, runs the loop, and writes traces and artifacts under <code>runs/</code> and <code>knowledge/</code>. It also works without external API keys.</p>
-<p>Run with Anthropic:</p>
-<pre><code class="language-bash">cd autocontext
-AUTOCONTEXT_AGENT_PROVIDER=anthropic \
-ANTHROPIC_API_KEY=your-key \
-uv run autoctx solve --description &quot;improve customer-support replies for billing disputes&quot; --gens 3
-</code></pre>
-<p><code>ANTHROPIC_API_KEY</code> is the preferred Anthropic credential env var. <code>AUTOCONTEXT_ANTHROPIC_API_KEY</code> remains supported as a compatibility alias.</p>
-<p>Run with Claude CLI:</p>
-<pre><code class="language-bash">cd autocontext
-AUTOCONTEXT_AGENT_PROVIDER=claude-cli \
-AUTOCONTEXT_CLAUDE_MODEL=sonnet \
-AUTOCONTEXT_CLAUDE_TIMEOUT=300 \
-uv run autoctx solve --description &quot;improve customer-support replies for billing disputes&quot; --gens 3
-</code></pre>
-<p>For longer live prompts, <code>autoctx solve</code>, <code>autoctx judge</code>, and <code>autoctx improve</code> all accept <code>--timeout &lt;seconds&gt;</code>. <code>autoctx solve</code> also accepts <code>--generation-time-budget &lt;seconds&gt;</code> to cap per-generation solve runtime. You can still use provider env vars such as <code>AUTOCONTEXT_CLAUDE_TIMEOUT</code> or <code>AUTOCONTEXT_PI_TIMEOUT</code>.</p>
-<p>Run with Codex CLI:</p>
-<pre><code class="language-bash">cd autocontext
-AUTOCONTEXT_AGENT_PROVIDER=codex \
-AUTOCONTEXT_CODEX_MODEL=o4-mini \
-uv run autoctx solve --description &quot;improve customer-support replies for billing disputes&quot; --gens 3
-</code></pre>
-<p>Start the API server:</p>
-<pre><code class="language-bash">cd autocontext
-uv run autoctx serve --host 127.0.0.1 --port 8000
-</code></pre>
-<p>Then inspect <code>http://127.0.0.1:8000/</code> for the API index, or use <code>npx autoctx tui</code> for the interactive terminal UI.</p>
-<p>Use the repo-level <code>.env.example</code> as the reference for available <code>AUTOCONTEXT_*</code> settings and supported provider-native credential aliases such as <code>ANTHROPIC_API_KEY</code>.</p>
-<h3>Installable Packages</h3>
-<p>The repo publishes two installable packages with different scopes:</p>
-<ul>
-<li>Python package: <code>pip install autocontext</code></li>
-<li>TypeScript package: <code>npm install autoctx</code></li>
-<li>Current release line: <code>autocontext==0.4.6</code> and <code>autoctx@0.4.6</code></li>
-</ul>
-<p>Important:</p>
-<ul>
-<li>The Python package on PyPI is now <code>autocontext</code>.</li>
-<li>The CLI entrypoint remains <code>autoctx</code>.</li>
-<li>The npm package for this project is still <code>autoctx</code>.</li>
-<li><code>autocontext</code> on npm is a different package.</li>
-</ul>
-<p>The Python package exposes the full <code>autoctx</code> control-plane CLI for scenario execution, API serving, exports, training, and operator workflows. The TypeScript package exposes the <code>autoctx</code> CLI and library surface for simulations, investigations, analysis, mission control, MCP serving, and Node integrations.</p>
-<p>Both packages share an optional, disabled-by-default browser exploration contract for thin browser control without bundling a heavyweight browser framework. The TypeScript CLI can attach a policy-gated browser snapshot to investigations and queued tasks with <code>--browser-url</code>. See <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/browser-exploration-contract.md">docs/browser-exploration-contract.md</a>.</p>
-<h3>Which Package Should You Use?</h3>
-<table>
-<thead>
-<tr>
-<th>If you want to...</th>
-<th>Start here</th>
-<th>Why</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Run the full multi-generation control plane</td>
-<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/README.md">autocontext/README.md</a></td>
-<td>Python has the API server, training loop, scenario scaffolding, export/import, and full CLI surface.</td>
-</tr>
-<tr>
-<td>Run simulations, investigations, analysis, or missions from Node</td>
-<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a></td>
-<td>The TypeScript package is focused on operator-facing workflows, integrations, mission control, and MCP serving.</td>
-</tr>
-<tr>
-<td>Embed autocontext in a Node app or operator workflow</td>
-<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a></td>
-<td>The TypeScript package also exposes library surfaces for evaluation, artifacts, publishing, and integrations.</td>
-</tr>
-<tr>
-<td>Point an external agent at autocontext</td>
-<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/agent-integration.md">autocontext/docs/agent-integration.md</a></td>
-<td>It documents the CLI-first contract, JSON output, MCP usage, and SDK options.</td>
-</tr>
-<tr>
-<td>Grab copy-paste integration snippets</td>
-<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/examples/README.md">examples/README.md</a></td>
-<td>The examples cover Python CLI, Claude Code MCP, Python SDK, and TypeScript library usage.</td>
-</tr>
-<tr>
-<td>Catch up on recent repo evolution</td>
-<td><a href="https://github.com/greyhaven-ai/autocontext/blob/main/CHANGELOG.md">CHANGELOG.md</a></td>
-<td>It summarizes recent public releases and notable changes.</td>
-</tr>
-</tbody></table>
-<h3>Common Workflows</h3>
-<ul>
-<li>Hand the harness a task in plain language: <code>uv run autoctx solve --description &quot;improve customer-support replies for billing disputes&quot; --gens 3</code></li>
-<li>Run and improve a saved scenario: <code>uv run autoctx run --scenario support_triage --gens 3</code></li>
-<li>Inspect or replay outputs: <code>uv run autoctx list</code>, <code>uv run autoctx status &lt;run_id&gt;</code></li>
-<li>Run an investigation from Python: <code>uv run autoctx investigate -d &quot;why did conversion drop after Tuesday&#39;s release&quot;</code></li>
-<li>Add a policy-checked browser snapshot to an investigation: <code>uv run autoctx investigate -d &quot;checkout is failing in prod&quot; --browser-url https://status.example.com</code></li>
-<li>Enqueue an ad hoc queued task from Python: <code>uv run autoctx queue add --task-prompt &quot;Write a 1-line fact about primes&quot; --rubric &quot;correct&quot; --threshold 0.8 --rounds 2</code></li>
-<li>Enqueue a browser-enriched queued task when browser exploration is configured: <code>uv run autoctx queue --spec support_triage --browser-url https://status.example.com</code></li>
-<li>Override the simulation provider per call: <code>uv run autoctx simulate -d &quot;simulate deploying a web service with rollback&quot; --provider claude-cli</code></li>
-<li>Scaffold a custom scenario: <code>uv run autoctx new-scenario --template prompt-optimization --name my-task</code></li>
-<li>Export training data: <code>uv run autoctx export-training-data --scenario support_triage --all-runs --output training/support_triage.jsonl</code></li>
-<li>Train a local model: <code>uv run autoctx train --scenario support_triage --data training/support_triage.jsonl --time-budget 300</code></li>
-<li>Start operator surfaces: <code>uv run autoctx serve --host 127.0.0.1 --port 8000</code>, <code>uv run autoctx mcp-serve</code></li>
-<li>Wait on a monitor condition: <code>uv run autoctx wait &lt;condition_id&gt; --json</code></li>
-</ul>
-<p>Representative TypeScript operator workflows:</p>
-<ul>
-<li>Run a simulation: <code>npx autoctx simulate -d &quot;simulate deploying a web service with rollback&quot;</code></li>
-<li>Analyze an artifact: <code>npx autoctx analyze --id deploy_sim --type simulation</code></li>
-<li>Operate a mission: <code>npx autoctx mission create --name &quot;Ship login&quot; --goal &quot;Implement OAuth&quot;</code></li>
-</ul>
-<p><code>operator-in-the-loop</code> is a fully runnable scenario family in both Python and TypeScript. It tests escalation and clarification judgment with real escalation/clarification hooks and behavioral-contract signals across multi-run, sweep, and replay flows.</p>
-<p>MLX training is host-only on Apple Silicon macOS. If you want a sandboxed OpenClaw agent to trigger training, use the file-based host watcher flow documented in <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/mlx-training.md">autocontext/docs/mlx-training.md</a>.</p>
-<h3>Repository Layout</h3>
-<ul>
-<li><code>autocontext/</code>: Python package, CLI, API server, and training loop</li>
-<li><code>ts/</code>: published TypeScript package, CLI, and MCP-compatible tooling</li>
-<li><code>docs/</code>: docs landing page and maintainer checklists</li>
-<li><code>examples/</code>: copy-paste integration snippets for package users and external agents</li>
-<li><code>infra/</code>: Docker, Fly.io, and bootstrap scripts</li>
-<li><code>protocol/</code>: shared protocol artifacts</li>
-<li><code>scripts/</code>: repo maintenance and generation scripts</li>
-</ul>
+<h3>Providers, Runtimes, Executors</h3>
+<p><strong>LLM providers</strong>: Anthropic (with <code>instrument_client</code> capture), OpenAI-compatible (vLLM, Ollama, Hermes), Gemini, Mistral, Groq, OpenRouter, Azure OpenAI, MLX (Apple Silicon), CUDA (Linux GPUs), Pi (CLI and RPC).</p>
+<p><strong>Agent runtimes</strong>: Claude CLI, Codex CLI, Hermes CLI, Direct API, Pi variants, plus branch-aware session and persistent Pi RPC for local agent loops.</p>
+<p><strong>Executors</strong>: Local subprocess, SSH remote, Monty (<code>pydantic-monty</code> sandbox), PrimeIntellect remote sandbox.</p>
+<p><strong>Harness profiles and hooks</strong>: The Python control plane supports a Pi-shaped lean profile that caps prompt context during generation and exports a minimal tool-affordance allowlist for agent surfaces that enforce tool gating. Semantic prompt compactions are recorded as Pi-shaped JSONL entries under each run; the TypeScript package now includes a mirrored deterministic prompt compactor plus <code>ArtifactStore</code> ledger read/write/latest APIs for standalone npm runs. Python and TypeScript runs can load <code>AUTOCONTEXT_EXTENSIONS</code>; Python extensions are Python modules, while TypeScript extensions are JavaScript/ESM modules that register hooks around context assembly, semantic compaction, provider calls, judge calls, artifact writes, and run lifecycle events.</p>
+<p>A deterministic offline provider exists for the test suite. Configuration matrix: <a href=".env.example"><code>.env.example</code></a> and <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/concept-model.md">docs/concept-model.md</a>.</p>
+<h3>FAQ</h3>
+<p><strong>Is autocontext a benchmark?</strong>
+No. It&#39;s a harness for improving real agent behavior on real work. Benchmarks (the 11 scenario families) are one of many surfaces; you can also point it at production tasks, missions, or simulations.</p>
+<p><strong>How is this different from DSPy, Inspect, TextGrad, or a prompt optimizer?</strong>
+Those tools optimize prompts. Autocontext takes a goal in plain language, generates the scenario, runs a multi-role loop with verifier-driven gating, and produces transferable artifacts (playbooks, datasets, distilled models) that the next run inherits. Prompt optimization is a special case.</p>
+<p><strong>Do I need API keys?</strong>
+No. The Pi runtime runs locally and handles its own auth. Anthropic, OpenAI, Gemini, Mistral, Groq, OpenRouter, Azure, MLX, and Claude/Codex CLI are all opt-in via env vars.</p>
+<p><strong>Where does the knowledge live?</strong>
+On your filesystem. Runs go to <code>runs/</code>, accumulated knowledge to <code>knowledge/</code>. Indexed metadata is in SQLite. Everything is inspectable, diffable, and portable.</p>
+<p><strong>Can my coding agent drive autocontext directly?</strong>
+Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>) into Claude Code, Cursor, or Pi as an MCP server, and the agent gets natural-language access to <code>solve</code>, <code>judge</code>, <code>improve</code>, <code>status</code>, <code>export_skill</code>, and the rest. See <a href="#or-just-talk-to-your-agent">Or Just Talk To Your Agent</a>.</p>
 <h3>Where To Look Next</h3>
 <ul>
 <li>Canonical vocabulary and object model: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/concept-model.md">docs/concept-model.md</a></li>
 <li>Docs overview: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/README.md">docs/README.md</a></li>
-<li>Analytics and adoption: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/analytics.md">docs/analytics.md</a></li>
 <li>Python package guide: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/README.md">autocontext/README.md</a></li>
 <li>TypeScript package guide: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a></li>
 <li>Copy-paste examples: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/examples/README.md">examples/README.md</a></li>
 <li>External agent integration: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/agent-integration.md">autocontext/docs/agent-integration.md</a></li>
 <li>Recent changes: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/CHANGELOG.md">CHANGELOG.md</a></li>
 <li>Contributor setup: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a></li>
-<li>Repo agent guide: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/AGENTS.md">AGENTS.md</a></li>
-<li>MLX host training and OpenClaw bridge: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/mlx-training.md">autocontext/docs/mlx-training.md</a></li>
+<li>Repo layout for coding agents: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/AGENTS.md">AGENTS.md</a></li>
+<li>Sandboxed agents that need to trigger MLX training on the host: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/mlx-training.md">autocontext/docs/mlx-training.md</a></li>
 <li>Sandbox and executor notes: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/sandbox.md">autocontext/docs/sandbox.md</a></li>
 <li>License: <a href="LICENSE">LICENSE</a></li>
 </ul>
@@ -542,37 +522,37 @@ uv run autoctx serve --host 127.0.0.1 --port 8000
   </div>
   <div>
     <div class="related-list">
+      <a class="related-row" href="/projects/mem0ai/mem0">
+        <div class="stars">★ 54.5K</div>
+        <div class="name"><span class="org">mem0ai /</span> mem0</div>
+      </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 10.9K</div>
+        <div class="stars">★ 11.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 189</div>
+        <div class="stars">★ 197</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 135</div>
+        <div class="stars">★ 143</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 51</div>
+        <div class="stars">★ 59</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 10</div>
+        <div class="stars">★ 13</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 11.7K</div>
+        <div class="stars">★ 12.6K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 311</div>
+        <div class="stars">★ 363</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
-      </a>
-      <a class="related-row" href="/projects/keepnotes-ai/keep">
-        <div class="stars">★ 31</div>
-        <div class="name"><span class="org">keepnotes-ai /</span> keep</div>
       </a>
     </div>
     <p class="list-link"><a href="/lists/best-memory-providers">see all memory &amp; context →</a></p>

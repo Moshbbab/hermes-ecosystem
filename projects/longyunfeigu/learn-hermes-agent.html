@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>learn-hermes-agent — Hermes Agent Guides &amp; Docs | Hermes Atlas</title>
+<meta name="description" content="A 27-chapter hands-on tutorial for building an autonomous AI agent from zero in Python. Agent loop, tool system, memory, skills, MCP,     multi-platform gateway">
+<link rel="canonical" href="https://hermesatlas.com/projects/longyunfeigu/learn-hermes-agent">
+<meta property="og:title" content="learn-hermes-agent — Hermes Atlas">
+<meta property="og:description" content="A 27-chapter hands-on tutorial for building an autonomous AI agent from zero in Python. Agent loop, tool system, memory, skills, MCP,     multi-platform gateway">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/longyunfeigu/learn-hermes-agent">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=learn-hermes-agent&amp;subtitle=A+27-chapter+hands-on+tutorial+for+building+an+autonomous+AI+agent+from+zero+in+Python.+Agent+loop%2C+tool+system%2C+memory%2C+skills%2C+MCP%2C+++++multi-platform+gateway%2C+and+self-evolution&amp;kind=project+%C2%B7+guides">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="learn-hermes-agent — Hermes Atlas">
+<meta name="twitter:description" content="A 27-chapter hands-on tutorial for building an autonomous AI agent from zero in Python. Agent loop, tool system, memory, skills, MCP,     multi-platform gateway">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=learn-hermes-agent&amp;subtitle=A+27-chapter+hands-on+tutorial+for+building+an+autonomous+AI+agent+from+zero+in+Python.+Agent+loop%2C+tool+system%2C+memory%2C+skills%2C+MCP%2C+++++multi-platform+gateway%2C+and+self-evolution&amp;kind=project+%C2%B7+guides">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "guides &amp; docs", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 3, "name": "learn-hermes-agent" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/longyunfeigu/learn-hermes-agent#software",
+  "name": "learn-hermes-agent",
+  "description": "Learn Hermes Agent is a 27-chapter hands-on tutorial for building production-grade autonomous AI agents from scratch using Python. The curriculum guides developers through implementing a core agent loop, tool registration, session persistence with SQLite, and context compression. It covers advanced infrastructure including multi-platform gateways for Telegram and Discord, Model Context Protocol (MCP) integration, and RL-based self-evolution. The project provides runnable reference implementation",
+  "url": "https://hermesatlas.com/projects/longyunfeigu/learn-hermes-agent",
+  "codeRepository": "https://github.com/longyunfeigu/learn-hermes-agent",
+  "applicationCategory": "ReferenceApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "author": {
+    "@type": "Organization",
+    "name": "longyunfeigu",
+    "url": "https://github.com/longyunfeigu"
+  },
+  "dateModified": "2026-04-21T08:25:31.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 73
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23d49a4f'/><text x='16' y='23' font-family='Space Grotesk,sans-serif' font-size='22' font-weight='700' fill='%230e0d0b' text-anchor='middle'>H</text></svg>">
+<script>(function(){try{var s=localStorage.getItem('theme');var o=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;var t=s||(o?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span>apr·2026</span>
+    <span id="meta-count">111·repos</span>
+    <span>hermes·v0.10.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/#curated-lists">lists</a>
+    <a href="/guide/">handbook</a>
+    <a href="/reports/state-of-hermes-april-2026">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-light">light</span><span class="tt-sep">/</span><span class="tt-dark">dark</span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/">guides &amp; docs</a><span class="sep">/</span>learn-hermes-agent
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">longyunfeigu</span><span class="slash">/</span>learn-hermes-agent
+  </h1>
+  <p class="project-desc">A 27-chapter hands-on tutorial for building an autonomous AI agent from zero in Python. Agent loop, tool system, memory, skills, MCP,     multi-platform gateway, and self-evolution — inspired by Hermes Agent.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 73</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    <span><span class="meta-label">license</span>MIT</span>
+    
+    <span><span class="meta-label">updated</span>2026-04-21</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/longyunfeigu/learn-hermes-agent" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    
+  </div>
+</section>
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">Learn Hermes Agent is a 27-chapter hands-on tutorial for building production-grade autonomous AI agents from scratch using Python. The curriculum guides developers through implementing a core agent loop, tool registration, session persistence with SQLite, and context compression. It covers advanced infrastructure including multi-platform gateways for Telegram and Discord, Model Context Protocol (MCP) integration, and RL-based self-evolution. The project provides runnable reference implementations for each stage to help users understand the design backbone of autonomous systems.</p>
+    <ul class="summary-highlights">
+      <li>Step-by-step implementation of agent loops and tool dispatch systems</li>
+      <li>Multi-platform gateway supporting Telegram, Discord, Slack, and WeChat</li>
+      <li>Advanced memory management with context compression and session persistence</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <p><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/README.md">English</a> | <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/README-zh.md">中文</a></p>
+<h2>Learn Hermes Agent</h2>
+<p><strong>Build a production-grade autonomous AI agent from scratch in Python.</strong> A 27-chapter, code-first tutorial covering the agent loop, tool system, session persistence, memory, skills, context compression, MCP, multi-platform gateway (Telegram / Discord / Slack / WeChat), and RL-based self-evolution — inspired by Hermes Agent.</p>
+<p>Every chapter ships a runnable reference implementation under <code>agents/sNN_*.py</code>, paired with a prose explanation under <code>docs/en/</code> (and <code>docs/zh/</code> for the Chinese mainline). Read, run, tweak, repeat.</p>
+<p>This repo does not try to mirror every product detail from the Hermes Agent codebase. It focuses on the mechanisms that actually decide whether an agent can work autonomously across platforms:</p>
+<ul>
+<li>the conversation loop</li>
+<li>tool registry and dispatch</li>
+<li>session persistence</li>
+<li>prompt assembly</li>
+<li>context compression</li>
+<li>memory and skill management</li>
+<li>skill system</li>
+<li>permission and safety</li>
+<li>multi-platform gateway</li>
+<li>terminal backends</li>
+<li>scheduling</li>
+<li>external capability routing</li>
+</ul>
+<p>The goal is simple:</p>
+<p><strong>understand the real design backbone well enough that you can rebuild it yourself.</strong></p>
+<h3>What This Repo Is Really Teaching</h3>
+<p>One sentence first:</p>
+<p><strong>The model does the reasoning. The harness gives the model a working environment that spans platforms, persists across sessions, and manages its own skills.</strong></p>
+<p>That working environment is made of a few cooperating parts:</p>
+<ul>
+<li><code>Agent Loop</code>: send messages to the model, execute tool calls, append results, continue</li>
+<li><code>Tool System</code>: a self-registering dispatch layer — the agent&#39;s hands</li>
+<li><code>Session Store</code>: SQLite with FTS5 — conversation memory that survives restarts</li>
+<li><code>Prompt Builder</code>: assemble system prompts from personality, memory, config, and context</li>
+<li><code>Context Compression</code>: keep the active window small when conversations grow long</li>
+<li><code>Memory &amp; Skills</code>: durable knowledge and agent-managed skill files</li>
+<li><code>Permission System</code>: detect dangerous commands before execution</li>
+<li><code>Gateway</code>: a single agent loop that listens on Telegram, Discord, Slack, WeChat, and more</li>
+<li><code>Terminal Backends</code>: run commands locally, in Docker, over SSH, or on serverless platforms</li>
+<li><code>Cron / MCP / Voice</code>: grow the single-agent core into a full working platform</li>
+</ul>
+<p>This is the teaching promise of the repo:</p>
+<ul>
+<li>teach the mainline in a clean order</li>
+<li>explain unfamiliar concepts before relying on them</li>
+<li>stay close to real system structure</li>
+<li>avoid drowning the learner in irrelevant product details</li>
+</ul>
+<h3>What This Repo Deliberately Does Not Teach</h3>
+<p>This repo is not trying to preserve every detail that exists in the production system.</p>
+<p>If a detail is not central to the agent&#39;s core operating model, it should not dominate the teaching line. That includes things like:</p>
+<ul>
+<li>packaging, Nix flakes, and release mechanics</li>
+<li>landing pages and marketing assets</li>
+<li>enterprise subscription and billing wiring</li>
+<li>telemetry and analytics</li>
+<li>RL training pipeline and batch runner internals</li>
+<li>platform-specific API quirks (WeChat XML parsing, Telegram inline keyboards)</li>
+<li>skin/theme engine cosmetics</li>
+<li>historical migration logic</li>
+</ul>
+<p>Those details may matter in production. They do not belong at the center of a 0-to-1 teaching path.</p>
+<h3>Who This Is For</h3>
+<p>The assumed reader:</p>
+<ul>
+<li>knows basic Python</li>
+<li>understands functions, classes, async/await basics</li>
+<li>may be completely new to agent systems or multi-platform bots</li>
+</ul>
+<p>So the repo tries to keep a few strong teaching rules:</p>
+<ul>
+<li>explain a concept before using it</li>
+<li>keep one concept fully explained in one main place</li>
+<li>start from &quot;what it is&quot;, then &quot;why it exists&quot;, then &quot;how to implement it&quot;</li>
+<li>avoid forcing beginners to assemble the system from scattered fragments</li>
+</ul>
+<h3>Recommended Reading Order</h3>
+<ul>
+<li>Overview: <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/s00-architecture-overview.md"><code>docs/en/s00-architecture-overview.md</code></a></li>
+<li>Code Reading Order: <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/s00f-code-reading-order.md"><code>docs/en/s00f-code-reading-order.md</code></a></li>
+<li>Glossary: <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/glossary.md"><code>docs/en/glossary.md</code></a></li>
+<li>Teaching Scope: <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/teaching-scope.md"><code>docs/en/teaching-scope.md</code></a></li>
+<li>Data Structures: <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/data-structures.md"><code>docs/en/data-structures.md</code></a></li>
+</ul>
+<h3>If This Is Your First Visit, Start Here</h3>
+<p>Do not open random chapters first.</p>
+<p>The safest path is:</p>
+<ol>
+<li>Read <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/s00-architecture-overview.md"><code>docs/en/s00-architecture-overview.md</code></a> for the full system map.</li>
+<li>Read <a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/s00f-code-reading-order.md"><code>docs/en/s00f-code-reading-order.md</code></a> so you know which source files to open first.</li>
+<li>Follow the five stages in order: <code>s01-s06 -&gt; s07-s11 -&gt; s12-s15 -&gt; s16-s20 -&gt; s21-s27</code>.</li>
+<li>After each stage, stop and rebuild the smallest version yourself before continuing.</li>
+</ol>
+<p>If the middle and late chapters start to blur together, reset in this order:</p>
+<ol>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/data-structures.md"><code>docs/en/data-structures.md</code></a></li>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/entity-map.md"><code>docs/en/entity-map.md</code></a></li>
+<li>then return to the chapter body</li>
+</ol>
+<h3>Five Stages</h3>
+<ol>
+<li><code>s01-s06</code>: build a working single-agent core with persistence</li>
+<li><code>s07-s11</code>: add intelligence — memory, skills, safety, delegation, and configuration</li>
+<li><code>s12-s15</code>: go multi-platform — gateway, adapters, terminal backends, and scheduling</li>
+<li><code>s16-s20</code>: add advanced capabilities — MCP, browser, voice, vision, and background review</li>
+<li><code>s21-s27</code>: self-improvement — skill creation, hooks, trajectory/RL, plugins, evaluation, and optimization</li>
+</ol>
+<h3>Main Chapters</h3>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Topic</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>s00</code></td>
+<td>Architecture Overview</td>
+<td>the global map, key terms, and learning order</td>
+</tr>
+<tr>
+<td><code>s01</code></td>
+<td>Agent Loop</td>
+<td>the synchronous conversation loop — ask, tool-call, append, continue</td>
+</tr>
+<tr>
+<td><code>s02</code></td>
+<td>Tool System</td>
+<td>a self-registering tool registry with dispatch orchestration</td>
+</tr>
+<tr>
+<td><code>s03</code></td>
+<td>Session Store</td>
+<td>SQLite + FTS5 persistence — conversations that survive restarts</td>
+</tr>
+<tr>
+<td><code>s04</code></td>
+<td>Prompt Builder</td>
+<td>section-based system prompt assembly from personality, memory, and config</td>
+</tr>
+<tr>
+<td><code>s05</code></td>
+<td>Context Compression</td>
+<td>auto-triggered LLM summarization when context grows too long</td>
+</tr>
+<tr>
+<td><code>s06</code></td>
+<td>Error Recovery</td>
+<td>API error classification, retry with backoff, and provider failover</td>
+</tr>
+<tr>
+<td><code>s07</code></td>
+<td>Memory System</td>
+<td>cross-session persistent knowledge with MEMORY.md and USER.md</td>
+</tr>
+<tr>
+<td><code>s08</code></td>
+<td>Skill System</td>
+<td>agent-managed skills — create, edit, and execute</td>
+</tr>
+<tr>
+<td><code>s09</code></td>
+<td>Permission System</td>
+<td>dangerous command detection and approval gates</td>
+</tr>
+<tr>
+<td><code>s10</code></td>
+<td>Subagent Delegation</td>
+<td>spawn fresh context for isolated subtasks</td>
+</tr>
+<tr>
+<td><code>s11</code></td>
+<td>Configuration System</td>
+<td>YAML config, env vars, profiles, and runtime migration</td>
+</tr>
+<tr>
+<td><code>s12</code></td>
+<td>Gateway Architecture</td>
+<td>the multi-platform message dispatch loop</td>
+</tr>
+<tr>
+<td><code>s13</code></td>
+<td>Platform Adapters</td>
+<td>building integrations for Telegram, Discord, Slack, WeChat, and more</td>
+</tr>
+<tr>
+<td><code>s14</code></td>
+<td>Terminal Backends</td>
+<td>run commands in Docker, over SSH, on Modal, or Daytona</td>
+</tr>
+<tr>
+<td><code>s15</code></td>
+<td>Cron Scheduler</td>
+<td>time-based automation with duration strings and cron expressions</td>
+</tr>
+<tr>
+<td><code>s16</code></td>
+<td>MCP Integration</td>
+<td>external capability routing via Model Context Protocol</td>
+</tr>
+<tr>
+<td><code>s17</code></td>
+<td>Browser Automation</td>
+<td>Playwright + Browserbase for web interaction</td>
+</tr>
+<tr>
+<td><code>s18</code></td>
+<td>Voice &amp; Vision</td>
+<td>TTS/STT pipelines and image analysis</td>
+</tr>
+<tr>
+<td><code>s19</code></td>
+<td>CLI Interface</td>
+<td>prompt_toolkit + Rich for an interactive terminal experience</td>
+</tr>
+<tr>
+<td><code>s20</code></td>
+<td>Background Review</td>
+<td>every N turns, a background pass updates memory and extracts skills</td>
+</tr>
+<tr>
+<td><code>s21</code></td>
+<td>Skill Creation Loop</td>
+<td>background review extracts patterns into reusable skills</td>
+</tr>
+<tr>
+<td><code>s22</code></td>
+<td>Hook System</td>
+<td>lifecycle hooks for extensibility without modifying core code</td>
+</tr>
+<tr>
+<td><code>s23</code></td>
+<td>Trajectory &amp; RL</td>
+<td>conversation trajectories become training data for model improvement</td>
+</tr>
+<tr>
+<td><code>s24</code></td>
+<td>Plugin Architecture</td>
+<td>pluggable memory, compression, and capability providers</td>
+</tr>
+<tr>
+<td><code>s25</code></td>
+<td>Self-Evolution Overview</td>
+<td>the core insight, four evolution targets, and full pipeline overview</td>
+</tr>
+<tr>
+<td><code>s26</code></td>
+<td>Evaluation System</td>
+<td>eval datasets, LLM-as-judge fitness scoring, and constraint gates</td>
+</tr>
+<tr>
+<td><code>s27</code></td>
+<td>Optimization &amp; Deploy</td>
+<td>the feedback→mutate→select loop, full pipeline, and Phase 2-4 concepts</td>
+</tr>
+</tbody></table>
+<h3>Chapter Index: What to Focus on in Each Chapter</h3>
+<p>If this is your first time learning this material systematically, do not spread your attention evenly across all details. For each chapter, focus on 3 things:</p>
+<ol>
+<li>What new capability this chapter adds.</li>
+<li>Where the key state lives.</li>
+<li>After finishing, can you hand-write this minimal mechanism yourself?</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Key Data Structures / Entities</th>
+<th>What you should have after this chapter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>s01</code></td>
+<td><code>messages</code> list / <code>AIAgent</code> class / <code>run_conversation()</code></td>
+<td>a minimal working synchronous conversation loop</td>
+</tr>
+<tr>
+<td><code>s02</code></td>
+<td><code>ToolRegistry</code> / <code>ToolEntry</code> / <code>tool_result</code></td>
+<td>a self-registering, self-discovering tool system</td>
+</tr>
+<tr>
+<td><code>s03</code></td>
+<td><code>SessionDB</code> / <code>state.db</code> / FTS5 index</td>
+<td>a SQLite persistence layer — conversations survive restarts</td>
+</tr>
+<tr>
+<td><code>s04</code></td>
+<td><code>build_context_files_prompt()</code> / <code>build_skills_system_prompt()</code></td>
+<td>a pipeline assembling prompts from personality, memory, and config</td>
+</tr>
+<tr>
+<td><code>s05</code></td>
+<td><code>ContextCompressor</code> / compression trigger threshold</td>
+<td>an auto-summarization layer when context grows too long</td>
+</tr>
+<tr>
+<td><code>s06</code></td>
+<td><code>ClassifiedError</code> / <code>FailoverReason</code> / <code>classify_api_error()</code></td>
+<td>error classification + backoff retry + provider failover</td>
+</tr>
+<tr>
+<td><code>s07</code></td>
+<td><code>MemoryStore</code> / <code>MemoryManager</code> / <code>MEMORY.md</code> / <code>USER.md</code></td>
+<td>a layer that separates &quot;temporary context&quot; from &quot;cross-session memory&quot;</td>
+</tr>
+<tr>
+<td><code>s08</code></td>
+<td><code>SkillMeta</code> / <code>SkillBundle</code> / skill SKILL.md files</td>
+<td>a skill system that can create, edit, and execute</td>
+</tr>
+<tr>
+<td><code>s09</code></td>
+<td><code>DANGEROUS_PATTERNS</code> / <code>detect_dangerous_command()</code> / <code>_ApprovalEntry</code></td>
+<td>a &quot;dangerous operations must pass the gate&quot; approval pipeline</td>
+</tr>
+<tr>
+<td><code>s10</code></td>
+<td><code>delegate_tool</code> / child <code>messages</code> / isolated <code>AIAgent</code></td>
+<td>a subagent mechanism with isolated context for one-off delegation</td>
+</tr>
+<tr>
+<td><code>s11</code></td>
+<td>config dict / <code>Profile</code> management / migration functions</td>
+<td>YAML config + profiles + runtime migration</td>
+</tr>
+<tr>
+<td><code>s12</code></td>
+<td><code>GatewayRunner</code> / <code>MessageEvent</code> / platform routing</td>
+<td>a unified multi-platform message dispatch loop</td>
+</tr>
+<tr>
+<td><code>s13</code></td>
+<td><code>BasePlatformAdapter</code> / <code>MessageType</code> / <code>SendResult</code></td>
+<td>a reusable platform adapter pattern</td>
+</tr>
+<tr>
+<td><code>s14</code></td>
+<td><code>BaseEnvironment</code> / local / docker / ssh / modal / daytona</td>
+<td>abstract execution environments: local, Docker, SSH, cloud</td>
+</tr>
+<tr>
+<td><code>s15</code></td>
+<td><code>parse_schedule()</code> / <code>create_job()</code> / <code>get_due_jobs()</code> / job dicts</td>
+<td>a &quot;when the time comes, work starts&quot; scheduling layer</td>
+</tr>
+<tr>
+<td><code>s16</code></td>
+<td><code>mcp_tool</code> / MCP config / tool schema bridging</td>
+<td>a bus for plugging external tools and capabilities into the system</td>
+</tr>
+<tr>
+<td><code>s17</code></td>
+<td><code>browser_tool</code> / Playwright / Browserbase provider</td>
+<td>a browser automation layer for web interaction</td>
+</tr>
+<tr>
+<td><code>s18</code></td>
+<td><code>tts_tool</code> / <code>voice_mode</code> / <code>vision_tools</code></td>
+<td>multimodal pipelines: voice I/O + image analysis</td>
+</tr>
+<tr>
+<td><code>s19</code></td>
+<td><code>HermesCLI</code> / <code>CommandDef</code> / <code>KawaiiSpinner</code> / Rich rendering</td>
+<td>a fully-featured interactive terminal interface</td>
+</tr>
+<tr>
+<td><code>s20</code></td>
+<td><code>BackgroundReviewer</code> / <code>_MEMORY_REVIEW_PROMPT</code> / dual trigger counters</td>
+<td>an &quot;every N turns, auto-reflect → update memory/skills&quot; background review mechanism</td>
+</tr>
+<tr>
+<td><code>s21</code></td>
+<td>skill creation loop / pattern extraction prompt / skill persistence pipeline</td>
+<td>the &quot;discover patterns → create reusable skills&quot; prerequisite for self-evolution</td>
+</tr>
+<tr>
+<td><code>s22</code></td>
+<td><code>HookRegistry</code> / <code>PluginHookRegistry</code> / BOOT.md handler</td>
+<td>lifecycle hooks — inject custom logic without modifying core code</td>
+</tr>
+<tr>
+<td><code>s23</code></td>
+<td><code>convert_to_trajectory()</code> / <code>compress_trajectory()</code> / reward functions</td>
+<td>conversation data → training pipeline for model improvement</td>
+</tr>
+<tr>
+<td><code>s24</code></td>
+<td>plugin interfaces / memory providers / compression providers</td>
+<td>pluggable memory and compression without touching core code</td>
+</tr>
+<tr>
+<td><code>s25</code></td>
+<td><code>EvalExample</code> / <code>EvalDataset</code></td>
+<td>the foundational data structures for self-evolution</td>
+</tr>
+<tr>
+<td><code>s26</code></td>
+<td><code>SyntheticDatasetBuilder</code> / <code>FitnessScore</code> / <code>ConstraintValidator</code></td>
+<td>measurement infrastructure — generate data, score outputs, gate changes</td>
+</tr>
+<tr>
+<td><code>s27</code></td>
+<td><code>SkillOptimizer</code> / <code>EvolutionResult</code> / <code>evolve_skill()</code></td>
+<td>the optimization loop and full 7-step pipeline</td>
+</tr>
+</tbody></table>
+<h3>Reading Approaches for Beginners</h3>
+<h4>Approach 1: Steady Mainline</h4>
+<p>Best for readers encountering agent systems for the first time.</p>
+<p>Read in this order:</p>
+<p><code>s00 -&gt; s01 -&gt; ... -&gt; s20 -&gt; s21 -&gt; ... -&gt; s27</code> (follow the numbers; <code>s24</code> is docs-only).</p>
+<h4>Approach 2: Build First, Complete Later</h4>
+<p>Best for &quot;get it running, then fill in the gaps&quot; readers.</p>
+<p>Read in this order:</p>
+<ol>
+<li><code>s01-s06</code>: build a core agent with persistence and context compression</li>
+<li><code>s07-s11</code>: add memory, skills, safety, delegation, and config</li>
+<li><code>s12-s15</code>: go multi-platform, learn cross-environment execution</li>
+<li><code>s16-s20</code>: advanced capabilities plus the background self-review</li>
+<li><code>s21-s27</code>: step into self-evolution — skill creation, hooks, trajectories, evaluation, and optimization</li>
+</ol>
+<h4>Approach 3: When You Get Stuck</h4>
+<p>If you hit a wall in the middle or late chapters, do not push forward blindly.</p>
+<p>Reset in this order:</p>
+<ol>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/s00-architecture-overview.md"><code>docs/en/s00-architecture-overview.md</code></a></li>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/data-structures.md"><code>docs/en/data-structures.md</code></a></li>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/entity-map.md"><code>docs/en/entity-map.md</code></a></li>
+<li>the chapter you are stuck on</li>
+</ol>
+<p>When readers truly get stuck, it is usually not &quot;I can&#39;t read the code&quot; but rather:</p>
+<ul>
+<li>which layer does this mechanism plug into?</li>
+<li>which data structure holds this state?</li>
+<li>what is the difference between this term and another that looks similar?</li>
+</ul>
+<h3>Quick Start</h3>
+<pre><code class="language-sh">git clone &lt;repo-url&gt;
+cd learn-hermes-agent
+pip install -r requirements.txt
+cp .env.example .env
+</code></pre>
+<p>Then configure your API key in <code>.env</code>, and run:</p>
+<pre><code class="language-sh">python agents/s01_agent_loop.py
+</code></pre>
+<p>Suggested order:</p>
+<ol>
+<li>Run <code>s01</code> and make sure the minimal loop really works.</li>
+<li>Read <code>s00</code>, then move through <code>s01 -&gt; s06</code> in order.</li>
+<li>Only after the single-agent core plus its persistence feel stable, continue into <code>s07 -&gt; s11</code>.</li>
+<li>Move into gateway and platform chapters <code>s12 -&gt; s15</code> only after the core agent makes sense.</li>
+<li>Continue through <code>s16 -&gt; s20</code>, then the self-evolution chapters <code>s21 -&gt; s27</code>.</li>
+</ol>
+<h3>How To Read Each Chapter</h3>
+<p>Each chapter is easier to absorb if you keep the same reading rhythm:</p>
+<ol>
+<li>what problem appears without this mechanism</li>
+<li>what the new concept means</li>
+<li>what the smallest correct implementation looks like</li>
+<li>where the state actually lives</li>
+<li>how it plugs back into the loop</li>
+<li>where to stop first, and what can wait until later</li>
+</ol>
+<p>If you keep asking:</p>
+<ul>
+<li>&quot;Is this core mainline or just a side detail?&quot;</li>
+<li>&quot;Where does this state actually live?&quot;</li>
+</ul>
+<p>go back to:</p>
+<ul>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/teaching-scope.md"><code>docs/en/teaching-scope.md</code></a></li>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/data-structures.md"><code>docs/en/data-structures.md</code></a></li>
+<li><a href="https://github.com/longyunfeigu/learn-hermes-agent/blob/main/docs/en/entity-map.md"><code>docs/en/entity-map.md</code></a></li>
+</ul>
+<h3>Repository Structure</h3>
+<pre><code class="language-text">learn-hermes-agent/
+├── agents/              # runnable Python reference implementations per chapter (s24 is an exception, see below)
+├── docs/zh/             # Chinese mainline docs
+├── docs/en/             # English docs
+├── illustrations/       # chalkboard-style diagrams for each chapter
+├── tests/               # smoke tests
+├── web/                 # web teaching platform (optional)
+├── .env.example         # environment variable template
+└── requirements.txt     # Python dependencies
+</code></pre>
+<blockquote>
+<p>Note: <code>s24 Plugin Architecture</code> currently ships with documentation only (<code>docs/en/s24-plugin-architecture.md</code> and the Chinese counterpart). There is no <code>agents/s24_*.py</code> reference implementation. The doc is self-contained and does not block the rest of the reading order.</p>
+</blockquote>
+<h3>Teaching Tradeoffs</h3>
+<p>To ensure &quot;buildable from 0 to 1&quot;, this repo makes deliberate tradeoffs:</p>
+<ul>
+<li>Teach the minimal correct version first, then explain extension boundaries.</li>
+<li>If a real mechanism is complex but the core idea is not, teach the core idea first.</li>
+<li>If an advanced term appears, explain it — do not assume the reader already knows.</li>
+<li>If an edge case in the real system has low teaching value, remove it entirely.</li>
+</ul>
+<p>This means the repo aims for:</p>
+<p><strong>High fidelity on core mechanisms, deliberate tradeoffs on peripheral details.</strong></p>
+<h3>Language Status</h3>
+<p>Chinese is the canonical teaching line and the fastest-moving version.</p>
+<ul>
+<li><code>zh</code>: most reviewed and most complete</li>
+<li><code>en</code>: all chapters s00-s27 available; Chinese is updated first</li>
+</ul>
+<p>If you want the fullest and most frequently refined explanation path, use the Chinese docs first.</p>
+<h3>End Goal</h3>
+<p>By the end of the repo, you should be able to answer these questions clearly:</p>
+<ul>
+<li>what is the minimum state an autonomous agent needs to persist across sessions?</li>
+<li>why is the tool registry the center of the agent&#39;s capability?</li>
+<li>how does a single conversation loop scale to 15+ messaging platforms?</li>
+<li>what problem do memory, skills, permissions, context compression, and error recovery each solve?</li>
+<li>how do terminal backends abstract away the execution environment?</li>
+<li>when should a single-agent system grow into gateway, scheduling, MCP, and voice?</li>
+</ul>
+<p>If you can answer those questions clearly and build a similar system yourself, this repo has done its job.</p>
+<hr>
+<p><strong>This is not &quot;copy the source code line by line.&quot; This is &quot;grasp the designs that truly matter, then build it yourself.&quot;</strong></p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in guides &amp; docs</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/0xNyk/awesome-hermes-agent">
+        <div class="stars">★ 2.2K</div>
+        <div class="name"><span class="org">0xNyk /</span> awesome-hermes-agent</div>
+      </a>
+      <a class="related-row" href="/projects/alchaincyf/hermes-agent-orange-book">
+        <div class="stars">★ 3.4K</div>
+        <div class="name"><span class="org">alchaincyf /</span> hermes-agent-orange-book</div>
+      </a>
+      <a class="related-row" href="/projects/OnlyTerp/hermes-optimization-guide">
+        <div class="stars">★ 225</div>
+        <div class="name"><span class="org">OnlyTerp /</span> hermes-optimization-guide</div>
+      </a>
+      <a class="related-row" href="/projects/metantonio/hermes-wsl-ubuntu">
+        <div class="stars">★ 24</div>
+        <div class="name"><span class="org">metantonio /</span> hermes-wsl-ubuntu</div>
+      </a>
+      <a class="related-row" href="/projects/mudrii/hermes-agent-docs">
+        <div class="stars">★ 22</div>
+        <div class="name"><span class="org">mudrii /</span> hermes-agent-docs</div>
+      </a>
+      <a class="related-row" href="/projects/martymcenroe/HermesWiki">
+        <div class="stars">★ 8</div>
+        <div class="name"><span class="org">martymcenroe /</span> HermesWiki</div>
+      </a>
+      <a class="related-row" href="/projects/ksimback/hermes-ecosystem">
+        <div class="stars">★ 663</div>
+        <div class="name"><span class="org">ksimback /</span> hermes-ecosystem</div>
+      </a>
+      <a class="related-row" href="/projects/jwangkun/hermes-agent-guide">
+        <div class="stars">★ 130</div>
+        <div class="name"><span class="org">jwangkun /</span> hermes-agent-guide</div>
+      </a>
+    </div>
+    
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script>(function(){fetch('/api/stars').then(function(r){return r.ok&&r.json()}).then(function(d){if(!d)return;var a=document.getElementById('meta-atlas');if(a&&d.atlas&&d.atlas.stars)a.textContent='★ '+d.atlas.stars+' · star this repo';var c=document.getElementById('meta-count');if(c&&d.totals&&d.totals.count)c.textContent=d.totals.count+'·repos'}).catch(function(){});})();</script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

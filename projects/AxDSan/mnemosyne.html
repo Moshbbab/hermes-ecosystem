@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a local-first memory system designed to provide persistent storage for Hermes Agents without relying on cloud services or external databases. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge graph triples. The system implements a three-tier BEAM architecture that automatically consolidates working memory into long-term episodic storage through scheduled sleep cycles. By running entirely in-process, it eli",
+  "description": "Mnemosyne is a local-first memory system designed to provide persistent context for Hermes Agents without relying on cloud services or external databases. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge entirely on-device. The system implements a three-tier BEAM architecture that categorizes data into working, episodic, and scratchpad memory while supporting automatic consolidation through sleep cycles. This approach",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-04-26T15:18:05.000Z",
+  "dateModified": "2026-04-30T16:07:02.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 47
+    "userInteractionCount": 56
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">100·repos</span>
+    <span id="meta-count">111·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 47</span>
+    <span class="stars">★ 56</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-26</span>
+    <span><span class="meta-label">updated</span>2026-04-30</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a local-first memory system designed to provide persistent storage for Hermes Agents without relying on cloud services or external databases. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge graph triples. The system implements a three-tier BEAM architecture that automatically consolidates working memory into long-term episodic storage through scheduled sleep cycles. By running entirely in-process, it eliminates network latency and API costs while ensuring data privacy and offline functionality.</p>
+    <p class="summary-text">Mnemosyne is a local-first memory system designed to provide persistent context for Hermes Agents without relying on cloud services or external databases. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge entirely on-device. The system implements a three-tier BEAM architecture that categorizes data into working, episodic, and scratchpad memory while supporting automatic consolidation through sleep cycles. This approach ensures data privacy and eliminates network latency, making it suitable for offline-capable AI applications.</p>
     <ul class="summary-highlights">
-      <li>Sub-millisecond read and write latency using SQLite-native vector search</li>
+      <li>SQLite-backed storage with native vector and full-text search</li>
+      <li>Sub-millisecond latency for memory read, write, and search operations</li>
       <li>Three-tier BEAM architecture for working, episodic, and scratchpad memory</li>
-      <li>Zero-dependency local storage with no external API or network requirements</li>
     </ul>
   </div>
 </section>
@@ -145,7 +145,7 @@
 <p>Native, zero-cloud memory for AI agents. SQLite-backed. Sub-millisecond. Fully private.</p>
 </blockquote>
 <p><a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python"></a>
-<a href="https://pypi.org/project/mnemosyne-memory/"><img src="https://img.shields.io/pypi/v/mnemosyne-memory.svg?v=1.10.1" alt="PyPI"></a>
+<a href="https://pypi.org/project/mnemosyne-memory/"><img src="https://img.shields.io/pypi/v/mnemosyne-memory.svg?v=2.0" alt="PyPI"></a>
 <a href="https://sqlite.org/codeofethics.html"><img src="https://img.shields.io/badge/SQLite-3.35+-green.svg" alt="SQLite"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
 <a href="https://github.com/AxDSan/mnemosyne/actions/workflows/ci.yml"><img src="https://github.com/AxDSan/mnemosyne/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
@@ -399,6 +399,11 @@ hermes mnemosyne stats     # Shows working + episodic memory counts
 <li><strong>Hybrid search</strong> — 50% vector similarity + 30% FTS5 rank + 20% importance, all inside SQLite</li>
 <li><strong>Automatic consolidation</strong> — Old working memories are summarized and moved to episodic memory via <code>mnemosyne_sleep()</code></li>
 <li><strong>Temporal triples</strong> — Time-aware knowledge graph with automatic invalidation</li>
+<li><strong>Entity extraction</strong> — Regex + Levenshtein fuzzy matching (no spaCy, no PyTorch)</li>
+<li><strong>LLM-driven fact extraction</strong> — Structured facts from raw text with graceful fallback chain</li>
+<li><strong>Memory banks</strong> — Per-bank SQLite isolation for domain separation</li>
+<li><strong>MCP server</strong> — 6 tools, stdio + SSE transports</li>
+<li><strong>Temporal recall</strong> — Exponential decay scoring with configurable halflife</li>
 <li><strong>Export / import</strong> — Move your entire memory database to a new machine with one JSON file</li>
 <li><strong>Cross-session scope</strong> — <code>remember(..., scope=&quot;global&quot;)</code> makes facts visible everywhere</li>
 <li><strong>Configurable compression</strong> — <code>int8</code> (default), <code>float32</code>, or <code>bit</code> (32x smaller) vectors</li>
@@ -712,6 +717,91 @@ beam.scratchpad_write(&quot;todo: fix auth bug&quot;)
 # Search both tiers
 results = beam.recall(&quot;editor preferences&quot;, top_k=5)
 </code></pre>
+<h4>Temporal Recall</h4>
+<p>Temporal recall adds an exponential decay boost so recent memories rank higher:</p>
+<pre><code class="language-python">results = recall(
+    &quot;deployments&quot;,
+    temporal_weight=0.5,        # Enable temporal scoring
+    temporal_halflife=48.0,     # 48-hour halflife
+    query_time=&quot;2026-04-29T12:00:00&quot;  # Reference point
+)
+</code></pre>
+<h4>Entity Extraction</h4>
+<p>Regex-based entity extraction with Levenshtein fuzzy matching. No spaCy, no PyTorch.</p>
+<pre><code class="language-python">remember(
+    &quot;Met with Abdias J about the Mnemosyne v2 release&quot;,
+    extract_entities=True
+)
+# Extracts: &quot;Abdias J&quot;, &quot;Mnemosyne&quot; — stored as triples
+# Fuzzy match: querying &quot;Abdias&quot; finds &quot;Abdias J&quot; (similarity: 0.925)
+</code></pre>
+<p>Catches <code>@mentions</code>, <code>#hashtags</code>, <code>&quot;quoted phrases&quot;</code>, and capitalized sequences (2-5 words). Misses pronouns and complex coreferences.</p>
+<h4>LLM-Driven Fact Extraction</h4>
+<p>Extract structured facts from raw text using an LLM, with a graceful fallback chain:</p>
+<ol>
+<li>Remote OpenAI-compatible API (if <code>MNEMOSYNE_LLM_BASE_URL</code> is set)</li>
+<li>Local ctransformers GGUF model</li>
+<li>Skip — extraction fails silently, memory is still stored</li>
+</ol>
+<pre><code class="language-python">remember(
+    &quot;User said they prefer Python over JavaScript for backend work&quot;,
+    extract=True  # Extracts 2-5 factual statements as triples
+)
+</code></pre>
+<h4>Memory Banks</h4>
+<p>Per-bank SQLite isolation for domain separation:</p>
+<pre><code class="language-python">from mnemosyne.core.banks import BankManager
+
+BankManager().create_bank(&quot;work&quot;)
+BankManager().create_bank(&quot;personal&quot;)
+
+work_mem = Mnemosyne(bank=&quot;work&quot;)
+work_mem.remember(&quot;Sprint review scheduled for Friday&quot;)
+</code></pre>
+<pre><code class="language-bash">mnemosyne bank list
+mnemosyne bank create research
+mnemosyne mcp --bank work  # MCP server scoped to a bank
+</code></pre>
+<h4>MCP Server</h4>
+<p>6 tools, 2 transports, for any MCP-compatible client:</p>
+<pre><code class="language-bash"># stdio — for Claude Desktop, etc.
+mnemosyne mcp
+
+# SSE — for web clients
+mnemosyne mcp --transport sse --port 8080
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>mnemosyne_remember</code></td>
+<td>Store a memory</td>
+</tr>
+<tr>
+<td><code>mnemosyne_recall</code></td>
+<td>Search with hybrid scoring</td>
+</tr>
+<tr>
+<td><code>mnemosyne_sleep</code></td>
+<td>Run consolidation</td>
+</tr>
+<tr>
+<td><code>mnemosyne_scratchpad_read</code></td>
+<td>Read scratchpad</td>
+</tr>
+<tr>
+<td><code>mnemosyne_scratchpad_write</code></td>
+<td>Write to scratchpad</td>
+</tr>
+<tr>
+<td><code>mnemosyne_get_stats</code></td>
+<td>Memory statistics</td>
+</tr>
+</tbody></table>
 <hr>
 <h3>Architecture</h3>
 <pre><code>┌─────────────────────────────────────────────────────────────┐
@@ -825,6 +915,21 @@ hermes mnemosyne import --input mnemosyne_backup.json
 <td>Vector compression: <code>float32</code>, <code>int8</code>, or <code>bit</code></td>
 </tr>
 <tr>
+<td><code>MNEMOSYNE_VEC_WEIGHT</code></td>
+<td><code>0.5</code></td>
+<td>Vector similarity weight</td>
+</tr>
+<tr>
+<td><code>MNEMOSYNE_FTS_WEIGHT</code></td>
+<td><code>0.3</code></td>
+<td>FTS5 keyword weight</td>
+</tr>
+<tr>
+<td><code>MNEMOSYNE_IMPORTANCE_WEIGHT</code></td>
+<td><code>0.2</code></td>
+<td>Importance weight</td>
+</tr>
+<tr>
 <td><code>MNEMOSYNE_WM_MAX_ITEMS</code></td>
 <td><code>10000</code></td>
 <td>Working memory item limit</td>
@@ -838,6 +943,11 @@ hermes mnemosyne import --input mnemosyne_backup.json
 <td><code>MNEMOSYNE_RECENCY_HALFLIFE</code></td>
 <td><code>168</code></td>
 <td>Recency decay halflife in hours (1 week)</td>
+</tr>
+<tr>
+<td><code>MNEMOSYNE_EP_LIMIT</code></td>
+<td><code>50000</code></td>
+<td>Episodic memory recall limit</td>
 </tr>
 <tr>
 <td><code>MNEMOSYNE_SLEEP_BATCH</code></td>
@@ -946,6 +1056,26 @@ python tests/benchmark_beam_working_memory.py
 </ul>
 <p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for guidelines.</p>
 <hr>
+<div align="center">
+
+<h4>❤️ Support Mnemosyne</h4>
+<p>If this project saves you time or helps your agents remember, consider supporting it:</p>
+<br/>
+
+<a href="https://github.com/sponsors/AxDSan">
+  <img src="https://img.shields.io/badge/💖_GitHub_Sponsors-30363D?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Sponsors"/>
+</a>
+<a href="https://ko-fi.com/axdsan">
+  <img src="https://img.shields.io/badge/☕_Ko‑fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi"/>
+</a>
+
+<br/>
+<br/>
+
+<p>⭐ Star the repo if you find it useful!</p>
+</div>
+
+<hr>
 <h3>License</h3>
 <p>MIT License — See <a href="LICENSE">LICENSE</a></p>
 <p>Copyright (c) 2026 Abdias J</p>
@@ -972,37 +1102,37 @@ python tests/benchmark_beam_working_memory.py
   </div>
   <div>
     <div class="related-list">
+      <a class="related-row" href="/projects/mem0ai/mem0">
+        <div class="stars">★ 54.5K</div>
+        <div class="name"><span class="org">mem0ai /</span> mem0</div>
+      </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 10.9K</div>
+        <div class="stars">★ 11.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 932</div>
+        <div class="stars">★ 947</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 189</div>
+        <div class="stars">★ 197</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 135</div>
+        <div class="stars">★ 143</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 51</div>
+        <div class="stars">★ 59</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 10</div>
+        <div class="stars">★ 13</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 11.7K</div>
+        <div class="stars">★ 12.6K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
-      </a>
-      <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 311</div>
-        <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>
     <p class="list-link"><a href="/lists/best-memory-providers">see all memory &amp; context →</a></p>

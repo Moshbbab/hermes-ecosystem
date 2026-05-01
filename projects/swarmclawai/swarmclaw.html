@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It operates as a multi-provider system that supports MCP-native tools, delegation, and scheduled tasks across various LLM backends and CLI-based agents. The platform enables users to visualize agent hierarchies through an organizational chart and implement conversation-to-skill learning. It integrates with over 20 providers, including OpenClaw, Hermes, and local models via Ollama.",
+  "description": "SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It functions as a central hub for multi-agent delegation, providing agents with persistent memory, runtime skills, and scheduled heartbeats. The platform integrates with over 20 model providers and CLI-based agents, including Hermes, OpenClaw, and Claude Code. Users can visualize agent hierarchies through an organizational chart and manage reviewed conversation-to-skill learning to expand agent",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-04-25T23:40:39.000Z",
+  "dateModified": "2026-04-29T22:07:56.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 408
+    "userInteractionCount": 416
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">100·repos</span>
+    <span id="meta-count">111·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">Self-hosted multi-agent AI runtime with MCP server support. Build, orchestrate, and run autonomous agents with memory, skills, schedules, and 23+ LLM providers (Claude, GPT, Gemini, OpenRouter, Ollama).</p>
 
   <div class="meta-row">
-    <span class="stars">★ 408</span>
+    <span class="stars">★ 416</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-25</span>
+    <span><span class="meta-label">updated</span>2026-04-29</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It operates as a multi-provider system that supports MCP-native tools, delegation, and scheduled tasks across various LLM backends and CLI-based agents. The platform enables users to visualize agent hierarchies through an organizational chart and implement conversation-to-skill learning. It integrates with over 20 providers, including OpenClaw, Hermes, and local models via Ollama.</p>
+    <p class="summary-text">SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It functions as a central hub for multi-agent delegation, providing agents with persistent memory, runtime skills, and scheduled heartbeats. The platform integrates with over 20 model providers and CLI-based agents, including Hermes, OpenClaw, and Claude Code. Users can visualize agent hierarchies through an organizational chart and manage reviewed conversation-to-skill learning to expand agent capabilities over time.</p>
     <ul class="summary-highlights">
-      <li>Self-hosted runtime for autonomous agent orchestration and delegation</li>
-      <li>Supports 23 providers including Hermes, OpenClaw, and local Ollama</li>
-      <li>Features MCP-native skills, memory, and scheduled agent heartbeats</li>
+      <li>Native support for MCP and 23 built-in model providers</li>
+      <li>Visualizes agent teams and delegation through an interactive org chart</li>
+      <li>Supports durable conversation history and reviewed skill learning</li>
     </ul>
   </div>
 </section>
@@ -512,6 +512,36 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.7.2 Highlights</h4>
+<p>CLI provider usability follow-up for v1.7.0/v1.7.1. The expanded coding-agent roster is now easier to find, configure, and validate from onboarding and setup diagnostics.</p>
+<ul>
+<li><strong>Shared CLI provider registry.</strong> Bespoke and generic CLI providers now share one metadata source for display names, binary names, capabilities, setup defaults, and provider-set behavior, reducing drift across onboarding, runtime routing, setup doctor, and capability prompts.</li>
+<li><strong>Onboarding exposes the full CLI roster.</strong> The setup wizard groups providers by CLI agents, gateways/local runtimes, API providers, and custom endpoints, with search so the 31 extended CLI providers added in v1.7 are usable without digging through settings.</li>
+<li><strong>Connection checks for every CLI provider.</strong> Bespoke CLIs keep auth-aware checks, while generic CLIs verify that the expected binary is on PATH and return actionable install guidance when missing.</li>
+<li><strong>Update banner polish.</strong> Source installs now show the target stable tag/version, remember dismissal per release target, and make the required restart after update explicit.</li>
+<li><strong>macOS desktop note.</strong> macOS builds remain ad-hoc signed and not notarized in this release, so the existing Gatekeeper/quarantine workaround still applies until Developer ID signing is available.</li>
+</ul>
+<h4>v1.7.1 Highlights</h4>
+<p>Republish of v1.7.0 from the correct commit. The v1.7.0 tarball on npm was inadvertently published from a pre-rebase tree that did not include the v1.6.1 codex continuity fixes (PR #62) or the v1.6.2 plan doc. v1.7.1 ships the same coding-agent-roster expansion on top of the correct v1.6.1+ history.</p>
+<p>Use v1.7.1 instead of v1.7.0; v1.7.0 has been deprecated on npm.</p>
+<h4>v1.7.0 Highlights</h4>
+<p>Extended CLI provider roster — every coding agent recognized by SwarmSkills now has a corresponding CLI provider in SwarmClaw, routed through a generic streamer when no bespoke parser exists.</p>
+<ul>
+<li><strong>31 new CLI providers.</strong> Aider, Amp, Augment, AdaL, IBM Bob, Cline, CodeBuddy, Command Code, Continue, Cortex Code, Crush, Deep Agents, Firebender, iFlow, Junie, Kilo Code, Kimi, Kode, MCPJam, Mistral Vibe, Mux, Neovate, OpenHands, Pochi, Qoder, Replit Agent, Roo Code, TRAE CN, Warp Agent, Windsurf, and Zencoder are now first-class provider IDs in <code>ProviderType</code>.</li>
+<li><strong>Generic CLI streamer.</strong> New <code>streamGenericCliChat</code> (<code>src/lib/providers/generic-cli.ts</code>) spawns the configured binary with the prompt as final argv and emits stdout lines as SSE deltas. Used by the new providers when no bespoke parser is available; existing bespoke parsers (Claude, Codex, Cursor, Gemini, Copilot, Droid, Qwen, OpenCode, Goose) are untouched.</li>
+<li><strong>Capability metadata.</strong> <code>CLI_PROVIDER_CAPABILITIES</code> (<code>src/lib/providers/cli-utils.ts</code>) carries a one-line description for each new provider so the UI and <code>isCliProvider()</code> recognize them.</li>
+<li><strong>Tests.</strong> New <code>generic-cli.test.ts</code> exercises the streamer against <code>echo</code> and asserts the missing-binary error path; <code>cli-utils.test.ts</code> extends the CLI provider recognition coverage.</li>
+</ul>
+<h4>v1.6.1 Highlights</h4>
+<p>Follow-up release for v1.6 with workflow starts, safer metadata handling, A2A discovery polish, and <a href="https://github.com/swarmclawai/swarmclaw/pull/61">#61</a> by <a href="https://github.com/latentwill">@latentwill</a>. Thanks latentwill!</p>
+<ul>
+<li><strong>Mission and protocol templates for real work.</strong> New starter paths cover codebase review sprints, research bureau scans, content studio cycles, release readiness panels, synthesis panels, and builder review loops.</li>
+<li><strong>Home launchpad paths.</strong> First-run users can choose a self-hosted assistant, visual workflow, or autonomous mission path, with quality actions still one click away.</li>
+<li><strong>A2A discovery is easier to integrate.</strong> The canonical <code>/.well-known/agent-card.json</code> endpoint now works alongside the legacy API route and hides disabled or trashed agents from public discovery.</li>
+<li><strong>Internal metadata stripping is safer.</strong> Side-channel JSON is removed with balanced-object parsing and zod validation so nested payloads are scrubbed without deleting ordinary user JSON.</li>
+<li><strong>Browser smoke gate restored.</strong> <code>npm run test:e2e</code> now runs a Playwright smoke against health, A2A discovery, <code>/home</code>, and <code>/quality</code>, either against a live URL or a temporary local dev server.</li>
+<li><strong>OpenCode CLI hang fixed.</strong> OpenCode CLI delegation no longer keeps an inherited stdin pipe open, preventing hangs in non-interactive runs.</li>
+</ul>
 <h4>v1.6.0 Highlights</h4>
 <p>Operator Quality Center release for builders running autonomous agents in production-like workflows.</p>
 <ul>
@@ -626,36 +656,10 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <ul>
 <li><strong>Share links for missions, skills, and sessions.</strong> New <code>share_links</code> collection in <code>src/lib/server/storage.ts</code> plus <code>src/lib/server/sharing/share-link-repository.ts</code>. <code>POST /api/share { entityType, entityId, expiresInSec?, label? }</code> mints a cryptographically random 32-char base64url token; <code>GET /api/share</code> lists; <code>GET /api/share/:id</code> fetches; <code>DELETE /api/share/:id</code> revokes (pass <code>?hard=true</code> to hard-delete). CLI: <code>swarmclaw share {list,mint,get,revoke,resolve,raw}</code>.</li>
 <li><strong>Public read endpoints (no auth required).</strong> <code>GET /api/s/:token</code> returns the scrubbed JSON payload; <code>GET /api/s/:token/raw</code> returns plain markdown (skills return their SKILL.md verbatim, missions render as title + goal + criteria + milestones, sessions as a transcript). Revoked and expired tokens return <code>404 Not found</code> without leaking shape information. <code>GET /s/:token</code> is a server-rendered page for dropping straight into a browser.</li>
-<li><strong>Share-link-based skill install.</strong> <code>POST /api/skills/import</code> already accepts an http(s) URL; pointing it at <code>https://&lt;your-host&gt;/api/s/&lt;token&gt;/raw</code> now installs a shared skill from another SwarmClaw instance without auth handshakes. Pairs naturally with existing <code>swarmclaw skills import</code> CLI.</li>
-<li><strong>Share-link repository tests.</strong> <code>share-link-repository.test.ts</code> covers mint / list / revoke / lookup-by-token round-trip plus expiry handling against a temporary data dir.</li>
+<li><strong>Share-link-based skill install.</strong> <code>POST /api/skills/import</code> already accepts an http(s) URL; pointing it at <code>https://&lt;your-host&gt;/api/s/&lt;token&gt;/raw</code> now installs a shared skill from another SwarmClaw instance without auth handshakes. Pairs naturally with exist</li>
 </ul>
-<p>Older releases: <a href="https://swarmclaw.ai/docs/release-notes">https://swarmclaw.ai/docs/release-notes</a></p>
-<ul>
-<li>GitHub releases: <a href="https://github.com/swarmclawai/swarmclaw/releases">https://github.com/swarmclawai/swarmclaw/releases</a></li>
-<li>npm package: <a href="https://www.npmjs.com/package/@swarmclawai/swarmclaw">https://www.npmjs.com/package/@swarmclawai/swarmclaw</a></li>
-<li>Historical release notes: <a href="https://swarmclaw.ai/docs/release-notes">https://swarmclaw.ai/docs/release-notes</a></li>
-</ul>
-<h3>Security Notes</h3>
-<ul>
-<li>First run creates an access key; keep it private.</li>
-<li>Do not expose port <code>3456</code> directly without a reverse proxy and TLS.</li>
-<li>Review agent prompts and enabled tools before granting shell, browser, wallet, or outbound capabilities.</li>
-<li>Wallet and outbound actions can be approval-gated globally.</li>
-</ul>
-<h3>Learn More</h3>
-<ul>
-<li>Getting started: <a href="https://swarmclaw.ai/docs/getting-started">https://swarmclaw.ai/docs/getting-started</a></li>
-<li>OpenClaw setup: <a href="https://swarmclaw.ai/docs/openclaw-setup">https://swarmclaw.ai/docs/openclaw-setup</a></li>
-<li>Agents: <a href="https://swarmclaw.ai/docs/agents">https://swarmclaw.ai/docs/agents</a></li>
-<li>Connectors: <a href="https://swarmclaw.ai/docs/connectors">https://swarmclaw.ai/docs/connectors</a></li>
-<li>SwarmDock: <a href="https://swarmclaw.ai/docs/swarmdock">https://swarmclaw.ai/docs/swarmdock</a></li>
-<li>SwarmDock marketplace: <a href="https://swarmdock.ai">https://swarmdock.ai</a></li>
-<li>SwarmFeed: <a href="https://swarmclaw.ai/docs/swarmfeed">https://swarmclaw.ai/docs/swarmfeed</a></li>
-<li>SwarmFeed platform: <a href="https://swarmfeed.ai">https://swarmfeed.ai</a></li>
-<li>SwarmVault: <a href="https://swarmvault.ai">https://swarmvault.ai</a></li>
-<li>Extensions: <a href="https://swarmclaw.ai/docs/extensions">https://swarmclaw.ai/docs/extensions</a></li>
-<li>CLI reference: <a href="https://swarmclaw.ai/docs/cli">https://swarmclaw.ai/docs/cli</a></li>
-</ul>
+<hr>
+<p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -668,7 +672,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/builderz-labs/mission-control">
-        <div class="stars">★ 4.4K</div>
+        <div class="stars">★ 4.5K</div>
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">
@@ -680,7 +684,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">
-        <div class="stars">★ 62</div>
+        <div class="stars">★ 71</div>
         <div class="name"><span class="org">1ilkhamov /</span> opencode-hermes-multiagent</div>
       </a>
       <a class="related-row" href="/projects/supermodeltools/bigiron">
@@ -688,7 +692,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">supermodeltools /</span> bigiron</div>
       </a>
       <a class="related-row" href="/projects/Rainhoole/hermes-agent-acp-skill">
-        <div class="stars">★ 10</div>
+        <div class="stars">★ 11</div>
         <div class="name"><span class="org">Rainhoole /</span> hermes-agent-acp-skill</div>
       </a>
     </div>

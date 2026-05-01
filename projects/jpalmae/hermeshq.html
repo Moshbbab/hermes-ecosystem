@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hermeshq — Hermes Agent Deployment &amp; Infra | Hermes Atlas</title>
+<meta name="description" content="HermesHQ is a Docker-first control plane for running and operating multiple Hermes Agent instances from one web application.">
+<link rel="canonical" href="https://hermesatlas.com/projects/jpalmae/hermeshq">
+<meta property="og:title" content="hermeshq — Hermes Atlas">
+<meta property="og:description" content="HermesHQ is a Docker-first control plane for running and operating multiple Hermes Agent instances from one web application.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/jpalmae/hermeshq">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=hermeshq&amp;subtitle=HermesHQ+is+a+Docker-first+control+plane+for+running+and+operating+multiple+Hermes+Agent+instances+from+one+web+application.&amp;kind=project+%C2%B7+deployment">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="hermeshq — Hermes Atlas">
+<meta name="twitter:description" content="HermesHQ is a Docker-first control plane for running and operating multiple Hermes Agent instances from one web application.">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermeshq&amp;subtitle=HermesHQ+is+a+Docker-first+control+plane+for+running+and+operating+multiple+Hermes+Agent+instances+from+one+web+application.&amp;kind=project+%C2%B7+deployment">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "deployment &amp; infra", "item": "https://hermesatlas.com/lists/deployment-options" },
+    { "@type": "ListItem", "position": 3, "name": "hermeshq" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/jpalmae/hermeshq#software",
+  "name": "hermeshq",
+  "description": "HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It acts as an operational layer over the Hermes execution engine, providing a centralized interface for task dispatching, scheduling, and multi-agent delegation. The platform includes a secrets vault, RBAC, and a runtime ledger to track activity across separate agent workspaces. It also supports managed integrations for AWS Bedrock, OpenAI-compatible endpoint",
+  "url": "https://hermesatlas.com/projects/jpalmae/hermeshq",
+  "codeRepository": "https://github.com/jpalmae/hermeshq",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "author": {
+    "@type": "Organization",
+    "name": "jpalmae",
+    "url": "https://github.com/jpalmae"
+  },
+  "dateModified": "2026-04-30T15:14:07.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 5
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23d49a4f'/><text x='16' y='23' font-family='Space Grotesk,sans-serif' font-size='22' font-weight='700' fill='%230e0d0b' text-anchor='middle'>H</text></svg>">
+<script>(function(){try{var s=localStorage.getItem('theme');var o=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;var t=s||(o?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span>apr·2026</span>
+    <span id="meta-count">111·repos</span>
+    <span>hermes·v0.10.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/#curated-lists">lists</a>
+    <a href="/guide/">handbook</a>
+    <a href="/reports/state-of-hermes-april-2026">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-light">light</span><span class="tt-sep">/</span><span class="tt-dark">dark</span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/lists/deployment-options">deployment &amp; infra</a><span class="sep">/</span>hermeshq
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">jpalmae</span><span class="slash">/</span>hermeshq
+  </h1>
+  <p class="project-desc">HermesHQ is a Docker-first control plane for running and operating multiple Hermes Agent instances from one web application.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 5</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    
+    
+    <span><span class="meta-label">updated</span>2026-04-30</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/jpalmae/hermeshq" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://hermeshq.org" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It acts as an operational layer over the Hermes execution engine, providing a centralized interface for task dispatching, scheduling, and multi-agent delegation. The platform includes a secrets vault, RBAC, and a runtime ledger to track activity across separate agent workspaces. It also supports managed integrations for AWS Bedrock, OpenAI-compatible endpoints, and messaging channels like Telegram and WhatsApp.</p>
+    <ul class="summary-highlights">
+      <li>Centralized web UI for managing multiple agents and separate workspaces.</li>
+      <li>Hierarchy-aware inter-agent delegation and automated task scheduling.</li>
+      <li>Integrated support for Telegram, WhatsApp, and AWS Bedrock providers.</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <p><img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/readme-hero-dark.png" alt="HermesHQ dark hero"></p>
+<h2>HermesHQ</h2>
+<p>HermesHQ is a Docker-first control plane for running and operating multiple <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> instances from one web application.</p>
+<blockquote>
+<p>[!WARNING]
+HermesHQ is under active development. Expect ongoing changes, rough edges, and occasional bugs while the product continues to evolve.</p>
+</blockquote>
+<p>It keeps Hermes as the real execution engine, then adds the operational layer around it:</p>
+<ul>
+<li>managed agents with separate workspaces and <code>HERMES_HOME</code></li>
+<li>web UI, RBAC, users, and assigned-agent scope</li>
+<li>task dispatch, schedules, runtime ledger, and activity stream</li>
+<li>hierarchy-aware inter-agent delegation</li>
+<li>per-agent Telegram and WhatsApp channels</li>
+<li>provider presets, secrets vault, runtime profiles, and managed integrations, including AWS Bedrock and generic OpenAI-compatible endpoints</li>
+</ul>
+<p>Project landing page: <a href="https://jpalmae.github.io/hermeshq/">jpalmae.github.io/hermeshq</a><br>Controlled demo page: <a href="https://jpalmae.github.io/hermeshq/demo.html">jpalmae.github.io/hermeshq/demo.html</a></p>
+<a href="https://jpalmae.github.io/hermeshq/demo.html">
+  <img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/hermeshq-demo-preview.gif" alt="HermesHQ demo preview" width="100%" />
+</a>
+
+<p>Click the preview above to open the demo page with player controls, or open the raw video directly: <a href="./frontend/public/manual/hermeshq-demo.mp4">HermesHQ demo video</a></p>
+<h3>Hermes Agent vs HermesHQ</h3>
+<p>HermesHQ does not replace <code>hermes-agent</code>; it orchestrates it.</p>
+<p>If you install and run <code>hermes-agent</code> directly on your machine, you get the Hermes runtime by itself:</p>
+<ul>
+<li>local CLI/TUI usage</li>
+<li>one local <code>HERMES_HOME</code></li>
+<li>direct prompt, tool, and plugin handling</li>
+<li>local sessions and config managed by the operator</li>
+</ul>
+<p>HermesHQ uses that same Hermes runtime underneath, but wraps it in a control plane:</p>
+<ul>
+<li>managed agents with separate workspaces and <code>HERMES_HOME</code></li>
+<li>web UI, RBAC, users, and assigned-agent scope</li>
+<li>task dispatch, schedules, and runtime ledger</li>
+<li>inter-agent comms and hierarchy-aware delegation</li>
+<li>per-agent Telegram and WhatsApp channels</li>
+<li>provider presets, secrets vault, and managed integrations, including AWS Bedrock and generic OpenAI-compatible endpoints</li>
+<li>runtime profiles and capability visibility</li>
+</ul>
+<p>In short:</p>
+<ul>
+<li><code>hermes-agent</code> alone = execution engine used directly</li>
+<li>HermesHQ = control plane plus managed multi-agent runtime built on top of Hermes</li>
+</ul>
+<h3>License</h3>
+<p>HermesHQ follows the same license as <a href="https://github.com/NousResearch/hermes-agent">NousResearch/hermes-agent</a>: MIT.</p>
+<h3>What It Looks Like</h3>
+<p>Default UI, without customer-specific branding:</p>
+<h4>Dashboard</h4>
+<p><img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/dashboard.png" alt="HermesHQ dashboard"></p>
+<h4>Agent Detail</h4>
+<p><img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/agent-detail.png" alt="HermesHQ agent detail"></p>
+<h4>Comms</h4>
+<p><img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/comms.png" alt="HermesHQ comms"></p>
+<h4>Integrations</h4>
+<p><img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/integrations.png" alt="HermesHQ integrations"></p>
+<h4>Settings</h4>
+<p><img src="https://raw.githubusercontent.com/jpalmae/hermeshq/main/frontend/public/manual/settings.png" alt="HermesHQ settings"></p>
+<h3>Why HermesHQ</h3>
+<p>Hermes works well as a local runtime. HermesHQ adds the things teams usually need once they move from one agent to an actual operational setup:</p>
+<ul>
+<li>multiple agents with separate identity, prompts, skills, integrations, and channels</li>
+<li>central task dispatch and scheduled execution</li>
+<li>runtime traceability through ledger and activity events</li>
+<li>hierarchy-aware delegation and callbacks</li>
+<li>per-user access scope and admin controls</li>
+<li>Docker-based deployment, backup, and restore</li>
+</ul>
+<h3>Core Capabilities</h3>
+<h4>Runtime and Operations</h4>
+<ul>
+<li>strict local agent runtime via <code>hermes-agent</code></li>
+<li>runtime profiles for <code>standard</code>, <code>technical</code>, and <code>security</code></li>
+<li>task submission, cancellation, and scheduled runs</li>
+<li>TUI/PTY support for allowed profiles</li>
+<li>runtime ledger and activity stream</li>
+<li>real WebSocket event stream</li>
+</ul>
+<h4>Multi-Agent Control Plane</h4>
+<ul>
+<li>agent CRUD and local node bootstrap</li>
+<li>inter-agent comms with hierarchy-aware delegation rules</li>
+<li>delegate result callbacks back to the parent agent</li>
+<li>per-agent Telegram and WhatsApp channels with activity traceability</li>
+<li>assigned-agent scope for non-admin users</li>
+</ul>
+<h4>Configuration and Governance</h4>
+<ul>
+<li>JWT auth</li>
+<li>admin/user RBAC</li>
+<li>self-service profile and password changes</li>
+<li>per-user theme override</li>
+<li>per-user language override with instance default</li>
+<li>secrets vault</li>
+<li>editable provider registry and presets, including AWS Bedrock (<code>aws_sdk</code>) and OpenAI-compatible API endpoints</li>
+<li>managed integration package catalog with install/uninstall and per-agent tests</li>
+</ul>
+<h4>UX</h4>
+<ul>
+<li>dashboard, agents, tasks, comms, users, settings, schedules</li>
+<li>English and Spanish UI</li>
+<li>in-app manual</li>
+<li>runtime capability visibility in <code>Settings</code> and per-agent <code>Integrations</code></li>
+<li>global Hermes TUI skin upload for admins</li>
+</ul>
+<h3>One-Line Install</h3>
+<p>HermesHQ installs and runs with Docker by default.</p>
+<p>The installer:</p>
+<ul>
+<li>installs Docker automatically on supported Linux hosts if it is missing</li>
+<li>enables the Docker service and adds the current user to the <code>docker</code> group</li>
+<li>downloads the current <code>main</code> branch tarball</li>
+<li>installs into <code>~/hermeshq</code></li>
+<li>preserves an existing <code>.env</code> if present</li>
+<li>preserves <code>.cloudflared.env</code> if present</li>
+<li>generates a new <code>.env</code> with bootstrap credentials on first install</li>
+<li>prints the final admin credentials at the end of the run</li>
+<li>rolls back a failed fresh install instead of leaving containers and images behind</li>
+<li>runs <code>docker compose up --build -d</code></li>
+</ul>
+<h4>Prerequisites</h4>
+<ul>
+<li><code>curl</code></li>
+<li><code>tar</code></li>
+<li><code>python3</code></li>
+</ul>
+<p>Docker is installed automatically on supported Linux hosts. On non-Linux systems, install Docker first.</p>
+<h4>Install</h4>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/jpalmae/hermeshq/main/install.sh | bash
+</code></pre>
+<p>If the server has multiple interfaces, pass the public host or DNS name explicitly:</p>
+<pre><code class="language-bash">HERMESHQ_HOST=your-server-ip-or-dns curl -fsSL https://raw.githubusercontent.com/jpalmae/hermeshq/main/install.sh | bash
+</code></pre>
+<h4>Useful Installer Overrides</h4>
+<ul>
+<li><code>INSTALL_DIR=/srv/hermeshq</code></li>
+<li><code>BRANCH=main</code></li>
+<li><code>HERMESHQ_HOST=your-server-ip-or-dns</code></li>
+<li><code>ADMIN_USERNAME=admin</code></li>
+<li><code>ADMIN_PASSWORD=YourPassword123!</code></li>
+<li><code>FRONTEND_PORT=3420</code></li>
+<li><code>BACKEND_PORT=8000</code></li>
+<li><code>SKIP_START=1</code></li>
+</ul>
+<h4>What You Get</h4>
+<ul>
+<li>frontend: <code>http://&lt;host&gt;:3420</code></li>
+<li>backend: <code>http://&lt;host&gt;:8000</code></li>
+<li>Docker-managed PostgreSQL and persistent workspaces</li>
+<li>final admin credentials printed at the end of install</li>
+<li>automatic rollback cleanup on failed first-time installs</li>
+</ul>
+<h3>Run With Docker Manually</h3>
+<pre><code class="language-bash">docker compose up --build -d
+</code></pre>
+<p>Default URLs:</p>
+<ul>
+<li>frontend: <code>http://localhost:3420</code></li>
+<li>backend: <code>http://localhost:8000</code></li>
+</ul>
+<h3>Local Development</h3>
+<h4>Backend</h4>
+<pre><code class="language-bash">cd backend
+uv venv .venv
+uv pip install --python .venv/bin/python -r requirements.txt
+uv pip install --python .venv/bin/python git+https://github.com/NousResearch/hermes-agent.git
+.venv/bin/python -m uvicorn hermeshq.main:app --reload
+</code></pre>
+<p>API default URL: <code>http://localhost:8000</code></p>
+<p>Default login:</p>
+<ul>
+<li>username: <code>admin</code></li>
+<li>password: <code>admin123</code></li>
+</ul>
+<h4>Frontend</h4>
+<pre><code class="language-bash">cd frontend
+npm install
+npm run dev
+</code></pre>
+<p>Frontend dev URL: <code>http://localhost:5173</code></p>
+<h3>Managed Integrations</h3>
+<p>HermesHQ supports managed integration packages that are separate from the core runtime.</p>
+<p>Admins can:</p>
+<ul>
+<li>upload <code>.tar.gz</code> integration packages from <code>Settings -&gt; Integrations</code></li>
+<li>install or uninstall them globally</li>
+<li>enable and configure them per agent</li>
+<li>run per-agent connection tests</li>
+</ul>
+<p>Bundled managed integrations now also include voice presets:</p>
+<ul>
+<li><code>voice-edge</code>: local STT with <code>faster-whisper</code> plus Spanish/English TTS through <code>edge-tts</code></li>
+<li><code>voice-local</code>: local STT with <code>faster-whisper</code> plus fully local Piper TTS when <code>piper-tts</code> is installed in the runtime</li>
+</ul>
+<p>When enabled on an agent, these integrations write <code>stt:</code> and <code>tts:</code> blocks directly into the agent <code>HERMES_HOME/config.yaml</code>.</p>
+<p>Typical Spanish configuration:</p>
+<pre><code class="language-yaml">stt:
+  enabled: true
+  model: small
+  language: es
+
+tts:
+  enabled: true
+  voice: es-MX-JorgeNeural
+</code></pre>
+<p>Typical English configuration:</p>
+<pre><code class="language-yaml">stt:
+  enabled: true
+  model: small
+  language: en
+
+tts:
+  enabled: true
+  voice: en-US-GuyNeural
+</code></pre>
+<p>Operational notes:</p>
+<ul>
+<li><code>voice-edge</code> is available out of the box in the HermesHQ backend image because it now includes <code>faster-whisper</code> and <code>edge-tts</code></li>
+<li><code>voice-local</code> still requires <code>piper-tts</code> in the runtime environment; HermesHQ checks for that with <code>Test connection</code></li>
+<li><code>edge-tts</code> does not require an API key, but it is not fully offline in the same sense as Piper</li>
+</ul>
+<p>HermesHQ also includes an <code>Integration Factory</code> for administrators and <code>HQ Operator</code>.</p>
+<ul>
+<li>create a draft package scaffold from <code>Settings -&gt; Factory</code></li>
+<li>edit <code>manifest.yaml</code>, plugin files, health checks, and companion skill content in-browser</li>
+<li>validate the draft before publication</li>
+<li>publish the draft directly into <code>Managed Integrations</code>, where it becomes installable and usable by <code>standard</code> agents once enabled per agent</li>
+</ul>
+<p>This turns <code>HQ Operator</code> into a practical builder/publisher for reusable capabilities instead of leaving every new skill or plugin as a one-off technical artifact.</p>
+<h4>Integration Factory Flow</h4>
+<p>Typical flow:</p>
+<ol>
+<li>open <code>Settings -&gt; Factory</code></li>
+<li>create a draft with a unique <code>slug</code>, human-readable <code>name</code>, description, and template</li>
+<li>review and edit the generated files:<ul>
+<li><code>manifest.yaml</code></li>
+<li><code>plugin/__init__.py</code></li>
+<li><code>plugin/plugin.yaml</code></li>
+<li>optional <code>healthcheck.py</code></li>
+<li>optional <code>actions.py</code></li>
+<li>optional <code>skill/SKILL.md</code></li>
+</ul>
+</li>
+<li>use <code>Validate</code> to check:<ul>
+<li>package structure</li>
+<li>manifest/profile declarations</li>
+<li>plugin metadata</li>
+<li>Python syntax for every <code>*.py</code> file</li>
+</ul>
+</li>
+<li>use <code>Publish</code> when validation is clean</li>
+<li>go to <code>Settings -&gt; Integrations</code> and confirm the package is now in the managed catalog</li>
+<li>enable that integration per agent from <code>Agent -&gt; Integrations</code></li>
+<li>complete required fields and secrets, then run <code>Test connection</code></li>
+</ol>
+<p>Important behavior:</p>
+<ul>
+<li>publishing keeps the draft record, so you can continue iterating and republish later</li>
+<li>published drafts become uploaded managed integrations</li>
+<li>standard users still do not author code; they consume approved integrations after an admin enables them</li>
+<li><code>HQ Operator</code> exposes matching administrative tools for the same lifecycle: list, create, edit files, validate, publish, and delete drafts</li>
+</ul>
+<p>HermesHQ also supports uploaded <code>standard</code>-compatible integrations built as real plugins instead of shell wrappers. A practical example is <code>gamma-app</code>, which can be uploaded as an integration package and then enabled on administrative agents to create presentations, documents, webpages, and social content through Gamma&#39;s public API.</p>
+<p>This separation is intentional:</p>
+<ul>
+<li>skills describe behavior</li>
+<li>integration packages install real plugins/tools</li>
+<li>runtime profiles decide which capabilities are allowed</li>
+</ul>
+<p>Typical package requirements:</p>
+<ul>
+<li><code>manifest.yaml</code> with slug, version, supported profiles, fields, and actions</li>
+<li><code>plugin/</code> with <code>__init__.py</code> and <code>plugin.yaml</code></li>
+<li>optional <code>healthcheck.py</code> and <code>actions.py</code></li>
+<li>optional <code>skill/</code> companion content for agent guidance</li>
+<li>secrets referenced through HermesHQ <code>Settings -&gt; Secrets</code>, not hardcoded into the package</li>
+</ul>
+<h3>Runtime Profiles</h3>
+<p>Agents now declare a <code>runtime profile</code>:</p>
+<ul>
+<li><code>standard</code></li>
+<li><code>technical</code></li>
+<li><code>security</code></li>
+</ul>
+<p>In the current phase:</p>
+<ul>
+<li><code>standard</code> blocks TUI access</li>
+<li><code>standard</code> blocks terminal/process usage in task execution</li>
+<li>built-in capabilities are visible in <code>Settings -&gt; Runtime built-ins</code></li>
+<li>each agent shows effective capabilities in <code>Agent -&gt; Integrations</code></li>
+</ul>
+<p>This is already real enforcement for <code>standard</code> versus technical/security agents, even though the deeper execution-plane split is still a later phase.</p>
+<h3>Hermes Agent Versions</h3>
+<p>HermesHQ can manage multiple Hermes Agent builds side by side and assign them per agent or as the instance default.</p>
+<p><code>Settings -&gt; Hermes Versions</code> now has two paths:</p>
+<ul>
+<li><code>Upstream releases</code>: HermesHQ queries the real upstream Hermes repository and lists actual tags plus the package version detected from each release</li>
+<li><code>Manual catalog entry</code>: still available for advanced cases, but the backend now validates the <code>release_tag</code> against upstream before saving</li>
+</ul>
+<p>Recommended flow:</p>
+<ol>
+<li>open <code>Settings -&gt; Hermes Versions</code></li>
+<li>use <code>Refresh upstream tags</code></li>
+<li>review the real upstream list</li>
+<li>click <code>Add to catalog</code> on the release you want</li>
+<li>use <code>Install</code> to materialize it under <code>/app/workspaces/_hermes_versions/&lt;version&gt;</code></li>
+<li>optionally set it as the instance default or pin it on specific agents</li>
+</ol>
+<p>Important behavior:</p>
+<ul>
+<li>HermesHQ now treats the upstream Hermes repo as the source of truth for release tags</li>
+<li><code>release_tag</code> is validated before save and before install, so broken tags fail early instead of failing only during <code>git checkout</code></li>
+<li>when HermesHQ can detect a package version from upstream metadata, it proposes that as the catalog version automatically</li>
+<li>if the catalog label differs from the runtime version detected after install, HermesHQ surfaces a warning so rollout decisions are made against the real runtime version</li>
+</ul>
+<h3>Backup and Restore</h3>
+<p>HermesHQ now has a first-class instance backup flow in <code>Settings -&gt; General -&gt; Backup &amp; Restore</code>.</p>
+<p>From the UI, an admin can:</p>
+<ul>
+<li>create a passphrase-encrypted backup archive</li>
+<li>optionally include activity logs, task/conversation history, terminal transcripts, and messaging session stores</li>
+<li>validate a backup archive before import</li>
+<li>restore the archive in:<ul>
+<li><code>replace</code> mode for disaster recovery into a fresh instance</li>
+<li><code>merge</code> mode to upsert the backup into the current instance</li>
+</ul>
+</li>
+</ul>
+<p>The backup archive includes:</p>
+<ul>
+<li>instance settings and branding metadata</li>
+<li>provider catalog and Hermes version catalog</li>
+<li>users, agent assignments, and encrypted secrets</li>
+<li>agents, messaging channels, scheduled tasks, templates, and integration drafts</li>
+<li>branding assets, TUI skins, agent/user assets, uploaded integration packages</li>
+<li>agent workspaces and managed <code>HERMES_HOME</code> state</li>
+</ul>
+<p>Restore behavior:</p>
+<ul>
+<li>secrets are decrypted only with the backup passphrase</li>
+<li>restored agents and messaging channels are normalized back to <code>stopped</code></li>
+<li>HermesHQ then re-syncs restored agent installations</li>
+<li>if managed Hermes runtime versions are in the catalog, HermesHQ attempts to reinstall them on the target server</li>
+</ul>
+<p>The older shell scripts still exist as a lower-level fallback:</p>
+<ul>
+<li><a href="https://github.com/jpalmae/hermeshq/blob/main/scripts/backup-instance.sh"><code>scripts/backup-instance.sh</code></a></li>
+<li><a href="https://github.com/jpalmae/hermeshq/blob/main/scripts/restore-instance.sh"><code>scripts/restore-instance.sh</code></a></li>
+</ul>
+<p>Those scripts capture PostgreSQL, <code>/app/workspaces</code>, <code>.env</code>, and <code>.cloudflared.env</code> for Docker-first server migration scenarios.</p>
+<h3>Operational Notes</h3>
+<ul>
+<li>The Docker stack uses PostgreSQL 16 and the backend connects through <code>asyncpg</code>.</li>
+<li><code>docker-compose.yml</code> reads ports, admin bootstrap credentials, PostgreSQL credentials, CORS origins, and frontend API base from <code>.env</code>.</li>
+<li>The frontend falls back to the current browser hostname for API and WebSocket calls if <code>VITE_API_BASE_URL</code> is not explicitly set.</li>
+<li>Production builds should normally leave <code>VITE_API_BASE_URL</code> empty so the frontend uses the safe <code>/api</code> reverse-proxy path.</li>
+<li>HermesHQ now refuses frontend builds that try to bake <code>localhost</code>, <code>127.0.0.1</code>, <code>::1</code>, or <code>0.0.0.0</code> into <code>VITE_API_BASE_URL</code>. Use <code>ALLOW_LOCAL_API_BASE=true</code> only for an intentional local-only build.</li>
+<li>Task execution is strict: if <code>hermes-agent</code> is missing, the agent has no valid credentials, or the provider rejects the request, the task is marked <code>failed</code>.</li>
+<li>Telegram bot tokens should be attached to only one active HermesHQ instance at a time. Running the same bot in two environments causes Telegram polling conflicts.</li>
+<li>UI localization affects the application chrome only. It does not rewrite backend error payloads, Hermes TUI output, or model-generated content already stored in tasks/logs.</li>
+</ul>
+<h3>Included In This Cut</h3>
+<h4>Backend</h4>
+<ul>
+<li>JWT auth</li>
+<li>per-user theme preference override</li>
+<li>per-user language preference override</li>
+<li>instance-wide default language</li>
+<li>self-service profile and password change for the current user</li>
+<li>admin/user RBAC with assigned-agent scope</li>
+<li>local node bootstrap</li>
+<li>agent CRUD</li>
+<li>per-agent avatar upload</li>
+<li>task submission/cancellation</li>
+<li>strict local agent runtime via <code>hermes-agent</code></li>
+<li>activity feed</li>
+<li>WebSocket event stream</li>
+<li>inter-agent comms with hierarchy-aware delegation rules</li>
+<li>secrets vault</li>
+<li>provider registry with editable presets</li>
+<li>runtime profiles for standard, technical, and security agents</li>
+<li>managed integration package catalog with install/uninstall and per-agent tests</li>
+<li>templates</li>
+<li>scheduled tasks</li>
+<li>workspace explorer APIs</li>
+<li>local PTY WebSocket</li>
+<li>installed skill deletion per agent</li>
+</ul>
+<h4>Frontend</h4>
+<ul>
+<li>English/Spanish UI localization</li>
+<li>login screen</li>
+<li>dashboard overview</li>
+<li>agents list/detail</li>
+<li>tasks board</li>
+<li>nodes</li>
+<li>comms</li>
+<li>settings</li>
+<li>in-app user manual with screenshots</li>
+<li>self-service <code>My Account</code></li>
+<li>users and assignments</li>
+<li>workspace editor</li>
+<li>PTY terminal pane</li>
+<li>per-agent integrations section with declarative config forms</li>
+<li>per-agent Telegram and WhatsApp channel management</li>
+<li>Telegram and WhatsApp message traceability in agent activity logs</li>
+<li>per-user operator avatar</li>
+<li>instance-wide Hermes TUI skin upload for admins</li>
+</ul>
+<h3>UI Fonts</h3>
+<p>The UI loads these Google Fonts globally:</p>
+<ul>
+<li><code>Doto</code></li>
+<li><code>Space Grotesk</code></li>
+<li><code>Space Mono</code></li>
+</ul>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in deployment &amp; infra</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/numtide/llm-agents.nix">
+        <div class="stars">★ 1.1K</div>
+        <div class="name"><span class="org">numtide /</span> llm-agents.nix</div>
+      </a>
+      <a class="related-row" href="/projects/TheAiSingularity/hermesclaw">
+        <div class="stars">★ 37</div>
+        <div class="name"><span class="org">TheAiSingularity /</span> hermesclaw</div>
+      </a>
+      <a class="related-row" href="/projects/0xrsydn/nix-hermes-agent">
+        <div class="stars">★ 14</div>
+        <div class="name"><span class="org">0xrsydn /</span> nix-hermes-agent</div>
+      </a>
+      <a class="related-row" href="/projects/rookiemann/portable-hermes-agent">
+        <div class="stars">★ 81</div>
+        <div class="name"><span class="org">rookiemann /</span> portable-hermes-agent</div>
+      </a>
+      <a class="related-row" href="/projects/xmbshwll/hermes-agent-docker">
+        <div class="stars">★ 16</div>
+        <div class="name"><span class="org">xmbshwll /</span> hermes-agent-docker</div>
+      </a>
+      <a class="related-row" href="/projects/JackTheGit/hermes-autonomous-server">
+        <div class="stars">★ 7</div>
+        <div class="name"><span class="org">JackTheGit /</span> hermes-autonomous-server</div>
+      </a>
+      <a class="related-row" href="/projects/ellickjohnson/portainer-stack-hermes">
+        <div class="stars">★ 5</div>
+        <div class="name"><span class="org">ellickjohnson /</span> portainer-stack-hermes</div>
+      </a>
+    </div>
+    <p class="list-link"><a href="/lists/deployment-options">see all deployment &amp; infra →</a></p>
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script>(function(){fetch('/api/stars').then(function(r){return r.ok&&r.json()}).then(function(d){if(!d)return;var a=document.getElementById('meta-atlas');if(a&&d.atlas&&d.atlas.stars)a.textContent='★ '+d.atlas.stars+' · star this repo';var c=document.getElementById('meta-count');if(c&&d.totals&&d.totals.count)c.textContent=d.totals.count+'·repos'}).catch(function(){});})();</script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
