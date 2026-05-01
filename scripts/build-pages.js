@@ -986,6 +986,35 @@ async function main() {
 
   console.log(`\n  Generated ${generated} project pages (${errors} errors)\n`);
 
+  // ── Orphan cleanup ──
+  // Delete any project HTML whose owner/repo no longer appears in repos.json.
+  // Without this, removing a repo (e.g. account deleted, project archived,
+  // intentional curation drop) leaves a stale HTML on the live site rendering
+  // pre-removal data — see PR #148 / Web3CZ/Web3Hermes incident.
+  const canonical = new Set(repos.map((r) => `${r.owner}/${r.repo}.html`));
+  let orphansRemoved = 0;
+  const ownerDirents = fs.readdirSync(projectsDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory());
+  for (const od of ownerDirents) {
+    const ownerPath = path.join(projectsDir, od.name);
+    for (const file of fs.readdirSync(ownerPath)) {
+      if (!file.endsWith(".html")) continue;
+      const key = `${od.name}/${file}`;
+      if (!canonical.has(key)) {
+        fs.unlinkSync(path.join(ownerPath, file));
+        orphansRemoved++;
+        console.log(`  Removed orphan: projects/${key}`);
+      }
+    }
+    if (fs.readdirSync(ownerPath).length === 0) {
+      fs.rmdirSync(ownerPath);
+      console.log(`  Removed empty owner dir: projects/${od.name}`);
+    }
+  }
+  if (orphansRemoved > 0) {
+    console.log(`  Cleaned up ${orphansRemoved} orphan project page(s)\n`);
+  }
+
   // Generate list pages
   console.log("Generating list pages...");
   for (const list of lists) {
