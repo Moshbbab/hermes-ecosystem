@@ -81,16 +81,24 @@ jobs:
 
               let category = 'Developer Tools'; // fallback
 
+              // Order matters: most-specific signal wins. "Guides & Docs"
+              // moved up because tutorials commonly mention every topic
+              // (memory, skills, MCP, plugins...) in their description, and
+              // the fact that something IS a tutorial outranks what it
+              // describes. The plural-aware skills regex (`skills?`) catches
+              // "Skills that teach..." which `\bskill\b` missed.
               if (data.owner?.login === 'NousResearch') {
                 category = 'Core & Official';
               } else if (data.fork) {
                 category = 'Forks & Derivatives';
+              } else if (/\b(guide|tutorial|book|wiki|awesome|learning|course|handbook|chapters?)\b/.test(text)) {
+                category = 'Guides & Docs';
+              } else if (/\b(skills?|agentskills?|skill.?registry|skill.?factory)\b/.test(text)) {
+                category = 'Skills & Skill Registries';
               } else if (/\b(memory|context|recall|remember|semantic search|knowledge graph|rag|retrieval|embedding|vector|long.?term)\b/.test(text)) {
                 category = 'Memory & Context';
               } else if (/\b(gui|ui|dashboard|desktop|workspace|webui|web.?ui|frontend|interface|chat.?app|companion.?app|panel)\b/.test(text)) {
                 category = 'Workspaces & GUIs';
-              } else if (/\b(skill|agentskills|skill.?registry|skill.?factory)\b/.test(text)) {
-                category = 'Skills & Skill Registries';
               } else if (/\b(plugin|extension|bridge|adapter|connector|integration|webhook|mcp)\b/.test(text)) {
                 category = 'Plugins & Extensions';
               } else if (/\b(multi.?agent|swarm|orchestrat|fleet|delegation|coordinator)\b/.test(text)) {
@@ -99,8 +107,6 @@ jobs:
                 category = 'Deployment & Infra';
               } else if (/\b(telegram|discord|slack|android|ios|mobile|whatsapp|cloudflare|browser)\b/.test(text)) {
                 category = 'Integrations & Bridges';
-              } else if (/\b(guide|tutorial|doc|book|wiki|awesome|learning|course|handbook)\b/.test(text)) {
-                category = 'Guides & Docs';
               } else if (/\b(cybersecurity|finance|trading|medical|legal|blockchain|oracle|game|novel|creative|domain)\b/.test(text)) {
                 category = 'Domain Applications';
               } else if (/\b(cli|linter|migration|token.?track|devtool|debug|test|benchmark|lint)\b/.test(text)) {
