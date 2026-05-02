@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a persistent, local-first memory layer that enables AI agents to retain corrections, preferences, and conventions across different sessions and tools. It stores information as plain YAML engrams on disk and uses a hybrid retrieval system combining BM25 search with BGE embeddings to inject relevant context into agent prompts. The system employs an ACT-R activation model where memories strengthen with use and naturally decay over time to prevent context bloat. It integrates with tools like",
+  "description": "PLUR is a local-first persistent memory layer designed to synchronize AI agent corrections, preferences, and conventions across different tools and sessions. It stores knowledge as plain YAML \"engrams\" on disk, using a hybrid retrieval system of BM25 and local embeddings to inject relevant context into agent prompts without cloud dependencies. The system employs an ACT-R activation model where memories strengthen with use and naturally decay over time to maintain context quality. It integrates d",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-05-01T10:39:55.000Z",
+  "dateModified": "2026-05-02T05:59:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -112,7 +112,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-05-01</span>
+    <span><span class="meta-label">updated</span>2026-05-02</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a persistent, local-first memory layer that enables AI agents to retain corrections, preferences, and conventions across different sessions and tools. It stores information as plain YAML engrams on disk and uses a hybrid retrieval system combining BM25 search with BGE embeddings to inject relevant context into agent prompts. The system employs an ACT-R activation model where memories strengthen with use and naturally decay over time to prevent context bloat. It integrates with tools like Claude Code, Cursor, and Hermes Agent to automatically capture and recall knowledge without cloud API dependencies.</p>
+    <p class="summary-text">PLUR is a local-first persistent memory layer designed to synchronize AI agent corrections, preferences, and conventions across different tools and sessions. It stores knowledge as plain YAML &quot;engrams&quot; on disk, using a hybrid retrieval system of BM25 and local embeddings to inject relevant context into agent prompts without cloud dependencies. The system employs an ACT-R activation model where memories strengthen with use and naturally decay over time to maintain context quality. It integrates directly with MCP-compatible tools like Claude Code and Cursor, as well as Hermes Agent via a dedicated plugin.</p>
     <ul class="summary-highlights">
       <li>Stores persistent agent memory as local YAML engrams</li>
-      <li>Hybrid retrieval using BM25 and embeddings with zero API cost</li>
-      <li>Automatic memory decay and strengthening based on usage patterns</li>
+      <li>Hybrid BM25 and embedding retrieval with zero API costs</li>
+      <li>Automatic memory injection for Claude Code, Cursor, and Hermes</li>
     </ul>
   </div>
 </section>
@@ -156,9 +156,12 @@
 <p>This creates <code>~/.plur/</code> for storage, adds PLUR to your <code>.mcp.json</code>, and installs Claude Code hooks for automatic engram injection. PLUR is installed <strong>globally</strong> — one MCP server, one store, available in every project. You only run init once.</p>
 <p>For <strong>multi-project setups</strong>, use domain/scope to separate knowledge:</p>
 <pre><code class="language-bash">cd ~/projects/my-app
-npx @plur-ai/cli init --domain myapp --scope project:my-app
+npx @plur-ai/cli@0.9.1 init --domain myapp --scope project:my-app
 </code></pre>
 <p>This creates a <code>.plur.yaml</code> in the project with defaults that hooks apply automatically. Engrams learned in that project are tagged; recall filters by scope but always includes global knowledge.</p>
+<blockquote>
+<p>Pin to <code>@0.9.1</code> — the <code>0.9.2</code> latest tag on npm is bricked (<code>Dynamic require of &quot;os&quot; is not supported</code>). Tracking in <a href="https://github.com/plur-ai/plur/issues/59">#59</a>.</p>
+</blockquote>
 <h4>Global install (faster startup)</h4>
 <pre><code class="language-bash">npm install -g @plur-ai/mcp
 plur-mcp init
@@ -449,7 +452,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 54.5K</div>
+        <div class="stars">★ 54.6K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -457,15 +460,15 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 947</div>
+        <div class="stars">★ 955</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 197</div>
+        <div class="stars">★ 201</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 144</div>
+        <div class="stars">★ 145</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -473,11 +476,11 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 12.6K</div>
+        <div class="stars">★ 12.7K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 367</div>
+        <div class="stars">★ 374</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "Autocontext is a recursive self-improving harness that enables AI agents to iterate on complex tasks through structured evaluation and feedback loops. It operates by coordinating five specialized roles—competitor, analyst, coach, architect, and curator—to test strategies, analyze failures, and persist successful patterns into reusable playbooks. The system generates structured traces, datasets, and artifacts that allow future agent iterations to inherit accumulated knowledge. It supports major m",
+  "description": "Autocontext is a recursive self-improving harness that enables AI agents to succeed on complex tasks through iterative evaluation and refinement. It operates by running a multi-role loop—including competitors, analysts, and curators—that tests strategies against real-world scenarios and retains successful outcomes. The system produces structured traces, playbooks, and datasets that allow future agent iterations to inherit accumulated knowledge. It integrates with various providers like Anthropic",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-05-01T15:42:37.000Z",
+  "dateModified": "2026-05-02T04:05:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 947
+    "userInteractionCount": 955
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -108,11 +108,11 @@
   <p class="project-desc">a recursive self-improving harness designed to help your agents (and future iterations of those agents) succeed on any task</p>
 
   <div class="meta-row">
-    <span class="stars">★ 947</span>
+    <span class="stars">★ 955</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-05-01</span>
+    <span><span class="meta-label">updated</span>2026-05-02</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Autocontext is a recursive self-improving harness that enables AI agents to iterate on complex tasks through structured evaluation and feedback loops. It operates by coordinating five specialized roles—competitor, analyst, coach, architect, and curator—to test strategies, analyze failures, and persist successful patterns into reusable playbooks. The system generates structured traces, datasets, and artifacts that allow future agent iterations to inherit accumulated knowledge. It supports major model providers and integrates with agent frameworks like Hermes, Claude Code, and Pi via CLI or MCP.</p>
+    <p class="summary-text">Autocontext is a recursive self-improving harness that enables AI agents to succeed on complex tasks through iterative evaluation and refinement. It operates by running a multi-role loop—including competitors, analysts, and curators—that tests strategies against real-world scenarios and retains successful outcomes. The system produces structured traces, playbooks, and datasets that allow future agent iterations to inherit accumulated knowledge. It integrates with various providers like Anthropic and OpenAI, and offers specialized support for Hermes Agent and Claude Code via MCP.</p>
     <ul class="summary-highlights">
-      <li>Recursive improvement through multi-role coordination and automated evaluation loops</li>
-      <li>Generates persistent playbooks and structured traces for knowledge transfer</li>
-      <li>Integrates with Hermes Agent via CLI-first skill and state inspection</li>
+      <li>Iterative self-improvement loop using five specialized agent roles</li>
+      <li>Generates structured playbooks and traces for knowledge persistence</li>
+      <li>Native integration for Hermes Agent and MCP-compatible clients</li>
     </ul>
   </div>
 </section>
@@ -387,6 +387,11 @@ pi install npm:pi-autocontext
 <td>Coordinate multiple missions with budgets, dependencies, progress aggregation</td>
 </tr>
 <tr>
+<td><code>worker</code></td>
+<td><code>autoctx worker --poll-interval 5</code></td>
+<td>Process queued tasks on a persistent host beside <code>autoctx serve</code></td>
+</tr>
+<tr>
 <td><code>export</code></td>
 <td><code>autoctx export &lt;run-id&gt;</code></td>
 <td>Share solved knowledge as JSON, skills, or Pi-local package directories</td>
@@ -476,7 +481,7 @@ pi install npm:pi-autocontext
 <h3>Providers, Runtimes, Executors</h3>
 <p><strong>LLM providers</strong>: Anthropic (with <code>instrument_client</code> capture), OpenAI-compatible (vLLM, Ollama, Hermes), Gemini, Mistral, Groq, OpenRouter, Azure OpenAI, MLX (Apple Silicon), CUDA (Linux GPUs), Pi (CLI and RPC).</p>
 <p><strong>Agent runtimes</strong>: Claude CLI, Codex CLI, Hermes CLI, Direct API, Pi variants, plus branch-aware session and persistent Pi RPC for local agent loops.</p>
-<p><strong>Executors</strong>: Local subprocess, SSH remote, Monty (<code>pydantic-monty</code> sandbox), PrimeIntellect remote sandbox.</p>
+<p><strong>Executors</strong>: Local subprocess, SSH remote, Monty (<code>pydantic-monty</code> sandbox), PrimeIntellect remote sandbox. Gondolin is reserved as an optional fail-closed microVM backend until its adapter is wired.</p>
 <p><strong>Harness profiles and hooks</strong>: The Python control plane supports a Pi-shaped lean profile that caps prompt context during generation and exports a minimal tool-affordance allowlist for agent surfaces that enforce tool gating. Semantic prompt compactions are recorded as Pi-shaped JSONL entries under each run; the TypeScript package now includes a mirrored deterministic prompt compactor plus <code>ArtifactStore</code> ledger read/write/latest APIs for standalone npm runs. Python and TypeScript runs can load <code>AUTOCONTEXT_EXTENSIONS</code>; Python extensions are Python modules, while TypeScript extensions are JavaScript/ESM modules that register hooks around context assembly, semantic compaction, provider calls, judge calls, artifact writes, and run lifecycle events.</p>
 <p>A deterministic offline provider exists for the test suite. Configuration matrix: <a href=".env.example"><code>.env.example</code></a> and <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/concept-model.md">docs/concept-model.md</a>.</p>
 <h3>FAQ</h3>
@@ -503,6 +508,7 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
 <li>Repo layout for coding agents: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/AGENTS.md">AGENTS.md</a></li>
 <li>Sandboxed agents that need to trigger MLX training on the host: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/mlx-training.md">autocontext/docs/mlx-training.md</a></li>
 <li>Sandbox and executor notes: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/sandbox.md">autocontext/docs/sandbox.md</a></li>
+<li>Persistent host worker: <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/persistent-host.md">autocontext/docs/persistent-host.md</a></li>
 <li>License: <a href="LICENSE">LICENSE</a></li>
 </ul>
 <h3>Acknowledgments</h3>
@@ -523,7 +529,7 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 54.5K</div>
+        <div class="stars">★ 54.6K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -531,11 +537,11 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 197</div>
+        <div class="stars">★ 201</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 144</div>
+        <div class="stars">★ 145</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
@@ -547,11 +553,11 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 12.6K</div>
+        <div class="stars">★ 12.7K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 367</div>
+        <div class="stars">★ 374</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>

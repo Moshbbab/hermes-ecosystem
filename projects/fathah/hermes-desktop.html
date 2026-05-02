@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/fathah/hermes-desktop#software",
   "name": "hermes-desktop",
-  "description": "Hermes Desktop is a native GUI companion designed to simplify the installation, configuration, and management of the Hermes Agent. It replaces manual CLI management by providing a guided setup process that handles dependency resolution and provider configuration. Users can interact with the agent through a streaming chat interface, manage multiple isolated profiles, and schedule tasks via a built-in cron job builder. The application also integrates a wide range of messaging gateways and toolsets",
+  "description": "Hermes Desktop is a native companion application that provides a graphical interface for installing, configuring, and interacting with Hermes Agent. It automates the setup process by managing dependencies like Python and Git, allowing users to run the agent locally or connect to a remote API server. The application features a streaming chat UI with support for 22 slash commands, session management via SQLite, and a persona editor for modifying the agent's personality. It integrates with 16 messa",
   "url": "https://hermesatlas.com/projects/fathah/hermes-desktop",
   "codeRepository": "https://github.com/fathah/hermes-desktop",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "fathah",
     "url": "https://github.com/fathah"
   },
-  "dateModified": "2026-05-01T14:23:24.000Z",
+  "dateModified": "2026-05-02T02:16:56.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 823
+    "userInteractionCount": 852
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -108,11 +108,11 @@
   <p class="project-desc">Desktop Companion for Hermes Agent</p>
 
   <div class="meta-row">
-    <span class="stars">★ 823</span>
+    <span class="stars">★ 852</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-01</span>
+    <span><span class="meta-label">updated</span>2026-05-02</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Desktop is a native GUI companion designed to simplify the installation, configuration, and management of the Hermes Agent. It replaces manual CLI management by providing a guided setup process that handles dependency resolution and provider configuration. Users can interact with the agent through a streaming chat interface, manage multiple isolated profiles, and schedule tasks via a built-in cron job builder. The application also integrates a wide range of messaging gateways and toolsets to extend the agent's capabilities.</p>
+    <p class="summary-text">Hermes Desktop is a native companion application that provides a graphical interface for installing, configuring, and interacting with Hermes Agent. It automates the setup process by managing dependencies like Python and Git, allowing users to run the agent locally or connect to a remote API server. The application features a streaming chat UI with support for 22 slash commands, session management via SQLite, and a persona editor for modifying the agent's personality. It integrates with 16 messaging gateways and 14 toolsets, including web browsing, code execution, and task planning.</p>
     <ul class="summary-highlights">
-      <li>Guided installation and multi-provider model support</li>
-      <li>Streaming chat UI with 22 slash commands</li>
-      <li>Extensive messaging gateways and toolset integration</li>
+      <li>Guided installer for local or remote Hermes Agent backends</li>
+      <li>Supports 16 messaging gateways including Discord, Slack, and Telegram</li>
+      <li>Integrated management for memory systems, toolsets, and scheduled tasks</li>
     </ul>
   </div>
 </section>
@@ -148,10 +148,9 @@
   <a href="https://github.com/fathah/hermes-desktop/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License: MIT"></a>
   <a href="https://github.com/fathah/hermes-desktop/releases/"><img src="https://img.shields.io/badge/Download-Releases-FF6600?style=for-the-badge" alt="Releases"></a>
 <a href="https://github.com/fathah/hermes-desktop/releases/">
-  <img src="https://img.shields.io/github/downloads/fathah/hermes-desktop/total?style=for-the-badge&color=FF6600&label=Downloads" alt="Downloads">
+  <img src="https://img.shields.io/github/downloads/fathah/hermes-desktop/total?style=for-the-badge&color=00B496&label=Total%20Downloads" alt="Downloads">
 </a>
 </p>
-
 
 <blockquote>
 <p><strong>This project is in active development.</strong> Features may change, and some things might break. If you run into a problem or have an idea, <a href="https://github.com/fathah/hermes-desktop/issues">open an issue</a>. Contributions are welcome!</p>
@@ -217,6 +216,7 @@
 <h3>Features</h3>
 <ul>
 <li><strong>Guided first-run install</strong> for Hermes Agent with progress tracking and dependency resolution</li>
+<li><strong>Local or remote backend</strong> — run Hermes locally on <code>127.0.0.1:8642</code>, or connect the desktop app to a remote Hermes API server with URL + API key</li>
 <li><strong>Multi-provider support</strong> — OpenRouter, Anthropic, OpenAI, Google (Gemini), xAI (Grok), Nous Portal, Qwen, MiniMax, Hugging Face, Groq, and local OpenAI-compatible endpoints (LM Studio, Ollama, vLLM, llama.cpp)</li>
 <li><strong>Streaming chat UI</strong> with SSE streaming, tool progress indicators, markdown rendering, and syntax highlighting</li>
 <li><strong>Token usage tracking</strong> — live prompt/completion token counts and cost display in the chat footer, plus a <code>/usage</code> slash command</li>
@@ -255,13 +255,14 @@
 <h3>How It Works</h3>
 <p>On first launch, the app:</p>
 <ol>
-<li>Checks whether Hermes is already installed in <code>~/.hermes</code>.</li>
-<li>If not installed, runs the official Hermes installer with dependency resolution (Git, uv, Python 3.11+).</li>
+<li>Asks whether you want to run Hermes <strong>locally</strong> or connect to a <strong>remote</strong> Hermes API server.</li>
+<li><strong>Local mode:</strong> checks whether Hermes is already installed in <code>~/.hermes</code>; if not, runs the official Hermes installer with dependency resolution (Git, uv, Python 3.11+).</li>
+<li><strong>Remote mode:</strong> prompts for the remote API URL and API key, validates the connection, and skips local install.</li>
 <li>Prompts for an API provider or local model endpoint.</li>
 <li>Saves provider config and API keys through Hermes config files.</li>
 <li>Launches the main workspace once setup is complete.</li>
 </ol>
-<p>Chat requests go through a local API server (<code>http://127.0.0.1:8642</code>) with SSE streaming. The desktop app parses the stream in real time, rendering tool progress, markdown content, and token usage as it arrives.</p>
+<p>In local mode, chat requests go through <code>http://127.0.0.1:8642</code> with SSE streaming. In remote mode, the app talks to your configured remote URL with the same streaming protocol. The desktop app parses the stream in real time, rendering tool progress, markdown content, and token usage as it arrives.</p>
 <h3>Screens</h3>
 <table>
 <thead>
@@ -406,6 +407,7 @@ npm run test:watch
 <pre><code class="language-bash">npm run build:mac
 npm run build:win
 npm run build:linux
+npm run build:rpm    # Fedora/RHEL .rpm only
 </code></pre>
 <h3>First-Time Setup</h3>
 <p>When the app opens for the first time, it will either detect an existing Hermes installation or offer to install it for you.</p>
@@ -474,7 +476,7 @@ npm run build:linux
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
-        <div class="stars">★ 91</div>
+        <div class="stars">★ 92</div>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
@@ -482,19 +484,19 @@ npm run build:linux
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 494</div>
+        <div class="stars">★ 496</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
-        <div class="stars">★ 739</div>
+        <div class="stars">★ 743</div>
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/nesquena/hermes-webui">
-        <div class="stars">★ 5.2K</div>
+        <div class="stars">★ 5.3K</div>
         <div class="name"><span class="org">nesquena /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
-        <div class="stars">★ 94</div>
+        <div class="stars">★ 96</div>
         <div class="name"><span class="org">pyrate-llama /</span> hermes-ui</div>
       </a>
       <a class="related-row" href="/projects/clawvader-tech/hermes-telegram-miniapp">

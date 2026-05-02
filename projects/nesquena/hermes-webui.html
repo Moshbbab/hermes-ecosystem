@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight web interface for the Hermes Agent, providing a graphical alternative to the standard command-line environment. Built with Python and vanilla JavaScript, it offers a three-panel layout for managing chat sessions, workspace files, and agent settings without requiring a complex build step. The interface maintains full parity with the CLI, allowing users to control models, monitor token usage via a context ring, and manage persistent memory. It facilitates secure remot",
+  "description": "Hermes WebUI is a lightweight browser-based interface for the Hermes Agent, providing a graphical alternative to the standard command-line environment. It utilizes a Python backend and vanilla JavaScript frontend to deliver a three-panel layout for managing chat sessions, workspace files, and agent settings without requiring complex build steps or frameworks. The interface maintains full parity with the CLI, allowing users to interact with the agent's persistent memory, scheduled jobs, and self-",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-05-01T18:36:26.000Z",
+  "dateModified": "2026-05-02T07:05:04.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5239
+    "userInteractionCount": 5291
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -108,11 +108,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 5.2K</span>
+    <span class="stars">★ 5.3K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-01</span>
+    <span><span class="meta-label">updated</span>2026-05-02</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight web interface for the Hermes Agent, providing a graphical alternative to the standard command-line environment. Built with Python and vanilla JavaScript, it offers a three-panel layout for managing chat sessions, workspace files, and agent settings without requiring a complex build step. The interface maintains full parity with the CLI, allowing users to control models, monitor token usage via a context ring, and manage persistent memory. It facilitates secure remote access to self-hosted agents through SSH tunneling or Docker deployment.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight browser-based interface for the Hermes Agent, providing a graphical alternative to the standard command-line environment. It utilizes a Python backend and vanilla JavaScript frontend to deliver a three-panel layout for managing chat sessions, workspace files, and agent settings without requiring complex build steps or frameworks. The interface maintains full parity with the CLI, allowing users to interact with the agent's persistent memory, scheduled jobs, and self-improving skills from any device. It integrates directly with existing Hermes configurations and supports secure remote access via SSH tunneling or Docker deployment.</p>
     <ul class="summary-highlights">
       <li>Three-panel layout for chat, file browsing, and session management</li>
-      <li>Full feature parity with the Hermes Agent CLI experience</li>
-      <li>Zero-framework architecture using only Python and vanilla JavaScript</li>
+      <li>Full feature parity with the Hermes Agent command-line interface</li>
+      <li>Visual context ring for real-time monitoring of token usage</li>
     </ul>
   </div>
 </section>
@@ -308,131 +308,100 @@ python3 bootstrap.py
 <p>If provider setup is still incomplete after install, the onboarding wizard will point you to finish it with <code>hermes model</code> instead of trying to replicate the full CLI setup in-browser.</p>
 <hr>
 <h3>Docker</h3>
-<p><strong>Pre-built images</strong> (amd64 + arm64) are published to GHCR on every release:</p>
-<p>Make sure the <code>HERMES_WEBUI_STATE_DIR</code> (by default <code>~/.hermes/webui-mvp</code>, as detailed in the <code>.env.example</code> file) folder exist with the UID/GID of the owner of the <code>.hermes</code> folder. 
-The container will also mount your configured &quot;workspace&quot; (also from the example .env.example) as <code>/workspace</code>. adapt the location as needed.</p>
+<p><strong>Pre-built images</strong> (amd64 + arm64) are published to GHCR on every release.</p>
+<p>For a comprehensive setup guide covering all 3 compose files, common failure modes, and bind-mount migration, see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a>. The README covers the 5-minute happy path.</p>
+<h4>5-minute quickstart (single container)</h4>
+<p>The simplest setup: one WebUI container that runs the agent in-process.</p>
+<pre><code class="language-bash">git clone https://github.com/nesquena/hermes-webui
+cd hermes-webui
+cp .env.docker.example .env
+# Edit .env if your host UID isn&#39;t 1000 (e.g. macOS where UIDs start at 501)
+docker compose up -d
+# Open http://localhost:8787
+</code></pre>
+<p>The container auto-detects your UID/GID from the mounted <code>~/.hermes</code> volume so files written by the agent stay readable by you on the host.</p>
+<p>To enable password protection (required if you expose the port outside <code>127.0.0.1</code>):</p>
+<pre><code class="language-bash">echo &quot;HERMES_WEBUI_PASSWORD=change-me-to-something-strong&quot; &gt;&gt; .env
+docker compose up -d --force-recreate
+</code></pre>
+<h4>Manual <code>docker run</code> (no compose)</h4>
 <pre><code class="language-bash">docker pull ghcr.io/nesquena/hermes-webui:latest
 docker run -d \
--e WANTED_UID=`id -u` -e WANTED_GID=`id -g` \
--v ~/.hermes:/home/hermeswebui/.hermes -e HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui-mvp \
--v ~/workspace:/workspace \
--p 8787:8787 ghcr.io/nesquena/hermes-webui:latest
+  -e WANTED_UID=$(id -u) -e WANTED_GID=$(id -g) \
+  -v ~/.hermes:/home/hermeswebui/.hermes \
+  -e HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui \
+  -v ~/workspace:/workspace \
+  -p 127.0.0.1:8787:8787 \
+  ghcr.io/nesquena/hermes-webui:latest
 </code></pre>
-<p>Or run with Docker Compose (recommended):</p>
-<pre><code class="language-bash"># Check the docker-compose.yml and make sure to adapt as needed, at minimum WANTED_UID/WANTED_GID
-docker compose up -d
-</code></pre>
-<p>Or build locally:</p>
+<h4>Build locally</h4>
 <pre><code class="language-bash">docker build -t hermes-webui .
 docker run -d \
--e WANTED_UID=`id -u` -e WANTED_GID=`id -g` \
--v ~/.hermes:/home/hermeswebui/.hermes -e HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui-mvp \
--v ~/workspace:/workspace \
--p 8787:8787 hermes-webui
+  -e WANTED_UID=$(id -u) -e WANTED_GID=$(id -g) \
+  -v ~/.hermes:/home/hermeswebui/.hermes \
+  -e HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui \
+  -v ~/workspace:/workspace \
+  -p 127.0.0.1:8787:8787 \
+  hermes-webui
 </code></pre>
-<p>Open <a href="http://localhost:8787">http://localhost:8787</a> in your browser.</p>
-<p>To enable password protection:</p>
-<pre><code class="language-bash">docker run -d \
--e WANTED_UID=`id -u` -e WANTED_GID=`id -g` \
--v ~/.hermes:/home/hermeswebui/.hermes -e HERMES_WEBUI_STATE_DIR=/home/hermeswebui/.hermes/webui-mvp \
--v ~/workspace:/workspace \
--p 8787:8787 -e HERMES_WEBUI_PASSWORD=your-secret ghcr.io/nesquena/hermes-webui:latest
+<h4>Multi-container setups</h4>
+<p>If you want the agent and WebUI in separate containers (for isolation, or because you&#39;re already running an agent gateway elsewhere):</p>
+<pre><code class="language-bash"># Agent + WebUI
+docker compose -f docker-compose.two-container.yml up -d
+
+# Agent + Dashboard + WebUI
+docker compose -f docker-compose.three-container.yml up -d
 </code></pre>
+<p>Both compose files use <strong>named Docker volumes</strong> by default, which solves the UID/GID problem by construction. If you need bind mounts to share an existing host directory, see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a> for the full migration recipe.</p>
+<blockquote>
+<p><strong>Known limitation (#681)</strong>: in the two-container setup, tools triggered from the WebUI run in the <strong>WebUI container</strong>, not the agent container. If you need git/node/etc. on the WebUI&#39;s filesystem, either use the single-container setup, extend the WebUI Dockerfile, or use the community <a href="https://github.com/sunnysktsang/hermes-suite">all-in-one image</a>.</p>
+</blockquote>
+<h4>Common failure modes</h4>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PermissionError</code> at startup</td>
+<td>UID mismatch on bind mount</td>
+<td>Set <code>UID=$(id -u)</code> in <code>.env</code></td>
+</tr>
+<tr>
+<td><code>.env: permission denied</code> (#1389)</td>
+<td><code>fix_credential_permissions()</code> enforced 0600</td>
+<td>Set <code>HERMES_SKIP_CHMOD=1</code> in <code>.env</code></td>
+</tr>
+<tr>
+<td>Workspace appears empty</td>
+<td>UID mismatch on <code>/workspace</code> mount</td>
+<td>Set <code>UID=$(id -u)</code> in <code>.env</code></td>
+</tr>
+<tr>
+<td><code>git: command not found</code> in chat</td>
+<td>Two-container architectural limit (#681)</td>
+<td>Use single-container or extend Dockerfile</td>
+</tr>
+<tr>
+<td>WebUI can&#39;t find agent source</td>
+<td><code>hermes-agent-src</code> volume misconfigured</td>
+<td>Use the named volumes from compose files as-is</td>
+</tr>
+<tr>
+<td>Podman shared <code>.hermes</code> fails</td>
+<td>Podman 3.4 <code>keep-id</code> limitation</td>
+<td>Use Podman 4+ or single-container</td>
+</tr>
+</tbody></table>
+<p>For the deep dive on each of these, see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a>.</p>
 <blockquote>
 <p><strong>Note:</strong> By default, Docker Compose binds to <code>127.0.0.1</code> (localhost only).
 To expose on a network, change the port to <code>&quot;8787:8787&quot;</code> in <code>docker-compose.yml</code>
 and set <code>HERMES_WEBUI_PASSWORD</code> to enable authentication.</p>
 </blockquote>
-<h4>Two-container setup (Agent + WebUI)</h4>
-<p>If you run the Hermes Agent in its own Docker container and want the WebUI
-in a separate container:</p>
-<pre><code class="language-bash">docker compose -f docker-compose.two-container.yml up -d
-</code></pre>
-<p>This starts both containers with shared volumes:</p>
-<ul>
-<li><strong><code>hermes-home</code></strong> — shared <code>~/.hermes</code> for config, sessions, skills, memory</li>
-<li><strong><code>hermes-agent-src</code></strong> — the agent&#39;s source code, mounted into the WebUI
-container so it can install the agent&#39;s Python dependencies at startup</li>
-</ul>
-<blockquote>
-<p><strong>Volume type:</strong> The compose files use named Docker volumes by default.
-If you prefer bind mounts to an existing directory (e.g. for sharing state
-with an agent container you already run), both containers must mount the
-same host path — the agent writes to <code>/root/.hermes</code>, the WebUI reads from
-<code>/home/hermeswebui/.hermes</code>. See <code>docker-compose.two-container.yml</code> for
-a bind-mount example.</p>
-</blockquote>
-<p>The WebUI&#39;s init script automatically installs hermes-agent and all its
-dependencies (openai, anthropic, etc.) into its own Python environment on
-first boot. Subsequent restarts reuse the installed packages.</p>
-<blockquote>
-<p><strong>How it works:</strong> The WebUI imports hermes-agent&#39;s Python modules directly
-(not via HTTP). The shared volume makes the agent source available, and
-the init script runs <code>uv pip install</code> to set up the dependencies. Both
-containers share the same <code>~/.hermes</code> directory for config and state.</p>
-</blockquote>
-<p>See <code>docker-compose.two-container.yml</code> for the full configuration.</p>
-<h4>Running alongside hermes-dashboard (three-container setup)</h4>
-<p>To run the Hermes Agent, Hermes Dashboard, and the WebUI together on a
-shared volume, use the three-container Compose file:</p>
-<pre><code class="language-bash">docker compose -f docker-compose.three-container.yml up -d
-</code></pre>
-<p>This brings up:</p>
-<ul>
-<li><strong><code>hermes-agent</code></strong> — gateway API on port 8642</li>
-<li><strong><code>hermes-dashboard</code></strong> — monitoring UI on port 9119</li>
-<li><strong><code>hermes-webui</code></strong> — browser chat interface on port 8787</li>
-</ul>
-<p>All three services share the same <code>hermes-home</code> named volume so config,
-sessions, skills, and memory are consistent across all surfaces.</p>
-<h5>Why UIDs must match</h5>
-<p>The <code>hermes-home</code> volume is a bind-mount in practice — all three containers
-write to the same filesystem tree under <code>~/.hermes</code>. If the containers run
-as different UIDs, whichever container creates a file first becomes its
-owner, and the others hit <code>PermissionError</code> on subsequent writes.</p>
-<p>The fix is to make all containers run as <strong>your host user&#39;s UID and GID</strong>.</p>
-<h5>Variable name asymmetry</h5>
-<blockquote>
-<p>⚠️ <strong>The two image families use different environment variable names</strong> for
-the UID/GID setting:</p>
-<table>
-<thead>
-<tr>
-<th>Image</th>
-<th>Variable</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>nousresearch/hermes-agent</code> (agent + dashboard)</td>
-<td><code>HERMES_UID</code> / <code>HERMES_GID</code></td>
-</tr>
-<tr>
-<td><code>ghcr.io/nesquena/hermes-webui</code></td>
-<td><code>WANTED_UID</code> / <code>WANTED_GID</code></td>
-</tr>
-</tbody></table>
-<p>You must set <strong>both pairs</strong> when using a <code>.env</code> file.</p>
-</blockquote>
-<h5>Recommended setup</h5>
-<p>For a standard Linux user (UID ≥ 1000):</p>
-<pre><code class="language-bash"># Create a .env file with your host UID/GID
-echo &quot;UID=$(id -u)&quot; &gt;&gt; .env
-echo &quot;GID=$(id -g)&quot; &gt;&gt; .env
-# hermes-agent / hermes-dashboard
-echo &quot;HERMES_UID=$(id -u)&quot; &gt;&gt; .env
-echo &quot;HERMES_GID=$(id -g)&quot; &gt;&gt; .env
-</code></pre>
-<p>For NAS/Unraid deployments where a fixed service account is preferred, use
-<code>10000:10000</code> (or your NAS service UID) instead of <code>$(id -u)</code>.</p>
-<p>If you get <code>PermissionError</code> on an <strong>existing</strong> <code>~/.hermes</code> directory, run
-the one-time ownership fix:</p>
-<pre><code class="language-bash">chown -R $(id -u):$(id -g) ~/.hermes
-</code></pre>
-<h5>Volume mount mode</h5>
-<p>The dashboard container needs <strong>read-write</strong> access to the shared volume
-(it writes session logs and dashboard state). Do <strong>not</strong> add <code>:ro</code> to the
-<code>hermes-home</code> volume in <code>hermes-dashboard</code>&#39;s <code>volumes:</code> entry.</p>
-<p>See <code>docker-compose.three-container.yml</code> for the full reference configuration.</p>
 <hr>
 <h3>What start.sh discovers automatically</h3>
 <table>
@@ -523,6 +492,21 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <td><code>HERMES_WEBUI_PASSWORD</code></td>
 <td><em>(unset)</em></td>
 <td>Set to enable password authentication</td>
+</tr>
+<tr>
+<td><code>HERMES_WEBUI_EXTENSION_DIR</code></td>
+<td><em>(unset)</em></td>
+<td>Optional local directory served at <code>/extensions/</code>; must point to an existing directory before extension injection is enabled</td>
+</tr>
+<tr>
+<td><code>HERMES_WEBUI_EXTENSION_SCRIPT_URLS</code></td>
+<td><em>(unset)</em></td>
+<td>Optional comma-separated same-origin script URLs to inject; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
+</tr>
+<tr>
+<td><code>HERMES_WEBUI_EXTENSION_STYLESHEET_URLS</code></td>
+<td><em>(unset)</em></td>
+<td>Optional comma-separated same-origin stylesheet URLs to inject; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
 </tr>
 <tr>
 <td><code>HERMES_HOME</code></td>
@@ -933,11 +917,11 @@ Added a streaming token buffer and post-run message scrub to <code>streaming.py<
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 823</div>
+        <div class="stars">★ 852</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
-        <div class="stars">★ 91</div>
+        <div class="stars">★ 92</div>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
@@ -945,15 +929,15 @@ Added a streaming token buffer and post-run message scrub to <code>streaming.py<
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 494</div>
+        <div class="stars">★ 496</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
-        <div class="stars">★ 739</div>
+        <div class="stars">★ 743</div>
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
-        <div class="stars">★ 94</div>
+        <div class="stars">★ 96</div>
         <div class="name"><span class="org">pyrate-llama /</span> hermes-ui</div>
       </a>
       <a class="related-row" href="/projects/clawvader-tech/hermes-telegram-miniapp">
