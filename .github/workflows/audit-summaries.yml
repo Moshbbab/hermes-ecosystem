@@ -15,6 +15,7 @@ jobs:
     permissions:
       contents: write
       actions: write  # required to dispatch build-pages.yml via `gh workflow run`
+      issues: write   # required for the dead-repo tracking issue
 
     steps:
       - name: Checkout
@@ -85,3 +86,47 @@ jobs:
           # length of one build run (~3 minutes).
           gh workflow run build-pages.yml
           echo "Dispatched build-pages.yml to regenerate flagged summaries"
+
+      - name: Detect dead repos
+        if: always()  # run even if earlier steps failed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/check-dead-repos.js
+
+      - name: Open or update dead-repo tracking issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          title="Dead repos detected in data/repos.json"
+          # `in:title` scopes the search to the title field so we don't
+          # match stray issues that happen to mention the phrase in their body.
+          existing=$(gh issue list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --search "\"$title\" in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+
+          if [ ! -s dead-repos.md ]; then
+            echo "No dead repos detected"
+            if [ -n "$existing" ]; then
+              gh issue close "$existing" \
+                --repo "$GITHUB_REPOSITORY" \
+                --comment "Auto-closed: no dead repos detected in latest audit run."
+              echo "Closed stale issue #$existing"
+            fi
+            exit 0
+          fi
+
+          if [ -n "$existing" ]; then
+            gh issue edit "$existing" \
+              --repo "$GITHUB_REPOSITORY" \
+              --body-file dead-repos.md
+            echo "Updated existing issue #$existing"
+          else
+            gh issue create \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$title" \
+              --body-file dead-repos.md
+          fi
