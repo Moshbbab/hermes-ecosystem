@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nativ3ai/hermes-agent-camel#software",
   "name": "hermes-agent-camel",
-  "description": "This project is a specialized fork of the Hermes Agent that integrates CaMeL trust-boundary principles to defend against prompt-injection attacks during autonomous execution. It implements a security layer adapted from Google Research that monitors or enforces policy decisions when the agent interacts with untrusted contexts. Users can explicitly opt into these protections using specific CLI flags to block unauthorized sensitive actions without altering the core Hermes runtime. The agent retains",
+  "description": "This project is a derivative of Hermes Agent that integrates CaMeL trust boundaries to mitigate risks from indirect prompt injection during autonomous execution. It implements an opt-in runtime guard that monitors or enforces security policies by gating sensitive tool side effects against verified user intent. The system maintains the core Hermes features, including a self-improving learning loop, cross-platform messaging support, and a built-in cron scheduler for automated tasks. Users can togg",
   "url": "https://hermesatlas.com/projects/nativ3ai/hermes-agent-camel",
   "codeRepository": "https://github.com/nativ3ai/hermes-agent-camel",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "nativ3ai",
     "url": "https://github.com/nativ3ai"
   },
-  "dateModified": "2026-04-22T14:37:26.000Z",
+  "dateModified": "2026-05-02T09:55:18.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 151
+    "userInteractionCount": 169
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">111·repos</span>
+    <span id="meta-count">110·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">Hermes Agent fork with integrated CaMeL trust boundaries</p>
 
   <div class="meta-row">
-    <span class="stars">★ 151</span>
+    <span class="stars">★ 169</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-22</span>
+    <span><span class="meta-label">updated</span>2026-05-02</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This project is a specialized fork of the Hermes Agent that integrates CaMeL trust-boundary principles to defend against prompt-injection attacks during autonomous execution. It implements a security layer adapted from Google Research that monitors or enforces policy decisions when the agent interacts with untrusted contexts. Users can explicitly opt into these protections using specific CLI flags to block unauthorized sensitive actions without altering the core Hermes runtime. The agent retains its original capabilities, including self-improving skills, cross-platform messaging integration, and a built-in learning loop for persistent memory.</p>
+    <p class="summary-text">This project is a derivative of Hermes Agent that integrates CaMeL trust boundaries to mitigate risks from indirect prompt injection during autonomous execution. It implements an opt-in runtime guard that monitors or enforces security policies by gating sensitive tool side effects against verified user intent. The system maintains the core Hermes features, including a self-improving learning loop, cross-platform messaging support, and a built-in cron scheduler for automated tasks. Users can toggle between monitoring modes to record policy decisions or enforcement modes to block unauthorized actions without mutating the system prompt.</p>
     <ul class="summary-highlights">
-      <li>Implements CaMeL trust-boundary principles for prompt-injection defense</li>
-      <li>Offers monitor and enforce modes for sensitive tool authorization</li>
-      <li>Maintains full compatibility with upstream Hermes Agent features</li>
+      <li>Opt-in CaMeL runtime guard for indirect prompt-injection protection</li>
+      <li>Enforcement mode blocks sensitive tool side effects from unauthorized intent</li>
+      <li>Maintains self-improving skill creation and autonomous learning loops</li>
     </ul>
   </div>
 </section>
@@ -163,15 +163,6 @@
 <tr><td><b>Research-ready</b></td><td>Batch trajectory generation, Atropos RL environments, trajectory compression for training the next generation of tool-calling models.</td></tr>
 </table>
 
-
-<h3>Research Provenance</h3>
-<p>This fork follows CaMeL trust-boundary principles for prompt-injection defense, adapted to Hermes runtime semantics. It is not presented as a full reproduction of Google Research&#39;s evaluation stack.</p>
-<ul>
-<li>CaMeL paper: <a href="https://arxiv.org/abs/2503.18813">https://arxiv.org/abs/2503.18813</a></li>
-<li>CaMeL repo: <a href="https://github.com/google-research/camel-prompt-injection">https://github.com/google-research/camel-prompt-injection</a></li>
-<li>Upstream Hermes: <a href="https://github.com/NousResearch/hermes-agent">https://github.com/NousResearch/hermes-agent</a></li>
-<li>Upstream CaMeL PR context: <a href="https://github.com/NousResearch/hermes-agent/pull/1992">https://github.com/NousResearch/hermes-agent/pull/1992</a></li>
-</ul>
 <hr>
 <h3>Quick Install</h3>
 <pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
@@ -199,24 +190,18 @@ hermes doctor       # Diagnose any issues
 </code></pre>
 <p>📖 <strong><a href="https://hermes-agent.nousresearch.com/docs/">Full documentation →</a></strong></p>
 <h3>Optional CaMeL Guard</h3>
-<p>Hermes keeps the legacy runtime by default. Running plain <code>hermes</code> or <code>hermes chat</code> does <strong>not</strong> enable CaMeL automatically.</p>
-<p>Use CaMeL only when you explicitly opt in for the session:</p>
+<p>Hermes includes an opt-in CaMeL-style runtime guard for indirect prompt-injection experiments. It keeps the default runtime unchanged, avoids dynamic system-prompt mutation, and gates sensitive tool side effects against trusted user intent when enabled.</p>
 <pre><code class="language-bash">hermes --camel-guard monitor
 hermes --camel-guard enforce
-hermes chat --camel-guard monitor -q &quot;Summarize this report&quot;
+hermes chat --camel-guard monitor -q &quot;Summarize this file&quot;
 </code></pre>
 <p>Modes:</p>
 <ul>
-<li><code>off</code> / legacy: default behavior, no CaMeL runtime enforcement</li>
-<li><code>monitor</code>: records policy decisions and traces but does not block tools</li>
-<li><code>enforce</code>: blocks unauthorized sensitive actions under untrusted context</li>
+<li><code>off</code> / <code>legacy</code>: default Hermes behavior</li>
+<li><code>monitor</code>: record CaMeL policy decisions without blocking tools</li>
+<li><code>enforce</code>: block sensitive side effects that are not authorized by trusted user intent</li>
 </ul>
-<p>CaMeL benchmark and trace docs:</p>
-<ul>
-<li><a href="https://github.com/nativ3ai/hermes-agent-camel/blob/main/docs/camel-benchmark.md"><code>docs/camel-benchmark.md</code></a></li>
-<li><a href="https://github.com/nativ3ai/hermes-agent-camel/blob/main/docs/camel-runtime-comparison.md"><code>docs/camel-runtime-comparison.md</code></a></li>
-<li><a href="https://github.com/nativ3ai/hermes-agent-camel/blob/main/docs/camel-live-runtime-comparison.md"><code>docs/camel-live-runtime-comparison.md</code></a></li>
-</ul>
+<p>See <a href="https://github.com/nativ3ai/hermes-agent-camel/blob/main/docs/camel-architecture.md"><code>docs/camel-architecture.md</code></a>, <a href="https://github.com/nativ3ai/hermes-agent-camel/blob/main/docs/camel-trace.md"><code>docs/camel-trace.md</code></a>, and <a href="https://github.com/nativ3ai/hermes-agent-camel/blob/main/docs/camel-live-runtime-comparison.md"><code>docs/camel-live-runtime-comparison.md</code></a> for design notes, trace format, and benchmark results.</p>
 <h3>CLI vs Messaging Quick Reference</h3>
 <p>Hermes has two entry points: start the terminal UI with <code>hermes</code>, or run the gateway and talk to it from Telegram, Discord, Slack, WhatsApp, Signal, or Email. Once you&#39;re in a conversation, many slash commands are shared across both interfaces.</p>
 <table>
@@ -260,7 +245,7 @@ hermes chat --camel-guard monitor -q &quot;Summarize this report&quot;
 <tr>
 <td>Browse skills</td>
 <td><code>/skills</code> or <code>/&lt;skill-name&gt;</code></td>
-<td><code>/skills</code> or <code>/&lt;skill-name&gt;</code></td>
+<td><code>/&lt;skill-name&gt;</code></td>
 </tr>
 <tr>
 <td>Interrupt current work</td>
@@ -381,13 +366,10 @@ cd hermes-agent
 uv venv venv --python 3.11
 source venv/bin/activate
 uv pip install -e &quot;.[all,dev]&quot;
-python -m pytest tests/ -q
+scripts/run_tests.sh
 </code></pre>
 <blockquote>
-<p><strong>RL Training (optional):</strong> To work on the RL/Tinker-Atropos integration:</p>
-<pre><code class="language-bash">git submodule update --init tinker-atropos
-uv pip install -e &quot;./tinker-atropos&quot;
-</code></pre>
+<p><strong>RL Training (optional):</strong> The RL/Atropos integration (<code>environments/</code>) ships via the <code>atroposlib</code> and <code>tinker</code> dependencies pulled in by <code>.[all,dev]</code> — no submodule setup required.</p>
 </blockquote>
 <hr>
 <h3>Community</h3>
@@ -395,9 +377,7 @@ uv pip install -e &quot;./tinker-atropos&quot;
 <li>💬 <a href="https://discord.gg/NousResearch">Discord</a></li>
 <li>📚 <a href="https://agentskills.io">Skills Hub</a></li>
 <li>🐛 <a href="https://github.com/NousResearch/hermes-agent/issues">Issues</a></li>
-<li>💡 <a href="https://github.com/NousResearch/hermes-agent/discussions">Discussions</a></li>
 <li>🔌 <a href="https://github.com/AaronWong1999/hermesclaw">HermesClaw</a> — Community WeChat bridge: Run Hermes Agent and OpenClaw on the same WeChat account.</li>
-<li>🛡️ <a href="https://github.com/nativ3ai/hermes-payguard-plugin">Hermes PayGuard plugin</a> — Payment-approval and guardrail extension for Camel-secured Hermes deployments.</li>
 </ul>
 <hr>
 <h3>License</h3>
@@ -415,7 +395,7 @@ uv pip install -e &quot;./tinker-atropos&quot;
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/kaminocorp/hermes-alpha">
-        <div class="stars">★ 82</div>
+        <div class="stars">★ 171</div>
         <div class="name"><span class="org">kaminocorp /</span> hermes-alpha</div>
       </a>
       <a class="related-row" href="/projects/beardthelion/hermes-skill-distillation">

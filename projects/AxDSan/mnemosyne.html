@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a local-first, zero-dependency memory system designed to provide persistent context for Hermes Agents. It utilizes a SQLite-backed architecture featuring native vector search and full-text search to store conversations and knowledge without external API calls. The system implements a three-tier BEAM architecture that manages working, episodic, and scratchpad memory through automatic consolidation cycles. This approach ensures data privacy and sub-millisecond latency by keeping all o",
+  "description": "Mnemosyne is a local-first memory system designed for the Hermes Agent framework that provides persistent storage for conversations, preferences, and knowledge. It operates entirely in-process using SQLite with native vector search and full-text search, eliminating the need for external databases or API keys. The system utilizes a three-tier BEAM architecture to manage working, episodic, and scratchpad memory while performing automatic consolidation through sleep cycles. This approach enables su",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-05-02T04:04:27.000Z",
+  "dateModified": "2026-05-03T01:35:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 58
+    "userInteractionCount": 100
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">111·repos</span>
+    <span id="meta-count">110·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 58</span>
+    <span class="stars">★ 100</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-02</span>
+    <span><span class="meta-label">updated</span>2026-05-03</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a local-first, zero-dependency memory system designed to provide persistent context for Hermes Agents. It utilizes a SQLite-backed architecture featuring native vector search and full-text search to store conversations and knowledge without external API calls. The system implements a three-tier BEAM architecture that manages working, episodic, and scratchpad memory through automatic consolidation cycles. This approach ensures data privacy and sub-millisecond latency by keeping all operations in-process on the user's local machine.</p>
+    <p class="summary-text">Mnemosyne is a local-first memory system designed for the Hermes Agent framework that provides persistent storage for conversations, preferences, and knowledge. It operates entirely in-process using SQLite with native vector search and full-text search, eliminating the need for external databases or API keys. The system utilizes a three-tier BEAM architecture to manage working, episodic, and scratchpad memory while performing automatic consolidation through sleep cycles. This approach enables sub-millisecond latency for read and write operations while ensuring data remains private and offline-capable.</p>
     <ul class="summary-highlights">
-      <li>Local SQLite storage with native vector and full-text search</li>
+      <li>SQLite-backed storage with native vector and full-text search</li>
       <li>Three-tier BEAM architecture for working, episodic, and scratchpad memory</li>
-      <li>Sub-millisecond read and write latency with zero network overhead</li>
+      <li>Sub-millisecond latency with zero-cloud dependencies or network calls</li>
     </ul>
   </div>
 </section>
@@ -145,7 +145,7 @@
 <p>Native, zero-cloud memory for AI agents. SQLite-backed. Sub-millisecond. Fully private.</p>
 </blockquote>
 <p><a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python"></a>
-<a href="https://pypi.org/project/mnemosyne-memory/"><img src="https://img.shields.io/pypi/v/mnemosyne-memory.svg?v=2.1" alt="PyPI"></a>
+<a href="https://pypi.org/project/mnemosyne-memory/"><img src="https://img.shields.io/pypi/v/mnemosyne-memory.svg?v=2.2" alt="PyPI"></a>
 <a href="https://sqlite.org/codeofethics.html"><img src="https://img.shields.io/badge/SQLite-3.35+-green.svg" alt="SQLite"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
 <a href="https://github.com/AxDSan/mnemosyne/actions/workflows/ci.yml"><img src="https://github.com/AxDSan/mnemosyne/actions/workflows/ci.yml/badge.svg" alt="CI"></a></p>
@@ -894,6 +894,28 @@ hermes mnemosyne export --output mnemosyne_backup.json
 # Import on a new machine
 hermes mnemosyne import --input mnemosyne_backup.json
 </code></pre>
+<h4>Migrate from other memory providers</h4>
+<p>Import directly from 6 supported providers into Mnemosyne:</p>
+<pre><code class="language-bash"># List all supported providers
+hermes mnemosyne import --list-providers
+
+# Mem0 → Mnemosyne
+hermes mnemosyne import --from mem0 --api-key sk-xxx
+
+# Letta → Mnemosyne (offline .af file)
+hermes mnemosyne import --from letta --agent-file-path ./agent.af
+
+# Zep → Mnemosyne
+hermes mnemosyne import --from zep --api-key sk-xxx --max-sessions 100
+
+# Generate a migration script for any provider
+hermes mnemosyne import --from mem0 --generate-script --output-script migrate.py
+
+# Use AI agent extraction (no SDK needed)
+hermes mnemosyne import --from zep --agentic
+</code></pre>
+<p><strong>Supported providers:</strong> Mem0, Letta (MemGPT), Zep, Cognee, Honcho, SuperMemory</p>
+<p>All importers preserve metadata, timestamps, user/agent identity, and relationships (graph edges → triples). Use <code>--dry-run</code> to validate without writing.</p>
 <hr>
 <h3>Environment Variables</h3>
 <table>
@@ -1104,35 +1126,35 @@ python tests/benchmark_beam_working_memory.py
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 54.6K</div>
+        <div class="stars">★ 54.7K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 11.7K</div>
+        <div class="stars">★ 12.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 955</div>
+        <div class="stars">★ 960</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 201</div>
+        <div class="stars">★ 206</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 145</div>
+        <div class="stars">★ 151</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 60</div>
+        <div class="stars">★ 62</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 13</div>
+        <div class="stars">★ 15</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 12.7K</div>
+        <div class="stars">★ 13.0K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

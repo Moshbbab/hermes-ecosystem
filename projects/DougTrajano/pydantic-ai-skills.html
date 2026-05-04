@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/DougTrajano/pydantic-ai-skills#software",
   "name": "pydantic-ai-skills",
-  "description": "pydantic-ai-skills is a framework that implements the Agent Skills open specification to provide modular, specialized capabilities for Pydantic AI agents. It uses a tool-calling approach to enable progressive disclosure, allowing agents to discover and load detailed instructions or scripts only when relevant to a task. The package supports skills defined as filesystem directories or created programmatically using Python decorators and dataclasses. This architecture reduces token consumption by p",
+  "description": "pydantic-ai-skills is a framework for implementing the Agent Skills open specification within the Pydantic AI ecosystem to manage modular agent capabilities. It uses a tool-calling approach to enable progressive disclosure, allowing agents to discover and load specific instructions or scripts only when relevant to a task. The library supports skills defined as filesystem directories or created programmatically using Python decorators and dataclasses. This architecture helps reduce token consumpt",
   "url": "https://hermesatlas.com/projects/DougTrajano/pydantic-ai-skills",
   "codeRepository": "https://github.com/DougTrajano/pydantic-ai-skills",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "DougTrajano",
     "url": "https://github.com/DougTrajano"
   },
-  "dateModified": "2026-04-21T02:15:45.000Z",
+  "dateModified": "2026-05-03T02:56:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 272
+    "userInteractionCount": 277
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">111·repos</span>
+    <span id="meta-count">110·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">This package implements Agent Skills (https://agentskills.io) support with progressive disclosure for Pydantic AI. Supports filesystem and programmatic skills.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 272</span>
+    <span class="stars">★ 277</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-21</span>
+    <span><span class="meta-label">updated</span>2026-05-03</span>
   </div>
 
   <div class="actions">
@@ -127,9 +127,9 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">pydantic-ai-skills is a framework that implements the Agent Skills open specification to provide modular, specialized capabilities for Pydantic AI agents. It uses a tool-calling approach to enable progressive disclosure, allowing agents to discover and load detailed instructions or scripts only when relevant to a task. The package supports skills defined as filesystem directories or created programmatically using Python decorators and dataclasses. This architecture reduces token consumption by preventing the injection of unnecessary context into the initial system prompt.</p>
+    <p class="summary-text">pydantic-ai-skills is a framework for implementing the Agent Skills open specification within the Pydantic AI ecosystem to manage modular agent capabilities. It uses a tool-calling approach to enable progressive disclosure, allowing agents to discover and load specific instructions or scripts only when relevant to a task. The library supports skills defined as filesystem directories or created programmatically using Python decorators and dataclasses. This architecture helps reduce token consumption while providing agents with secure access to domain-specific tools and resources.</p>
     <ul class="summary-highlights">
-      <li>Implements the Agent Skills open specification for Pydantic AI</li>
+      <li>Implements the standardized Agent Skills open format for Pydantic AI</li>
       <li>Reduces token usage through progressive disclosure of skill metadata</li>
       <li>Supports both filesystem-based and programmatic Python skill definitions</li>
     </ul>
@@ -185,7 +185,7 @@
 </video>
 
 <h3>Quick Start</h3>
-<p>If you are using <code>pydantic-ai&gt;=1.71</code>, we recommend using <code>SkillsCapability</code>, which is based on the Pydantic AI <a href="https://ai.pydantic.dev/capabilities/">Capabilities API</a>. It bundles the skills tools and instructions into a single object that can be added to agents. This provides a more streamlined and integrated way to use agent skills.</p>
+<p>We recommend using <code>SkillsCapability</code>, which is based on the Pydantic AI <a href="https://ai.pydantic.dev/capabilities/">Capabilities API</a>. It bundles the skills tools and instructions into a single object that can be added to agents. This provides a more streamlined and integrated way to use agent skills.</p>
 <pre><code class="language-python">from pydantic_ai import Agent
 from pydantic_ai_skills import SkillsCapability
 
@@ -195,8 +195,8 @@ agent = Agent(
   capabilities=[SkillsCapability(directories=[&#39;./skills&#39;])],
 )
 </code></pre>
-<p>For earlier versions of Pydantic AI, you can use the <code>SkillsToolset</code>.</p>
-<pre><code class="language-python">from pydantic_ai import Agent, RunContext
+<p>Alternatively, use <code>SkillsToolset</code> directly when your app is built around <code>toolsets=[...]</code>.</p>
+<pre><code class="language-python">from pydantic_ai import Agent
 from pydantic_ai_skills import SkillsToolset
 
 # Initialize Skills Toolset with one or more skill directories
@@ -208,13 +208,6 @@ agent = Agent(
     instructions=&#39;You are a helpful research assistant.&#39;,
     toolsets=[skills_toolset]
 )
-
-# For pydantic-ai&lt;1.74, you must add an instructions hook to inject the skills instructions into the agent&#39;s context
-# On pydantic-ai &gt;= 1.74, this is automatic and you can omit the following instructions hook
-# @agent.instructions
-# async def add_skills(ctx: RunContext) -&gt; str | None:
-#     &quot;&quot;&quot;Add skills instructions to the agent&#39;s context.&quot;&quot;&quot;
-#     return await skills_toolset.get_instructions(ctx)
 
 # Use agent - skills tools are available for the agent to call
 user_prompt = &quot;What are the last 3 papers on arXiv about machine learning?&quot;
@@ -407,7 +400,7 @@ result = await run_skill_script(
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 5.9K</div>
+        <div class="stars">★ 6.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -415,27 +408,27 @@ result = await run_skill_script(
         <div class="name"><span class="org">conorbronsdon /</span> avoid-ai-writing</div>
       </a>
       <a class="related-row" href="/projects/wondelai/skills">
-        <div class="stars">★ 812</div>
+        <div class="stars">★ 834</div>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 901</div>
+        <div class="stars">★ 1.1K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
-        <div class="stars">★ 95</div>
+        <div class="stars">★ 97</div>
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 118</div>
+        <div class="stars">★ 122</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
-        <div class="stars">★ 109</div>
+        <div class="stars">★ 110</div>
         <div class="name"><span class="org">esaradev /</span> icarus-plugin</div>
       </a>
       <a class="related-row" href="/projects/chigwell/skilldock.io">
-        <div class="stars">★ 59</div>
+        <div class="stars">★ 60</div>
         <div class="name"><span class="org">chigwell /</span> skilldock.io</div>
       </a>
     </div>

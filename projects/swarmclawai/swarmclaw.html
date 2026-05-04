@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It functions as a central hub for multi-agent delegation, providing agents with persistent memory, runtime skills, and scheduled heartbeats. The platform integrates with over 20 model providers and CLI-based agents, including Hermes, OpenClaw, and Claude Code. Users can visualize agent hierarchies through an organizational chart and manage reviewed conversation-to-skill learning to expand agent",
+  "description": "SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It operates by providing a centralized environment for agent delegation, memory management, and runtime skill acquisition across multiple model providers and CLI backends. The platform features an organizational chart interface for visualizing agent activity and supports MCP-native integrations for expanded tool use. Users can deploy the system via Docker, a desktop application, or as a global ",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-04-29T22:07:56.000Z",
+  "dateModified": "2026-05-04T10:11:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 420
+    "userInteractionCount": 445
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">111·repos</span>
+    <span id="meta-count">110·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">Self-hosted multi-agent AI runtime with MCP server support. Build, orchestrate, and run autonomous agents with memory, skills, schedules, and 23+ LLM providers (Claude, GPT, Gemini, OpenRouter, Ollama).</p>
 
   <div class="meta-row">
-    <span class="stars">★ 420</span>
+    <span class="stars">★ 445</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-29</span>
+    <span><span class="meta-label">updated</span>2026-05-04</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It functions as a central hub for multi-agent delegation, providing agents with persistent memory, runtime skills, and scheduled heartbeats. The platform integrates with over 20 model providers and CLI-based agents, including Hermes, OpenClaw, and Claude Code. Users can visualize agent hierarchies through an organizational chart and manage reviewed conversation-to-skill learning to expand agent capabilities over time.</p>
+    <p class="summary-text">SwarmClaw is a self-hosted runtime designed for orchestrating and managing autonomous AI agent swarms. It operates by providing a centralized environment for agent delegation, memory management, and runtime skill acquisition across multiple model providers and CLI backends. The platform features an organizational chart interface for visualizing agent activity and supports MCP-native integrations for expanded tool use. Users can deploy the system via Docker, a desktop application, or as a global NPM package to manage durable conversation histories and scheduled tasks.</p>
     <ul class="summary-highlights">
-      <li>Native support for MCP and 23 built-in model providers</li>
-      <li>Visualizes agent teams and delegation through an interactive org chart</li>
-      <li>Supports durable conversation history and reviewed skill learning</li>
+      <li>Supports 23 model providers including Hermes, OpenAI, and Anthropic.</li>
+      <li>Native MCP support for extensible agent skills and tools.</li>
+      <li>Visualizes agent teams and delegation through an interactive org chart.</li>
     </ul>
   </div>
 </section>
@@ -512,6 +512,38 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.8.11 Highlights</h4>
+<p>DeepSeek tool-use hotfix for issue <a href="https://github.com/swarmclawai/swarmclaw/issues/67">#67</a>.</p>
+<ul>
+<li><strong>DeepSeek reasoning replay.</strong> Stored assistant turns now keep provider-native <code>reasoning_content</code> separately from visible text and send it back to DeepSeek on follow-up tool-use turns.</li>
+<li><strong>Streaming parity.</strong> Direct OpenAI-compatible streams and LangGraph agent streams both preserve <code>reasoning_content</code> while continuing to show reasoning through SwarmClaw&#39;s existing thinking surface.</li>
+<li><strong>Regression coverage.</strong> Added tests for DeepSeek history replay and the LangChain bridge selection path.</li>
+</ul>
+<h4>v1.8.1 Highlights</h4>
+<p>Operator evidence release: a focused follow-up that makes release and mission review easier to scan.</p>
+<ul>
+<li><strong>Operations Pulse.</strong> Home and Quality now share a live triage panel that rolls missions, runs, approvals, connector readiness, and budget pressure into one next-action queue.</li>
+<li><strong>Run Briefs.</strong> Run detail sheets now open with a deterministic brief: objective, owner, timeline, warnings, usage, and evidence before the raw replay log.</li>
+<li><strong>Evidence Shelf.</strong> Runs and missions now expose linked artifacts, task outputs, protocol outputs, mission reports, public share links, and knowledge citations through a shared artifact resolver.</li>
+<li><strong>Connector readiness.</strong> Connector cards now show credential, route, pairing, gateway, connection, and doctor hints so setup gaps are visible before a platform bridge is started.</li>
+<li><strong>API surface.</strong> Added <code>GET /api/operations/pulse</code>, <code>GET /api/runs/:id/brief</code>, and <code>GET /api/artifacts</code> for external operator dashboards and release tooling.</li>
+</ul>
+<h4>v1.8.0 Highlights</h4>
+<p>Mission Command release: a bigger operator update that makes autonomous missions easier to launch, inspect, and share.</p>
+<ul>
+<li><strong>Mission Command launchpad.</strong> The home launchpad now opens concrete mission starters for Release QA, Launch Sprint, Cost Audit, and Connector Smoke Test instead of dropping users into a generic mission list.</li>
+<li><strong>Deep-linked mission templates.</strong> <code>/missions?template=&lt;id&gt;</code> opens the right starter template directly, and the template installer can create a mission-driver chat when no sessions exist yet.</li>
+<li><strong>Quality Center handoffs.</strong> <code>/quality?tab=evals|approvals|runs</code> is shareable, and the Quality overview/Eval Lab can start a Release QA mission from current operator evidence.</li>
+<li><strong>Public mission reports.</strong> Missions can mint, copy, and revoke public share links from the detail view. Shared pages render status, budgets, milestones, and generated reports using the existing allowlisted share resolver.</li>
+<li><strong>Safer share payloads.</strong> Mission milestones now expose <code>summary</code> correctly in public HTML and raw markdown shares, with regression coverage in <code>npm run test:runtime</code>.</li>
+</ul>
+<h4>v1.7.3 Highlights</h4>
+<p>Desktop packaging fix for Linux AppImage and deb builds.</p>
+<ul>
+<li><strong>Linux desktop native modules match Electron.</strong> Packaged Linux builds now copy Electron-rebuilt native addons into the embedded Next standalone server, fixing the <code>better-sqlite3</code> Node ABI mismatch reported in <a href="https://github.com/swarmclawai/swarmclaw/issues/65">#65</a>.</li>
+<li><strong>Desktop packaging regression coverage.</strong> The Electron <code>afterPack</code> hook now has a Linux standalone native-module sync test wired into <code>npm run test:cli</code>.</li>
+<li><strong>macOS desktop note.</strong> macOS builds remain ad-hoc signed and not notarized in this release, so the existing Gatekeeper/quarantine workaround still applies until Developer ID signing is available.</li>
+</ul>
 <h4>v1.7.2 Highlights</h4>
 <p>CLI provider usability follow-up for v1.7.0/v1.7.1. The expanded coding-agent roster is now easier to find, configure, and validate from onboarding and setup diagnostics.</p>
 <ul>
@@ -639,25 +671,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <li><strong>Swarm snapshot exposes the effective cap.</strong> <code>SwarmSnapshot.maxConcurrency</code> lands in the persisted snapshot payload so the UI and external tooling can surface the active concurrency level. Verified live via a 3-branch quorum run: <code>totalCompleted: 2</code>, <code>totalCancelled: 1</code>, <code>maxConcurrency: 2</code>, <code>joinPolicy: &quot;quorum&quot;</code>.</li>
 </ul>
 <h4>v1.5.61 Highlights</h4>
-<p>Adds an opt-in per-agent planning mode that rides on the existing <code>[MAIN_LOOP_PLAN]</code> token machinery.</p>
-<ul>
-<li><strong><code>Agent.planningMode: &#39;off&#39; | &#39;strict&#39; | null</code></strong> — new optional field on the Agent type. Defaults to <code>null</code> (off) so existing agents are unaffected. Validated by <code>AgentCreateSchema</code> / <code>AgentUpdateSchema</code> and surfaced through <code>createAgent</code> in <code>agent-service.ts</code>.</li>
-<li><strong>Strict planning prompt section.</strong> New <code>buildPlanningModeSection</code> in <code>prompt-sections.ts</code> injects a short contract into the system prompt when <code>planningMode === &#39;strict&#39;</code>: before any multi-step work, emit a single-line <code>[MAIN_LOOP_PLAN]{&quot;steps&quot;:...}</code> block. The existing parser in <code>main-agent-loop.ts</code> reads these blocks into <code>MainLoopState.planSteps</code> / <code>currentPlanStep</code> / <code>completedPlanSteps</code> with no additional wiring. Skipped in minimal prompt mode and for heartbeat turns.</li>
-<li><strong>Test coverage.</strong> <code>prompt-sections.planning-mode.test.ts</code> covers the null / off / strict / minimal / missing-agent paths (6 cases).</li>
-</ul>
-<h4>v1.5.60 Highlights</h4>
-<p>Adds a turn-snapshot primitive for external replay and comparison tooling, without touching the execution flow.</p>
-<ul>
-<li><strong>Turn snapshot endpoint.</strong> New <code>GET /api/chats/:id/turns/:index/snapshot</code> returns the input state of a prior user turn: the message (text + optional imagePath + time), all prior messages in order, the session&#39;s effective provider/model/endpoint/credential at snapshot time, and the bound agent&#39;s provider/model/systemPrompt when available. Invalid or non-user indices return <code>400</code>, out-of-range indices return <code>404</code>. CLI: <code>swarmclaw chats turn-snapshot &lt;chatId&gt; &lt;index&gt;</code>.</li>
-<li><strong>Use case.</strong> External CLIs, notebooks, and comparison harnesses can now capture the exact inputs that produced a given turn and replay them against a different model, provider, or system prompt to compare outputs — without mutating the original session. Pairs with the existing <code>edit-resend</code> path (destructive in-session replay) and the new share-link infrastructure in v1.5.59 (share the original turn&#39;s context, replay on another instance).</li>
-</ul>
-<h4>v1.5.59 Highlights</h4>
-<p>Viral-loop release. Adds public share links for missions, skills, and sessions, plus a complementary raw-markdown endpoint so any shared skill installs directly through the existing <code>POST /api/skills/import</code>.</p>
-<ul>
-<li><strong>Share links for missions, skills, and sessions.</strong> New <code>share_links</code> collection in <code>src/lib/server/storage.ts</code> plus <code>src/lib/server/sharing/share-link-repository.ts</code>. <code>POST /api/share { entityType, entityId, expiresInSec?, label? }</code> mints a cryptographically random 32-char base64url token; <code>GET /api/share</code> lists; <code>GET /api/share/:id</code> fetches; <code>DELETE /api/share/:id</code> revokes (pass <code>?hard=true</code> to hard-delete). CLI: <code>swarmclaw share {list,mint,get,revoke,resolve,raw}</code>.</li>
-<li><strong>Public read endpoints (no auth required).</strong> <code>GET /api/s/:token</code> returns the scrubbed JSON payload; <code>GET /api/s/:token/raw</code> returns plain markdown (skills return their SKILL.md verbatim, missions render as title + goal + criteria + milestones, sessions as a transcript). Revoked and expired tokens return <code>404 Not found</code> without leaking shape information. <code>GET /s/:token</code> is a server-rendered page for dropping straight into a browser.</li>
-<li><strong>Share-link-based skill install.</strong> <code>POST /api/skills/import</code> already accepts an http(s) URL; pointing it at <code>https://&lt;your-host&gt;/api/s/&lt;token&gt;/raw</code> now installs a shared skill from another SwarmClaw instance without auth handshakes. Pairs naturally with exist</li>
-</ul>
+<p>Adds</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
 
@@ -672,7 +686,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/builderz-labs/mission-control">
-        <div class="stars">★ 4.5K</div>
+        <div class="stars">★ 4.6K</div>
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">
@@ -680,19 +694,19 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">howdymary /</span> hermes-agent-metaharness</div>
       </a>
       <a class="related-row" href="/projects/runtimenoteslabs/gladiator">
-        <div class="stars">★ 37</div>
+        <div class="stars">★ 38</div>
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">
-        <div class="stars">★ 71</div>
+        <div class="stars">★ 77</div>
         <div class="name"><span class="org">1ilkhamov /</span> opencode-hermes-multiagent</div>
       </a>
       <a class="related-row" href="/projects/supermodeltools/bigiron">
-        <div class="stars">★ 10</div>
+        <div class="stars">★ 11</div>
         <div class="name"><span class="org">supermodeltools /</span> bigiron</div>
       </a>
       <a class="related-row" href="/projects/Rainhoole/hermes-agent-acp-skill">
-        <div class="stars">★ 11</div>
+        <div class="stars">★ 12</div>
         <div class="name"><span class="org">Rainhoole /</span> hermes-agent-acp-skill</div>
       </a>
     </div>

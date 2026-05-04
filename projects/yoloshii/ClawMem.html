@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is a local-first memory and context engine designed to provide persistent knowledge across different AI agent runtimes. It utilizes a hybrid retrieval architecture that combines vector search, BM25, and multi-graph traversal to surface relevant project history and decisions. The system automatically captures milestones and preferences from session transcripts using a local observer model, storing everything in a shared SQLite vault. It integrates directly with Hermes agents, Claude Code,",
+  "description": "ClawMem is a local-first memory and context engine designed to provide persistent knowledge across different AI agent runtimes. It utilizes a hybrid architecture combining vector search, BM25 retrieval, and multi-graph traversal to surface relevant project history and decisions. The system automatically captures session milestones and manages document lifecycles through a local SQLite vault without cloud dependencies. It integrates directly with Claude Code, OpenClaw, and Hermes agents to ensure",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-04-28T12:39:19.000Z",
+  "dateModified": "2026-05-04T10:40:42.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 145
+    "userInteractionCount": 151
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">111·repos</span>
+    <span id="meta-count">110·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">On-device memory layer for AI agents. Claude Code, Hermes and OpenClaw. Hooks + MCP server + hybrid RAG search.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 145</span>
+    <span class="stars">★ 151</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-28</span>
+    <span><span class="meta-label">updated</span>2026-05-04</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is a local-first memory and context engine designed to provide persistent knowledge across different AI agent runtimes. It utilizes a hybrid retrieval architecture that combines vector search, BM25, and multi-graph traversal to surface relevant project history and decisions. The system automatically captures milestones and preferences from session transcripts using a local observer model, storing everything in a shared SQLite vault. It integrates directly with Hermes agents, Claude Code, and OpenClaw to ensure context remains consistent as users switch between different tools.</p>
+    <p class="summary-text">ClawMem is a local-first memory and context engine designed to provide persistent knowledge across different AI agent runtimes. It utilizes a hybrid architecture combining vector search, BM25 retrieval, and multi-graph traversal to surface relevant project history and decisions. The system automatically captures session milestones and manages document lifecycles through a local SQLite vault without cloud dependencies. It integrates directly with Claude Code, OpenClaw, and Hermes agents to ensure a unified memory layer across diverse development tools.</p>
     <ul class="summary-highlights">
       <li>Hybrid retrieval using vector search, BM25, and causal graph traversal</li>
-      <li>Local-only operation with no cloud dependencies or API keys required</li>
-      <li>Cross-runtime memory sharing between Hermes, OpenClaw, and Claude Code</li>
+      <li>Local-only execution with no API keys or cloud dependencies</li>
+      <li>Cross-runtime memory sharing for Claude Code, OpenClaw, and Hermes</li>
     </ul>
   </div>
 </section>
@@ -350,7 +350,7 @@ clawmem setup mcp      # Register MCP server in ~/.claude.json (31 tools)
 <p><strong>What the plugin provides:</strong></p>
 <ul>
 <li><strong><code>before_prompt_build</code> hook (load-bearing)</strong> - prompt-aware retrieval (context-surfacing + session-bootstrap) AND the pre-emptive <code>precompact-extract</code> run when token usage approaches the compaction threshold. This is the authoritative path for precompact state capture because it runs synchronously before the LLM call that would trigger compaction, so it cannot race the compactor.</li>
-<li><strong><code>agent_end</code> hook</strong> - decision extraction, handoff generation, feedback loop (parallel, fire-and-forget at the OpenClaw call site)</li>
+<li><strong><code>agent_end</code> hook</strong> - decision extraction, handoff generation, feedback loop (parallel, fire-and-forget at the OpenClaw call site). OpenClaw v2026.4.26+ also enforces a 30s default void-hook timeout on <code>agent_end</code> — slow handlers are logged but the underlying postrun work is not cancelled (fail-open).</li>
 <li><strong><code>before_compaction</code> hook (defense-in-depth fallback)</strong> - fires <code>precompact-extract</code> again for the rare case where <code>before_prompt_build</code>&#39;s proximity heuristic missed a sudden token-count jump. Fire-and-forget at OpenClaw&#39;s call site, so it races the compactor and offers no correctness guarantee on its own — the <code>before_prompt_build</code> path is what actually holds the invariant.</li>
 <li><strong><code>session_start</code> hook</strong> - session registration + cached first-turn bootstrap context</li>
 <li><strong>5 agent tools</strong> - <code>clawmem_search</code>, <code>clawmem_get</code>, <code>clawmem_session_log</code>, <code>clawmem_timeline</code>, <code>clawmem_similar</code></li>
@@ -1096,15 +1096,7 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>session_log</code></td>
-<td>USE THIS for &quot;last time&quot;, &quot;yesterday&quot;, &quot;what happened&quot;, &quot;what did we do&quot;. Returns session history with handoffs and file changes. DO NOT use <code>query()</code> for cross-session questions — this tool has session-specific data that search cannot find.</td>
-</tr>
-<tr>
-<td><code>profile</code></td>
-<td>Current static + dynamic user profile</td>
-</tr>
-<tr>
-<td><code>lifecycle_status</code></td>
-<td>Document lifecycle statistics: active</td>
+<td>USE THIS for &quot;last time&quot;, &quot;yesterday&quot;, &quot;what happened&quot;, &quot;what did we do&quot;. Returns session history with handoffs and file changes. DO NOT use <code>query()</code> for cross-session questions — this</td>
 </tr>
 </tbody></table>
 <hr>
@@ -1121,35 +1113,35 @@ clawmem status                                  Quick index status
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 54.6K</div>
+        <div class="stars">★ 54.7K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 11.7K</div>
+        <div class="stars">★ 12.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 955</div>
+        <div class="stars">★ 960</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 201</div>
+        <div class="stars">★ 206</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 60</div>
+        <div class="stars">★ 62</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 13</div>
+        <div class="stars">★ 15</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 12.7K</div>
+        <div class="stars">★ 13.0K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 374</div>
+        <div class="stars">★ 384</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>

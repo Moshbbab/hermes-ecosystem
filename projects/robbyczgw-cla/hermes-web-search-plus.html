@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "Hermes Web Search Plus is a multi-provider search plugin for the Hermes Agent that enables intelligent information retrieval from ten different search engines. The system uses an auto-routing engine to select the most appropriate provider, such as Exa for semantic discovery or Serper for news, based on the specific intent of the user's query. It features adaptive fallback logic to skip providers on cooldown and includes a dedicated tool for extracting clean markdown content from URLs. Users can ",
+  "description": "Web-search-plus is a multi-provider search and extraction plugin for the Hermes Agent ecosystem that enables intelligent web retrieval. It utilizes an auto-routing engine to select the most appropriate provider—such as Brave, Serper, or Exa—based on the specific intent of a query. The tool supports advanced features like deep research synthesis, time-range filtering, and automated URL content extraction via specialized backends. It also includes adaptive fallback logic and local caching to maint",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-04-29T15:08:32.000Z",
+  "dateModified": "2026-05-03T12:47:21.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 119
+    "userInteractionCount": 135
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -78,7 +78,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">111·repos</span>
+    <span id="meta-count">110·repos</span>
     <span>hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -108,11 +108,11 @@
   <p class="project-desc">Hermes Agent plugin: multi-provider web search (Serper, Tavily, Exa, Querit, Perplexity) with intelligent auto-routing</p>
 
   <div class="meta-row">
-    <span class="stars">★ 119</span>
+    <span class="stars">★ 135</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-29</span>
+    <span><span class="meta-label">updated</span>2026-05-03</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Web Search Plus is a multi-provider search plugin for the Hermes Agent that enables intelligent information retrieval from ten different search engines. The system uses an auto-routing engine to select the most appropriate provider, such as Exa for semantic discovery or Serper for news, based on the specific intent of the user's query. It features adaptive fallback logic to skip providers on cooldown and includes a dedicated tool for extracting clean markdown content from URLs. Users can further refine results through time-range filtering, domain restrictions, and specialized deep-research modes for complex synthesis.</p>
+    <p class="summary-text">Web-search-plus is a multi-provider search and extraction plugin for the Hermes Agent ecosystem that enables intelligent web retrieval. It utilizes an auto-routing engine to select the most appropriate provider—such as Brave, Serper, or Exa—based on the specific intent of a query. The tool supports advanced features like deep research synthesis, time-range filtering, and automated URL content extraction via specialized backends. It also includes adaptive fallback logic and local caching to maintain reliability and efficiency during API cooldowns.</p>
     <ul class="summary-highlights">
-      <li>Auto-routes queries across 10 providers including Brave, Exa, and Tavily</li>
-      <li>Supports deep research and cross-document analysis via Exa integration</li>
-      <li>Includes URL extraction tool for converting web content to markdown</li>
+      <li>Routes queries across 10 providers based on intent and availability</li>
+      <li>Supports Exa deep research for multi-source synthesis and analysis</li>
+      <li>Extracts clean markdown content from URLs using multiple extraction backends</li>
     </ul>
   </div>
 </section>
@@ -140,38 +140,40 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <h2>web-search-plus — Hermes Plugin</h2>
-<p>Multi-provider web search with intelligent auto-routing for <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a>.</p>
+<p>Multi-provider web search, URL extraction, quality reports, and opt-in research mode for <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a>.</p>
 <blockquote>
 <p>Ported from <a href="https://github.com/robbyczgw-cla/web-search-plus-plugin">web-search-plus-plugin</a> (OpenClaw) to the Hermes Plugin API.</p>
 </blockquote>
 <hr>
 <h3>Quick Start</h3>
-<pre><code class="language-bash">git clone https://github.com/robbyczgw-cla/hermes-web-search-plus.git ~/.hermes/plugins/web-search-plus
-cd ~/.hermes/hermes-agent
-source venv/bin/activate
-pip install requests
+<pre><code class="language-bash"># 1) Install + enable the Hermes plugin
+hermes plugins install robbyczgw-cla/hermes-web-search-plus --enable
+
+# 2) Add at least one provider key to Hermes&#39; env file
+hermes config env-path
+$EDITOR &quot;$(hermes config env-path)&quot;
+
+# Recommended minimum keys:
+# BRAVE_API_KEY=...
+# TAVILY_API_KEY=...
+# EXA_API_KEY=...
+# LINKUP_API_KEY=...
+
+# 3) Restart/reload your Hermes session so plugin tools are registered
+# CLI: exit and start `hermes` again, or use /reset in-session
+# Gateway/Telegram: /restart, then /reset
+
+# 4) Verify from the plugin CLI if you want a shell smoke test
 cd ~/.hermes/plugins/web-search-plus
-cp .env.template .env          # fill in at least one provider key
-# Optional: pip install httpx  # only needed for Exa deep/deep-reasoning
+python3 search.py --query &quot;Hermes Agent latest release&quot; --provider auto --quality-report
 </code></pre>
-<p>Important:</p>
+<p>Notes:</p>
 <ul>
-<li>Use the Hermes virtualenv, not your system Python.</li>
-<li>Run <code>pip</code> only after <code>source ~/.hermes/hermes-agent/venv/bin/activate</code> (or from <code>~/.hermes/hermes-agent</code> via <code>source venv/bin/activate</code>).</li>
-<li>If you test the plugin from the CLI, prefer <code>~/.hermes/hermes-agent/venv/bin/python</code> or activate the Hermes venv first.</li>
+<li><code>hermes plugins install ... --enable</code> clones into <code>~/.hermes/plugins/web-search-plus</code> and enables the plugin for future sessions.</li>
+<li>Keys live in Hermes&#39; env file, not in the repo. Use <code>hermes config env-path</code> instead of guessing the path.</li>
+<li>If you manually run <code>pip</code>, use the Hermes environment — not random system Python. The normal plugin install path should not need manual config-file editing.</li>
 </ul>
-<p>Then enable the plugin in <code>~/.hermes/config.yaml</code>:</p>
-<pre><code class="language-yaml">plugins:
-  enabled:
-    - web-search-plus
-</code></pre>
-<p>Also enable the plugin toolset alongside the built-in <code>web</code> toolset so both are available:</p>
-<pre><code class="language-yaml">tools:
-  enabled:
-    - web
-    - web-search-plus
-</code></pre>
-<p>Finally restart Hermes (or <code>/restart</code> + <code>/reset</code> in gateway chats) and use the plugin tools:</p>
+<p>After restart/reset, use the plugin tools:</p>
 <ul>
 <li><code>web_search_plus</code> — multi-provider web search and auto-routing</li>
 <li><code>web_extract_plus</code> — provider-specific URL extraction via Firecrawl, Linkup, Tavily, Exa, or You.com</li>
@@ -185,6 +187,8 @@ cp .env.template .env          # fill in at least one provider key
 <li><strong>Exa Deep Research</strong> — <code>depth=deep</code> for multi-source synthesis, <code>depth=deep-reasoning</code> for cross-document analysis</li>
 <li><strong>Adaptive fallback</strong> — automatically skips providers on cooldown (1h after failure)</li>
 <li><strong>Routing transparency</strong> — every response includes a <code>routing</code> object explaining provider choice</li>
+<li><strong>Quality reports</strong> — optional provider diagnostics, result-count summaries, and execution metadata</li>
+<li><strong>Research mode</strong> — opt-in multi-provider search + extraction with a best-effort time budget</li>
 <li><strong>Time &amp; domain filtering</strong> — <code>time_range</code>, <code>include_domains</code>, <code>exclude_domains</code></li>
 <li><strong>URL extraction</strong> — <code>web_extract_plus</code> extracts clean content via Firecrawl, Linkup, Tavily, Exa, or You.com</li>
 <li><strong>Local caching</strong> — avoids duplicate API calls (1h TTL)</li>
@@ -326,7 +330,28 @@ SEARXNG_INSTANCE_URL=https://your-instance.example.com
 <td>—</td>
 <td>Exclude domains</td>
 </tr>
+<tr>
+<td><code>quality_report</code></td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>Include provider diagnostics and result-quality metadata</td>
+</tr>
+<tr>
+<td><code>mode</code></td>
+<td>string</td>
+<td><code>&quot;normal&quot;</code></td>
+<td><code>normal</code> or opt-in <code>research</code></td>
+</tr>
+<tr>
+<td><code>research_time_budget</code></td>
+<td>number</td>
+<td><code>55.0</code></td>
+<td>Best-effort seconds budget for research mode provider/extraction work</td>
+</tr>
 </tbody></table>
+<h4>Quality report and research mode</h4>
+<p><code>quality_report=True</code> adds diagnostic metadata without changing provider selection. Use it when tuning routing, comparing providers, or debugging weak result sets.</p>
+<p><code>mode=&quot;research&quot;</code> is intentionally opt-in: it can query multiple providers and extract selected result URLs, so it is slower and may spend more API credits than normal search. The default <code>research_time_budget=55.0</code> keeps the run bounded; when the budget is exhausted, remaining providers or extraction steps are skipped and reported in routing metadata instead of hanging or failing the whole response. Search results already collected are preserved even if extraction fails.</p>
 <h4><code>web_extract_plus</code></h4>
 <p>Extract content from specific URLs using provider-specific extraction backends.</p>
 <table>
@@ -398,6 +423,12 @@ web_search_plus(query=&quot;YC startups web scraping&quot;, provider=&quot;firec
 web_search_plus(query=&quot;find credible sources and citations for AI tutoring outcomes&quot;, provider=&quot;linkup&quot;)
 # → Linkup source-grounded retrieval
 
+web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_report=True)
+# → Normal search plus diagnostic routing/result-quality metadata
+
+web_search_plus(query=&quot;compare recent reviews of turntables under 1000&quot;, mode=&quot;research&quot;, research_time_budget=45)
+# → Opt-in multi-provider research; keeps partial results if extraction hits errors/budget
+
 web_extract_plus(urls=[&quot;https://example.com&quot;], provider=&quot;firecrawl&quot;)
 # → Extract clean markdown from a URL
 
@@ -412,11 +443,16 @@ web_search_plus(query=&quot;LoRA fine-tuning&quot;, include_domains=[&quot;arxiv
 source venv/bin/activate
 python ~/.hermes/plugins/web-search-plus/search.py \
   --query &quot;test query&quot; --provider auto --max-results 5 --compact
+
+python ~/.hermes/plugins/web-search-plus/search.py \
+  --query &quot;compare recent reviews of turntables under 1000&quot; \
+  --mode research --quality-report --research-time-budget 45 --compact
 </code></pre>
 <hr>
 <h3>Architecture</h3>
 <pre><code>__init__.py      — Hermes plugin entry, tool schema, handler
 search.py        — Core engine: providers, routing, caching, fallback
+scripts/         — Golden query evaluator and support scripts
 plugin.yaml      — Plugin manifest
 .env.template    — API key reference
 CHANGELOG.md     — Version history
@@ -440,7 +476,7 @@ CHANGELOG.md     — Version history
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 73</div>
+        <div class="stars">★ 79</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -448,7 +484,7 @@ CHANGELOG.md     — Version history
         <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
-        <div class="stars">★ 7</div>
+        <div class="stars">★ 8</div>
         <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
       </a>
       <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
@@ -460,16 +496,16 @@ CHANGELOG.md     — Version history
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/clawshell/clawshell">
-        <div class="stars">★ 278</div>
+        <div class="stars">★ 281</div>
         <div class="name"><span class="org">clawshell /</span> clawshell</div>
       </a>
       <a class="related-row" href="/projects/briancaffey/hermes-otel">
         <div class="stars">★ 10</div>
         <div class="name"><span class="org">briancaffey /</span> hermes-otel</div>
       </a>
-      <a class="related-row" href="/projects/iamagenius00/hermes-a2a">
-        <div class="stars">★ 114</div>
-        <div class="name"><span class="org">iamagenius00 /</span> hermes-a2a</div>
+      <a class="related-row" href="/projects/335234131/agent-browser-mcp">
+        <div class="stars">★ 171</div>
+        <div class="name"><span class="org">335234131 /</span> agent-browser-mcp</div>
       </a>
     </div>
     
