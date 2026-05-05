@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI provides a lightweight web-based interface for the Hermes Agent, offering a graphical alternative to the standard terminal and messaging app interactions. The application is built using Python and vanilla JavaScript with no external frameworks, featuring a three-panel layout for session management, chat, and workspace file browsing. It maintains 1:1 functional parity with the Hermes CLI, allowing users to manage persistent memory, scheduled cron jobs, and self-improving skills throu",
+  "description": "Hermes WebUI provides a browser-based graphical interface for interacting with the Hermes Agent. It is built using Python and vanilla JavaScript to offer full functional parity with the existing command-line interface without requiring complex build steps. The interface features a three-panel layout for session management, chat, and workspace file browsing, allowing users to manage their autonomous agent via web or mobile browsers. It integrates directly with existing Hermes setups, utilizing th",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-05-04T05:33:56.000Z",
+  "dateModified": "2026-05-05T02:43:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5585
+    "userInteractionCount": 5688
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -108,11 +108,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 5.6K</span>
+    <span class="stars">★ 5.7K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-04</span>
+    <span><span class="meta-label">updated</span>2026-05-05</span>
   </div>
 
   <div class="actions">
@@ -127,11 +127,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI provides a lightweight web-based interface for the Hermes Agent, offering a graphical alternative to the standard terminal and messaging app interactions. The application is built using Python and vanilla JavaScript with no external frameworks, featuring a three-panel layout for session management, chat, and workspace file browsing. It maintains 1:1 functional parity with the Hermes CLI, allowing users to manage persistent memory, scheduled cron jobs, and self-improving skills through a browser. The interface includes a circular context ring for real-time token usage monitoring and a centralized control center for agent settings.</p>
+    <p class="summary-text">Hermes WebUI provides a browser-based graphical interface for interacting with the Hermes Agent. It is built using Python and vanilla JavaScript to offer full functional parity with the existing command-line interface without requiring complex build steps. The interface features a three-panel layout for session management, chat, and workspace file browsing, allowing users to manage their autonomous agent via web or mobile browsers. It integrates directly with existing Hermes setups, utilizing the user's current models and configurations.</p>
     <ul class="summary-highlights">
-      <li>Three-panel layout for chat, sessions, and workspace file browsing</li>
-      <li>Full functional parity with the Hermes Agent CLI experience</li>
-      <li>Lightweight architecture using Python and vanilla JS without frameworks</li>
+      <li>Full parity with the Hermes CLI experience</li>
+      <li>Three-panel layout with workspace file browsing</li>
+      <li>Lightweight implementation using Python and vanilla JS</li>
     </ul>
   </div>
 </section>
@@ -294,6 +294,14 @@ python3 bootstrap.py
 <p>Or keep using the shell launcher:</p>
 <pre><code class="language-bash">./start.sh
 </code></pre>
+<p>For self-hosted VM or homelab installs, <code>ctl.sh</code> wraps the common daemon lifecycle commands without requiring <code>fuser</code> or <code>pkill</code>:</p>
+<pre><code class="language-bash">./ctl.sh start              # background daemon, PID at ~/.hermes/webui.pid
+./ctl.sh status             # PID, uptime, bound host/port, log path, /health
+./ctl.sh logs --lines 100   # tail ~/.hermes/webui.log
+./ctl.sh restart
+./ctl.sh stop
+</code></pre>
+<p><code>ctl.sh start</code> runs the bootstrap in foreground/no-browser mode behind the daemon wrapper, writes logs to <code>~/.hermes/webui.log</code>, and respects <code>.env</code> plus inline overrides such as <code>HERMES_WEBUI_HOST=0.0.0.0 ./ctl.sh start</code>.</p>
 <p>The bootstrap will:</p>
 <ol>
 <li>Detect Hermes Agent and, if missing, attempt the official installer (<code>curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash</code>).</li>
@@ -303,7 +311,8 @@ python3 bootstrap.py
 <li>Drop you into a first-run onboarding wizard inside the WebUI.</li>
 </ol>
 <blockquote>
-<p>Native Windows is not supported for this bootstrap yet. Use Linux, macOS, or WSL2.</p>
+<p>Native Windows is not supported for this bootstrap yet. Use Linux, macOS, or WSL2.
+For Windows / WSL auto-start at login, see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/wsl-autostart.md"><code>docs/wsl-autostart.md</code></a>.</p>
 </blockquote>
 <p>If provider setup is still incomplete after install, the onboarding wizard will point you to finish it with <code>hermes model</code> instead of trying to replicate the full CLI setup in-browser.</p>
 <hr>
@@ -913,11 +922,11 @@ Added a streaming token buffer and post-run message scrub to <code>streaming.py<
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/outsourc-e/hermes-workspace">
-        <div class="stars">★ 3.2K</div>
+        <div class="stars">★ 3.3K</div>
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 997</div>
+        <div class="stars">★ 1.1K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -929,11 +938,11 @@ Added a streaming token buffer and post-run message scrub to <code>streaming.py<
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 569</div>
+        <div class="stars">★ 574</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
-        <div class="stars">★ 755</div>
+        <div class="stars">★ 890</div>
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
