@@ -173,7 +173,12 @@ for (const list of lists) {
 }
 
 // ── Shared favicon (brutalist amber square + H) ──
-const FAVICON = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23d49a4f'/><text x='16' y='23' font-family='Space Grotesk,sans-serif' font-size='22' font-weight='700' fill='%230e0d0b' text-anchor='middle'>H</text></svg>`;
+// Full link block — Google SERP needs a real fetchable icon URL, not a data:URI.
+const FAVICON = `<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">`;
 
 // ── Shared theme init + toggle script ──
 const THEME_INIT = `(function(){try{var s=localStorage.getItem('theme');var o=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;var t=s||(o?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();`;
@@ -639,7 +644,7 @@ function renderProjectPage(repo, meta, readmeHtml, relatedRepos, summary, handbo
 </script>
 ${renderSoftwareApplicationLD(repo, meta, summary)}
 <link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
-<link rel="icon" href="${FAVICON}">
+${FAVICON}
 <script>${THEME_INIT}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -807,7 +812,7 @@ function renderListPage(list, matchedRepos, listSummaryEntries) {
 </script>
 ${renderCollectionPageLD(list, matchedRepos)}
 <link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
-<link rel="icon" href="${FAVICON}">
+${FAVICON}
 <script>${THEME_INIT}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -947,7 +952,7 @@ ${JSON.stringify(breadcrumbLD, null, 2)}
 ${JSON.stringify(itemListLD, null, 2)}
 </script>
 <link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
-<link rel="icon" href="${FAVICON}">
+${FAVICON}
 <script>${THEME_INIT}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
