@@ -32,12 +32,12 @@ async function main() {
   // Collect all markdown files
   const files = [];
 
-  // research/ folder
+  // research/ folder — recursive so research/docs/<...>.md (the auto-scraped
+  // mirror of hermes-agent.nousresearch.com/docs) is ingested too.
   const researchDir = path.join(ROOT, "research");
-  for (const f of fs.readdirSync(researchDir)) {
-    if (f.endsWith(".md")) {
-      files.push({ path: path.join(researchDir, f), source: `research/${f}` });
-    }
+  for (const abs of walkMarkdown(researchDir)) {
+    const rel = path.relative(ROOT, abs).split(path.sep).join("/");
+    files.push({ path: abs, source: rel });
   }
 
   // repos/ folder
@@ -104,6 +104,17 @@ async function main() {
 
   const sizeMB = (fs.statSync(outputPath).size / 1024 / 1024).toFixed(1);
   console.log(`\nWrote ${outputPath} (${sizeMB} MB)`);
+}
+
+function* walkMarkdown(dir) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      yield* walkMarkdown(full);
+    } else if (entry.isFile() && entry.name.endsWith(".md")) {
+      yield full;
+    }
+  }
 }
 
 function chunkText(text, source) {

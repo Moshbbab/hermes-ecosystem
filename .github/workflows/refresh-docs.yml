@@ -1,0 +1,70 @@
+name: Refresh Hermes Docs Mirror
+
+# Pulls the latest content from hermes-agent.nousresearch.com/docs into
+# research/docs/. Idempotent: only files whose upstream content changed are
+# rewritten. The push then triggers rebuild-chunks.yml downstream, so the
+# embedded knowledge base stays in sync without manual intervention.
+
+concurrency:
+  group: main-bot-push
+  cancel-in-progress: false
+
+on:
+  schedule:
+    # Mondays 02:00 UTC. Most Nous doc updates land mid-week, so Monday
+    # catches the prior week's changes without piling on top of release-day pushes.
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Scrape docs
+        run: node scripts/scrape-hermes-docs.js
+
+      - name: Check if mirror changed
+        id: diff
+        run: |
+          if git diff --quiet research/docs/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            CHANGED=$(git diff --name-only research/docs/ | wc -l)
+            echo "count=$CHANGED" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit refreshed mirror
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "Hermes Atlas Bot"
+          git config user.email "bot@hermesatlas.com"
+          git add research/docs/
+          git commit -m "Refresh Hermes docs mirror (${{ steps.diff.outputs.count }} files changed)"
+
+          # main can move during a multi-minute scrape (PR merge, another bot
+          # workflow committing). Mirror the retry pattern from rebuild-chunks.yml.
+          for attempt in 1 2 3; do
+            if git push; then
+              echo "Pushed on attempt $attempt"
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt) — pulling --rebase and retrying"
+            git pull --rebase origin main || { echo "Rebase failed — aborting"; exit 1; }
+          done
+          echo "Push failed after 3 attempts"
+          exit 1
