@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-LCM is a context management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes while persisting raw data in a SQLite store. This architecture allows the agent to maintain a bounded active context window without permanently discarding details, as it can use specialized tools to drill back into specific hi",
+  "description": "Hermes-LCM is a context management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts old messages into depth-aware summary nodes. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into raw message data stored in a local SQLite database. By integrating recall directly into the context engine",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -46,13 +46,13 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-05-06T10:55:52.000Z",
+  "dateModified": "2026-05-07T00:09:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 399
+    "userInteractionCount": 422
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 399</span>
+    <span class="stars">★ 422</span>
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-05-06</span>
+    <span><span class="meta-label">updated</span>2026-05-07</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-LCM is a context management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes while persisting raw data in a SQLite store. This architecture allows the agent to maintain a bounded active context window without permanently discarding details, as it can use specialized tools to drill back into specific historical material. The system includes session-aware retrieval, source-lineage filtering, and controls for managing oversized tool outputs.</p>
+    <p class="summary-text">Hermes-LCM is a context management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts old messages into depth-aware summary nodes. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into raw message data stored in a local SQLite database. By integrating recall directly into the context engine, it ensures that specific details remain accessible even after multiple rounds of compaction.</p>
     <ul class="summary-highlights">
       <li>Hierarchical DAG structure for depth-aware context compaction</li>
-      <li>SQLite message store for lossless persistence of raw conversation history</li>
-      <li>Agent tools for searching, describing, and expanding compacted context nodes</li>
+      <li>SQLite-backed message store for persistent raw history retrieval</li>
+      <li>Agent tools for grepping, describing, and expanding compacted context</li>
     </ul>
   </div>
 </section>
@@ -203,7 +203,7 @@ claim that Hermes core has no persisted record of pre-compression history.</p>
 <ul>
 <li>Hermes Agent with the pluggable context engine slot (<a href="https://github.com/NousResearch/hermes-agent/pull/7464">PR #7464</a>)</li>
 <li>Python 3.11+</li>
-<li>No required third-party runtime dependencies. <code>tiktoken</code> is used if available; otherwise LCM falls back to character-based token estimates.</li>
+<li>No required third-party runtime dependencies. <code>tiktoken</code> is used if available; otherwise LCM falls back to character-based token estimates. <code>regex</code> is used if available to apply timeouts to message ignore patterns; if it is not installed, message-level regex filtering is disabled with a warning rather than running unbounded stdlib <code>re</code> matches.</li>
 </ul>
 <h3>Install</h3>
 <p>Canonical install path: clone <code>hermes-lcm</code> as a general user plugin.</p>
@@ -253,11 +253,11 @@ context:
 <ul>
 <li>plugin list includes <code>hermes-lcm</code></li>
 <li>selected context engine is <code>lcm</code></li>
-<li>tool list includes <code>lcm_grep</code>, <code>lcm_describe</code>, <code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, and <code>lcm_doctor</code></li>
+<li>tool list includes <code>lcm_grep</code>, <code>lcm_load_session</code>, <code>lcm_describe</code>, <code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, and <code>lcm_doctor</code></li>
 </ul>
 <p>Typical output:</p>
 <pre><code class="language-text">Plugins (1):
-  ✓ hermes-lcm v0.8.0 (6 tools)
+  ✓ hermes-lcm v0.9.1 (7 tools)
 
 Provider Plugins:
   Context Engine: lcm
@@ -314,6 +314,11 @@ environment variables:</p>
 <td><code>LCM_STATELESS_SESSION_PATTERNS</code></td>
 <td>empty</td>
 <td>Comma-separated session globs kept read-only</td>
+</tr>
+<tr>
+<td><code>LCM_IGNORE_MESSAGE_PATTERNS</code></td>
+<td>empty</td>
+<td>Comma-separated regex patterns; matching message content (plain text, extracted text parts for structured/multimodal content, or normalized JSON fallback when no text parts exist) is excluded from LCM storage</td>
 </tr>
 <tr>
 <td><code>LCM_LARGE_OUTPUT_EXTERNALIZATION_ENABLED</code></td>
@@ -389,6 +394,57 @@ session.</p>
 </ul>
 <p>Example: <code>cron:*</code> can match Hermes cron sessions, while exact raw session IDs
 still work.</p>
+<h4>Noise suppression</h4>
+<p>LCM offers two layers of noise filtering, sized to two different shapes of
+noise:</p>
+<ul>
+<li><strong>Session-level filters</strong> (<code>LCM_IGNORE_SESSION_PATTERNS</code>,
+<code>LCM_STATELESS_SESSION_PATTERNS</code>) catch the case where the noisy traffic
+arrives as its own session or platform, for example a dedicated <code>cron:*</code>
+session. Match keys cover the session id, the platform, and
+<code>platform:session_id</code>.</li>
+<li><strong>Message-level patterns</strong> (<code>LCM_IGNORE_MESSAGE_PATTERNS</code>) catch the case
+where cron alerts or other noise are injected into a normal Telegram or
+WhatsApp conversation as ordinary user-visible messages. From LCM&#39;s
+perspective the session/platform is <code>telegram</code> or <code>whatsapp</code>, not <code>cron</code>,
+so only the message content is distinctive.</li>
+</ul>
+<p>Message-level patterns are Python regex strings, comma-separated, compiled
+once at engine start. They run against plain message text. For structured
+multimodal payloads, LCM matches against concatenated text parts first, so
+anchored patterns bind to the text an operator sees. If a structured payload
+contains no text parts, matching falls back to the normalized JSON form that
+LCM would have written to the store. Matching messages are skipped before
+storage, so new matching rows do not enter the messages table or FTS index.
+Filtering is role-agnostic by default, since cron alerts can be re-emitted
+under any role depending on the gateway.</p>
+<p>Example operator config:</p>
+<pre><code>LCM_IGNORE_MESSAGE_PATTERNS=^Cronjob Response:,^&gt;&gt;&gt;Cronjob Response&lt;&lt;&lt;:
+</code></pre>
+<p>Invalid regex entries are logged at warning level and dropped; the
+surviving patterns in the same list still take effect, so a misconfigured
+entry never crashes ingest. Pattern matching uses a 50 ms per-pattern timeout
+when the optional <code>regex</code> package is installed. If <code>regex</code> is not installed,
+LCM logs a warning and disables message-level regex filtering rather than
+running unbounded stdlib <code>re</code> matches in the ingest path.</p>
+<p>One operator-facing limitation to know about:</p>
+<ul>
+<li><strong>Compaction-window edge.</strong> The filter runs at ingest time. When a
+matching message is part of the chunk being summarized in the same
+turn it arrived, the message&#39;s text may appear inside the resulting
+summary node text. In long-running sessions where compaction triggers
+every several dozen turns, this can affect multiple summary nodes per
+day rather than only happening rarely. The summary node&#39;s <code>source_ids</code>
+will not reference the filtered message (it was never written to the
+store), so DAG lineage stays clean; only the serialized summary text
+can carry it. Closing this window is tracked as follow-up work.</li>
+</ul>
+<p><code>lcm_status</code> surfaces the full filter contract under <code>session_filters</code>, including
+<code>ignore_session_patterns</code>, <code>stateless_session_patterns</code>, <code>ignore_message_patterns</code>,
+their <code>*_source</code> fields (<code>default</code> or <code>env</code>), the current session&#39;s <code>ignored</code> and
+<code>stateless</code> booleans, and a process-lifetime <code>ignored_message_count</code> so operators
+can confirm their patterns are loaded and watch how often message filters fire.
+The counter resets on engine restart.</p>
 <h4>Large tool-output handling</h4>
 <p>Externalization is opt-in. When enabled, oversized tool results are written to
 plugin-managed JSON files and referenced from summaries. They remain inspectable
@@ -412,6 +468,10 @@ for earlier separate sessions or broad cross-session history.</p>
 <tbody><tr>
 <td><code>lcm_grep</code></td>
 <td>Search current-session raw messages and summaries. Opt into <code>session_scope=&#39;all&#39;</code> or <code>session_scope=&#39;session&#39;</code> (with <code>session_id</code>) for bounded archive recovery over rows already present in <code>lcm.db</code>, including externally backfilled rows that may carry source strings such as <code>openclaw-lcm:*</code>; broader scopes return raw-message hits only. Use <code>session_search</code> for earlier separate sessions or broad cross-session recall.</td>
+</tr>
+<tr>
+<td><code>lcm_load_session</code></td>
+<td>Load one ordered raw-message transcript page for an explicit <code>session_id</code>. This is not search: it returns raw rows in <code>store_id</code> order, bounded by <code>limit</code>, with per-message content bounded by <code>max_content_chars</code>, and continues with <code>after_store_id</code> from <code>next_cursor</code>.</td>
 </tr>
 <tr>
 <td><code>lcm_describe</code></td>
@@ -438,8 +498,9 @@ for earlier separate sessions or broad cross-session history.</p>
 <p>LCM retrieval tools default to current-session scope. <code>lcm_grep</code> accepts
 <code>session_scope=&#39;all&#39;</code> or <code>session_scope=&#39;session&#39;</code> as an explicit opt-in for
 bounded archive search over rows already present in <code>lcm.db</code> (raw-message hits
-only); use Hermes <code>session_search</code> for broad cross-session history outside the
-LCM database.</p>
+only). Once a session id is known, <code>lcm_load_session</code> can enumerate that session&#39;s
+raw transcript in chronological <code>store_id</code> pages without a search query. Use
+Hermes <code>session_search</code> for broad cross-session history outside the LCM database.</p>
 <p>Within the current session, <code>source</code> filters raw rows directly and filters
 summary nodes by descendant raw-message source lineage. <code>unknown</code> is a real
 source value, not a wildcard. Legacy blank-source rows are treated as <code>unknown</code>.</p>
@@ -451,6 +512,7 @@ Lossless recovery means raw content is stored with stable source lineage and can
 be recovered in deterministic pages.</p>
 <ul>
 <li><code>lcm_expand(node_id=...)</code> pages immediate sources with <code>source_offset</code> and <code>source_limit</code></li>
+<li><code>lcm_load_session(session_id=...)</code> pages ordered raw session rows with <code>after_store_id</code> and <code>next_cursor</code>; each row includes bounded content plus truncation metadata, and large individual rows can be recovered with <code>lcm_expand(store_id=...)</code> using <code>content_offset</code></li>
 <li>oversized raw messages continue with <code>content_offset</code></li>
 <li><code>lcm_expand(externalized_ref=...)</code> pages payload content with <code>content_offset</code></li>
 <li><code>lcm_expand_query</code> uses <code>context_max_tokens</code> for auxiliary context and reports truncation/pagination hints when needed</li>
@@ -515,7 +577,7 @@ store.py         SQLite message store and FTS
 dag.py           summary DAG and FTS
 config.py        env var defaults and overrides
 command.py       /lcm command handlers
-tools.py         lcm_grep, lcm_describe, lcm_expand, lcm_expand_query
+tools.py         lcm_grep, lcm_load_session, lcm_describe, lcm_expand, lcm_expand_query
 schemas.py       tool schemas shown to the model
 tests/           standalone pytest coverage
 </code></pre>
@@ -544,23 +606,23 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 54.9K</div>
+        <div class="stars">★ 55.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 12.3K</div>
+        <div class="stars">★ 12.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 968</div>
+        <div class="stars">★ 971</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 208</div>
+        <div class="stars">★ 210</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 153</div>
+        <div class="stars">★ 155</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
@@ -568,11 +630,11 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 16</div>
+        <div class="stars">★ 19</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 13.4K</div>
+        <div class="stars">★ 13.5K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration layer featuring heartbeats, schedules, and delegation to coordinate agent activities. The platform supports durable agent memory, MCP tools, and a conversation-to-skill learning system. It integrates with over 23 LLM providers, including Claude, GPT, Gemini, and Ollama.",
+  "description": "SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It operates as a centralized dashboard where users can manage agent memory, runtime skills, and delegation across more than 23 LLM providers. The platform supports complex workflows through scheduled tasks, heartbeats, and a conversation-to-skill learning system. It integrates with various tools including MCP, Docker sandboxes for browser execution, and specialized CLI backends l",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-05-06T10:43:22.000Z",
+  "dateModified": "2026-05-06T19:50:12.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 460
+    "userInteractionCount": 463
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,7 +112,7 @@
   <p class="project-desc">Open-source self-hosted AI agent runtime and multi-agent framework for autonomous agent swarms. Agent memory, MCP tools, schedules, delegation, and 23+ LLM providers (Claude, GPT, Gemini, OpenRouter, Ollama). A practical Claude Code and LangChain alternative.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 460</span>
+    <span class="stars">★ 463</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration layer featuring heartbeats, schedules, and delegation to coordinate agent activities. The platform supports durable agent memory, MCP tools, and a conversation-to-skill learning system. It integrates with over 23 LLM providers, including Claude, GPT, Gemini, and Ollama.</p>
+    <p class="summary-text">SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It operates as a centralized dashboard where users can manage agent memory, runtime skills, and delegation across more than 23 LLM providers. The platform supports complex workflows through scheduled tasks, heartbeats, and a conversation-to-skill learning system. It integrates with various tools including MCP, Docker sandboxes for browser execution, and specialized CLI backends like Claude Code and Hermes.</p>
     <ul class="summary-highlights">
-      <li>Self-hosted runtime with durable agent memory and schedules</li>
-      <li>Supports 23+ LLM providers and MCP tools</li>
-      <li>Visual orchestration via org charts and delegation workflows</li>
+      <li>Orchestrates multi-agent swarms with durable memory and delegation</li>
+      <li>Supports 23+ LLM providers including Ollama, OpenAI, and Hermes</li>
+      <li>Features deterministic cron scheduling for autonomous recurring agent tasks</li>
     </ul>
   </div>
 </section>
@@ -214,9 +214,11 @@
 <h4>Desktop app (recommended for non-technical users)</h4>
 <p>Download the one-click installer from <a href="https://swarmclaw.ai/downloads">swarmclaw.ai/downloads</a>.
 Available for macOS (Apple Silicon &amp; Intel), Windows, and Linux (AppImage + .deb).</p>
-<p>Current builds are ad-hoc signed but not notarized, so on first launch:</p>
+<p>The release workflow supports Developer ID signing and notarization when Apple
+credentials are configured. If a macOS build is still ad-hoc signed, first
+launch may need one manual approval:</p>
 <ul>
-<li><strong>macOS:</strong> right-click the app in Finder → <strong>Open</strong> → <strong>Open</strong> to bypass Gatekeeper. If macOS instead reports <em>&quot;SwarmClaw is damaged and can&#39;t be opened&quot;</em> (common on Apple Silicon when the dmg was quarantined by Safari), strip the quarantine attribute and relaunch:<pre><code class="language-bash">xattr -dr com.apple.quarantine /Applications/SwarmClaw.app
+<li><strong>macOS:</strong> right-click the app in Finder → <strong>Open</strong> → <strong>Open</strong> to bypass Gatekeeper. If macOS instead reports <em>&quot;SwarmClaw is damaged and can&#39;t be opened&quot;</em> (common when the dmg was quarantined by Safari), strip the quarantine attribute and relaunch:<pre><code class="language-bash">xattr -dr com.apple.quarantine /Applications/SwarmClaw.app
 </code></pre>
 </li>
 <li><strong>Windows:</strong> if SmartScreen appears, click <strong>More info</strong> → <strong>Run anyway</strong>.</li>
@@ -258,6 +260,13 @@ docker compose up -d --build
 <pre><code class="language-bash">clawhub install swarmclaw
 </code></pre>
 <p><a href="https://clawhub.ai/skills/swarmclaw">Browse on ClawHub</a></p>
+<h3>v1.9.23 Highlights</h3>
+<p>Schedule reliability is now more deterministic for recurring autonomous work, especially after restarts or stale stored timing state.</p>
+<ul>
+<li><strong>Cron drift repair.</strong> Active schedules repair stale future cron slots before they skip the nearest run.</li>
+<li><strong>Stable stagger.</strong> Staggered schedules keep a deterministic per-schedule offset.</li>
+<li><strong>Mission continuity.</strong> Schedule-created board tasks keep a persistent mission link across recurring runs.</li>
+</ul>
 <h3>Hosted Deploys</h3>
 <p>SwarmClaw now ships provider-ready deploy files at the repo root:</p>
 <ul>
@@ -278,7 +287,7 @@ docker compose up -d --build
 <p>Full hosted deployment guides live at <a href="https://swarmclaw.ai/docs/deployment">https://swarmclaw.ai/docs/deployment</a></p>
 <h3>Core Capabilities</h3>
 <ul>
-<li><strong>Providers</strong>: 23 built-in — Claude Code CLI, Codex CLI, OpenCode CLI, Gemini CLI, Copilot CLI, Cursor Agent CLI, Qwen Code CLI, Goose, Anthropic, OpenAI, OpenRouter, Google Gemini, DeepSeek, Groq, Together, Mistral, xAI, Fireworks, Nebius, DeepInfra, Ollama, OpenClaw, and Hermes Agent, plus compatible custom endpoints.</li>
+<li><strong>Providers</strong>: 24+ built-in — Claude Code CLI, Codex CLI, OpenCode CLI, Gemini CLI, Copilot CLI, Cursor Agent CLI, Qwen Code CLI, Goose, Anthropic, OpenAI, OpenRouter, Google Gemini, DeepSeek, Groq, Together, Mistral, xAI, Fireworks, Nebius, DeepInfra, Ollama, LM Studio, OpenClaw, and Hermes Agent, plus compatible custom endpoints.</li>
 <li><strong>OpenRouter</strong>: <img src="https://raw.githubusercontent.com/swarmclawai/swarmclaw/main/public/provider-logos/openrouter.png" alt="OpenRouter logo" width="20" height="20" /> Use OpenRouter as a first-class built-in provider with its standard OpenAI-compatible endpoint and routed model IDs such as <code>openai/gpt-4.1-mini</code>.</li>
 <li><strong>Hermes Agent</strong>: <img src="https://raw.githubusercontent.com/swarmclawai/swarmclaw/main/public/provider-logos/hermes-agent.png" alt="Hermes Agent logo" width="20" height="20" /> Connect Hermes through its OpenAI-compatible API server, locally or through a reachable remote <code>/v1</code> endpoint.</li>
 <li><strong>Delegation</strong>: built-in delegation to Claude Code, Codex CLI, OpenCode CLI, Gemini CLI, Cursor Agent CLI, Qwen Code CLI, and native SwarmClaw subagents.</li>
@@ -516,6 +525,86 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.9.23 Highlights</h4>
+<p>Schedule reliability release: recurring work now repairs stale timing state before it can skip the nearest run, and scheduled board tasks keep mission context across repeat launches.</p>
+<ul>
+<li><strong>Cron drift repair.</strong> Active cron schedules repair missing or invalid <code>nextRunAt</code> values and stale future cron slots before the scheduler decides whether work is due.</li>
+<li><strong>Tick-time advancement.</strong> Cron and interval schedules now advance from the scheduler tick time instead of the process wall clock, making restart and catch-up behavior deterministic.</li>
+<li><strong>Stable stagger.</strong> Schedule stagger offsets are deterministic per schedule, avoiding thundering-herd launches without moving a saved next-run target on every recompute.</li>
+<li><strong>Mission continuity.</strong> Schedule-created board tasks attach to a persistent mission link, so recurring runs share the same operational context.</li>
+</ul>
+<h4>v1.9.22 Highlights</h4>
+<p>Research tools release: agents now get direct <code>web_extract</code> and <code>web_crawl</code> tools alongside <code>web_search</code>, <code>web_fetch</code>, and the unified <code>web</code> tool.</p>
+<ul>
+<li><strong>Source-grounded extraction.</strong> <code>web_extract</code> returns a page title, canonical URL, and readable content for known source URLs.</li>
+<li><strong>Bounded crawls.</strong> <code>web_crawl</code> walks same-origin links by default with conservative page and depth caps, plus an explicit external-link opt-in.</li>
+<li><strong>Better routing.</strong> Tool aliases, capability policy, planning hints, continuation recovery, and the chat UI all recognize the granular research tools.</li>
+<li><strong>Regression coverage.</strong> New tests cover action inference, tool-call translation, direct tool registration, extraction cleanup, and same-origin crawl bounds.</li>
+</ul>
+<h4>v1.9.21 Highlights</h4>
+<p>Provider diagnostics release: connection checks now return a structured step timeline across setup, provider settings, and agent editing.</p>
+<ul>
+<li><strong>Connection timelines.</strong> Provider checks show endpoint resolution, model discovery, fallback selection, and chat/gateway verification steps.</li>
+<li><strong>Safer error details.</strong> Token-like values are redacted before check messages or diagnostics are returned to the UI.</li>
+<li><strong>Local runtime debugging.</strong> LM Studio, Ollama, custom OpenAI-compatible endpoints, cloud providers, OpenClaw gateways, and CLI providers all report concise pass/fail diagnostics.</li>
+<li><strong>macOS signing path.</strong> Desktop releases now forward Developer ID and Apple notarization credentials when configured, while ad-hoc fallback builds keep the quarantine workaround documented.</li>
+</ul>
+<h4>v1.9.20 Highlights</h4>
+<p>Provider reliability release: local OpenAI-compatible runtimes now get safer endpoint handling, clearer setup, and first-class LM Studio support.</p>
+<ul>
+<li><strong>LM Studio provider.</strong> LM Studio is available in setup, provider settings, agent editing, model discovery, and connection checks with an optional API key.</li>
+<li><strong>Endpoint normalization.</strong> LM Studio and OpenAI-compatible OpenAI overrides normalize bare hosts like <code>http://127.0.0.1:1234</code> to <code>/v1</code> before calling models or chat completions.</li>
+<li><strong>Provider switch isolation.</strong> Switching an agent from a local endpoint back to a fixed cloud provider clears stale per-agent endpoints and fallback keys.</li>
+<li><strong>Manual model flow.</strong> Provider model saves now preserve explicit empty endpoint resets and optional-key providers can be tested without creating a credential.</li>
+</ul>
+<h4>v1.9.19 Highlights</h4>
+<p>Output hygiene release: final assistant responses now use the shared internal metadata scrubber before persistence, UI reset, connector delivery, and completion hooks.</p>
+<ul>
+<li><strong>Multi-block scrubbing.</strong> Repeated internal metadata payloads are stripped in one pass instead of stopping after the first block.</li>
+<li><strong>Malformed prelude cleanup.</strong> When a validated internal block is followed by a malformed internal fragment, the leftover prelude is removed before user-facing text is delivered.</li>
+<li><strong>Shared finalizer path.</strong> Post-stream finalization now uses the same metadata scrubber as the chat UI, keeping stored, streamed, and connector-visible output aligned.</li>
+<li><strong>Regression coverage.</strong> Tests cover repeated classifier-shape blocks, malformed follow-on fragments, and false-positive protection for malformed text without a prior validated strip.</li>
+</ul>
+<h4>v1.9.18 Highlights</h4>
+<p>Schedule preflight release: schedules now show server-backed timing forecasts before save, with timezone-aware cron previews and warnings for risky drafts.</p>
+<ul>
+<li><strong>Schedule preview API.</strong> <code>POST /api/schedules/preview</code> validates a draft schedule through the same normalization path as saved schedules and returns the next calculated runs.</li>
+<li><strong>Timezone-aware schedule sheet.</strong> Cron schedules can set an explicit timezone, preview the next runs from the server, and see warnings before saving.</li>
+<li><strong>Stagger and one-shot controls.</strong> Operators can add a stagger window to recurring schedules and choose a run-once delay from the schedule workflow.</li>
+<li><strong>CLI access.</strong> <code>swarmclaw schedules preview --data &#39;{...}&#39;</code> exposes the same forecast for scripts and release automation.</li>
+</ul>
+<h4>v1.9.17 Highlights</h4>
+<p>Agent configuration history release: SwarmClaw now surfaces saved agent versions directly in the agent editor, giving operators a fast rollback path for agent settings.</p>
+<ul>
+<li><strong>Agent sheet history.</strong> Advanced settings list recent saved versions with relative time, actor, and provider/model snapshot.</li>
+<li><strong>One-click restore.</strong> Operators can restore a prior agent configuration through the existing version-restore API without leaving the agent workflow.</li>
+<li><strong>Stale-form protection.</strong> Successful restore reloads agent state and closes the sheet so operators reopen the refreshed record.</li>
+<li><strong>Regression coverage.</strong> New tests cover config-version list/restore routes and summary formatting.</li>
+</ul>
+<h4>v1.9.16 Highlights</h4>
+<p>Agent planning controls release: strict planning is now a first-class agent setting instead of a hidden persisted field, so operators can decide which agents must expose machine-readable plans before multi-step work.</p>
+<ul>
+<li><strong>Agent editor control.</strong> Advanced agent settings now include a Standard / Strict planning selector with inline behavior guidance.</li>
+<li><strong>Runtime prompt wiring.</strong> Strict planning continues to inject the existing <code>[MAIN_LOOP_PLAN]</code> contract before multi-step tool work, and the test suite now keeps that prompt section in the runtime gate.</li>
+<li><strong>Portable agent packs.</strong> Agent exports preserve <code>planningMode</code>, so planning discipline follows agents across installs.</li>
+<li><strong>API coverage.</strong> Agent create and update route tests verify that strict planning persists without clobbering unrelated settings.</li>
+</ul>
+<h4>v1.9.15 Highlights</h4>
+<p>Run handoff release: SwarmClaw now turns completed, failed, queued, or running execution records into copyable handoff packets with outcome, evidence, artifacts, timeline, usage, resume commands, and recommended next actions.</p>
+<ul>
+<li><strong>Run handoff API.</strong> <code>GET /api/runs/:id/handoff</code> returns structured handoff JSON, and <code>?format=markdown</code> returns copyable markdown.</li>
+<li><strong>Run Review copy action.</strong> The run detail sheet exposes a copy handoff button so operators can move outcome evidence into another session without replaying the full event log.</li>
+<li><strong>CLI access.</strong> <code>swarmclaw runs handoff &lt;runId&gt; --query format=markdown</code> exposes the same packet for scripts and release automation.</li>
+<li><strong>Readiness guidance.</strong> Packets mark failed, cancelled, running, warning, or under-evidenced runs as blocked or needing attention before another operator relies on the result.</li>
+</ul>
+<h4>v1.9.14 Highlights</h4>
+<p>Session context-pack release: SwarmClaw now turns a live chat into a concise handoff packet with session metadata, recent visible turns, linked tasks, attachments, resume handles, and next actions.</p>
+<ul>
+<li><strong>Context-pack API.</strong> <code>GET /api/chats/:id/context-pack</code> returns structured handoff JSON, and <code>?format=markdown</code> returns copyable markdown.</li>
+<li><strong>Chat header copy action.</strong> Active chats with messages expose a context-pack button for quick handoff to another operator or backend.</li>
+<li><strong>CLI access.</strong> <code>swarmclaw chats context-pack &lt;chatId&gt; --query format=markdown</code> exposes the same packet for scripts and release automation.</li>
+<li><strong>Smoke coverage.</strong> Runtime tests and the browser smoke gate now verify the context-pack route and markdown response.</li>
+</ul>
 <h4>v1.9.13 Highlights</h4>
 <p>Architecture health release: SwarmClaw now turns runtime ownership, dispatch, memory, startup, and quality evidence into a scored operator report.</p>
 <ul>
@@ -687,66 +776,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <h4>v1.7.0 Highlights</h4>
 <p>Extended CLI provider roster — every coding agent recognized by SwarmSkills now has a corresponding CLI provider in SwarmClaw, routed through a generic streamer when no bespoke parser exists.</p>
 <ul>
-<li><strong>31 new CLI providers.</strong> Aider, Amp, Augment, AdaL, IBM Bob, Cline, CodeBuddy, Command Code, Continue, Cortex Code, Crush, Deep Agents, Firebender, iFlow, Junie, Kilo Code, Kimi, Kode, MCPJam, Mistral Vibe, Mux, Neovate, OpenHands, Pochi, Qoder, Replit Agent, Roo Code, TRAE CN, Warp Agent, Windsurf, and Zencoder are now first-class provider IDs in <code>ProviderType</code>.</li>
-<li><strong>Generic CLI streamer.</strong> New <code>streamGenericCliChat</code> (<code>src/lib/providers/generic-cli.ts</code>) spawns the configured binary with the prompt as final argv and emits stdout lines as SSE deltas. Used by the new providers when no bespoke parser is available; existing bespoke parsers (Claude, Codex, Cursor, Gemini, Copilot, Droid, Qwen, OpenCode, Goose) are untouched.</li>
-<li><strong>Capability metadata.</strong> <code>CLI_PROVIDER_CAPABILITIES</code> (<code>src/lib/providers/cli-utils.ts</code>) carries a one-line description for each new provider so the UI and <code>isCliProvider()</code> recognize them.</li>
-<li><strong>Tests.</strong> New <code>generic-cli.test.ts</code> exercises the streamer against <code>echo</code> and asserts the missing-binary error path; <code>cli-utils.test.ts</code> extends the CLI provider recognition coverage.</li>
-</ul>
-<h4>v1.6.1 Highlights</h4>
-<p>Follow-up release for v1.6 with workflow starts, safer metadata handling, A2A discovery polish, and <a href="https://github.com/swarmclawai/swarmclaw/pull/61">#61</a> by <a href="https://github.com/latentwill">@latentwill</a>. Thanks latentwill!</p>
-<ul>
-<li><strong>Mission and protocol templates for real work.</strong> New starter paths cover codebase review sprints, research bureau scans, content studio cycles, release readiness panels, synthesis panels, and builder review loops.</li>
-<li><strong>Home launchpad paths.</strong> First-run users can choose a self-hosted assistant, visual workflow, or autonomous mission path, with quality actions still one click away.</li>
-<li><strong>A2A discovery is easier to integrate.</strong> The canonical <code>/.well-known/agent-card.json</code> endpoint now works alongside the legacy API route and hides disabled or trashed agents from public discovery.</li>
-<li><strong>Internal metadata stripping is safer.</strong> Side-channel JSON is removed with balanced-object parsing and zod validation so nested payloads are scrubbed without deleting ordinary user JSON.</li>
-<li><strong>Browser smoke gate restored.</strong> <code>npm run test:e2e</code> now runs a Playwright smoke against health, A2A discovery, <code>/home</code>, and <code>/quality</code>, either against a live URL or a temporary local dev server.</li>
-<li><strong>OpenCode CLI hang fixed.</strong> OpenCode CLI delegation no longer keeps an inherited stdin pipe open, preventing hangs in non-interactive runs.</li>
-</ul>
-<h4>v1.6.0 Highlights</h4>
-<p>Operator Quality Center release for builders running autonomous agents in production-like workflows.</p>
-<ul>
-<li><strong>New Quality workspace.</strong> <code>/quality</code> brings run health, failed/running counts, pending approvals, latest eval scores, and attention shortcuts into one operator surface.</li>
-<li><strong>Eval Lab and Approval Desk.</strong> Existing eval and approval APIs are now exposed through a practical UI for running scenarios/suites, reviewing score evidence, and approving or denying human-loop/tool/connector/skill requests.</li>
-<li><strong>Run Review upgrades.</strong> The run history now has source filtering and search across run id, source, errors, results, and ownership fields while keeping the existing replay/evidence sheet.</li>
-<li><strong>Release-ready mission templates.</strong> New templates cover Release Candidate QA, Agent Cost Audit, Connector Smoke Test, Failed Run Triage, and Weekly Agent Quality Report using the existing mission budget/report model.</li>
-<li><strong>Home launchpad quality actions.</strong> First-run users can jump straight to evals, approvals, failed runs, and release QA missions from the operational launchpad.</li>
-</ul>
-<h4>v1.5.71 Highlights</h4>
-<p>Fast-follow release for <a href="https://github.com/swarmclawai/swarmclaw/pull/60">#60</a> by <a href="https://github.com/borislavnnikolov">@borislavnnikolov</a>. Thanks Borislav!</p>
-<ul>
-<li><strong>Browser MCP works from standalone builds again.</strong> The Next standalone output now includes the Playwright MCP runtime packages required by packaged SwarmClaw builds.</li>
-<li><strong>Host browser launches use cached Chromium.</strong> Local Playwright MCP startup now selects Chromium explicitly instead of depending on a system Chrome install.</li>
-<li><strong>Standalone repair is more robust.</strong> The build repair step now fills partially traced Playwright MCP package directories, and the packaging and browser startup paths are covered by regression tests.</li>
-</ul>
-<h4>v1.5.70 Highlights</h4>
-<p>Fast-follow release for <a href="https://github.com/swarmclawai/swarmclaw/pull/56">#56</a> by <a href="https://github.com/latentwill">@latentwill</a>. Thanks latentwill!</p>
-<p>Also includes fixes for <a href="https://github.com/swarmclawai/swarmclaw/issues/57">#57</a> and <a href="https://github.com/swarmclawai/swarmclaw/issues/58">#58</a> reported by <a href="https://github.com/zantak">@zantak</a>. Thanks zantak!</p>
-<ul>
-<li><strong>Builtin provider saves work again.</strong> Saving a builtin provider no longer sends the strict-schema rejected <code>type</code> field, and the provider update route is now covered by the runtime test script.</li>
-<li><strong>Knowledge sources appear on direct visits.</strong> Panel-backed routes such as Knowledge now auto-open their source/sidebar panel on desktop route changes, while mobile keeps the drawer closed by default.</li>
-<li><strong>Reasoning content stays out of the reply body.</strong> OpenAI-compatible <code>reasoning_content</code> and <code>reasoning</code> stream deltas now flow into the existing collapsed Thinking panel instead of being appended before the visible answer.</li>
-<li><strong>macOS install guidance remains explicit.</strong> Ad-hoc signed macOS desktop builds still document the quarantine workaround until Developer ID signing and notarization are available. Thanks <a href="https://github.com/yagudaev">@yagudaev</a> for confirming the current workaround on Apple Silicon.</li>
-</ul>
-<h4>v1.5.69 Highlights</h4>
-<p>Fast-follow release for <a href="https://github.com/swarmclawai/swarmclaw/pull/55">#55</a> by <a href="https://github.com/borislavnnikolov">@borislavnnikolov</a>. Thanks Borislav!</p>
-<ul>
-<li><strong>Structured runs are easier to find.</strong> Schedule-backed protocol runs now appear in the schedule console and unified <code>/api/runs</code> endpoints, including detail and event fallbacks for structured run records.</li>
-<li><strong>Agent sessions get a cleaner fresh-chat flow.</strong> Agent chat headers now expose a New chat action for sessions with history or saved CLI/runtime handles, first prompts derive compact session titles, and agent session lists sort newest-first.</li>
-<li><strong>Structured session execution is sturdier.</strong> CLI providers can execute structured turns through their direct provider runtime, blank structured responses now surface the real logged error where possible, successful structured turns clear their watchdog timers promptly, schedule timing changes recompute <code>nextRunAt</code>, and in-process daemon status/control paths are covered.</li>
-<li><strong>Package contents are safer.</strong> The npm package allowlist now explicitly excludes local env files under <code>src/</code> even when a maintainer has private ignored config in their working tree.</li>
-</ul>
-<h4>v1.5.68 Highlights</h4>
-<p>Launch-readiness release for turning SwarmClaw&#39;s own next launch into a reusable workflow.</p>
-<ul>
-<li><strong>Launch Week Growth Sprint mission template.</strong> The mission template gallery now includes a launch-week operator that audits the product/docs, drafts GitHub Release, Product Hunt, Show HN, social, and community copy, identifies the top demo moments, and produces daily feedback/metrics/follow-up reports. The default goal explicitly keeps public posting behind approval.</li>
-<li><strong>Security and release metadata refresh.</strong> Next.js is updated to <code>16.2.4</code> in the app and docs site, OpenClaw / Discord.js / selected transitives are refreshed so the production high/critical audit gate passes, and the stale <code>package-lock.json</code> root version is realigned with the published package version.</li>
-<li><strong>Desktop release gate hardening.</strong> <code>npm run electron:build</code> now restores host-architecture native modules after macOS multi-arch packaging, so a local release smoke build no longer leaves the checkout unable to run the next host build.</li>
-<li><strong>Launch assets and docs.</strong> Added a concrete v1.5.68 launch plan in <code>docs/release/v1.5.68-launch-plan.md</code>, refreshed the website release notes/docs index, and updated stale install examples so public launch traffic sees current instructions.</li>
-</ul>
-<h4>v1.5.67 Highlights</h4>
-<p>Three chatroom-focused fixes from a community contribution by <a href="https://github.com/borislavnnikolov">@borislavnnikolov</a>. Thanks Borislav!</p>
-<ul>
-<li><strong>Inspect a chatroom member mid-turn.</strong> Clicking a member avatar in a chatroom while that agent is busy now opens a bottom sheet with the agent&#39;s synthetic chatroom session: recent messages, execution-log entries, and counts. Previously the click jumped to the agent detail page, which lost the chatroom context. The synthetic session-id convention (<code>chatroom-&lt;roomId&gt;-&lt;agentId&gt;</code>) is now centralized in <code>src/lib/chatroom-sessions.ts</code> and shared between the UI and <code>chatroom-helpers.ts</code></li>
+<li>**31 new CLI provider</li>
 </ul>
 <hr>
 <p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
@@ -762,7 +792,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/builderz-labs/mission-control">
-        <div class="stars">★ 4.6K</div>
+        <div class="stars">★ 4.7K</div>
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">
@@ -774,7 +804,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">
-        <div class="stars">★ 77</div>
+        <div class="stars">★ 79</div>
         <div class="name"><span class="org">1ilkhamov /</span> opencode-hermes-multiagent</div>
       </a>
       <a class="related-row" href="/projects/supermodeltools/bigiron">
@@ -782,7 +812,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">supermodeltools /</span> bigiron</div>
       </a>
       <a class="related-row" href="/projects/Rainhoole/hermes-agent-acp-skill">
-        <div class="stars">★ 25</div>
+        <div class="stars">★ 27</div>
         <div class="name"><span class="org">Rainhoole /</span> hermes-agent-acp-skill</div>
       </a>
     </div>

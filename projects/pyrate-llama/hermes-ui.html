@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/pyrate-llama/hermes-ui#software",
   "name": "hermes-ui",
-  "description": "Hermes UI is a glassmorphic web interface that serves as a centralized command center for the self-hosted Hermes Agent. Built as a single-file React 18 application, it connects to the agent via a lightweight Python proxy server to provide real-time operational visibility. The interface features a multi-workspace environment with integrated file browsing, Kanban-style task tracking, and live log streaming. It also supports advanced interaction controls such as Mermaid diagram rendering, MCP tool ",
+  "description": "Hermes UI is a glassmorphic web interface that serves as a centralized command center for managing the self-hosted Hermes Agent. Built as a single-file React 18 application, it communicates with the agent via a lightweight Python proxy server to provide real-time operational visibility. The interface includes a Kanban-style task board, a workspace-aware file browser, and a chat system capable of rendering Mermaid diagrams and streaming logs. Users can manage skills, monitor system health, and ex",
   "url": "https://hermesatlas.com/projects/pyrate-llama/hermes-ui",
   "codeRepository": "https://github.com/pyrate-llama/hermes-ui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "pyrate-llama",
     "url": "https://github.com/pyrate-llama"
   },
-  "dateModified": "2026-05-06T09:21:20.000Z",
+  "dateModified": "2026-05-06T13:08:37.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 100
+    "userInteractionCount": 101
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,7 +112,7 @@
   <p class="project-desc">The command center for Hermes Agent — chat, steer, browse files, manage skills, and monitor everything from a single glassmorphic HTML app.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 100</span>
+    <span class="stars">★ 101</span>
     <span><span class="meta-label">lang</span>HTML</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes UI is a glassmorphic web interface that serves as a centralized command center for the self-hosted Hermes Agent. Built as a single-file React 18 application, it connects to the agent via a lightweight Python proxy server to provide real-time operational visibility. The interface features a multi-workspace environment with integrated file browsing, Kanban-style task tracking, and live log streaming. It also supports advanced interaction controls such as Mermaid diagram rendering, MCP tool management, and per-message model switching.</p>
+    <p class="summary-text">Hermes UI is a glassmorphic web interface that serves as a centralized command center for managing the self-hosted Hermes Agent. Built as a single-file React 18 application, it communicates with the agent via a lightweight Python proxy server to provide real-time operational visibility. The interface includes a Kanban-style task board, a workspace-aware file browser, and a chat system capable of rendering Mermaid diagrams and streaming logs. Users can manage skills, monitor system health, and execute scheduled cron jobs through a unified dashboard.</p>
     <ul class="summary-highlights">
-      <li>Single-file React application with real-time log and chat streaming</li>
-      <li>Integrated Kanban board for automatic task detection and tracking</li>
-      <li>Workspace management with folder picking and context-aware file browsing</li>
+      <li>Single-file React 18 application with a lightweight Python proxy server</li>
+      <li>Kanban-style task board for tracking active tool work and subagents</li>
+      <li>Integrated file browser and terminal for workspace-aware project management</li>
     </ul>
   </div>
 </section>
@@ -147,12 +147,14 @@
 <p><strong>English</strong> · <a href="https://github.com/pyrate-llama/hermes-ui/blob/main/README.zh-CN.md">简体中文</a></p>
 <p>The command center for <a href="https://github.com/pyrate-llama/hermes-agent">Hermes Agent</a> — chat, steer, browse files, manage skills, and monitor everything from a single glassmorphic HTML app.</p>
 <p>Built as a single-file HTML application with React 18, Hermes UI provides a full-featured chat interface, real-time log streaming, file browsing, memory inspection, and more — all through a lightweight Python proxy server.</p>
-<p><img src="https://img.shields.io/badge/version-3.3.1-ef4444?style=for-the-badge" alt="v3.3.1">
+<p><img src="https://img.shields.io/badge/version-3.3.2-ef4444?style=for-the-badge" alt="v3.3.2">
 <img src="https://img.shields.io/badge/architecture-single_file-44d88a?style=for-the-badge" alt="Single file HTML">
 <img src="https://img.shields.io/badge/react-18.2-61dafb?style=for-the-badge" alt="React 18"></p>
 <h4>Chat</h4>
 <p><img src="https://raw.githubusercontent.com/pyrate-llama/hermes-ui/main/screenshots/chat.png" alt="Chat with inline image generation and live terminal panel">
 <img src="https://raw.githubusercontent.com/pyrate-llama/hermes-ui/main/screenshots/chat-logs.png" alt="Chat with split log panel and streaming response visibility"></p>
+<h4>Tasks / Live Work</h4>
+<p><img src="https://raw.githubusercontent.com/pyrate-llama/hermes-ui/main/screenshots/tasks.png" alt="Tasks board showing active tool work and background follow-up tracking"></p>
 <h4>Dashboard</h4>
 <p><img src="https://raw.githubusercontent.com/pyrate-llama/hermes-ui/main/screenshots/dashboard.png" alt="Dashboard with live stats, recent activity, and installed skills"></p>
 <h4>Skills Browser</h4>
@@ -166,6 +168,14 @@
 <h4>Terminal</h4>
 <p><img src="https://raw.githubusercontent.com/pyrate-llama/hermes-ui/main/screenshots/terminal.png" alt="Built-in terminal area with Hermes and Claude Code tabs"></p>
 <hr>
+<h3>What&#39;s new in v3.3.2</h3>
+<p>Hermes UI 3.3.2 is a live-work reliability patch. It makes background/process work harder to miss, flags local-work claims when no tool ran, and keeps task status visible near the composer instead of letting it scroll away.</p>
+<p><strong>Live work visibility</strong></p>
+<ul>
+<li><strong>Composer work banner</strong> — active Hermes work and task follow-ups now stay visible directly above the message box with a quick Open Tasks action</li>
+<li><strong>Tool honesty guard</strong> — local file/process claims with no tool call are flagged in chat so users do not mistake narrated work for completed work</li>
+<li><strong>Tasks screenshot</strong> — README now shows the Tasks board and live work tracking flow</li>
+</ul>
 <h3>What&#39;s new in v3.3.1</h3>
 <p>Hermes UI 3.3.1 is a session-memory hotfix. It aligns the chat stream lifecycle more closely with Nesquena/Hermes WebUI so context compression and session rotation do not leave the visible UI chat attached to a stale shorter backend session.</p>
 <p><strong>Session durability hotfix</strong></p>
@@ -181,6 +191,8 @@
 <li><strong>Health screen</strong> — consolidated Hermes heartbeat, agent/model/provider status, Scrapling/web extraction status, and redacted recent log snippets</li>
 <li><strong>Recent log safety</strong> — logs shown in the UI are allowlisted and redacted so tokens and API keys do not leak into the app surface</li>
 <li><strong>Version/update awareness</strong> — Hermes UI and Hermes Agent update status stay visible in-app without taking over the main workspace</li>
+<li><strong>Background work monitor</strong> — active tools and &quot;check back later&quot; background work surface in Tasks and show a compact chat notice so users know where to continue</li>
+<li><strong>Tool honesty guard</strong> — local file/process claims with no tool call are flagged in chat so users do not mistake narrated work for completed work</li>
 </ul>
 <p><strong>Chat performance + usability</strong></p>
 <ul>
@@ -300,7 +312,7 @@
 <p><strong>Tasks / Kanban</strong></p>
 <ul>
 <li>Live board generated from existing Hermes chat signals, not a separate manual task database</li>
-<li>Tracks todos, delegated subagent work, active agent turns, blocked items, and completed work</li>
+<li>Tracks todos, delegated subagent work, active agent turns, running tool calls, background follow-ups, blocked items, and completed work</li>
 <li>Opens source chats from task cards so users can continue the original work</li>
 <li>Works with Hermes Agent v0.12.0 without depending on the upstream Kanban experiment that was reverted before the 0.12 stable release</li>
 </ul>
@@ -345,7 +357,8 @@
 <li>Search and browse all installed Hermes skills</li>
 <li>Sort by newest, oldest, or name — see what Hermes has been creating</li>
 <li>Relative timestamps on each skill (e.g. &quot;2h ago&quot;, &quot;3d ago&quot;)</li>
-<li>Edit and delete installed skills from the UI</li>
+<li>Edit installed skills from the UI</li>
+<li>Move skills to local trash instead of hard-deleting them, with restore controls in Skills Safety</li>
 <li>View skill descriptions, tags, and trigger phrases</li>
 </ul>
 <p><strong>Jobs Monitor</strong></p>
@@ -605,7 +618,7 @@ tailscale up
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/outsourc-e/hermes-workspace">
-        <div class="stars">★ 3.4K</div>
+        <div class="stars">★ 3.5K</div>
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
@@ -613,15 +626,15 @@ tailscale up
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
-        <div class="stars">★ 92</div>
+        <div class="stars">★ 93</div>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 61</div>
+        <div class="stars">★ 62</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 595</div>
+        <div class="stars">★ 604</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
@@ -629,7 +642,7 @@ tailscale up
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/nesquena/hermes-webui">
-        <div class="stars">★ 5.8K</div>
+        <div class="stars">★ 6.0K</div>
         <div class="name"><span class="org">nesquena /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/clawvader-tech/hermes-telegram-miniapp">
