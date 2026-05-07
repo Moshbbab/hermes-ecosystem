@@ -23,7 +23,10 @@ const OUT_DIR = path.join(ROOT, "research", "docs");
 
 const BASE = "https://hermes-agent.nousresearch.com";
 const START_PATHS = ["/docs"];
-const SKIP_PREFIXES = ["/docs/zh-Hans"];
+const SKIP_PREFIXES = [
+  "/docs/zh-Hans", // Chinese mirror — same content, redundant for KB
+  "/docs/assets/", // Docusaurus static assets (images, generated llms.txt, etc.)
+];
 const USER_AGENT = "HermesAtlasBot/1.0 (+https://hermesatlas.com)";
 
 const STRIP_SELECTORS = [
