@@ -19,6 +19,11 @@ const ROOT = path.resolve(__dirname, "..");
 const CHUNK_SIZE = 500; // target tokens (~4 chars per token)
 const CHUNK_CHARS = CHUNK_SIZE * 4;
 const OVERLAP_CHARS = 200;
+// Hard ceiling per chunk — text-embedding-3-small caps input at 8192 tokens
+// (~32k chars). The paragraph splitter doesn't break inside a single paragraph,
+// so a wall-of-links page (e.g. user-stories) can otherwise produce a 30k+
+// char chunk that crashes the embedding call.
+const MAX_CHUNK_CHARS = 6000;
 
 const API_KEY = process.env.OPENROUTER_API_KEY;
 if (!API_KEY) {
@@ -117,6 +122,38 @@ function* walkMarkdown(dir) {
   }
 }
 
+function pushChunk(chunks, source, heading, text) {
+  const trimmed = text.trim();
+  if (trimmed.length <= 50) return;
+  // Hard-split anything still oversized after paragraph splitting (mega
+  // paragraphs with no blank lines, e.g. wall-of-links pages).
+  for (const piece of hardSplitByLines(trimmed, MAX_CHUNK_CHARS)) {
+    chunks.push({
+      id: `${source}:${chunks.length}`,
+      text: piece.trim(),
+      source,
+      section: heading,
+    });
+  }
+}
+
+function hardSplitByLines(text, maxChars) {
+  if (text.length <= maxChars) return [text];
+  const pieces = [];
+  let i = 0;
+  while (i < text.length) {
+    let end = Math.min(i + maxChars, text.length);
+    if (end < text.length) {
+      // Prefer a line-break boundary in the back half of the window
+      const nl = text.lastIndexOf("\n", end);
+      if (nl > i + maxChars / 2) end = nl;
+    }
+    pieces.push(text.slice(i, end));
+    i = end;
+  }
+  return pieces;
+}
+
 function chunkText(text, source) {
   const chunks = [];
 
@@ -129,14 +166,7 @@ function chunkText(text, source) {
 
     // If section is small enough, keep as one chunk
     if (section.length <= CHUNK_CHARS) {
-      if (section.trim().length > 50) {
-        chunks.push({
-          id: `${source}:${chunks.length}`,
-          text: section.trim(),
-          source,
-          section: heading,
-        });
-      }
+      pushChunk(chunks, source, heading, section);
       continue;
     }
 
@@ -146,12 +176,7 @@ function chunkText(text, source) {
 
     for (const para of paragraphs) {
       if ((current + "\n\n" + para).length > CHUNK_CHARS && current.length > 50) {
-        chunks.push({
-          id: `${source}:${chunks.length}`,
-          text: current.trim(),
-          source,
-          section: heading,
-        });
+        pushChunk(chunks, source, heading, current);
         // Overlap: keep last portion
         current = current.slice(-OVERLAP_CHARS) + "\n\n" + para;
       } else {
@@ -159,14 +184,7 @@ function chunkText(text, source) {
       }
     }
 
-    if (current.trim().length > 50) {
-      chunks.push({
-        id: `${source}:${chunks.length}`,
-        text: current.trim(),
-        source,
-        section: heading,
-      });
-    }
+    pushChunk(chunks, source, heading, current);
   }
 
   return chunks;
