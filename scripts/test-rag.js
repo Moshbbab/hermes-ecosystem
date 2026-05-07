@@ -248,11 +248,13 @@ function cosineSimilarity(a, b) {
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-async function getEmbedding(text) {
+async function getEmbedding(text, corpusDim) {
+  const body = { model: "openai/text-embedding-3-small", input: [text] };
+  if (corpusDim && corpusDim !== 1536) body.dimensions = corpusDim;
   const res = await fetch("https://openrouter.ai/api/v1/embeddings", {
     method: "POST",
     headers: { Authorization: `Bearer ${OPENROUTER_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "openai/text-embedding-3-small", input: [text] }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) throw new Error(`Embedding error: ${res.status}`);
   const data = await res.json();
@@ -389,7 +391,7 @@ async function runRetrievalTests() {
     console.log(`TEST: ${test.name}`);
     console.log(`  Query: "${test.query}"`);
 
-    const queryEmbedding = await getEmbedding(test.query);
+    const queryEmbedding = await getEmbedding(test.query, chunks[0]?.embedding?.length);
 
     // Baseline: cosine only
     const cosineResults = cosineOnlyRetrieve(queryEmbedding, chunks, 3);
@@ -561,7 +563,7 @@ async function runMmrTests() {
     console.log(`TEST: ${test.name}`);
     console.log(`  Query: "${test.query}"`);
 
-    const queryEmbedding = await getEmbedding(test.query);
+    const queryEmbedding = await getEmbedding(test.query, chunks[0]?.embedding?.length);
 
     // Baseline: hybrid without MMR (top 8 by score)
     const baselineResults = hybridRetrieve(test.query, queryEmbedding, chunks, bm25Index, 8);

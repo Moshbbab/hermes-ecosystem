@@ -24,6 +24,15 @@ const OVERLAP_CHARS = 200;
 // so a wall-of-links page (e.g. user-stories) can otherwise produce a 30k+
 // char chunk that crashes the embedding call.
 const MAX_CHUNK_CHARS = 6000;
+// Embedding dimensions. Default for text-embedding-3-small is 1536, but the
+// model supports truncation via `dimensions`. At ~5k chunks, 1536-dim vectors
+// blow chunks.json past GitHub's 100MB file limit (147MB observed). 512-dim
+// is ~33% the size and OpenAI's own benchmarks show v3-small at 512 dims
+// still beats v2 at full 1536 dims — quality cost is minimal.
+// Query side (api/chat.js, scripts/test-rag.js) reads this dim from the
+// loaded chunks at runtime, so changing it here propagates after the next
+// rebuild lands.
+const EMBED_DIMENSIONS = 512;
 
 const API_KEY = process.env.OPENROUTER_API_KEY;
 if (!API_KEY) {
@@ -209,6 +218,7 @@ async function getEmbeddings(texts) {
         body: JSON.stringify({
           model: "openai/text-embedding-3-small",
           input: texts,
+          dimensions: EMBED_DIMENSIONS,
         }),
       });
 

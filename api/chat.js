@@ -649,16 +649,25 @@ Rewritten:`;
 }
 
 async function getEmbedding(text) {
+  // Match the corpus dim. build-chunks.js may emit reduced-dim vectors
+  // (e.g. 512) to keep chunks.json under GitHub's 100MB limit. Reading the
+  // dim from the loaded corpus means there's never a query/corpus mismatch
+  // during a dim-change rollout — old chunks.json keeps working with old
+  // dim until the new chunks.json lands.
+  const corpusDim = chunks?.[0]?.embedding?.length;
+  const body = {
+    model: "openai/text-embedding-3-small",
+    input: [text],
+  };
+  if (corpusDim && corpusDim !== 1536) body.dimensions = corpusDim;
+
   const res = await fetch("https://openrouter.ai/api/v1/embeddings", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${OPENROUTER_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      model: "openai/text-embedding-3-small",
-      input: [text],
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) throw new Error(`Embedding error: ${res.status}`);
