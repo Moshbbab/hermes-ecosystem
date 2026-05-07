@@ -173,25 +173,68 @@ function chunkText(text, source) {
 }
 
 async function getEmbeddings(texts) {
-  const res = await fetch("https://openrouter.ai/api/v1/embeddings", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "openai/text-embedding-3-small",
-      input: texts,
-    }),
-  });
+  // Retry transient failures: HTTP 429/5xx, network errors, and 200-OK
+  // responses where the body shape is unexpected (OpenRouter occasionally
+  // returns errors as 200 with `{error: ...}` instead of `{data: [...]}`).
+  // A single batch failure used to crash the whole rebuild — across thousands
+  // of chunks that's a near-guaranteed loss.
+  const maxAttempts = 5;
+  let lastErr;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch("https://openrouter.ai/api/v1/embeddings", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "openai/text-embedding-3-small",
+          input: texts,
+        }),
+      });
 
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Embedding API error ${res.status}: ${err}`);
+      if (!res.ok) {
+        const errBody = await res.text();
+        const retriable = [408, 429, 500, 502, 503, 504].includes(res.status);
+        if (retriable && attempt < maxAttempts) {
+          lastErr = `HTTP ${res.status}: ${errBody.slice(0, 200)}`;
+          await sleep(backoffMs(attempt));
+          continue;
+        }
+        throw new Error(`Embedding API ${res.status}: ${errBody.slice(0, 500)}`);
+      }
+
+      const data = await res.json();
+      if (!data || !Array.isArray(data.data)) {
+        const preview = JSON.stringify(data).slice(0, 300);
+        if (attempt < maxAttempts) {
+          lastErr = `malformed response: ${preview}`;
+          await sleep(backoffMs(attempt));
+          continue;
+        }
+        throw new Error(`Embedding response missing .data array: ${preview}`);
+      }
+
+      return data.data.map((d) => d.embedding);
+    } catch (e) {
+      lastErr = e.message;
+      if (attempt === maxAttempts) throw e;
+      await sleep(backoffMs(attempt));
+    }
   }
+  throw new Error(`Embedding failed after ${maxAttempts} attempts: ${lastErr}`);
+}
 
-  const data = await res.json();
-  return data.data.map(d => d.embedding);
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+function backoffMs(attempt) {
+  // 1s, 2s, 4s, 8s with ±25% jitter
+  const base = 1000 * Math.pow(2, attempt - 1);
+  const jitter = base * 0.25 * (Math.random() * 2 - 1);
+  return Math.round(base + jitter);
 }
 
 main().catch(err => {
