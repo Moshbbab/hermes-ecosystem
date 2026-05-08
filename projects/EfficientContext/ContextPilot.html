@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/EfficientContext/ContextPilot#software",
   "name": "ContextPilot",
-  "description": "ContextPilot is an inference optimization layer designed to accelerate long-context LLM workloads by maximizing KV cache reuse. It utilizes a Context Index to identify overlapping data across requests, reordering and deduplicating context blocks to align shared content into common prefixes. This approach reduces redundant computation and token usage without compromising reasoning quality. The system integrates as a drop-in solution for vLLM, SGLang, llama.cpp, and various agentic frameworks like",
+  "description": "ContextPilot is an optimization engine designed to accelerate long-context LLM inference by maximizing KV cache reuse. It functions by maintaining a context index that reorders and deduplicates overlapping context blocks into shared prefixes before they reach the inference engine. This approach reduces redundant token computation and lowers prefill latency without compromising reasoning accuracy. The project provides native plugins for Hermes Agent and OpenClaw, and supports backends like vLLM, ",
   "url": "https://hermesatlas.com/projects/EfficientContext/ContextPilot",
   "codeRepository": "https://github.com/EfficientContext/ContextPilot",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "EfficientContext",
     "url": "https://github.com/EfficientContext"
   },
-  "dateModified": "2026-05-05T13:16:08.000Z",
+  "dateModified": "2026-05-07T15:46:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-05-05</span>
+    <span><span class="meta-label">updated</span>2026-05-07</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ContextPilot is an inference optimization layer designed to accelerate long-context LLM workloads by maximizing KV cache reuse. It utilizes a Context Index to identify overlapping data across requests, reordering and deduplicating context blocks to align shared content into common prefixes. This approach reduces redundant computation and token usage without compromising reasoning quality. The system integrates as a drop-in solution for vLLM, SGLang, llama.cpp, and various agentic frameworks like OpenClaw and Mem0.</p>
+    <p class="summary-text">ContextPilot is an optimization engine designed to accelerate long-context LLM inference by maximizing KV cache reuse. It functions by maintaining a context index that reorders and deduplicates overlapping context blocks into shared prefixes before they reach the inference engine. This approach reduces redundant token computation and lowers prefill latency without compromising reasoning accuracy. The project provides native plugins for Hermes Agent and OpenClaw, and supports backends like vLLM, SGLang, and llama.cpp.</p>
     <ul class="summary-highlights">
-      <li>Optimizes prefix reuse via context reordering and deduplication</li>
-      <li>Reduces prompt tokens by up to 36% in agentic workloads</li>
-      <li>Supports vLLM, SGLang, llama.cpp, and major cloud LLM APIs</li>
+      <li>Boosts cache hits and prefill speeds via prefix reordering.</li>
+      <li>Reduces input token usage by deduplicating redundant context blocks.</li>
+      <li>Native integration with Hermes Agent, OpenClaw, and vLLM.</li>
     </ul>
   </div>
 </section>
@@ -159,6 +159,7 @@
 <p>| <a href="https://efficientcontext.github.io/contextpilot-docs/"><strong>Documentation</strong></a> | <a href="examples/"><strong>Examples</strong></a> | <a href="https://efficientcontext.github.io/contextpilot-docs/reference/benchmarks"><strong>Benchmarks</strong></a> | <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/docker"><strong>Docker</strong></a> | <a href="https://arxiv.org/abs/2511.03475"><strong>Paper</strong></a> |</p>
 <h3>News</h3>
 <ul>
+<li>[2026/05] Supports <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> as a native context engine plugin — <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/hermes.md">guide</a></li>
 <li>[2026/03] Supports <a href="https://openclaw.ai">OpenClaw</a> — <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">guide</a> | <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/benchmarks/openclaw.md">benchmark</a></li>
 <li>[2026/03] Supports cloud APIs (OpenAI, Anthropic, MiniMax) — <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/cache_sync.md">cache sync</a></li>
 <li>[2026/03] ContextPilot now can run on <strong>macOS / Apple Silicon</strong> via <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/mac_llama_cpp.md">llama.cpp</a>.</li>
@@ -170,7 +171,7 @@
 <p>ContextPilot sits between context assembly and inference to maximize prefix reuse and remove duplicates:</p>
 <ol>
 <li><strong>Higher throughput &amp; cache hits</strong> — boosts prefill throughput and prefix cache hit ratio via context reuse.  </li>
-<li><strong>Drop-in solutions</strong> — supports <a href="https://openclaw.ai">OpenClaw</a> (<a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">guide</a>), <a href="https://github.com/VectifyAI/PageIndex">PageIndex</a>, <a href="https://github.com/mem0ai/mem0">Mem0</a>, <a href="https://github.com/LMCache/LMCache">LMCache</a>, <a href="https://github.com/vllm-project/vllm">vLLM</a>, <a href="https://github.com/sgl-project/sglang">SGLang</a>, <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/mac_llama_cpp.md">llama.cpp</a>, and cloud APIs (OpenAI, Anthropic).</li>
+<li><strong>Drop-in solutions</strong> — supports <a href="https://openclaw.ai">OpenClaw</a> (<a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">guide</a>), <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> (<a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/hermes.md">guide</a>), <a href="https://github.com/VectifyAI/PageIndex">PageIndex</a>, <a href="https://github.com/mem0ai/mem0">Mem0</a>, <a href="https://github.com/LMCache/LMCache">LMCache</a>, <a href="https://github.com/vllm-project/vllm">vLLM</a>, <a href="https://github.com/sgl-project/sglang">SGLang</a>, <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/mac_llama_cpp.md">llama.cpp</a>, and cloud APIs (OpenAI, Anthropic).</li>
 <li><strong>No compromise in reasoning quality</strong> — can even improve with extremely long contexts.</li>
 <li><strong>Widely tested</strong> — validated across diverse RAG and agentic workloads.</li>
 </ol>
@@ -320,6 +321,13 @@ python -m contextpilot.server.http_server \
 </code></pre>
 <p>Then set OpenClaw&#39;s base URL to <code>http://localhost:8765/v1</code>. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">full OpenClaw integration guide</a> for details.</p>
 <hr>
+<h4>Hermes Agent</h4>
+<p>Native plugin — zero Hermes source changes, zero external dependencies:</p>
+<pre><code class="language-bash">hermes plugins install EfficientContext/ContextPilot
+hermes plugins   # select: Context Engine → contextpilot
+</code></pre>
+<p>Typical savings: <strong>40–50% input tokens</strong> on agentic workloads with repeated file reads. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/hermes.md">Hermes integration guide</a> for details.</p>
+<hr>
 <h4>vLLM / SGLang</h4>
 <p><strong>From PyPI</strong> — the vLLM and SGLang hooks are installed automatically:</p>
 <pre><code class="language-bash">pip install contextpilot          # CPU index computation
@@ -459,27 +467,27 @@ for resp, idx in zip(asyncio.run(generate_all()), order):
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 55.0K</div>
+        <div class="stars">★ 55.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 12.5K</div>
+        <div class="stars">★ 12.6K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 971</div>
+        <div class="stars">★ 973</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 212</div>
+        <div class="stars">★ 216</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 155</div>
+        <div class="stars">★ 156</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 63</div>
+        <div class="stars">★ 67</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -487,7 +495,7 @@ for resp, idx in zip(asyncio.run(generate_all()), order):
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 13.5K</div>
+        <div class="stars">★ 13.7K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

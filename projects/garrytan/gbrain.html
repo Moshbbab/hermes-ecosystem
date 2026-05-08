@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a persistent memory and knowledge graph system designed to prevent AI agents from losing context over time. It utilizes a self-wiring graph architecture that automatically extracts entity references and typed links from ingested data without requiring additional LLM calls. The system features hybrid search, backlink-boosted ranking, and a structured timeline to manage thousands of pages, people, and companies. It integrates with agent platforms like Hermes Agent and OpenClaw via MCP, p",
+  "description": "GBrain is a memory and context management system designed to provide AI agents with long-term persistence and structured knowledge. It utilizes a self-wiring knowledge graph and hybrid search to link entities like people and companies without requiring additional LLM calls. The system supports automated ingestion of diverse data types and offers specialized evaluation tools for measuring retrieval performance. It can be deployed as a standalone CLI, an MCP server, or a remote OAuth 2.1-protected",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-05-07T04:28:35.000Z",
+  "dateModified": "2026-05-08T06:07:00.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 13525
+    "userInteractionCount": 13693
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 13.5K</span>
+    <span class="stars">★ 13.7K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-07</span>
+    <span><span class="meta-label">updated</span>2026-05-08</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a persistent memory and knowledge graph system designed to prevent AI agents from losing context over time. It utilizes a self-wiring graph architecture that automatically extracts entity references and typed links from ingested data without requiring additional LLM calls. The system features hybrid search, backlink-boosted ranking, and a structured timeline to manage thousands of pages, people, and companies. It integrates with agent platforms like Hermes Agent and OpenClaw via MCP, providing over 30 specialized tools for autonomous memory consolidation and retrieval.</p>
+    <p class="summary-text">GBrain is a memory and context management system designed to provide AI agents with long-term persistence and structured knowledge. It utilizes a self-wiring knowledge graph and hybrid search to link entities like people and companies without requiring additional LLM calls. The system supports automated ingestion of diverse data types and offers specialized evaluation tools for measuring retrieval performance. It can be deployed as a standalone CLI, an MCP server, or a remote OAuth 2.1-protected service.</p>
     <ul class="summary-highlights">
-      <li>Self-wiring knowledge graph with automated entity and relationship extraction</li>
-      <li>Hybrid search combining vector retrieval with graph-based ranking</li>
-      <li>Exposes 30+ MCP tools for Claude Code, Cursor, and Hermes</li>
+      <li>Self-wiring knowledge graph with typed entity links</li>
+      <li>Hybrid search combining vector and graph-based retrieval</li>
+      <li>Supports MCP, CLI, and OAuth 2.1 remote connections</li>
     </ul>
   </div>
 </section>
@@ -149,6 +149,7 @@
 <p>The brain wires itself. Every page write extracts entity references and creates typed links (<code>attended</code>, <code>works_at</code>, <code>invested_in</code>, <code>founded</code>, <code>advises</code>) with zero LLM calls. Hybrid search. Self-wiring knowledge graph. Structured timeline. Backlink-boosted ranking. Ask &quot;who works at Acme AI?&quot; or &quot;what did Bob invest in this quarter?&quot; and get answers vector search alone can&#39;t reach. Benchmarked side-by-side against the category: gbrain lands <strong>P@5 49.1%, R@5 97.9%</strong> on a 240-page Opus-generated rich-prose corpus, beating its own graph-disabled variant by <strong>+31.4 points P@5</strong> and ripgrep-BM25 + vector-only RAG by a similar margin. The graph layer plus v0.12 extract quality together carry the gap. Full BrainBench scorecards + corpus live in the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> repo.</p>
 <p>GBrain is those patterns, generalized. 34 skills. Install in 30 minutes. Your agent does the work. As Garry&#39;s personal agent gets smarter, so does yours.</p>
 <p><strong>New in v0.25.0 — BrainBench-Real (session capture, contributor opt-in):</strong> with <code>GBRAIN_CONTRIBUTOR_MODE=1</code> set in your shell, every real <code>query</code> + <code>search</code> call through MCP, CLI, or the subagent tool-bridge gets captured (PII-scrubbed) into an <code>eval_candidates</code> table. Snapshot with <code>gbrain eval export</code>, replay against your code change with <code>gbrain eval replay</code>. Three numbers come back: mean Jaccard@k between captured and current retrieved slugs, top-1 stability, and latency Δ. <strong>Off by default</strong> for production users — no surprise data accumulation. Walkthrough: <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval-bench.md">docs/eval-bench.md</a>. NDJSON wire format: <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval-capture.md">docs/eval-capture.md</a>.</p>
+<p><strong>New in v0.28.8 — LongMemEval in the box:</strong> <code>gbrain eval longmemeval &lt;dataset.jsonl&gt;</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against gbrain&#39;s hybrid retrieval. One in-memory PGLite per run, <code>TRUNCATE</code> between questions (runtime-enumerated tables, schema-migration-safe), 25.9ms p50 per question on Apple Silicon. Your <code>~/.gbrain</code> brain is never touched. Retrieved chat content is sanitized with the same <code>INJECTION_PATTERNS</code> that protect takes — one source of truth for prompt-injection defense. Hand the JSONL output to LongMemEval&#39;s <code>evaluate_qa.py</code> to score.</p>
 <blockquote>
 <p><strong>~30 minutes to a fully working brain.</strong> Database ready in 2 seconds (PGLite, no server). You just answer questions about API keys.</p>
 </blockquote>
@@ -722,6 +723,7 @@ repopulates missing files from the database (container restart, fresh clone, acc
 └──────────────────┘    └───────────────┘    └──────────────────┘
 </code></pre>
 <p>The repo is the system of record. GBrain is the retrieval layer. The agent reads and writes through both. Human always wins... edit any markdown file and <code>gbrain sync</code> picks up the changes.</p>
+<p>For multi-machine setups (cross-machine thin client) and multi-worktree setups (per-worktree code engine + shared remote artifacts), see <a href="https://github.com/garrytan/gbrain/blob/main/docs/architecture/topologies.md"><code>docs/architecture/topologies.md</code></a>.</p>
 <h3>The Knowledge Model</h3>
 <p>Every page follows the compiled truth + timeline pattern:</p>
 <pre><code class="language-markdown">---
@@ -956,6 +958,15 @@ SKILLS (v0.19)
                                         SKILLIFY_STUB). Accepts RESOLVER.md OR AGENTS.md.
   gbrain routing-eval [--llm] [--json]  Intent→skill routing accuracy on fixtures
 
+EVAL
+  gbrain eval --qrels &lt;path&gt;            Legacy IR-eval (P@k, R@k, MRR, nDCG@k against ground truth)
+  gbrain eval export [--since DUR]      Stream captured eval_candidates as NDJSON (BrainBench-Real)
+  gbrain eval prune --older-than DUR    Retention cleanup for eval_candidates (requires window)
+  gbrain eval replay --against FILE     Replay captured queries vs current build (Jaccard@k, top-1, latency Δ)
+  gbrain eval longmemeval &lt;dataset&gt;     Run public LongMemEval against gbrain hybrid retrieval (v0.28.8)
+                                        [--limit N] [--retrieval-only] [--keyword-only] [--expansion]
+                                        [--top-k K] [--model M] [--output FILE]
+
 ADMIN
   gbrain doctor [--json] [--fast]       Health checks (resolver, skills, DB, embeddings)
   gbrain doctor --fix [--dry-run]       Auto-fix DRY violations (delegate inlined rules to conventions)
@@ -1002,29 +1013,8 @@ ADMIN
 <p><strong>For agents:</strong></p>
 <ul>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md">skills/RESOLVER.md</a></strong> ... Start here. The skill dispatcher.</li>
-<li><a href="skills/">Individual skill files</a> ... 28 standalone instruction sets (25 ship in the curated <code>gbrain skillpack install</code> bundle)</li>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/GBRAIN_SKILLPACK.md">GBRAIN_SKILLPACK.md</a> ... Legacy reference architecture</li>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/README.md">Getting Data In</a> ... Integration recipes and data flow</li>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/GBRAIN_VERIFY.md">GBRAIN_VERIFY.md</a> ... Installation verification</li>
+<li><a href="skills/">Individual skill files</a> ...</li>
 </ul>
-<p><strong>For humans:</strong></p>
-<ul>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/GBRAIN_RECOMMENDED_SCHEMA.md">GBRAIN_RECOMMENDED_SCHEMA.md</a> ... Brain repo directory structure</li>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/ethos/THIN_HARNESS_FAT_SKILLS.md">Thin Harness, Fat Skills</a> ... Architecture philosophy</li>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/ENGINES.md">ENGINES.md</a> ... Pluggable engine interface</li>
-</ul>
-<p><strong>Reference:</strong></p>
-<ul>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/GBRAIN_V0.md">GBRAIN_V0.md</a> ... Full product spec</li>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/CHANGELOG.md">CHANGELOG.md</a> ... Version history</li>
-</ul>
-<p><strong>Benchmarks:</strong></p>
-<ul>
-<li><a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> ... BrainBench, the sibling repo that holds the eval harness, corpus, scorecards, and 4-adapter comparisons. Depends on gbrain; not installed alongside gbrain.</li>
-</ul>
-<h3>Contributing</h3>
-<p>See <a href="https://github.com/garrytan/gbrain/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>. Run <code>bun run test</code> for the parallel unit-test fast loop (~85s on a Mac dev box, 3700+ tests) or <code>bun run verify</code> for the pre-push gate (privacy + jsonb + progress + test-isolation + wasm + admin-build + typecheck). For the full local CI gate (gitleaks + unit + all 29 E2E files in Docker, the same checks GH Actions runs), use <code>bun run ci:local</code> ... or <code>bun run ci:local:diff</code> for the diff-aware subset during fast iteration.</p>
-<p>If you&#39;re working on retrieval or any of the search/embedding/rankin</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
@@ -1039,27 +1029,27 @@ ADMIN
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 55.0K</div>
+        <div class="stars">★ 55.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 12.5K</div>
+        <div class="stars">★ 12.6K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 971</div>
+        <div class="stars">★ 973</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 212</div>
+        <div class="stars">★ 216</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 155</div>
+        <div class="stars">★ 156</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 63</div>
+        <div class="stars">★ 67</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -1067,7 +1057,7 @@ ADMIN
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 421</div>
+        <div class="stars">★ 438</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>
