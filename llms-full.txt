@@ -1980,12 +1980,12 @@ Category: Multi-Agent & Orchestration
 Stars: 285
 Build autonomous AI agent swarms with orchestration, skills, and multiple model providers
 
-SwarmClaw is a self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It functions as a multi-agent dashboard where users can manage delegation, durable memory, and scheduled tasks across more than 23 LLM providers. The platform enables agents to learn new skills from conversation history and integrates with external tools via the Model Context Protocol (MCP). It supports diverse execution environments including local CLI backends, Docker sandboxes, and OpenClaw gateways.
+SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for building and managing autonomous swarms. It utilizes an orchestration layer that supports delegation, durable memory, and scheduled heartbeats across more than 23 LLM providers. The platform enables agents to learn new skills from reviewed conversations and integrates with MCP tools for expanded functionality. Users can monitor live agent activity through a visual organizational chart and manage workflows via a dedicated dashboard or CLI.
 
 Highlights:
-- Orchestrates multi-agent swarms with delegation and visual org charts
-- Supports 23+ providers including Hermes, Ollama, and OpenRouter
-- Features durable agent memory and conversation-to-skill learning
+- Supports 23+ LLM providers including Hermes, OpenAI, and Ollama.
+- Features durable agent memory and conversation-to-skill learning capabilities.
+- Orchestrates multi-agent swarms with delegation and visual org charts.
 
 ---
 
@@ -2082,11 +2082,11 @@ Category: Memory & Context
 Stars: 178
 Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message
 
-Hermes-LCM is a context management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts old messages into depth-aware summary nodes. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into raw message data stored in a local SQLite database. By integrating recall directly into the context engine, it ensures that specific details remain accessible even after multiple rounds of compaction.
+Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes while persisting raw data in a local SQLite store. This architecture allows the agent to maintain a bounded active context window without permanently discarding details. Agents can use specialized tools to drill back into specific compacted material, ensuring precise retrieval of historical data through source-aware lineage filtering.
 
 Highlights:
 - Hierarchical DAG structure for depth-aware context compaction
-- SQLite-backed message store for persistent raw history retrieval
+- SQLite message store for persistent raw conversation history
 - Agent tools for grepping, describing, and expanding compacted context
 
 ---
@@ -2201,12 +2201,12 @@ Category: Memory & Context
 Stars: 86
 On-device memory and context engine for agents — local-first, no cloud dependencies
 
-ClawMem is a local-first memory and context engine designed to provide persistent knowledge across different AI agent runtimes. It utilizes a hybrid architecture combining vector search, BM25 retrieval, and multi-graph traversal to surface relevant project history and decisions. The system automatically captures session milestones and manages document lifecycles through a local SQLite vault without cloud dependencies. It integrates directly with Claude Code, OpenClaw, and Hermes agents to ensure a unified memory layer across diverse development tools.
+ClawMem is a local-first memory and context engine that provides AI agents with persistent, on-device knowledge. It utilizes a hybrid architecture combining multi-signal retrieval, intent classification, and multi-graph traversal to surface relevant context from markdown notes and session transcripts. The system integrates with Claude Code, OpenClaw, and Hermes agents via a shared SQLite vault. It enables agents to capture decisions, generate session handoffs, and maintain a self-evolving memory layer without cloud dependencies.
 
 Highlights:
-- Hybrid retrieval using vector search, BM25, and causal graph traversal
-- Local-only execution with no API keys or cloud dependencies
-- Cross-runtime memory sharing for Claude Code, OpenClaw, and Hermes
+- Local-first architecture with no API keys or cloud dependencies
+- Hybrid retrieval using BM25, vector search, and knowledge graphs
+- Integrates via MCP server, Claude Code hooks, and agent plugins
 
 ---
 
@@ -2218,12 +2218,12 @@ Category: Skills & Skill Registries
 Stars: 85
 Oracle network and smart contract interaction skills (agentskills.io spec)
 
-Chainlink Agent Skills is a collection of standardized tools that enable AI agents to interact with Chainlink's oracle network and smart contract infrastructure. The project implements the Agent Skills specification, allowing developers to add specific capabilities to their agents via a CLI-based installation process. These skills facilitate complex tasks such as cross-chain transfers via CCIP, data feed integration, and real-time data stream processing. The repository also includes local evaluation frameworks for A/B testing skill performance and refining agent responses.
+Chainlink Agent Skills is a collection of standardized coding tools designed to help AI agents interact with Chainlink's oracle network and smart contract infrastructure. The project implements the Agent Skills specification, allowing agents to discover and execute specific functions via a unified CLI-based installation process. These skills enable agents to perform complex tasks such as managing cross-chain transfers via CCIP, integrating verifiable randomness with VRF, and accessing real-time market data through Data Feeds and Streams. Developers can use these tools to automate the creation of tokenized funds, cross-chain settlement systems, and on-chain asset verification workflows.
 
 Highlights:
-- Standardized skills for CCIP, Data Feeds, and Data Streams integration
-- CLI-based installation compatible with the open skills ecosystem
-- Local A/B testing framework for evaluating and improving agent responses
+- Standardized skills for CCIP, VRF, and Data Feeds integration
+- Compatible with the agentskills.io specification for agent discovery
+- Supports automated CRE onboarding and runtime operations management
 
 ---
 
@@ -2558,12 +2558,12 @@ Category: Memory & Context
 Stars: 29
 The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents
 
-Mnemosyne is a local-first memory system designed to provide persistent storage for Hermes Agents without relying on cloud services. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge entirely on-device. The system features a three-tier architecture—working, episodic, and scratchpad—to handle different memory scales and temporal knowledge. By running in-process, it eliminates network latency and API costs while ensuring data privacy and offline functionality.
+Mnemosyne is a local-first memory system designed to provide persistent storage for Hermes Agents without relying on cloud services. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge entirely on-device. The system features a three-tier architecture—working, episodic, and scratchpad—to handle different memory scales and temporal knowledge. It integrates as a native Hermes plugin and supports importing data from several other memory providers like Mem0 and Zep.
 
 Highlights:
-- Zero-dependency SQLite backend with native vector and full-text search
-- Sub-millisecond read and write latency for local-first performance
-- Native Hermes Agent integration with automated episodic memory consolidation
+- Local-first SQLite storage with native vector and full-text search
+- Sub-millisecond latency for read, write, and search operations
+- Zero-dependency architecture requiring no API keys or external databases
 
 ---
 
@@ -2609,12 +2609,12 @@ Category: Skills & Skill Registries
 Stars: 25
 Harness for long-running AI agents — structured memory, cross-feature learning, plan-approve-execute
 
-Maestro is a local-first conductor for multi-agent software engineering that manages shared state across separate agent sessions without requiring a server or database. It operates by persisting missions, features, and memory directly to the local filesystem in a structured directory, allowing a human operator to coordinate multiple terminal-based agents. The system enables complex workflows through plan-approve-execute cycles, automated handoff briefs, and cross-feature learning. It integrates with agents like Hermes, Codex, and Claude to maintain project context and validation assertions across long-running tasks.
+Maestro is a local-first orchestration tool designed to manage state and coordination for long-running multi-agent software engineering tasks. It operates by persisting mission data, milestones, and feature assertions directly to the local filesystem in a structured directory, eliminating the need for external databases or servers. This approach allows human operators to coordinate multiple agent sessions across different terminals while maintaining a consistent, inspectable history of progress and learnings. The system supports native handoffs to models like Hermes and Claude, enabling fresh agent runs to resume work with full project context and specific behavioral principles.
 
 Highlights:
-- Persists shared agent state locally in a disciplined on-disk model.
-- Coordinates multi-step missions with milestones, assertions, and validation gates.
-- Generates markdown handoff briefs to launch fresh agent sessions.
+- Stores mission state and memory locally in the .maestro directory
+- Facilitates multi-agent collaboration via structured handoffs and markdown briefs
+- Provides a read-only TUI dashboard for real-time mission tracking
 
 ---
 
