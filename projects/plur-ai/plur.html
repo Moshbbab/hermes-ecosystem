@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first persistent memory layer designed to synchronize AI agent preferences, corrections, and conventions across different tools and sessions. It stores knowledge as plain YAML \"engrams\" on disk, using an ACT-R activation model to strengthen relevant facts while allowing stale information to naturally decay. The system employs a hybrid local search combining BM25 and BGE embeddings to inject context into agent prompts without external API calls. It integrates directly with tools l",
+  "description": "PLUR is a persistent, local-first memory layer designed to synchronize agent corrections, preferences, and conventions across different tools and sessions. It stores knowledge as plain YAML \"engrams\" on disk and uses a hybrid BM25 and embedding-based retrieval system to inject relevant context into agent prompts. The system employs an ACT-R activation model where facts strengthen with use and naturally decay over time to prevent context clutter. It integrates directly with MCP-compatible tools, ",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-05-07T12:36:24.000Z",
+  "dateModified": "2026-05-11T07:31:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 70
+    "userInteractionCount": 72
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Shared memory for AI agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 70</span>
+    <span class="stars">★ 72</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-05-07</span>
+    <span><span class="meta-label">updated</span>2026-05-11</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first persistent memory layer designed to synchronize AI agent preferences, corrections, and conventions across different tools and sessions. It stores knowledge as plain YAML &quot;engrams&quot; on disk, using an ACT-R activation model to strengthen relevant facts while allowing stale information to naturally decay. The system employs a hybrid local search combining BM25 and BGE embeddings to inject context into agent prompts without external API calls. It integrates directly with tools like Claude Code, Cursor, and Hermes Agent to automate the capture and recall of project-specific rules.</p>
+    <p class="summary-text">PLUR is a persistent, local-first memory layer designed to synchronize agent corrections, preferences, and conventions across different tools and sessions. It stores knowledge as plain YAML &quot;engrams&quot; on disk and uses a hybrid BM25 and embedding-based retrieval system to inject relevant context into agent prompts. The system employs an ACT-R activation model where facts strengthen with use and naturally decay over time to prevent context clutter. It integrates directly with MCP-compatible tools, Claude Code, and Hermes Agent to automate the capture and recall of project-specific knowledge.</p>
     <ul class="summary-highlights">
-      <li>Stores memory locally as open-format YAML engrams</li>
-      <li>Uses hybrid BM25 and embedding search with zero API costs</li>
-      <li>Automates memory injection for Hermes, Claude Code, and Cursor</li>
+      <li>Stores memory locally as open-format YAML engrams with zero API costs</li>
+      <li>Uses ACT-R activation to strengthen relevant facts and decay stale ones</li>
+      <li>Provides MCP tools for automated learning and hybrid context injection</li>
     </ul>
   </div>
 </section>
@@ -149,7 +149,7 @@
 <h3>The idea</h3>
 <p>You correct your agent&#39;s coding style on Monday. On Tuesday, it makes the same mistake. You explain your architecture in Cursor. That night, Claude Code has no idea.</p>
 <p>PLUR fixes this. Install it once, and corrections, preferences, and conventions persist — across sessions, tools, and machines. Your memory is stored as plain YAML on your disk. No cloud, no API calls, no black box.</p>
-<p>The interesting part: <strong>Haiku with PLUR memory outperforms Opus without it</strong> — 2.6x better on tool routing, at roughly 10x less cost. Turns out the bottleneck isn&#39;t model intelligence. It&#39;s context.</p>
+<p>The interesting part: in our tool-routing and local-knowledge benchmark, <strong>Haiku with PLUR memory outperformed Opus without it</strong> — 2.6x better on tool routing, at roughly 10x less cost. Turns out the bottleneck isn&#39;t model intelligence. It&#39;s context.</p>
 <h3>Install</h3>
 <h4>Tell your agent</h4>
 <p>Go to <a href="https://plur.ai">plur.ai</a> and tell your agent to install memory for your tool — Claude Code, Cursor, Windsurf, or OpenClaw. The site has the right config for your setup.</p>
@@ -160,12 +160,9 @@
 <p>This creates <code>~/.plur/</code> for storage, adds PLUR to your <code>.mcp.json</code>, and installs Claude Code hooks for automatic engram injection. PLUR is installed <strong>globally</strong> — one MCP server, one store, available in every project. You only run init once.</p>
 <p>For <strong>multi-project setups</strong>, use domain/scope to separate knowledge:</p>
 <pre><code class="language-bash">cd ~/projects/my-app
-npx @plur-ai/cli@0.9.1 init --domain myapp --scope project:my-app
+npx @plur-ai/cli@0.9.4 init --domain myapp --scope project:my-app
 </code></pre>
 <p>This creates a <code>.plur.yaml</code> in the project with defaults that hooks apply automatically. Engrams learned in that project are tagged; recall filters by scope but always includes global knowledge.</p>
-<blockquote>
-<p>Pin to <code>@0.9.1</code> — the <code>0.9.2</code> latest tag on npm is bricked (<code>Dynamic require of &quot;os&quot; is not supported</code>). Tracking in <a href="https://github.com/plur-ai/plur/issues/59">#59</a>.</p>
-</blockquote>
 <h4>Global install (faster startup)</h4>
 <pre><code class="language-bash">npm install -g @plur-ai/mcp
 plur-mcp init
@@ -177,8 +174,9 @@ openclaw config set plur.enabled true
 <p>That&#39;s it. PLUR works in the background from here. No workflow changes needed — just use your tools as usual. Corrections accumulate automatically.</p>
 <h4>Hermes Agent</h4>
 <pre><code class="language-bash">pip install plur-hermes
+npm install -g @plur-ai/cli@0.9.4
 </code></pre>
-<p>The plugin registers automatically via Hermes&#39; plugin system. It injects relevant memories before each LLM call, extracts learnings from agent responses, and exposes all PLUR tools to the agent. Requires the PLUR CLI — pin to the last working version: <code>npm install -g @plur-ai/cli@0.9.1</code> (the <code>0.9.2</code> latest tag on npm is bricked; tracking in <a href="https://github.com/plur-ai/plur/issues/59">#59</a>).</p>
+<p>The plugin registers automatically via Hermes&#39; plugin system. It injects relevant memories before each LLM call, extracts learnings from agent responses, and exposes all PLUR tools to the agent. Hermes shells out to the PLUR CLI; current verified pairing is <code>plur-hermes==0.9.4</code> with <code>@plur-ai/cli@0.9.4</code>.</p>
 <h4>Verify it works</h4>
 <p>Ask your agent: <em>&quot;What&#39;s my PLUR status?&quot;</em> — it should call <code>plur_status</code> and return your engram count and storage path.</p>
 <h3>How it works</h3>
@@ -208,7 +206,7 @@ const plur = new Plur()
 
 // Learn from a correction
 plur.learn(&#39;toEqual() in Vitest is strict — use toMatchObject() for partial matching&#39;, {
-  type: &#39;correction&#39;,
+  type: &#39;behavioral&#39;,
   scope: &#39;project:my-app&#39;,
   domain: &#39;dev/testing&#39;
 })
@@ -263,7 +261,7 @@ plur.sync(&#39;git@github.com:you/plur-memory.git&#39;)
 </tr>
 <tr>
 <td><code>plur_forget</code></td>
-<td>Retire a memory (activaton decays, eventually pruned)</td>
+<td>Retire a memory (activation decays, eventually pruned)</td>
 </tr>
 <tr>
 <td><code>plur_capture</code></td>
@@ -318,7 +316,7 @@ plur.sync(&#39;git@github.com:you/plur-memory.git&#39;)
 </tr>
 </tbody></table>
 <p><strong>31 wins, 4 losses (89% win rate).</strong> Without memory, agents got house rules right 10–38% of the time depending on model — with PLUR, 12–0 across every model. Memory isn&#39;t a reasoning crutch — it&#39;s information the model literally cannot infer.</p>
-<p>The cost insight was unexpected: Haiku + PLUR scored 0.80 on discoverability. Opus alone scored 0.31. A $0.25/MTok model with memory beat a $15/MTok model without it.</p>
+<p>The cost insight was unexpected: in the reported local-knowledge benchmark setup, Haiku + PLUR scored 0.80 on discoverability while Opus alone scored 0.31. A $0.25/MTok model with memory beat a $15/MTok model without it on this task set.</p>
 <p><a href="https://plur.ai/benchmark.html">Full methodology →</a></p>
 <h3>What PLUR is — and isn&#39;t</h3>
 <p>PLUR is <strong>agent memory</strong> — it stores corrections, preferences, conventions, and architectural decisions that an AI agent learns during work sessions, and injects them back when they&#39;re relevant.</p>
@@ -456,23 +454,23 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 55.3K</div>
+        <div class="stars">★ 55.4K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 12.8K</div>
+        <div class="stars">★ 12.9K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 978</div>
+        <div class="stars">★ 979</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 218</div>
+        <div class="stars">★ 221</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 157</div>
+        <div class="stars">★ 158</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -480,11 +478,11 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 14.2K</div>
+        <div class="stars">★ 14.7K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 459</div>
+        <div class="stars">★ 475</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>

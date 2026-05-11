@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "Web-search-plus is a capability-based search and extraction plugin for the Hermes Agent ecosystem that prevents provider lock-in. It utilizes a routed multi-provider architecture to automatically select from ten supported backends like Serper, Tavily, and Linkup based on available API keys and query needs. The plugin features explicit fallbacks, a dedicated extraction tool for clean URL content, and an optional synthesis layer for generating cited answers.",
+  "description": "Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give Hermes Agents flexible access to live web data. It utilizes a capability-based routing system that automatically selects the best available provider based on the user's configured API keys, such as Tavily, Brave, or Serper. The plugin provides three distinct tools for broad web searching, clean URL content extraction, and synthesized cited answers. This modular approach ensures the agent remains functional e",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-05-09T19:50:44.000Z",
+  "dateModified": "2026-05-10T18:59:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 166
+    "userInteractionCount": 167
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes Agent flagship plugin for multi-provider web search and extraction with intelligent routing, quality reports, and research mode.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 166</span>
+    <span class="stars">★ 167</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-09</span>
+    <span><span class="meta-label">updated</span>2026-05-10</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Web-search-plus is a capability-based search and extraction plugin for the Hermes Agent ecosystem that prevents provider lock-in. It utilizes a routed multi-provider architecture to automatically select from ten supported backends like Serper, Tavily, and Linkup based on available API keys and query needs. The plugin features explicit fallbacks, a dedicated extraction tool for clean URL content, and an optional synthesis layer for generating cited answers.</p>
+    <p class="summary-text">Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give Hermes Agents flexible access to live web data. It utilizes a capability-based routing system that automatically selects the best available provider based on the user's configured API keys, such as Tavily, Brave, or Serper. The plugin provides three distinct tools for broad web searching, clean URL content extraction, and synthesized cited answers. This modular approach ensures the agent remains functional even with partial API coverage by falling back to available services.</p>
     <ul class="summary-highlights">
-      <li>Supports 10 providers including Serper, Tavily, Exa, and Linkup</li>
-      <li>Auto-routing with explicit provider cooldowns and quality diagnostics</li>
-      <li>Capability-based design functions with any single configured search provider</li>
+      <li>Supports 10 providers including Serper, Tavily, Exa, and Firecrawl</li>
+      <li>Auto-routes queries based on provider availability and quality diagnostics</li>
+      <li>Provides dedicated tools for search, URL extraction, and cited answers</li>
     </ul>
   </div>
 </section>
@@ -145,7 +145,11 @@
   <section class="readme" data-nosnippet>
     <h2>web-search-plus — Hermes Plugin</h2>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-v181-release.png" alt="Hermes web-search-plus v1.8.1 release graphic showing search, extraction, optional answer beta, onboarding, and supported providers" width="100%">
+  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-logo.png" alt="web search plus logo" width="180">
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-github-hero.jpg" alt="Hermes Web Search Plus feature overview showing search, extraction, answer beta, onboarding, and supported providers" width="100%">
 </p>
 
 <p align="center">
@@ -154,7 +158,7 @@
   <img alt="Hermes Plugin" src="https://img.shields.io/badge/Hermes-plugin-a78bfa.svg">
 </p>
 
-<p><strong>Web search, extraction, and optional cited answers for Hermes — bring any one of 10 provider options and the plugin unlocks the tools your keys can actually support.</strong> Linkup is preferred for extraction, but not required; search-only setups still work and degrade honestly.</p>
+<p><strong>Web search, extraction, and optional cited answers for Hermes — bring any one of 10 provider options and the plugin unlocks the tools your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Firecrawl-first extraction for robust scraping; Linkup remains the cheap/citation-friendly answer-extraction path when available.</p>
 <p><code>web-search-plus</code> adds three Hermes tools:</p>
 <ul>
 <li><code>web_search_plus</code> — routed multi-provider web search with quality diagnostics</li>
@@ -221,7 +225,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup brave linkup --env-path 
 <li><code>starter</code> — Tavily + Linkup + Brave; best first-run setup.</li>
 <li><code>lean</code> — Tavily + Linkup; cheapest useful search + extraction pairing.</li>
 <li><code>search</code> — Tavily + Brave + Serper; broad search coverage.</li>
-<li><code>extract</code> — Linkup + Firecrawl + Tavily; extraction-heavy setup.</li>
+<li><code>extract</code> — Firecrawl + Linkup + Exa + Tavily; extraction-heavy setup.</li>
 <li><code>all</code> — prompt for every supported provider.</li>
 </ul>
 <p>The CLI never prints secret values. It writes keys into the active Hermes <code>.env</code> file, then reminds you to restart Hermes or run <code>/reset</code> so the tools re-register.</p>
@@ -323,7 +327,7 @@ web_answer_plus(query=&quot;Sources about Linkup extraction pricing&quot;, outpu
 <li><code>quick</code> mode asks for 3 sources and extracts up to 2 URLs.</li>
 <li><code>deep</code> mode asks for 6 sources and uses research mode, with extraction still hard-capped at 5 URLs.</li>
 <li><code>freshness=&quot;none&quot;</code> is the default to avoid over-triggering recency on words like “current” or “aktuell”. Set <code>freshness=&quot;auto&quot;</code>, <code>day</code>, <code>week</code>, <code>month</code>, or <code>year</code> explicitly when recency should shape search.</li>
-<li>Linkup is preferred for extraction; other extraction providers are used through the normal fallback chain.</li>
+<li><code>web_answer_plus</code> still prefers Linkup for answer extraction when available; direct <code>web_extract_plus(provider=&quot;auto&quot;)</code> uses the extraction chain below.</li>
 <li>If no extraction provider is configured, answers are snippet-backed and carry an explicit warning.</li>
 </ul>
 <p>A real failure case from dogfooding: <code>Österreich Startelf WM 2026 Qualifikation aktuelle Aufstellung</code> is better handled by <code>web_search_plus</code>; answer synthesis can drift toward schedule or wrong-sport sources if recency is pushed too hard.</p>
@@ -482,7 +486,7 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linkup&quot;, render_js=False)
 # → Linkup fetch endpoint
 </code></pre>
-<p>Auto extraction currently tries Firecrawl, then Linkup, Tavily, Exa, and You.com when keys are available.</p>
+<p>Auto extraction currently tries Firecrawl, then Linkup, Exa, Tavily, and You.com when keys are available. Firecrawl is the default robust scraper; Linkup is the cheap/citation-friendly fallback; Exa is preferred before Tavily for academic/research-style pages.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -612,7 +616,7 @@ BRAVE_API_KEY=***         # https://brave.com/search/api/
 TAVILY_API_KEY=***        # https://tavily.com — search + extraction
 EXA_API_KEY=***           # https://exa.ai — search + extraction
 QUERIT_API_KEY=***        # https://querit.ai
-LINKUP_API_KEY=***        # https://linkup.so — search + preferred extraction
+LINKUP_API_KEY=***        # https://linkup.so — search + cheap/citation-friendly extraction
 FIRECRAWL_API_KEY=***     # https://firecrawl.dev — search + extraction
 PERPLEXITY_API_KEY=***    # https://perplexity.ai/settings/api
 YOU_API_KEY=***           # https://api.you.com — search + extraction
@@ -674,7 +678,7 @@ LICENSE          MIT license
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 94</div>
+        <div class="stars">★ 97</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -682,15 +686,15 @@ LICENSE          MIT license
         <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
-        <div class="stars">★ 9</div>
+        <div class="stars">★ 10</div>
         <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
       </a>
       <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
-        <div class="stars">★ 6</div>
+        <div class="stars">★ 7</div>
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
-        <div class="stars">★ 13</div>
+        <div class="stars">★ 14</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/clawshell/clawshell">
@@ -702,7 +706,7 @@ LICENSE          MIT license
         <div class="name"><span class="org">briancaffey /</span> hermes-otel</div>
       </a>
       <a class="related-row" href="/projects/335234131/agent-browser-mcp">
-        <div class="stars">★ 193</div>
+        <div class="stars">★ 195</div>
         <div class="name"><span class="org">335234131 /</span> agent-browser-mcp</div>
       </a>
     </div>

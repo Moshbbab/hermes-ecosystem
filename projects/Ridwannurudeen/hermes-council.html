@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Ridwannurudeen/hermes-council#software",
   "name": "hermes-council",
-  "description": "Hermes Council is an MCP server that provides an adversarial judgment layer for Hermes Agent to stress-test plans and risky actions before execution. It utilizes a multi-perspective deliberation process where specialized personas like the Advocate, Skeptic, and Oracle argue to produce a structured final verdict. This system helps prevent overconfident plans and unsafe commands by returning explicit fields such as allow/deny status, blocking risks, and required checks. Additionally, it can extrac",
+  "description": "Hermes Council is an MCP server that provides an adversarial judgment layer for Hermes Agent to stress-test plans and actions before execution. It utilizes a multi-perspective deliberation process involving personas like Advocate, Skeptic, and Arbiter to generate structured verdicts on code diffs, claims, and risky commands. This approach helps prevent overconfident agent failures by producing explicit signals such as blocking risks, required checks, and DPO preference pairs for reinforcement le",
   "url": "https://hermesatlas.com/projects/Ridwannurudeen/hermes-council",
   "codeRepository": "https://github.com/Ridwannurudeen/hermes-council",
   "applicationCategory": "CommunicationApplication",
@@ -47,13 +47,13 @@
     "name": "Ridwannurudeen",
     "url": "https://github.com/Ridwannurudeen"
   },
-  "dateModified": "2026-05-09T19:54:40.000Z",
+  "dateModified": "2026-05-11T07:20:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 20
+    "userInteractionCount": 22
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Adversarial multi-perspective council MCP server for hermes-agent</p>
 
   <div class="meta-row">
-    <span class="stars">★ 20</span>
+    <span class="stars">★ 22</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-09</span>
+    <span><span class="meta-label">updated</span>2026-05-11</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Council is an MCP server that provides an adversarial judgment layer for Hermes Agent to stress-test plans and risky actions before execution. It utilizes a multi-perspective deliberation process where specialized personas like the Advocate, Skeptic, and Oracle argue to produce a structured final verdict. This system helps prevent overconfident plans and unsafe commands by returning explicit fields such as allow/deny status, blocking risks, and required checks. Additionally, it can extract DPO preference pairs and normalized rewards to support reinforcement learning and evaluator workflows.</p>
+    <p class="summary-text">Hermes Council is an MCP server that provides an adversarial judgment layer for Hermes Agent to stress-test plans and actions before execution. It utilizes a multi-perspective deliberation process involving personas like Advocate, Skeptic, and Arbiter to generate structured verdicts on code diffs, claims, and risky commands. This approach helps prevent overconfident agent failures by producing explicit signals such as blocking risks, required checks, and DPO preference pairs for reinforcement learning workflows.</p>
     <ul class="summary-highlights">
       <li>Multi-persona adversarial deliberation using Advocate, Skeptic, and Oracle roles</li>
-      <li>Structured decision gating with allow, deny, and conditional verdicts</li>
-      <li>Generates DPO preference pairs and rewards for RL workflows</li>
+      <li>Structured safety gating with allow, deny, and conditional verdicts</li>
+      <li>Generates DPO preference pairs and rewards for RL training workflows</li>
     </ul>
   </div>
 </section>
@@ -228,6 +228,11 @@ transport.</p>
 <p><code>hermes-council-server</code> is also installed as a console script. The <code>python -m</code>
 form is recommended because it works even when the Python user scripts directory
 is not on <code>PATH</code>.</p>
+<p>You can also wire the server up interactively with Hermes Agent&#39;s own CLI:</p>
+<pre><code class="language-bash">hermes mcp add
+</code></pre>
+<p><code>hermes mcp add/list/remove/test</code> writes to the same <code>mcp_servers</code> key in
+<code>~/.hermes/config.yaml</code>, so either path produces an equivalent config.</p>
 <p>Set one provider key:</p>
 <pre><code class="language-bash">export OPENROUTER_API_KEY=your-key-here
 </code></pre>
@@ -608,8 +613,12 @@ fallback parsing is implemented.</li>
 where the adversarial council concept was proposed as a core subsystem. The
 recommendation was to rebuild it as an external MCP server to avoid core tool
 injection, provider bypass, hidden LLM costs, and brittle parsing.</p>
-<p>Related integration PR:
-<a href="https://github.com/NousResearch/hermes-agent/pull/1972">NousResearch/hermes-agent#1972</a>.</p>
+<p>A follow-up integration PR proposing a commented config stub inside hermes-agent
+(<a href="https://github.com/NousResearch/hermes-agent/pull/1972">NousResearch/hermes-agent#1972</a>)
+was <strong>closed on 2026-05-11</strong> — the maintainers do not bundle third-party MCP
+server references in <code>cli-config.yaml.example</code> or <code>optional-skills/</code> to avoid
+endorsing one community server over others. Install standalone via the
+<a href="#quickstart">Quickstart</a> above; the server is designed to run that way.</p>
 <h3>Contributing</h3>
 <ul>
 <li>Keep MCP tool outputs structured and backward-compatible where possible.</li>
@@ -632,11 +641,11 @@ injection, provider bypass, hidden LLM costs, and brittle parsing.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 149</div>
+        <div class="stars">★ 151</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
-        <div class="stars">★ 27</div>
+        <div class="stars">★ 28</div>
         <div class="name"><span class="org">teknium1 /</span> hermes-miniverse</div>
       </a>
       <a class="related-row" href="/projects/marlandoj/zouroboros-swarm-executors">
@@ -652,7 +661,7 @@ injection, provider bypass, hidden LLM costs, and brittle parsing.</p>
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 433</div>
+        <div class="stars">★ 441</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">

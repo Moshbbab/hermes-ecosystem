@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/jpalmae/hermeshq#software",
   "name": "hermeshq",
-  "description": "HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It acts as an operational layer over the Hermes execution engine, providing a centralized interface for task dispatching, scheduling, and multi-agent delegation. The platform includes a secrets vault, RBAC, and a runtime ledger to track activity across separate agent workspaces. It also supports managed integrations for AWS Bedrock, OpenAI-compatible endpoint",
+  "description": "HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an operational layer that wraps the Hermes execution engine, providing centralized task dispatching, scheduling, and a runtime ledger. The platform enables multi-agent delegation, RBAC-controlled user access, and per-agent communication channels for Telegram and WhatsApp. It also features an enterprise MCP bridge to expose specific agents to e",
   "url": "https://hermesatlas.com/projects/jpalmae/hermeshq",
   "codeRepository": "https://github.com/jpalmae/hermeshq",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "jpalmae",
     "url": "https://github.com/jpalmae"
   },
-  "dateModified": "2026-04-30T15:14:07.000Z",
+  "dateModified": "2026-05-11T04:11:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -115,7 +115,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-04-30</span>
+    <span><span class="meta-label">updated</span>2026-05-11</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It acts as an operational layer over the Hermes execution engine, providing a centralized interface for task dispatching, scheduling, and multi-agent delegation. The platform includes a secrets vault, RBAC, and a runtime ledger to track activity across separate agent workspaces. It also supports managed integrations for AWS Bedrock, OpenAI-compatible endpoints, and messaging channels like Telegram and WhatsApp.</p>
+    <p class="summary-text">HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an operational layer that wraps the Hermes execution engine, providing centralized task dispatching, scheduling, and a runtime ledger. The platform enables multi-agent delegation, RBAC-controlled user access, and per-agent communication channels for Telegram and WhatsApp. It also features an enterprise MCP bridge to expose specific agents to external AI clients like Claude Code and Codex.</p>
     <ul class="summary-highlights">
-      <li>Centralized web UI for managing multiple agents and separate workspaces.</li>
-      <li>Hierarchy-aware inter-agent delegation and automated task scheduling.</li>
-      <li>Integrated support for Telegram, WhatsApp, and AWS Bedrock providers.</li>
+      <li>Orchestrates multiple Hermes Agent instances with separate workspaces and identities</li>
+      <li>Provides hierarchy-aware inter-agent delegation and task scheduling</li>
+      <li>Offers enterprise MCP access for external AI client integrations</li>
     </ul>
   </div>
 </section>
@@ -156,6 +156,7 @@ HermesHQ is under active development. Expect ongoing changes, rough edges, and o
 <li>task dispatch, schedules, runtime ledger, and activity stream</li>
 <li>hierarchy-aware inter-agent delegation</li>
 <li>per-agent Telegram and WhatsApp channels</li>
+<li>enterprise MCP access for Claude Code, Codex, Claude Desktop and other external AI clients</li>
 <li>provider presets, secrets vault, runtime profiles, and managed integrations, including AWS Bedrock and generic OpenAI-compatible endpoints</li>
 </ul>
 <p>Project landing page: <a href="https://jpalmae.github.io/hermeshq/">jpalmae.github.io/hermeshq</a><br>Controlled demo page: <a href="https://jpalmae.github.io/hermeshq/demo.html">jpalmae.github.io/hermeshq/demo.html</a></p>
@@ -180,6 +181,7 @@ HermesHQ is under active development. Expect ongoing changes, rough edges, and o
 <li>task dispatch, schedules, and runtime ledger</li>
 <li>inter-agent comms and hierarchy-aware delegation</li>
 <li>per-agent Telegram and WhatsApp channels</li>
+<li>enterprise MCP credentials for exposing selected agents to external AI clients</li>
 <li>provider presets, secrets vault, and managed integrations, including AWS Bedrock and generic OpenAI-compatible endpoints</li>
 <li>runtime profiles and capability visibility</li>
 </ul>
@@ -229,6 +231,7 @@ HermesHQ is under active development. Expect ongoing changes, rough edges, and o
 <li>delegate result callbacks back to the parent agent</li>
 <li>per-agent Telegram and WhatsApp channels with activity traceability</li>
 <li>assigned-agent scope for non-admin users</li>
+<li>enterprise MCP access with scoped credentials, per-agent allowlists, revocation, expiry and audit logs</li>
 </ul>
 <h4>Configuration and Governance</h4>
 <ul>
@@ -241,6 +244,20 @@ HermesHQ is under active development. Expect ongoing changes, rough edges, and o
 <li>editable provider registry and presets, including AWS Bedrock (<code>aws_sdk</code>) and OpenAI-compatible API endpoints</li>
 <li>managed integration package catalog with install/uninstall and per-agent tests</li>
 </ul>
+<h4>Enterprise MCP Access</h4>
+<p>Admins can expose selected HermesHQ agents to MCP-capable clients without giving those clients full platform access.</p>
+<ol>
+<li>Open <code>Settings -&gt; External access</code>.</li>
+<li>Create an MCP credential, select the allowed agents, choose scopes, and optionally set expiry.</li>
+<li>Copy the token shown once.</li>
+<li>Point the client to the HermesHQ MCP endpoint <code>/mcp</code> with <code>Authorization: Bearer &lt;token&gt;</code>.</li>
+</ol>
+<p>For stdio-only clients such as some Claude Code or Codex setups, use the bridge script:</p>
+<pre><code class="language-bash">HERMESHQ_URL=https://your-hermeshq.example.com \
+HERMESHQ_MCP_TOKEN=hq_mcp_xxx \
+python3 scripts/hermeshq-mcp-stdio.py
+</code></pre>
+<p>The initial MCP toolset includes <code>list_agents</code>, <code>invoke_agent</code>, and <code>get_agent_task</code>.</p>
 <h4>UX</h4>
 <ul>
 <li>dashboard, agents, tasks, comms, users, settings, schedules</li>
@@ -584,7 +601,7 @@ tts:
         <div class="name"><span class="org">0xrsydn /</span> nix-hermes-agent</div>
       </a>
       <a class="related-row" href="/projects/rookiemann/portable-hermes-agent">
-        <div class="stars">★ 110</div>
+        <div class="stars">★ 111</div>
         <div class="name"><span class="org">rookiemann /</span> portable-hermes-agent</div>
       </a>
       <a class="related-row" href="/projects/xmbshwll/hermes-agent-docker">
