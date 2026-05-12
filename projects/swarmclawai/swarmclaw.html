@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed to orchestrate autonomous swarms. It operates by managing agent memory, delegation, and runtime skills across more than 23 LLM providers, including Hermes, OpenAI, and Ollama. The platform features an organization chart interface for visualizing agent activity and supports automated conversation-to-skill learning. Users can deploy the system via a desktop application, Docker, or as a global NPM package to automate com",
+  "description": "SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It utilizes a multi-agent architecture featuring durable memory, delegation hierarchies, and a conversation-to-skill learning system to automate complex workflows. The platform provides a visual dashboard for managing agent heartbeats, schedules, and tool usage across various environments. It supports over 23 LLM providers and integrates with specialized agent CLIs like Claude Co",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-05-08T09:09:03.000Z",
+  "dateModified": "2026-05-11T09:48:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-08</span>
+    <span><span class="meta-label">updated</span>2026-05-11</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed to orchestrate autonomous swarms. It operates by managing agent memory, delegation, and runtime skills across more than 23 LLM providers, including Hermes, OpenAI, and Ollama. The platform features an organization chart interface for visualizing agent activity and supports automated conversation-to-skill learning. Users can deploy the system via a desktop application, Docker, or as a global NPM package to automate complex workflows with scheduled tasks and MCP tools.</p>
+    <p class="summary-text">SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It utilizes a multi-agent architecture featuring durable memory, delegation hierarchies, and a conversation-to-skill learning system to automate complex workflows. The platform provides a visual dashboard for managing agent heartbeats, schedules, and tool usage across various environments. It supports over 23 LLM providers and integrates with specialized agent CLIs like Claude Code, Hermes, and OpenClaw.</p>
     <ul class="summary-highlights">
-      <li>Supports 23+ LLM providers including Hermes, Claude, and local Ollama models.</li>
+      <li>Orchestrates multi-agent swarms with hierarchical delegation and visual org charts.</li>
+      <li>Supports 23+ LLM providers including Ollama, OpenRouter, and Anthropic.</li>
       <li>Features durable agent memory and reviewed conversation-to-skill learning capabilities.</li>
-      <li>Orchestrates multi-agent swarms with delegation, heartbeats, and scheduled tasks.</li>
     </ul>
   </div>
 </section>
@@ -260,13 +260,13 @@ docker compose up -d --build
 <pre><code class="language-bash">clawhub install swarmclaw
 </code></pre>
 <p><a href="https://clawhub.ai/skills/swarmclaw">Browse on ClawHub</a></p>
-<h3>v1.9.26 Highlights</h3>
-<p>Output hygiene follow-up: empty successful LLM turns now stay silent instead of being rewritten as user-visible errors.</p>
+<h3>v1.9.27 Highlights</h3>
+<p>Desktop compatibility and provider-save repair for Intel Mac users and OpenRouter setup.</p>
 <ul>
-<li><strong>Silent empty completions.</strong> Blank successful runs no longer become <code>Error: Run completed...</code> assistant messages.</li>
-<li><strong>Connector-safe final text.</strong> Slack and other connectors no longer receive synthetic error text for intentional silence or quiet no-op turns.</li>
-<li><strong>Real errors preserved.</strong> Explicit provider failures and streamed provider errors still surface as terminal errors.</li>
-<li><strong>Regression coverage.</strong> Chat-execution tests now lock the distinction between empty success and real failure.</li>
+<li><strong>Intel macOS native modules.</strong> The desktop packaging hook now rebuilds Electron-loaded native modules with the target architecture and blocks a release if an x64 macOS bundle contains an arm64-only required addon.</li>
+<li><strong>OpenRouter save repair.</strong> Provider updates now tolerate UI metadata fields like <code>id</code>, <code>type</code>, <code>createdAt</code>, and <code>updatedAt</code> without persisting them, while still rejecting unrelated unknown fields.</li>
+<li><strong>Downloads clarity.</strong> The downloads page no longer guesses Apple Silicon when a browser hides the Mac architecture, so Intel users can choose the x64 DMG explicitly.</li>
+<li><strong>Regression coverage.</strong> Provider route and Electron after-pack tests cover the reported failure modes.</li>
 </ul>
 <h3>Hosted Deploys</h3>
 <p>SwarmClaw now ships provider-ready deploy files at the repo root:</p>
@@ -526,6 +526,14 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.9.27 Highlights</h4>
+<p>Desktop compatibility and provider-save repair for Intel Mac users and OpenRouter setup.</p>
+<ul>
+<li><strong>Intel macOS native modules.</strong> The desktop packaging hook now rebuilds Electron-loaded native modules with the target architecture and blocks a release if an x64 macOS bundle contains an arm64-only required addon.</li>
+<li><strong>OpenRouter save repair.</strong> Provider updates now tolerate UI metadata fields like <code>id</code>, <code>type</code>, <code>createdAt</code>, and <code>updatedAt</code> without persisting them, while still rejecting unrelated unknown fields.</li>
+<li><strong>Downloads clarity.</strong> The downloads page no longer guesses Apple Silicon when a browser hides the Mac architecture, so Intel users can choose the x64 DMG explicitly.</li>
+<li><strong>Regression coverage.</strong> Provider route and Electron after-pack tests cover the reported failure modes.</li>
+</ul>
 <h4>v1.9.26 Highlights</h4>
 <p>Output hygiene follow-up: empty successful LLM turns now stay silent instead of being rewritten as user-visible errors.</p>
 <ul>
@@ -770,17 +778,8 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <li><strong>Deep-linked mission templates.</strong> <code>/missions?template=&lt;id&gt;</code> opens the right starter template directly, and the template installer can create a mission-driver chat when no sessions exist yet.</li>
 <li><strong>Quality Center handoffs.</strong> <code>/quality?tab=evals|approvals|runs</code> is shareable, and the Quality overview/Eval Lab can start a Release QA mission from current operator evidence.</li>
 <li><strong>Public mission reports.</strong> Missions can mint, copy, and revoke public share links from the detail view. Shared pages render status, budgets, milestones, and generated reports using the existing allowlisted share resolver.</li>
-<li><strong>Safer share payloads.</strong> Mission milestones now expose <code>summary</code> correctly in public HTML and raw markdown shares, with regression coverage in <code>npm run test:runtime</code>.</li>
+<li>**Safer share payloa</li>
 </ul>
-<h4>v1.7.3 Highlights</h4>
-<p>Desktop packaging fix for Linux AppImage and deb builds.</p>
-<ul>
-<li><strong>Linux desktop native modules match Electron.</strong> Packaged Linux builds now copy Electron-rebuilt native addons into the embedded Next standalone server, fixing the <code>better-sqlite3</code> Node ABI mismatch reported in <a href="https://github.com/swarmclawai/swarmclaw/issues/65">#65</a>.</li>
-<li><strong>Desktop packaging regression coverage.</strong> The Electron <code>afterPack</code> hook now has a Linux standalone native-module sync test wired into <code>npm run test:cli</code>.</li>
-<li><strong>macOS desktop note.</strong> macOS builds remain ad-hoc signed and not notarized in this release, so the existing Gatekeeper/quarantine workaround still applies until Developer ID signing is available.</li>
-</ul>
-<h4>v1.7.2 Highlights</h4>
-<p>CLI provider usability follow-up for v1.7.0/v1.7.1. The expanded coding-agent roster is now </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
 
@@ -799,15 +798,15 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">
-        <div class="stars">★ 80</div>
+        <div class="stars">★ 82</div>
         <div class="name"><span class="org">howdymary /</span> hermes-agent-metaharness</div>
       </a>
       <a class="related-row" href="/projects/runtimenoteslabs/gladiator">
-        <div class="stars">★ 41</div>
+        <div class="stars">★ 44</div>
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">
-        <div class="stars">★ 85</div>
+        <div class="stars">★ 86</div>
         <div class="name"><span class="org">1ilkhamov /</span> opencode-hermes-multiagent</div>
       </a>
       <a class="related-row" href="/projects/supermodeltools/bigiron">

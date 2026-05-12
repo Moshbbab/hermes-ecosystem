@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a local-first memory system designed to provide persistent storage for Hermes Agents without relying on cloud services. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge entirely on-device. The system features a three-tier architecture—working, episodic, and scratchpad—to handle different memory scales and types. By running in-process, it eliminates network latency and API costs while ensuring full data pr",
+  "description": "Mnemosyne is a local-first memory system designed for the Hermes Agent framework to provide private, zero-dependency context management. It utilizes SQLite with native vector search and full-text search to store conversations, preferences, and knowledge without requiring external databases or API keys. The system features a three-tier architecture—working, episodic, and scratchpad—to manage information across different time scales. It is optimized for low-latency performance, achieving sub-milli",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-05-11T03:20:55.000Z",
+  "dateModified": "2026-05-12T02:03:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 211
+    "userInteractionCount": 216
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 211</span>
+    <span class="stars">★ 216</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-11</span>
+    <span><span class="meta-label">updated</span>2026-05-12</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a local-first memory system designed to provide persistent storage for Hermes Agents without relying on cloud services. It utilizes a SQLite backend with native vector search and full-text search to manage conversations, preferences, and knowledge entirely on-device. The system features a three-tier architecture—working, episodic, and scratchpad—to handle different memory scales and types. By running in-process, it eliminates network latency and API costs while ensuring full data privacy and offline capability.</p>
+    <p class="summary-text">Mnemosyne is a local-first memory system designed for the Hermes Agent framework to provide private, zero-dependency context management. It utilizes SQLite with native vector search and full-text search to store conversations, preferences, and knowledge without requiring external databases or API keys. The system features a three-tier architecture—working, episodic, and scratchpad—to manage information across different time scales. It is optimized for low-latency performance, achieving sub-millisecond read and write speeds while remaining fully functional in offline environments.</p>
     <ul class="summary-highlights">
-      <li>Local SQLite storage with native vector and full-text search</li>
-      <li>Sub-millisecond read, write, and search latency without network calls</li>
-      <li>Native Hermes Agent integration with automated episodic consolidation cycles</li>
+      <li>SQLite-backed storage with native vector and full-text search</li>
+      <li>Sub-millisecond latency for local read, write, and search operations</li>
+      <li>Three-tier memory architecture including working and episodic consolidation</li>
     </ul>
   </div>
 </section>
@@ -469,6 +469,10 @@ hermes mnemosyne stats     # Shows working + episodic memory counts
 <li><strong>Cross-provider importers</strong> -- Migrate from Mem0, Letta, Zep, Cognee, Honcho, SuperMemory, <strong>Hindsight</strong></li>
 <li><strong>Cross-session scope</strong> -- <code>remember(..., scope=&quot;global&quot;)</code> makes facts visible everywhere</li>
 <li><strong>Configurable compression</strong> -- <code>int8</code> (default), <code>float32</code>, or <code>bit</code> (32x smaller) vectors</li>
+<li><strong>Binary vectors</strong> -- Information-theoretic binarization (MIB) for 32x memory reduction with deterministic Hamming-distance retrieval</li>
+<li><strong>Streaming &amp; DeltaSync</strong> -- Real-time memory event stream (push/pull) and checkpoint-based incremental sync between instances</li>
+<li><strong>Configurable auto-sleep</strong> -- Automatically triggers consolidation when working memory exceeds <code>sleep_threshold</code>; configurable via <code>config.yaml</code> or env var</li>
+<li><strong>ignore_patterns</strong> -- Regex-based content filtering to exclude shell commands, stack traces, and boilerplate from memory storage</li>
 </ul>
 <hr>
 <h3>Benchmarks</h3>
@@ -874,6 +878,93 @@ mnemosyne mcp --transport sse --port 8080
 <td>Memory statistics</td>
 </tr>
 </tbody></table>
+<h4>Hermes Plugin</h4>
+<p>When registered as a Hermes plugin, Mnemosyne exposes <strong>15 tools</strong> to the agent, providing full memory lifecycle management directly from the conversation:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>mnemosyne_remember</code></td>
+<td>Store a memory with importance, source, expiry, and cross-session scope</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>mnemosyne_recall</code></td>
+<td>Hybrid vector + FTS5 search across working and episodic memory with configurable scoring weights</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>mnemosyne_stats</code></td>
+<td>Get BEAM tier statistics (working, episodic, scratchpad counts)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>mnemosyne_triple_add</code></td>
+<td>Add a temporal triple to the knowledge graph with validity dates</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>mnemosyne_triple_query</code></td>
+<td>Query the temporal knowledge graph with <code>as_of</code> historical lookback</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>mnemosyne_sleep</code></td>
+<td>Run the consolidation cycle — summarize old working memories into episodic tier</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>mnemosyne_scratchpad_write</code></td>
+<td>Write a temporary note to the scratchpad reasoning workspace</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>mnemosyne_scratchpad_read</code></td>
+<td>Read all current scratchpad entries</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>mnemosyne_scratchpad_clear</code></td>
+<td>Clear all scratchpad entries</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>mnemosyne_invalidate</code></td>
+<td>Mark a memory as expired or superseded by a replacement</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>mnemosyne_export</code></td>
+<td>Export all memories to a portable JSON file for backup or migration</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>mnemosyne_update</code></td>
+<td>Update the content or importance of an existing memory by ID</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>mnemosyne_forget</code></td>
+<td>Permanently delete a memory by ID</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>mnemosyne_import</code></td>
+<td>Import from JSON file, Mem0, Letta, Zep, Cognee, Honcho, SuperMemory, or Hindsight</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>mnemosyne_diagnose</code></td>
+<td>Run PII-safe diagnostics (dependencies, DB state, vector readiness) — never exposes memory content</td>
+</tr>
+</tbody></table>
+<p>The plugin also registers three lifecycle hooks (<code>pre_llm_call</code>, <code>on_session_start</code>, <code>post_tool_call</code>) for automatic context injection before every LLM call.</p>
 <hr>
 <h3>Architecture</h3>
 <pre><code>┌─────────────────────────────────────────────────────────────┐
@@ -899,6 +990,8 @@ mnemosyne mcp --transport sse --port 8080
 <li><code>episodic_memory</code> -- Long-term storage with sqlite-vec + FTS5 hybrid search</li>
 <li><code>scratchpad</code> -- Temporary agent reasoning workspace</li>
 </ul>
+<p><strong>Binary Vectors</strong> (MIB — Maximally Informative Binarization):
+Mnemosyne uses information-theoretic binarization (building on Moorcheh ITS, arXiv:2601.11557) to compress 384-dimensional float32 embeddings into 48-byte binary vectors — a 32× reduction. Retrieval uses Hamming distance (XOR + popcount) for deterministic, CPU-efficient ranking without ANN indices or external vector databases. This enables sub-millisecond search over millions of vectors entirely within SQLite.</p>
 <hr>
 <h3>Why SQLite for Hermes?</h3>
 <p>SQLite is already in your stack. Hermes uses it for session persistence. Mnemosyne extends that same file -- no new dependencies, no Docker containers, no connection pooling.</p>
@@ -1161,6 +1254,120 @@ remote shape.</p>
 </tbody></table>
 <p>When the host call fails, the adapter falls back to the local GGUF model rather than the remote URL. See <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/hermes-llm-integration.md">docs/hermes-llm-integration.md</a> for the full behavior model and session-shutdown semantics.</p>
 <hr>
+<h3>Configuration (config.yaml)</h3>
+<p>In addition to environment variables, Mnemosyne supports configuration via Hermes&#39; <code>config.yaml</code> file. This is the recommended approach for plugin-level settings, keeping all Hermes configuration in one place.</p>
+<p>Place the <code>memory.mnemosyne</code> block under the top-level <code>memory</code> key:</p>
+<pre><code class="language-yaml">memory:
+  mnemosyne:
+    # Enable automatic consolidation on session boundaries
+    auto_sleep: true
+
+    # Minimum working memory count before auto-sleep triggers.
+    # Prevents consolidation on trivial sessions. Default: 50
+    sleep_threshold: 50
+
+    # Vector storage type: float32 (full precision), int8 (default, good balance), or bit (32x smaller)
+    vector_type: int8
+
+    # Regex patterns to filter BEFORE memory storage.
+    # Content matching any pattern is silently skipped (not stored).
+    # Useful for excluding shell commands, stack traces, and boilerplate.
+    ignore_patterns:
+      - &quot;^pip install&quot;
+      - &quot;^npm install&quot;
+      - &quot;^sudo &quot;
+      - &quot;^Traceback \\(most recent call last\\)&quot;
+      - &quot;^Error:&quot;
+      - &quot;^git &quot;
+</code></pre>
+<h4>Configuration Keys</h4>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>auto_sleep</code></td>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+<td>Auto-run <code>sleep()</code> consolidation on session boundaries. Also settable via <code>MNEMOSYNE_AUTO_SLEEP_ENABLED</code> env var.</td>
+</tr>
+<tr>
+<td><code>sleep_threshold</code></td>
+<td><code>int</code></td>
+<td><code>50</code></td>
+<td>Minimum working memory entries before auto-sleep triggers. Skips consolidation on sessions with few memories.</td>
+</tr>
+<tr>
+<td><code>vector_type</code></td>
+<td><code>str</code></td>
+<td><code>int8</code></td>
+<td>Vector storage type: <code>float32</code> (1,536 bytes/vector), <code>int8</code> (384 bytes, default), <code>bit</code> (48 bytes, 32× smaller).</td>
+</tr>
+<tr>
+<td><code>ignore_patterns</code></td>
+<td><code>list[str]</code></td>
+<td><code>[]</code></td>
+<td>Regex patterns applied via Python <code>re.search()</code>. Memories matching any pattern are discarded before storage.</td>
+</tr>
+</tbody></table>
+<h4>ignore_patterns</h4>
+<p><code>ignore_patterns</code> filters content <strong>before</strong> it enters memory storage. It uses Python&#39;s <code>re.search()</code> with <code>re.IGNORECASE</code> to match patterns against the content string. If any pattern matches, the memory is silently skipped — it will never appear in working memory or recall results.</p>
+<p>Common use cases:</p>
+<ul>
+<li><strong>Shell commands</strong>: <code>&quot;^pip &quot;</code>, <code>&quot;^npm &quot;</code>, <code>&quot;^git &quot;</code>, <code>&quot;^sudo &quot;</code>, <code>&quot;^apt &quot;</code></li>
+<li><strong>Stack traces</strong>: <code>&quot;^Traceback \\(most recent call last\\)&quot;</code>, <code>&quot;^Error:&quot;</code>, <code>&quot;^\\s+at &quot;</code></li>
+<li><strong>Boilerplate</strong>: <code>&quot;^---BEGIN&quot;</code>, <code>&quot;^#include&quot;</code>, <code>&quot;^#!/&quot;</code></li>
+<li><strong>System noise</strong>: Any pattern matching low-signal operational chatter</li>
+</ul>
+<p>Patterns can be specified as a YAML list (one per line) or as a comma-separated string. They are applied at <code>remember()</code> time and logged at <code>DEBUG</code> level when matched.</p>
+<p>Example:</p>
+<pre><code class="language-yaml">memory:
+  mnemosyne:
+    ignore_patterns:
+      - &quot;^pip &quot;
+      - &quot;^npm &quot;
+      - &quot;^Traceback \\(most recent call last\\)&quot;
+      - &quot;^Error:&quot;
+      - &quot;^\\s+at &quot;
+</code></pre>
+<hr>
+<h3>Streaming &amp; DeltaSync</h3>
+<p>Mnemosyne includes a real-time memory event system for reactive and distributed memory architectures.</p>
+<h4>MemoryStream</h4>
+<p>An event-driven stream supporting both push (callbacks) and pull (iterator) patterns. Thread-safe, with a configurable buffer for late-connecting iterators.</p>
+<pre><code class="language-python">from mnemosyne.core.streaming import MemoryStream, MemoryEvent, EventType
+
+stream = MemoryStream(max_buffer=100)
+
+# Push: register callbacks
+stream.on(EventType.MEMORY_ADDED, lambda e: print(f&quot;New: {e.memory_id}&quot;))
+
+# Pull: iterate over events as they occur
+for event in stream.listen([EventType.MEMORY_ADDED, EventType.MEMORY_CONSOLIDATED]):
+    process(event)
+</code></pre>
+<p>Supported event types: <code>MEMORY_ADDED</code>, <code>MEMORY_RECALLED</code>, <code>MEMORY_INVALIDATED</code>, <code>MEMORY_CONSOLIDATED</code>, <code>MEMORY_UPDATED</code>.</p>
+<h4>DeltaSync</h4>
+<p>Checkpoint-based incremental synchronization between Mnemosyne instances. Computes diffs (only changed memories since last sync) and applies them with insert/update/skip tracking.</p>
+<pre><code class="language-python">from mnemosyne.core.streaming import DeltaSync
+
+ds = DeltaSync(mnemosyne)
+
+# Push: compute and send delta since last sync
+result = ds.sync_to(&quot;peer_b&quot;, &quot;working_memory&quot;)
+# result = {&quot;delta&quot;: [...], &quot;count&quot;: 3, &quot;checkpoint&quot;: &quot;...&quot;}
+
+# Pull: receive and apply remote delta
+stats = ds.sync_from(&quot;peer_a&quot;, remote_delta, &quot;working_memory&quot;)
+# stats = {&quot;inserted&quot;: 3, &quot;updated&quot;: 0, &quot;skipped&quot;: 0}
+</code></pre>
+<p>Checkpoints are persisted per-peer, enabling incremental sync without re-sending already-synchronized memories. Ideal for multi-agent setups and backup/restore workflows.</p>
+<hr>
 <h3>Testing</h3>
 <pre><code class="language-bash"># Run tests locally
 python -m pytest tests/test_beam.py -v
@@ -1250,35 +1457,35 @@ python tests/benchmark_beam_working_memory.py
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 55.4K</div>
+        <div class="stars">★ 55.5K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 12.9K</div>
+        <div class="stars">★ 13.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 979</div>
+        <div class="stars">★ 980</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 221</div>
+        <div class="stars">★ 224</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 158</div>
+        <div class="stars">★ 160</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 72</div>
+        <div class="stars">★ 73</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 19</div>
+        <div class="stars">★ 20</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 14.7K</div>
+        <div class="stars">★ 15.0K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>
