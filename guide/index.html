@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://hermesatlas.com/guide/">
 <meta property="og:site_name" content="Hermes Atlas">
 <meta property="article:published_time" content="2026-04-20T00:00:00Z">
-<meta property="article:modified_time" content="2026-04-23T00:00:00Z">
+<meta property="article:modified_time" content="2026-05-12T00:00:00Z">
 <meta property="article:author" content="https://x.com/ksimback">
 <meta property="og:image" content="https://hermesatlas.com/api/og?title=Hermes+Agent%3A+The+Complete+Beginner%27s+Guide&amp;subtitle=Install%2C+pick+a+model%2C+ship+your+first+workflow+%E2%80%94+with+the+best+community+tool+for+every+step.&amp;kind=handbook">
 <meta property="og:image:width" content="1200">
@@ -93,7 +93,7 @@
     {
       "@type": "HowToStep",
       "name": "Run the installer",
-      "text": "In your terminal, run: curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh. This drops the hermes binary in ~/.hermes/bin/ and adds it to your PATH.",
+      "text": "In your terminal, run: curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash. The installer sets up uv, Python 3.11, Node.js, ripgrep, ffmpeg, the venv, and the hermes command. On native Windows, use PowerShell: irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex.",
       "url": "https://hermesatlas.com/guide/#4-install-in-2-minutes"
     },
     {
@@ -130,7 +130,7 @@
       "name": "Does Hermes Agent work on Windows?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, via WSL2. Bare Windows isn't officially supported. Run wsl --install in PowerShell, then install Hermes from inside WSL as you would on Linux."
+        "text": "Yes. Native Windows is supported as an early beta via a PowerShell installer (irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex). For a more road-tested setup, run wsl --install in PowerShell to get WSL2 + Ubuntu, then run the standard Linux curl installer from inside WSL."
       }
     },
     {
@@ -381,7 +381,7 @@
 <h3>Prerequisites</h3>
 
 <ul>
-<li><strong>macOS, Linux, or Windows (WSL2).</strong> Bare Windows isn't officially supported yet; use WSL2 (install link on the Hermes GitHub page).</li>
+<li><strong>macOS, Linux, Windows, Android (Termux).</strong> Linux, macOS, and WSL2 are first-class. Native Windows works via an early-beta PowerShell installer. Termux on Android works via a curated install path.</li>
 <li><strong>A terminal.</strong> Any shell works — bash, zsh, fish.</li>
 <li><strong>An API key or a local model.</strong> If you don't have a model provider or want to set up a new one for your agent, a great place to start is the <a href="https://portal.nousresearch.com" target="_blank" rel="noopener">Nous Portal</a> — otherwise just grab an API key from your model provider, or a local Ollama/LM Studio install. You can always swap model providers later.</li>
 <li><strong>~200 MB of disk</strong> for the install plus whatever you use for memory and skills.</li>
@@ -389,9 +389,15 @@
 
 <h3>Install</h3>
 
-<pre><code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh</code></pre>
+<p><strong>macOS, Linux, WSL2, Termux:</strong></p>
 
-<p>This drops the <code>hermes</code> binary in <code>~/.hermes/bin/</code> and adds it to your PATH. The installer prints everything it does — no hidden steps.</p>
+<pre><code>curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash</code></pre>
+
+<p><strong>Native Windows (PowerShell, early beta):</strong></p>
+
+<pre><code>irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex</code></pre>
+
+<p>The installer sets up <code>uv</code>, Python 3.11, Node.js, <code>ripgrep</code>, <code>ffmpeg</code>, the venv, and the <code>hermes</code> command. On Linux/macOS it drops the binary under <code>~/.hermes/</code> and symlinks <code>~/.local/bin/hermes</code>. On Windows it installs to <code>%LOCALAPPDATA%\hermes</code> with a bundled portable Git Bash. The installer prints everything it does — no hidden steps.</p>
 
 <h3>First run</h3>
 
@@ -475,7 +481,7 @@ hermes
 <p>On any cheap Linux VPS (Hetzner, Digital Ocean, Hostinger, a Raspberry Pi, whatever):</p>
 
 <pre><code># install Hermes
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 
 # set up the Telegram gateway
 hermes gateway setup
@@ -623,7 +629,7 @@ hermes skills info &lt;name&gt;      # inspect before installing</code></pre>
 <p>Hermes itself is free and open-source (MIT licensed). You pay only for the model API you use. With some API model providers or a local Ollama model, your total cost can be $0. With Claude or GPT, you can easily spend $100+ per month depending on volume.</p>
 
 <h3>Does it work on Windows?</h3>
-<p>Yes, via WSL2. Bare Windows isn't officially supported. Run <code>wsl --install</code> in PowerShell, then install Hermes from inside WSL as you would on Linux. The community runs Hermes on Windows happily this way.</p>
+<p>Yes — two paths. <strong>WSL2</strong> is the road-tested option: run <code>wsl --install</code> in PowerShell, install Ubuntu, then run the standard Linux curl installer from inside WSL. <strong>Native Windows</strong> works via an early-beta PowerShell installer (<code>irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex</code>) — Nous's own framing is "not road-tested as broadly," so prefer WSL2 if you're using Hermes for real work.</p>
 
 <h3>Can I run it fully offline?</h3>
 <p>Yes. Install Hermes, pair it with Ollama or LM Studio, and disconnect your network. Memory, skills, and cron all work offline. The catch: local models are weaker at tool calling, so complex multi-step workflows degrade. For offline <em>coding</em>, you're fine to an extent based on the capabilities of your local model. For offline <em>automation with many tool calls</em>, expect rough edges.</p>

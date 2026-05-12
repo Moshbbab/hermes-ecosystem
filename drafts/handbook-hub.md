@@ -127,18 +127,26 @@ Installing Hermes is one curl command followed by two small config steps. If eve
 
 ### Prerequisites
 
-- **macOS, Linux, or Windows (WSL2).** Bare Windows isn't officially supported yet; use WSL2 (install link on the Hermes GitHub page).
-- **A terminal.** Any shell works — bash, zsh, fish.
+- **macOS, Linux, Windows, Android (Termux).** Linux, macOS, and WSL2 are first-class. Native Windows works via an early-beta PowerShell installer. Termux on Android works via a curated install path.
+- **A terminal.** Any shell works — bash, zsh, fish, PowerShell.
 - **An API key or a local model.** If you don't have a model provider or want to set up a new one for your agent, a great place to start is the [Nous Portal](https://portal.nousresearch.com) — otherwise just grab an API key from your model provider, or a local Ollama/LM Studio install. You can always swap model providers later.
 - **~200 MB of disk** for the install plus whatever you use for memory and skills.
 
 ### Install
 
+**macOS, Linux, WSL2, Termux:**
+
 ```bash
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 ```
 
-This drops the `hermes` binary in `~/.hermes/bin/` and adds it to your PATH. The installer prints everything it does — no hidden steps.
+**Native Windows (PowerShell, early beta):**
+
+```powershell
+irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex
+```
+
+The installer sets up `uv`, Python 3.11, Node.js, `ripgrep`, `ffmpeg`, the venv, and the `hermes` command. On Linux/macOS it drops the binary under `~/.hermes/` and symlinks `~/.local/bin/hermes`. On Windows it installs to `%LOCALAPPDATA%\hermes` with a bundled portable Git Bash. The installer prints everything it does — no hidden steps.
 
 ### First run
 
@@ -160,7 +168,7 @@ Prints a health report. Green across the board means you're ready. Red lines usu
 
 1. **"Command not found: hermes"** → your shell didn't pick up the new PATH. Open a fresh terminal or run `source ~/.bashrc` (or `~/.zshrc`).
 2. **"Provider error: invalid key"** → the key you pasted has a trailing space or is for the wrong provider. Re-run `hermes model` and paste carefully.
-3. **Windows: "bad interpreter"** → you're on bare Windows, not WSL2. Install WSL2 (`wsl --install` in PowerShell), then rerun the curl install from inside WSL.
+3. **Windows: "bad interpreter"** → you ran the Linux `curl ... | bash` command in PowerShell or cmd. Either install WSL2 (`wsl --install` in PowerShell) and rerun from inside WSL, or use the native PowerShell installer instead (`irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex`).
 
 Everything else is rare. If `hermes doctor` shows a problem it doesn't explain, open an issue on [the Hermes repo](https://github.com/NousResearch/hermes-agent) — the Nous team triages quickly.
 
@@ -223,7 +231,7 @@ On any cheap Linux VPS (Hetzner, Digital Ocean, Hostinger, a Raspberry Pi, whate
 
 ```bash
 # install Hermes
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 
 # set up the Telegram gateway
 hermes gateway setup
@@ -372,7 +380,7 @@ Hermes itself is free and open-source (MIT licensed). You pay only for the model
 
 ### Does it work on Windows?
 
-Yes, via WSL2. Bare Windows isn't officially supported. Run `wsl --install` in PowerShell, then install Hermes from inside WSL as you would on Linux. The community runs Hermes on Windows happily this way.
+Yes — two paths. **WSL2** is the road-tested option: run `wsl --install` in PowerShell, install Ubuntu, then run the standard Linux curl installer from inside WSL. **Native Windows** works via an early-beta PowerShell installer (`irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex`) — Nous's own framing is "not road-tested as broadly," so prefer WSL2 if you're using Hermes for real work.
 
 ### Can I run it fully offline?
 

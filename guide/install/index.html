@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://hermesatlas.com/guide/install/">
 <meta property="og:site_name" content="Hermes Atlas">
 <meta property="article:published_time" content="2026-04-23T00:00:00Z">
-<meta property="article:modified_time" content="2026-04-23T00:00:00Z">
+<meta property="article:modified_time" content="2026-05-12T00:00:00Z">
 <meta property="article:author" content="https://x.com/ksimback">
 <meta property="og:image" content="https://hermesatlas.com/api/og?title=How+to+install+Hermes+Agent&amp;subtitle=The+complete+2026+setup+guide+for+macOS%2C+Linux%2C+and+Windows+%28WSL2%29.&amp;kind=handbook+%C2%B7+install">
 <meta property="og:image:width" content="1200">
@@ -56,7 +56,7 @@
   "description": "Install Hermes Agent, Nous Research's self-improving AI agent, in 2 minutes on macOS, Linux, or Windows WSL2. Includes the complete troubleshooting tree.",
   "image": "https://hermesatlas.com/api/og?title=How+to+install+Hermes+Agent&subtitle=The+complete+2026+setup+guide+for+macOS%2C+Linux%2C+and+Windows+%28WSL2%29.&kind=handbook+%C2%B7+install",
   "datePublished": "2026-04-23T00:00:00Z",
-  "dateModified": "2026-04-23T00:00:00Z",
+  "dateModified": "2026-05-12T00:00:00Z",
   "author": {
     "@type": "Person",
     "name": "Kevin Simback",
@@ -88,10 +88,10 @@
   "@context": "https://schema.org",
   "@type": "HowTo",
   "name": "How to install Hermes Agent",
-  "description": "Install Hermes Agent v0.10.0 on macOS, Linux, or Windows via WSL2 using one curl command.",
+  "description": "Install Hermes Agent v0.10.0 on macOS, Linux, WSL2, native Windows (PowerShell, early beta), or Termux on Android.",
   "totalTime": "PT2M",
   "tool": [
-    { "@type": "HowToTool", "name": "Terminal (bash or zsh)" },
+    { "@type": "HowToTool", "name": "Terminal (bash, zsh, or PowerShell)" },
     { "@type": "HowToTool", "name": "Git" }
   ],
   "step": [
@@ -137,7 +137,7 @@
       "name": "Does Hermes Agent work on bare Windows?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. Bare Windows is not officially supported as of v0.10.0 (April 2026). Use WSL2: run wsl --install in PowerShell, install Ubuntu, then run the standard Hermes curl installer from inside WSL."
+        "text": "Yes, in early beta. As of v0.10.0 the Nous team ships a native Windows PowerShell installer: irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex. It installs to %LOCALAPPDATA%\\hermes with a bundled portable Git Bash. For a more road-tested setup, use WSL2: run wsl --install in PowerShell, install Ubuntu, then run the standard Linux curl installer from inside WSL."
       }
     },
     {
@@ -227,7 +227,7 @@
   <div class="article-badge">handbook · satellite · install</div>
   <h1>How to install Hermes Agent</h1>
   <p class="subtitle">The complete 2026 setup guide for macOS, Linux, and Windows (WSL2). With the full troubleshooting tree for every common install error.</p>
-  <p class="meta">By <a href="https://x.com/ksimback">Kevin Simback</a> · Hermes Atlas maintainer · Updated 2026-04-23 · ~8 min read</p>
+  <p class="meta">By <a href="https://x.com/ksimback">Kevin Simback</a> · Hermes Atlas maintainer · Updated 2026-05-12 · ~8 min read</p>
 </header>
 
 <blockquote><strong>TL;DR</strong> — Hermes Agent installs with a single curl command on macOS, Linux, or Windows via WSL2. The installer takes two to three minutes end-to-end and is maintained in lockstep with the main repo. This guide covers Hermes Agent <strong>v0.10.0</strong> (<a href="https://github.com/NousResearch/hermes-agent/releases" target="_blank" rel="noopener">current release</a> as of April 2026; 112,074 GitHub stars as of 2026-04-23).</blockquote>
@@ -251,7 +251,8 @@ hermes             # start chatting</code></pre>
 <ul>
 <li><strong>macOS</strong> 13 Ventura or newer. Apple Silicon (M1/M2/M3/M4) and Intel both supported. Apple Silicon is faster for local-model workloads.</li>
 <li><strong>Linux</strong> — Ubuntu 22.04 or newer, Debian 12, Fedora 39+, Arch rolling. Any modern distro with glibc 2.35+ should work.</li>
-<li><strong>Windows</strong> — only via <strong>WSL2</strong> with an Ubuntu or Debian distro inside. Bare Windows is not supported; see <a href="#install-windows">Install on Windows</a> below.</li>
+<li><strong>Windows</strong> — two options. <strong>WSL2</strong> with Ubuntu or Debian inside is the road-tested path. Native Windows works via an <strong>early-beta PowerShell installer</strong> (Nous's wording: "not road-tested as broadly"). See <a href="#install-windows">Install on Windows</a> below.</li>
+<li><strong>Termux (Android)</strong> — supported via a curated <code>.[termux]</code> extra. The same curl one-liner works inside Termux; voice dependencies are excluded.</li>
 </ul>
 
 <p><strong>Prerequisites</strong> — Hermes's installer is aggressive about setting up its own stack, so you need almost nothing pre-installed:</p>
@@ -263,7 +264,7 @@ hermes             # start chatting</code></pre>
 <li><strong>Model access</strong> (optional on first install, required before useful work) — an API key from Anthropic / OpenAI / z.AI / MiniMax / DeepSeek, or a <a href="https://portal.nousresearch.com" target="_blank" rel="noopener">Nous Portal</a> subscription, or a local model via Ollama / LM Studio.</li>
 </ul>
 
-<p>The installer handles the rest automatically: <code>uv</code>, Python 3.11, Node.js 22, <code>ripgrep</code>, <code>ffmpeg</code>, the venv, the global <code>hermes</code> command, and the <code>~/.hermes/</code> directory tree.</p>
+<p>The installer handles the rest automatically: <code>uv</code>, Python 3.11, Node.js, <code>ripgrep</code>, <code>ffmpeg</code>, the venv, the global <code>hermes</code> command, and the <code>~/.hermes/</code> directory tree. On native Windows it additionally bundles a portable Git Bash (~45 MB MinGit) inside <code>%LOCALAPPDATA%\hermes\git</code>.</p>
 
 <hr>
 
@@ -310,11 +311,15 @@ source ~/.bashrc</code></pre>
 
 <hr>
 
-<h2 id="install-windows">Install on Windows (via WSL2)</h2>
+<h2 id="install-windows">Install on Windows</h2>
 
-<p><strong>Bare Windows is not supported.</strong> The Hermes team has stated no plans for a native Windows port — Nous's official position is that agent workloads belong on a Unix userland. Use WSL2, which runs a real Linux kernel inside Windows 11 with near-native performance.</p>
+<p>Two supported paths. <strong>WSL2</strong> is the road-tested option that most users should pick. <strong>Native Windows via PowerShell</strong> is shipped as an early beta in the official installer — Nous's wording is "not road-tested as broadly" — and is the right call if you can't or won't enable WSL.</p>
 
-<h3>1. Install WSL2</h3>
+<h3 id="install-windows-wsl">Option A — WSL2 (recommended)</h3>
+
+<p>WSL2 runs a real Linux kernel inside Windows 11 with near-native performance.</p>
+
+<h4>1. Install WSL2</h4>
 
 <p>Open PowerShell as Administrator:</p>
 
@@ -322,7 +327,7 @@ source ~/.bashrc</code></pre>
 
 <p>This installs WSL2 + Ubuntu by default. Reboot when prompted. On first boot of Ubuntu, create a username and password.</p>
 
-<h3>2. Install Hermes inside WSL</h3>
+<h4>2. Install Hermes inside WSL</h4>
 
 <p>Open the Ubuntu terminal (from Start Menu) and run the same Linux install command:</p>
 
@@ -330,9 +335,24 @@ source ~/.bashrc</code></pre>
 source ~/.bashrc
 hermes version</code></pre>
 
-<h3>3. Use Windows Terminal</h3>
+<h4>3. Use Windows Terminal</h4>
 
 <p>The default WSL console is workable but Windows Terminal (free, Microsoft Store) is substantially better — tabs, font control, and proper Unicode. Set Ubuntu as your default profile and you're done.</p>
+
+<h3 id="install-windows-native">Option B — Native Windows via PowerShell (early beta)</h3>
+
+<p>Open <strong>PowerShell</strong> (not WSL, not cmd) and run:</p>
+
+<pre><code>irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex</code></pre>
+
+<p>The installer drops Hermes into <code>%LOCALAPPDATA%\hermes</code> and unpacks a portable Git Bash (~45 MB MinGit) into <code>%LOCALAPPDATA%\hermes\git</code> so shell-based tools work without a system-wide Git install. It also sets up <code>uv</code>, Python 3.11, Node.js, <code>ripgrep</code>, and <code>ffmpeg</code> in the same directory.</p>
+
+<p>After the script finishes, close and reopen PowerShell so <code>hermes</code> is on PATH, then:</p>
+
+<pre><code>hermes version
+hermes doctor</code></pre>
+
+<p><strong>What "early beta" actually means.</strong> The Nous team's own framing in the README: "not road-tested as broadly" as the Linux/macOS path. Expect more rough edges in the messaging gateway and any tool that shells out to native binaries. If something breaks and you have the option, WSL2 is the safer fallback.</p>
 
 <hr>
 
@@ -390,9 +410,9 @@ hermes status       # current config + running daemons</code></pre>
 
 <p>Trailing whitespace is the #1 cause. Paste with care, or use the heredoc approach: <code>hermes config set model.api_key "$(cat)"</code> then paste and hit Ctrl-D. Second most common cause: wrong provider selected for the key type.</p>
 
-<h3>3. Windows: "bad interpreter" or "cannot execute"</h3>
+<h3>3. Windows: "bad interpreter", "cannot execute", or curl errors</h3>
 
-<p>You're running Hermes from bare Windows cmd or PowerShell, not from inside WSL. Open your Ubuntu (WSL) terminal and rerun from there.</p>
+<p>You ran the Linux <code>curl ... | bash</code> command from PowerShell or cmd. That path is for WSL only. Either open your Ubuntu (WSL) terminal and rerun the bash installer, or use the native PowerShell installer instead: <code>irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex</code>.</p>
 
 <h3>4. "Permission denied" during install</h3>
 
@@ -607,7 +627,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 
 <h3>Does Hermes Agent work on bare Windows?</h3>
 
-<p>No. Bare Windows is not officially supported as of v0.10.0. Use WSL2 — <code>wsl --install</code> in PowerShell, install Ubuntu, then run the standard curl installer from inside WSL. Performance is effectively native.</p>
+<p>Yes, in early beta. As of v0.10.0, Nous ships a native Windows installer you run from PowerShell: <code>irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex</code>. It installs to <code>%LOCALAPPDATA%\hermes</code> and bundles a portable Git Bash. Nous explicitly flags this path as "not road-tested as broadly" — for production use, prefer WSL2: <code>wsl --install</code> in PowerShell, install Ubuntu, then run the standard curl installer from inside WSL.</p>
 
 <h3>Does Hermes work on Apple Silicon (M1, M2, M3, M4)?</h3>
 
@@ -635,7 +655,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 
 <div class="article-footer">
   <p><strong>Written by <a href="https://x.com/ksimback">Kevin Simback</a></strong> · maintainer, Hermes Atlas</p>
-  <p><strong>Last updated:</strong> 2026-04-23 · <strong>Next scheduled refresh:</strong> 2026-05-20 (or sooner if Nous ships a breaking installer change)</p>
+  <p><strong>Last updated:</strong> 2026-05-12 · <strong>Next scheduled refresh:</strong> 2026-06-12 (or sooner if Nous ships a breaking installer change)</p>
   <p><strong>Cited stats:</strong></p>
   <ul>
     <li>112,074 GitHub stars (source: <code>api.github.com/repos/NousResearch/hermes-agent</code>, as of 2026-04-23)</li>
