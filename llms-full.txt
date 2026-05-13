@@ -1,6 +1,6 @@
 # Hermes Atlas — Full Context Bundle
 
-> Complete content of hermesatlas.com as of 2026-05-12. Concatenated from guide pages, ecosystem overview, the quarterly report, and project summaries. Canonical URLs preserved throughout.
+> Complete content of hermesatlas.com as of 2026-05-13. Concatenated from guide pages, ecosystem overview, the quarterly report, and project summaries. Canonical URLs preserved throughout.
 
 This file is the companion to https://hermesatlas.com/llms.txt (the concise index).
 
@@ -448,18 +448,26 @@ Installing Hermes is one curl command followed by two small config steps. If eve
 
 ### Prerequisites
 
-- **macOS, Linux, or Windows (WSL2).** Bare Windows isn't officially supported yet; use WSL2 (install link on the Hermes GitHub page).
-- **A terminal.** Any shell works — bash, zsh, fish.
+- **macOS, Linux, Windows, Android (Termux).** Linux, macOS, and WSL2 are first-class. Native Windows works via an early-beta PowerShell installer. Termux on Android works via a curated install path.
+- **A terminal.** Any shell works — bash, zsh, fish, PowerShell.
 - **An API key or a local model.** If you don't have a model provider or want to set up a new one for your agent, a great place to start is the [Nous Portal](https://portal.nousresearch.com) — otherwise just grab an API key from your model provider, or a local Ollama/LM Studio install. You can always swap model providers later.
 - **~200 MB of disk** for the install plus whatever you use for memory and skills.
 
 ### Install
 
+**macOS, Linux, WSL2, Termux:**
+
 ```bash
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 ```
 
-This drops the `hermes` binary in `~/.hermes/bin/` and adds it to your PATH. The installer prints everything it does — no hidden steps.
+**Native Windows (PowerShell, early beta):**
+
+```powershell
+irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex
+```
+
+The installer sets up `uv`, Python 3.11, Node.js, `ripgrep`, `ffmpeg`, the venv, and the `hermes` command. On Linux/macOS it drops the binary under `~/.hermes/` and symlinks `~/.local/bin/hermes`. On Windows it installs to `%LOCALAPPDATA%\hermes` with a bundled portable Git Bash. The installer prints everything it does — no hidden steps.
 
 ### First run
 
@@ -481,7 +489,7 @@ Prints a health report. Green across the board means you're ready. Red lines usu
 
 1. **"Command not found: hermes"** → your shell didn't pick up the new PATH. Open a fresh terminal or run `source ~/.bashrc` (or `~/.zshrc`).
 2. **"Provider error: invalid key"** → the key you pasted has a trailing space or is for the wrong provider. Re-run `hermes model` and paste carefully.
-3. **Windows: "bad interpreter"** → you're on bare Windows, not WSL2. Install WSL2 (`wsl --install` in PowerShell), then rerun the curl install from inside WSL.
+3. **Windows: "bad interpreter"** → you ran the Linux `curl ... | bash` command in PowerShell or cmd. Either install WSL2 (`wsl --install` in PowerShell) and rerun from inside WSL, or use the native PowerShell installer instead (`irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex`).
 
 Everything else is rare. If `hermes doctor` shows a problem it doesn't explain, open an issue on [the Hermes repo](https://github.com/NousResearch/hermes-agent) — the Nous team triages quickly.
 
@@ -544,7 +552,7 @@ On any cheap Linux VPS (Hetzner, Digital Ocean, Hostinger, a Raspberry Pi, whate
 
 ```bash
 # install Hermes
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
 
 # set up the Telegram gateway
 hermes gateway setup
@@ -693,7 +701,7 @@ Hermes itself is free and open-source (MIT licensed). You pay only for the model
 
 ### Does it work on Windows?
 
-Yes, via WSL2. Bare Windows isn't officially supported. Run `wsl --install` in PowerShell, then install Hermes from inside WSL as you would on Linux. The community runs Hermes on Windows happily this way.
+Yes — two paths. **WSL2** is the road-tested option: run `wsl --install` in PowerShell, install Ubuntu, then run the standard Linux curl installer from inside WSL. **Native Windows** works via an early-beta PowerShell installer (`irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex`) — Nous's own framing is "not road-tested as broadly," so prefer WSL2 if you're using Hermes for real work.
 
 ### Can I run it fully offline?
 
@@ -930,7 +938,7 @@ Skip to content
  handbook · satellite · install 
  How to install Hermes Agent 
  The complete 2026 setup guide for macOS, Linux, and Windows (WSL2). With the full troubleshooting tree for every common install error. 
- By Kevin Simback · Hermes Atlas maintainer · Updated 2026-04-23 · ~8 min read 
+ By Kevin Simback · Hermes Atlas maintainer · Updated 2026-05-12 · ~8 min read 
 
  TL;DR — Hermes Agent installs with a single curl command on macOS, Linux, or Windows via WSL2. The installer takes two to three minutes end-to-end and is maintained in lockstep with the main repo. This guide covers Hermes Agent v0.10.0 ( current release as of April 2026; 112,074 GitHub stars as of 2026-04-23). 
 
@@ -950,7 +958,8 @@ hermes # start chatting
 
  macOS 13 Ventura or newer. Apple Silicon (M1/M2/M3/M4) and Intel both supported. Apple Silicon is faster for local-model workloads. 
  Linux — Ubuntu 22.04 or newer, Debian 12, Fedora 39+, Arch rolling. Any modern distro with glibc 2.35+ should work. 
- Windows — only via WSL2 with an Ubuntu or Debian distro inside. Bare Windows is not supported; see Install on Windows below. 
+ Windows — two options. WSL2 with Ubuntu or Debian inside is the road-tested path. Native Windows works via an early-beta PowerShell installer (Nous's wording: "not road-tested as broadly"). See Install on Windows below. 
+ Termux (Android) — supported via a curated .[termux] extra. The same curl one-liner works inside Termux; voice dependencies are excluded. 
 
  Prerequisites — Hermes's installer is aggressive about setting up its own stack, so you need almost nothing pre-installed: 
 
@@ -959,7 +968,7 @@ hermes # start chatting
  ~200 MB of disk for the install itself; budget another 100–500 MB for memory, skills, and session logs as you use it. 
  Model access (optional on first install, required before useful work) — an API key from Anthropic / OpenAI / z.AI / MiniMax / DeepSeek, or a Nous Portal subscription, or a local model via Ollama / LM Studio. 
 
- The installer handles the rest automatically: uv , Python 3.11, Node.js 22, ripgrep , ffmpeg , the venv, the global hermes command, and the ~/.hermes/ directory tree. 
+ The installer handles the rest automatically: uv , Python 3.11, Node.js, ripgrep , ffmpeg , the venv, the global hermes command, and the ~/.hermes/ directory tree. On native Windows it additionally bundles a portable Git Bash (~45 MB MinGit) inside %LOCALAPPDATA%\hermes\git . 
 
  Install on macOS 
 
@@ -998,9 +1007,13 @@ source ~/.bashrc
  Arch / Manjaro — works; installer uses pacman for missing deps. The AUR has a community hermes-agent package too, but the official curl installer is what the Nous team ships against. 
  Alpine — works with caveats. glibc is required; the installer will fall back to a statically-linked path, but memory and skills with native deps (ffmpeg audio handling, image cache) can be flaky. A $5 Debian VPS is the path of least resistance. 
 
- Install on Windows (via WSL2) 
+ Install on Windows 
 
- Bare Windows is not supported. The Hermes team has stated no plans for a native Windows port — Nous's official position is that agent workloads belong on a Unix userland. Use WSL2, which runs a real Linux kernel inside Windows 11 with near-native performance. 
+ Two supported paths. WSL2 is the road-tested option that most users should pick. Native Windows via PowerShell is shipped as an early beta in the official installer — Nous's wording is "not road-tested as broadly" — and is the right call if you can't or won't enable WSL. 
+
+ Option A — WSL2 (recommended) 
+
+ WSL2 runs a real Linux kernel inside Windows 11 with near-native performance. 
 
  1. Install WSL2 
 
@@ -1021,6 +1034,21 @@ hermes version
  3. Use Windows Terminal 
 
  The default WSL console is workable but Windows Terminal (free, Microsoft Store) is substantially better — tabs, font control, and proper Unicode. Set Ubuntu as your default profile and you're done. 
+
+ Option B — Native Windows via PowerShell (early beta) 
+
+ Open PowerShell (not WSL, not cmd) and run: 
+
+ irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex 
+
+ The installer drops Hermes into %LOCALAPPDATA%\hermes and unpacks a portable Git Bash (~45 MB MinGit) into %LOCALAPPDATA%\hermes\git so shell-based tools work without a system-wide Git install. It also sets up uv , Python 3.11, Node.js, ripgrep , and ffmpeg in the same directory. 
+
+ After the script finishes, close and reopen PowerShell so hermes is on PATH, then: 
+
+ hermes version
+hermes doctor 
+
+ What "early beta" actually means. The Nous team's own framing in the README: "not road-tested as broadly" as the Linux/macOS path. Expect more rough edges in the messaging gateway and any tool that shells out to native binaries. If something breaks and you have the option, WSL2 is the safer fallback. 
 
  Verify the install 
 
@@ -1072,9 +1100,9 @@ hermes status # current config + running daemons
 
  Trailing whitespace is the #1 cause. Paste with care, or use the heredoc approach: hermes config set model.api_key "$(cat)" then paste and hit Ctrl-D. Second most common cause: wrong provider selected for the key type. 
 
- 3. Windows: "bad interpreter" or "cannot execute" 
+ 3. Windows: "bad interpreter", "cannot execute", or curl errors 
 
- You're running Hermes from bare Windows cmd or PowerShell, not from inside WSL. Open your Ubuntu (WSL) terminal and rerun from there. 
+ You ran the Linux curl ... | bash command from PowerShell or cmd. That path is for WSL only. Either open your Ubuntu (WSL) terminal and rerun the bash installer, or use the native PowerShell installer instead: irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex . 
 
  4. "Permission denied" during install 
 
@@ -1272,7 +1300,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
 
  Does Hermes Agent work on bare Windows? 
 
- No. Bare Windows is not officially supported as of v0.10.0. Use WSL2 — wsl --install in PowerShell, install Ubuntu, then run the standard curl installer from inside WSL. Performance is effectively native. 
+ Yes, in early beta. As of v0.10.0, Nous ships a native Windows installer you run from PowerShell: irm https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1 | iex . It installs to %LOCALAPPDATA%\hermes and bundles a portable Git Bash. Nous explicitly flags this path as "not road-tested as broadly" — for production use, prefer WSL2: wsl --install in PowerShell, install Ubuntu, then run the standard curl installer from inside WSL. 
 
  Does Hermes work on Apple Silicon (M1, M2, M3, M4)? 
 
@@ -1299,7 +1327,7 @@ curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scri
  Re-running the same curl command is safe — the installer is idempotent. If it fails a second time, fall back to the manual install above. 
 
  Written by Kevin Simback · maintainer, Hermes Atlas 
- Last updated: 2026-04-23 · Next scheduled refresh: 2026-05-20 (or sooner if Nous ships a breaking installer change) 
+ Last updated: 2026-05-12 · Next scheduled refresh: 2026-06-12 (or sooner if Nous ships a breaking installer change) 
  Cited stats: 
  
  112,074 GitHub stars (source: api.github.com/repos/NousResearch/hermes-agent , as of 2026-04-23) 
@@ -1686,11 +1714,11 @@ Category: Workspaces & GUIs
 Stars: 1,844
 Web dashboard for Hermes Agent — multi-platform AI chat, session management, scheduled jobs, usage analytics & channel configuration (Telegram, Discord, Slack, WhatsApp)
 
-Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that centralizes AI chat, configuration, and monitoring into a single interface. It provides a unified control plane for managing multi-platform channels like Telegram, Discord, and WhatsApp while offering deep visibility into token usage, costs, and session history. The system features a built-in file browser, a web-based terminal, and a profile management system to isolate different agent configurations and backends. Users can also schedule cron jobs, manage model provider credentials, and participate in multi-agent group chats with automated context compression.
+Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. The platform connects directly to the Hermes state database and configuration files to manage chat sessions, provider credentials, and multi-platform communication channels. Users can monitor real-time usage analytics, schedule automated cron jobs, and manage files across local or remote backends like Docker and SSH. It also features a multi-agent group chat system with @mention routing and automated context compression for long conversations.
 
 Highlights:
-- Unified configuration for 8 messaging platforms including Slack and WeChat
-- Real-time usage analytics for token consumption and cost tracking
+- Unified configuration for eight platforms including Telegram, Discord, and Slack
+- Real-time usage analytics with token tracking and cost estimation
 - Integrated file browser and web terminal for remote backend management
 
 ---
@@ -1859,12 +1887,12 @@ Category: Memory & Context
 Stars: 711
 Recursive self-improving context harness — helps agents succeed on complex tasks
 
-Autocontext is a recursive self-improving harness that enables agents to succeed on complex tasks through iterative evaluation and refinement. It operates by running five specialized roles—competitor, analyst, coach, architect, and curator—to propose strategies, analyze outcomes, and persist successful playbooks. The system generates structured traces, artifacts, and distilled knowledge that future agent iterations inherit to improve performance over time. It supports major providers like Anthropic and OpenAI, and includes specific integrations for Hermes Agent and Claude Code via MCP.
+Autocontext is a recursive self-improving harness that enables AI agents to succeed on complex tasks through iterative evaluation and knowledge accumulation. It functions by running a multi-role loop—including competitors, analysts, and curators—that tests strategies against real-world scenarios and retains successful outcomes. The system produces structured traces, playbooks, and datasets that allow subsequent agent iterations to inherit proven strategies and avoid past failures. It supports major model providers and integrates directly with coding agents like Hermes and Claude via CLI or MCP.
 
 Highlights:
-- Iterative self-improvement through structured evaluation and knowledge persistence
-- Five-role architecture for strategy proposal, analysis, and curation
-- Generates reusable playbooks, datasets, and local model distillation
+- Iterative self-improvement loop using five specialized agent roles
+- Generates structured playbooks and traces for persistent knowledge transfer
+- Native integration with Hermes Agent and MCP-compatible clients
 
 ---
 
@@ -2048,12 +2076,12 @@ Category: Domain Applications
 Stars: 204
 Decision infrastructure with guard policies and risk assessment for agents
 
-DashClaw is a decision infrastructure and governance layer designed to intercept and evaluate agent actions before they execute. It sits between AI agents and external systems to enforce guard policies, assess risks, and record verifiable evidence of every decision. Users can approve risky tool calls via Discord and review decision replays to prevent destructive actions. The platform integrates with Claude Code, LangChain, and CrewAI through MCP servers, SDKs, or zero-code hooks.
+DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative guard policies, routing high-risk tasks for human approval via dashboards or messaging platforms. The system maintains durable records of agent reasoning and terminal outcomes to prevent silent double-execution during retries. It integrates with major agent frameworks, MCP runtimes, and coding tools through SDKs, hooks, and a REST API.
 
 Highlights:
-- Intercepts and evaluates agent tool calls before execution
-- Provides Discord-based manual approval for high-risk actions
-- Supports MCP servers and zero-code hooks for Claude Code
+- Evaluates agent actions against risk thresholds and declarative guard policies
+- Routes pending approvals to CLI, mobile, Telegram, or Discord queues
+- Prevents double-execution by tracking durable terminal outcomes and retries
 
 ---
 
@@ -2320,12 +2348,12 @@ Category: Workspaces & GUIs
 Stars: 65
 Desktop companion app for installing, configuring, and chatting with Hermes Agent
 
-Hermes Desktop is a cross-platform companion application that provides a graphical interface for managing and interacting with the Hermes Agent. It automates the installation of dependencies like Python and Git, allowing users to run the agent locally or connect to remote API servers. The app features a comprehensive workspace for configuring multi-provider model endpoints, managing memory systems, and deploying messaging gateways across platforms like Discord and Slack. It also includes specialized tools for task planning, code execution, and a 3D visual interface called Hermes Office.
+Hermes Desktop is a native cross-platform GUI that simplifies the installation and management of the Hermes Agent ecosystem. It automates the setup of local dependencies like Python and Git or connects to remote API servers to provide a unified workspace for agent interaction. The application features a streaming chat interface, a persona editor for SOUL.md, and management tools for 14 toolsets and 16 messaging gateways including Telegram and Discord. Users can also monitor token usage, manage long-term memory providers, and schedule tasks via a built-in cron job builder.
 
 Highlights:
-- Guided installation with automated dependency resolution and environment setup
-- Support for 16 messaging gateways including Telegram, Discord, and Slack
-- Integrated memory management and persona editing for agent customization
+- Guided installer for local Hermes Agent setup and dependency resolution
+- Unified GUI for managing 16 messaging gateways and 14 toolsets
+- Integrated persona editor and memory system with SQLite-backed session search
 
 ---
 
@@ -2456,12 +2484,12 @@ Category: Developer Tools
 Stars: 44
 AI-native browser built for autonomous agent control via MCP
 
-Vessel is an open-source Chromium-based browser designed specifically for autonomous agent control and human supervision. It provides a persistent runtime environment where external agent harnesses can drive web workflows while humans audit and intervene through a visible UI. The browser maintains durable state through named sessions, annotated checkpoints, and an action undo feature that rolls back the browser to snapshots taken before agent mutations. It integrates with MCP clients like Hermes Agent and includes a built-in chat assistant that supports various AI providers and local endpoints.
+Vessel is an open-source, Chromium-based browser designed specifically for autonomous agent control rather than traditional human-centric browsing. It provides a persistent runtime with durable state and a visible UI that allows humans to audit, intervene, and redirect long-running agent workflows. The browser integrates with the Model Context Protocol (MCP) to support external harnesses like Hermes Agent and includes built-in tools for page schema inference, action rollback, and agent-readable bookmarks. It is primarily optimized for Linux and macOS environments where agents act as the primary operators.
 
 Highlights:
-- Persistent browser state with named sessions and action rollbacks
-- MCP-compatible control for external agent harnesses and Hermes Agent
-- Human-in-the-loop supervisory UI with approval and intervention controls
+- Provides a human-visible supervisory UI for auditing autonomous agent actions
+- Exposes browser control via MCP for external agent harnesses
+- Maintains durable state with named sessions and annotated checkpoints
 
 ---
 
@@ -2558,12 +2586,12 @@ Category: Memory & Context
 Stars: 29
 The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents
 
-Mnemosyne is a local-first memory system designed for the Hermes Agent framework to provide private, zero-dependency context management. It utilizes SQLite with native vector search and full-text search to store conversations, preferences, and knowledge without requiring external databases or API keys. The system features a three-tier architecture—working, episodic, and scratchpad—to manage information across different time scales. It is optimized for low-latency performance, achieving sub-millisecond read and write speeds while remaining fully functional in offline environments.
+Mnemosyne is a local-first memory system designed to provide AI agents with persistent storage for conversations, preferences, and knowledge without relying on cloud services. It utilizes a SQLite backend featuring native vector search via sqlite-vec and full-text search through FTS5 to ensure data remains private and accessible offline. The system achieves sub-millisecond latency by running in-process, eliminating the need for external databases or API calls. It integrates natively as a Hermes Agent plugin and includes a three-tier architecture for working, episodic, and scratchpad memory.
 
 Highlights:
-- SQLite-backed storage with native vector and full-text search
-- Sub-millisecond latency for local read, write, and search operations
-- Three-tier memory architecture including working and episodic consolidation
+- Zero-dependency SQLite backend with native vector and full-text search
+- Sub-millisecond read, write, and search latency for local performance
+- Native Hermes Agent plugin with built-in episodic consolidation cycles
 
 ---
 
@@ -2643,12 +2671,12 @@ Category: Workspaces & GUIs
 Stars: 25
 Glassmorphic web interface for Hermes Agent — your self-hosted AI assistant
 
-Hermes UI is a glassmorphic web-based command center designed for managing and monitoring the Hermes Agent ecosystem. Built as a single-file React 18 application, it connects to a lightweight Python proxy to provide a unified interface for chat, file browsing, and skill management. The interface features real-time log streaming, a task board for tracking active tool work, and integrated support for Model Context Protocol (MCP) servers. It also includes specialized tools for scheduling cron jobs, inspecting memory, and uploading video files for compatible model workflows.
+Hermes UI is a glassmorphic web dashboard that serves as the central command center for the Hermes Agent ecosystem. Built as a single-file React 18 application, it connects to a lightweight Python proxy to provide real-time log streaming, file browsing, and memory inspection. The interface enables users to manage complex agentic workflows including task tracking, cron job scheduling, and MCP tool integration. It also features specialized session recovery logic to maintain transcript continuity and tool-call evidence across browser and server states.
 
 Highlights:
 - Single-file React 18 application with a lightweight Python proxy server
-- Real-time log streaming and live task tracking for agent activities
 - Integrated file browser, terminal, and MCP tool management interface
+- Real-time task tracking with automated session and transcript repair
 
 ---
 

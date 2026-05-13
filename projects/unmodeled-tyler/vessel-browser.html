@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/unmodeled-tyler/vessel-browser#software",
   "name": "vessel-browser",
-  "description": "Vessel is an open-source Chromium-based browser designed specifically for autonomous agent control and human supervision. It provides a persistent runtime environment where external agent harnesses can drive web workflows while humans audit and intervene through a visible UI. The browser maintains durable state through named sessions, annotated checkpoints, and an action undo feature that rolls back the browser to snapshots taken before agent mutations. It integrates with MCP clients like Hermes",
+  "description": "Vessel is an open-source, Chromium-based browser designed specifically for autonomous agent control rather than traditional human-centric browsing. It provides a persistent runtime with durable state and a visible UI that allows humans to audit, intervene, and redirect long-running agent workflows. The browser integrates with the Model Context Protocol (MCP) to support external harnesses like Hermes Agent and includes built-in tools for page schema inference, action rollback, and agent-readable ",
   "url": "https://hermesatlas.com/projects/unmodeled-tyler/vessel-browser",
   "codeRepository": "https://github.com/unmodeled-tyler/vessel-browser",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "unmodeled-tyler",
     "url": "https://github.com/unmodeled-tyler"
   },
-  "dateModified": "2026-05-12T03:02:02.000Z",
+  "dateModified": "2026-05-13T03:49:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 74
+    "userInteractionCount": 75
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Built from the ground-up for agents, Vessel Browser is an open source AI browser for Linux/Windows that provides a durable state, MCP control, and BYOK with full autonomous browsing. Use with Hermes Agent, OpenClaw, or connect to your favorite API provider.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 74</span>
+    <span class="stars">★ 75</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-12</span>
+    <span><span class="meta-label">updated</span>2026-05-13</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Vessel is an open-source Chromium-based browser designed specifically for autonomous agent control and human supervision. It provides a persistent runtime environment where external agent harnesses can drive web workflows while humans audit and intervene through a visible UI. The browser maintains durable state through named sessions, annotated checkpoints, and an action undo feature that rolls back the browser to snapshots taken before agent mutations. It integrates with MCP clients like Hermes Agent and includes a built-in chat assistant that supports various AI providers and local endpoints.</p>
+    <p class="summary-text">Vessel is an open-source, Chromium-based browser designed specifically for autonomous agent control rather than traditional human-centric browsing. It provides a persistent runtime with durable state and a visible UI that allows humans to audit, intervene, and redirect long-running agent workflows. The browser integrates with the Model Context Protocol (MCP) to support external harnesses like Hermes Agent and includes built-in tools for page schema inference, action rollback, and agent-readable bookmarks. It is primarily optimized for Linux and macOS environments where agents act as the primary operators.</p>
     <ul class="summary-highlights">
-      <li>Persistent browser state with named sessions and action rollbacks</li>
-      <li>MCP-compatible control for external agent harnesses and Hermes Agent</li>
-      <li>Human-in-the-loop supervisory UI with approval and intervention controls</li>
+      <li>Provides a human-visible supervisory UI for auditing autonomous agent actions</li>
+      <li>Exposes browser control via MCP for external agent harnesses</li>
+      <li>Maintains durable state with named sessions and annotated checkpoints</li>
     </ul>
   </div>
 </section>
@@ -205,9 +205,10 @@ npm run dev
 <li><strong>Agent-first browser model</strong> — Vessel is designed around an agent driving the browser while a human watches, intervenes, and redirects</li>
 <li><strong>Human-visible browser UI</strong> — pages render like a normal browser so agent activity stays legible instead of disappearing into a headless run</li>
 <li><strong>Command Bar</strong> (<code>Ctrl+L</code>) — a secondary operator surface for harness-driven workflows and future runtime commands</li>
-<li><strong>Supervisor Sidebar</strong> (<code>Ctrl+Shift+L</code>) — live supervision across seven tabs: Supervisor, Bookmarks, Checkpoints, Chat, Automate, History, and Changes</li>
+<li><strong>Supervisor Sidebar</strong> (<code>Ctrl+Shift+L</code>) — live supervision across eight tabs: Supervisor, Bookmarks, Checkpoints, Chat, Automate, History, Changes, and Research</li>
 <li><strong>Chat Assistant</strong> — built-in conversational AI in the sidebar Chat tab; supports Anthropic, OpenAI, Ollama, llama.cpp, Mistral, xAI, Google Gemini, OpenRouter, and any OpenAI-compatible endpoint; reads the current page automatically; has full access to the same browser tools as external agents; multi-turn session history; configure provider, model, and API key in Settings</li>
 <li><strong>Automation Kits</strong> (Premium) — parameterized workflow templates in the sidebar Automate tab; fill in a short form and the built-in agent executes the workflow autonomously; bundled kits include Research &amp; Collect (multi-source research with bookmark saving) and Price Scout (cross-retailer price comparison); designed for a future kit marketplace</li>
+<li><strong>Research Desk</strong> (Beta) — a dedicated sidebar Research tab for structured research reports; start with a topic, complete an in-tab briefing, let Vessel draft research objectives, approve the plan, then dispatch browser sub-agents to collect source-backed claims and synthesize a markdown-exportable report. Starting the brief is free; plan approval, sub-agent execution, and report export require Vessel Premium.</li>
 <li><strong>Dev Tools Panel</strong> (<code>F12</code>) — inspect console output, network requests, and MCP/agent activity in a resizable panel at the bottom of the window; export logs by category and date range as JSON</li>
 <li><strong>Browser Basics For Long Runs</strong> — pinned tabs stay compact at the front of the tab strip and are protected from accidental close; tab groups can be color-coded and collapsed; audible tabs show audio indicators with mute controls; open additional browser windows with <code>Ctrl+N</code>; print the active page with <code>Ctrl+P</code> or save it directly as PDF with <code>Ctrl+Shift+P</code></li>
 <li><strong>Action Undo / Rollback</strong> — restore the browser to the session snapshot captured immediately before the last successful mutating agent action; available from the Supervisor tab and through the <code>undo_last_action</code> tool</li>
@@ -282,14 +283,14 @@ npm run dev
 <pre><code>Main Process                              Renderer (SolidJS)
 ├── TabManager (WebContentsView[])        ├── TabBar, AddressBar
 ├── AgentRuntime (session + supervision)  ├── CommandBar (secondary surface)
-├── MCP server for external agents        ├── AI Sidebar (Supervisor/Bookmarks/Checkpoints/Chat/Automate)
+├── MCP server for external agents        ├── AI Sidebar (Supervisor/Bookmarks/Checkpoints/Chat/Automate/History/Changes/Research)
 ├── AI providers (Anthropic + OAI-compat) ├── DevTools Panel (Console/Network/Activity)
 ├── Supervision, bookmarks, checkpoints   ├── Agent Transcript Dock
 └── IPC Handlers ◄──contextBridge──► ──► └── Signal stores (tabs, ai, ui)
 └── IPC Handlers ◄──contextBridge──► Preload API
 </code></pre>
 <p>Each browser tab is a separate <code>WebContentsView</code> managed by the main process. The browser chrome (SolidJS) runs in its own view layered on top. All communication between renderer and main goes through typed IPC channels via <code>contextBridge</code>.</p>
-<p>The sidebar Automate tab renders kit forms entirely in the renderer and passes the rendered prompt to the built-in agent via the same <code>query()</code> path used by the Chat tab — no additional IPC surface is needed. The Changes tab reads the current page&#39;s diff timeline through IPC and unlocks persisted history for Premium users.</p>
+<p>The sidebar Automate tab renders kit forms entirely in the renderer and passes the rendered prompt to the built-in agent via the same <code>query()</code> path used by the Chat tab — no additional IPC surface is needed. The Changes tab reads the current page&#39;s diff timeline through IPC and unlocks persisted history for Premium users. The Research tab has a dedicated IPC surface for its state machine: briefing is available to everyone, while objective approval, parallel browser sub-agents, report synthesis, and markdown export are Premium-gated during the beta.</p>
 <h3>Getting Started</h3>
 <p>The installer:</p>
 <ul>
@@ -382,6 +383,7 @@ npm run dist:mac:signed
 <li>The default MCP port is <code>3100</code></li>
 <li>Hermes Agent and OpenClaw should treat Vessel as the persistent, human-visible browser rather than launching their own separate browser session</li>
 <li>Vessel supports a built-in Chat tab with configurable AI provider; open Settings (<code>Ctrl+,</code>) and enable Chat Assistant to set a provider and model</li>
+<li>The sidebar Research tab is marked Beta; use it to turn a broad research topic into a brief, approve a multi-thread plan, run browser sub-agents, and export the final report as markdown. Briefing is free, while full execution and export require Premium.</li>
 <li><code>llama.cpp (Local)</code> is a first-class chat provider in Settings and targets <code>http://localhost:8080/v1</code> by default; Vessel auto-fetches the active model from <code>llama-server</code></li>
 <li>For <code>llama-server</code>, use <code>--ctx-size 16384</code> minimum and <code>32768</code> recommended for reliable Vessel agent loops; lower values often fail once prompt, tool schema, and tool history accumulate</li>
 <li>Approval policy is controlled live from the sidebar Supervisor panel rather than a separate global settings screen</li>
@@ -689,7 +691,7 @@ vessel-browser-launch --dry-run
 │   └── src/
 │       ├── components/
 │       │   ├── chrome/   # TitleBar, TabBar, AddressBar, AgentTranscriptDock
-│       │   ├── ai/       # CommandBar, Sidebar (Supervisor/Bookmarks/Checkpoints/Chat/Automate/History/Changes)
+│       │   ├── ai/       # CommandBar, Sidebar (Supervisor/Bookmarks/Checkpoints/Chat/Automate/History/Changes/Research)
 │       │   ├── devtools/ # DevTools panel (Console, Network, Activity)
 │       │   └── shared/   # Settings panel
 │       ├── stores/       # SolidJS signal stores (tabs, ai, ui, runtime, bookmarks, etc.)
@@ -721,11 +723,11 @@ vessel-browser-launch --dry-run
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/junhoyeo/tokscale">
-        <div class="stars">★ 2.8K</div>
+        <div class="stars">★ 2.9K</div>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 341</div>
+        <div class="stars">★ 351</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -745,7 +747,7 @@ vessel-browser-launch --dry-run
         <div class="name"><span class="org">0xNyk /</span> openclaw-to-hermes</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-setup">
-        <div class="stars">★ 20</div>
+        <div class="stars">★ 21</div>
         <div class="name"><span class="org">42-evey /</span> evey-setup</div>
       </a>
     </div>
