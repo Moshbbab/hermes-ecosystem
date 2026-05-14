@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory and context layer that provides AI agents with a persistent, structured brain to prevent forgetfulness. It utilizes a self-wiring knowledge graph and hybrid search to create typed links between entities without requiring LLM calls for extraction. The system supports various embedding providers and can be deployed as a standalone CLI or an MCP server for tools like Claude Code and Cursor.",
+  "description": "GBrain is a persistent memory and knowledge graph system designed to prevent AI agents from losing context over time. It utilizes a self-wiring graph layer that extracts entity relationships like investments and employment without requiring additional LLM calls, alongside hybrid vector and keyword search. The system consolidates meetings, emails, and notes into a structured timeline while fixing its own citations and memory overnight. It supports 14 embedding providers and includes built-in benc",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-05-12T22:26:27.000Z",
+  "dateModified": "2026-05-14T04:59:22.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 15313
+    "userInteractionCount": 15547
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 15.3K</span>
+    <span class="stars">★ 15.5K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-12</span>
+    <span><span class="meta-label">updated</span>2026-05-14</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory and context layer that provides AI agents with a persistent, structured brain to prevent forgetfulness. It utilizes a self-wiring knowledge graph and hybrid search to create typed links between entities without requiring LLM calls for extraction. The system supports various embedding providers and can be deployed as a standalone CLI or an MCP server for tools like Claude Code and Cursor.</p>
+    <p class="summary-text">GBrain is a persistent memory and knowledge graph system designed to prevent AI agents from losing context over time. It utilizes a self-wiring graph layer that extracts entity relationships like investments and employment without requiring additional LLM calls, alongside hybrid vector and keyword search. The system consolidates meetings, emails, and notes into a structured timeline while fixing its own citations and memory overnight. It supports 14 embedding providers and includes built-in benchmarking tools to evaluate retrieval accuracy and latency.</p>
     <ul class="summary-highlights">
-      <li>Self-wiring knowledge graph with typed entity references</li>
-      <li>Hybrid search combining vector retrieval and graph-based ranking</li>
-      <li>MCP server support for seamless AI agent integration</li>
+      <li>Self-wiring knowledge graph extracts entity relationships without LLM calls.</li>
+      <li>Hybrid search combining vector embeddings, BM25, and backlink-boosted ranking.</li>
+      <li>Local-first architecture using PGLite for zero-server database deployment.</li>
     </ul>
   </div>
 </section>
@@ -181,9 +181,51 @@ the full doc map, use <code>llms.txt</code> at the same URL root.</p>
 <h4>Standalone CLI (no agent)</h4>
 <pre><code class="language-bash">git clone https://github.com/garrytan/gbrain.git &amp;&amp; cd gbrain &amp;&amp; bun install &amp;&amp; bun link
 gbrain init                     # local brain, ready in 2 seconds
+                                # picks a search mode (conservative / balanced / tokenmax)
 gbrain import ~/notes/          # index your markdown
 gbrain query &quot;what themes show up across my notes?&quot;
+gbrain search modes             # see the active search mode + per-knob attribution
+gbrain search stats             # cache hit rate + intent mix after some real usage
 </code></pre>
+<p><strong>v0.32.3 — named search modes.</strong> <code>gbrain init</code> asks once which mode fits
+your workload. The cost spread depends on BOTH the mode AND your downstream
+model — 25x corner-to-corner. Per-query cost @ 10K queries/month (typical
+single-user volume; multiply by 10 for heavy / multi-user fleets):</p>
+<table>
+<thead>
+<tr>
+<th>Mode \ Downstream</th>
+<th>Haiku 4.5 ($1/M)</th>
+<th>Sonnet 4.6 ($3/M)</th>
+<th>Opus 4.7 ($5/M)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>conservative</code> (~4K)</td>
+<td><strong>$40/mo</strong></td>
+<td>$120/mo</td>
+<td>$200/mo</td>
+</tr>
+<tr>
+<td><code>balanced</code> (~10K)</td>
+<td>$100/mo</td>
+<td>$300/mo</td>
+<td>$500/mo</td>
+</tr>
+<tr>
+<td><code>tokenmax</code> (~20K)</td>
+<td>$200/mo</td>
+<td>$600/mo</td>
+<td><strong>$1,000/mo</strong></td>
+</tr>
+</tbody></table>
+<p>Natural pairings (corner-diagonal) span ~4x at realistic single-user
+volume. Auto-suggests based on your configured <code>models.tier.subagent</code>.
+Non-TTY installs auto-pick <code>balanced</code> and print a hint pointing at
+<code>gbrain config set search.mode &lt;m&gt;</code>. After some real usage, run
+<code>gbrain search stats</code> for observability and <code>gbrain search tune</code> for
+data-driven recommendations. Methodology + eval results live at
+<a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md">docs/eval/SEARCH_MODE_METHODOLOGY.md</a>.</p>
 <p><strong>Do NOT use <code>bun install -g github:garrytan/gbrain</code>.</strong> Bun blocks the top-level
 postinstall hook on global installs, so schema migrations never run and the CLI
 aborts with <code>Aborted()</code> the first time it opens PGLite. Use <code>git clone + bun install &amp;&amp; bun link</code> as shown above. See <a href="https://github.com/garrytan/gbrain/issues/218">#218</a>.</p>
@@ -985,27 +1027,9 @@ ADMIN
                                           gbrain config set models.default opus
                                           gbrain config set models.tier.deep opus
   gbrain models doctor                  1-token reachability probe for each configured
-                                        chat/expansion model. Catches `model_not_found`
-                                        before the next agent run silently degrades.
-                                        [--skip=&lt;provider&gt;] [--json]
-  gbrain serve                          MCP server (stdio)
-  gbrain serve --http [--port 3131]     HTTP MCP server with OAuth 2.1 + admin dashboard
-                                        [--token-ttl 3600] [--enable-dcr]
-                                        [--public-url URL] [--log-full-params]
-  gbrain auth create|list|revoke|test   Legacy bearer token management
-  gbrain auth register-client &lt;name&gt;    Register an OAuth 2.1 client
-        --grant-types client_credentials,authorization_code
-        --scopes &quot;read write admin&quot;
-  gbrain auth revoke-client &lt;client_id&gt; Revoke an OAuth 2.1 client (cascade purges
-                                        active tokens + auth codes via FK CASCADE)
-  # OAuth 2.1 clients can also be registered from the /admin dashboard or
-  # programmatically via oauthProvider.registerClientManual() for host-repo wrappers.
-  gbrain integrations                   Integration recipe dashboard
-  gbrain sources list|add|remove|...    Multi-source brain management (v0.18)
-                                        v0.28.2: --url &lt;https://...&gt; registers a federated
-                                        remote git repo; clone is auto-managed under
-                                        $GBRAIN_HOME/clones/&lt;id&gt;/ and re-cloned on sync if
- 
+                                        chat/expansion model + a zero-token embedding_config
+                                        probe (catches Voyage flexible-dim misconfigs before
+                      
 
 ---
 
@@ -1027,7 +1051,7 @@ ADMIN
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 13.2K</div>
+        <div class="stars">★ 13.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1035,15 +1059,15 @@ ADMIN
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 225</div>
+        <div class="stars">★ 226</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 162</div>
+        <div class="stars">★ 164</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 81</div>
+        <div class="stars">★ 106</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -1051,7 +1075,7 @@ ADMIN
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 488</div>
+        <div class="stars">★ 498</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>
