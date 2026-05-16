@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/EKKOLearnAI/hermes-web-ui#software",
   "name": "hermes-web-ui",
-  "description": "Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. The platform connects directly to the Hermes state database and configuration files to manage chat sessions, provider credentials, and multi-platform communication channels. Users can monitor real-time usage analytics, schedule automated cron jobs, and manage files across local or remote backends like Docker and SSH. It also featur",
+  "description": "Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. It utilizes a local SQLite database for session management and Socket.IO for real-time chat streaming, allowing users to monitor token usage, costs, and agent logs. The platform enables unified configuration for eight communication channels, including Telegram, Discord, and WhatsApp, while supporting multi-profile management and sc",
   "url": "https://hermesatlas.com/projects/EKKOLearnAI/hermes-web-ui",
   "codeRepository": "https://github.com/EKKOLearnAI/hermes-web-ui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -46,13 +46,13 @@
     "name": "EKKOLearnAI",
     "url": "https://github.com/EKKOLearnAI"
   },
-  "dateModified": "2026-05-15T07:33:11.000Z",
+  "dateModified": "2026-05-16T07:17:05.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4852
+    "userInteractionCount": 4959
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">110·repos</span>
+    <span id="meta-count">115·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -111,11 +111,11 @@
   <p class="project-desc">Web dashboard for Hermes Agent — multi-platform AI chat, session management, scheduled jobs, usage analytics </p>
 
   <div class="meta-row">
-    <span class="stars">★ 4.9K</span>
+    <span class="stars">★ 5.0K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     
     
-    <span><span class="meta-label">updated</span>2026-05-15</span>
+    <span><span class="meta-label">updated</span>2026-05-16</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. The platform connects directly to the Hermes state database and configuration files to manage chat sessions, provider credentials, and multi-platform communication channels. Users can monitor real-time usage analytics, schedule automated cron jobs, and manage files across local or remote backends like Docker and SSH. It also features a multi-agent group chat system with @mention routing and automated context compression for long conversations.</p>
+    <p class="summary-text">Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. It utilizes a local SQLite database for session management and Socket.IO for real-time chat streaming, allowing users to monitor token usage, costs, and agent logs. The platform enables unified configuration for eight communication channels, including Telegram, Discord, and WhatsApp, while supporting multi-profile management and scheduled cron jobs. Users can also manage model providers, browse remote files, and access an integrated web terminal for direct system interaction.</p>
     <ul class="summary-highlights">
-      <li>Unified configuration for eight platforms including Telegram, Discord, and Slack</li>
-      <li>Real-time usage analytics with token tracking and cost estimation</li>
-      <li>Integrated file browser and web terminal for remote backend management</li>
+      <li>Unified configuration for Telegram, Discord, Slack, and five other platforms</li>
+      <li>Real-time chat streaming with multi-session management and markdown support</li>
+      <li>Usage analytics tracking token consumption, costs, and model distribution</li>
     </ul>
   </div>
 </section>
@@ -175,9 +175,9 @@
 <h3>Features</h3>
 <h4>AI Chat</h4>
 <ul>
-<li>Real-time streaming via SSE with async run support</li>
+<li>Real-time chat streaming over Socket.IO <code>/chat-run</code>; API Server runs consume Hermes Gateway streaming responses</li>
 <li>Multi-session management — create, rename, delete, switch between sessions</li>
-<li><strong>Self-built session database</strong> — local SQLite storage with automatic sync from Hermes state.db on first startup</li>
+<li><strong>Self-built session database</strong> — local SQLite storage for Web UI sessions; Hermes state.db remains a read-only source for Hermes history APIs</li>
 <li>Session grouping by source (Telegram, Discord, Slack, etc.) with collapsible accordion</li>
 <li>Active session indicator — live sessions pin to top with spinner icon</li>
 <li>Sessions sorted by latest message time</li>
@@ -185,7 +185,7 @@
 <li>Tool call detail expansion (arguments / result)</li>
 <li>File upload support</li>
 <li>File download support — download user-uploaded files and agent-generated files across local, Docker, SSH, and Singularity backends</li>
-<li>Session search — Ctrl+K global search across all conversations</li>
+<li>Session search — Ctrl+K search across the Web UI local session database; read-only Hermes history sessions are not included</li>
 <li>Global model selector — discovers models from <code>~/.hermes/auth.json</code> credential pool</li>
 <li>Per-session model display badge and context token usage</li>
 </ul>
@@ -358,6 +358,92 @@ docker compose logs -f hermes-webui
 <li>All runtime settings are environment-variable driven in <code>docker-compose.yml</code></li>
 </ul>
 <p>For detailed notes and troubleshooting, see <a href="https://github.com/EKKOLearnAI/hermes-web-ui/blob/main/docs/docker.md"><code>docs/docker.md</code></a>.</p>
+<h3>Web UI Environment Variables</h3>
+<p>These variables configure Hermes Web UI itself. Provider API keys and Hermes Agent settings are managed separately through Hermes profiles.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PORT</code></td>
+<td><code>8648</code></td>
+<td>Web UI listen port.</td>
+</tr>
+<tr>
+<td><code>BIND_HOST</code></td>
+<td><code>0.0.0.0</code></td>
+<td>Web UI bind host. Set <code>::</code> explicitly for IPv6.</td>
+</tr>
+<tr>
+<td><code>HERMES_WEB_UI_HOME</code></td>
+<td><code>~/.hermes-web-ui</code></td>
+<td>Web UI data home for auth token, credentials, logs, DB, and default uploads. <code>HERMES_WEBUI_STATE_DIR</code> is also supported as a compatibility alias.</td>
+</tr>
+<tr>
+<td><code>UPLOAD_DIR</code></td>
+<td><code>$HERMES_WEB_UI_HOME/upload</code></td>
+<td>Upload directory override.</td>
+</tr>
+<tr>
+<td><code>CORS_ORIGINS</code></td>
+<td><code>*</code></td>
+<td>Koa CORS origin setting.</td>
+</tr>
+<tr>
+<td><code>AUTH_DISABLED</code></td>
+<td>unset</td>
+<td>Set to <code>1</code> or <code>true</code> to disable Web UI auth.</td>
+</tr>
+<tr>
+<td><code>AUTH_TOKEN</code></td>
+<td>auto-generated</td>
+<td>Explicit bearer token. If unset, Web UI creates one under <code>HERMES_WEB_UI_HOME</code>.</td>
+</tr>
+<tr>
+<td><code>PROFILE</code></td>
+<td><code>default</code></td>
+<td>Initial Hermes profile name.</td>
+</tr>
+<tr>
+<td><code>LOG_LEVEL</code></td>
+<td><code>info</code></td>
+<td>Server log level.</td>
+</tr>
+<tr>
+<td><code>BRIDGE_LOG_LEVEL</code></td>
+<td><code>$LOG_LEVEL</code> or <code>info</code></td>
+<td>Bridge log level.</td>
+</tr>
+<tr>
+<td><code>MAX_DOWNLOAD_SIZE</code></td>
+<td><code>200MB</code></td>
+<td>Maximum file download size.</td>
+</tr>
+<tr>
+<td><code>MAX_EDIT_SIZE</code></td>
+<td><code>10MB</code></td>
+<td>Maximum editable file size.</td>
+</tr>
+<tr>
+<td><code>WORKSPACE_BASE</code></td>
+<td><code>/opt/data/workspace</code></td>
+<td>Base directory for workspace browsing.</td>
+</tr>
+<tr>
+<td><code>GATEWAY_HOST</code></td>
+<td><code>127.0.0.1</code></td>
+<td>Default gateway host written into profile config.</td>
+</tr>
+<tr>
+<td><code>HERMES_WEB_UI_STOP_GATEWAYS_ON_SHUTDOWN</code></td>
+<td>environment-dependent</td>
+<td>Whether Web UI shutdown also stops managed gateways.</td>
+</tr>
+</tbody></table>
 <h4>CLI Commands</h4>
 <table>
 <thead>
@@ -391,6 +477,10 @@ docker compose logs -f hermes-webui
 <td>Update to latest version &amp; restart</td>
 </tr>
 <tr>
+<td><code>hermes-web-ui upgrade</code></td>
+<td>Alias for <code>update</code></td>
+</tr>
+<tr>
 <td><code>hermes-web-ui -v</code></td>
 <td>Show version number</td>
 </tr>
@@ -399,6 +489,7 @@ docker compose logs -f hermes-webui
 <td>Show help message</td>
 </tr>
 </tbody></table>
+<p><code>update</code> / <code>upgrade</code> first attempt <code>npm cache clean --force</code>, then run <code>npm install -g hermes-web-ui@latest</code> and restart. Cache cleanup is best-effort; if it fails, the updater continues with the install.</p>
 <h4>Auto Configuration</h4>
 <p>On startup the BFF server automatically:</p>
 <ul>
@@ -421,6 +512,7 @@ npm run dev
 </ul>
 <pre><code class="language-bash">npm run build   # outputs to dist/
 </code></pre>
+<p>See <a href="https://github.com/EKKOLearnAI/hermes-web-ui/blob/main/DEVELOPMENT.md">DEVELOPMENT.md</a> for project development guidelines.</p>
 <h3>Architecture</h3>
 <pre><code>Browser → BFF (Koa, :8648) → Hermes Gateway (:8642)
                 ↓
@@ -453,11 +545,11 @@ npm run dev
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/outsourc-e/hermes-workspace">
-        <div class="stars">★ 4.2K</div>
+        <div class="stars">★ 4.3K</div>
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 5.1K</div>
+        <div class="stars">★ 5.2K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -469,7 +561,7 @@ npm run dev
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 649</div>
+        <div class="stars">★ 653</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/dodo-reach/hermes-desktop">
@@ -477,11 +569,11 @@ npm run dev
         <div class="name"><span class="org">dodo-reach /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/nesquena/hermes-webui">
-        <div class="stars">★ 7.3K</div>
+        <div class="stars">★ 7.4K</div>
         <div class="name"><span class="org">nesquena /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
-        <div class="stars">★ 122</div>
+        <div class="stars">★ 124</div>
         <div class="name"><span class="org">pyrate-llama /</span> hermes-ui</div>
       </a>
     </div>

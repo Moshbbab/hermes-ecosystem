@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative policies, routing requests for human approval when risk thresholds are met. The system records verifiable evidence for every decision and tracks terminal outcomes to prevent silent double-execution during retries. It integrates with various runtimes including Hermes Agent, Claude Code, and LangChain via",
+  "description": "DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative policies, routing high-risk tasks for human approval via a dashboard or mobile interface. The system records verifiable evidence for every decision and tracks terminal outcomes to prevent double-execution during agent retries. It integrates with various runtimes including Hermes Agent, Claude Code, and ",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,13 +47,13 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-05-15T06:06:32.000Z",
+  "dateModified": "2026-05-16T01:53:33.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 261
+    "userInteractionCount": 264
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">110·repos</span>
+    <span id="meta-count">115·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">🛡️Decision infrastructure for AI agents. Intercept actions, enforce guard policies, require approvals, and produce audit-ready decision trails.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 261</span>
+    <span class="stars">★ 264</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-15</span>
+    <span><span class="meta-label">updated</span>2026-05-16</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative policies, routing requests for human approval when risk thresholds are met. The system records verifiable evidence for every decision and tracks terminal outcomes to prevent silent double-execution during retries. It integrates with various runtimes including Hermes Agent, Claude Code, and LangChain via MCP servers, SDKs, or lifecycle hooks.</p>
+    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative policies, routing high-risk tasks for human approval via a dashboard or mobile interface. The system records verifiable evidence for every decision and tracks terminal outcomes to prevent double-execution during agent retries. It integrates with various runtimes including Hermes Agent, Claude Code, and LangChain through MCP servers, SDKs, or lifecycle hooks.</p>
     <ul class="summary-highlights">
-      <li>Evaluates agent actions against risk thresholds and declarative policies</li>
-      <li>Provides human-in-the-loop approval queues via CLI, mobile, or messaging apps</li>
-      <li>Prevents double-execution by tracking durable terminal outcomes and session states</li>
+      <li>Evaluates risky agent actions against declarative guard policies</li>
+      <li>Routes pending approvals to CLI, mobile, or messaging platforms</li>
+      <li>Prevents double-execution by tracking durable terminal outcomes</li>
     </ul>
   </div>
 </section>
@@ -474,31 +474,6 @@ const key = claw.deriveIdempotencyKey({
 await claw.createAction({ /* ... */, idempotency_key: key });
 </code></pre>
 <p><code>POST /api/actions/[actionId]/outcome</code> is one-shot: the first call wins, every subsequent POST returns 409 with <code>current_status</code>. A daily Vercel cron (hourly externally on Pro or via GitHub Actions) marks stale pending rows as <code>lost_confirmation</code> and emits a <code>signal.detected</code> event so subscribed webhooks know to investigate. Full spec: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/durable-execution-finality.md"><code>docs/architecture/durable-execution-finality.md</code></a>.</p>
-<hr>
-<h3>Platform overview</h3>
-<p>Every screenshot below is a live surface in the running app, not a marketing render.</p>
-<div align="center">
-
-<p><strong>Mission Control.</strong> Strategic posture, decision stream, and live intervention feed.</p>
-<img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/public/images/screenshots/Mission%20Control.png" alt="Mission Control" width="1000" />
-
-<p><br /><br /></p>
-<p><strong>Approval Queue.</strong> Human-in-the-loop intervention with risk score, matched policies, and one-click allow or deny.</p>
-<img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/public/images/screenshots/Approvals.png" alt="Approval Queue" width="1000" />
-
-<p><br /><br /></p>
-<p><strong>Policy Builder.</strong> Declarative shields that govern agent behavior before actions execute.</p>
-<img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/public/images/screenshots/Policies.png" alt="Policy Builder" width="1000" />
-
-<p><br /><br /></p>
-<p><strong>Assumption Tracking.</strong> Every action carries its declared assumptions. Drift checks surface when an assumption is invalidated by later evidence.</p>
-<img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/public/images/screenshots/Assumptions.png" alt="Assumption Tracking" width="1000" />
-
-</div>
-
-<blockquote>
-<p><strong>Asset note for maintainers.</strong> The four screenshots above are current. Other surfaces with usable assets in <a href="public/images/screenshots/"><code>public/images/screenshots/</code></a> include Decisions, Agents, Signals, Activity, Compliance, Audit Log, Analytics, Webhooks, Integrations, and Settings. The hero screencast (<code>demo-gif2.gif</code>) currently has no destination URL; remove or repoint when a fresh recording exists.</p>
-</blockquote>
 <hr>
 <h3>Safety and governance model</h3>
 <p>DashClaw is not observability. It is control before execution. The model:</p>

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give Hermes Agent flexible access to live web data. It uses a capability-based routing system that automatically selects the best available tool based on the user's configured API keys, such as Tavily, Brave, or Firecrawl. The plugin provides three distinct tools for broad web searching, URL content extraction, and synthesized answers with citations. This modular approach ensures the agent remains functional with",
+  "description": "Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give the Hermes Agent reliable access to real-time web data. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys and query intent. The tool includes specialized functions for raw web search, URL content extraction, and a beta layer for generating cited answers. This modular approach ensures the agent remains functional",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-05-14T12:14:26.000Z",
+  "dateModified": "2026-05-15T18:50:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">110·repos</span>
+    <span id="meta-count">115·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-14</span>
+    <span><span class="meta-label">updated</span>2026-05-15</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give Hermes Agent flexible access to live web data. It uses a capability-based routing system that automatically selects the best available tool based on the user's configured API keys, such as Tavily, Brave, or Firecrawl. The plugin provides three distinct tools for broad web searching, URL content extraction, and synthesized answers with citations. This modular approach ensures the agent remains functional with any single provider while scaling its capabilities as more keys are added.</p>
+    <p class="summary-text">Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give the Hermes Agent reliable access to real-time web data. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys and query intent. The tool includes specialized functions for raw web search, URL content extraction, and a beta layer for generating cited answers. This modular approach ensures the agent remains functional even if specific search APIs are unavailable or missing.</p>
     <ul class="summary-highlights">
-      <li>Supports 10 providers including Serper, Tavily, Exa, and Linkup</li>
-      <li>Auto-routing logic selects providers based on query and key availability</li>
-      <li>Provides dedicated tools for search, extraction, and cited answer synthesis</li>
+      <li>Auto-routes queries across Serper, Tavily, Exa, You.com, and other providers.</li>
+      <li>Provides dedicated tools for search, URL extraction, and cited synthesis.</li>
+      <li>Includes a CLI setup wizard with presets for different search needs.</li>
     </ul>
   </div>
 </section>
@@ -158,7 +158,7 @@
   <img alt="Hermes Plugin" src="https://img.shields.io/badge/Hermes-plugin-a78bfa.svg">
 </p>
 
-<p><strong>Web search, extraction, and optional cited answers for Hermes — bring any one of 10 provider options and the plugin unlocks the tools your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Firecrawl-first extraction for robust scraping; Linkup remains the cheap/citation-friendly answer-extraction path when available.</p>
+<p><strong>Web search, extraction, and optional cited answers for Hermes — now with Routing v2: benchmarked, class-aware auto-routing across the providers your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Firecrawl-first extraction for robust scraping; Linkup remains the cheap/citation-friendly answer-extraction path when available.</p>
 <p><code>web-search-plus</code> adds three Hermes tools:</p>
 <ul>
 <li><code>web_search_plus</code> — routed multi-provider web search with quality diagnostics</li>
@@ -177,7 +177,7 @@
 <ul>
 <li><strong>No global required key.</strong> Configure one search-capable provider and search/answers work.</li>
 <li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, or You.com for fuller cited answers and URL extraction.</li>
-<li><strong>Fallbacks are explicit.</strong> Provider failures go on cooldown; missing extraction keys produce snippet-backed answers with warnings instead of fake confidence.</li>
+<li><strong>Routing v2 is conservative.</strong> You.com, Serper, Exa, Firecrawl, Tavily, and Linkup form the default search pool; Brave, SerpBase, Querit, and Perplexity/Kilo stay explicit/guarded unless opted in.</li>
 <li><strong>Costs stay bounded.</strong> Research and answer modes cap provider work and keep partial results when extraction fails.</li>
 </ul>
 <hr>
@@ -192,9 +192,9 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup
 # Bare setup prompts every supported provider; press Enter to skip what you do not have.
 # Fast starter preset if you want the short path:
 # python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter
-# TAVILY_API_KEY=...   # search/research
+# YOU_API_KEY=...      # fast Routing v2 core provider
+# SERPER_API_KEY=...   # reliable Google-like fallback
 # LINKUP_API_KEY=...   # extraction + fuller cited answers
-# BRAVE_API_KEY=...    # broad independent web search
 
 # 3) Restart/reload Hermes so plugin tools are registered
 # CLI: exit and start `hermes` again, or use /reset in-session
@@ -211,20 +211,27 @@ python3 search.py --query &quot;Hermes Agent latest release&quot; --provider aut
 <li>Python 3.8+ is required. Normal Hermes plugin installation handles runtime dependencies; manual development can use <code>python3 -m pip install -r requirements.txt</code> inside the Hermes/plugin environment.</li>
 </ul>
 <hr>
+<h3>Documentation</h3>
+<ul>
+<li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a> — detailed setup, provider tuning, routing, extraction, answer beta, reliability, and cost controls.</li>
+<li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/FAQ.md">FAQ</a> — common setup, SerpBase auto-allow, provider selection, cache, quota, and troubleshooting questions.</li>
+<li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/ARCHITECTURE.md">Architecture</a> — plugin boundary, routing engine, auto-allow gate, cache/cooldown state, data flow, and provider-extension notes.</li>
+</ul>
+<hr>
 <h3>CLI setup</h3>
 <p>The setup wizard is intentionally nicer than “paste keys and pray”:</p>
 <pre><code class="language-bash">python ~/.hermes/plugins/web-search-plus/setup.py status
 python ~/.hermes/plugins/web-search-plus/setup.py list
 python ~/.hermes/plugins/web-search-plus/setup.py setup
 python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter --open
-python ~/.hermes/plugins/web-search-plus/setup.py setup brave linkup --env-path ~/.hermes/.env
+python ~/.hermes/plugins/web-search-plus/setup.py setup you linkup --env-path ~/.hermes/.env
 </code></pre>
 <p>Presets:</p>
 <ul>
 <li>default / <code>all</code> — prompt every supported provider; Enter skips missing keys.</li>
-<li><code>starter</code> — Tavily + Linkup + Brave; best first-run setup.</li>
-<li><code>lean</code> — Tavily + Linkup; cheapest useful search + extraction pairing.</li>
-<li><code>search</code> — Tavily + Brave + Serper; broad search coverage.</li>
+<li><code>starter</code> — You.com + Serper + Linkup; best Routing v2 first-run setup.</li>
+<li><code>lean</code> — You.com + Linkup; small fast search + extraction pairing.</li>
+<li><code>search</code> — You.com + Serper + Exa + Firecrawl + Tavily + Linkup; full default Routing v2 pool.</li>
 <li><code>extract</code> — Firecrawl + Linkup + Exa + Tavily; extraction-heavy setup.</li>
 <li><code>all</code> — prompt for every supported provider.</li>
 </ul>
@@ -236,26 +243,29 @@ python ~/.hermes/plugins/web-search-plus/setup.py status --json
 python ~/.hermes/plugins/web-search-plus/setup.py config show --json
 
 # Prefer one fixed provider instead of auto-routing
-python ~/.hermes/plugins/web-search-plus/setup.py config set-default brave
+python ~/.hermes/plugins/web-search-plus/setup.py config set-default you
 
 # Turn auto-routing back on
 python ~/.hermes/plugins/web-search-plus/setup.py config set-routing on
 
 # Tune auto-routing order and fallback
-python ~/.hermes/plugins/web-search-plus/setup.py config set-priority tavily,linkup,brave,serper
-python ~/.hermes/plugins/web-search-plus/setup.py config set-fallback tavily
+python ~/.hermes/plugins/web-search-plus/setup.py config set-priority you,serper,exa,firecrawl,tavily,linkup
+python ~/.hermes/plugins/web-search-plus/setup.py config set-fallback serper
 python ~/.hermes/plugins/web-search-plus/setup.py config disable perplexity
 python ~/.hermes/plugins/web-search-plus/setup.py config enable perplexity
+python ~/.hermes/plugins/web-search-plus/setup.py config set-auto-allow serpbase off
+python ~/.hermes/plugins/web-search-plus/setup.py config set-auto-allow serpbase on
 python ~/.hermes/plugins/web-search-plus/setup.py config set-threshold 0.45
 
 # Preview changes without touching disk
-python ~/.hermes/plugins/web-search-plus/setup.py config set-default brave --dry-run
+python ~/.hermes/plugins/web-search-plus/setup.py config set-default you --dry-run
 </code></pre>
 <p>Notes:</p>
 <ul>
 <li><code>set-default &lt;provider&gt;</code> disables auto-routing and makes <code>--provider auto</code> resolve to that provider.</li>
 <li><code>set-routing on</code> restores query-based routing while keeping the saved default for later.</li>
 <li><code>set-priority</code> accepts comma-separated provider names, normalizes case/whitespace, and ignores duplicates with a warning.</li>
+<li><code>set-auto-allow &lt;provider&gt; off</code> keeps a configured provider available for explicit calls while preventing auto-routing/fallback from selecting it. Brave, SerpBase, Querit, Perplexity, and Kilo Perplexity default to <code>off</code> here.</li>
 <li><code>setup.py --config-path /path/to/config.json</code> points the helper at a custom config; <code>WEB_SEARCH_PLUS_CONFIG=/path/to/config.json</code> points <code>search.py</code> at the same file.</li>
 <li><code>config reset --yes</code> backs up the existing file before writing fresh defaults.</li>
 </ul>
@@ -272,7 +282,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py config set-default brave --dry
 <tbody><tr>
 <td>Search</td>
 <td><code>web_search_plus</code>, snippet-backed <code>web_answer_plus</code></td>
-<td>Brave, Serper, Tavily, Exa, Querit, Linkup, Firecrawl, Perplexity, You.com, or SearXNG</td>
+<td>Brave, Serper, Tavily, Exa, Linkup, Firecrawl, Perplexity, Kilo Perplexity, You.com, SearXNG, SerpBase, or Querit</td>
 </tr>
 <tr>
 <td>Extraction</td>
@@ -281,12 +291,12 @@ python ~/.hermes/plugins/web-search-plus/setup.py config set-default brave --dry
 </tr>
 <tr>
 <td>Best starter</td>
-<td>Search + extraction + broad fallback</td>
-<td>Tavily + Linkup + optional Brave</td>
+<td>Search + extraction + reliable fallback</td>
+<td>You.com + Serper + Linkup</td>
 </tr>
 </tbody></table>
 <p><code>setup.py status --plain</code> reports this directly:</p>
-<pre><code class="language-text">web-search-plus is configured. Providers: Linkup, Brave Search
+<pre><code class="language-text">web-search-plus is configured. Providers: You.com, Serper, Linkup
 Capabilities: search=yes, extraction=yes, answer=yes
 </code></pre>
 <hr>
@@ -395,8 +405,8 @@ web_answer_plus(query=&quot;Sources about Linkup extraction pricing&quot;, outpu
 <pre><code class="language-python">web_search_plus(query=&quot;Graz weather today&quot;)
 # → auto-routed current-info search
 
-web_search_plus(query=&quot;Singapore CPI latest&quot;, provider=&quot;brave&quot;)
-# → force Brave Search
+web_search_plus(query=&quot;Singapore CPI latest&quot;, provider=&quot;you&quot;)
+# → force You.com search
 
 web_search_plus(query=&quot;alternatives to Notion&quot;, provider=&quot;exa&quot;)
 # → semantic discovery
@@ -427,7 +437,7 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 <td><code>provider</code></td>
 <td>string</td>
 <td><code>&quot;auto&quot;</code></td>
-<td><code>auto</code>, <code>serper</code>, <code>brave</code>, <code>tavily</code>, <code>exa</code>, <code>querit</code>, <code>linkup</code>, <code>firecrawl</code>, <code>perplexity</code>, <code>kilo-perplexity</code>, <code>you</code>, <code>searxng</code></td>
+<td><code>auto</code>, <code>serper</code>, <code>brave</code>, <code>tavily</code>, <code>exa</code>, <code>linkup</code>, <code>firecrawl</code>, <code>perplexity</code>, <code>kilo-perplexity</code>, <code>you</code>, <code>searxng</code>, <code>serpbase</code>, <code>querit</code></td>
 </tr>
 <tr>
 <td><code>depth</code></td>
@@ -546,16 +556,28 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 </tr>
 </thead>
 <tbody><tr>
-<td>Brave</td>
+<td>You.com</td>
 <td align="right">✅</td>
-<td align="right">—</td>
-<td>General-purpose independent web index</td>
+<td align="right">✅</td>
+<td>Fast Routing v2 core for current, multilingual, LLM-ready search</td>
 </tr>
 <tr>
 <td>Serper</td>
 <td align="right">✅</td>
 <td align="right">—</td>
-<td>Google-like SERP, news, shopping, local facts</td>
+<td>Reliable Google-like fallback for facts, shopping, local, and news</td>
+</tr>
+<tr>
+<td>Exa</td>
+<td align="right">✅</td>
+<td align="right">✅</td>
+<td>Semantic discovery, docs, GitHub, academic/arXiv</td>
+</tr>
+<tr>
+<td>Firecrawl</td>
+<td align="right">✅</td>
+<td align="right">✅</td>
+<td>Source-first web search with scrape-ready result content</td>
 </tr>
 <tr>
 <td>Tavily</td>
@@ -564,46 +586,28 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <td>Long-form research and content-heavy queries</td>
 </tr>
 <tr>
-<td>Exa</td>
-<td align="right">✅</td>
-<td align="right">✅</td>
-<td>Semantic discovery and similarity search</td>
-</tr>
-<tr>
-<td>Querit</td>
-<td align="right">✅</td>
-<td align="right">—</td>
-<td>Multilingual and real-time queries</td>
-</tr>
-<tr>
 <td>Linkup</td>
 <td align="right">✅</td>
 <td align="right">✅</td>
 <td>Source-backed grounding, citations, RAG-ready retrieval</td>
 </tr>
 <tr>
-<td>Firecrawl</td>
-<td align="right">✅</td>
-<td align="right">✅</td>
-<td>Web search with scrape-ready result content</td>
-</tr>
-<tr>
 <td>Perplexity</td>
 <td align="right">✅</td>
 <td align="right">—</td>
-<td>Native Perplexity direct answer-style search</td>
+<td>Native direct-answer style search; explicit/answer-mode guarded by default (<code>auto_allow=false</code>)</td>
 </tr>
 <tr>
 <td>Kilo Perplexity</td>
 <td align="right">✅</td>
 <td align="right">—</td>
-<td>Perplexity through Kilo gateway (<code>kilo-perplexity</code>)</td>
+<td>Perplexity through Kilo gateway; explicit/answer-mode guarded by default (<code>auto_allow=false</code>)</td>
 </tr>
 <tr>
-<td>You.com</td>
+<td>Brave</td>
 <td align="right">✅</td>
-<td align="right">✅</td>
-<td>LLM-ready real-time snippets and content</td>
+<td align="right">—</td>
+<td>Independent web index; explicit/guarded by default (<code>auto_allow=false</code>)</td>
 </tr>
 <tr>
 <td>SearXNG</td>
@@ -611,8 +615,20 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <td align="right">—</td>
 <td>Privacy-focused self-hosted metasearch</td>
 </tr>
+<tr>
+<td>SerpBase</td>
+<td align="right">✅</td>
+<td align="right">—</td>
+<td>Cheap Google-like SERP fallback; explicit/fallback-only by default (<code>auto_allow=false</code>)</td>
+</tr>
+<tr>
+<td>Querit</td>
+<td align="right">✅</td>
+<td align="right">—</td>
+<td>Multilingual and real-time queries; explicit/fallback-only by default (<code>auto_allow=false</code>)</td>
+</tr>
 </tbody></table>
-<p>Auto-routing is rule-based on query signals such as recency, product intent, research language, and semantic-discovery patterns. Brave and Serper share generic web-search intents; when they tie, deterministic per-query tie-breaking keeps the same query reproducible while distributing ties across both providers.</p>
+<p>Routing v2 is benchmarked and class-aware. It detects language/script hints and query classes such as multilingual current news, AT shopping/local, docs/API, GitHub, academic/arXiv, Reddit/community, CVE/security, official/regulatory, finance/IR, weather/local, OSS discovery, and answer/synthesis. You.com, Serper, Exa, Firecrawl, Tavily, and Linkup are the conservative default auto-search pool. Brave, SerpBase, Querit, Perplexity, and Kilo Perplexity default to <code>auto_allow=false</code>: configure their keys to call them explicitly, or opt them into automatic routing with <code>setup.py config set-auto-allow &lt;provider&gt; on</code>.</p>
 <hr>
 <h3>API keys</h3>
 <p>All provider keys are optional at install time. Configure only what you use:</p>
@@ -621,12 +637,13 @@ SERPER_API_KEY=***        # https://serper.dev
 BRAVE_API_KEY=***         # https://brave.com/search/api/
 TAVILY_API_KEY=***        # https://tavily.com — search + extraction
 EXA_API_KEY=***           # https://exa.ai — search + extraction
-QUERIT_API_KEY=***        # https://querit.ai
 LINKUP_API_KEY=***        # https://linkup.so — search + cheap/citation-friendly extraction
 FIRECRAWL_API_KEY=***     # https://firecrawl.dev — search + extraction
 PERPLEXITY_API_KEY=***    # https://perplexity.ai/settings/api
 YOU_API_KEY=***           # https://api.you.com — search + extraction
 SEARXNG_INSTANCE_URL=https://your-instance.example.com
+SERPBASE_API_KEY=***      # https://www.serpbase.dev — explicit/fallback-only Google-like SERP search
+QUERIT_API_KEY=***        # https://querit.ai — explicit/fallback-only by default
 
 # Kilo gateway alternate provider (`provider=&quot;kilo-perplexity&quot;`)
 KILOCODE_API_KEY=***
@@ -684,7 +701,7 @@ LICENSE          MIT license
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 110</div>
+        <div class="stars">★ 115</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -704,7 +721,7 @@ LICENSE          MIT license
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/clawshell/clawshell">
-        <div class="stars">★ 277</div>
+        <div class="stars">★ 278</div>
         <div class="name"><span class="org">clawshell /</span> clawshell</div>
       </a>
       <a class="related-row" href="/projects/briancaffey/hermes-otel">
@@ -712,7 +729,7 @@ LICENSE          MIT license
         <div class="name"><span class="org">briancaffey /</span> hermes-otel</div>
       </a>
       <a class="related-row" href="/projects/335234131/agent-browser-mcp">
-        <div class="stars">★ 204</div>
+        <div class="stars">★ 205</div>
         <div class="name"><span class="org">335234131 /</span> agent-browser-mcp</div>
       </a>
     </div>

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is a self-hosted runtime and framework designed for orchestrating autonomous multi-agent swarms. It operates by managing agent lifecycles through heartbeats, schedules, and delegation while providing durable memory and runtime skill learning. The platform supports over 23 LLM providers including Hermes, OpenAI, and Ollama, and can integrate with external CLI tools like Claude Code. Users can monitor activity through an organizational chart interface and deploy the system via Docker, de",
+  "description": "SwarmClaw is a self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It utilizes a centralized dashboard to manage agent delegation, durable memory, and scheduled tasks across more than 23 LLM providers. The platform enables agents to learn new skills from conversation history and integrate with external tools via the Model Context Protocol (MCP). Users can deploy the system as a desktop application, via Docker, or as a Node.js server to create multi-agent work",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-05-14T12:58:52.000Z",
+  "dateModified": "2026-05-15T11:12:48.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 482
+    "userInteractionCount": 483
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">110·repos</span>
+    <span id="meta-count">115·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Open-source self-hosted AI agent runtime and multi-agent framework for autonomous agent swarms. Agent memory, MCP tools, schedules, delegation, and 23+ LLM providers (Claude, GPT, Gemini, OpenRouter, Ollama). A practical Claude Code and LangChain alternative.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 482</span>
+    <span class="stars">★ 483</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-14</span>
+    <span><span class="meta-label">updated</span>2026-05-15</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is a self-hosted runtime and framework designed for orchestrating autonomous multi-agent swarms. It operates by managing agent lifecycles through heartbeats, schedules, and delegation while providing durable memory and runtime skill learning. The platform supports over 23 LLM providers including Hermes, OpenAI, and Ollama, and can integrate with external CLI tools like Claude Code. Users can monitor activity through an organizational chart interface and deploy the system via Docker, desktop applications, or NPM.</p>
+    <p class="summary-text">SwarmClaw is a self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It utilizes a centralized dashboard to manage agent delegation, durable memory, and scheduled tasks across more than 23 LLM providers. The platform enables agents to learn new skills from conversation history and integrate with external tools via the Model Context Protocol (MCP). Users can deploy the system as a desktop application, via Docker, or as a Node.js server to create multi-agent workflows with live activity monitoring.</p>
     <ul class="summary-highlights">
-      <li>Supports 23+ LLM providers including Hermes, Ollama, and OpenRouter</li>
-      <li>Features durable agent memory and conversation-to-skill learning</li>
-      <li>Orchestrates swarms with delegation, schedules, and heartbeats</li>
+      <li>Orchestrates multi-agent swarms with delegation and hierarchical org charts</li>
+      <li>Supports 23+ providers including Hermes, Ollama, and OpenRouter</li>
+      <li>Features durable agent memory and conversation-to-skill learning capabilities</li>
     </ul>
   </div>
 </section>
@@ -257,9 +257,17 @@ docker compose up -d --build
 <p>Then open <code>http://localhost:3456</code>.</p>
 <h3>ClawHub Skill</h3>
 <p>Install the SwarmClaw skill for your <a href="https://openclaw.ai">OpenClaw</a> agents:</p>
-<pre><code class="language-bash">clawhub install swarmclaw
+<pre><code class="language-bash">openclaw skills install swarmclaw
 </code></pre>
-<p><a href="https://clawhub.ai/skills/swarmclaw">Browse on ClawHub</a></p>
+<p><a href="https://clawhub.ai/waydelyle/swarmclaw">Browse on ClawHub</a></p>
+<h3>v1.9.32 Highlights</h3>
+<p>PR integration release for background model routing, reflection memory controls, and current ClawHub install guidance.</p>
+<ul>
+<li><strong>Background model routing.</strong> Per-agent <code>dreamConfig</code> overrides can route dream cycles and daily digests before global dream settings, while <code>compactionProvider</code> settings can route live auto-compaction summaries through a cheaper or faster model.</li>
+<li><strong>Reflection memory controls.</strong> <code>reflectionMinQuality</code> gates automatic reflection memory writes without dropping the reflection record, and optional embedding dedup skips near-duplicate reflection notes when embeddings are configured.</li>
+<li><strong>ClawHub install guidance.</strong> OpenClaw skill docs now use <code>openclaw skills install swarmclaw</code> and current owner-scoped ClawHub links.</li>
+<li><strong>Regression coverage.</strong> Added tests for dream override precedence, compaction preference resolution, reflection quality gating, and embedding-based reflection dedup.</li>
+</ul>
 <h3>v1.9.31 Highlights</h3>
 <p>Documentation cleanup release for public release notes and OpenClaw guidance. No runtime behavior changed.</p>
 <ul>
@@ -526,7 +534,7 @@ docker compose up -d --build
 <li><strong>Per-agent opt-in</strong>: enable SwarmFeed on any agent with automatic Ed25519 registration</li>
 <li><strong>Richer in-app surface</strong>: feed tabs for For You, Following, Trending, Bookmarks, and Notifications, plus thread detail, profile sheets, suggested follows, and search</li>
 <li><strong>Heartbeat integration</strong>: agents can auto-post, auto-reply to mentions, auto-follow with guardrails, and publish task-completion updates during heartbeat cycles</li>
-<li><strong>Multiple access methods</strong>: <a href="https://www.npmjs.com/package/@swarmfeed/sdk">SDK</a>, <a href="https://www.npmjs.com/package/@swarmfeed/cli">CLI</a>, <a href="https://www.npmjs.com/package/@swarmfeed/mcp-server">MCP Server</a>, and <a href="https://clawhub.ai/skills/swarmfeed">ClawHub skill</a></li>
+<li><strong>Multiple access methods</strong>: <a href="https://www.npmjs.com/package/@swarmfeed/sdk">SDK</a>, <a href="https://www.npmjs.com/package/@swarmfeed/cli">CLI</a>, <a href="https://www.npmjs.com/package/@swarmfeed/mcp-server">MCP Server</a>, and <a href="https://clawhub.ai/waydelyle/swarmfeed">ClawHub skill</a></li>
 </ul>
 <p>Read the docs at <a href="https://swarmclaw.ai/docs/swarmfeed">swarmclaw.ai/docs/swarmfeed</a> and visit <a href="https://swarmfeed.ai">swarmfeed.ai</a> for the platform itself.</p>
 <h3>OpenTelemetry OTLP Export</h3>
@@ -540,6 +548,14 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.9.32 Highlights</h4>
+<p>PR integration release for background model routing, reflection memory controls, and current ClawHub install guidance.</p>
+<ul>
+<li><strong>Background model routing.</strong> Per-agent <code>dreamConfig</code> overrides can route dream cycles and daily digests before global dream settings, while <code>compactionProvider</code> settings can route live auto-compaction summaries through a cheaper or faster model.</li>
+<li><strong>Reflection memory controls.</strong> <code>reflectionMinQuality</code> gates automatic reflection memory writes without dropping the reflection record, and optional embedding dedup skips near-duplicate reflection notes when embeddings are configured.</li>
+<li><strong>ClawHub install guidance.</strong> OpenClaw skill docs now use <code>openclaw skills install swarmclaw</code> and current owner-scoped ClawHub links.</li>
+<li><strong>Regression coverage.</strong> Added tests for dream override precedence, compaction preference resolution, reflection quality gating, and embedding-based reflection dedup.</li>
+</ul>
 <h4>v1.9.31 Highlights</h4>
 <p>Documentation cleanup release for public release notes and OpenClaw guidance. No runtime behavior changed.</p>
 <ul>
@@ -772,23 +788,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>Bundled runtime-polish release: reasoning hygiene, deterministic delegation routing, task workflow polish, OpenClaw export hardening, and timeout hygiene.</p>
 <ul>
 <li><strong>Stateful reasoning tag scrubber.</strong> String-streamed <code>&lt;think&gt;</code>, <code>&lt;thinking&gt;</code>, <code>&lt;reasoning&gt;</code>, <code>&lt;thought&gt;</code>, and <code>&lt;REASONING_SCRATCHPAD&gt;</code> blocks are removed across split deltas and routed into SwarmClaw&#39;s thinking stream instead of leaking into visible answers.</li>
-<li><strong>Deterministic delegation profiles.</strong> <code>manage_tasks</code> now accepts explicit <code>workType</code> and <code>requiredCapabilities</code> routing hints, returns a stable <code>routeKey</code>, and can auto-assign unowned work without a classifier call when the profile is explicit.</li>
-<li><strong>Assignment workflow transitions.</strong> Newly assigned backlog/triage/todo tasks move into the <code>in_progress</code> workflow lane without changing their runtime status or queueing execution.</li>
-<li><strong>Knowledge hygiene pruning.</strong> Archived or superseded knowledge sources can now be pruned after a retention window, with prune actions recorded in the hygiene summary.</li>
-<li><strong>Collision-safe exports and timeout hardening.</strong> Portability exports support timestamped attachment filenames, the sandbox browser image build has a configurable timeout, and release notes now carry the macOS quarantine workaround for ad-hoc signed desktop builds.</li>
-</ul>
-<h4>v1.9.1 Highlights</h4>
-<p>Task execution workspace release: task-scoped workspaces, preview handoffs, and liveness evidence.</p>
-<ul>
-<li><strong>Task-scoped execution workspaces.</strong> Tasks can now provision a deterministic workspace under the SwarmClaw workspace root, preserving source cwd and project context while creating a task-local README for artifacts and handoffs.</li>
-<li><strong>Preview and runtime metadata.</strong> Tasks can carry preview links and runtime services, and the task board surfaces those links directly on task cards and sheets.</li>
-<li><strong>Liveness snapshots.</strong> Task list/read responses now compute blocked, queued, stale, retrying, ready, and terminal liveness states so operators can see why work is stopped or ready to run.</li>
-<li><strong>Browser smoke coverage.</strong> The browser smoke now creates a workspace-backed task and verifies the task board renders the workspace and liveness chips.</li>
-</ul>
-<h4>v1.8.13 Highlights</h4>
-<p>Task retry and host execute hotfix for issues <a href="https://github.com/swarmclawai/swarmclaw/issues/68">#68</a> and <a href="https://github.com/swarmclawai/swarmclaw/issues/69">#69</a>.</p>
-<ul>
-<li><strong>Per-agent host execute.</strong> Agents configured with <code>executeConfig.backend = &quot;host&quot;</code> now pass that setting into the runtime <code>execute</code> tool, so <code>persistent=true</code> uses the documented host backend.</li>
+<li><strong>Deterministic delegation profiles.</strong> <code>manage_tasks</code> now accepts explicit <code>workType</code> and <code>requiredCapabilities</code> routing hints, returns a stable <code>routeKey</code>, and can auto-assign unowned work without a classifier call when the profile i</li>
 </ul>
 <hr>
 <p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
@@ -812,7 +812,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">howdymary /</span> hermes-agent-metaharness</div>
       </a>
       <a class="related-row" href="/projects/runtimenoteslabs/gladiator">
-        <div class="stars">★ 47</div>
+        <div class="stars">★ 48</div>
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">

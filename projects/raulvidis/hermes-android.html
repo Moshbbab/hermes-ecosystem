@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/raulvidis/hermes-android#software",
   "name": "hermes-android",
-  "description": "Hermes-android provides a remote control bridge that allows AI agents to interact with Android devices via a Kotlin-based mobile app and a Python toolset. The system uses a WebSocket relay to connect phones behind NAT to a server without requiring port forwarding or USB cables, utilizing a 6-character pairing code for authentication. It enables agents to perform 36 distinct actions including UI navigation, media control, and location retrieval through Android's AccessibilityService. This integra",
+  "description": "Hermes-android is a remote device control bridge that allows AI agents to interact with Android hardware through a suite of automation tools. It operates via a Kotlin-based bridge app that connects to a Python relay server using WebSockets, enabling remote execution of commands without requiring port forwarding or USB connections. The system provides 36 specialized tools for tasks such as UI navigation, screen recording, and managing system functions like SMS or GPS. It is compatible with standa",
   "url": "https://hermesatlas.com/projects/raulvidis/hermes-android",
   "codeRepository": "https://github.com/raulvidis/hermes-android",
   "applicationCategory": "CommunicationApplication",
@@ -46,13 +46,13 @@
     "name": "raulvidis",
     "url": "https://github.com/raulvidis"
   },
-  "dateModified": "2026-05-14T08:55:24.000Z",
+  "dateModified": "2026-05-16T05:47:22.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 170
+    "userInteractionCount": 173
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span>apr·2026</span>
-    <span id="meta-count">110·repos</span>
+    <span id="meta-count">115·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -111,11 +111,11 @@
   <p class="project-desc">Android device control for hermes-agent — bridge app + Python toolset</p>
 
   <div class="meta-row">
-    <span class="stars">★ 170</span>
+    <span class="stars">★ 173</span>
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-05-14</span>
+    <span><span class="meta-label">updated</span>2026-05-16</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-android provides a remote control bridge that allows AI agents to interact with Android devices via a Kotlin-based mobile app and a Python toolset. The system uses a WebSocket relay to connect phones behind NAT to a server without requiring port forwarding or USB cables, utilizing a 6-character pairing code for authentication. It enables agents to perform 36 distinct actions including UI navigation, media control, and location retrieval through Android's AccessibilityService. This integration allows for autonomous mobile tasks such as sending SMS, managing notifications, and capturing screen recordings.</p>
+    <p class="summary-text">Hermes-android is a remote device control bridge that allows AI agents to interact with Android hardware through a suite of automation tools. It operates via a Kotlin-based bridge app that connects to a Python relay server using WebSockets, enabling remote execution of commands without requiring port forwarding or USB connections. The system provides 36 specialized tools for tasks such as UI navigation, screen recording, and managing system functions like SMS or GPS. It is compatible with standard mobile devices and Android Automotive OS, facilitating agentic control over both personal phones and vehicle head units.</p>
     <ul class="summary-highlights">
-      <li>Executes 36 tools for UI navigation, media, and system control</li>
-      <li>Connects via WebSocket relay without requiring USB or port forwarding</li>
-      <li>Uses AccessibilityService for screen reading and automated interaction</li>
+      <li>Executes 36 automation tools via Android AccessibilityService</li>
+      <li>Connects behind NAT using WebSocket relay and 6-character pairing</li>
+      <li>Supports Android Automotive OS for vehicle head unit automation</li>
     </ul>
   </div>
 </section>
@@ -214,6 +214,56 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 <p>Hermes will reply with the server address. Enter it in the app and tap <strong>Connect</strong>.</p>
 <h4>4. Done</h4>
 <p>The agent can now control your phone. Try: &quot;open Instagram&quot;, &quot;take a screenshot&quot;, &quot;what apps do I have?&quot;</p>
+<h3>Android Automotive OS (Car Head Units)</h3>
+<p>The bridge app can run on Android Automotive OS (AAOS) car head units. Phone-specific features (SMS, calls, contacts) gracefully return errors when the hardware is unavailable.</p>
+<h4>Installation</h4>
+<ol>
+<li>Build the APK: <code>cd hermes-android-bridge &amp;&amp; ./gradlew assembleDebug</code></li>
+<li>Sideload via ADB: <code>adb install app/build/outputs/apk/debug/app-debug.apk</code><ul>
+<li>USB: connect directly to the head unit&#39;s USB port</li>
+<li>WiFi: <code>adb connect &lt;head-unit-ip&gt;:5555</code> then install</li>
+</ul>
+</li>
+<li>Grant Accessibility Service: <strong>Settings &gt; Accessibility &gt; Hermes Bridge &gt; Enable</strong></li>
+<li>Grant overlay permission: <strong>Settings &gt; Apps &gt; Special access &gt; Draw over apps &gt; Hermes Bridge</strong></li>
+<li>Skip phone-specific permissions (SMS, calls, contacts) — not applicable</li>
+</ol>
+<h4>Connection</h4>
+<p>The car head unit needs network access to reach the relay server:</p>
+<ul>
+<li><strong>USB tethering</strong> (recommended): <code>adb forward tcp:8766 tcp:8766</code>, then enter <code>http://localhost:8766</code> in the app</li>
+<li><strong>WiFi</strong>: enter the relay server&#39;s <code>http://&lt;ip&gt;:8766</code> in the app (both devices on same network)</li>
+</ul>
+<h4>Limitations</h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Status on AAOS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>android_send_sms</code></td>
+<td>Not available — returns error</td>
+</tr>
+<tr>
+<td><code>android_call</code></td>
+<td>Not available — returns error</td>
+</tr>
+<tr>
+<td><code>android_search_contacts</code></td>
+<td>Not available — returns error</td>
+</tr>
+<tr>
+<td><code>android_location</code></td>
+<td>Depends on car unit GPS configuration</td>
+</tr>
+<tr>
+<td><code>android_screen_record</code></td>
+<td>May behave differently (restricted MediaProjection on some OEMs)</td>
+</tr>
+</tbody></table>
+<p>All other tools (tap, swipe, type, screenshot, read screen, open apps, etc.) work normally.</p>
 <h3>Tools (36)</h3>
 <table>
 <thead>
@@ -536,12 +586,16 @@ cd hermes-android-bridge
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 483</div>
+        <div class="stars">★ 490</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
         <div class="stars">★ 23</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
+      </a>
+      <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">
+        <div class="stars">★ 1</div>
+        <div class="name"><span class="org">kfa-ai /</span> hermes-timetree-sync</div>
       </a>
     </div>
     
