@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/mem0ai/mem0#software",
   "name": "mem0",
-  "description": "Mem0 is a universal memory layer designed to provide AI agents and assistants with long-term persistence and personalization. It utilizes a token-efficient algorithm that combines single-pass fact extraction with multi-signal retrieval, fusing semantic, keyword, and entity matching. The system manages state across users, sessions, and agents while incorporating temporal reasoning to distinguish between past events and current preferences. It is available as an Apache-2.0 self-hosted server, a Py",
+  "description": "Mem0 is a universal memory layer designed to provide AI agents and assistants with long-term context and personalization. It utilizes a multi-signal retrieval algorithm that fuses semantic search, BM25 keyword matching, and entity linking to recall user preferences and past interactions. The system supports multi-level memory across users, sessions, and agents while maintaining temporal reasoning for time-aware queries. It is available as an Apache-2.0 self-hosted package, a Python/NPM library, ",
   "url": "https://hermesatlas.com/projects/mem0ai/mem0",
   "codeRepository": "https://github.com/mem0ai/mem0",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "mem0ai",
     "url": "https://github.com/mem0ai"
   },
-  "dateModified": "2026-05-16T00:17:28.000Z",
+  "dateModified": "2026-05-17T02:13:57.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 55822
+    "userInteractionCount": 55904
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Universal memory layer for AI Agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 55.8K</span>
+    <span class="stars">★ 55.9K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-05-16</span>
+    <span><span class="meta-label">updated</span>2026-05-17</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mem0 is a universal memory layer designed to provide AI agents and assistants with long-term persistence and personalization. It utilizes a token-efficient algorithm that combines single-pass fact extraction with multi-signal retrieval, fusing semantic, keyword, and entity matching. The system manages state across users, sessions, and agents while incorporating temporal reasoning to distinguish between past events and current preferences. It is available as an Apache-2.0 self-hosted server, a Python/Node.js library, or a managed cloud platform.</p>
+    <p class="summary-text">Mem0 is a universal memory layer designed to provide AI agents and assistants with long-term context and personalization. It utilizes a multi-signal retrieval algorithm that fuses semantic search, BM25 keyword matching, and entity linking to recall user preferences and past interactions. The system supports multi-level memory across users, sessions, and agents while maintaining temporal reasoning for time-aware queries. It is available as an Apache-2.0 self-hosted package, a Python/NPM library, or a managed cloud service.</p>
     <ul class="summary-highlights">
-      <li>Multi-level memory retention for users, sessions, and agent states</li>
-      <li>Hybrid retrieval using semantic, BM25 keyword, and entity linking</li>
-      <li>Temporal reasoning for time-aware ranking of past and future events</li>
+      <li>Multi-signal retrieval combining semantic, keyword, and entity-based matching.</li>
+      <li>Temporal reasoning for ranking memories by current and past relevance.</li>
+      <li>Single-pass memory extraction that accumulates facts without overwriting data.</li>
     </ul>
   </div>
 </section>
@@ -260,9 +260,21 @@
 <li><strong>Productivity &amp; Gaming</strong>: Adaptive workflows and environments based on user behavior</li>
 </ul>
 <h3>🚀 Quickstart Guide <a name="quickstart"></a></h3>
-<blockquote>
-<p><strong>Agent Mode — for AI agents setting up Mem0 autonomously.</strong> Run <code>mem0 init --agent --agent-caller &lt;your-name&gt; --json</code> (after <code>pip install mem0-cli</code> or <code>npm install -g @mem0/cli</code>), replacing <code>&lt;your-name&gt;</code> with your AI agent identity (e.g. <code>claude-code</code>, <code>cursor</code>, <code>codex</code>). This mints an evaluation Mem0 API key in &lt;5 seconds — no email, no dashboard, no OTP. If you forgot to pass <code>--agent-caller</code>, run <code>mem0 identify &lt;your-name&gt;</code> after init. Use the key immediately against the Platform or the MCP server. The human owner can claim ownership later with <code>mem0 init --email &lt;their-email&gt;</code>: memories transfer, the same key keeps working, and the agent isn&#39;t disrupted.</p>
-</blockquote>
+<h4>Sign up as an agent</h4>
+<p>AI agents can mint a working Mem0 API key in under five seconds — no email, no dashboard, no OTP. Four commands end-to-end:</p>
+<pre><code class="language-bash"># 1. Install
+npm install -g @mem0/cli      # or: pip install mem0-cli
+
+# 2. Sign up as an agent (replace `claude-code` with your name)
+mem0 init --agent --agent-caller claude-code
+
+# 3. Add a memory
+mem0 add &quot;I am using mem0&quot;
+
+# 4. Search
+mem0 search &quot;am I using mem0&quot;
+</code></pre>
+<p>The human owner can claim the account later with <code>mem0 init --email &lt;their-email&gt;</code> — same key, memories preserved. Full guide: <a href="https://docs.mem0.ai/platform/agent-signup">Sign up as an agent</a>.</p>
 <table>
 <thead>
 <tr>
@@ -329,6 +341,7 @@ cd server &amp;&amp; docker compose up -d    # http://localhost:3000
 <ol>
 <li>Sign up on <a href="https://app.mem0.ai?utm_source=oss&utm_medium=readme">Mem0 Platform</a></li>
 <li>Embed the memory layer via SDK or API keys</li>
+<li>Using hosted Qdrant vectors? See the <a href="https://docs.mem0.ai/migration/oss-to-platform">Platform migration guide</a> to import them into Mem0 Platform.</li>
 </ol>
 <h4>CLI</h4>
 <p>Manage memories from your terminal:</p>
@@ -427,7 +440,7 @@ if __name__ == &quot;__main__&quot;:
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 13.4K</div>
+        <div class="stars">★ 13.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -435,7 +448,7 @@ if __name__ == &quot;__main__&quot;:
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 230</div>
+        <div class="stars">★ 232</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -443,7 +456,7 @@ if __name__ == &quot;__main__&quot;:
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 122</div>
+        <div class="stars">★ 123</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -451,11 +464,11 @@ if __name__ == &quot;__main__&quot;:
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 15.9K</div>
+        <div class="stars">★ 16.3K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 520</div>
+        <div class="stars">★ 525</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>

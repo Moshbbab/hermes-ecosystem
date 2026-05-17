@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes stored in a local SQLite database. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into raw message history or specific summary branches. The system also i",
+  "description": "Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that stores messages in a local SQLite database and generates depth-aware summaries. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into specific historical details. The system includes automated controls for exter",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -46,13 +46,13 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-05-14T14:42:00.000Z",
+  "dateModified": "2026-05-16T23:33:21.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 520
+    "userInteractionCount": 525
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 520</span>
+    <span class="stars">★ 525</span>
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-05-14</span>
+    <span><span class="meta-label">updated</span>2026-05-16</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes stored in a local SQLite database. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into raw message history or specific summary branches. The system also includes automated controls for externalizing large payloads and media to prevent context flooding.</p>
+    <p class="summary-text">Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that stores messages in a local SQLite database and generates depth-aware summaries. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into specific historical details. The system includes automated controls for externalizing large payloads and filtering noisy sessions to optimize storage and retrieval quality.</p>
     <ul class="summary-highlights">
-      <li>Hierarchical DAG structure for depth-aware conversation compaction</li>
+      <li>Hierarchical DAG structure for depth-aware context compaction</li>
       <li>SQLite-backed message store for persistent raw history retrieval</li>
-      <li>Agent tools for grepping, describing, and expanding compacted context</li>
+      <li>Agent tools for searching, describing, and expanding compressed context</li>
     </ul>
   </div>
 </section>
@@ -733,10 +733,47 @@ contexts:</p>
 <li><code>/lcm doctor source apply</code> - backup-first normalization of legacy blank-source rows to <code>unknown</code></li>
 <li><code>/lcm doctor retention</code> - read-only retention analysis</li>
 <li><code>/lcm backup</code> - timestamped SQLite backup</li>
+<li><code>/lcm rotate</code> - read-only preview of an in-place tail-preserving compact of the active session</li>
+<li><code>/lcm rotate apply</code> - backup-first rotate that advances the lifecycle frontier past pre-tail raw messages</li>
 <li><code>/lcm help</code> - command help</li>
 </ul>
 <p>Apply paths are intentionally narrow and backup-first. Start with diagnostics
 before cleanup or repair.</p>
+<h4>Rotate: in-place compact without changing session identity</h4>
+<p><code>/lcm rotate</code> lets an operator compact a long-running session in place without
+changing <code>session_id</code> or <code>conversation_id</code>. It is the in-session counterpart to
+Hermes-level <code>/new</code> (which starts a new session) and to <code>/lcm doctor clean</code>
+(which prunes whole junk sessions).</p>
+<p>What rotate does:</p>
+<ul>
+<li>preserves the live tail (<code>LCM_FRESH_TAIL_COUNT</code> most-recent messages)</li>
+<li>advances the lifecycle frontier marker past every raw message before the tail,
+so subsequent bootstrap stops replaying them into the active prompt</li>
+<li>writes a rolling <code>*-rotate-latest.sqlite3</code> backup under the same backup
+directory as <code>/lcm backup</code>, overwriting the previous rotate slot atomically
+so disk usage stays bounded across repeated rotates</li>
+</ul>
+<p>What rotate does not do:</p>
+<ul>
+<li>it does not delete raw messages — pre-tail rows remain in the SQLite store
+and stay recoverable through <code>lcm_load_session</code> and <code>lcm_expand</code>, preserving
+the lossless raw recovery contract</li>
+<li>it does not invoke the summarization model — rotate is a frontier and backup
+operation, not a synthesis step. Pre-tail content that was not yet covered by
+a summary node remains accessible only as raw rows; trigger normal compaction
+first if you want the pre-tail range covered by summary nodes before rotating</li>
+<li>it does not change session or conversation identity, run on stateless
+sessions (<code>LCM_STATELESS_SESSION_PATTERNS</code>), or run on ignored sessions
+(<code>LCM_IGNORE_SESSION_PATTERNS</code>) — rotate refuses on both with a clear reason</li>
+</ul>
+<p><code>lcm_status</code> and <code>/lcm status</code> surface <code>last_rotate_at</code> (epoch float, or <code>null</code>
+when no rotate has happened) and the rolling backup path so operators can see
+when rotate last ran. The mtime of the rolling backup file is the source of
+truth — no new lifecycle column is added by this feature.</p>
+<p>Re-running <code>/lcm rotate apply</code> on a session whose frontier is already at or
+ahead of the target boundary reports <code>status: noop</code> and is safe to retry.
+A no-op apply does not write a new rolling backup, so the previous
+known-good <code>*-rotate-latest.sqlite3</code> snapshot survives idempotent retries.</p>
 <h3>How It Works</h3>
 <ol>
 <li><strong>Ingest</strong> - persist each message in SQLite with FTS metadata</li>
@@ -792,11 +829,11 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 55.8K</div>
+        <div class="stars">★ 55.9K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 13.4K</div>
+        <div class="stars">★ 13.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -804,7 +841,7 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 230</div>
+        <div class="stars">★ 232</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -812,7 +849,7 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 122</div>
+        <div class="stars">★ 123</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -820,7 +857,7 @@ See the <a href="https://github.com/stephenschoettler/hermes-lcm/releases">relea
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 15.9K</div>
+        <div class="stars">★ 16.3K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

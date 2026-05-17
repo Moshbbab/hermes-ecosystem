@@ -1,6 +1,6 @@
 # Hermes Atlas — Full Context Bundle
 
-> Complete content of hermesatlas.com as of 2026-05-16. Concatenated from guide pages, ecosystem overview, the quarterly report, and project summaries. Canonical URLs preserved throughout.
+> Complete content of hermesatlas.com as of 2026-05-17. Concatenated from guide pages, ecosystem overview, the quarterly report, and project summaries. Canonical URLs preserved throughout.
 
 This file is the companion to https://hermesatlas.com/llms.txt (the concise index).
 
@@ -1576,12 +1576,12 @@ Stars: 83,290
 Official: Yes (maintained by Nous Research)
 The self-improving AI agent that grows with you — persistent memory, auto-generated skills, 14 platforms, 6 execution backends
 
-Hermes Agent is an autonomous AI system designed for persistent, cross-platform task execution and self-improvement. It utilizes a closed learning loop to generate new skills from experience, curate long-term memory, and build user models across sessions. The agent integrates with 14 messaging platforms and supports six execution backends, including serverless environments like Modal and Daytona that hibernate when idle. Users can swap between numerous LLM providers and utilize a built-in cron scheduler for natural language automations.
+Hermes Agent is an autonomous AI system designed for persistent, cross-platform task execution and self-improvement. It utilizes a closed learning loop to generate new skills from experience, curate long-term memory, and build user models across sessions. The agent integrates with 14 messaging platforms and supports six execution backends, ranging from local Docker environments to serverless cloud infrastructure. Users can switch between various LLM providers and models via a unified CLI or messaging interface without changing code.
 
 Highlights:
 - Autonomous skill creation and self-improvement from task experience
-- Multi-platform support including Telegram, Discord, Slack, and CLI
-- Flexible execution across local, Docker, SSH, and serverless backends
+- Multi-platform support including Telegram, Discord, Slack, and Signal
+- Flexible execution across local, SSH, Docker, and serverless backends
 
 ---
 
@@ -1593,12 +1593,12 @@ Category: Memory & Context
 Stars: 53,915
 Universal memory layer for AI Agents — official Hermes Agent memory provider, available as managed cloud or Apache-2.0 self-hosted OSS
 
-Mem0 is a universal memory layer designed to provide AI agents and assistants with long-term persistence and personalization. It utilizes a token-efficient algorithm that combines single-pass fact extraction with multi-signal retrieval, fusing semantic, keyword, and entity matching. The system manages state across users, sessions, and agents while incorporating temporal reasoning to distinguish between past events and current preferences. It is available as an Apache-2.0 self-hosted server, a Python/Node.js library, or a managed cloud platform.
+Mem0 is a universal memory layer designed to provide AI agents and assistants with long-term context and personalization. It utilizes a multi-signal retrieval algorithm that fuses semantic search, BM25 keyword matching, and entity linking to recall user preferences and past interactions. The system supports multi-level memory across users, sessions, and agents while maintaining temporal reasoning for time-aware queries. It is available as an Apache-2.0 self-hosted package, a Python/NPM library, or a managed cloud service.
 
 Highlights:
-- Multi-level memory retention for users, sessions, and agent states
-- Hybrid retrieval using semantic, BM25 keyword, and entity linking
-- Temporal reasoning for time-aware ranking of past and future events
+- Multi-signal retrieval combining semantic, keyword, and entity-based matching.
+- Temporal reasoning for ranking memories by current and past relevance.
+- Single-pass memory extraction that accumulates facts without overwriting data.
 
 ---
 
@@ -1714,10 +1714,10 @@ Category: Workspaces & GUIs
 Stars: 1,844
 Web dashboard for Hermes Agent — multi-platform AI chat, session management, scheduled jobs, usage analytics & channel configuration (Telegram, Discord, Slack, WhatsApp)
 
-Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. It utilizes a local SQLite database for session management and Socket.IO for real-time chat streaming, allowing users to monitor token usage, costs, and agent logs. The platform enables unified configuration for eight communication channels, including Telegram, Discord, and WhatsApp, while supporting multi-profile management and scheduled cron jobs. Users can also manage model providers, browse remote files, and access an integrated web terminal for direct system interaction.
+Hermes Web UI is a comprehensive management dashboard for the Hermes Agent ecosystem that provides a graphical interface for AI interaction and system administration. It centralizes agent operations by integrating multi-platform channel configuration, real-time chat streaming via Socket.IO, and a local SQLite database for session persistence. Users can monitor detailed usage analytics, manage scheduled cron jobs, and configure credentials for eight different messaging platforms including Telegram, Discord, and Slack. The interface also includes advanced tools such as a file browser for remote backends, a web-based terminal, and multi-profile management for isolated gateway environments.
 
 Highlights:
-- Unified configuration for Telegram, Discord, Slack, and five other platforms
+- Unified configuration for eight messaging platforms including WhatsApp and WeChat
 - Real-time chat streaming with multi-session management and markdown support
 - Usage analytics tracking token consumption, costs, and model distribution
 
@@ -1818,12 +1818,12 @@ Category: Deployment & Infra
 Stars: 967
 Nix packages for AI coding agents including Hermes
 
-llm-agents.nix is a collection of Nix packages designed to simplify the deployment and management of AI coding agents and development tools. It provides a centralized repository of pre-configured Nix expressions that allow users to run various agentic tools directly via the Nix package manager without manual installation. The project features daily automated updates to ensure compatibility with the latest versions of tools like Claude Code, Goose, and various multi-agent orchestrators. This infrastructure enables developers to maintain reproducible environments for terminal-based AI assistants and unified API proxies.
+llm-agents.nix is a collection of Nix packages designed to simplify the deployment and management of AI coding agents and development tools. The project provides a centralized repository that automatically updates daily, ensuring users have access to the latest versions of various agentic tools. It allows developers to run a wide range of CLI-based agents, such as Goose, Claude Code, and Bernstein, directly via Nix flakes without manual installation. This infrastructure supports multi-agent orchestration, unified API proxies, and terminal-based AI pair programming across different model providers.
 
 Highlights:
-- Provides Nix packages for numerous AI coding agents and CLI tools
-- Automated daily updates ensure access to the latest software versions
-- Supports diverse tools including orchestrators, proxies, and terminal-based assistants
+- Provides daily updated Nix packages for numerous AI coding agents
+- Enables instant execution of tools via Nix run commands
+- Supports diverse agents including local, open-source, and proprietary binaries
 
 ---
 
@@ -1887,12 +1887,12 @@ Category: Skills & Skill Registries
 Stars: 759
 Audits and rewrites content to eliminate detectable AI writing patterns
 
-Avoid-ai-writing is a portable writing skill designed to audit and rewrite text to eliminate detectable AI patterns and "AI-isms." It utilizes a structured two-pass process that first identifies issues like significance inflation and copula avoidance, then performs a second audit to catch lingering tells. The tool relies on a 109-entry word replacement table and 36 specific pattern categories to ensure edits are grounded in plain language rather than general prompts. It is compatible with Hermes, Claude Code, and OpenClaw, offering both a full rewrite mode and a detection-only mode for auditing content.
+Avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite text to eliminate detectable machine-generated patterns. It utilizes a structured two-pass system that first identifies specific "AI-isms" and then performs a secondary audit to catch any lingering tells in the revised version. The tool relies on a library of 42 pattern categories and a 109-entry word replacement table rather than general prompting. It integrates with Hermes, Claude Code, and OpenClaw, offering both a full rewrite mode and a detection-only mode for content auditing.
 
 Highlights:
-- Identifies 36 distinct AI writing patterns and structural tells
-- Uses a three-tier, 109-entry word replacement table for consistency
-- Performs a two-pass audit to catch recycled transitions and inflation
+- Uses a 109-entry tiered word replacement table for precise editing
+- Performs two-pass audits to catch recycled transitions and lingering inflation
+- Detects 42 distinct patterns including significance inflation and copula avoidance
 
 ---
 
@@ -2127,12 +2127,12 @@ Category: Memory & Context
 Stars: 178
 Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message
 
-Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes stored in a local SQLite database. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into raw message history or specific summary branches. The system also includes automated controls for externalizing large payloads and media to prevent context flooding.
+Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long-running conversations. It replaces standard lossy compression with a hierarchical Directed Acyclic Graph (DAG) that stores messages in a local SQLite database and generates depth-aware summaries. This architecture allows the agent to maintain a bounded active context while using specialized tools to drill back into specific historical details. The system includes automated controls for externalizing large payloads and filtering noisy sessions to optimize storage and retrieval quality.
 
 Highlights:
-- Hierarchical DAG structure for depth-aware conversation compaction
+- Hierarchical DAG structure for depth-aware context compaction
 - SQLite-backed message store for persistent raw history retrieval
-- Agent tools for grepping, describing, and expanding compacted context
+- Agent tools for searching, describing, and expanding compressed context
 
 ---
 
@@ -2161,12 +2161,12 @@ Category: Skills & Skill Registries
 Stars: 131
 Generate draw.io diagrams from natural language descriptions
 
-The drawio-skill project is a tool that converts natural-language descriptions into professional diagrams using the .drawio XML format. It utilizes the native draw.io desktop CLI to generate and export diagrams into PNG, SVG, PDF, or JPG formats. The system features six specialized presets for architecture, machine learning, and UML, while incorporating a multi-round self-check and feedback loop to refine visual accuracy. It integrates with various AI agents including Hermes, Cursor, and Claude Code to automate technical documentation workflows.
+The drawio-skill project is a tool that converts natural language descriptions into professional .drawio diagrams and exports them to common image formats. It functions by generating XML code and utilizing the native draw.io desktop CLI for rendering, layout, and export. The system includes a self-correction mechanism that analyzes its own output to fix visual issues and supports iterative refinement through a multi-round feedback loop. It integrates with various agent platforms including Claude Code, Cursor, and Hermes, requiring no additional server-side dependencies.
 
 Highlights:
-- Generates .drawio XML and exports to PNG, SVG, PDF, or JPG
-- Includes presets for ERD, UML, Architecture, and ML diagrams
-- Features automated self-check and iterative feedback refinement loops
+- Generates .drawio XML from text with 6 diagram type presets
+- Self-checks and auto-fixes visual issues using native CLI output
+- Learns and applies custom visual styles from existing files or images
 
 ---
 
@@ -2671,12 +2671,12 @@ Category: Skills & Skill Registries
 Stars: 25
 Harness for long-running AI agents — structured memory, cross-feature learning, plan-approve-execute
 
-Maestro is a local-first agent harness designed to coordinate long-running multi-agent software engineering workflows. It persists shared state, missions, and project context directly to the local filesystem in a .maestro directory rather than relying on external databases or chat history. This allows human operators to drive multiple terminal-based agent sessions, such as Hermes or Claude, while maintaining a disciplined and inspectable record of progress through structured handoffs and checkpoints.
+Maestro is a local-first agent harness designed to manage the spec-to-ship lifecycle through a structured state model stored directly on disk. It coordinates multi-agent collaboration without a central server by using a shared CLI and a directory-based state layer for tasks, evidence, and handoffs. This approach allows separate agent sessions to resume work seamlessly by reading durable continuation records and passive JSON envelopes. The system enforces discipline through machine-checked contracts and auditable evidence rows that gate task completion based on witnessed results.
 
 Highlights:
-- Local-first state management using on-disk .maestro directory and JSON snapshots
-- Structured mission lifecycle with milestones, features, and validation assertions
-- Native handoff launches that generate markdown briefs for fresh agent sessions
+- Local-first state management using on-disk .maestro directory and Git
+- Structured task lifecycle following a spec-task-verify-ship workflow
+- Passive handoff envelopes for seamless context transfer between agents
 
 ---
 
@@ -2773,12 +2773,12 @@ Category: Plugins & Extensions
 Stars: 21
 Multi-provider web search (Serper, Tavily, Exa, Querit, Perplexity) with auto-routing
 
-Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give the Hermes Agent reliable access to real-time web data. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys and query intent. The tool includes specialized functions for raw web search, URL content extraction, and a beta layer for generating cited answers. This modular approach ensures the agent remains functional even if specific search APIs are unavailable or missing.
+web-search-plus is a capability-based plugin for Hermes Agent that provides multi-provider web search and URL extraction. It utilizes a Routing v2 engine to automatically select from available search providers based on the user's configured API keys. The plugin features additive extraction capabilities and includes cost-control mechanisms like research mode to manage provider usage.
 
 Highlights:
-- Auto-routes queries across Serper, Tavily, Exa, You.com, and other providers.
-- Provides dedicated tools for search, URL extraction, and cited synthesis.
-- Includes a CLI setup wizard with presets for different search needs.
+- Auto-routes queries across multiple search providers
+- Provides clean URL extraction via specialized backends
+- Configurable priority and fallback provider settings
 
 ---
 
@@ -3198,12 +3198,12 @@ Category: Guides & Docs
 Stars: 6
 Community documentation covering deployment patterns and v0.2.0+ workflows
 
-Hermes Agent is an autonomous AI agent featuring a built-in learning loop for self-improvement and persistent memory. It utilizes a unified agent core that manages tool execution, session history in SQLite, and a pluggable transport layer for diverse model providers. The system supports a wide array of messaging gateways, an Ink-based TUI, and a plugin architecture for extending tools and provider backends. It is designed to run on various infrastructures, from low-cost VPS to GPU clusters.
+Hermes Agent is an autonomous AI system designed to create a persistent, self-improving learning loop across multiple platforms. It utilizes a unified core to manage long-running conversations, execute parallel tool calls, and autonomously generate reusable skills stored in a local SQLite database. The agent integrates with over 20 messaging platforms and dozens of model providers, allowing it to function as a CLI, a messaging gateway, or an IDE extension. Its architecture supports context compression, full-text session search, and a plugin system for extending tools and backends without forking the codebase.
 
 Highlights:
-- Closed learning loop with autonomous skill creation and self-improvement
-- Multi-platform gateway supporting 20+ messaging services and IDEs
-- Pluggable architecture for custom tools, providers, and memory backends
+- Autonomous skill creation and self-improvement based on task experience
+- Unified messaging gateway supporting Telegram, Discord, Slack, and WhatsApp
+- Pluggable transport layer compatible with 400+ models and custom endpoints
 
 ---
 

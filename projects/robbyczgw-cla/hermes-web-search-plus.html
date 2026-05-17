@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give the Hermes Agent reliable access to real-time web data. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys and query intent. The tool includes specialized functions for raw web search, URL content extraction, and a beta layer for generating cited answers. This modular approach ensures the agent remains functional",
+  "description": "web-search-plus is a capability-based plugin for Hermes Agent that provides multi-provider web search and URL extraction. It utilizes a Routing v2 engine to automatically select from available search providers based on the user's configured API keys. The plugin features additive extraction capabilities and includes cost-control mechanisms like research mode to manage provider usage.",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-05-15T18:50:10.000Z",
+  "dateModified": "2026-05-16T18:51:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 177
+    "userInteractionCount": 181
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes Agent flagship plugin for multi-provider web search and extraction with intelligent routing, quality reports, and research mode.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 177</span>
+    <span class="stars">★ 181</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-15</span>
+    <span><span class="meta-label">updated</span>2026-05-16</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Web Search Plus is a multi-provider search and extraction plugin designed to give the Hermes Agent reliable access to real-time web data. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys and query intent. The tool includes specialized functions for raw web search, URL content extraction, and a beta layer for generating cited answers. This modular approach ensures the agent remains functional even if specific search APIs are unavailable or missing.</p>
+    <p class="summary-text">web-search-plus is a capability-based plugin for Hermes Agent that provides multi-provider web search and URL extraction. It utilizes a Routing v2 engine to automatically select from available search providers based on the user's configured API keys. The plugin features additive extraction capabilities and includes cost-control mechanisms like research mode to manage provider usage.</p>
     <ul class="summary-highlights">
-      <li>Auto-routes queries across Serper, Tavily, Exa, You.com, and other providers.</li>
-      <li>Provides dedicated tools for search, URL extraction, and cited synthesis.</li>
-      <li>Includes a CLI setup wizard with presets for different search needs.</li>
+      <li>Auto-routes queries across multiple search providers</li>
+      <li>Provides clean URL extraction via specialized backends</li>
+      <li>Configurable priority and fallback provider settings</li>
     </ul>
   </div>
 </section>
@@ -145,11 +145,7 @@
   <section class="readme" data-nosnippet>
     <h2>web-search-plus — Hermes Plugin</h2>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-logo.png" alt="web search plus logo" width="180">
-</p>
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-github-hero.jpg" alt="Hermes Web Search Plus feature overview showing search, extraction, answer beta, onboarding, and supported providers" width="100%">
+  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-v21-hero.png" alt="Hermes web-search-plus v2.1 hero showing the two-tool surface, Routing v2, Tavily-first extraction, and supported providers" width="100%">
 </p>
 
 <p align="center">
@@ -158,27 +154,23 @@
   <img alt="Hermes Plugin" src="https://img.shields.io/badge/Hermes-plugin-a78bfa.svg">
 </p>
 
-<p><strong>Web search, extraction, and optional cited answers for Hermes — now with Routing v2: benchmarked, class-aware auto-routing across the providers your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Firecrawl-first extraction for robust scraping; Linkup remains the cheap/citation-friendly answer-extraction path when available.</p>
-<p><code>web-search-plus</code> adds three Hermes tools:</p>
+<p><strong>Web search and URL extraction for Hermes — now with Routing v2: benchmarked, class-aware auto-routing across the providers your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Tavily-first extraction for fast, reliable fetches; Exa, Linkup, Firecrawl, and You.com remain fallback paths when available.</p>
+<p><code>web-search-plus</code> adds two Hermes tools:</p>
 <ul>
 <li><code>web_search_plus</code> — routed multi-provider web search with quality diagnostics</li>
-<li><code>web_answer_plus</code> — optional beta answer-synthesis layer for explicit summaries/cited answers</li>
 <li><code>web_extract_plus</code> — clean URL extraction via provider backends</li>
 </ul>
 <blockquote>
 <p>Ported from <a href="https://github.com/robbyczgw-cla/web-search-plus-plugin">web-search-plus-plugin</a> for the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> plugin API.</p>
 </blockquote>
-<blockquote>
-<p>🧪 <strong>Beta note:</strong> <code>web_answer_plus</code> is optional. It is a synthesis layer on top of search, not a replacement for <code>web_search_plus</code>. For current events, sports lineups, schedules, scores, prices, weather, or when you mainly need source discovery, start with <code>web_search_plus</code>. Use <code>web_answer_plus</code> when the user explicitly asks for a written answer, summary, or cited synthesis.</p>
-</blockquote>
 <hr>
 <h3>Why this exists</h3>
 <p>Most web-search tools fail in one of two boring ways: they hard-code a single provider, or they pretend every user has every API key. This plugin is capability-based instead:</p>
 <ul>
-<li><strong>No global required key.</strong> Configure one search-capable provider and search/answers work.</li>
-<li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, or You.com for fuller cited answers and URL extraction.</li>
+<li><strong>No global required key.</strong> Configure one search-capable provider and search works.</li>
+<li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, or You.com for URL extraction.</li>
 <li><strong>Routing v2 is conservative.</strong> You.com, Serper, Exa, Firecrawl, Tavily, and Linkup form the default search pool; Brave, SerpBase, Querit, and Perplexity/Kilo stay explicit/guarded unless opted in.</li>
-<li><strong>Costs stay bounded.</strong> Research and answer modes cap provider work and keep partial results when extraction fails.</li>
+<li><strong>Costs stay bounded.</strong> Research mode caps provider work and keeps partial results when extraction fails.</li>
 </ul>
 <hr>
 <h3>Quick Start</h3>
@@ -194,7 +186,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup
 # python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter
 # YOU_API_KEY=...      # fast Routing v2 core provider
 # SERPER_API_KEY=...   # reliable Google-like fallback
-# LINKUP_API_KEY=...   # extraction + fuller cited answers
+# LINKUP_API_KEY=...   # clean extraction
 
 # 3) Restart/reload Hermes so plugin tools are registered
 # CLI: exit and start `hermes` again, or use /reset in-session
@@ -213,7 +205,7 @@ python3 search.py --query &quot;Hermes Agent latest release&quot; --provider aut
 <hr>
 <h3>Documentation</h3>
 <ul>
-<li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a> — detailed setup, provider tuning, routing, extraction, answer beta, reliability, and cost controls.</li>
+<li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a> — detailed setup, provider tuning, routing, extraction, reliability, and cost controls.</li>
 <li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/FAQ.md">FAQ</a> — common setup, SerpBase auto-allow, provider selection, cache, quota, and troubleshooting questions.</li>
 <li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/ARCHITECTURE.md">Architecture</a> — plugin boundary, routing engine, auto-allow gate, cache/cooldown state, data flow, and provider-extension notes.</li>
 </ul>
@@ -281,12 +273,12 @@ python ~/.hermes/plugins/web-search-plus/setup.py config set-default you --dry-r
 </thead>
 <tbody><tr>
 <td>Search</td>
-<td><code>web_search_plus</code>, snippet-backed <code>web_answer_plus</code></td>
+<td><code>web_search_plus</code></td>
 <td>Brave, Serper, Tavily, Exa, Linkup, Firecrawl, Perplexity, Kilo Perplexity, You.com, SearXNG, SerpBase, or Querit</td>
 </tr>
 <tr>
 <td>Extraction</td>
-<td><code>web_extract_plus</code>, fuller <code>web_answer_plus</code> citations</td>
+<td><code>web_extract_plus</code></td>
 <td>Linkup, Firecrawl, Tavily, Exa, or You.com</td>
 </tr>
 <tr>
@@ -297,109 +289,10 @@ python ~/.hermes/plugins/web-search-plus/setup.py config set-default you --dry-r
 </tbody></table>
 <p><code>setup.py status --plain</code> reports this directly:</p>
 <pre><code class="language-text">web-search-plus is configured. Providers: You.com, Serper, Linkup
-Capabilities: search=yes, extraction=yes, answer=yes
+Capabilities: search=yes, extraction=yes
 </code></pre>
 <hr>
 <h3>Tool overview</h3>
-<h4><code>web_answer_plus</code></h4>
-<p>Optional beta tool for when the user explicitly wants a written answer, summary, or cited synthesis. It is slower and more source-ranking-sensitive than <code>web_search_plus</code>, so do not treat it as the default search path.</p>
-<p>Use <code>web_search_plus</code> first when the query is about:</p>
-<ul>
-<li>current events, breaking news, live facts, sports lineups, schedules, scores, or standings</li>
-<li>weather, prices, shopping availability, or quick factual lookup</li>
-<li>raw source discovery, provider comparison, or cases where the source list matters more than prose</li>
-</ul>
-<p>Use <code>web_answer_plus</code> when the user asks for:</p>
-<ul>
-<li>a concise answer with sources</li>
-<li>a research brief or summary</li>
-<li>citation-ready source notes from a few selected pages</li>
-</ul>
-<pre><code class="language-python">web_answer_plus(query=&quot;Summarize what changed in Hermes Agent this week&quot;, output=&quot;brief&quot;)
-# → beta synthesis: answer + sources from selected results
-
-web_answer_plus(
-    query=&quot;Compare DAC amps under 500 EUR in Austria from review sources&quot;,
-    mode=&quot;deep&quot;,
-    sources=6,
-    country=&quot;AT&quot;,
-)
-# → broader research-mode synthesis with Austrian locale hint
-
-web_answer_plus(query=&quot;OpenAI latest model announcements&quot;, freshness=&quot;week&quot;, output=&quot;brief&quot;)
-# → explicit recent-answer request; freshness is opt-in
-
-web_answer_plus(query=&quot;Sources about Linkup extraction pricing&quot;, output=&quot;sources&quot;)
-# → sources-only list
-</code></pre>
-<p>Defaults are intentionally conservative:</p>
-<ul>
-<li><code>quick</code> mode asks for 3 sources and extracts up to 2 URLs.</li>
-<li><code>deep</code> mode asks for 6 sources and uses research mode, with extraction still hard-capped at 5 URLs.</li>
-<li><code>freshness=&quot;none&quot;</code> is the default to avoid over-triggering recency on words like “current” or “aktuell”. Set <code>freshness=&quot;auto&quot;</code>, <code>day</code>, <code>week</code>, <code>month</code>, or <code>year</code> explicitly when recency should shape search.</li>
-<li><code>web_answer_plus</code> still prefers Linkup for answer extraction when available; direct <code>web_extract_plus(provider=&quot;auto&quot;)</code> uses the extraction chain below.</li>
-<li>If no extraction provider is configured, answers are snippet-backed and carry an explicit warning.</li>
-</ul>
-<p>A real failure case from dogfooding: <code>Österreich Startelf WM 2026 Qualifikation aktuelle Aufstellung</code> is better handled by <code>web_search_plus</code>; answer synthesis can drift toward schedule or wrong-sport sources if recency is pushed too hard.</p>
-<p>Parameters:</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>query</code></td>
-<td>string</td>
-<td><strong>required</strong></td>
-<td>Question or research query to answer from the web</td>
-</tr>
-<tr>
-<td><code>mode</code></td>
-<td>string</td>
-<td><code>&quot;quick&quot;</code></td>
-<td><code>quick</code> or <code>deep</code></td>
-</tr>
-<tr>
-<td><code>sources</code></td>
-<td>integer</td>
-<td>quick <code>3</code>, deep <code>6</code></td>
-<td>Citation-ready sources to return, max 10</td>
-</tr>
-<tr>
-<td><code>freshness</code></td>
-<td>string</td>
-<td><code>&quot;none&quot;</code></td>
-<td><code>none</code>, <code>auto</code>, <code>day</code>, <code>week</code>, <code>month</code>, <code>year</code></td>
-</tr>
-<tr>
-<td><code>output</code></td>
-<td>string</td>
-<td><code>&quot;answer&quot;</code></td>
-<td><code>answer</code>, <code>brief</code>, <code>sources</code>, or <code>json</code></td>
-</tr>
-<tr>
-<td><code>language</code></td>
-<td>string</td>
-<td><code>&quot;auto&quot;</code></td>
-<td>Optional language code such as <code>de</code>, <code>en</code>, <code>es</code>, <code>fr</code></td>
-</tr>
-<tr>
-<td><code>country</code></td>
-<td>string</td>
-<td><code>&quot;auto&quot;</code></td>
-<td>Optional country/region code such as <code>AT</code>, <code>DE</code>, <code>US</code></td>
-</tr>
-<tr>
-<td><code>max_extracts</code></td>
-<td>integer</td>
-<td><code>2</code></td>
-<td>Advanced cost guard; hard-capped at 5</td>
-</tr>
-</tbody></table>
 <h4><code>web_search_plus</code></h4>
 <p>Use this when the agent needs search results and routing metadata.</p>
 <pre><code class="language-python">web_search_plus(query=&quot;Graz weather today&quot;)
@@ -496,7 +389,7 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linkup&quot;, render_js=False)
 # → Linkup fetch endpoint
 </code></pre>
-<p>Auto extraction currently tries Firecrawl, then Linkup, Exa, Tavily, and You.com when keys are available. Firecrawl is the default robust scraper; Linkup is the cheap/citation-friendly fallback; Exa is preferred before Tavily for academic/research-style pages.</p>
+<p>Auto extraction currently tries Tavily, then Exa, Linkup, Firecrawl, and You.com when keys are available. Tavily is the fast reliable default; Exa is the fast docs/academic backup; Linkup stays the clean long-form/RAG fallback; Firecrawl remains the robust scraper safety net; You.com is the final fallback.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -595,13 +488,13 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <td>Perplexity</td>
 <td align="right">✅</td>
 <td align="right">—</td>
-<td>Native direct-answer style search; explicit/answer-mode guarded by default (<code>auto_allow=false</code>)</td>
+<td>Native synthesized search; explicit/research-style guarded by default (<code>auto_allow=false</code>)</td>
 </tr>
 <tr>
 <td>Kilo Perplexity</td>
 <td align="right">✅</td>
 <td align="right">—</td>
-<td>Perplexity through Kilo gateway; explicit/answer-mode guarded by default (<code>auto_allow=false</code>)</td>
+<td>Perplexity through Kilo gateway; explicit/research-style guarded by default (<code>auto_allow=false</code>)</td>
 </tr>
 <tr>
 <td>Brave</td>
@@ -628,7 +521,7 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <td>Multilingual and real-time queries; explicit/fallback-only by default (<code>auto_allow=false</code>)</td>
 </tr>
 </tbody></table>
-<p>Routing v2 is benchmarked and class-aware. It detects language/script hints and query classes such as multilingual current news, AT shopping/local, docs/API, GitHub, academic/arXiv, Reddit/community, CVE/security, official/regulatory, finance/IR, weather/local, OSS discovery, and answer/synthesis. You.com, Serper, Exa, Firecrawl, Tavily, and Linkup are the conservative default auto-search pool. Brave, SerpBase, Querit, Perplexity, and Kilo Perplexity default to <code>auto_allow=false</code>: configure their keys to call them explicitly, or opt them into automatic routing with <code>setup.py config set-auto-allow &lt;provider&gt; on</code>.</p>
+<p>Routing v2 is benchmarked and class-aware. It detects language/script hints and query classes such as multilingual current news, AT shopping/local, docs/API, GitHub, academic/arXiv, Reddit/community, CVE/security, official/regulatory, finance/IR, weather/local, OSS discovery, and briefing/synthesis-style searches. You.com, Serper, Exa, Firecrawl, Tavily, and Linkup are the conservative default auto-search pool. Brave, SerpBase, Querit, Perplexity, and Kilo Perplexity default to <code>auto_allow=false</code>: configure their keys to call them explicitly, or opt them into automatic routing with <code>setup.py config set-auto-allow &lt;provider&gt; on</code>.</p>
 <hr>
 <h3>API keys</h3>
 <p>All provider keys are optional at install time. Configure only what you use:</p>
@@ -653,7 +546,6 @@ KILOCODE_API_KEY=***
 <ul>
 <li><strong>Provider cooldowns:</strong> failed providers are skipped for 1 hour before retry.</li>
 <li><strong>Research budget:</strong> <code>mode=&quot;research&quot;</code> checks the wall-clock budget between provider calls and extraction steps.</li>
-<li><strong>Answer extraction cap:</strong> <code>web_answer_plus</code> never extracts more than 5 URLs per call.</li>
 <li><strong>Partial results:</strong> search results already collected are preserved if extraction fails or times out.</li>
 <li><strong>Truthful warnings:</strong> missing extraction keys, quota failures, empty results, and budget exhaustion appear in response metadata.</li>
 </ul>
@@ -701,7 +593,7 @@ LICENSE          MIT license
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 115</div>
+        <div class="stars">★ 116</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -717,11 +609,11 @@ LICENSE          MIT license
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
-        <div class="stars">★ 16</div>
+        <div class="stars">★ 17</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/clawshell/clawshell">
-        <div class="stars">★ 278</div>
+        <div class="stars">★ 280</div>
         <div class="name"><span class="org">clawshell /</span> clawshell</div>
       </a>
       <a class="related-row" href="/projects/briancaffey/hermes-otel">
@@ -729,7 +621,7 @@ LICENSE          MIT license
         <div class="name"><span class="org">briancaffey /</span> hermes-otel</div>
       </a>
       <a class="related-row" href="/projects/335234131/agent-browser-mcp">
-        <div class="stars">★ 205</div>
+        <div class="stars">★ 206</div>
         <div class="name"><span class="org">335234131 /</span> agent-browser-mcp</div>
       </a>
     </div>
