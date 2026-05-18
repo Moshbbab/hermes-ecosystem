@@ -305,6 +305,14 @@ Then in Slack:
 
 For backward compatibility with older manifests, you can still type `/hermes btw run the tests` — Hermes routes it the same way as `/btw run the tests`. Free-form questions also work: `/hermes what's the weather?` is treated as a regular message.
 
+### Using commands inside threads (the `!cmd` prefix)
+
+Slack itself blocks native slash commands inside thread replies — try `/queue` in a thread and Slack responds with _"/queue is not supported in threads. Sorry!"_ There is no app-side setting that re-enables them; Slack never delivers them to Hermes.
+
+As a workaround, Hermes recognises a leading `!` as an alternate command prefix that works in threads (and anywhere else). Type `!queue`, `!stop`, `!model gpt-5.4`, etc. as a regular thread reply — Hermes treats it identically to the slash form and replies in the same thread.
+
+Only the first token is checked against the known command list, so casual messages like `!nice work` pass through to the agent unchanged.
+
 ### Advanced: emit only the slash-commands array
 
 If you maintain your Slack manifest by hand and just want the slash command list:

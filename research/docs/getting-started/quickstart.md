@@ -61,7 +61,16 @@ Add routing and fallback only after the base chat works
 
 ## 1\. Install Hermes Agent
 
-Run the one-line installer:
+**Option A — pip (simplest):**
+
+```
+pip install hermes-agent
+hermes postinstall     # optional: installs Node.js, browser, ripgrep, ffmpeg + runs setup
+```
+
+PyPI releases track tagged versions (major/minor releases), not every commit on `main`. For bleeding-edge, use Option B.
+
+**Option B — git installer (tracks main branch):**
 
 ```
 # Linux / macOS / WSL2 / Android (Termux)

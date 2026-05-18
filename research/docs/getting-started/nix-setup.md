@@ -835,6 +835,41 @@ services.hermes-agent.extraPythonPackages = [
 
 The package's `site-packages` is added to PYTHONPATH in the hermes wrapper. `importlib.metadata` discovers the entry point at session start.
 
+### Optional Dependency Groups (`extraDependencyGroups`)
+
+For optional extras already declared in hermes-agent's `pyproject.toml` (e.g., memory providers like `hindsight` or `honcho`), use `extraDependencyGroups` to include them in the sealed venv at build time:
+
+```
+services.hermes-agent = {
+  extraDependencyGroups = [ "hindsight" ];
+  settings.memory.provider = "hindsight";
+};
+```
+
+This is resolved by uv alongside core dependencies in a single pass — no PYTHONPATH patching, no collision risk. Available groups match the `[project.optional-dependencies]` keys in `pyproject.toml` (e.g., `"hindsight"`, `"honcho"`, `"voice"`, `"matrix"`, `"mistral"`, `"bedrock"`).
+
+**When to use which:**
+
+Need
+
+Option
+
+Enable a pyproject.toml optional extra
+
+`extraDependencyGroups`
+
+Add an external Python plugin not in pyproject.toml
+
+`extraPythonPackages`
+
+Add a system binary (pandoc, jq, etc.)
+
+`extraPackages`
+
+Add a directory-based plugin source tree
+
+`extraPlugins`
+
 ### Combining Both
 
 A directory plugin with third-party Python dependencies needs both options:
@@ -856,7 +891,9 @@ External flakes can override the package directly:
   inputs.hermes-agent.url = "github:NousResearch/hermes-agent";
   outputs = { hermes-agent, nixpkgs, ... }: {
     nixpkgs.overlays = [ hermes-agent.overlays.default ];
-    # Then: pkgs.hermes-agent.override { extraPythonPackages = [...]; }
+    # Then:
+    #   pkgs.hermes-agent.override { extraPythonPackages = [...]; }
+    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "hindsight" ]; }
   };
 }
 ```
@@ -1265,6 +1302,14 @@ Directory plugin packages to symlink into `$HERMES_HOME/plugins/`. Each must con
 `[]`
 
 Python packages added to PYTHONPATH for entry-point plugin discovery. Build with `python312Packages`
+
+`extraDependencyGroups`
+
+`listOf str`
+
+`[]`
+
+pyproject.toml optional extras to include in the sealed venv (e.g. `["hindsight"]`). Resolved by uv — no collisions
 
 `restart`
 

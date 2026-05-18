@@ -265,7 +265,7 @@ Agent with optional pre-check script
 
 When the message content requires reasoning over data
 
-OS cron + `curl` to a [webhook subscription](/docs/user-guide/features/webhooks)
+OS cron + `curl` to a [webhook subscription](/docs/user-guide/messaging/webhooks)
 
 Your script on the OS schedule
 
@@ -277,5 +277,5 @@ For critical system-health watchdogs that must fire _even when the gateway is do
 
 -   [Automate Anything with Cron](/docs/guides/automate-with-cron) — LLM-driven cron patterns.
 -   [Scheduled Tasks (Cron) reference](/docs/user-guide/features/cron) — full schedule syntax, lifecycle, delivery routing.
--   [Webhook Subscriptions](/docs/user-guide/features/webhooks) — fire-and-forget HTTP entry points for external schedulers.
+-   [Webhook Subscriptions](/docs/user-guide/messaging/webhooks) — fire-and-forget HTTP entry points for external schedulers.
 -   [Gateway Internals](/docs/developer-guide/gateway-internals) — delivery-router internals.

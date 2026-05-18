@@ -43,9 +43,13 @@ Skill
 
 Description
 
-[**base**](/docs/user-guide/skills/optional/blockchain/blockchain-base)
+[**evm**](/docs/user-guide/skills/optional/blockchain/blockchain-evm)
 
-Query Base (Ethereum L2) blockchain data with USD pricing — wallet balances, token info, transaction details, gas analysis, contract inspection, whale detection, and live network stats. Uses Base RPC + CoinGecko. No API key required.
+Read-only EVM client: wallets, tokens, gas across 8 chains.
+
+[**hyperliquid**](/docs/user-guide/skills/optional/blockchain/blockchain-hyperliquid)
+
+Hyperliquid market data, account history, trade review.
 
 [**solana**](/docs/user-guide/skills/optional/blockchain/blockchain-solana)
 
@@ -100,6 +104,10 @@ Run 150+ AI apps via inference.sh CLI (infsh) — image generation, video creati
 [**docker-management**](/docs/user-guide/skills/optional/devops/devops-docker-management)
 
 Manage Docker containers, images, volumes, networks, and Compose stacks — lifecycle ops, debugging, cleanup, and Dockerfile optimization.
+
+[**pinggy-tunnel**](/docs/user-guide/skills/optional/devops/devops-pinggy-tunnel)
+
+Zero-install localhost tunnels over SSH via Pinggy.
 
 [**watchers**](/docs/user-guide/skills/optional/devops/devops-watchers)
 
@@ -158,6 +166,10 @@ Build accretion/dilution (merger) models in Excel — pro-forma P&L, synergies, 
 [**pptx-author**](/docs/user-guide/skills/optional/finance/finance-pptx-author)
 
 Build PowerPoint decks headless with python-pptx. Pairs with excel-author for model-backed decks where every number traces to a workbook cell. Use for pitch decks, IC memos, earnings notes.
+
+[**stocks**](/docs/user-guide/skills/optional/finance/finance-stocks)
+
+Stock quotes, history, search, compare, crypto via Yahoo.
 
 ## health
 
@@ -230,10 +242,6 @@ Optimizes transformer attention with Flash Attention for 2-4x speedup and 10-20x
 [**guidance**](/docs/user-guide/skills/optional/mlops/mlops-guidance)
 
 Control LLM output with regex and grammars, guarantee valid JSON/XML/code generation, enforce structured formats, and build multi-step workflows with Guidance - Microsoft Research's constrained generation framework
-
-[**hermes-atropos-environments**](/docs/user-guide/skills/optional/mlops/mlops-hermes-atropos-environments)
-
-Build, test, and debug Hermes Agent RL environments for Atropos training. Covers the HermesAgentBaseEnv interface, reward functions, agent loop integration, evaluation with tools, wandb logging, and the three CLI modes (serve/process/eva...
 
 [**huggingface-tokenizers**](/docs/user-guide/skills/optional/mlops/mlops-huggingface-tokenizers)
 
@@ -363,6 +371,10 @@ Description
 
 Gateway to 400+ bioinformatics skills from bioSkills and ClawBio. Covers genomics, transcriptomics, single-cell, variant calling, pharmacogenomics, metagenomics, structural biology, and more. Fetches domain-specific reference material on...
 
+[**darwinian-evolver**](/docs/user-guide/skills/optional/research/research-darwinian-evolver)
+
+Evolve prompts/regex/SQL/code with Imbue's evolution loop.
+
 [**domain-intel**](/docs/user-guide/skills/optional/research/research-domain-intel)
 
 Passive domain reconnaissance using Python stdlib. Subdomain discovery, SSL certificate inspection, WHOIS lookups, DNS records, domain availability checks, and bulk multi-domain analysis. No API keys required.
@@ -378,6 +390,10 @@ Free web search via DuckDuckGo — text, news, images, videos. No API key needed
 [**gitnexus-explorer**](/docs/user-guide/skills/optional/research/research-gitnexus-explorer)
 
 Index a codebase with GitNexus and serve an interactive knowledge graph via web UI + Cloudflare tunnel.
+
+[**osint-investigation**](/docs/user-guide/skills/optional/research/research-osint-investigation)
+
+Public-records OSINT investigation framework — SEC EDGAR filings, USAspending contracts, Senate lobbying, OFAC sanctions, ICIJ offshore leaks, NYC property records (ACRIS), OpenCorporates registries, CourtListener court records, Wayback...
 
 [**parallel-cli**](/docs/user-guide/skills/optional/research/research-parallel-cli)
 
@@ -412,6 +428,16 @@ Supply chain investigation, evidence recovery, and forensic analysis for GitHub 
 [**sherlock**](/docs/user-guide/skills/optional/security/security-sherlock)
 
 OSINT username search across 400+ social networks. Hunt down social media accounts by username.
+
+## software-development
+
+Skill
+
+Description
+
+[**rest-graphql-debug**](/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug)
+
+Debug REST/GraphQL APIs: status codes, auth, schemas, repro.
 
 ## web-development
 

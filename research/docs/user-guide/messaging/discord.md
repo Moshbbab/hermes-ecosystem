@@ -379,6 +379,14 @@ No
 
 When `true`, the bot only responds in server channels when `@mentioned`. Set to `false` to respond to all messages in every channel.
 
+`DISCORD_THREAD_REQUIRE_MENTION`
+
+No
+
+`false`
+
+When `true`, the in-thread mention shortcut is disabled — threads are gated the same as channels, requiring `@mention` even after the bot has already participated. Use this when multiple bots share a thread and you want each to fire only on explicit `@mention`.
+
 `DISCORD_FREE_RESPONSE_CHANNELS`
 
 No
@@ -443,6 +451,22 @@ No
 
 Comma-separated channel IDs where the bot responds directly in the channel instead of creating a thread. Only relevant when `DISCORD_AUTO_THREAD` is `true`.
 
+`DISCORD_HISTORY_BACKFILL`
+
+No
+
+`true`
+
+When `true`, prepend recent channel scrollback (since the bot's last response) to the user message when the bot is mentioned. Recovers context the bot would otherwise miss with `require_mention`. Skipped in DMs and free-response channels. Set to `false` to disable.
+
+`DISCORD_HISTORY_BACKFILL_LIMIT`
+
+No
+
+`50`
+
+Maximum number of messages to scan backwards when assembling the backfill block. In practice the scan usually stops earlier — at the bot's own last message in the channel.
+
 `DISCORD_REPLY_TO_MODE`
 
 No
@@ -491,6 +515,22 @@ No
 
 Proxy URL for Discord connections (HTTP, WebSocket, REST). Overrides `HTTPS_PROXY`/`ALL_PROXY`. Supports `http://`, `https://`, and `socks5://` schemes.
 
+`DISCORD_ALLOW_ANY_ATTACHMENT`
+
+No
+
+`false`
+
+When `true`, the bot accepts attachments of any file type (not just the built-in PDF/text/zip/office allowlist). Unknown types are cached to disk and surfaced to the agent as a local path with `application/octet-stream` MIME so it can inspect them with `terminal` / `read_file` / `ffprobe` / etc.
+
+`DISCORD_MAX_ATTACHMENT_BYTES`
+
+No
+
+`33554432`
+
+Maximum bytes per attachment the gateway will download and cache. Default 32 MiB. Set to `0` for no cap (attachments are held in memory while being written, so unlimited carries a real memory cost).
+
 `HERMES_DISCORD_TEXT_BATCH_DELAY_SECONDS`
 
 No
@@ -515,11 +555,14 @@ The `discord` section in `~/.hermes/config.yaml` mirrors the env vars above. Con
 # Discord-specific settings
 discord:
   require_mention: true           # Require @mention in server channels
+  thread_require_mention: false   # If true, require @mention in threads too (multi-bot threads)
   free_response_channels: ""      # Comma-separated channel IDs (or YAML list)
   auto_thread: true               # Auto-create threads on @mention
   reactions: true                 # Add emoji reactions during processing
   ignored_channels: []            # Channel IDs where bot never responds
   no_thread_channels: []          # Channel IDs where bot responds without threading
+  history_backfill: true          # Prepend recent channel scrollback on mention (default: true)
+  history_backfill_limit: 50      # Max messages to scan backwards (default: 50)
   channel_prompts: {}             # Per-channel ephemeral system prompts
   allow_mentions:                 # What the bot is allowed to ping (safe defaults)
     everyone: false               # @everyone / @here pings (default: false)
@@ -536,6 +579,20 @@ group_sessions_per_user: true     # Isolate sessions per user in shared channels
 **Type:** boolean — **Default:** `true`
 
 When enabled, the bot only responds in server channels when directly `@mentioned`. DMs always get a response regardless of this setting.
+
+#### `discord.thread_require_mention`
+
+**Type:** boolean — **Default:** `false`
+
+By default, once the bot has participated in a thread (auto-created on `@mention` or replied in once), it keeps responding to every subsequent message in that thread without needing to be `@mentioned` again. That's the right default for one-on-one conversations.
+
+In **multi-bot threads** where users address one bot per turn, this default becomes a footgun — every other bot in the thread also fires on every message, burning credits and spamming the channel. Set `thread_require_mention: true` to disable the in-thread shortcut and gate threads the same way channels are gated. Explicit `@mentions` still work as before.
+
+```
+discord:
+  require_mention: true
+  thread_require_mention: true    # multi-bot setup
+```
 
 #### `discord.free_response_channels`
 
@@ -563,7 +620,7 @@ Free-response channels also **skip auto-threading** — the bot replies inline r
 
 **Type:** boolean — **Default:** `true`
 
-When enabled, every `@mention` in a regular text channel automatically creates a new thread for the conversation. This keeps the main channel clean and gives each conversation its own isolated session history. Once a thread is created, subsequent messages in that thread don't require `@mention` — the bot knows it's already participating.
+When enabled, every `@mention` in a regular text channel automatically creates a new thread for the conversation. This keeps the main channel clean and gives each conversation its own isolated session history. Once a thread is created, subsequent messages in that thread don't require `@mention` — the bot knows it's already participating. Set [`thread_require_mention`](#discordthread_require_mention) to `true` to disable this in-thread shortcut for multi-bot setups.
 
 Messages sent in existing threads or DMs are unaffected by this setting. Channels listed in `discord.free_response_channels` or `discord.no_thread_channels` also bypass auto-threading and get inline replies instead.
 
@@ -635,6 +692,47 @@ Behavior:
 -   Exact thread/channel ID matches win.
 -   If a message arrives inside a thread or forum post and that thread has no explicit entry, Hermes falls back to the parent channel/forum ID.
 -   Prompts are applied ephemerally at runtime, so changing them affects future turns immediately without rewriting past session history.
+
+#### `discord.history_backfill`
+
+**Type:** boolean — **Default:** `true`
+
+When enabled, the bot recovers missed channel messages on each `@mention`. With `require_mention: true`, the bot only processes messages that tag it directly — everything else in the channel is invisible to the session transcript. History backfill scans backwards through recent channel history when triggered, collecting messages between the bot's last response and the current mention, and includes them as context.
+
+Behavior by surface:
+
+-   **Server channels** (with `require_mention: true`): backfill scans the channel since the bot's last response. Useful when other participants posted while the bot wasn't addressed.
+-   **Threads**: backfill scans the thread only — Discord's `channel.history()` on a thread returns only that thread's messages, not the parent channel. This is the right scope because threads are usually self-contained conversations.
+-   **DMs**: skipped. Every DM message triggers the bot, so the session transcript is already complete — there's no mention gap to fill.
+-   **Free-response channels** and **bot's own auto-created threads**: skipped for the same reason — no mention gating means no gap.
+
+Per-user sessions (`group_sessions_per_user: true`, the default) also benefit: a user's session is missing the context posted by other channel participants and the user's own messages from before they tagged the bot. Backfill fills both gaps.
+
+```
+discord:
+  history_backfill: true   # default
+```
+
+To turn it off:
+
+```
+discord:
+  history_backfill: false
+```
+
+> **Note:** Messages that arrive _while_ the bot is processing (between a trigger and its response) are not captured. This is an accepted simplification — the user can re-send or tag again.
+
+#### `discord.history_backfill_limit`
+
+**Type:** integer — **Default:** `50`
+
+Maximum number of messages to scan backwards when recovering channel context. In practice the scan usually stops much earlier — at the bot's own last message in the channel, which is the natural boundary between turns. This limit is a safety cap for cold starts and long gaps where no prior bot message exists in recent history.
+
+```
+discord:
+  history_backfill: true
+  history_backfill_limit: 50
+```
 
 #### `group_sessions_per_user`
 
@@ -782,6 +880,25 @@ Documents (PDF/ZIP/docx/etc.)
 `send_document` — native attachment with download button
 
 Discord's per-upload size limit depends on the server's boost tier (25 MB free, up to 500 MB). If Hermes gets an HTTP 413, the adapter falls back to a link pointing at the local cache path rather than failing silently.
+
+## Receiving Arbitrary File Types
+
+By default the bot caches uploads that match a built-in allowlist — images, audio, video, PDF, text/markdown/csv/log, JSON/XML/YAML/TOML, zip, docx/xlsx/pptx. Anything else (a `.wav`, a `.bin`, a custom-extension dump) gets logged as `Unsupported document type` and dropped before the agent sees it.
+
+To accept arbitrary file types, enable `discord.allow_any_attachment`:
+
+```
+discord:
+  allow_any_attachment: true
+  # Optional — raise/disable the per-file size cap. Default is 32 MiB.
+  # The whole file is held in memory while being cached, so unlimited
+  # uploads carry a real memory cost.
+  max_attachment_bytes: 33554432   # bytes; 0 = unlimited
+```
+
+When the flag is on, any uploaded file is downloaded, cached under `~/.hermes/cache/documents/`, and surfaced to the agent as a `DOCUMENT`\-typed message event with `application/octet-stream` MIME. The agent receives a context note pointing at the local path (auto-translated for Docker/Modal sandboxed terminals via `to_agent_visible_cache_path`) and can inspect the file with `terminal` (`ffprobe`, `unzip`, `file`, `strings`, etc.) or `read_file`. The file body is **not** inlined into the prompt — only the path — so binary uploads don't blow up the context window.
+
+Known-text formats already in the allowlist (`.txt`, `.md`, `.log`) continue to have their contents auto-injected up to 100 KiB; that behavior is unchanged when the flag is on.
 
 ## Home Channel
 

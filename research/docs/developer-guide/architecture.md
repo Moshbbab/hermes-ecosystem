@@ -123,7 +123,6 @@ hermes-agent/
 ├── cron/                     # Scheduler (jobs.py, scheduler.py)
 ├── plugins/memory/           # Memory provider plugins
 ├── plugins/context_engine/   # Context engine plugins
-├── environments/             # RL training environments (Atropos)
 ├── skills/                   # Bundled skills (always available)
 ├── optional-skills/          # Official optional skills (install explicitly)
 ├── website/                  # Docusaurus documentation site
@@ -181,7 +180,6 @@ If you are new to the codebase:
 8.  **[Gateway Internals](/docs/developer-guide/gateway-internals)** — messaging platform gateway
 9.  **[Context Compression & Prompt Caching](/docs/developer-guide/context-compression-and-caching)** — compression and caching
 10.  **[ACP Internals](/docs/developer-guide/acp-internals)** — IDE integration
-11.  **[Environments, Benchmarks & Data Generation](/docs/developer-guide/environments)** — RL training
 
 ## Major Subsystems
 
@@ -243,11 +241,11 @@ Exposes Hermes as an editor-native agent over stdio/JSON-RPC for VS Code, Zed, a
 
 → [ACP Internals](/docs/developer-guide/acp-internals)
 
-### RL / Environments / Trajectories
+### Trajectories
 
-Full environment framework for evaluation and RL training. Integrates with Atropos, supports multiple tool-call parsers, and generates ShareGPT-format trajectories.
+Generates ShareGPT-format trajectories from agent sessions for training data generation.
 
-→ [Environments, Benchmarks & Data Generation](/docs/developer-guide/environments), [Trajectories & Training Format](/docs/developer-guide/trajectory-format)
+→ [Trajectories & Training Format](/docs/developer-guide/trajectory-format)
 
 ## Design Principles
 

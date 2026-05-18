@@ -439,6 +439,8 @@ Default taps (browsable without any setup):
     
 -   [anthropics/skills](https://github.com/anthropics/skills)
     
+-   [huggingface/skills](https://github.com/huggingface/skills)
+    
 -   [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills)
     
 -   [garrytan/gstack](https://github.com/garrytan/gstack)
@@ -555,7 +557,7 @@ Builtin trust, no third-party warning
 
 `trusted`
 
-Trusted registries/repos such as `openai/skills`, `anthropics/skills`
+Trusted registries/repos such as `openai/skills`, `anthropics/skills`, `huggingface/skills`
 
 More permissive policy than community sources
 

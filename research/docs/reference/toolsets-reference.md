@@ -41,7 +41,7 @@ Or in-session:
 ```
 /tools list
 /tools disable browser
-/tools enable rl
+/tools enable homeassistant
 ```
 
 ## Core Toolsets
@@ -136,6 +136,12 @@ Background macOS desktop control via cua-driver — does not steal cursor/focus.
 
 Text-to-image generation via FAL.ai (with opt-in OpenAI / xAI backends).
 
+`video_gen`
+
+`video_generate`
+
+Text-to-video and image-to-video via plugin-registered backends (xAI Grok-Imagine, FAL.ai Veo 3.1 / Pixverse v6 / Kling O3). Pass `image_url` to animate an image; omit it for text-to-video.
+
 `kanban`
 
 `kanban_block`, `kanban_comment`, `kanban_complete`, `kanban_create`, `kanban_heartbeat`, `kanban_link`, `kanban_show`
@@ -159,12 +165,6 @@ Send messages to other platforms (Telegram, Discord, etc.) from within a session
 `mixture_of_agents`
 
 Multi-model consensus via Mixture of Agents.
-
-`rl`
-
-`rl_check_status`, `rl_edit_config`, `rl_get_current_config`, `rl_get_results`, `rl_list_environments`, `rl_list_runs`, `rl_select_environment`, `rl_start_training`, `rl_stop_training`, `rl_test_inference`
-
-RL training environment management (Atropos).
 
 `safe`
 
@@ -231,6 +231,12 @@ Video analysis and understanding tools (opt-in, not in the default toolset — a
 `web_extract`, `web_search`
 
 Web search and page content extraction.
+
+`x_search`
+
+`x_search`
+
+Search X (Twitter) posts and threads via xAI's built-in `x_search` Responses tool. Off by default; opt in via `hermes tools`. Schema only registered when xAI credentials (SuperGrok OAuth or `XAI_API_KEY`) are configured.
 
 `yuanbao`
 

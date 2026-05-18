@@ -36,6 +36,10 @@ Setup
 
 `OPENROUTER_API_KEY` in `~/.hermes/.env`
 
+**NovitaAI**
+
+`NOVITA_API_KEY` in `~/.hermes/.env` (provider: `novita`, 200+ models, Model API, Agent Sandbox, GPU Cloud)
+
 **AI Gateway**
 
 `AI_GATEWAY_API_KEY` in `~/.hermes/.env` (provider: `ai-gateway`)
@@ -385,6 +389,10 @@ Override ACP args (default: `--acp --stdio`)
 These providers have built-in support with dedicated provider IDs. Set the API key and use `--provider` to select:
 
 ```
+# NovitaAI Model API
+hermes chat --provider novita --model moonshotai/kimi-k2.5
+# Requires: NOVITA_API_KEY in ~/.hermes/.env
+
 # z.ai / ZhipuAI GLM
 hermes chat --provider zai --model glm-5
 # Requires: GLM_API_KEY in ~/.hermes/.env
@@ -435,7 +443,7 @@ model:
   default: "zai-org/GLM-5.1-FP8"
 ```
 
-Base URLs can be overridden with `GLM_BASE_URL`, `KIMI_BASE_URL`, `MINIMAX_BASE_URL`, `MINIMAX_CN_BASE_URL`, `DASHSCOPE_BASE_URL`, `XIAOMI_BASE_URL`, `GMI_BASE_URL`, or `TOKENHUB_BASE_URL` environment variables.
+Base URLs can be overridden with `NOVITA_BASE_URL`, `GLM_BASE_URL`, `KIMI_BASE_URL`, `MINIMAX_BASE_URL`, `MINIMAX_CN_BASE_URL`, `DASHSCOPE_BASE_URL`, `XIAOMI_BASE_URL`, `GMI_BASE_URL`, or `TOKENHUB_BASE_URL` environment variables.
 
 Z.AI Endpoint Auto-Detection
 
@@ -445,11 +453,37 @@ When using the Z.AI / GLM provider, Hermes automatically probes multiple endpoin
 
 xAI is wired through the Responses API (`codex_responses` transport) for automatic reasoning support on Grok 4 models — no `reasoning_effort` parameter needed, the server reasons by default. Set `XAI_API_KEY` in `~/.hermes/.env` and pick xAI in `hermes model`, or drop `grok` as a shortcut into `/model grok-4-1-fast-reasoning`.
 
+SuperGrok subscribers can sign in with browser OAuth instead of using an API key — pick **xAI Grok OAuth (SuperGrok Subscription)** in `hermes model`, or run `hermes auth add xai-oauth`. The same OAuth bearer token is automatically reused by direct-to-xAI tools (TTS, image gen, video gen, transcription). See the [xAI Grok OAuth guide](/docs/guides/xai-grok-oauth) for the full flow — and if Hermes runs on a remote host, also see [OAuth over SSH / Remote Hosts](/docs/guides/oauth-over-ssh) for the required `ssh -L` tunnel.
+
 When using xAI as a provider (any base URL containing `x.ai`), Hermes automatically enables prompt caching by sending the `x-grok-conv-id` header with every API request. This routes requests to the same server within a conversation session, allowing xAI's infrastructure to reuse cached system prompts and conversation history.
 
 No configuration is needed — caching activates automatically when an xAI endpoint is detected and a session ID is available. This reduces latency and cost for multi-turn conversations.
 
 xAI also ships a dedicated TTS endpoint (`/v1/tts`). Select **xAI TTS** in `hermes tools` → Voice & TTS, or see the [Voice & TTS](/docs/user-guide/features/tts#text-to-speech) page for config.
+
+### NovitaAI
+
+[NovitaAI](https://novita.ai) is the AI-native cloud for builders and agents. Its three product lines are Model API for 200+ models, Agent Sandbox for building and running AI agents, and GPU Cloud for scalable compute, all available from one platform.
+
+```
+# Use any available model
+hermes chat --provider novita --model moonshotai/kimi-k2.5
+# Requires: NOVITA_API_KEY in ~/.hermes/.env
+
+# Short alias
+hermes chat --provider novita-ai --model deepseek/deepseek-v3-0324
+```
+
+Or set it permanently in `config.yaml`:
+
+```
+model:
+  provider: "novita"
+  default: "moonshotai/kimi-k2.5"
+  base_url: "https://api.novita.ai/openai/v1"
+```
+
+Get your API key at [novita.ai/settings/key-management](https://novita.ai/settings/key-management). The base URL can be overridden with `NOVITA_BASE_URL`.
 
 ### Ollama Cloud — Managed Ollama Models, OAuth + API Key
 
@@ -1674,12 +1708,6 @@ Mistral TTS + voice transcription
 
 `MISTRAL_API_KEY`
 
-RL Training
-
-[Tinker](https://tinker-console.thinkingmachines.ai/) + [WandB](https://wandb.ai/)
-
-`TINKER_API_KEY`, `WANDB_API_KEY`
-
 Cross-session user modeling
 
 [Honcho](https://honcho.dev/)
@@ -1781,7 +1809,7 @@ fallback_model:
 
 When activated, the fallback swaps the model and provider mid-session without losing your conversation. The chain is tried entry-by-entry; activation is one-shot per session.
 
-Supported providers: `openrouter`, `nous`, `openai-codex`, `copilot`, `copilot-acp`, `anthropic`, `gemini`, `google-gemini-cli`, `qwen-oauth`, `huggingface`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth`, `deepseek`, `nvidia`, `xai`, `ollama-cloud`, `bedrock`, `ai-gateway`, `azure-foundry`, `opencode-zen`, `opencode-go`, `kilocode`, `xiaomi`, `arcee`, `gmi`, `stepfun`, `lmstudio`, `alibaba`, `alibaba-coding-plan`, `tencent-tokenhub`, `custom`.
+Supported providers: `openrouter`, `nous`, `openai-codex`, `copilot`, `copilot-acp`, `anthropic`, `gemini`, `google-gemini-cli`, `qwen-oauth`, `huggingface`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth`, `deepseek`, `nvidia`, `xai`, `xai-oauth`, `ollama-cloud`, `bedrock`, `ai-gateway`, `azure-foundry`, `opencode-zen`, `opencode-go`, `kilocode`, `xiaomi`, `arcee`, `gmi`, `stepfun`, `lmstudio`, `alibaba`, `alibaba-coding-plan`, `tencent-tokenhub`, `custom`.
 
 tip
 

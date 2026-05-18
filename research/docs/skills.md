@@ -588,7 +588,7 @@ Productivity🐧 Linux macOSwindows
 
 ✓ Built-in
 
-Notion API via curl: pages, databases, blocks, search.
+Notion API + ntn CLI: pages, databases, markdown, Workers.
 
 Productivity🐧 Linux macOSwindows
 
@@ -602,4 +602,4 @@ Extract text from PDFs/scans (pymupdf, marker-pdf).
 
 Productivity🐧 Linux macOSwindows
 
-Show more (624 remaining)
+Show more (629 remaining)

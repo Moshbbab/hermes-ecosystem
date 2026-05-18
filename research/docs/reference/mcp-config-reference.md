@@ -25,6 +25,7 @@ mcp_servers:
     enabled: true
     timeout: 120
     connect_timeout: 60
+    supports_parallel_tool_calls: false
     tools:
       include: []
       exclude: []
@@ -105,6 +106,14 @@ number
 both
 
 Initial connection timeout
+
+`supports_parallel_tool_calls`
+
+bool
+
+both
+
+Allow tools from this server to run concurrently
 
 `tools`
 

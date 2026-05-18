@@ -388,7 +388,7 @@ Trust levels:
 
 -   `builtin` — ships with Hermes (always trusted)
 -   `official` — from `optional-skills/` in the repo (builtin trust, no third-party warning)
--   `trusted` — from openai/skills, anthropics/skills
+-   `trusted` — from openai/skills, anthropics/skills, huggingface/skills
 -   `community` — non-dangerous findings can be overridden with `--force`; `dangerous` verdicts remain blocked
 
 Hermes can now consume third-party skills from multiple external discovery models:

@@ -948,6 +948,8 @@ $ hermes model
 [ ] compression          currently: auto / main model
 [ ] approval             currently: auto / main model
 [ ] triage_specifier     currently: auto / main model
+[ ] kanban_decomposer    currently: auto / main model
+[ ] profile_describer    currently: auto / main model
 ```
 
 Select a task, pick a provider (OAuth flows open a browser; API-key providers prompt), pick a model. The change persists to `auxiliary.<task>.*` in `config.yaml`. Same machinery as the main-model picker — no extra syntax to learn.
@@ -984,11 +986,15 @@ not set
 
 When `base_url` is set, Hermes ignores the provider and calls that endpoint directly (using `api_key` or `OPENAI_API_KEY` for auth). When only `provider` is set, Hermes uses that provider's built-in auth and base URL.
 
-Available providers for auxiliary tasks: `auto`, `main`, plus any provider in the [provider registry](/docs/reference/environment-variables) — `openrouter`, `nous`, `openai-codex`, `copilot`, `copilot-acp`, `anthropic`, `gemini`, `google-gemini-cli`, `qwen-oauth`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth`, `deepseek`, `nvidia`, `xai`, `ollama-cloud`, `alibaba`, `bedrock`, `huggingface`, `arcee`, `xiaomi`, `kilocode`, `opencode-zen`, `opencode-go`, `ai-gateway`, `azure-foundry` — or any named custom provider from your `custom_providers` list (e.g. `provider: "beans"`).
+Available providers for auxiliary tasks: `auto`, `main`, plus any provider in the [provider registry](/docs/reference/environment-variables) — `openrouter`, `nous`, `openai-codex`, `copilot`, `copilot-acp`, `anthropic`, `gemini`, `google-gemini-cli`, `qwen-oauth`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth`, `deepseek`, `nvidia`, `xai`, `xai-oauth`, `ollama-cloud`, `alibaba`, `bedrock`, `huggingface`, `arcee`, `xiaomi`, `kilocode`, `opencode-zen`, `opencode-go`, `ai-gateway`, `azure-foundry` — or any named custom provider from your `custom_providers` list (e.g. `provider: "beans"`).
 
 MiniMax OAuth
 
 `minimax-oauth` logs in via browser OAuth (no API key needed). Run `hermes model` and select **MiniMax (OAuth)** to authenticate. Auxiliary tasks use `MiniMax-M2.7-highspeed` automatically. See the [MiniMax OAuth guide](/docs/guides/minimax-oauth).
+
+xAI Grok OAuth
+
+`xai-oauth` logs in via browser OAuth for SuperGrok subscribers (no API key needed). Run `hermes model` and select **xAI Grok OAuth (SuperGrok Subscription)** to authenticate. The same OAuth token is reused for every direct-to-xAI surface (chat, auxiliary tasks, TTS, image gen, video gen, transcription). See the [xAI Grok OAuth guide](/docs/guides/xai-grok-oauth), and if Hermes is on a remote host see [OAuth over SSH / Remote Hosts](/docs/guides/oauth-over-ssh).
 
 `"main"` is for auxiliary tasks only
 
@@ -1179,6 +1185,12 @@ Force Codex OAuth (ChatGPT account). Supports vision (gpt-5.3-codex).
 Force MiniMax OAuth (browser login, no API key). Uses MiniMax-M2.7-highspeed for auxiliary tasks.
 
 `hermes model` → MiniMax (OAuth)
+
+`"xai-oauth"`
+
+Force xAI Grok OAuth (browser login for SuperGrok subscribers, no API key). Same OAuth token covers chat, TTS, image, video, and transcription.
+
+`hermes model` → xAI Grok OAuth (SuperGrok Subscription)
 
 `"main"`
 
@@ -1454,8 +1466,24 @@ display:
   runtime_footer:         # Gateway: append a runtime-context footer to final replies
     enabled: false
     fields: ["model", "context_pct", "cwd"]
+  file_mutation_verifier: true    # Append an advisory footer when write_file/patch calls failed this turn
   language: en            # UI language for static messages (approval prompts, some gateway replies). en | zh | ja | de | es | fr | tr | uk
 ```
+
+### File-mutation verifier
+
+When `display.file_mutation_verifier` is `true` (default), Hermes appends a one-line advisory to the assistant's final response whenever a `write_file` or `patch` call failed during the turn and was never superseded by a successful write to the same path. This catches the "batch of parallel patches, half silently fail, model summarises success" class of over-claim without requiring you to manually run `git status` after every edit.
+
+Example footer:
+
+```
+⚠️ File-mutation verifier: 3 file(s) were NOT modified this turn despite any wording above that may suggest otherwise. Run `git status` or `read_file` to confirm.
+  • concepts/automatic-organization.md — [patch] Could not find match for old_string
+  • concepts/lora.md — [patch] Could not find match for old_string
+  • concepts/rag-pipeline.md — [patch] Could not find match for old_string
+```
+
+Set `file_mutation_verifier: false` (or `HERMES_FILE_MUTATION_VERIFIER=0`) to suppress the footer. The verifier only fires when real failures are outstanding at turn end — a model that retries a failed patch and succeeds within the same turn will not trigger it for that file.
 
 ### UI language for static messages
 
@@ -1845,6 +1873,9 @@ browser:
   dialog_timeout_s: 300          # Safety auto-dismiss under must_respond (seconds)
   camofox:
     managed_persistence: false   # When true, Camofox sessions persist cookies/logins across restarts
+    user_id: ""                  # Optional externally managed Camofox userId
+    session_key: ""              # Optional session key sent when Hermes creates a tab
+    adopt_existing_tab: false    # Reuse an existing tab for this identity before creating one
 ```
 
 **Dialog policies:**
@@ -1900,7 +1931,7 @@ security:
 ```
 
 -   `redact_secrets` — when `true`, automatically detects and redacts patterns that look like API keys, tokens, and passwords in tool output before it enters the conversation context and logs. **Off by default** — enable if you commonly work with real credentials in tool output and want a safety net. Set to `true` explicitly to turn on.
--   `tirith_enabled` — when `true`, terminal commands are scanned by [Tirith](https://github.com/StackGuardian/tirith) before execution to detect potentially dangerous operations.
+-   `tirith_enabled` — when `true`, terminal commands are scanned by [Tirith](https://github.com/sheeki03/tirith) before execution to detect potentially dangerous operations.
 -   `tirith_path` — path to the tirith binary. Set this if tirith is installed in a non-standard location.
 -   `tirith_timeout` — maximum seconds to wait for a tirith scan. Commands proceed if the scan times out.
 -   `tirith_fail_open` — when `true` (default), commands are allowed to execute if tirith is unavailable or fails. Set to `false` to block commands when tirith cannot verify them.
@@ -1984,6 +2015,7 @@ delegation:
   # provider: "openrouter"                  # Override provider (empty = inherit parent)
   # base_url: "http://localhost:1234/v1"    # Direct OpenAI-compatible endpoint (takes precedence over provider)
   # api_key: "local-key"                    # API key for base_url (falls back to OPENAI_API_KEY)
+  # api_mode: ""                            # Wire protocol for base_url: "chat_completions", "codex_responses", or "anthropic_messages". Empty = auto-detect from URL (e.g. /anthropic suffix → anthropic_messages). Set explicitly for non-standard endpoints the heuristic can't detect.
   max_concurrent_children: 3                # Parallel children per batch (floor 1, no ceiling). Also via DELEGATION_MAX_CONCURRENT_CHILDREN env var.
   max_spawn_depth: 1                        # Delegation tree depth cap (1-3, clamped). 1 = flat (default): parent spawns leaves that cannot delegate. 2 = orchestrator children can spawn leaf grandchildren. 3 = three levels.
   orchestrator_enabled: true                # Global kill switch. When false, role="orchestrator" is ignored and every child is forced to leaf regardless of max_spawn_depth.
@@ -1992,6 +2024,8 @@ delegation:
 **Subagent provider:model override:** By default, subagents inherit the parent agent's provider and model. Set `delegation.provider` and `delegation.model` to route subagents to a different provider:model pair — e.g., use a cheap/fast model for narrowly-scoped subtasks while your primary agent runs an expensive reasoning model.
 
 **Direct endpoint override:** If you want the obvious custom-endpoint path, set `delegation.base_url`, `delegation.api_key`, and `delegation.model`. That sends subagents directly to that OpenAI-compatible endpoint and takes precedence over `delegation.provider`. If `delegation.api_key` is omitted, Hermes falls back to `OPENAI_API_KEY` only.
+
+**Wire protocol (`api_mode`):** Hermes auto-detects the wire protocol from `delegation.base_url` (e.g. paths ending in `/anthropic` → `anthropic_messages`; Codex / native Anthropic / Kimi-coding hostnames keep their existing detection). For endpoints the heuristic can't classify — for example Azure AI Foundry, MiniMax, Zhipu GLM, or LiteLLM proxies fronting an Anthropic-shaped backend — set `delegation.api_mode` explicitly to one of `chat_completions`, `codex_responses`, or `anthropic_messages`. Leave it empty (the default) to keep auto-detection.
 
 The delegation provider uses the same credential resolution as CLI/gateway startup. All configured providers are supported: `openrouter`, `nous`, `copilot`, `zai`, `kimi-coding`, `minimax`, `minimax-cn`. When a provider is set, the system automatically resolves the correct base URL, API key, and API mode — no manual credential wiring needed.
 

@@ -36,6 +36,10 @@ An **image-generation backend**
 
 [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin)
 
+A **video-generation backend**
+
+[Video Generation Provider Plugins](/docs/developer-guide/video-gen-provider-plugin)
+
 A **TTS backend** (any CLI — Piper, VoxCPM, Kokoro, voice cloning, …)
 
 [TTS custom command providers](/docs/user-guide/features/tts#custom-command-providers) — config-driven, no Python needed
@@ -530,6 +534,23 @@ ctx.register_tool(
     check_fn=lambda: _has_optional_lib(),  # False = tool hidden from model
 )
 ```
+
+### Overriding a built-in tool
+
+To replace a built-in tool with your own implementation (e.g. swap the default browser tool for a headed-Chrome CDP backend, or replace `web_search` with a custom corporate index), pass `override=True`:
+
+```
+def register(ctx):
+    ctx.register_tool(
+        name="browser_navigate",             # same name as the built-in
+        toolset="plugin_my_browser",         # your own toolset namespace
+        schema={...},
+        handler=my_custom_navigate,
+        override=True,                       # explicit opt-in
+    )
+```
+
+Without `override=True`, the registry rejects any registration that would shadow an existing tool from a different toolset — this prevents accidental overwrites. The override is logged at INFO level so it's auditable in `~/.hermes/logs/agent.log`. Plugins load after built-in tools, so the registration order is correct: your handler replaces the built-in one.
 
 ### Register multiple hooks
 

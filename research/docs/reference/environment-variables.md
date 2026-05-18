@@ -230,6 +230,14 @@ DeepSeek API key for direct DeepSeek access ([platform.deepseek.com](https://pla
 
 Custom DeepSeek API base URL
 
+`NOVITA_API_KEY`
+
+NovitaAI API key — AI-native cloud for Model API, Agent Sandbox, and GPU Cloud ([novita.ai/settings/key-management](https://novita.ai/settings/key-management))
+
+`NOVITA_BASE_URL`
+
+Override NovitaAI base URL (default: `https://api.novita.ai/openai/v1`)
+
 `NVIDIA_API_KEY`
 
 NVIDIA NIM API key — Nemotron and open models ([build.nvidia.com](https://build.nvidia.com))
@@ -356,7 +364,7 @@ Description
 
 `HERMES_INFERENCE_PROVIDER`
 
-Override provider selection: `auto`, `custom`, `openrouter`, `nous`, `openai-codex`, `copilot`, `copilot-acp`, `anthropic`, `huggingface`, `gemini`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth` (browser OAuth login — no API key required; see [MiniMax OAuth guide](/docs/guides/minimax-oauth)), `kilocode`, `xiaomi`, `arcee`, `gmi`, `stepfun`, `alibaba`, `alibaba-coding-plan` (alias `alibaba_coding`), `deepseek`, `nvidia`, `ollama-cloud`, `xai` (alias `grok`), `google-gemini-cli`, `qwen-oauth`, `bedrock`, `opencode-zen`, `opencode-go`, `ai-gateway`, `tencent-tokenhub` (default: `auto`)
+Override provider selection: `auto`, `custom`, `openrouter`, `nous`, `openai-codex`, `copilot`, `copilot-acp`, `anthropic`, `huggingface`, `novita`, `gemini`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth` (browser OAuth login — no API key required; see [MiniMax OAuth guide](/docs/guides/minimax-oauth)), `kilocode`, `xiaomi`, `arcee`, `gmi`, `stepfun`, `alibaba`, `alibaba-coding-plan` (alias `alibaba_coding`), `deepseek`, `nvidia`, `ollama-cloud`, `xai` (alias `grok`), `xai-oauth` (browser OAuth login for SuperGrok subscribers — no API key required; see [xAI Grok OAuth guide](/docs/guides/xai-grok-oauth)), `google-gemini-cli`, `qwen-oauth`, `bedrock`, `opencode-zen`, `opencode-go`, `ai-gateway`, `tencent-tokenhub` (default: `auto`)
 
 `HERMES_PORTAL_BASE_URL`
 
@@ -444,9 +452,25 @@ Chrome DevTools Protocol URL for local browser (set via `/browser connect`, e.g.
 
 Camofox local anti-detection browser URL (default: `http://localhost:9377`)
 
+`CAMOFOX_USER_ID`
+
+Optional externally managed Camofox user ID for shared visible sessions
+
+`CAMOFOX_SESSION_KEY`
+
+Optional Camofox session key used when creating tabs for `CAMOFOX_USER_ID`
+
+`CAMOFOX_ADOPT_EXISTING_TAB`
+
+Set to `true` to reuse an existing Camofox tab before creating a new one
+
 `BROWSER_INACTIVITY_TIMEOUT`
 
 Browser session inactivity timeout in seconds
+
+`AGENT_BROWSER_ARGS`
+
+Extra Chromium launch flags (comma- or newline-separated). Hermes auto-injects `--no-sandbox,--disable-dev-shm-usage` when running as root or on AppArmor-restricted unprivileged user namespaces (Ubuntu 23.10+, DGX Spark, many container images); set this manually only to override or add other flags.
 
 `FAL_KEY`
 
@@ -496,14 +520,6 @@ Timeout in seconds for Hindsight memory-provider API calls (default: `60`). Bump
 
 Semantic long-term memory with profile recall and session ingest ([supermemory.ai](https://supermemory.ai))
 
-`TINKER_API_KEY`
-
-RL training ([tinker-console.thinkingmachines.ai](https://tinker-console.thinkingmachines.ai/))
-
-`WANDB_API_KEY`
-
-RL training metrics ([wandb.ai](https://wandb.ai/))
-
 `DAYTONA_API_KEY`
 
 Daytona cloud sandboxes ([daytona.io](https://daytona.io/))
@@ -526,7 +542,7 @@ Vercel short-lived OIDC token (development-only alternative)
 
 ### Langfuse Observability
 
-Environment variables for the bundled [`observability/langfuse`](/docs/user-guide/features/built-in-plugins#observabilitylangfuse) plugin. Set these with `hermes tools → Langfuse Observability` or manually in `~/.hermes/.env`. The plugin must also be enabled (`hermes plugins enable observability/langfuse`) before any of these take effect.
+Environment variables for the bundled [`observability/langfuse`](/docs/user-guide/features/built-in-plugins#observabilitylangfuse) plugin. Set these in `~/.hermes/.env`. The plugin must also be enabled (`hermes plugins enable observability/langfuse`, or check the box in `hermes plugins`) before any of these take effect.
 
 Variable
 
@@ -827,6 +843,14 @@ Comma-separated channel IDs where mention is not required
 `DISCORD_AUTO_THREAD`
 
 Auto-thread long replies when supported
+
+`DISCORD_ALLOW_ANY_ATTACHMENT`
+
+When `true`, accept attachments of any file type (not just the built-in PDF/text/zip/office allowlist). Unknown types are cached and surfaced to the agent as a local path so it can inspect them via `terminal` / `read_file` / `ffprobe`. Default `false`.
+
+`DISCORD_MAX_ATTACHMENT_BYTES`
+
+Maximum bytes per attachment the gateway will cache. Default `33554432` (32 MiB). Set to `0` for no cap (attachments are held in memory while being written).
 
 `DISCORD_REACTIONS`
 
@@ -1672,6 +1696,10 @@ Default gateway busy-input behavior: `queue`, `steer`, or `interrupt`. Can be ov
 
 Whether the gateway sends an acknowledgment message (⚡/⏳/⏩) when a user sends input while the agent is busy (default: `true`). Set to `false` to suppress these messages entirely — the input is still queued/steered/interrupts as normal, only the chat reply is silenced. Bridged from `display.busy_ack_enabled` in `config.yaml`.
 
+`HERMES_FILE_MUTATION_VERIFIER`
+
+Enable the per-turn file-mutation verifier footer (default: `true`). When enabled, Hermes appends an advisory listing any `write_file` / `patch` calls that failed during the turn and were not superseded by a successful write. Set to `0`, `false`, `no`, or `off` to suppress. Mirrors `display.file_mutation_verifier` in `config.yaml`; the env var wins when set.
+
 `HERMES_CRON_TIMEOUT`
 
 Inactivity timeout for cron job agent runs in seconds (default: `600`). The agent can run indefinitely while actively calling tools or receiving stream tokens — this only triggers when idle. Set to `0` for unlimited.
@@ -1741,6 +1769,14 @@ Custom delay range maximum (ms)
 `HERMES_QUIET`
 
 Suppress non-essential output (`true`/`false`)
+
+`CODEX_HOME`
+
+When [Codex app-server runtime](/docs/user-guide/features/codex-app-server-runtime) is enabled, override the directory Codex CLI reads its config + auth from (default: `~/.codex`). Hermes' migration writes the managed block to `<CODEX_HOME>/config.toml`.
+
+`HERMES_KANBAN_TASK`
+
+Set by the kanban dispatcher when spawning a worker (task UUID). Workers and the spawned `hermes-tools` MCP subprocess inherit it so kanban tools gate correctly. Don't set manually.
 
 `HERMES_API_TIMEOUT`
 

@@ -500,7 +500,7 @@ Edit PDF text/typos/titles via nano-pdf CLI (NL prompts).
 
 [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
 
-Notion API via curl: pages, databases, blocks, search.
+Notion API + ntn CLI: pages, databases, markdown, Workers.
 
 `productivity/notion`
 

@@ -4,7 +4,7 @@
 
 This page documents Hermes' built-in tools, grouped by toolset. Availability varies by platform, credentials, and enabled toolsets.
 
-**Quick counts (current registry):** ~70 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 10 RL tools, 4 Home Assistant tools, 2 terminal tools, 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 7 kanban tools (registered when the kanban dispatcher spawns the agent), 2 Discord tools, and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `vision_analyze`, `video_analyze`, `mixture_of_agents`, `send_message`, `todo`, `computer_use`, `process`).
+**Quick counts (current registry):** ~70 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 10 RL tools, 4 Home Assistant tools, 2 terminal tools, 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 7 kanban tools (registered when the kanban dispatcher spawns the agent), 2 Discord tools, and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `video_generate`, `vision_analyze`, `video_analyze`, `mixture_of_agents`, `send_message`, `todo`, `computer_use`, `process`).
 
 MCP Tools
 
@@ -396,74 +396,6 @@ Route a hard problem through multiple frontier LLMs collaboratively. Makes 5 API
 
 OPENROUTER\_API\_KEY
 
-## `rl` toolset
-
-Tool
-
-Description
-
-Requires environment
-
-`rl_check_status`
-
-Get status and metrics for a training run. RATE LIMITED: enforces 30-minute minimum between checks for the same run. Returns WandB metrics: step, state, reward\_mean, loss, percent\_correct.
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_edit_config`
-
-Update a configuration field. Use rl\_get\_current\_config() first to see all available fields for the selected environment. Each environment has different configurable options. Infrastructure settings (tokenizer, URLs, lora\_rank, learning\_ra…
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_get_current_config`
-
-Get the current environment configuration. Returns only fields that can be modified: group\_size, max\_token\_length, total\_steps, steps\_per\_eval, use\_wandb, wandb\_name, max\_num\_workers.
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_get_results`
-
-Get final results and metrics for a completed training run. Returns final metrics and path to trained weights.
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_list_environments`
-
-List all available RL environments. Returns environment names, paths, and descriptions. TIP: Read the file\_path with file tools to understand how each environment works (verifiers, data loading, rewards).
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_list_runs`
-
-List all training runs (active and completed) with their status.
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_select_environment`
-
-Select an RL environment for training. Loads the environment's default configuration. After selecting, use rl\_get\_current\_config() to see settings and rl\_edit\_config() to modify them.
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_start_training`
-
-Start a new RL training run with the current environment and config. Most training parameters (lora\_rank, learning\_rate, etc.) are fixed. Use rl\_edit\_config() to set group\_size, batch\_size, wandb\_project before starting. WARNING: Training…
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_stop_training`
-
-Stop a running training job. Use if metrics look bad, training is stagnant, or you want to try different settings.
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
-`rl_test_inference`
-
-Quick inference test for any environment. Runs a few steps of inference + scoring using OpenRouter. Default: 3 steps x 16 completions = 48 rollouts per model, testing 3 models = 144 total. Tests environment loading, prompt construction, in…
-
-TINKER\_API\_KEY, WANDB\_API\_KEY
-
 ## `session_search` toolset
 
 Tool
@@ -568,6 +500,29 @@ Analyze video content from a URL or file path — captions, scene breakdowns, ke
 
 —
 
+## `video_gen` toolset
+
+Opt-in toolset (not loaded in the default `hermes-cli` set). Add via `--toolsets video_gen` or enable it in `hermes tools` → Video Generation, which also walks you through picking a backend.
+
+Backends ship as plugins under `plugins/video_gen/<name>/`:
+
+-   **xAI Grok-Imagine** — text-to-video and image-to-video (SuperGrok OAuth or `XAI_API_KEY`).
+-   **FAL.ai** — Veo 3.1, Pixverse v6, Kling O3 (requires `FAL_KEY`).
+
+The single `video_generate` tool covers both modalities — pass `image_url` to animate a still, omit it to generate from text alone. The active backend auto-routes to the right endpoint. The tool's description is rebuilt at session start to reflect the active backend's actual capabilities (modalities, aspect ratios, resolutions, duration range, max reference images, audio support). See [Video Generation Provider Plugins](/docs/developer-guide/video-gen-provider-plugin) for backend authoring.
+
+Tool
+
+Description
+
+Requires environment
+
+`video_generate`
+
+Generate a video from a text prompt (text-to-video) or animate a still image (image-to-video) using the user's configured video generation backend. Pass `image_url` to animate that image; omit it to generate from text alone. The backend auto-routes to the right endpoint. Returns either an HTTP URL or an absolute file path in the `video` field.
+
+Active `video_gen` plugin + its credential (e.g. `XAI_API_KEY`, `FAL_KEY`)
+
 ## `web` toolset
 
 Tool
@@ -587,6 +542,20 @@ EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY
 Extract content from web page URLs. Returns page content in markdown format. Also works with PDF URLs — pass the PDF link directly and it converts to markdown text. Pages under 5000 chars return full markdown; larger pages are LLM-summarized.
 
 EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY
+
+## `x_search` toolset
+
+Tool
+
+Description
+
+Requires environment
+
+`x_search`
+
+Search X (Twitter) posts, profiles, and threads using xAI's built-in `x_search` Responses tool. Use this for current discussion, reactions, or claims on X rather than general web pages. Off by default — opt in via `hermes tools` → 🐦 X (Twitter) Search. Schema is only registered when xAI credentials are configured (check\_fn-gated).
+
+XAI\_API\_KEY **or** xAI Grok OAuth (SuperGrok Subscription) login
 
 ## `tts` toolset
 

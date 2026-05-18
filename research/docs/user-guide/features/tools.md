@@ -26,6 +26,12 @@ Description
 
 Search the web and extract page content.
 
+**X Search**
+
+`x_search`
+
+Search X (Twitter) posts and threads via xAI's built-in `x_search` Responses tool — gated on xAI credentials (SuperGrok OAuth or `XAI_API_KEY`); off by default, opt in via `hermes tools` → 🐦 X (Twitter) Search.
+
 **Terminal & Files**
 
 `terminal`, `process`, `read_file`, `patch`
@@ -40,9 +46,9 @@ Interactive browser automation with text and vision support.
 
 **Media**
 
-`vision_analyze`, `image_generate`, `text_to_speech`
+`vision_analyze`, `image_generate`, `video_generate`, `video_analyze`, `text_to_speech`
 
-Multimodal analysis and generation.
+Multimodal analysis and generation. `video_generate` and `video_analyze` are opt-in (add `video_gen` / `video` toolsets via `hermes tools` or `--toolsets`).
 
 **Agent orchestration**
 
