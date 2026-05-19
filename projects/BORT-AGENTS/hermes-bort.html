@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/BORT-AGENTS/hermes-bort#software",
   "name": "hermes-bort",
-  "description": "Hermes-bort is a plugin for Hermes Agent that enables interaction with BORT agent NFTs on the Binance Smart Chain mainnet. It allows Hermes processes to read agent states, execute on-chain actions via operator-signed writes, and manage portable session memory. The plugin integrates with the BORT logic contracts and knowledge registries to anchor chat history and evolution metrics to IPFS. This setup facilitates a persistent identity and memory for autonomous agents that can be transferred alongs",
+  "description": "hermes-bort is a plugin for Hermes Agent that enables interaction with BORT (BAP-578) agent NFTs on the BSC mainnet. It allows Hermes processes to read on-chain agent states, execute actions via operator-signed writes, and manage portable session memory anchored to IPFS. The plugin integrates with the hermes-agent-self-evolution optimizer to commit verifiable on-chain learning records and evolved skills directly to an agent's knowledge registry.",
   "url": "https://hermesatlas.com/projects/BORT-AGENTS/hermes-bort",
   "codeRepository": "https://github.com/BORT-AGENTS/hermes-bort",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "BORT-AGENTS",
     "url": "https://github.com/BORT-AGENTS"
   },
-  "dateModified": "2026-05-17T23:51:49.000Z",
+  "dateModified": "2026-05-18T22:08:58.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-17</span>
+    <span><span class="meta-label">updated</span>2026-05-18</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-bort is a plugin for Hermes Agent that enables interaction with BORT agent NFTs on the Binance Smart Chain mainnet. It allows Hermes processes to read agent states, execute on-chain actions via operator-signed writes, and manage portable session memory. The plugin integrates with the BORT logic contracts and knowledge registries to anchor chat history and evolution metrics to IPFS. This setup facilitates a persistent identity and memory for autonomous agents that can be transferred alongside the underlying NFT.</p>
+    <p class="summary-text">hermes-bort is a plugin for Hermes Agent that enables interaction with BORT (BAP-578) agent NFTs on the BSC mainnet. It allows Hermes processes to read on-chain agent states, execute actions via operator-signed writes, and manage portable session memory anchored to IPFS. The plugin integrates with the hermes-agent-self-evolution optimizer to commit verifiable on-chain learning records and evolved skills directly to an agent's knowledge registry.</p>
     <ul class="summary-highlights">
-      <li>Reads multi-source agent state, logic snapshots, and marketplace data.</li>
-      <li>Executes operator-signed writes gated by local policy and approval prompts.</li>
-      <li>Anchors session memory to IPFS and on-chain knowledge registries.</li>
+      <li>Reads full agent state, IPFS identity, and knowledge registries</li>
+      <li>Executes on-chain actions via VaultPermissionManagerV2 with local policy gating</li>
+      <li>Anchors local session memory to IPFS and KnowledgeRegistryV2</li>
     </ul>
   </div>
 </section>
@@ -218,7 +218,72 @@ broadcasting once you have confirmed simulation looks right.</p>
 <pre><code class="language-bash">hermes bort doctor
 </code></pre>
 <p>Walks the setup: RPC reachable, operator key valid and funded, policy file present
-and parseable, Pinata creds set if you plan to anchor memory.</p>
+and parseable, Pinata creds set if you plan to anchor memory, and the
+<code>hermes-agent-self-evolution</code> repo if you plan to use <code>evolve</code>.</p>
+<h4>Evolve</h4>
+<p>Run the <a href="https://github.com/NousResearch/hermes-agent-self-evolution"><code>hermes-agent-self-evolution</code></a>
+optimizer for a skill and, if it improved, commit the result on-chain in one step:</p>
+<pre><code class="language-bash">hermes bort evolve github-code-review --token-id 11100
+</code></pre>
+<p>It runs the optimizer as a subprocess and, only if <code>metrics.json</code> shows a real
+improvement, chains two on-chain writes linked by one content hash:</p>
+<ul>
+<li><code>commit_evolution</code> pins the evolved skill to IPFS and writes it as an
+<code>INSTRUCTION</code> knowledge source on <code>KnowledgeRegistryV2</code>.</li>
+<li><code>commit_learning</code> emits a <code>LearningRecorded</code> event on the agent&#39;s logic
+contract: a permanent, timestamped, verifiable on-chain learning record.</li>
+</ul>
+<p>The self-evolution repo is located via <code>--repo</code>, <code>$BORT_SELF_EVOLUTION_REPO</code>,
+<code>~/.hermes/hermes-agent-self-evolution</code>, or a sibling directory. With
+<code>BORT_ALLOW_BROADCAST</code> unset the whole loop is a dry run (the skill is still
+pinned to IPFS; both chain writes only simulate).</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--iterations N</code></td>
+<td>GEPA iterations (default 10).</td>
+</tr>
+<tr>
+<td><code>--optimizer-model M</code></td>
+<td>LLM for GEPA reflections, litellm format (<code>anthropic/claude-sonnet-4-6</code>, <code>deepseek/deepseek-chat</code>, <code>openrouter/...</code>). Default: the optimizer&#39;s own default.</td>
+</tr>
+<tr>
+<td><code>--eval-model M</code></td>
+<td>LLM for evaluations, litellm format.</td>
+</tr>
+<tr>
+<td><code>--repo PATH</code></td>
+<td>Path to the <code>hermes-agent-self-evolution</code> repo.</td>
+</tr>
+<tr>
+<td><code>--commit-only</code></td>
+<td>Skip the optimizer; commit the latest existing run dir.</td>
+</tr>
+<tr>
+<td><code>--only {both,evolution,learning}</code></td>
+<td>Which on-chain steps to run (default <code>both</code>).</td>
+</tr>
+<tr>
+<td><code>--min-improvement F</code></td>
+<td>Only commit if <code>metrics.improvement &gt;= F</code>.</td>
+</tr>
+</tbody></table>
+<p><strong>LLM provider.</strong> The optimizer runs on litellm, so any provider works:
+<code>--optimizer-model anthropic/claude-sonnet-4-6</code>, <code>deepseek/...</code>, <code>openrouter/...</code>,
+etc. The provider&#39;s API key (<code>ANTHROPIC_API_KEY</code>, <code>DEEPSEEK_API_KEY</code>, ...) is read
+from the environment.</p>
+<p><strong>Without Pinata.</strong> <code>commit_evolution</code> pins the evolved skill to IPFS and needs
+Pinata credentials. <code>commit_learning</code> does not: <code>record_learning</code> only emits the
+content hash. So <code>--only learning</code> records the verifiable on-chain learning event
+with no IPFS and no Pinata key at all.</p>
+<p>If <code>commit_evolution</code> succeeds but <code>commit_learning</code> fails, retry just the
+learning step: <code>hermes bort evolve &lt;skill&gt; --token-id N --commit-only --only learning</code>.
+Each run is a distinct on-chain event; the knowledge registry does not dedup.</p>
 <h3>Tools</h3>
 <h4>Read</h4>
 <table>
@@ -269,8 +334,8 @@ disposition, and (when <code>confirm</code>) the Hermes approval prompt. With
 <td>Builds the two owner-signed transactions to give the operator a <code>WRITE</code> grant on the agent&#39;s vault.</td>
 </tr>
 <tr>
-<td><code>bort_commit_learning(token_id, claim_root, ...)</code></td>
-<td>Records a learning leaf on the logic contract via <code>record_learning</code> (Hunter / Trading V5 / CTO).</td>
+<td><code>bort_commit_learning(token_id, data_hash, ...)</code></td>
+<td>Emits a <code>LearningRecorded</code> event on the logic contract via <code>record_learning</code> (Hunter / Trading V5 / CTO). A permanent on-chain learning record; mutates no score.</td>
 </tr>
 <tr>
 <td><code>bort_invoke(token_id, action, args)</code></td>
@@ -457,7 +522,8 @@ Network tests are skipped or short-circuit when the relevant env var is unset
   bort_signer.py              operator key load + broadcast
   bort_policy.py              ~/.hermes/bort-policy.yaml loader + writer
   approval.py                 Hermes approval prompt integration
-  cli.py                      hermes bort init-operator / init-policy / doctor / anchor-memory / commit-evolution
+  cli.py                      hermes bort init-operator / init-policy / doctor / anchor-memory / commit-evolution / evolve
+  evolution_loop.py           self-evolution optimizer runner + on-chain commit chain
   tools/
     read_agent.py health_check.py list_actions.py
     marketplace_browse.py marketplace_agent.py list_agent_uri.py
@@ -486,7 +552,7 @@ VPM v2 forwarder, and KR v2 delegated writes.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 183</div>
+        <div class="stars">★ 187</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -494,7 +560,7 @@ VPM v2 forwarder, and KR v2 delegated writes.</p>
         <div class="name"><span class="org">teknium1 /</span> hermes-miniverse</div>
       </a>
       <a class="related-row" href="/projects/Ridwannurudeen/hermes-council">
-        <div class="stars">★ 25</div>
+        <div class="stars">★ 28</div>
         <div class="name"><span class="org">Ridwannurudeen /</span> hermes-council</div>
       </a>
       <a class="related-row" href="/projects/marlandoj/zouroboros-swarm-executors">
@@ -510,11 +576,11 @@ VPM v2 forwarder, and KR v2 delegated writes.</p>
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 507</div>
+        <div class="stars">★ 513</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 24</div>
+        <div class="stars">★ 25</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
     </div>
