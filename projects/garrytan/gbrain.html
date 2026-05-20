@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a persistent memory and knowledge graph system designed to prevent AI agents from losing context over time. It utilizes a hybrid search architecture combining vector embeddings, BM25 keywords, and a self-wiring knowledge graph that extracts entity relationships without additional LLM calls. The system automates background tasks like memory consolidation, citation fixing, and entity enrichment through a Postgres-native job queue. It integrates directly with Hermes and OpenClaw as a skil",
+  "description": "GBrain is a persistent memory and knowledge graph layer designed to prevent AI agents from losing context over time. It utilizes a hybrid search architecture combining vector embeddings, BM25 keyword matching, and a self-wiring knowledge graph that extracts typed entity links without LLM calls. The system automatically ingests and enriches data from meetings, emails, and tweets while performing overnight maintenance tasks like citation fixing and memory consolidation. It integrates directly with",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-05-19T05:55:32.000Z",
+  "dateModified": "2026-05-20T05:56:24.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 17277
+    "userInteractionCount": 17609
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 17.3K</span>
+    <span class="stars">★ 17.6K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-19</span>
+    <span><span class="meta-label">updated</span>2026-05-20</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a persistent memory and knowledge graph system designed to prevent AI agents from losing context over time. It utilizes a hybrid search architecture combining vector embeddings, BM25 keywords, and a self-wiring knowledge graph that extracts entity relationships without additional LLM calls. The system automates background tasks like memory consolidation, citation fixing, and entity enrichment through a Postgres-native job queue. It integrates directly with Hermes and OpenClaw as a skillpack or operates as a standalone MCP server for clients like Claude and Cursor.</p>
+    <p class="summary-text">GBrain is a persistent memory and knowledge graph layer designed to prevent AI agents from losing context over time. It utilizes a hybrid search architecture combining vector embeddings, BM25 keyword matching, and a self-wiring knowledge graph that extracts typed entity links without LLM calls. The system automatically ingests and enriches data from meetings, emails, and tweets while performing overnight maintenance tasks like citation fixing and memory consolidation. It integrates directly with Hermes and OpenClaw as a skillpack or operates as a standalone MCP server for clients like Claude Code and Cursor.</p>
     <ul class="summary-highlights">
-      <li>Hybrid search combining vector, BM25, and graph-based retrieval methods.</li>
-      <li>Self-wiring knowledge graph with typed links and zero-LLM entity extraction.</li>
-      <li>Automated cron-driven memory consolidation and entity enrichment cycles.</li>
+      <li>Hybrid search combining vector, BM25, and graph-based ranking</li>
+      <li>Self-wiring knowledge graph with automated typed entity linking</li>
+      <li>Automated 'doctor' command for autonomous brain maintenance and remediation</li>
     </ul>
   </div>
 </section>
@@ -149,6 +149,7 @@
 <p>The brain wires itself. Every page write extracts entity references and creates typed links (<code>attended</code>, <code>works_at</code>, <code>invested_in</code>, <code>founded</code>, <code>advises</code>) with zero LLM calls. Hybrid search. Self-wiring knowledge graph. Structured timeline. Backlink-boosted ranking. Ask &quot;who works at Acme AI?&quot; or &quot;what did Bob invest in this quarter?&quot; and get answers vector search alone can&#39;t reach. Benchmarked side-by-side: gbrain lands <strong>P@5 49.1%, R@5 97.9%</strong> on a 240-page Opus-generated rich-prose corpus, beating its graph-disabled variant by <strong>+31.4 points P@5</strong> and ripgrep-BM25 + vector-only RAG by a similar margin. Full BrainBench scorecards live in the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> repo.</p>
 <p><strong>New default in v0.36.2.0: ZeroEntropy</strong> for both embedding (<code>zembed-1</code> at 1280d via Matryoshka) and reranker (<code>zerank-2</code>). On a real-corpus benchmark vs OpenAI and Voyage: <strong>2.2× faster</strong> (442ms vs OpenAI 973ms), <strong>2.6× cheaper at regular pricing</strong> ($0.05/M vs OpenAI $0.13), wins 11 of 20 queries head-to-head, reshuffles 60% of top-1 results when used as a second-pass reranker. Bring your own key from <a href="https://dashboard.zeroentropy.dev">zeroentropy.dev</a>, or stay on OpenAI/Voyage via <code>gbrain config set embedding_model &lt;provider:model&gt;</code> — your choice is sticky.</p>
 <p>GBrain is those patterns, generalized. Install in 30 minutes. Your agent does the work. As Garry&#39;s personal agent gets smarter, so does yours.</p>
+<p><strong>New in v0.36.4.0 — Your agent drives the brain to 90/100 by itself.</strong> One command does the loop you used to run by hand: <code>gbrain doctor --remediate --yes --target-score 90 --max-usd 5</code>. It computes a dependency-ordered plan (sync before extract, embed after consolidate), submits each step as a Minion job, re-checks score between every step, and refuses to spend past your cost cap. Cron can drive it unattended. <code>gbrain doctor --remediation-plan --json</code> previews what would run. Autopilot now does the same thing on its 5-minute tick: small problems get targeted handlers, big problems get the full cycle, a healthy brain sleeps for 60 minutes instead of grinding through synthesize+patterns+embed every tick. Eleven new things you can submit as background jobs (<code>reindex</code>, <code>repair-jsonb</code>, <code>orphans</code>, <code>integrity</code>, <code>purge</code>, plus six cycle phases); three of them (synthesize, patterns, consolidate) are PROTECTED so an MCP-connected agent can&#39;t silently burn Anthropic credits. New <code>--background</code> flag on <code>gbrain embed</code> submits the job and exits with <code>job_id=N</code> for shell composition.</p>
 <p><strong>New in v0.35.7 — Temporal trajectory + founder scorecard.</strong> Author typed metric assertions in the <code>## Facts</code> fence (<code>mrr=50000</code>, <code>arr=2000000</code>, <code>team_size=12</code>) and gbrain stores them as first-class typed columns. <code>gbrain eval trajectory companies/acme-example</code> prints the chronological history with regressions auto-flagged inline. <code>gbrain founder scorecard companies/acme-example</code> rolls up claim accuracy, consistency, growth direction, and red flags into a stable <code>schema_version: 1</code> JSON contract. New MCP op <code>find_trajectory</code> exposes the same data to agents (read scope, visibility-filtered for remote callers). The <code>consolidate</code> cycle phase now writes <code>valid_until</code> on chronologically-superseded facts AND uses semantic upsert on <code>(page_id, claim, since_date)</code> — re-running the dream cycle on stable input is now a true no-op (fixed a pre-existing duplicate-takes bug from prior versions).</p>
 <blockquote>
 <p><strong>~30 minutes to a fully working brain.</strong> Database ready in 2 seconds (PGLite, no server). You just answer questions about API keys.</p>
@@ -159,11 +160,11 @@
 <h3>Install</h3>
 <p>GBrain runs in three shapes. Pick the one that matches how you use AI agents today.</p>
 <h4>Run with your agent platform</h4>
-<p>Already using <a href="https://github.com/garrytan/openclaw">OpenClaw</a> or <a href="https://github.com/garrytan/hermes">Hermes</a>? GBrain installs as a skillpack into your agent&#39;s workspace.</p>
+<p>Already using <a href="https://github.com/garrytan/openclaw">OpenClaw</a> or <a href="https://github.com/garrytan/hermes">Hermes</a>? GBrain installs as a skillpack scaffold into your agent&#39;s workspace.</p>
 <pre><code class="language-bash">gbrain init --pglite
-gbrain skillpack install
+gbrain skillpack scaffold --all   # or: scaffold &lt;name&gt; per skill
 </code></pre>
-<p>That&#39;s it. Your agent picks up 43 skills (signal detection, brain-ops, ingest, enrich, citation-fixer, daily-task-manager, cron-scheduler, eval framework, and 35 more). Routing lives in <code>skills/RESOLVER.md</code> — the agent reads it once per request, picks the right skill, executes.</p>
+<p>That&#39;s it. Your agent picks up 43 skills (signal detection, brain-ops, ingest, enrich, citation-fixer, daily-task-manager, cron-scheduler, eval framework, and 35 more). Routing lives in <code>skills/RESOLVER.md</code> — the agent reads it once per request, picks the right skill, executes. Scaffolded skills are first-class members of your agent repo — you own them, edit freely; <code>gbrain skillpack reference &lt;name&gt;</code> diffs your copy against gbrain&#39;s bundle when you want to pull upstream improvements. (The legacy <code>gbrain skillpack install</code> managed-block model was retired in v0.36.0.0; run <code>gbrain skillpack migrate-fence</code> once if you&#39;re upgrading from an older release.)</p>
 <h4>CLI standalone</h4>
 <p>Use gbrain from any shell, no agent platform required.</p>
 <pre><code class="language-bash">bun install -g github:garrytan/gbrain
@@ -204,7 +205,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
 <h3>Integrations</h3>
 <p>Data flowing into the brain. Each integration is a recipe — markdown + setup hints — that ships in <code>recipes/</code> and is discoverable via <code>gbrain integrations list</code>.</p>
 <ul>
-<li><strong>Voice</strong>: Whisper or Groq voice-to-brain capture. Setup in <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/voice.md"><code>docs/integrations/voice.md</code></a>.</li>
+<li><strong>Voice</strong>: Phone calls create brain pages via Twilio + OpenAI Realtime (or DIY STT+LLM+TTS). Setup recipe: <a href="https://github.com/garrytan/gbrain/blob/main/recipes/twilio-voice-brain.md"><code>recipes/twilio-voice-brain.md</code></a>.</li>
 <li><strong>Email + calendar</strong>: webhook handlers that route to brain signals. <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/meeting-webhooks.md"><code>docs/integrations/meeting-webhooks.md</code></a>.</li>
 <li><strong>Embedding providers</strong>: 14 recipes covering OpenAI (default fallback), Voyage, ZeroEntropy (default), Google Gemini, Azure OpenAI, MiniMax, Alibaba DashScope, Zhipu, Ollama (local), llama.cpp llama-server (local), LiteLLM proxy. Pricing matrix + decision tree in <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/embedding-providers.md"><code>docs/integrations/embedding-providers.md</code></a>.</li>
 <li><strong>Credential gateway</strong>: vault-aware secret distribution. <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/credential-gateway.md"><code>docs/integrations/credential-gateway.md</code></a>.</li>
@@ -249,11 +250,11 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 56.1K</div>
+        <div class="stars">★ 56.2K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 13.8K</div>
+        <div class="stars">★ 13.9K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -261,7 +262,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 235</div>
+        <div class="stars">★ 238</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -269,15 +270,15 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 125</div>
+        <div class="stars">★ 130</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 21</div>
+        <div class="stars">★ 22</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 539</div>
+        <div class="stars">★ 546</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>

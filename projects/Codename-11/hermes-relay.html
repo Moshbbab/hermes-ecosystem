@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Codename-11/hermes-relay#software",
   "name": "hermes-relay",
-  "description": "Hermes-Relay is a companion suite that enables remote interaction with a server-deployed Hermes agent through a native Android app and a desktop CLI. It uses a WebSocket Secure (WSS) relay to bridge local devices with remote agent instances, allowing for persistent sessions across different platforms. The Android application provides mobile device control including screen reading and gesture execution, while the desktop client allows a remote agent to execute local terminal commands and file ope",
+  "description": "Hermes-Relay is a multi-platform companion suite that enables remote interaction with a server-deployed Hermes agent from Android and desktop environments. It uses a WebSocket Secure (WSS) relay and a dedicated server plugin to bridge local devices with remote agent instances. The Android application provides native phone control including screen reading and automated actions, while the desktop CLI and tray app allow for terminal-based interaction and local file system access. This setup allows ",
   "url": "https://hermesatlas.com/projects/Codename-11/hermes-relay",
   "codeRepository": "https://github.com/Codename-11/hermes-relay",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "Codename-11",
     "url": "https://github.com/Codename-11"
   },
-  "dateModified": "2026-05-16T15:06:57.000Z",
+  "dateModified": "2026-05-20T00:10:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Kotlin</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-16</span>
+    <span><span class="meta-label">updated</span>2026-05-20</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-Relay is a companion suite that enables remote interaction with a server-deployed Hermes agent through a native Android app and a desktop CLI. It uses a WebSocket Secure (WSS) relay to bridge local devices with remote agent instances, allowing for persistent sessions across different platforms. The Android application provides mobile device control including screen reading and gesture execution, while the desktop client allows a remote agent to execute local terminal commands and file operations. This setup eliminates the need for SSH by routing tool execution and chat interfaces through a unified relay plugin.</p>
+    <p class="summary-text">Hermes-Relay is a multi-platform companion suite that enables remote interaction with a server-deployed Hermes agent from Android and desktop environments. It uses a WebSocket Secure (WSS) relay and a dedicated server plugin to bridge local devices with remote agent instances. The Android application provides native phone control including screen reading and automated actions, while the desktop CLI and tray app allow for terminal-based interaction and local file system access. This setup allows users to utilize a powerful remote agent as if it were running locally on their personal hardware.</p>
     <ul class="summary-highlights">
-      <li>Native Android app for remote chat, voice, and device control</li>
-      <li>Experimental desktop CLI for local terminal and file system access</li>
-      <li>WSS relay plugin for seamless server-to-client tool execution</li>
+      <li>Native Android app for chat, voice, and automated device control</li>
+      <li>Desktop CLI and Windows tray app for remote agent interaction</li>
+      <li>Bidirectional tool use for local terminal and file system access</li>
     </ul>
   </div>
 </section>
@@ -190,9 +190,9 @@
 <td>Available — Google Play (Internal testing) + sideload APK</td>
 </tr>
 <tr>
-<td><strong><a href="#1b-desktop-cli-experimental">Desktop CLI</a></strong></td>
-<td>Use a server-deployed Hermes from your laptop <strong>like it&#39;s local</strong> — same shell, same TUI, same <code>Win+Shift+S</code> → <code>Ctrl+A v</code> paste flow, same conversation continuity. The remote agent can also reach back through the relay and run tools on YOUR machine.</td>
-<td><strong>Experimental</strong> — <code>desktop-v0.3.0-alpha.14</code> (one-binary install, no Node required)</td>
+<td><strong><a href="#1b-desktop-app--cli-experimental">Desktop app + CLI</a></strong></td>
+<td>Use a server-deployed Hermes from your laptop <strong>like it&#39;s local</strong>. Windows gets the native tray app first: pair, start/pause the daemon, view devices, task log, settings, overlay status, and emergency stop. The CLI remains the terminal/headless surface and powers macOS/Linux installs. Experimental computer-use tools are opt-in.</td>
+<td><strong>Experimental</strong> — <code>desktop-v0.3.0-alpha.18</code> (Windows tray installer + native CLI binaries, no Node required)</td>
 </tr>
 </tbody></table>
 <p>Both share <code>~/.hermes/remote-sessions.json</code> and the same WSS relay. <strong>Pair once from either, both work.</strong></p>
@@ -218,12 +218,16 @@
 </ol>
 <p>Full walkthrough, including signing-certificate fingerprint: <a href="https://codename-11.github.io/hermes-relay/guide/getting-started.html#sideload-apk">Sideload guide</a>.</p>
 <p><strong>Staying up to date (sideload):</strong> the app checks GitHub for a newer release on cold start (at most once every 6 hours) and shows a dismissable banner when you&#39;re behind. Tapping <strong>Update</strong> opens the next APK in your browser so Android&#39;s Downloads notification hands it to the system installer — no second app required. You can also trigger a check manually under <strong>Settings → About → Updates</strong>. Google Play installs get auto-updates through the Play Store and don&#39;t show this banner.</p>
-<h4>1b. Desktop CLI (experimental)</h4>
-<p>A single-binary thin client (<code>hermes-relay</code>) that talks to a server-deployed Hermes over WSS — same shell, same TUI, same <code>/paste</code> flow as a local install. The remote agent can also reach back through the relay and run <code>desktop_read_file</code>, <code>desktop_terminal</code>, <code>desktop_search_files</code>, <code>desktop_screenshot</code>, <code>desktop_clipboard_*</code>, <code>desktop_open_in_editor</code>, etc. <strong>on your machine</strong> while its brain stays on the host. One pair, two surfaces (with the Android app), no <code>ssh</code>.</p>
-<p><strong>Install</strong> (Windows PowerShell):</p>
+<h4>1b. Desktop app + CLI (experimental)</h4>
+<p>The desktop surface talks to a server-deployed Hermes over WSS. On Windows, the default installer launches the native tray app with pairing, daemon control, devices, task log, settings, overlay status, pause, and emergency stop. The same release still ships the <code>hermes-relay</code> CLI for shell/TUI use, scripting, headless daemon mode, and macOS/Linux.</p>
+<p>The remote agent can also reach back through the relay and run <code>desktop_read_file</code>, <code>desktop_terminal</code>, <code>desktop_search_files</code>, <code>desktop_screenshot</code>, <code>desktop_clipboard_*</code>, <code>desktop_open_in_editor</code>, etc. <strong>on your machine</strong> while its brain stays on the host. One pair, two surfaces (with the Android app), no <code>ssh</code>.</p>
+<p><strong>Install tray app</strong> (Windows PowerShell):</p>
 <pre><code class="language-powershell">irm https://raw.githubusercontent.com/Codename-11/hermes-relay/main/desktop/scripts/install.ps1 | iex
 </code></pre>
-<p><strong>Install</strong> (macOS / Linux):</p>
+<p><strong>Install CLI only</strong> (Windows PowerShell):</p>
+<pre><code class="language-powershell">$env:HERMES_RELAY_INSTALL_SURFACE=&#39;cli&#39;; irm https://raw.githubusercontent.com/Codename-11/hermes-relay/main/desktop/scripts/install.ps1 | iex
+</code></pre>
+<p><strong>Install CLI</strong> (macOS / Linux):</p>
 <pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/Codename-11/hermes-relay/main/desktop/scripts/install.sh | sh
 </code></pre>
 <pre><code class="language-bash">hermes-relay pair --remote ws://&lt;host&gt;:8767   # once
@@ -234,9 +238,9 @@ hermes-relay daemon                            # headless tool router (agent rea
 hermes-relay update                            # self-update via GitHub Releases
 </code></pre>
 <p><strong>Native paste workflow</strong> (the killer demo): inside <code>hermes-relay shell</code>, hit <code>Win+Shift+S</code> to screenshot, then <code>Ctrl+A v</code> — the client reads your clipboard, ships the image to the server&#39;s inbox, and types <code>/paste</code> into the TUI for you. Identical UX to native local-Hermes paste. The same chord set works on macOS (<code>Cmd+Shift+4</code> → <code>Ctrl+A v</code>) and Linux (Wayland/X11 detected automatically).</p>
-<p><strong>No Node required</strong> — Bun-compiled native binaries (~60–110 MB per platform) installed via curl/irm. Version-aware install (<code>upgrading X → Y</code>), collision-safe <code>hermes</code> short alias, self-update via <code>hermes-relay update</code>. Binaries are <strong>unsigned</strong> during the experimental phase — SmartScreen/Gatekeeper warnings are expected; the install scripts show the one-line escape hatches. Code signing, multi-client server-side routing, and service installers (sc.exe / systemd / launchd) land with v1.0.</p>
+<p><strong>No Node required</strong> — the Windows tray installer bundles the compiled CLI sidecar; CLI-only installs use Bun-compiled native binaries (~60–110 MB per platform) via curl/irm. Version-aware install (<code>upgrading X → Y</code>), collision-safe <code>hermes</code> short alias for CLI installs, self-update via <code>hermes-relay update</code>. Assets are <strong>unsigned</strong> during the experimental phase — SmartScreen/Gatekeeper warnings are expected. Code signing, multi-client server-side routing, and service installers (sc.exe / systemd / launchd) land with v1.0.</p>
 <ul>
-<li><strong>Docs</strong>: <a href="https://codename-11.github.io/hermes-relay/desktop/">Desktop CLI guide</a> · <a href="https://github.com/Codename-11/hermes-relay/blob/main/desktop/README.md"><code>desktop/README.md</code></a></li>
+<li><strong>Docs</strong>: <a href="https://codename-11.github.io/hermes-relay/desktop/">Desktop guide</a> · <a href="https://github.com/Codename-11/hermes-relay/blob/main/desktop/README.md"><code>desktop/README.md</code></a></li>
 <li><strong>Release track</strong>: tagged <code>desktop-v*</code>, <a href="https://github.com/Codename-11/hermes-relay/releases?q=desktop">separate from Android</a></li>
 <li><strong>AI-agent setup recipe</strong>: <code>/hermes-relay-desktop-setup</code> (the agent can run <code>desktop_terminal</code> on your machine to diagnose install/pair issues live)</li>
 </ul>
@@ -356,7 +360,7 @@ Always confirm before running shell commands. Never restart hermes-gateway witho
 <ul>
 <li><strong>Streaming chat</strong> — Direct SSE to the Hermes API Server with real-time markdown rendering, session history, tool-call visualization, personality picker, searchable command palette (29+ gateway commands), file attachments, and send-while-streaming message queuing</li>
 <li><strong>Multi-Connection + agent profiles</strong> — Pair with multiple Hermes servers and switch targets from the top bar; select an upstream-discovered agent profile to overlay model + <code>SOUL.md</code> on chat turns. Three-layer model: Connection (server) → Profile (agent directory) → Personality (prompt preset)</li>
-<li><strong>Voice mode</strong> — Real-time voice conversation via the relay; the sphere listens with you and performs the agent&#39;s reply as it speaks. Uses your server&#39;s configured TTS/STT providers (Edge TTS, ElevenLabs, OpenAI, MiniMax, Mistral, NeuTTS / faster-whisper, Groq, OpenAI Whisper)</li>
+<li><strong>Voice mode</strong> — Experimental server-mediated voice conversation via the relay; the sphere listens with you and performs the agent&#39;s reply as it speaks. Hermes owns chat, tool calls, and approvals, while relay voice output defaults to provider-neutral streaming TTS (<code>xai_tts</code> first) with realtime voice-agent providers kept as a separate lab mode.</li>
 <li><strong>Phone control (bridge)</strong> — The agent can read what&#39;s on screen and act on it — tap, long-press, drag, swipe, scroll, type, and press system keys — plus take screenshots, read/write the clipboard, and control system-wide media playback. Gesture reliability is hardened for dim/idle screens, and a smarter tap-fallback cascade handles apps where labels sit inside non-clickable wrappers</li>
 <li><strong>Screen understanding</strong> — Filtered accessibility-tree search, per-node property lookups with stable IDs, cheap screen-hash change detection, and multi-window reads (system overlays, popups, notification shade) so the agent can reason about UI without guessing</li>
 <li><strong>Workflow automation</strong> — Batched macro execution for multi-step flows, real-time accessibility event streaming for &quot;wait until something happens&quot; waits, and a raw-Intent escape hatch for apps that expose deep-link actions</li>
@@ -372,7 +376,7 @@ Always confirm before running shell commands. Never restart hermes-gateway witho
 <ul>
 <li><strong>Shell mode (default)</strong> — bare <code>hermes-relay</code> pipes the host&#39;s actual <code>hermes</code> Ink TUI through a PTY in tmux. Same banner, same skin, same slash commands as a local install. <code>Ctrl+A .</code> detaches (preserves tmux), <code>Ctrl+A k</code> kills, <code>Ctrl+A v</code> pastes a clipboard image, <code>Ctrl+A ?</code> re-prints chord help, <code>Ctrl+A Ctrl+A</code> literal.</li>
 <li><strong>Chat mode</strong> — REPL or one-shot or piped stdin. <code>--json</code> emits <code>GatewayEvent</code>s per line for <code>jq</code> / automation. REPL slash commands <code>/paste</code> (clipboard), <code>/screenshot</code> (multi-monitor by default; <code>primary</code> / <code>1</code> / <code>2</code> to narrow), <code>/image &lt;path&gt;</code> attach the next message.</li>
-<li><strong>Local tool routing</strong> — agent calls <code>desktop_read_file</code>, <code>desktop_write_file</code>, <code>desktop_terminal</code>, <code>desktop_search_files</code>, <code>desktop_patch</code>, <code>desktop_clipboard_read/write</code>, <code>desktop_screenshot</code>, <code>desktop_open_in_editor</code> — all run on YOUR machine over the same WSS relay. One-time per-URL consent gate; <code>--no-tools</code> kill-switch; non-TTY stdin fails closed; agent-proposed patches render as colored diffs with <code>y/n/e/r</code> interactive approval.</li>
+<li><strong>Local tool routing</strong> — agent calls <code>desktop_read_file</code>, <code>desktop_write_file</code>, <code>desktop_terminal</code>, <code>desktop_search_files</code>, <code>desktop_patch</code>, <code>desktop_clipboard_read/write</code>, <code>desktop_screenshot</code>, <code>desktop_open_in_editor</code> — all run on YOUR machine over the same WSS relay. One-time per-URL consent gate; <code>--no-tools</code> kill-switch; non-TTY stdin fails closed; agent-proposed patches render as colored diffs with <code>y/n/e/r</code> interactive approval. Experimental <code>desktop_computer_*</code> control tools require <code>--experimental-computer-use</code> / <code>HERMES_RELAY_EXPERIMENTAL_COMPUTER_USE=1</code>, task-scoped grants, and visible local approval.</li>
 <li><strong>Daemon mode</strong> — <code>hermes-relay daemon</code> runs the tool router headless so the agent can reach you even when no shell is open. JSON-line lifecycle logs by default, auto-human on TTY. Fails closed on missing consent.</li>
 <li><strong>Self-update</strong> — <code>hermes-relay update</code> polls GitHub Releases (SemVer-max picker, prerelease-aware), verifies SHA256, atomic-swaps the binary on POSIX (running daemon keeps inode), cooperative <code>.new.exe</code> swap on Windows.</li>
 <li><strong>Multi-endpoint pairing + reconnect-on-drop + TOFU cert pinning</strong> — same as the Android app. One QR carries LAN + Tailscale + public; client races candidates in priority order, re-probes on every network change.</li>
@@ -438,8 +442,12 @@ Desktop CLI  (WSS)      --&gt; Relay Server (:8767)         [tui, terminal, desk
 <td>ADRs — framework, channels, auth, terminal</td>
 </tr>
 <tr>
+<td><a href="https://github.com/Codename-11/hermes-relay/blob/main/docs/upstream-integration-sync.md">Upstream Integration Sync</a></td>
+<td>Supported Hermes extension points vs relay-owned compatibility layers</td>
+</tr>
+<tr>
 <td><a href="https://github.com/Codename-11/hermes-relay/blob/main/CHANGELOG.md">Changelog</a></td>
-<td>Release history (Android <code>v*</code> and desktop <code>desktop-v*</code>)</td>
+<td>Release history (Android <code>v*</code>, Relay <code>relay-v*</code>, and desktop <code>desktop-v*</code>)</td>
 </tr>
 </tbody></table>
 <hr>
@@ -564,7 +572,7 @@ ln -s &quot;$PWD/plugin&quot; ~/.hermes/plugins/hermes-relay
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 187</div>
+        <div class="stars">★ 191</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -588,7 +596,7 @@ ln -s &quot;$PWD/plugin&quot; ~/.hermes/plugins/hermes-relay
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 513</div>
+        <div class="stars">★ 520</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "web-search-plus is a capability-based plugin for Hermes Agent that provides multi-provider web search and URL extraction. It utilizes a Routing v2 engine to automatically select from available search providers based on the user's configured API keys. The plugin features additive extraction capabilities and includes cost-control mechanisms like research mode to manage provider usage.",
+  "description": "Web-search-plus is a multi-provider search and URL extraction plugin designed for the Hermes Agent ecosystem. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys. The tool supports a wide range of backends including Serper, Tavily, Exa, and You.com, ensuring search functionality remains active even if specific keys are missing. It features a dedicated setup wizard for managing provider priorities, cos",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-05-16T18:51:07.000Z",
+  "dateModified": "2026-05-19T20:31:24.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-16</span>
+    <span><span class="meta-label">updated</span>2026-05-19</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">web-search-plus is a capability-based plugin for Hermes Agent that provides multi-provider web search and URL extraction. It utilizes a Routing v2 engine to automatically select from available search providers based on the user's configured API keys. The plugin features additive extraction capabilities and includes cost-control mechanisms like research mode to manage provider usage.</p>
+    <p class="summary-text">Web-search-plus is a multi-provider search and URL extraction plugin designed for the Hermes Agent ecosystem. It utilizes a capability-based routing engine that automatically selects the best available search provider based on the user's configured API keys. The tool supports a wide range of backends including Serper, Tavily, Exa, and You.com, ensuring search functionality remains active even if specific keys are missing. It features a dedicated setup wizard for managing provider priorities, cost controls, and extraction preferences.</p>
     <ul class="summary-highlights">
-      <li>Auto-routes queries across multiple search providers</li>
-      <li>Provides clean URL extraction via specialized backends</li>
-      <li>Configurable priority and fallback provider settings</li>
+      <li>Adds web_search_plus and web_extract_plus tools to Hermes Agent</li>
+      <li>Auto-routes queries across multiple providers based on available API keys</li>
+      <li>Supports clean URL extraction via Tavily, Firecrawl, and Linkup backends</li>
     </ul>
   </div>
 </section>
@@ -154,7 +154,7 @@
   <img alt="Hermes Plugin" src="https://img.shields.io/badge/Hermes-plugin-a78bfa.svg">
 </p>
 
-<p><strong>Web search and URL extraction for Hermes — now with Routing v2: benchmarked, class-aware auto-routing across the providers your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Tavily-first extraction for fast, reliable fetches; Exa, Linkup, Firecrawl, and You.com remain fallback paths when available.</p>
+<p><strong>Web search and URL extraction for Hermes — now with Routing v2: benchmarked, class-aware auto-routing across the providers your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Tavily-first extraction for fast, reliable fetches; Exa, Linkup, Firecrawl, Parallel, and You.com remain fallback paths when available.</p>
 <p><code>web-search-plus</code> adds two Hermes tools:</p>
 <ul>
 <li><code>web_search_plus</code> — routed multi-provider web search with quality diagnostics</li>
@@ -168,8 +168,8 @@
 <p>Most web-search tools fail in one of two boring ways: they hard-code a single provider, or they pretend every user has every API key. This plugin is capability-based instead:</p>
 <ul>
 <li><strong>No global required key.</strong> Configure one search-capable provider and search works.</li>
-<li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, or You.com for URL extraction.</li>
-<li><strong>Routing v2 is conservative.</strong> You.com, Serper, Exa, Firecrawl, Tavily, and Linkup form the default search pool; Brave, SerpBase, Querit, and Perplexity/Kilo stay explicit/guarded unless opted in.</li>
+<li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, Parallel, or You.com for URL extraction.</li>
+<li><strong>Routing v2 is conservative.</strong> You.com, Serper, Exa, Firecrawl, Tavily, and Linkup form the default search pool; Brave, SerpBase, Querit, Parallel, and Perplexity/Kilo stay explicit/guarded unless opted in.</li>
 <li><strong>Costs stay bounded.</strong> Research mode caps provider work and keeps partial results when extraction fails.</li>
 </ul>
 <hr>
@@ -274,12 +274,12 @@ python ~/.hermes/plugins/web-search-plus/setup.py config set-default you --dry-r
 <tbody><tr>
 <td>Search</td>
 <td><code>web_search_plus</code></td>
-<td>Brave, Serper, Tavily, Exa, Linkup, Firecrawl, Perplexity, Kilo Perplexity, You.com, SearXNG, SerpBase, or Querit</td>
+<td>Brave, Serper, Tavily, Exa, Linkup, Firecrawl, Parallel, Perplexity, Kilo Perplexity, You.com, SearXNG, SerpBase, or Querit</td>
 </tr>
 <tr>
 <td>Extraction</td>
 <td><code>web_extract_plus</code></td>
-<td>Linkup, Firecrawl, Tavily, Exa, or You.com</td>
+<td>Linkup, Firecrawl, Tavily, Exa, Parallel, or You.com</td>
 </tr>
 <tr>
 <td>Best starter</td>
@@ -330,7 +330,7 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 <td><code>provider</code></td>
 <td>string</td>
 <td><code>&quot;auto&quot;</code></td>
-<td><code>auto</code>, <code>serper</code>, <code>brave</code>, <code>tavily</code>, <code>exa</code>, <code>linkup</code>, <code>firecrawl</code>, <code>perplexity</code>, <code>kilo-perplexity</code>, <code>you</code>, <code>searxng</code>, <code>serpbase</code>, <code>querit</code></td>
+<td><code>auto</code>, <code>serper</code>, <code>brave</code>, <code>tavily</code>, <code>exa</code>, <code>linkup</code>, <code>firecrawl</code>, <code>parallel</code>, <code>perplexity</code>, <code>kilo-perplexity</code>, <code>you</code>, <code>searxng</code>, <code>serpbase</code>, <code>querit</code></td>
 </tr>
 <tr>
 <td><code>depth</code></td>
@@ -389,7 +389,7 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linkup&quot;, render_js=False)
 # → Linkup fetch endpoint
 </code></pre>
-<p>Auto extraction currently tries Tavily, then Exa, Linkup, Firecrawl, and You.com when keys are available. Tavily is the fast reliable default; Exa is the fast docs/academic backup; Linkup stays the clean long-form/RAG fallback; Firecrawl remains the robust scraper safety net; You.com is the final fallback.</p>
+<p>Auto extraction currently tries Tavily, then Exa, Linkup, Parallel, Firecrawl, and You.com when keys are available. Tavily is the fast reliable default; Exa is the fast docs/academic backup; Linkup stays the clean long-form/RAG fallback; Parallel is the excerpt-heavy LLM-ready backup; Firecrawl remains the robust scraper safety net; You.com is the final fallback.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -410,7 +410,7 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <td><code>provider</code></td>
 <td>string</td>
 <td><code>&quot;auto&quot;</code></td>
-<td><code>auto</code>, <code>firecrawl</code>, <code>linkup</code>, <code>tavily</code>, <code>exa</code>, <code>you</code></td>
+<td><code>auto</code>, <code>firecrawl</code>, <code>linkup</code>, <code>parallel</code>, <code>tavily</code>, <code>exa</code>, <code>you</code></td>
 </tr>
 <tr>
 <td><code>format</code></td>
@@ -515,13 +515,19 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <td>Cheap Google-like SERP fallback; explicit/fallback-only by default (<code>auto_allow=false</code>)</td>
 </tr>
 <tr>
+<td>Parallel</td>
+<td align="right">✅</td>
+<td align="right">✅</td>
+<td>LLM-ready search and fast extract with long source excerpts; explicit/guarded by default (<code>auto_allow=false</code>)</td>
+</tr>
+<tr>
 <td>Querit</td>
 <td align="right">✅</td>
 <td align="right">—</td>
 <td>Multilingual and real-time queries; explicit/fallback-only by default (<code>auto_allow=false</code>)</td>
 </tr>
 </tbody></table>
-<p>Routing v2 is benchmarked and class-aware. It detects language/script hints and query classes such as multilingual current news, AT shopping/local, docs/API, GitHub, academic/arXiv, Reddit/community, CVE/security, official/regulatory, finance/IR, weather/local, OSS discovery, and briefing/synthesis-style searches. You.com, Serper, Exa, Firecrawl, Tavily, and Linkup are the conservative default auto-search pool. Brave, SerpBase, Querit, Perplexity, and Kilo Perplexity default to <code>auto_allow=false</code>: configure their keys to call them explicitly, or opt them into automatic routing with <code>setup.py config set-auto-allow &lt;provider&gt; on</code>.</p>
+<p>Routing v2 is benchmarked and class-aware. It detects language/script hints and query classes such as multilingual current news, AT shopping/local, docs/API, GitHub, academic/arXiv, Reddit/community, CVE/security, official/regulatory, finance/IR, weather/local, OSS discovery, and briefing/synthesis-style searches. You.com, Serper, Exa, Firecrawl, Tavily, and Linkup are the conservative default auto-search pool. Brave, SerpBase, Querit, Parallel, Perplexity, and Kilo Perplexity default to <code>auto_allow=false</code>: configure their keys to call them explicitly, or opt them into automatic routing with <code>setup.py config set-auto-allow &lt;provider&gt; on</code>.</p>
 <hr>
 <h3>API keys</h3>
 <p>All provider keys are optional at install time. Configure only what you use:</p>
@@ -536,6 +542,7 @@ PERPLEXITY_API_KEY=***    # https://perplexity.ai/settings/api
 YOU_API_KEY=***           # https://api.you.com — search + extraction
 SEARXNG_INSTANCE_URL=https://your-instance.example.com
 SERPBASE_API_KEY=***      # https://www.serpbase.dev — explicit/fallback-only Google-like SERP search
+PARALLEL_API_KEY=***      # https://platform.parallel.ai — explicit/guarded LLM-ready search + extraction
 QUERIT_API_KEY=***        # https://querit.ai — explicit/fallback-only by default
 
 # Kilo gateway alternate provider (`provider=&quot;kilo-perplexity&quot;`)
@@ -593,7 +600,7 @@ LICENSE          MIT license
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 123</div>
+        <div class="stars">★ 124</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -621,7 +628,7 @@ LICENSE          MIT license
         <div class="name"><span class="org">briancaffey /</span> hermes-otel</div>
       </a>
       <a class="related-row" href="/projects/335234131/agent-browser-mcp">
-        <div class="stars">★ 210</div>
+        <div class="stars">★ 211</div>
         <div class="name"><span class="org">335234131 /</span> agent-browser-mcp</div>
       </a>
     </div>
