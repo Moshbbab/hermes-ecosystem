@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/dodo-reach/hermes-desktop#software",
   "name": "hermes-desktop",
-  "description": "Hermes Desktop is a native macOS application that provides a localized workbench for managing Hermes Agent hosts over SSH. The app connects directly to remote hosts to manage sessions, Kanban boards, and files without requiring a browser wrapper or additional sync layers. Users can save local workflow presets to launch agent tasks in an embedded terminal while maintaining the remote host as the single source of truth. It supports multiple agent profiles and includes built-in tools for editing sk",
+  "description": "Hermes Desktop is a native macOS application that provides a focused workbench for managing Hermes Agent hosts. It establishes a direct connection over SSH to interact with remote sessions, files, and workflows without requiring a browser or additional daemon. The app maintains the remote host as the single source of truth, allowing users to manage multiple agent profiles, edit skills, and monitor usage. It also features an embedded terminal and local workflow presets to streamline agent interac",
   "url": "https://hermesatlas.com/projects/dodo-reach/hermes-desktop",
   "codeRepository": "https://github.com/dodo-reach/hermes-desktop",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "dodo-reach",
     "url": "https://github.com/dodo-reach"
   },
-  "dateModified": "2026-05-18T19:41:25.000Z",
+  "dateModified": "2026-05-20T12:12:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1408
+    "userInteractionCount": 1485
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">The safest, simplest way to manage Hermes from your Mac. Pure SSH. No gateways, no exposed ports, no browser layer.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 1.4K</span>
+    <span class="stars">★ 1.5K</span>
     <span><span class="meta-label">lang</span>Swift</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-18</span>
+    <span><span class="meta-label">updated</span>2026-05-20</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Desktop is a native macOS application that provides a localized workbench for managing Hermes Agent hosts over SSH. The app connects directly to remote hosts to manage sessions, Kanban boards, and files without requiring a browser wrapper or additional sync layers. Users can save local workflow presets to launch agent tasks in an embedded terminal while maintaining the remote host as the single source of truth. It supports multiple agent profiles and includes built-in tools for editing skills and monitoring resource usage.</p>
+    <p class="summary-text">Hermes Desktop is a native macOS application that provides a focused workbench for managing Hermes Agent hosts. It establishes a direct connection over SSH to interact with remote sessions, files, and workflows without requiring a browser or additional daemon. The app maintains the remote host as the single source of truth, allowing users to manage multiple agent profiles, edit skills, and monitor usage. It also features an embedded terminal and local workflow presets to streamline agent interactions on Apple Silicon and Intel Macs.</p>
     <ul class="summary-highlights">
-      <li>Direct SSH connection to remote Hermes hosts without middleman APIs</li>
-      <li>Native macOS interface for sessions, Kanban, and remote file management</li>
-      <li>Local workflow presets for launching tasks in an embedded terminal</li>
+      <li>Connects directly to Hermes hosts via native SSH and aliases</li>
+      <li>Manages remote sessions, Kanban boards, and cron jobs natively</li>
+      <li>Supports multi-agent workflows through selectable Hermes profiles</li>
     </ul>
   </div>
 </section>
@@ -210,13 +210,6 @@ or the same Mac through <code>ssh localhost</code> or a local SSH alias.</p>
 session store. Kanban comes from the upstream Hermes Kanban home. Cron jobs
 come from the remote scheduler state. Files and skills are edited on the host
 with conflict checks before save.</p>
-<p>Workflow presets are the intentional local convenience layer in that model.
-They are small saved prompts with optional skill selections stored on your Mac,
-scoped to the active host/profile, and used only to open a fresh remote
-Terminal tab. They do not create a second copy of Hermes state on the host.</p>
-<p>That makes the app easier to reason about. There is no hidden execution layer
-to audit, no shadow state to reconcile, and no ambiguity about which machine
-owns the work.</p>
 <p>That restraint has a practical advantage: Hermes Desktop can remain useful when
 higher-level surfaces are unavailable. If a dashboard, gateway, or agent
 configuration breaks, the app still has the direct SSH path: inspect the host,
@@ -244,8 +237,8 @@ Tailscale</li>
 <li><code>python3</code> available on the Hermes host</li>
 <li>Hermes data under the remote user&#39;s <code>~/.hermes</code></li>
 </ul>
-<p>For in-app chat and terminal resume workflows, the remote <code>hermes</code> CLI also
-needs to be available on the host&#39;s non-interactive SSH <code>PATH</code>.</p>
+<p>For Sessions Chat, Terminal resume, and workflow launch, the remote <code>hermes</code>
+CLI also needs to be available on the host&#39;s non-interactive SSH <code>PATH</code>.</p>
 <p>For the native Kanban workspace, the host needs a Hermes Agent build with
 upstream Kanban support. Newer Kanban features appear automatically when the
 host exposes them.</p>
@@ -369,12 +362,14 @@ controls, and enough room for multi-profile, multi-agent work.</li>
 <p>Hermes Desktop does not replace the terminal surfaces Hermes already gives you.
 It lets you choose the right one for the job.</p>
 <ul>
-<li>Use in-app chat in <code>Sessions</code> for quick turns, context checks, and continuing
-a session while you are already in the app.</li>
+<li>Use <code>Chat</code> in <code>Sessions</code> when you want the real Hermes TUI embedded in the
+app, already scoped to the selected SSH host and Hermes profile.</li>
+<li>Use <code>Transcript</code> in <code>Sessions</code> when you want to inspect persisted history from
+the host without starting or resuming a live TUI.</li>
 <li>Use the embedded <code>Terminal</code> for heavier work where you want shell control,
 command approvals, long-running output, or manual review close at hand.</li>
-<li>Use <code>hermes --tui</code> in the terminal when you want Hermes Agent&#39;s richer TUI for
-longer interactive sessions.</li>
+<li>Use <code>hermes --tui</code> in any terminal when you want the same Hermes TUI outside
+the desktop layout.</li>
 </ul>
 <p>All of these paths still run Hermes on the selected host. The choice is about
 surface area, not about creating a second source of truth.</p>
@@ -456,14 +451,14 @@ local state is documented in <a href="https://github.com/dodo-reach/hermes-deskt
 non-interactive way.</p>
 <p>If Terminal still needs password entry, host key confirmation, or other
 interactive setup for that target, the app will usually hit the same wall.</p>
-<h4>What does in-app chat do?</h4>
-<p>It runs Hermes on the selected host over SSH.</p>
-<p>Starting a new chat uses the remote <code>hermes chat</code> path. Continuing a session
-uses the remote resume path with the selected Hermes profile preserved when one
-is active.</p>
-<p>If Hermes requests command approval during a non-interactive chat turn, Hermes
-Desktop cannot collect a manual approval inside that chat surface. When you
-need to review or approve commands yourself, resume the session in Terminal.</p>
+<h4>What does Sessions Chat do?</h4>
+<p>It runs the real Hermes TUI on the selected host over SSH.</p>
+<p>Starting a new chat launches <code>hermes --tui</code>. Continuing a session launches
+<code>hermes --tui --resume &lt;session-id&gt;</code>, with the selected Hermes profile preserved
+when one is active.</p>
+<p>The important detail is that Chat is a surface over the host&#39;s Hermes TUI, not a
+separate Desktop conversation backend. Sessions still reads persisted
+transcripts back from the host, and the host remains the source of truth.</p>
 <h4>Does Hermes Desktop replace a remote file manager or IDE?</h4>
 <p>No.</p>
 <p>It lets you browse remote directories and bookmark selected text files next to
@@ -506,7 +501,7 @@ because it is technically possible.</p>
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 6.0K</div>
+        <div class="stars">★ 6.2K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -518,11 +513,11 @@ because it is technically possible.</p>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/xaspx/hermes-control-interface">
-        <div class="stars">★ 670</div>
+        <div class="stars">★ 683</div>
         <div class="name"><span class="org">xaspx /</span> hermes-control-interface</div>
       </a>
       <a class="related-row" href="/projects/nesquena/hermes-webui">
-        <div class="stars">★ 8.0K</div>
+        <div class="stars">★ 8.1K</div>
         <div class="name"><span class="org">nesquena /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/pyrate-llama/hermes-ui">
