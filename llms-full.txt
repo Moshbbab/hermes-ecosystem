@@ -1,6 +1,6 @@
 # Hermes Atlas — Full Context Bundle
 
-> Complete content of hermesatlas.com as of 2026-05-21. Concatenated from guide pages, ecosystem overview, the quarterly report, and project summaries. Canonical URLs preserved throughout.
+> Complete content of hermesatlas.com as of 2026-05-22. Concatenated from guide pages, ecosystem overview, the quarterly report, and project summaries. Canonical URLs preserved throughout.
 
 This file is the companion to https://hermesatlas.com/llms.txt (the concise index).
 
@@ -1610,12 +1610,12 @@ Category: Memory & Context
 Stars: 8,857
 Garry's Opinionated OpenClaw/Hermes Agent Brain
 
-GBrain is a persistent memory and knowledge graph layer designed to prevent AI agents from losing context over time. It utilizes a hybrid search architecture combining vector embeddings, BM25 keyword matching, and a self-wiring knowledge graph that extracts typed entity links without LLM calls. The system automatically ingests and enriches data from meetings, emails, and tweets while performing overnight maintenance tasks like citation fixing and memory consolidation. It integrates directly with Hermes and OpenClaw as a skillpack or operates as a standalone MCP server for clients like Claude Code and Cursor.
+GBrain is a persistent memory and knowledge graph system designed to provide long-term context for AI agents like OpenClaw and Hermes. It automatically extracts entity references and typed links from ingested data to build a self-wiring graph without requiring additional LLM calls. The system utilizes hybrid search, combining vector embeddings with BM25 keyword ranking and backlink-boosted scoring to improve retrieval accuracy. It includes automated maintenance cycles for consolidating memory, fixing citations, and generating founder scorecards from structured temporal data.
 
 Highlights:
-- Hybrid search combining vector, BM25, and graph-based ranking
-- Self-wiring knowledge graph with automated typed entity linking
-- Automated 'doctor' command for autonomous brain maintenance and remediation
+- Self-wiring knowledge graph with typed links and zero-LLM entity extraction.
+- Hybrid search combining HNSW vector, BM25, and reciprocal-rank fusion.
+- Automated 'doctor' loop for autonomous memory repair and background enrichment.
 
 ---
 
@@ -1680,12 +1680,12 @@ Stars: 3,143
 Official: Yes (maintained by Nous Research)
 Memory library for building stateful agents — the upstream library that the elkimek/honcho-self-hosted Hermes wrapper builds on.
 
-Honcho is a memory infrastructure library designed to help developers build stateful agents that track evolving entities like users, groups, and projects over time. It functions through a background reasoning loop that extracts conclusions from stored messages and events rather than relying solely on simple vector matching. This approach allows agents to query natural-language insights, peer representations, and session context to inform future model calls. The system supports both a managed cloud service and a self-hosted FastAPI server with integrations for MCP, Claude Code, and Hermes.
+Honcho is a memory infrastructure library designed to help developers build stateful agents that maintain context over time. It functions by storing conversations and events as messages, which are then processed asynchronously to extract reasoning-based conclusions and update peer representations. This approach allows agents to query natural-language insights, session context, and hybrid search results across users, groups, and projects. The system supports both a managed cloud service and a self-hosted FastAPI server with SDKs for Python and TypeScript.
 
 Highlights:
-- Asynchronous reasoning extracts conclusions from conversation history and events
-- Peer-centric model tracks evolving relationships between users and agents
-- Provides prompt-ready context via Python and TypeScript SDKs
+- Extracts reasoning-based conclusions from conversations instead of simple vector matching
+- Tracks evolving entities including users, agents, groups, and projects
+- Provides hybrid BM25 and vector search for retrieving session context
 
 ---
 
@@ -2603,12 +2603,12 @@ Category: Memory & Context
 Stars: 29
 The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents
 
-Mnemosyne is a local-first memory system for the Hermes Agent framework that provides private, zero-dependency storage for conversations and knowledge. It utilizes a SQLite backend with native vector search and full-text search to eliminate the need for external databases or API keys. The system features the MEMORIA fact engine for structured fact extraction and recursive gap analysis to improve multi-hop reasoning. It enables agents to maintain long-term context with sub-millisecond latency while operating entirely offline.
+Mnemosyne is a local-first memory system for the Hermes Agent framework that provides private, zero-dependency storage for conversations and knowledge. It utilizes a SQLite backend with native vector search and full-text search to eliminate the need for external databases or API keys. The system features a structured fact engine called MEMORIA that supports multi-hop reasoning and temporal knowledge tracking. It is designed for high-performance, sub-millisecond retrieval and can import data from seven other memory providers.
 
 Highlights:
-- SQLite-backed storage with native vector and full-text search
-- Sub-millisecond read, write, and search latency for local agents
-- MEMORIA engine for structured fact triples and temporal reasoning
+- Local-first SQLite storage with native vector and full-text search
+- Sub-millisecond latency for memory reads, writes, and searches
+- MEMORIA engine for structured fact extraction and recursive gap analysis
 
 ---
 
