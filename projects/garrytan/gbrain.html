@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a persistent memory and knowledge graph system designed to provide long-term context for AI agents like OpenClaw and Hermes. It automatically extracts entity references and typed links from ingested data to build a self-wiring graph without requiring additional LLM calls. The system utilizes hybrid search, combining vector embeddings with BM25 keyword ranking and backlink-boosted scoring to improve retrieval accuracy. It includes automated maintenance cycles for consolidating memory, f",
+  "description": "GBrain is a persistent memory and knowledge graph system designed to provide AI agents with long-term context and structured data storage. It automatically extracts entities and typed relationships from ingested content like emails and meetings to build a self-wiring graph without requiring LLM calls for every link. The system utilizes hybrid search, backlink-boosted ranking, and a temporal trajectory timeline to ground agent responses in factual, chronological data. It integrates directly with ",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-05-22T06:35:41.000Z",
+  "dateModified": "2026-05-23T05:38:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 18080
+    "userInteractionCount": 18272
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 18.1K</span>
+    <span class="stars">★ 18.3K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-22</span>
+    <span><span class="meta-label">updated</span>2026-05-23</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a persistent memory and knowledge graph system designed to provide long-term context for AI agents like OpenClaw and Hermes. It automatically extracts entity references and typed links from ingested data to build a self-wiring graph without requiring additional LLM calls. The system utilizes hybrid search, combining vector embeddings with BM25 keyword ranking and backlink-boosted scoring to improve retrieval accuracy. It includes automated maintenance cycles for consolidating memory, fixing citations, and generating founder scorecards from structured temporal data.</p>
+    <p class="summary-text">GBrain is a persistent memory and knowledge graph system designed to provide AI agents with long-term context and structured data storage. It automatically extracts entities and typed relationships from ingested content like emails and meetings to build a self-wiring graph without requiring LLM calls for every link. The system utilizes hybrid search, backlink-boosted ranking, and a temporal trajectory timeline to ground agent responses in factual, chronological data. It integrates directly with Hermes and OpenClaw via MCP or a CLI, featuring an autonomous 'doctor' mode for self-remediation and memory consolidation.</p>
     <ul class="summary-highlights">
-      <li>Self-wiring knowledge graph with typed links and zero-LLM entity extraction.</li>
-      <li>Hybrid search combining HNSW vector, BM25, and reciprocal-rank fusion.</li>
-      <li>Automated 'doctor' loop for autonomous memory repair and background enrichment.</li>
+      <li>Builds self-wiring knowledge graphs with typed entity relationships</li>
+      <li>Hybrid search combining vector embeddings, reranking, and graph-based queries</li>
+      <li>Temporal trajectory tracking for chronological metric and event grounding</li>
     </ul>
   </div>
 </section>
@@ -145,10 +145,11 @@
   <section class="readme" data-nosnippet>
     <h2>GBrain</h2>
 <p>Your AI agent is smart but forgetful. GBrain gives it a brain.</p>
-<p>Built by the President and CEO of Y Combinator to run his actual AI agents. The production brain behind his OpenClaw and Hermes deployments: <strong>17,888 pages, 4,383 people, 723 companies</strong>, 21 cron jobs running autonomously, built in 12 days. The agent ingests meetings, emails, tweets, voice calls, and original ideas while you sleep. It enriches every person and company it encounters. It fixes its own citations and consolidates memory overnight. You wake up smarter than when you went to bed.</p>
+<p>Built by the President and CEO of Y Combinator to run his actual AI agents. The production brain behind his OpenClaw and Hermes deployments: <strong>146,646 pages, 24,585 people, 5,339 companies</strong>, 66 cron jobs running autonomously. The agent ingests meetings, emails, tweets, voice calls, and original ideas while you sleep. It enriches every person and company it encounters. It fixes its own citations and consolidates memory overnight. You wake up smarter than when you went to bed.</p>
 <p>The brain wires itself. Every page write extracts entity references and creates typed links (<code>attended</code>, <code>works_at</code>, <code>invested_in</code>, <code>founded</code>, <code>advises</code>) with zero LLM calls. Hybrid search. Self-wiring knowledge graph. Structured timeline. Backlink-boosted ranking. Ask &quot;who works at Acme AI?&quot; or &quot;what did Bob invest in this quarter?&quot; and get answers vector search alone can&#39;t reach. Benchmarked side-by-side: gbrain lands <strong>P@5 49.1%, R@5 97.9%</strong> on a 240-page Opus-generated rich-prose corpus, beating its graph-disabled variant by <strong>+31.4 points P@5</strong> and ripgrep-BM25 + vector-only RAG by a similar margin. Full BrainBench scorecards live in the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> repo.</p>
 <p><strong>New default in v0.36.2.0: ZeroEntropy</strong> for both embedding (<code>zembed-1</code> at 1280d via Matryoshka) and reranker (<code>zerank-2</code>). On a real-corpus benchmark vs OpenAI and Voyage: <strong>2.2× faster</strong> (442ms vs OpenAI 973ms), <strong>2.6× cheaper at regular pricing</strong> ($0.05/M vs OpenAI $0.13), wins 11 of 20 queries head-to-head, reshuffles 60% of top-1 results when used as a second-pass reranker. Bring your own key from <a href="https://dashboard.zeroentropy.dev">zeroentropy.dev</a>, or switch to OpenAI/Voyage at install time via <code>gbrain init --pglite --embedding-model &lt;provider:model&gt; --embedding-dimensions &lt;N&gt;</code> — your choice is sticky. To switch an existing brain, run <code>gbrain reinit-pglite --embedding-model &lt;provider:model&gt; --embedding-dimensions &lt;N&gt;</code> (PGLite) or follow the SQL recipe in <code>docs/embedding-migrations.md</code> (Postgres). <code>gbrain config set embedding_model</code> is refused as of v0.37.11.0 because the schema column has to resize too.</p>
 <p>GBrain is those patterns, generalized. Install in 30 minutes. Your agent does the work. As Garry&#39;s personal agent gets smarter, so does yours.</p>
+<p><strong>New in v0.40.2.0 — <code>gbrain think</code> grounds temporal answers in the typed-claim timeline.</strong> Ask &quot;when did Marco last switch jobs&quot; or &quot;what was the ARR in March&quot; and the answer comes back rooted in a real chronological timeline of the metric + event facts your brain already extracted via the <code>extract_facts</code> cycle phase. Default ON. The intent classifier (<code>temporal</code> / <code>knowledge_update</code> / <code>other</code>) is a regex pass with zero LLM cost; the <code>&#39;other&#39;</code> fast path short-circuits with zero extra SQL. Migration v82 adds a nullable <code>facts.event_type</code> column so the same plumbing carries event-shaped rows (<code>&#39;meeting&#39;</code>, <code>&#39;job_change&#39;</code>, <code>&#39;location_change&#39;</code>) alongside metric rows. Flip <code>think.trajectory_enabled=false</code> to opt out. Debug with <code>GBRAIN_THINK_DEBUG=1 gbrain think &quot;...&quot;</code> to see the spliced prompt. The same trajectory plumbing also lands in the LongMemEval benchmark with a methodology change disclosed in <code>methodology_note: extractor=haiku-preprocess-full-haystack-v1</code> — published scores are &quot;gbrain + Haiku-preprocess pipeline&quot; vs &quot;gbrain alone&quot;, NOT directly comparable to baseline LongMemEval numbers without that note.</p>
 <p><strong>New in v0.36.4.0 — Your agent drives the brain to 90/100 by itself.</strong> One command does the loop you used to run by hand: <code>gbrain doctor --remediate --yes --target-score 90 --max-usd 5</code>. It computes a dependency-ordered plan (sync before extract, embed after consolidate), submits each step as a Minion job, re-checks score between every step, and refuses to spend past your cost cap. Cron can drive it unattended. <code>gbrain doctor --remediation-plan --json</code> previews what would run. Autopilot now does the same thing on its 5-minute tick: small problems get targeted handlers, big problems get the full cycle, a healthy brain sleeps for 60 minutes instead of grinding through synthesize+patterns+embed every tick. Eleven new things you can submit as background jobs (<code>reindex</code>, <code>repair-jsonb</code>, <code>orphans</code>, <code>integrity</code>, <code>purge</code>, plus six cycle phases); three of them (synthesize, patterns, consolidate) are PROTECTED so an MCP-connected agent can&#39;t silently burn Anthropic credits. New <code>--background</code> flag on <code>gbrain embed</code> submits the job and exits with <code>job_id=N</code> for shell composition.</p>
 <p><strong>New in v0.35.7 — Temporal trajectory + founder scorecard.</strong> Author typed metric assertions in the <code>## Facts</code> fence (<code>mrr=50000</code>, <code>arr=2000000</code>, <code>team_size=12</code>) and gbrain stores them as first-class typed columns. <code>gbrain eval trajectory companies/acme-example</code> prints the chronological history with regressions auto-flagged inline. <code>gbrain founder scorecard companies/acme-example</code> rolls up claim accuracy, consistency, growth direction, and red flags into a stable <code>schema_version: 1</code> JSON contract. New MCP op <code>find_trajectory</code> exposes the same data to agents (read scope, visibility-filtered for remote callers). The <code>consolidate</code> cycle phase now writes <code>valid_until</code> on chronologically-superseded facts AND uses semantic upsert on <code>(page_id, claim, since_date)</code> — re-running the dream cycle on stable input is now a true no-op (fixed a pre-existing duplicate-takes bug from prior versions).</p>
 <blockquote>
@@ -183,6 +184,28 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
                           # at /admin, SSE activity feed at /admin/events
 </code></pre>
 <p>Per-client guides (Claude Desktop, Code, Cursor, ChatGPT, Perplexity, Cowork) live under <a href="docs/mcp/"><code>docs/mcp/</code></a>. HTTP server supports DCR-style client registration, scope-gated access (<code>read</code>/<code>write</code>/<code>admin</code>), and built-in rate limiting.</p>
+<h3>How to get data in (v0.38+)</h3>
+<p>One command, local or hosted, synchronous receipt:</p>
+<pre><code class="language-bash">gbrain capture &quot;the thought I want to remember&quot;
+gbrain capture --file ./notes/today.md
+echo &quot;from a pipe&quot; | gbrain capture --stdin
+SLUG=$(gbrain capture &quot;...&quot; --quiet)
+</code></pre>
+<p>The page lands in the DB AND on disk in one move (the v0.38 <code>put_page</code>
+write-through plumbing). Default slug <code>inbox/YYYY-MM-DD-&lt;hash8&gt;</code> so
+captures cluster in a predictable triage location. On thin-client installs
+the verb routes through MCP to the server — same command, same UX.</p>
+<p>For webhook ingestion (Zapier / IFTTT / Apple Shortcuts):</p>
+<pre><code class="language-bash">curl -X POST https://your-brain/ingest \
+  -H &quot;Authorization: Bearer $TOKEN&quot; \
+  -H &quot;Content-Type: text/markdown&quot; \
+  -d &quot;# a thought from a Shortcut&quot;
+</code></pre>
+<p>For mobile capture, the inbox folder source picks up anything dropped into
+<code>~/.gbrain/inbox/</code> from iOS Shortcuts / AirDrop / Drafts / Finder.</p>
+<p>Third-party skillpacks can ship custom ingestion sources (Granola, Linear,
+voice, OCR) against the versioned <code>IngestionSource</code> contract at
+<code>gbrain/ingestion</code>. See <a href="https://github.com/garrytan/gbrain/blob/main/docs/skillpack-anatomy.md"><code>docs/skillpack-anatomy.md</code></a>.</p>
 <h3>What it does (the loop)</h3>
 <pre><code>  signal   →   search   →   respond   →   write   →   auto-link   →   sync
   (every    (brain-first  (informed     (page +    (typed edges     (cron
@@ -252,7 +275,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 56.4K</div>
+        <div class="stars">★ 56.5K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -264,7 +287,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 252</div>
+        <div class="stars">★ 255</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -272,7 +295,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 134</div>
+        <div class="stars">★ 135</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -280,7 +303,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/stephenschoettler/hermes-lcm">
-        <div class="stars">★ 562</div>
+        <div class="stars">★ 568</div>
         <div class="name"><span class="org">stephenschoettler /</span> hermes-lcm</div>
       </a>
     </div>
