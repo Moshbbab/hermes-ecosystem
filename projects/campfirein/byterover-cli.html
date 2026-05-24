@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>byterover-cli — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
+<meta name="description" content="ByteRover CLI (brv) - The portable memory layer for  autonomous coding agents (formerly Cipher)">
+<link rel="canonical" href="https://hermesatlas.com/projects/campfirein/byterover-cli">
+<meta property="og:title" content="byterover-cli — Hermes Atlas">
+<meta property="og:description" content="ByteRover CLI (brv) - The portable memory layer for  autonomous coding agents (formerly Cipher)">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/campfirein/byterover-cli">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=byterover-cli&amp;subtitle=ByteRover+CLI+%28brv%29+-+The+portable+memory+layer+for++autonomous+coding+agents+%28formerly+Cipher%29&amp;kind=project+%C2%B7+memory">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="byterover-cli — Hermes Atlas">
+<meta name="twitter:description" content="ByteRover CLI (brv) - The portable memory layer for  autonomous coding agents (formerly Cipher)">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=byterover-cli&amp;subtitle=ByteRover+CLI+%28brv%29+-+The+portable+memory+layer+for++autonomous+coding+agents+%28formerly+Cipher%29&amp;kind=project+%C2%B7+memory">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "memory &amp; context", "item": "https://hermesatlas.com/lists/best-memory-providers" },
+    { "@type": "ListItem", "position": 3, "name": "byterover-cli" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/campfirein/byterover-cli#software",
+  "name": "byterover-cli",
+  "description": "ByteRover CLI is a persistent memory provider for AI coding agents that structures project knowledge into a version-controlled context tree. It utilizes a 5-tier retrieval system and a Git-like workflow—including branching, committing, and merging—to manage markdown-based memory. The tool features an interactive REPL, supports over 20 LLM providers, and integrates with the Model Context Protocol (MCP). It allows developers to curate, sync, and share codebase context across teams and various AI e",
+  "url": "https://hermesatlas.com/projects/campfirein/byterover-cli",
+  "codeRepository": "https://github.com/campfirein/byterover-cli",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "TypeScript",
+  "author": {
+    "@type": "Organization",
+    "name": "campfirein",
+    "url": "https://github.com/campfirein"
+  },
+  "dateModified": "2026-05-24T07:24:12.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 4784
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script>(function(){try{var s=localStorage.getItem('theme');var o=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;var t=s||(o?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span>apr·2026</span>
+    <span id="meta-count">123·repos</span>
+    <span id="meta-version">hermes·v0.10.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/#curated-lists">lists</a>
+    <a href="/guide/">handbook</a>
+    <a href="/reports/">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-light">light</span><span class="tt-sep">/</span><span class="tt-dark">dark</span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/lists/best-memory-providers">memory &amp; context</a><span class="sep">/</span>byterover-cli
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">campfirein</span><span class="slash">/</span>byterover-cli
+  </h1>
+  <p class="project-desc">ByteRover CLI (brv) - The portable memory layer for  autonomous coding agents (formerly Cipher)</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 4.8K</span>
+    <span><span class="meta-label">lang</span>TypeScript</span>
+    
+    
+    <span><span class="meta-label">updated</span>2026-05-24</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/campfirein/byterover-cli" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://docs.byterover.dev/" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">ByteRover CLI is a persistent memory provider for AI coding agents that structures project knowledge into a version-controlled context tree. It utilizes a 5-tier retrieval system and a Git-like workflow—including branching, committing, and merging—to manage markdown-based memory. The tool features an interactive REPL, supports over 20 LLM providers, and integrates with the Model Context Protocol (MCP). It allows developers to curate, sync, and share codebase context across teams and various AI editors like Cursor and Claude Code.</p>
+    <ul class="summary-highlights">
+      <li>Git-like version control for context trees with branching and merging</li>
+      <li>Sub-100ms 5-tier retrieval system for long-term conversational memory</li>
+      <li>Built-in agent tools for code execution, file operations, and search</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <h2>ByteRover CLI</h2>
+<div align="center">
+
+<img src="https://raw.githubusercontent.com/campfirein/byterover-cli/main/assets/images/logo/byterover-logo.svg" alt="ByteRover Logo" width="280" />
+
+<p align="center">
+<em>Interactive REPL CLI for AI-powered context memory</em>
+</p>
+
+<p align="center">
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-Elastic%202.0-blue.svg" alt="License" /></a>
+<a href="https://npmjs.org/package/byterover-cli"><img src="https://img.shields.io/npm/v/byterover-cli.svg" alt="Version" /></a>
+<a href="https://npmjs.org/package/byterover-cli"><img src="https://img.shields.io/npm/dw/byterover-cli.svg" alt="Downloads" /></a>
+<a href="https://docs.byterover.dev"><img src="https://img.shields.io/badge/Docs-Documentation-green.svg" alt="Documentation" /></a>
+<a href="https://discord.com/invite/UMRrpNjh5W"><img src="https://img.shields.io/badge/Discord-Join%20Community-7289da" alt="Discord" /></a>
+</p>
+
+</div>
+
+<h3>Overview</h3>
+<p>ByteRover CLI (<code>brv</code>) gives AI coding agents persistent, structured memory. It lets developers curate project knowledge into a context tree, sync it to the cloud, and share it across tools and teammates.</p>
+<p>Run <code>brv</code> in any project directory to start an interactive REPL powered by your choice of LLM. The agent understands your codebase through an agentic map, can read and write files, execute code, and store knowledge for future sessions.</p>
+<p>📄 Read the <a href="https://arxiv.org/abs/2604.01599">paper</a> for the full technical details.</p>
+<p>Or download our self-hosted PDF version of the paper <a href="https://byterover.dev/paper">here</a>.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>🌐 Web dashboard for curating and querying context (<code>brv webui</code>)</li>
+<li>🖥️ Interactive TUI with REPL interface (React/Ink)</li>
+<li>🧠 Context tree and knowledge storage management</li>
+<li>🔀 Git-like version control for the context tree (branch, commit, merge, push/pull)</li>
+<li>🤖 20 LLM providers (Anthropic, OpenAI, Google, Groq, Mistral, xAI, DeepSeek, and more)</li>
+<li>🛠️ 24 built-in agent tools (code exec, file ops, knowledge search, memory management)</li>
+<li>🔄 Cloud sync with push/pull</li>
+<li>👀 Review workflow for curate operations (approve/reject pending changes)</li>
+<li>🔌 MCP (Model Context Protocol) integration</li>
+<li>📦 Hub and connectors ecosystem for skills and bundles</li>
+<li>🤝 Works with 22+ AI coding agents (Cursor, Claude Code, Windsurf, Cline, and more)</li>
+<li>🏢 Enterprise proxy support</li>
+</ul>
+<h3>Benchmark Results</h3>
+<p>All benchmarks are run using the production <code>byterover-cli</code> codebase in this repository - no separate research prototype.</p>
+<p>We evaluate on two long-term conversational memory benchmarks:</p>
+<ul>
+<li><strong>LoCoMo</strong> - ultra-long conversations (~20K tokens, 35 sessions) testing single-hop, multi-hop, temporal, and open-domain retrieval.</li>
+<li><strong>LongMemEval-S</strong> - large-scale benchmark (23,867 docs, ~48 sessions per question) testing 6 memory abilities including knowledge update, temporal reasoning, and multi-session synthesis.</li>
+</ul>
+<p><strong>LoCoMo</strong> - 96.1% overall accuracy (1,982 questions, 272 docs).</p>
+<p><strong>LongMemEval-S</strong> - 92.8% overall accuracy (500 questions, 23,867 docs).</p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/campfirein/byterover-cli/main/assets/images/benchmarks/longmemeval-s-by-category.png" alt="LongMemEval-S Benchmark by Category" width="700" />
+</p>
+
+<p>All metrics are LLM-as-Judge accuracy (%). See the <a href="https://arxiv.org/abs/2604.01599">paper</a>, or self-hosted <a href="https://byterover.dev/paper">PDF</a> for full details.</p>
+<h3>Quick Start</h3>
+<h4>Shell Script (macOS &amp; Linux)</h4>
+<p>No Node.js required - everything is bundled.</p>
+<pre><code class="language-bash">curl -fsSL https://byterover.dev/install.sh | sh
+</code></pre>
+<p>Supported platforms: macOS ARM64, macOS x64 (Intel), Linux x64, Linux ARM64.</p>
+<h4>npm (All Platforms)</h4>
+<p>Requires Node.js &gt;= 20.</p>
+<pre><code class="language-bash">npm install -g byterover-cli
+</code></pre>
+<h4>Verify</h4>
+<pre><code class="language-bash">brv --version
+</code></pre>
+<h4>First Run</h4>
+<pre><code class="language-bash">cd your/project
+brv
+</code></pre>
+<p>The REPL auto-configures on first run - no setup needed. Type <code>/</code> to discover all available commands:</p>
+<pre><code>/curate &quot;Auth uses JWT with 24h expiry&quot; @src/middleware/auth.ts
+/query How is authentication implemented?
+</code></pre>
+<h3>ByteRover Cloud</h3>
+<p>ByteRover Cloud is a hosted platform for teams to sync, share, and manage context knowledge across projects and machines.
+Everything works locally by default - Cloud adds collaboration and persistence without changing your workflow.</p>
+<p>
+<a href="https://app.byterover.dev"><img src="https://img.shields.io/badge/Try%20ByteRover%20Cloud-Free-blue?style=for-the-badge" alt="Try ByteRover Cloud" /></a>
+</p>
+
+<p>Sign in from the dashboard, or run <code>brv login</code> with an <a href="https://app.byterover.dev/settings/keys">API key</a>.</p>
+<ul>
+<li>🔄 <strong>Team context sync</strong> — push and pull shared knowledge across teammates</li>
+<li>📂 <strong>Shared spaces</strong> — organize context across multiple projects and teams</li>
+<li>💻 <strong>Multi-machine access</strong> — sync your context tree across devices with cloud backup</li>
+<li>💻 <strong>Multi-machine access</strong> — sync your context tree across devices</li>
+<li>🧠 <strong>Built-in hosted LLM</strong> — start immediately with limited free usage</li>
+<li>👥 <strong>Team management</strong> — manage members, spaces, and permissions via the web app</li>
+<li>📊 <strong>Usage analytics</strong> — track seat allocation and monthly credit consumption</li>
+<li>🔒 <strong>SOC 2 Type II</strong> certified infrastructure with privacy mode</li>
+</ul>
+<details>
+<summary><h2>CLI Usage</h2></summary>
+
+<p>Most users only need <code>brv webui</code>. The commands below are for advanced users and automation. Run <code>brv --help</code> for the full, up-to-date reference.</p>
+<h4>Core Workflow</h4>
+<pre><code class="language-bash">brv                  # Start interactive REPL
+brv webui            # Open the ByteRover dashboard (primary UI)
+brv status           # Show project and daemon status
+brv curate           # Add context to knowledge storage
+brv curate view      # View curate history
+brv query            # Query context tree and knowledge
+brv review pending   # List pending review operations
+brv review approve   # Approve curate operations
+brv review reject    # Reject curate operations
+</code></pre>
+<h4>Sync (Legacy)</h4>
+<pre><code class="language-bash">brv push             # Legacy — migrate or snapshot context to cloud
+brv pull             # Legacy — restore context from cloud snapshot
+</code></pre>
+<blockquote>
+<p>Use <code>brv vc push</code> / <code>brv vc pull</code> for version-controlled sync going forward.</p>
+</blockquote>
+<h4>Version Control</h4>
+<pre><code class="language-bash">brv vc init              # Initialize version control for context tree
+brv vc status            # Show version control status
+brv vc add               # Stage files for the next commit
+brv vc commit            # Save staged changes as a commit
+brv vc log               # Show commit history
+brv vc branch            # List, create, or delete branches
+brv vc checkout          # Switch branches
+brv vc merge             # Merge a branch into the current branch
+brv vc clone             # Clone a ByteRover space repository
+brv vc push              # Push commits to ByteRover cloud
+brv vc pull              # Pull commits from ByteRover cloud
+brv vc fetch             # Fetch refs from ByteRover cloud
+brv vc remote            # Show current remote origin
+brv vc remote add        # Add a named remote
+brv vc remote set-url    # Update a remote URL
+brv vc config            # Get or set commit author
+brv vc reset             # Unstage files or undo commits
+</code></pre>
+<h4>Providers &amp; Models</h4>
+<pre><code class="language-bash">brv providers list       # List available LLM providers
+brv providers connect    # Connect to an LLM provider
+brv providers switch     # Switch active provider
+brv providers disconnect # Disconnect a provider
+brv model list           # List available models
+brv model switch         # Switch active model
+</code></pre>
+<h4>Hub &amp; Connectors</h4>
+<pre><code class="language-bash">brv hub list             # List available hub packages
+brv hub install          # Install a hub package
+brv hub registry add     # Add a custom registry
+brv hub registry list    # List registries
+brv hub registry remove  # Remove a registry
+brv connectors list      # List connectors
+brv connectors install   # Install a connector
+</code></pre>
+<h4>Spaces (Deprecated)</h4>
+<pre><code class="language-bash">brv space list       # Deprecated — use web dashboard
+brv space switch     # Deprecated — use brv vc clone
+</code></pre>
+<h4>Settings</h4>
+<p><code>brv</code> ships with operational defaults that suit most users. The <code>brv settings</code> command group lets you inspect and override these values.</p>
+<pre><code class="language-bash">brv settings                    # List all settings with current and default values
+brv settings list               # Alias for `brv settings`
+brv settings get &lt;key&gt;          # Show current and default for one key
+brv settings set &lt;key&gt; &lt;value&gt;  # Update one key (restart required)
+brv settings reset &lt;key&gt;        # Restore one key to its default (restart required)
+</code></pre>
+<p>Available keys:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Default</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>agentPool.maxSize</code></td>
+<td>10</td>
+<td>Maximum concurrent active projects (one agent process per project)</td>
+</tr>
+<tr>
+<td><code>agentPool.maxConcurrentTasksPerProject</code></td>
+<td>5</td>
+<td>Parallel <code>brv curate</code> / <code>brv query</code> tasks within a single project</td>
+</tr>
+<tr>
+<td><code>llm.iterationBudgetMs</code></td>
+<td>600000</td>
+<td>Wall-clock budget for the agentic loop on one task, in milliseconds</td>
+</tr>
+<tr>
+<td><code>llm.requestTimeoutMs</code></td>
+<td>120000</td>
+<td>Wall-clock budget for one direct LLM HTTP request, in milliseconds</td>
+</tr>
+<tr>
+<td><code>taskHistory.maxEntries</code></td>
+<td>1000</td>
+<td>Number of task records <code>brv query-log view</code> retains per project</td>
+</tr>
+</tbody></table>
+<p>Raise <code>llm.iterationBudgetMs</code> when a single <code>brv curate</code> or <code>brv query</code> on a slow local LLM (Ollama on CPU, heavy quantization, cold model load) routinely hits the default 10-minute cap on legitimate work. Lower it on cloud providers when you want a stuck task to surface as an error faster instead of waiting out the full budget. The cap is enforced per task, not per request.</p>
+<p><code>llm.requestTimeoutMs</code> bounds one HTTP request to the LLM. A frozen Ollama or LM Studio connection aborts at this boundary and the retry layer treats it as a transient error rather than wasting the full iteration budget. The setting must satisfy <code>llm.requestTimeoutMs &lt;= llm.iterationBudgetMs</code>; the daemon rejects writes that violate the rule and falls back to defaults for both keys when the file violates it at startup. Suggested presets:</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th><code>llm.requestTimeoutMs</code></th>
+<th><code>llm.iterationBudgetMs</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cloud</td>
+<td>120000 (2 min)</td>
+<td>600000 (10 min)</td>
+</tr>
+<tr>
+<td>Local LLM, fast GPU</td>
+<td>300000 (5 min)</td>
+<td>1200000 (20 min)</td>
+</tr>
+<tr>
+<td>Local LLM, CPU / heavy quantization</td>
+<td>900000 (15 min)</td>
+<td>3600000 (60 min)</td>
+</tr>
+</tbody></table>
+<p>Settings persist in <code>settings.json</code> under the <code>brv</code> global data directory:</p>
+<ul>
+<li>Linux: <code>$XDG_DATA_HOME/brv/settings.json</code> (defaults to <code>~/.local/share/brv/settings.json</code>)</li>
+<li>macOS: <code>~/Library/Application Support/brv/settings.json</code></li>
+<li>Windows: <code>%LOCALAPPDATA%/brv/settings.json</code></li>
+</ul>
+<p>Set the <code>BRV_DATA_DIR</code> environment variable to override the directory.</p>
+<p>Changes apply after <code>brv restart</code>. The daemon reads the file once at startup and does not observe file changes during runtime. This keeps every running agent on the same configuration for the lifetime of the daemon.</p>
+<p>Example session:</p>
+<pre><code class="language-bash">$ brv settings list
+KEY                                       CURRENT  DEFAULT  RESTART?
+agentPool.maxSize                         10       10       yes
+agentPool.maxConcurrentTasksPerProject    5        5        yes
+taskHistory.maxEntries                    1000     1000     yes
+
+$ brv settings set agentPool.maxSize 20
+Setting saved. Run `brv restart` to apply.
+
+$ brv settings get agentPool.maxSize
+20  (default: 10)
+</code></pre>
+<p>Every command supports <code>--format json</code> for scripting. Validation errors (unknown key, value out of range) exit with code 1 and a message naming the key.</p>
+<h4>Other</h4>
+<pre><code class="language-bash">brv mcp              # Start MCP server
+brv login            # Authenticate to ByteRover
+brv logout           # Disconnect and clear credentials
+brv locations        # List registered projects
+brv restart          # Restart daemon
+brv debug            # Debug mode
+</code></pre>
+<p>Run <code>brv --help</code> for the full command reference.</p>
+</details>
+
+<details>
+<summary><h2>Supported LLM Providers</h2></summary>
+
+<p>ByteRover CLI supports 20 LLM providers out of the box. Connect and switch providers from the dashboard, or use <code>brv providers connect</code> / <code>brv providers switch</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Anthropic</td>
+<td>Claude models</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT models</td>
+</tr>
+<tr>
+<td>Google</td>
+<td>Gemini models</td>
+</tr>
+<tr>
+<td>Groq</td>
+<td>Fast inference</td>
+</tr>
+<tr>
+<td>Mistral</td>
+<td>Mistral models</td>
+</tr>
+<tr>
+<td>xAI</td>
+<td>Grok models</td>
+</tr>
+<tr>
+<td>Cerebras</td>
+<td>Fast inference</td>
+</tr>
+<tr>
+<td>Cohere</td>
+<td>Command models</td>
+</tr>
+<tr>
+<td>DeepInfra</td>
+<td>Open-source model hosting</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>DeepSeek V3 and R1 reasoning models</td>
+</tr>
+<tr>
+<td>OpenRouter</td>
+<td>Multi-provider gateway</td>
+</tr>
+<tr>
+<td>Perplexity</td>
+<td>Search-augmented models</td>
+</tr>
+<tr>
+<td>TogetherAI</td>
+<td>Open-source model hosting</td>
+</tr>
+<tr>
+<td>Vercel</td>
+<td>AI SDK provider</td>
+</tr>
+<tr>
+<td>Minimax</td>
+<td>Minimax models</td>
+</tr>
+<tr>
+<td>Moonshot</td>
+<td>Kimi models</td>
+</tr>
+<tr>
+<td>GLM</td>
+<td>GLM models</td>
+</tr>
+<tr>
+<td>GLM Coding Plan</td>
+<td>GLM models on Z.AI Coding Plan subscription</td>
+</tr>
+<tr>
+<td>OpenAI-Compatible</td>
+<td>Any OpenAI-compatible API</td>
+</tr>
+<tr>
+<td>ByteRover</td>
+<td>ByteRover&#39;s hosted models</td>
+</tr>
+</tbody></table>
+</details>
+
+<h3>Worktrees and Knowledge Sources</h3>
+<blockquote>
+<p><strong>Vocabulary</strong></p>
+<ul>
+<li><strong>Worktree link</strong> — a subdirectory pointer to a parent project (<code>brv worktree</code>)</li>
+<li><strong>Source</strong> — a read-only reference to another project&#39;s knowledge (<code>brv source</code>)</li>
+<li><strong>Origin</strong> — where an indexed search result came from (<code>local</code> vs <code>shared</code>)</li>
+</ul>
+</blockquote>
+<p>ByteRover can run from a linked subdirectory without creating a nested <code>.brv/</code>.</p>
+<ul>
+<li><code>projectRoot</code>: the directory that owns <code>.brv/config.json</code></li>
+<li><code>worktreeRoot</code>: the linked worktree directory, or <code>projectRoot</code> when unlinked</li>
+<li><code>clientCwd</code>: the shell cwd where you ran <code>brv</code></li>
+</ul>
+<p>When you run <code>brv query</code> or <code>brv curate</code> from a linked worktree, implicit defaults use <code>worktreeRoot</code> so scope stays stable even if <code>clientCwd</code> drifts deeper into the package. Explicit relative paths that you pass yourself, such as <code>brv curate -f ./src/auth.ts</code>, still resolve from <code>clientCwd</code> to match normal shell behavior.</p>
+<p>Use <code>brv worktree add</code> from the project root to register a subdirectory (or sibling) as a worktree. This creates a <code>.brv</code> pointer file in the target directory that redirects to the parent project — the same pattern git uses for <code>git worktree</code>. Use <code>brv worktree remove</code> to unregister, and <code>brv worktree list</code> to inspect. To search another project&#39;s knowledge from here, use <code>brv source add &lt;path&gt;</code> (with <code>brv source list</code> / <code>brv source remove</code> to inspect or detach).</p>
+<h3>Documentation</h3>
+<p>Visit <a href="https://docs.byterover.dev"><strong>docs.byterover.dev</strong></a> for full guides on setup, integrations, and advanced usage.</p>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://docs.byterover.dev">Getting Started</a></td>
+<td>Installation, first run, and basic usage</td>
+</tr>
+<tr>
+<td><a href="https://docs.byterover.dev">Cloud Sync</a></td>
+<td>Push/pull workflows and team sharing</td>
+</tr>
+<tr>
+<td><a href="https://docs.byterover.dev">Version Control</a></td>
+<td>Context tree branching, commits, and collaboration</td>
+</tr>
+<tr>
+<td><a href="https://docs.byterover.dev">LLM Providers</a></td>
+<td>Provider setup and model configuration</td>
+</tr>
+<tr>
+<td><a href="https://docs.byterover.dev">AI Agent Integrations</a></td>
+<td>Using ByteRover with Cursor, Claude Code, Windsurf, etc.</td>
+</tr>
+<tr>
+<td><a href="https://docs.byterover.dev">Hub &amp; Connectors</a></td>
+<td>Skills, bundles, and the connector ecosystem</td>
+</tr>
+<tr>
+<td>CLI Reference</td>
+<td>Run <code>brv --help</code></td>
+</tr>
+</tbody></table>
+<h3>Contributing</h3>
+<p>We welcome contributions! See our <a href="https://github.com/campfirein/byterover-cli/blob/main/CONTRIBUTING.md">Contributing Guide</a> for development setup, coding standards, and the PR workflow.</p>
+<h3>Community &amp; Support</h3>
+<p>ByteRover CLI is built and maintained by the <a href="https://byterover.dev/">ByteRover team</a>.</p>
+<ul>
+<li>Join our <a href="https://discord.com/invite/UMRrpNjh5W">Discord</a> to share projects, ask questions, or just say hi</li>
+<li><a href="https://github.com/campfirein/byterover-cli/issues">Report issues</a> on GitHub</li>
+<li>If you enjoy ByteRover CLI, please give us a star on GitHub — it helps a lot!</li>
+<li>Follow <a href="https://x.com/kevinnguyendn">@kevinnguyendn</a> on X</li>
+</ul>
+<h3>Contributors</h3>
+<p><a href="https://github.com/campfirein/byterover-cli/graphs/contributors"><img src="https://contrib.rocks/image?repo=campfirein/byterover-cli&amp;max=40&amp;columns=10" alt="Contributors"></a></p>
+<h3>Star History</h3>
+<a href="https://star-history.com/#campfirein/byterover-cli&Date">
+  <img width="500" alt="Star History Chart" src="https://api.star-history.com/svg?repos=campfirein/byterover-cli&type=Date&v=2">
+</a>
+
+<h3>License</h3>
+<p>Elastic License 2.0. See <a href="LICENSE">LICENSE</a> for full terms.</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in memory &amp; context</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/mem0ai/mem0">
+        <div class="stars">★ 56.6K</div>
+        <div class="name"><span class="org">mem0ai /</span> mem0</div>
+      </a>
+      <a class="related-row" href="/projects/vectorize-io/hindsight">
+        <div class="stars">★ 14.4K</div>
+        <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
+      </a>
+      <a class="related-row" href="/projects/greyhaven-ai/autocontext">
+        <div class="stars">★ 1.0K</div>
+        <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
+      </a>
+      <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
+        <div class="stars">★ 257</div>
+        <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
+      </a>
+      <a class="related-row" href="/projects/yoloshii/ClawMem">
+        <div class="stars">★ 172</div>
+        <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
+      </a>
+      <a class="related-row" href="/projects/plur-ai/plur">
+        <div class="stars">★ 135</div>
+        <div class="name"><span class="org">plur-ai /</span> plur</div>
+      </a>
+      <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
+        <div class="stars">★ 26</div>
+        <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
+      </a>
+      <a class="related-row" href="/projects/garrytan/gbrain">
+        <div class="stars">★ 18.6K</div>
+        <div class="name"><span class="org">garrytan /</span> gbrain</div>
+      </a>
+    </div>
+    <p class="list-link"><a href="/lists/best-memory-providers">see all memory &amp; context →</a></p>
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
