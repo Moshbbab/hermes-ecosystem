@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, self-hosted browser interface for the Hermes Agent that provides a graphical alternative to the CLI. It is built using Python and vanilla JavaScript without the need for a build step or framework. The interface features a three-panel layout for session management, chatting, and file browsing, offering full parity with the agent's terminal capabilities. Users can securely access their existing agent and models via an SSH tunnel with minimal configuration.",
+  "description": "Hermes WebUI is a lightweight browser-based interface for the Hermes Agent, providing a graphical alternative to the terminal and messaging app access. It is built using Python and vanilla JavaScript without the need for frameworks or build steps. The interface features a three-panel layout for session navigation, chatting, and workspace file browsing with inline previews. It maintains full parity with the CLI experience, allowing users to manage models, profiles, and workspace controls through ",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-05-28T20:08:53.000Z",
+  "dateModified": "2026-05-30T04:39:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 9131
+    "userInteractionCount": 9224
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 9.1K</span>
+    <span class="stars">★ 9.2K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-28</span>
+    <span><span class="meta-label">updated</span>2026-05-30</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, self-hosted browser interface for the Hermes Agent that provides a graphical alternative to the CLI. It is built using Python and vanilla JavaScript without the need for a build step or framework. The interface features a three-panel layout for session management, chatting, and file browsing, offering full parity with the agent's terminal capabilities. Users can securely access their existing agent and models via an SSH tunnel with minimal configuration.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight browser-based interface for the Hermes Agent, providing a graphical alternative to the terminal and messaging app access. It is built using Python and vanilla JavaScript without the need for frameworks or build steps. The interface features a three-panel layout for session navigation, chatting, and workspace file browsing with inline previews. It maintains full parity with the CLI experience, allowing users to manage models, profiles, and workspace controls through a centralized control center.</p>
     <ul class="summary-highlights">
-      <li>Three-panel layout with session, chat, and file browsing</li>
-      <li>Full feature parity with the Hermes CLI experience</li>
+      <li>Full parity with Hermes CLI in a three-panel web layout</li>
       <li>No-build setup using only Python and vanilla JavaScript</li>
+      <li>Integrated workspace file browser with inline preview capabilities</li>
     </ul>
   </div>
 </section>
@@ -334,9 +334,15 @@ a <code>messages</code> list, or plain text; plain text is wrapped as one <code>
 message so dynamic recall text becomes ordinary context instead of an extra
 system instruction. If the hook must provide system-level guidance, emit JSON
 messages with an explicit <code>role: &quot;system&quot;</code> entry instead. Script output is capped
-at 256 KiB before parsing. The browser only receives a compact status event
-(<code>source</code>, <code>label</code>, message count, and redacted errors), never the prefill
-message bodies.</p>
+at 256 KiB before parsing. Parsed prefill context is then bounded by
+<code>webui_prefill_context_max_chars</code> or <code>HERMES_WEBUI_PREFILL_CONTEXT_MAX_CHARS</code>
+(default: 12,000 characters; set to <code>0</code> to disable). When a dynamic script
+exceeds the budget and a compact static prefill file is configured, WebUI falls
+back to that file. If no compact fallback is available, WebUI injects a short
+retrieval instruction instead of sending the oversized note/body payload with
+every new browser turn. The browser only receives a compact status event
+(<code>source</code>, <code>label</code>, message count, compaction metadata, and redacted errors),
+never the prefill message bodies.</p>
 <h4>Optional Gateway-backed browser chat</h4>
 <p>By default, browser chat runs through WebUI&#39;s in-process legacy runtime. Advanced
 self-hosted deployments can opt into routing new browser turns through a running
@@ -400,6 +406,7 @@ cp .env.docker.example .env
 docker compose up -d
 # Open http://localhost:8787
 </code></pre>
+<p>Run Compose as the user who owns your Hermes home. <code>sudo docker compose up -d</code> can make <code>${HOME}</code> expand to the root user&#39;s home, so Docker mounts the wrong <code>.hermes</code> directory instead of your real <code>~/.hermes</code> and the WebUI starts with <code>config.yaml (not found, using defaults)</code>. Prefer adding your user to the Docker group and running <code>docker compose up -d</code>; if you must use sudo, set absolute paths first, for example <code>HERMES_HOME=/home/you/.hermes HERMES_WORKSPACE=/home/you/workspace sudo -E docker compose up -d</code>, then verify with <code>docker compose config</code>.</p>
 <p>The container auto-detects your UID/GID from the mounted <code>~/.hermes</code> volume so files written by the agent stay readable by you on the host.</p>
 <p>To enable password protection (required if you expose the port outside <code>127.0.0.1</code>):</p>
 <pre><code class="language-bash">echo &quot;HERMES_WEBUI_PASSWORD=change-me-to-something-strong&quot; &gt;&gt; .env
@@ -476,6 +483,16 @@ docker compose -f docker-compose.three-container.yml up -d
 <td>Podman shared <code>.hermes</code> fails</td>
 <td>Podman 3.4 <code>keep-id</code> limitation</td>
 <td>Use Podman 4+ or single-container</td>
+</tr>
+<tr>
+<td>Host API at <code>localhost</code> fails from WebUI</td>
+<td>Container <code>localhost</code> means the container, not your host (#3012)</td>
+<td>Use <code>http://host.docker.internal:&lt;port&gt;</code> on Docker Desktop, or <code>http://host.containers.internal:&lt;port&gt;</code> on Podman</td>
+</tr>
+<tr>
+<td>WebUI can&#39;t see <code>~/.hermes</code> after <code>sudo docker compose</code></td>
+<td><code>${HOME}</code> expanded to the root user&#39;s home (#3006)</td>
+<td>Run Compose as your user, or pass absolute <code>HERMES_HOME</code>/<code>HERMES_WORKSPACE</code> with <code>sudo -E</code></td>
 </tr>
 </tbody></table>
 <p>For the deep dive on each of these, see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a>.</p>
@@ -1023,11 +1040,11 @@ Configurable assistant display name, thinking/reasoning block display, and a log
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/outsourc-e/hermes-workspace">
-        <div class="stars">★ 5.0K</div>
+        <div class="stars">★ 5.1K</div>
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 8.4K</div>
+        <div class="stars">★ 8.6K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -1035,11 +1052,11 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 71</div>
+        <div class="stars">★ 70</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 203</div>
+        <div class="stars">★ 206</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -1051,7 +1068,7 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 449</div>
+        <div class="stars">★ 451</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>

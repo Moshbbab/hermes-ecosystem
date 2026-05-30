@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a universal memory layer that provides AI agents with a local, persistent storage system for long-term context. It utilizes a Bilevel Episodic-Associative Memory (BEAM) architecture backed by a single SQLite database for hybrid vector and full-text search. The system supports various integration methods including an MCP server, a Python SDK, and native plugins for tools like Cursor and OpenWebUI. This approach allows agents to maintain private, offline memory with minimal resource o",
+  "description": "Mnemosyne is a local-first memory layer designed to provide AI agents with persistent, private long-term memory. It utilizes a SQLite-backed architecture featuring a Bilevel Episodic-Associative Memory (BEAM) system that combines working memory, episodic memory, and a temporal knowledge graph. The system employs hybrid scoring and binary vector compression to enable efficient search without external vector databases. It integrates with various platforms via an SDK or the Model Context Protocol (",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-05-29T01:35:40.000Z",
+  "dateModified": "2026-05-29T17:39:08.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 723
+    "userInteractionCount": 745
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,7 +112,7 @@
   <p class="project-desc">The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents and Everyone Else!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 723</span>
+    <span class="stars">★ 745</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a universal memory layer that provides AI agents with a local, persistent storage system for long-term context. It utilizes a Bilevel Episodic-Associative Memory (BEAM) architecture backed by a single SQLite database for hybrid vector and full-text search. The system supports various integration methods including an MCP server, a Python SDK, and native plugins for tools like Cursor and OpenWebUI. This approach allows agents to maintain private, offline memory with minimal resource overhead.</p>
+    <p class="summary-text">Mnemosyne is a local-first memory layer designed to provide AI agents with persistent, private long-term memory. It utilizes a SQLite-backed architecture featuring a Bilevel Episodic-Associative Memory (BEAM) system that combines working memory, episodic memory, and a temporal knowledge graph. The system employs hybrid scoring and binary vector compression to enable efficient search without external vector databases. It integrates with various platforms via an SDK or the Model Context Protocol (MCP), supporting tools like Cursor, Claude Code, and OpenWebUI.</p>
     <ul class="summary-highlights">
-      <li>Local-first storage using SQLite with sqlite-vec and FTS5</li>
-      <li>BEAM architecture featuring working, episodic, and triple-store memory</li>
-      <li>Broad compatibility via MCP, Python SDK, and native plugins</li>
+      <li>Zero-dependency, SQLite-backed storage with sub-millisecond performance</li>
+      <li>Hybrid search using vector similarity, FTS5, and importance scoring</li>
+      <li>MCP-ready integration for Cursor, Claude Code, and other agents</li>
     </ul>
   </div>
 </section>
@@ -158,7 +158,7 @@
 <a href="https://modelcontextprotocol.io"><img src="https://img.shields.io/badge/MCP-Ready-6366f1" alt="MCP"></a></p>
 </div>
 
-<p><strong>Mnemosyne</strong> is a universal memory layer for AI agents. Drop it into <strong>any</strong> agent framework — Hermes, Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent. One <code>pip install</code>, one SQLite database, zero cloud dependencies.</p>
+<p><strong>Mnemosyne</strong> is a universal, Hermes-first memory layer that plays nicely with any agent framework — Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent. One <code>pip install</code>, one SQLite database, zero cloud dependencies.</p>
 <hr>
 <h3>Table of Contents</h3>
 <ul>
@@ -179,7 +179,7 @@
 <li><a href="#environment-variables">Environment Variables</a></li>
 </ul>
 </li>
-<li><a href="#hermes-plugin-17-tools">Hermes Plugin</a></li>
+<li><a href="#hermes-plugin-23-tools">Hermes Plugin (23 tools)</a></li>
 <li><a href="#contributing">Contributing</a></li>
 <li><a href="#support">Support</a></li>
 <li><a href="#license">License</a></li>
@@ -572,10 +572,48 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
 | <code>MNEMOSYNE_EMBEDDING_API_KEY</code> | <code>${OPENROUTER_API_KEY:-${OPENAI_API_KEY:-}}</code> | Preferred name for embedding API key. Falls back to <code>OPENROUTER_API_KEY</code>, then <code>OPENAI_API_KEY</code>. |</p>
 <p>Full reference: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/configuration.md">docs/configuration.md</a></p>
 <hr>
-<h3>Hermes Plugin (17 tools)</h3>
-<p>When used with Hermes Agent, Mnemosyne exposes 17 tools for memory lifecycle management — 3 lifecycle hooks (<code>pre_llm_call</code>, <code>on_session_start</code>, <code>post_tool_call</code>) for automatic context injection, plus full MCP support.</p>
-<p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/hermes-integration.md">docs/hermes-integration.md</a>.</p>
-<p><strong>Updating:</strong> <code>git pull &amp;&amp; hermes gateway restart</code> (source install) or <code>pip install --upgrade mnemosyne-memory &amp;&amp; hermes gateway restart</code> (PyPI). See <a href="https://github.com/AxDSan/mnemosyne/blob/main/UPDATING.md">UPDATING.md</a> for all update paths.</p>
+<h3>Hermes Plugin (23 tools)</h3>
+<p>When used with Hermes Agent, Mnemosyne exposes <strong>23 tools</strong> for full memory lifecycle management — 3 lifecycle hooks (<code>pre_llm_call</code>, <code>on_session_start</code>, <code>post_tool_call</code>) for automatic context injection, plus MCP support.</p>
+<p><strong>Install (Hermes users):</strong></p>
+<pre><code class="language-bash">pip install mnemosyne-hermes
+hermes config set memory.provider mnemosyne
+hermes memory setup
+</code></pre>
+<p>Then disable Hermes&#39; built-in file memory to avoid duplication:</p>
+<pre><code class="language-bash">hermes tools disable memory
+</code></pre>
+<p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/hermes-integration.md">docs/hermes-integration.md</a> for the full setup guide.</p>
+<h4>Tool categories</h4>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Core memory</strong> (9)</td>
+<td><code>remember</code>, <code>recall</code>, <code>sleep</code>, <code>stats</code>, <code>get</code>, <code>update</code>, <code>forget</code>, <code>invalidate</code>, <code>validate</code></td>
+</tr>
+<tr>
+<td><strong>Knowledge graph</strong> (4)</td>
+<td><code>triple_add</code>, <code>triple_query</code>, <code>graph_query</code>, <code>graph_link</code></td>
+</tr>
+<tr>
+<td><strong>Multi-agent surface</strong> (4)</td>
+<td><code>shared_remember</code>, <code>shared_recall</code>, <code>shared_forget</code>, <code>shared_stats</code></td>
+</tr>
+<tr>
+<td><strong>Working notes</strong> (3)</td>
+<td><code>scratchpad_write</code>, <code>scratchpad_read</code>, <code>scratchpad_clear</code></td>
+</tr>
+<tr>
+<td><strong>Ops</strong> (3)</td>
+<td><code>export</code>, <code>import</code>, <code>diagnose</code></td>
+</tr>
+</tbody></table>
+<p>All 23 tools surface through the <code>mnemosyne-hermes</code> package, which wraps the <code>mnemosyne-memory</code> core library. The plugin manifest at <code>integrations/hermes/</code> is also discoverable by Hermes&#39; plugin system.</p>
+<p><strong>Updating:</strong> <code>pip install --upgrade mnemosyne-hermes &amp;&amp; hermes gateway restart</code> or <code>git pull &amp;&amp; pip install --upgrade integrations/hermes &amp;&amp; hermes gateway restart</code> (source).</p>
 <hr>
 <h3>Contributing</h3>
 <p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for guidelines.</p>
@@ -610,11 +648,11 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 57.0K</div>
+        <div class="stars">★ 57.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 15.1K</div>
+        <div class="stars">★ 15.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -622,11 +660,11 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 269</div>
+        <div class="stars">★ 271</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 177</div>
+        <div class="stars">★ 178</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -634,7 +672,7 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 144</div>
+        <div class="stars">★ 145</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">

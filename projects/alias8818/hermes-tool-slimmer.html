@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/alias8818/hermes-tool-slimmer#software",
   "name": "hermes-tool-slimmer",
-  "description": "Hermes Tool Slimmer is a schema-selection optimization that reduces the prompt token overhead caused by large tool catalogs in Hermes Agent. It creates an indexable corpus of tool schemas and uses local BM25 ranking with explicit boosts to select only the most relevant tools for each turn. This process minimizes the repeated payload sent to the model while maintaining essential safety tools. The project includes a dashboard for monitoring estimated token savings and supports custom profiles for ",
+  "description": "Hermes Tool Slimmer is a schema-selection optimization that reduces the token overhead caused by large tool catalogs in Hermes Agent. It builds an indexable corpus from tool schemas and uses local BM25 ranking with explicit boosts to select the most relevant tool set for each turn. This process lowers the prompt payload size while maintaining essential safety tools and failing open to the original schema list if an error occurs. It includes a dashboard plugin to track estimated token savings and",
   "url": "https://hermesatlas.com/projects/alias8818/hermes-tool-slimmer",
   "codeRepository": "https://github.com/alias8818/hermes-tool-slimmer",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "alias8818",
     "url": "https://github.com/alias8818"
   },
-  "dateModified": "2026-05-28T21:09:25.000Z",
+  "dateModified": "2026-05-29T14:15:36.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 17
+    "userInteractionCount": 20
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Reduce Hermes Agent tool-schema overhead with keyword selection and Tool Search support</p>
 
   <div class="meta-row">
-    <span class="stars">★ 17</span>
+    <span class="stars">★ 20</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-28</span>
+    <span><span class="meta-label">updated</span>2026-05-29</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Tool Slimmer is a schema-selection optimization that reduces the prompt token overhead caused by large tool catalogs in Hermes Agent. It creates an indexable corpus of tool schemas and uses local BM25 ranking with explicit boosts to select only the most relevant tools for each turn. This process minimizes the repeated payload sent to the model while maintaining essential safety tools. The project includes a dashboard for monitoring estimated token savings and supports custom profiles for different deployment environments like Slack or Telegram.</p>
+    <p class="summary-text">Hermes Tool Slimmer is a schema-selection optimization that reduces the token overhead caused by large tool catalogs in Hermes Agent. It builds an indexable corpus from tool schemas and uses local BM25 ranking with explicit boosts to select the most relevant tool set for each turn. This process lowers the prompt payload size while maintaining essential safety tools and failing open to the original schema list if an error occurs. It includes a dashboard plugin to track estimated token savings and manage tool indexing.</p>
     <ul class="summary-highlights">
-      <li>Ranks tools using BM25 and keyword selection for efficiency</li>
-      <li>Provides a dashboard to track estimated schema token savings</li>
-      <li>Supports custom tool profiles and always-include/exclude lists</li>
+      <li>Reduces prompt tokens via BM25-based tool ranking and selection</li>
+      <li>Includes a dashboard for monitoring estimated schema token savings</li>
+      <li>Supports keyword, hybrid, and Anthropic Tool Search modes</li>
     </ul>
   </div>
 </section>
@@ -151,6 +151,8 @@
 <img src="https://img.shields.io/badge/Hermes-dashboard%20plugin-111827" alt="Hermes"></p>
 <p><img src="https://raw.githubusercontent.com/alias8818/hermes-tool-slimmer/main/docs/assets/tool-slimmer-dashboard.png" alt="Hermes Tool Slimmer dashboard"></p>
 <p>Hermes Tool Slimmer reduces repeated tool-schema overhead by selecting the smallest useful tool set for a turn. It builds an indexable corpus from Hermes tool schemas, ranks candidate tools with local BM25 plus explicit boosts, and fails open to the original schema list when anything goes wrong.</p>
+<h3>Support</h3>
+<p>For Tool Slimmer install bugs, dashboard issues, ranking misses, or configuration questions, please open an issue at <a href="https://github.com/alias8818/hermes-tool-slimmer/issues">alias8818/hermes-tool-slimmer</a> instead of posting inside unrelated Hermes Agent issue threads. You can also reach Aliasocracy on Discord at <code>Aliasocracy#1439</code>; mention Hermes Tool Slimmer in the message so it is clear the contact is about this project.</p>
 <h3>Why</h3>
 <p>Large Hermes installations can expose dozens of native and MCP tools. A 57-tool schema catalog can serialize to roughly 73 KB, or about 18K approximate prompt tokens using the documented <code>bytes / 4</code> estimate. Selecting 8-12 relevant tools for a repository-search turn can reduce that to about 15 KB / 3.7K approximate tokens while keeping configured safety tools hot.</p>
 <p>Tool slimming is only a schema-selection optimization. It must not bypass Hermes approval prompts, tool execution controls, provider auth, disabled toolsets, or any runtime safety policy.</p>
@@ -222,7 +224,7 @@ pytest -q
 
 tool_slimmer:
   enabled: true
-  mode: keyword        # eager | keyword | hybrid | anthropic_tool_search
+  mode: keyword        # eager | keyword | hybrid | anthropic_tool_search | two_pass
   top_k: 8             # selected after always_include
   always_include: [terminal, read_file, write_file, patch, search_files]
   always_exclude: []   # alias for disabled_tools; useful for noisy tools in text-only deployments
@@ -235,6 +237,11 @@ tool_slimmer:
   min_score: 0.25
   aliases:
     browse: [browser, navigate, url, website]
+  two_pass:
+    hydrate_limit: 8
+    max_catalog_tools: 120
+    cache_hydrated_tools: true
+    fallback_to_keyword: true
   profiles:
     telegram:
       top_k: 4
@@ -249,6 +256,10 @@ tool_slimmer:
   fail_open: true      # selector errors preserve the original full schema list
   dry_run: false       # true logs/injects diagnostics but does not alter schemas
 </code></pre>
+<h4>Experimental Two-Pass Mode</h4>
+<p><code>mode: two_pass</code> is opt-in and experimental. It is intended for very large tool catalogs, text-first gateways, or TPM-capped providers where even a keyword-trimmed full-schema set is too expensive.</p>
+<p>In two-pass mode, the first request receives your <code>always_include</code> tools plus <code>tool_slimmer_hydrate_tools</code>. That hydration tool carries a compact deterministic catalog of available tool names, one-line descriptions, toolsets, and tags. If the model needs tools, it calls <code>tool_slimmer_hydrate_tools</code> with multiple names in one batch; the next request exposes those full schemas and caches them for the session when <code>cache_hydrated_tools: true</code>.</p>
+<p>Keep <code>keyword</code> as the default for normal use. Two-pass can add one extra model round trip before tool use, and current Hermes history may still record the compact hydration tool call. It avoids external delegation and avoids injecting the full catalog on ordinary no-tool turns.</p>
 <h3>Commands</h3>
 <pre><code class="language-bash">hermes tool-slimmer status
 hermes tool-slimmer doctor
@@ -356,11 +367,11 @@ python -m build
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 57.0K</div>
+        <div class="stars">★ 57.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 15.1K</div>
+        <div class="stars">★ 15.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -368,11 +379,11 @@ python -m build
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 269</div>
+        <div class="stars">★ 271</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 177</div>
+        <div class="stars">★ 178</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -380,7 +391,7 @@ python -m build
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 144</div>
+        <div class="stars">★ 145</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
