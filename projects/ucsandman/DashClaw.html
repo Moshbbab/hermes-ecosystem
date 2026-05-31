@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative policies, routing high-risk tasks for human approval via a dashboard or mobile interface. The system records verifiable evidence for every decision and tracks terminal outcomes to prevent double-execution during agent retries. It integrates with various runtimes including Hermes Agent, Claude Code, and ",
+  "description": "DashClaw is a governance layer designed to secure AI agents that interact with real-world systems. It intercepts risky actions to evaluate them against declarative policies, routing requests for human approval via a dashboard, CLI, or messaging apps when necessary. The system ensures operational safety through cryptographic identity verification and durable outcome tracking to prevent double-execution during retries. It integrates with various runtimes via MCP, Node/Python SDKs, and REST APIs, s",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-05-30T01:53:59.000Z",
+  "dateModified": "2026-05-31T06:05:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-30</span>
+    <span><span class="meta-label">updated</span>2026-05-31</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to secure AI agents interacting with real-world systems. It intercepts risky agent actions to evaluate them against declarative policies, routing high-risk tasks for human approval via a dashboard or mobile interface. The system records verifiable evidence for every decision and tracks terminal outcomes to prevent double-execution during agent retries. It integrates with various runtimes including Hermes Agent, Claude Code, and LangChain through MCP servers, SDKs, or lifecycle hooks.</p>
+    <p class="summary-text">DashClaw is a governance layer designed to secure AI agents that interact with real-world systems. It intercepts risky actions to evaluate them against declarative policies, routing requests for human approval via a dashboard, CLI, or messaging apps when necessary. The system ensures operational safety through cryptographic identity verification and durable outcome tracking to prevent double-execution during retries. It integrates with various runtimes via MCP, Node/Python SDKs, and REST APIs, supporting frameworks like LangChain, CrewAI, and AutoGen.</p>
     <ul class="summary-highlights">
-      <li>Evaluates risky agent actions against declarative guard policies</li>
-      <li>Routes pending approvals to CLI, mobile, or messaging platforms</li>
-      <li>Prevents double-execution by tracking durable terminal outcomes</li>
+      <li>Policy-based interception for blocking, warning, or approving risky actions</li>
+      <li>Cryptographic identity verification using JWKS-verified OIDC bearer tokens</li>
+      <li>Broad integration support for MCP, LangChain, CrewAI, and AutoGen</li>
     </ul>
   </div>
 </section>
@@ -188,6 +188,10 @@
 <tbody><tr>
 <td><strong>Intercept</strong></td>
 <td>Risky agent actions are evaluated before they execute. Block, warn, or hold for approval, by policy.</td>
+</tr>
+<tr>
+<td><strong>Verify identity</strong></td>
+<td>Agents authenticate with JWKS-verified OIDC bearer tokens (EdDSA / RSA / ECDSA). Replay protection rejects reused tokens; optional action binding scopes a token to one intended call. Cryptographic attribution, not self-assertion.</td>
 </tr>
 <tr>
 <td><strong>Enforce</strong></td>
@@ -304,7 +308,7 @@ powershell -File scripts/install-hermes-plugin.ps1   # Windows
 </code></pre>
 <p>For Claude Code specifically, the hook installer alone (without the plugin) governs 40+ tool types (Bash, Edit, Write, MultiEdit, …) with semantic classification, risk scoring, and per-turn token capture — no SDK calls in your agent code. Set <code>DASHCLAW_BASE_URL</code>, <code>DASHCLAW_API_KEY</code>, and optionally <code>DASHCLAW_HOOK_MODE=enforce</code>. Full details in <a href="https://github.com/ucsandman/DashClaw/blob/main/hooks/README.md"><code>hooks/README.md</code></a>.</p>
 <h4>2. MCP server (zero code, any MCP host)</h4>
-<p><a href="./mcp-server"><code>@dashclaw/mcp-server</code></a> exposes <strong>23 governance MCP tools</strong> across 7 groups — core governance, optimal files, session continuity, credential hygiene, skill safety, open loops, learning + retrospection — plus 4 read-only resources (<code>dashclaw://policies</code>, <code>dashclaw://capabilities</code>, <code>dashclaw://agent/{agent_id}/history</code>, <code>dashclaw://status</code>).</p>
+<p><a href="./mcp-server"><code>@dashclaw/mcp-server</code></a> exposes <strong>23 governance MCP tools</strong> across 7 groups — core governance, optimal files, session continuity, credential hygiene, skill safety, open loops, learning + retrospection — plus 6 read-only resources (<code>dashclaw://policies</code>, <code>dashclaw://capabilities</code>, <code>dashclaw://agent/{agent_id}/history</code>, <code>dashclaw://status</code>, <code>dashclaw://code-sessions/projects</code>, <code>dashclaw://code-sessions/sessions/{session_id}</code>).</p>
 <p><strong>Stdio (Claude Code, Claude Desktop, any stdio MCP client):</strong></p>
 <pre><code class="language-json">{
   &quot;mcpServers&quot;: {
@@ -337,7 +341,7 @@ powershell -File scripts/install-hermes-plugin.ps1   # Windows
 <pre><code class="language-bash">npm install dashclaw     # Node 18+
 pip install dashclaw     # Python 3.7+
 </code></pre>
-<p>87-method canonical Node surface: core governance, durable execution finality, scoring profiles, learning analytics, messaging, handoffs, security scanning, threads, sessions, and the execution-studio domains (workflow templates, model strategies, knowledge collections, capability runtime). The Python SDK exposes 235 methods including ready-made framework integrations:</p>
+<p>87-method canonical Node surface: core governance, durable execution finality, scoring profiles, learning analytics, messaging, handoffs, security scanning, threads, sessions, and the execution-studio domains (workflow templates, model strategies, knowledge collections, capability runtime). The Python SDK exposes 227 methods including ready-made framework integrations:</p>
 <pre><code class="language-python"># LangChain — auto-log LLM calls, tool use, and costs
 from dashclaw.integrations.langchain import DashClawCallbackHandler
 agent.run(&quot;Hello world&quot;, callbacks=[DashClawCallbackHandler(claw)])
@@ -358,7 +362,7 @@ DashClawAutoGenIntegration(claw).instrument_agent(assistant)
 </code></pre>
 <p>It intercepts every tool-use call (<code>before_tool_call</code>, <code>llm_output</code>, <code>after_tool_call</code>, <code>agent_end</code>), calls guard / record / waitForApproval automatically, and ships a <code>HOOK.md</code> the <code>openclaw</code> CLI installs. Tool-classification vocabulary aligns with DashClaw guard action types so policies behave consistently across plugin, hook, and SDK paths.</p>
 <h4>5. Direct REST API and webhooks</h4>
-<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>259 routes</strong>: 46 stable, 23 beta, 190 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
+<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>259 routes</strong>: 46 stable, 24 beta, 189 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
 <h4>6. Skills — governance protocol + live platform reference</h4>
 <p>Two drop-in skills, both available as zip bundles or source directories in <a href="./public/downloads/"><code>public/downloads/</code></a> and auto-bundled into the coding-agent plugins:</p>
 <ul>
@@ -484,6 +488,7 @@ await claw.createAction({ /* ... */, idempotency_key: key });
 <li><strong>Outcomes are durable.</strong> The five-state finality machine guarantees no silent double-execute on retry, and the sweep catches lost confirmations.</li>
 <li><strong>Evidence is exportable.</strong> Compliance evidence bundles (signed manifests, JSON exports) are produced from real action records, not synthetic fixtures.</li>
 <li><strong>Prompt injection scanning is on by default.</strong> Declared goals are scanned for injection patterns. Hits are blocked at guard time.</li>
+<li><strong>Agent identity is cryptographically verified.</strong> Agents may present a JWKS-verified JWT instead of self-asserting <code>agent_id</code>. DashClaw checks the signature against the issuer&#39;s published keys (EdDSA / RSA / ECDSA), rejects replayed tokens, and can bind a token to its intended action — the verified <code>sub</code> overrides any body-supplied <code>agent_id</code>. Fail-soft: a downed issuer never blocks a decision. See <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/agent-identity.md"><code>docs/agent-identity.md</code></a>.</li>
 </ol>
 <p>The full architecture map lives in <a href="https://github.com/ucsandman/DashClaw/blob/main/PROJECT_DETAILS.md"><code>PROJECT_DETAILS.md</code></a>. The runtime API contract is in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/runtime-api.md"><code>docs/architecture/runtime-api.md</code></a>.</p>
 <hr>
@@ -581,6 +586,7 @@ await claw.createAction({ /* ... */, idempotency_key: key });
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/sdk/README.md">Node SDK reference</a>: canonical reference for the <code>dashclaw</code> npm package.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/sdk-python/README.md">Python SDK reference</a>: same surface, snake_case.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/sdk-parity.md">SDK parity matrix</a>: Node v2 vs Python coverage.</li>
+<li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/agent-identity.md">Agent identity guide</a>: JWKS verification, replay protection, and action binding (Phase 2 / 2b / 2c).</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/runtime-api.md">Runtime API contract</a>: minimal core governance endpoints.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md">API inventory</a>: full route list with maturity tier.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/durable-execution-finality.md">Durable execution finality spec</a>: five-state machine, sweep, idempotency.</li>
@@ -625,7 +631,7 @@ await claw.createAction({ /* ... */, idempotency_key: key });
         <div class="name"><span class="org">JackTheGit /</span> hermes-ai-infrastructure-monitoring-toolkit</div>
       </a>
       <a class="related-row" href="/projects/bigph00t/hermescraft">
-        <div class="stars">★ 34</div>
+        <div class="stars">★ 35</div>
         <div class="name"><span class="org">bigph00t /</span> hermescraft</div>
       </a>
       <a class="related-row" href="/projects/hxsteric/mercury">

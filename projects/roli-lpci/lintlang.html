@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/roli-lpci/lintlang#software",
   "name": "lintlang",
-  "description": "lintlang is a static analysis tool designed to identify structural and linguistic failures in AI agent configurations, system prompts, and tool definitions. It utilizes regex and AST-based heuristics rather than LLM calls to detect issues like vague tool descriptions and missing termination conditions. This approach ensures deterministic, zero-cost scans that run in approximately 2ms per file. The tool is intended for use in CI/CD pipelines to prevent prompt drift and logic errors before runtime",
+  "description": "lintlang is a static linter designed to identify structural flaws in AI agent configurations, tool descriptions, and system prompts. It utilizes regex and AST-based heuristics rather than LLM calls to detect issues like vague tool descriptions, missing termination conditions, and schema-intent mismatches. This approach ensures deterministic, zero-cost quality gating that can be integrated directly into CI/CD pipelines. By catching language-level failures before runtime, it prevents common agent ",
   "url": "https://hermesatlas.com/projects/roli-lpci/lintlang",
   "codeRepository": "https://github.com/roli-lpci/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "roli-lpci",
     "url": "https://github.com/roli-lpci"
   },
-  "dateModified": "2026-05-26T02:22:13.000Z",
+  "dateModified": "2026-05-31T03:47:37.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-05-26</span>
+    <span><span class="meta-label">updated</span>2026-05-31</span>
   </div>
 
   <div class="actions">
@@ -131,10 +131,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">lintlang is a static analysis tool designed to identify structural and linguistic failures in AI agent configurations, system prompts, and tool definitions. It utilizes regex and AST-based heuristics rather than LLM calls to detect issues like vague tool descriptions and missing termination conditions. This approach ensures deterministic, zero-cost scans that run in approximately 2ms per file. The tool is intended for use in CI/CD pipelines to prevent prompt drift and logic errors before runtime.</p>
+    <p class="summary-text">lintlang is a static linter designed to identify structural flaws in AI agent configurations, tool descriptions, and system prompts. It utilizes regex and AST-based heuristics rather than LLM calls to detect issues like vague tool descriptions, missing termination conditions, and schema-intent mismatches. This approach ensures deterministic, zero-cost quality gating that can be integrated directly into CI/CD pipelines. By catching language-level failures before runtime, it prevents common agent behaviors such as infinite looping and incorrect tool selection.</p>
     <ul class="summary-highlights">
-      <li>Deterministic structural analysis using 7 specific detector patterns (H1–H7)</li>
-      <li>Zero LLM calls for cost-effective and offline CI integration</li>
+      <li>Runs zero-LLM quality gating for deterministic, cost-free CI scans</li>
+      <li>Detects 7 structural failure modes using regex and AST heuristics</li>
       <li>Supports YAML, JSON, plain text, and .prompt file formats</li>
     </ul>
   </div>
@@ -144,7 +144,7 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <h2>lintlang</h2>
-<p><strong>Static linter for AI agent configs, system prompts, and tool definitions. 7 structural detectors (H1–H7), 6 HERM v1.1 scoring dimensions, validated against 28 comparison files. 154 tests (including a CI-mechanical doc-consistency gate), 0 LLM calls per scan, ~2ms per file.</strong> Reproduce: <code>bash evals/sample-detection-rate.sh</code> flags 4-of-4 known-bad samples and passes 1-of-1 clean — same input, same output, every run.</p>
+<p><strong>lintlang is a static linter for AI agent configs, tool descriptions, and system prompts that runs zero-LLM quality gating in CI. 7 structural detectors (H1–H7), 6 HERM v1.1 scoring dimensions, validated against 28 comparison files. 154 tests (including a CI-mechanical doc-consistency gate), 0 LLM calls per scan, ~2ms per file.</strong> Reproduce: <code>bash evals/sample-detection-rate.sh</code> flags 4-of-4 known-bad samples and passes 1-of-1 clean — same input, same output, every run.</p>
 <p>AI agent configs fail for language reasons long before they fail for code reasons: vague tool descriptions, missing stop conditions, and schema fields that say nothing useful.</p>
 <p><code>lintlang</code> catches those language-level failures before they hit CI, runtime, or human review — without calling a model.</p>
 <ul>
@@ -471,48 +471,7 @@ pytest
 <p><a href="LICENSE">Apache 2.0</a></p>
 <hr>
 <h3>About Hermes Labs</h3>
-<p>Hermes Labs is building the reliability stack for the agent era. Memory, 
-evaluation, observability, containment. Founded 2025 by Rolando 
-(Roli) Bosch, solo founder, AI-amplified (&quot;cyborg engineering&quot;). Based 
-in the San Francisco Bay Area.</p>
-<p>The technical thesis: language sets the capability and intelligence; the 
-model is the ceiling, not the source. Reliability is a question of 
-linguistic infrastructure, not model tuning. Formalized as LPCI 
-(Linguistically Persistent Cognitive Interface) — transfer entropy ≈ 0 
-in embedding-space proxy, Markov property holds, the substrate is 
-linguistic. The engineering follow-on: when language is the substrate, 
-the engineering is interpretive — recovering meaning across the 
-boundaries between model and user, session and session, training and 
-runtime.</p>
-<p>Public technical receipts. The flagship open-source release is fidelis 
-— zero-LLM agent memory with integer-pointer fidelity. 73.0% end-to-end 
-QA on LongMemEval-S, Wilson 95% CI [68.7%, 77.0%], at $0 per query, 
-fully local. Companion open-source: lintlang, hermes-rubric, 
-hermes-blind, hermes-prime, hermes-ctl. Published research at 
-zenodo.org and the Hermes Labs paper line. The OSS surface is the 
-proof; the commercial work is enterprise deployments.</p>
-<p>For enterprise deployments and AI-reliability engagements: 
-<a href="mailto:rbosch@lpci.ai">rbosch@lpci.ai</a> · lpci.ai</p>
-<p>On naming. Hermes Labs is named for Hermes, the Greek messenger god — 
-patron of communication and interpretation, the herald who carries 
-meaning between worlds. The thread to the work: hermeneutics, the 
-theory of interpretation that takes its name from Hermes, is the 
-philosophical anchor for an AI infrastructure company whose substrate 
-is linguistic. Not affiliated with NousResearch&#39;s Hermes LLM line or 
-their hermes-agent framework — different companies, different work.</p>
-<p>Founder: Rolando (Roli) Bosch. 
-Site: hermes-labs.ai
-Citation: Bosch, R. (2026). Hermes Labs: AI reliability infrastructure 
-for autonomous agents. <a href="https://hermes-labs.ai">https://hermes-labs.ai</a></p>
-<p>Quantitative sources for claims above:</p>
-<ul>
-<li>fidelis 73.0% / Wilson 95% CI [68.7%, 77.0%]: see fidelis/README.md 
-&quot;End-to-end QA accuracy&quot; + experiments/zeroLLM-FLAGSHIP-evidence/, 
-470 questions, eval date 2026-04-24</li>
-<li>LPCI thesis (TE ≈ 0 embedding-space proxy): langquant repo, commit 
-dd918cc (2026-03-28) &quot;LPCI PROVED&quot; + lpci_rigorous.py:507-571</li>
-<li>24-failure taxonomy: hermes-rubric/calibration/failure-mode-taxonomy.md</li>
-</ul>
+<p>Hermes Labs is an independent AI-reliability lab building open-source tools that catch silent failure modes in production AI. More at <a href="https://hermes-labs.ai">hermes-labs.ai</a>.</p>
 
   </section>
 </details>
@@ -525,11 +484,11 @@ dd918cc (2026-03-28) &quot;LPCI PROVED&quot; + lpci_rigorous.py:507-571</li>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 33.6K</div>
+        <div class="stars">★ 34.7K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 419</div>
+        <div class="stars">★ 420</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -537,19 +496,19 @@ dd918cc (2026-03-28) &quot;LPCI PROVED&quot; + lpci_rigorous.py:507-571</li>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
-        <div class="stars">★ 54</div>
+        <div class="stars">★ 56</div>
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/junhoyeo/tokscale">
-        <div class="stars">★ 3.3K</div>
+        <div class="stars">★ 3.4K</div>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 413</div>
+        <div class="stars">★ 417</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
-        <div class="stars">★ 110</div>
+        <div class="stars">★ 111</div>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">

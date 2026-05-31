@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a local-first memory layer designed to provide AI agents with persistent, private long-term memory. It utilizes a SQLite-backed architecture featuring a Bilevel Episodic-Associative Memory (BEAM) system that combines working memory, episodic memory, and a temporal knowledge graph. The system employs hybrid scoring and binary vector compression to enable efficient search without external vector databases. It integrates with various platforms via an SDK or the Model Context Protocol (",
+  "description": "Mnemosyne is a private memory layer designed to provide AI agents with persistent, long-term context without cloud dependencies. It utilizes a SQLite-backed architecture incorporating sqlite-vec and FTS5 to manage working memory, episodic memory, and a temporal knowledge graph. The system integrates with various platforms via the Model Context Protocol (MCP) or a direct Python SDK. It supports advanced features like entity extraction, temporal triples, and episodic compression for efficient stor",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-05-29T17:39:08.000Z",
+  "dateModified": "2026-05-30T21:40:39.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 745
+    "userInteractionCount": 772
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents and Everyone Else!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 745</span>
+    <span class="stars">★ 772</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-29</span>
+    <span><span class="meta-label">updated</span>2026-05-30</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a local-first memory layer designed to provide AI agents with persistent, private long-term memory. It utilizes a SQLite-backed architecture featuring a Bilevel Episodic-Associative Memory (BEAM) system that combines working memory, episodic memory, and a temporal knowledge graph. The system employs hybrid scoring and binary vector compression to enable efficient search without external vector databases. It integrates with various platforms via an SDK or the Model Context Protocol (MCP), supporting tools like Cursor, Claude Code, and OpenWebUI.</p>
+    <p class="summary-text">Mnemosyne is a private memory layer designed to provide AI agents with persistent, long-term context without cloud dependencies. It utilizes a SQLite-backed architecture incorporating sqlite-vec and FTS5 to manage working memory, episodic memory, and a temporal knowledge graph. The system integrates with various platforms via the Model Context Protocol (MCP) or a direct Python SDK. It supports advanced features like entity extraction, temporal triples, and episodic compression for efficient storage.</p>
     <ul class="summary-highlights">
-      <li>Zero-dependency, SQLite-backed storage with sub-millisecond performance</li>
-      <li>Hybrid search using vector similarity, FTS5, and importance scoring</li>
-      <li>MCP-ready integration for Cursor, Claude Code, and other agents</li>
+      <li>Zero-dependency SQLite storage with sub-millisecond retrieval latency</li>
+      <li>MCP support for Cursor, Claude Code, and Windsurf integrations</li>
+      <li>Bilevel Episodic-Associative Memory (BEAM) for tiered context management</li>
     </ul>
   </div>
 </section>
@@ -269,8 +269,39 @@ results = recall(&quot;user preferences&quot;)
 <p><strong>OpenWebUI:</strong> Drop a 1-line bridge file into <code>data/tools/</code>.</p>
 <p><strong>OpenClaw:</strong> Add <code>provider: mnemosyne.integrations.openclaw:create_provider</code> to config.</p>
 <hr>
-<h3>Benchmark</h3>
-<p>Mnemosyne v3 scores <strong>65.2%</strong> on the <a href="https://github.com/mohammadtavakoli78/BEAM">BEAM</a> long-context memory benchmark (ICLR 2026) at 100K scale — competitive with cloud alternatives while running fully offline, all in a single SQLite file.</p>
+<h3>Benchmarks</h3>
+<p>Mnemosyne holds top-tier scores on the two major memory benchmarks, <strong>LongMemEval</strong> (ICLR 2025) and <strong>BEAM</strong> (ICLR 2026), both in one SQLite file, zero cloud dependencies.</p>
+<h4>LongMemEval (retrieval)</h4>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Score</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Mnemosyne (dense)</strong></td>
+<td><strong>98.9% Recall@All@5</strong></td>
+<td>Apr 2026, bge-small-en-v1.5, 100 instances</td>
+</tr>
+<tr>
+<td>Mempalace</td>
+<td>96.6% Recall@5</td>
+<td>AAAK + Palace architecture</td>
+</tr>
+<tr>
+<td>Backboard</td>
+<td>93.4%</td>
+<td>Independent assessment</td>
+</tr>
+<tr>
+<td>Hindsight</td>
+<td>91.4%</td>
+<td>Vectorize.io</td>
+</tr>
+</tbody></table>
+<h4>BEAM (end-to-end QA)</h4>
 <table>
 <thead>
 <tr>
@@ -292,7 +323,48 @@ results = recall(&quot;user preferences&quot;)
 </tr>
 </tbody></table>
 <p>Per-ability (100K): IE 91.5% · MR 87.5% · TR 75.0% · ABS 100.0% · CR 50.0% · KU 50.0% · EO 25.0% · IF 62.5% · PF 54.5% · SUM 55.6%</p>
-<p>Full report: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/beam-benchmark.md">docs/beam-benchmark.md</a></p>
+<h4>BEAM retrieval (pure recall)</h4>
+<table>
+<thead>
+<tr>
+<th>Scale</th>
+<th>Recall@10</th>
+<th>Latency</th>
+<th>Storage</th>
+<th>Messages</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>100K</td>
+<td>20%</td>
+<td>372ms</td>
+<td>1.8 MB</td>
+<td>200</td>
+</tr>
+<tr>
+<td>500K</td>
+<td>20%</td>
+<td>412ms</td>
+<td>3.2 MB</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td>1M</td>
+<td>20%</td>
+<td>493ms</td>
+<td>4.8 MB</td>
+<td>2,000</td>
+</tr>
+<tr>
+<td><strong>10M</strong></td>
+<td><strong>20%</strong></td>
+<td><strong>35ms</strong></td>
+<td><strong>7.2 MB</strong></td>
+<td><strong>20,000</strong></td>
+</tr>
+</tbody></table>
+<p>Recall holds flat across all scales. <strong>100% abstention accuracy</strong>, never hallucinates on unknowns. Episodic compression delivers 9.4x storage savings.</p>
+<p>Full reports: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/beam-benchmark.md">docs/beam-benchmark.md</a></p>
 <hr>
 <h3>CLI Usage</h3>
 <pre><code class="language-bash"># MCP server (works with any MCP client)
@@ -472,7 +544,7 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
 </tr>
 <tr>
 <td><strong>Benchmark</strong></td>
-<td><strong>65.2% BEAM</strong></td>
+<td><strong>65.2% BEAM / 98.9% LongMem</strong></td>
 <td>49% LongMem</td>
 <td>83.2% LoCoMo</td>
 <td><strong>90.4% LongMem</strong></td>
@@ -648,11 +720,11 @@ hermes memory setup
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 57.1K</div>
+        <div class="stars">★ 57.2K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 15.2K</div>
+        <div class="stars">★ 15.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -660,19 +732,19 @@ hermes memory setup
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 271</div>
+        <div class="stars">★ 276</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 178</div>
+        <div class="stars">★ 179</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 176</div>
+        <div class="stars">★ 177</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 145</div>
+        <div class="stars">★ 146</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
