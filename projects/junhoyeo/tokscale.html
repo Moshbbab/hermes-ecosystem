@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a high-performance CLI tool designed to monitor and analyze token consumption and costs across various AI coding agents. It functions by parsing local data files and databases from multiple client environments to aggregate usage statistics. Users can access these insights through a native Rust-based TUI or a visualization dashboard. The tool supports a wide range of integrations including Claude Code, Hermes Agent, Cursor, and GitHub Copilot CLI.",
+  "description": "Tokscale is a high-performance CLI tool and visualization dashboard designed to track token consumption and costs across various AI coding agents. It works by scanning local application data directories, databases, and session logs to aggregate usage metrics into a centralized interface. The tool features a native Rust TUI for cross-platform monitoring and provides detailed daily summaries and statistics. It supports a wide range of clients including Hermes Agent, Claude Code, GitHub Copilot CLI",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-05-30T13:32:28.000Z",
+  "dateModified": "2026-05-31T20:11:52.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 3358
+    "userInteractionCount": 3424
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-30</span>
+    <span><span class="meta-label">updated</span>2026-05-31</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a high-performance CLI tool designed to monitor and analyze token consumption and costs across various AI coding agents. It functions by parsing local data files and databases from multiple client environments to aggregate usage statistics. Users can access these insights through a native Rust-based TUI or a visualization dashboard. The tool supports a wide range of integrations including Claude Code, Hermes Agent, Cursor, and GitHub Copilot CLI.</p>
+    <p class="summary-text">Tokscale is a high-performance CLI tool and visualization dashboard designed to track token consumption and costs across various AI coding agents. It works by scanning local application data directories, databases, and session logs to aggregate usage metrics into a centralized interface. The tool features a native Rust TUI for cross-platform monitoring and provides detailed daily summaries and statistics. It supports a wide range of clients including Hermes Agent, Claude Code, GitHub Copilot CLI, and Cursor IDE.</p>
     <ul class="summary-highlights">
-      <li>Native Rust TUI for high-performance terminal visualization</li>
-      <li>Tracks token usage across numerous AI coding agents</li>
-      <li>Provides a dashboard for monitoring usage and costs</li>
+      <li>Tracks token usage and costs across multiple AI coding agents</li>
+      <li>Features a native Rust TUI for high-performance local monitoring</li>
+      <li>Integrates with Hermes Agent, Claude Code, and 20+ other clients</li>
     </ul>
   </div>
 </section>
@@ -369,6 +369,12 @@ I drop new open-source work every week. Don&#39;t miss the next one.</p>
 <td>✅ Yes</td>
 </tr>
 <tr>
+<td>Warp/Oz</td>
+<td><a href="https://www.warp.dev/">Warp</a> / Oz</td>
+<td>Cached via <code>tokscale warp sync</code> to <code>~/.config/tokscale/warp-cache/usage.json</code> (aggregate requests and spend only; no token transcripts)</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-zed.webp" alt="Zed Agent" /></td>
 <td><a href="https://zed.dev/docs/ai/agent-panel">Zed Agent</a></td>
 <td><code>~/.local/share/zed/threads/threads.db</code> (macOS: <code>~/Library/Application Support/Zed/threads/threads.db</code>; Windows: <code>%LOCALAPPDATA%/Zed/threads/threads.db</code>; hosted Zed models only, not external ACP agents)</td>
@@ -416,6 +422,7 @@ I drop new open-source work every week. Don&#39;t miss the next one.</p>
 <li><a href="#cursor-ide-commands">Cursor IDE Commands</a></li>
 <li><a href="#antigravity-commands">Antigravity Commands</a></li>
 <li><a href="#trae-commands">Trae Commands</a></li>
+<li><a href="#warpoz-commands">Warp/Oz Commands</a></li>
 <li><a href="#subscription-usage">Subscription Usage</a></li>
 <li><a href="#example-output---light-version">Example Output</a></li>
 <li><a href="#configuration">Configuration</a></li>
@@ -981,6 +988,22 @@ tokscale trae logout --variant solo
 <blockquote>
 <p><strong>China variants</strong>: The China editions (<code>trae.com.cn</code>) are intentionally <strong>not</strong> supported. The CN backend does not expose a session-level usage query API. Trae CN / Trae Solo CN support will be added once an official endpoint becomes available upstream.</p>
 </blockquote>
+<h4>Warp/Oz Commands</h4>
+<p>Warp/Oz does not expose local token transcripts. Tokscale only syncs the aggregate request and spend counters returned by Warp&#39;s GraphQL API, then reports them as <code>warp</code> / <code>aggregate-requests</code> rows with zero token buckets.</p>
+<pre><code class="language-bash"># Save a bearer token or Cookie header copied from an authenticated Warp request
+tokscale warp login
+
+# Inspect credential/cache state and diagnostics
+tokscale warp status
+
+# Sync aggregate requests and spend into tokscale&#39;s local cache
+tokscale warp sync
+
+# Remove saved credentials; add --purge-cache to delete synced usage too
+tokscale warp logout --purge-cache
+</code></pre>
+<p><strong>Cache location</strong>: <code>~/.config/tokscale/warp-cache/usage.json</code></p>
+<p><strong>How it works</strong>: <code>tokscale warp sync</code> calls Warp&#39;s authenticated GraphQL API for account and workspace aggregate counters. Tokscale preserves request counts as message counts and vendor-reported spend as cost, but it never converts requests into synthetic tokens. Warp is excluded from default <code>submit</code> data because the public leaderboard accepts token-attributed usage, not aggregate request counters.</p>
 <h4>Subscription Usage</h4>
 <p>Tokscale can fetch and display your real-time subscription quota across AI providers. This shows how much of your plan you&#39;ve used and when limits reset.</p>
 <pre><code class="language-bash"># Show subscription usage for all detected providers
@@ -1414,44 +1437,10 @@ customize the design.</p>
 </thead>
 <tbody><tr>
 <td align="center"><img src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/wrapped-2025-agents.png" alt="Wrapped 2025 (Agents + Pin Sisyphus)"></td>
-<td align="center"><img src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/wrapped-2025-clients.png" alt="Wrapped 2025 (Clients)"></td>
-<td align="center"><img src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/wrapped-2025-agents-disable-pinned.png" alt="Wrapped 2025 (Agents + Disable Pinned)"></td>
+<td align="center">![Wrapped 202</td>
+<td align="center"></td>
 </tr>
 </tbody></table>
-<h4>Command</h4>
-<pre><code class="language-bash"># Generate wrapped image for current year
-tokscale wrapped
-
-# Generate for a specific year
-tokscale wrapped --year 2025
-</code></pre>
-<h4>What&#39;s Included</h4>
-<p>The generated image includes:</p>
-<ul>
-<li><strong>Total Tokens</strong> - Your total token consumption for the year</li>
-<li><strong>Top Models</strong> - Your 3 most-used AI models ranked by cost</li>
-<li><strong>Top Clients</strong> - Your 3 most-used platforms (OpenCode, Claude Code, Cursor, etc.)</li>
-<li><strong>Messages</strong> - Total number of AI interactions</li>
-<li><strong>Active Days</strong> - Days with at least one AI interaction</li>
-<li><strong>Cost</strong> - Estimated total cost based on LiteLLM pricing</li>
-<li><strong>Streak</strong> - Your longest consecutive streak of active days</li>
-<li><strong>Contribution Graph</strong> - A visual heatmap of your yearly activity</li>
-</ul>
-<p>The generated PNG is optimized for sharing on social media. Share your coding journey with the community!</p>
-<h3>Development</h3>
-<blockquote>
-<p><strong>Quick setup</strong>: If you just want to get started quickly, see <a href="#development-setup">Development Setup</a> in the Installation section above.</p>
-</blockquote>
-<h4>Prerequisites</h4>
-<pre><code class="language-bash"># Bun (required)
-bun --version
-
-# Rust (for native module)
-rustc --version
-cargo --version
-</code></pre>
-<h4>How to Run</h4>
-<p>After following the <a href="#development-setup">Development Setup</a>, you ca</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
@@ -1466,23 +1455,23 @@ cargo --version
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 34.7K</div>
+        <div class="stars">★ 36.0K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 420</div>
+        <div class="stars">★ 422</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
-        <div class="stars">★ 1.0K</div>
+        <div class="stars">★ 1.1K</div>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
-        <div class="stars">★ 56</div>
+        <div class="stars">★ 57</div>
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 417</div>
+        <div class="stars">★ 420</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -1490,7 +1479,7 @@ cargo --version
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 84</div>
+        <div class="stars">★ 85</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">

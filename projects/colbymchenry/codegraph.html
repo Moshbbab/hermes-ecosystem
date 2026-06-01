@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local pre-indexed code knowledge graph designed to reduce token consumption and tool call frequency for coding agents. It replaces expensive file scanning and grep operations by providing agents with instant access to symbol relationships, call graphs, and code structure. This approach lowers operational costs and increases speed across various codebase sizes and languages. It integrates with agents including Hermes Agent, Claude Code, Cursor, and Gemini.",
+  "description": "CodeGraph is a local pre-indexed knowledge graph designed to reduce token consumption and tool calls for AI coding agents. It replaces expensive file scanning and grep operations by providing agents with immediate access to symbol relationships, call graphs, and code structure. This approach allows agents to answer architectural questions faster and more cheaply by querying the graph instead of reading multiple files. It integrates with various agents including Hermes Agent, Claude Code, Cursor,",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-05-31T03:09:48.000Z",
+  "dateModified": "2026-06-01T00:22:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 34668
+    "userInteractionCount": 36005
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 34.7K</span>
+    <span class="stars">★ 36.0K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-31</span>
+    <span><span class="meta-label">updated</span>2026-06-01</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local pre-indexed code knowledge graph designed to reduce token consumption and tool call frequency for coding agents. It replaces expensive file scanning and grep operations by providing agents with instant access to symbol relationships, call graphs, and code structure. This approach lowers operational costs and increases speed across various codebase sizes and languages. It integrates with agents including Hermes Agent, Claude Code, Cursor, and Gemini.</p>
+    <p class="summary-text">CodeGraph is a local pre-indexed knowledge graph designed to reduce token consumption and tool calls for AI coding agents. It replaces expensive file scanning and grep operations by providing agents with immediate access to symbol relationships, call graphs, and code structure. This approach allows agents to answer architectural questions faster and more cheaply by querying the graph instead of reading multiple files. It integrates with various agents including Hermes Agent, Claude Code, Cursor, and Gemini.</p>
     <ul class="summary-highlights">
       <li>Reduces tool calls by 62% and costs by 25% on average</li>
-      <li>100% local indexing with no Node.js runtime required</li>
-      <li>Supports multiple agents via MCP server configuration</li>
+      <li>Provides local symbol relationships and call graphs for AI agents</li>
+      <li>Supports multiple agents including Hermes, Cursor, and Claude Code</li>
     </ul>
   </div>
 </section>
@@ -1144,7 +1144,12 @@ fi
 </tbody></table>
 <hr>
 <h3>Library Usage</h3>
+<p>CodeGraph can be embedded directly. The npm package re-exports its programmatic
+API, so both <code>import</code> and <code>require</code> resolve the <code>CodeGraph</code> class in your own
+process — handy for embedding it in an app (e.g. an Electron main process).</p>
 <pre><code class="language-typescript">import CodeGraph from &#39;@colbymchenry/codegraph&#39;;
+// CommonJS works too:
+//   const { CodeGraph } = require(&#39;@colbymchenry/codegraph&#39;);
 
 const cg = await CodeGraph.init(&#39;/path/to/project&#39;);
 // Or: const cg = await CodeGraph.open(&#39;/path/to/project&#39;);
@@ -1162,6 +1167,20 @@ cg.watch();   // auto-sync on file changes
 cg.unwatch(); // stop watching
 cg.close();
 </code></pre>
+<p>Lower-level building blocks are exported from the same entry point for callers
+that drive the graph directly: <code>DatabaseConnection</code>, <code>QueryBuilder</code>,
+<code>getDatabasePath</code>, <code>initGrammars</code> / <code>loadGrammarsForLanguages</code>, and <code>FileLock</code>.</p>
+<p><strong>Embedding requirements</strong></p>
+<ul>
+<li>Install from npm (<code>npm i @colbymchenry/codegraph</code>) so the matching
+per-platform package — which carries the compiled library and its
+dependencies — is fetched alongside the shim.</li>
+<li>The API runs on <strong>your</strong> runtime, so it needs <strong>Node 22.5+</strong> for the built-in
+<code>node:sqlite</code> (Electron qualifies when its bundled Node is 22.5+). The CLI and
+MCP server are unaffected — they run on the self-contained bundled runtime.</li>
+<li>TypeScript types ship with the package. As with any Node-targeting library,
+keep <code>@types/node</code> available and <code>skipLibCheck: true</code> (the common default).</li>
+</ul>
 <hr>
 <h3>Configuration</h3>
 <p>There isn&#39;t any — CodeGraph is zero-config, with <strong>no config file</strong> to write or
@@ -1383,15 +1402,15 @@ is written):</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 420</div>
+        <div class="stars">★ 422</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
-        <div class="stars">★ 1.0K</div>
+        <div class="stars">★ 1.1K</div>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
-        <div class="stars">★ 56</div>
+        <div class="stars">★ 57</div>
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/junhoyeo/tokscale">
@@ -1399,7 +1418,7 @@ is written):</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 417</div>
+        <div class="stars">★ 420</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -1407,7 +1426,7 @@ is written):</p>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 84</div>
+        <div class="stars">★ 85</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">
