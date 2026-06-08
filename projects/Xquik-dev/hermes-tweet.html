@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Xquik-dev/hermes-tweet#software",
   "name": "hermes-tweet",
-  "description": "Hermes Tweet is a native plugin that enables Hermes Agent to perform X automation via Xquik. It integrates 99 OpenAPI-generated endpoints as structured tools for tasks such as searching, posting, and monitoring trends. The plugin separates read and action tools to maintain a least-privilege security model, with action endpoints disabled by default. It is designed for workflows including social listening, brand research, and controlled publishing.",
+  "description": "Hermes Tweet is a native plugin for the Hermes Agent that enables automated interaction with X via the Xquik API. It converts 99 Xquik endpoints into structured tools for tasks such as searching, posting, and monitoring trends. The plugin separates read and action tools to ensure a least-privilege security model, with write capabilities disabled by default. It is designed for workflows like social listening, brand research, and support triage.",
   "url": "https://hermesatlas.com/projects/Xquik-dev/hermes-tweet",
   "codeRepository": "https://github.com/Xquik-dev/hermes-tweet",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Xquik-dev",
     "url": "https://github.com/Xquik-dev"
   },
-  "dateModified": "2026-06-07T14:54:56.000Z",
+  "dateModified": "2026-06-08T04:34:53.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -115,7 +115,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-07</span>
+    <span><span class="meta-label">updated</span>2026-06-08</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Tweet is a native plugin that enables Hermes Agent to perform X automation via Xquik. It integrates 99 OpenAPI-generated endpoints as structured tools for tasks such as searching, posting, and monitoring trends. The plugin separates read and action tools to maintain a least-privilege security model, with action endpoints disabled by default. It is designed for workflows including social listening, brand research, and controlled publishing.</p>
+    <p class="summary-text">Hermes Tweet is a native plugin for the Hermes Agent that enables automated interaction with X via the Xquik API. It converts 99 Xquik endpoints into structured tools for tasks such as searching, posting, and monitoring trends. The plugin separates read and action tools to ensure a least-privilege security model, with write capabilities disabled by default. It is designed for workflows like social listening, brand research, and support triage.</p>
     <ul class="summary-highlights">
-      <li>99 agent-callable Xquik endpoints generated from OpenAPI</li>
-      <li>Least-privilege security with disabled action endpoints by default</li>
-      <li>Installable via PyPI with a native Hermes plugin entry point</li>
+      <li>Provides 99 OpenAPI-generated endpoints for X automation</li>
+      <li>Separates read and action tools for enhanced security</li>
+      <li>Includes bundled skills and slash commands for agent guidance</li>
     </ul>
   </div>
 </section>
@@ -173,6 +173,8 @@ media automation for agents, or a native Hermes toolset for X/Twitter.</p>
 <li>Action endpoints are disabled by default.</li>
 <li>Bundled Hermes skill for agent-facing usage guidance.</li>
 <li>Slash commands for account status and trends.</li>
+<li>Current guidance for Hermes Agent v0.16.0 Desktop, remote gateway, and
+dashboard credential workflows.</li>
 <li>Strict CI with formatting, linting, type checking, tests, coverage, security
 scan, dependency audit, and package build checks.</li>
 </ul>
@@ -210,6 +212,12 @@ hermes plugins enable hermes-tweet
 installing the plugin into <code>~/.hermes/plugins/</code> or through the PyPI entry point,
 start Hermes with <code>HERMES_ENABLE_PROJECT_PLUGINS=true</code> only for trusted
 repositories.</p>
+<p>Hermes Agent v0.16.0 adds a native desktop app and remote gateway profiles.
+For a remote gateway profile, install and enable Hermes Tweet on the remote
+Hermes host because that is where plugin code executes and where
+<code>XQUIK_API_KEY</code> must be available. The desktop app is the chat surface; it
+should not receive or store the key unless it is also running the Hermes
+runtime locally.</p>
 <h3>Python Package</h3>
 <table>
 <thead>
@@ -344,6 +352,18 @@ account actions:</p>
 <td>Controlled publishing</td>
 <td>Enable <code>HERMES_TWEET_ENABLE_ACTIONS=true</code> only in sessions that require posting, DMs, follows, webhooks, monitors, or media changes.</td>
 </tr>
+<tr>
+<td>Desktop operator sessions</td>
+<td>Use Hermes Desktop for interactive review, then keep action calls explicit and approval-gated.</td>
+</tr>
+<tr>
+<td>Remote gateway teams</td>
+<td>Install Hermes Tweet and set <code>XQUIK_API_KEY</code> on the remote gateway host, then connect Desktop profiles to that host.</td>
+</tr>
+<tr>
+<td>Dashboard-administered agents</td>
+<td>Use the dashboard for gateway and credential operations, but keep Hermes Tweet secrets in the runtime environment.</td>
+</tr>
 </tbody></table>
 <p>For marketing or user education, position Hermes Tweet as a native Hermes Agent
 plugin, not a generic API wrapper: it ships a PyPI entry point, a <code>plugin.yaml</code>
@@ -356,10 +376,23 @@ toolset flows, so teams can keep X automation available only where it belongs.
 Current Hermes Agent releases discover third-party plugins but do not execute
 them until they are enabled in <code>plugins.enabled</code>, through <code>hermes plugins enable</code>,
 or by installing with <code>--enable</code>. This is expected safety behavior for user and
-PyPI entry-point plugins.
-For non-interactive smoke tests and CI-style diagnostics, use
+PyPI entry-point plugins.</p>
+<p>Hermes Agent v0.16.0 expands the surfaces where the same toolset can appear:
+the native Desktop app, remote gateway profiles, the web dashboard, the TUI,
+and the CLI can all route work to the enabled runtime. Hermes Tweet does not
+need a different plugin entry point for those surfaces. It needs the same
+enabled plugin, the same runtime environment, and the same read/action split.</p>
+<p>The v0.16.0 Desktop command palette surfaces skills and quick-command slash
+commands. Treat <code>/xstatus</code> and <code>/xtrends</code> as interactive runtime commands for
+active CLI, TUI, Desktop, or gateway sessions; keep <code>hermes -z</code> for tool-call
+smoke tests.</p>
+<p>The v0.16.0 dashboard added broader administration and credential-management
+surfaces. Those are useful for gateway operations, but Hermes Tweet still reads
+<code>XQUIK_API_KEY</code> and <code>HERMES_TWEET_ENABLE_ACTIONS</code> from the runtime environment.
+Do not paste API keys into prompts, issue bodies, PR comments, or tool inputs.</p>
+<p>For non-interactive smoke tests and CI-style diagnostics, use
 <code>hermes tools list</code>; bare <code>hermes tools</code> opens the interactive tool UI and
-requires a TTY. In Hermes v0.12.0, <code>hermes tools list</code> reports plugin toolsets,
+requires a TTY. In current Hermes Agent releases, <code>hermes tools list</code> reports plugin toolsets,
 not every individual plugin tool name.</p>
 <p>Use the read-only path for social listening, trend research, account checks,
 giveaway audits, and draft planning. Keep <code>HERMES_TWEET_ENABLE_ACTIONS=false</code>
@@ -379,10 +412,10 @@ or cron process is restarted, <code>tweet_read</code> can read <code>/api/v1/acc
 <li><code>tweet_action</code> stays hidden or disabled unless <code>HERMES_TWEET_ENABLE_ACTIONS=true</code>.</li>
 <li><code>/xstatus</code> and <code>/xtrends</code> appear in the Hermes plugin command registry.</li>
 </ul>
-<p>Hermes v0.12.0 one-shot <code>hermes -z &quot;/xstatus&quot;</code> runs as a model prompt, not as
-the interactive slash-command dispatcher. Verify slash commands in an active CLI
-or gateway session, or through the plugin registry tests, and use <code>hermes -z</code>
-for tool-call probes.</p>
+<p>Hermes one-shot <code>hermes -z &quot;/xstatus&quot;</code> can run as a model prompt, not as the
+interactive slash-command dispatcher. Verify slash commands in an active CLI,
+TUI, Desktop, or gateway session, or through the plugin registry tests, and use
+<code>hermes -z</code> for tool-call probes.</p>
 <p>If <code>hermes plugins install</code> runs without a TTY, Hermes cannot safely prompt for
 secrets and will skip API-key storage. This is expected; set <code>XQUIK_API_KEY</code>
 in the process environment or <code>~/.hermes/.env</code>.</p>
@@ -452,11 +485,11 @@ Python plugin. Both use the same Xquik API contract.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 255</div>
+        <div class="stars">★ 257</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 195</div>
+        <div class="stars">★ 197</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">

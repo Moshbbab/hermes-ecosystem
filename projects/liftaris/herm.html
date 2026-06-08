@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/liftaris/herm#software",
   "name": "herm",
-  "description": "Herm is an operator-focused terminal user interface (TUI) that centralizes the management of Hermes Agent, eliminating the need to switch between shell commands and browser windows. Built with OpenTUI and Bun, it acts as a client for the Hermes Agent gateway rather than a standalone runtime. Users can chat with the agent, manage operational surfaces like cron jobs and memory, and track agentic work via an integrated kanban board. The interface also supports a command palette, customizable keybin",
+  "description": "Herm is an operator-focused terminal user interface and dashboard that centralizes the management of Hermes Agent. It acts as a client for the Hermes Agent gateway, utilizing OpenTUI and Bun to consolidate shell commands and configuration files into a single interface. Users can chat with the agent, manage operational surfaces like cron jobs and memory, and track agentic work via a built-in kanban board. The tool also includes a system for discovering and installing terminal avatars called eikon",
   "url": "https://hermesatlas.com/projects/liftaris/herm",
   "codeRepository": "https://github.com/liftaris/herm",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "liftaris",
     "url": "https://github.com/liftaris"
   },
-  "dateModified": "2026-06-07T19:48:18.000Z",
+  "dateModified": "2026-06-08T07:40:43.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 242
+    "userInteractionCount": 243
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">The Hermes TUI built with OpenTUI</p>
 
   <div class="meta-row">
-    <span class="stars">★ 242</span>
+    <span class="stars">★ 243</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-07</span>
+    <span><span class="meta-label">updated</span>2026-06-08</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Herm is an operator-focused terminal user interface (TUI) that centralizes the management of Hermes Agent, eliminating the need to switch between shell commands and browser windows. Built with OpenTUI and Bun, it acts as a client for the Hermes Agent gateway rather than a standalone runtime. Users can chat with the agent, manage operational surfaces like cron jobs and memory, and track agentic work via an integrated kanban board. The interface also supports a command palette, customizable keybindings, and a marketplace for installing eikons.</p>
+    <p class="summary-text">Herm is an operator-focused terminal user interface and dashboard that centralizes the management of Hermes Agent. It acts as a client for the Hermes Agent gateway, utilizing OpenTUI and Bun to consolidate shell commands and configuration files into a single interface. Users can chat with the agent, manage operational surfaces like cron jobs and memory, and track agentic work via a built-in kanban board. The tool also includes a system for discovering and installing terminal avatars called eikons.</p>
     <ul class="summary-highlights">
-      <li>Integrated chat with markdown, LaTeX, and inline image rendering</li>
-      <li>Kanban boards for managing and dispatching agentic work</li>
-      <li>TUI dashboard for managing profiles, skills, and environment config</li>
+      <li>Integrated chat with markdown, LaTeX, and tool call rendering</li>
+      <li>Kanban boards for dispatching and monitoring agentic work</li>
+      <li>TUI management of profiles, skills, toolsets, and environment config</li>
     </ul>
   </div>
 </section>
@@ -217,17 +217,42 @@ board.</li>
 the same shell you use for chat.</li>
 </ul>
 <h4>Share and install eikons</h4>
+<p>Eikons are 48×24 terminal avatars. The shipped lifecycle is deterministic:
+discover, inspect, install, use, update, and remove.</p>
+<p>In Herm:</p>
 <ul>
 <li>Open Eikon → Marketplace, or run <code>/marketplace</code>, to browse shared catalog
 entries.</li>
-<li>Preview the selected eikon, install without activating, then use it when
-ready.</li>
-<li>Use <code>eikon.liftaris.dev</code> as a discovery gallery only; it previews catalog
-entries and gives copyable Herm install instructions.</li>
-<li>Submit local non-bundled eikons from Studio with <code>u</code>; Herm shows the exact
-preflight bundle before submission and blocks published marketplace installs
-from duplicate submission.</li>
+<li>Preview rows before installing. Trust is shown as <code>Verified</code>, <code>Unverified</code>,
+or <code>Mismatch</code> beside source and compatibility state.</li>
+<li>Install adds the eikon to your local library without activating it.</li>
+<li>Use selects an installed eikon as the active avatar.</li>
+<li>Update or remove an active eikon only after confirming that the active
+avatar&#39;s backing package will change or be cleared.</li>
 </ul>
+<p>From the shell:</p>
+<pre><code class="language-bash">herm eikon search [query]
+herm eikon inspect &lt;name|github.com/user/repo/eikon-name|dir&gt;
+herm eikon install &lt;name|github.com/user/repo/eikon-name|dir&gt;
+herm eikon use &lt;name&gt;
+herm eikon info &lt;name&gt;
+herm eikon update &lt;name&gt; --active-ok
+herm eikon remove &lt;name&gt; --active-ok
+</code></pre>
+<p><code>install</code> never activates. <code>use</code> is the activation action. JSON output is
+available for automation with <code>--json</code>.</p>
+<p>Default Marketplace installs fetch built package artifacts referenced by the
+catalog, not creator repositories. Direct GitHub installs are for sharing
+outside the default catalog and support both single-package repos and
+multi-eikon catalog repos addressed as <code>github.com/user/repo/eikon-name</code>.
+Private GitHub repos use normal git authentication.</p>
+<p>Creators can share eikons through normal GitHub repositories. Use upstream
+<code>eikon pack</code>, <code>eikon index</code>, and <code>eikon manifest</code> to prepare single-package or
+multi-eikon repos for direct installs. <code>eikon publish</code> remains a GitHub PR
+contribution helper for the configured/default catalog repo; it is not a
+hosted marketplace account, upload, dashboard, or moderation flow.</p>
+<p>Use <code>eikon.liftaris.dev</code> as a discovery gallery only; it previews catalog
+entries and gives copyable Herm install instructions.</p>
 <p>Herm owns native Marketplace behavior. The eikon repo owns the registry,
 browser mirror, shared catalog/player exports, install resolver, and publish
 preflight. Herm imports public eikon package exports rather than browser mirror
@@ -282,7 +307,7 @@ runtime Herm operates</li>
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 11.0K</div>
+        <div class="stars">★ 11.1K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -294,7 +319,7 @@ runtime Herm operates</li>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 271</div>
+        <div class="stars">★ 281</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -302,11 +327,11 @@ runtime Herm operates</li>
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 614</div>
+        <div class="stars">★ 615</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 465</div>
+        <div class="stars">★ 466</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>

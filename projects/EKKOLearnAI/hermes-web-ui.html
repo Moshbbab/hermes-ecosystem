@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/EKKOLearnAI/hermes-web-ui#software",
   "name": "hermes-web-ui",
-  "description": "Hermes Web UI is a comprehensive desktop application and web dashboard designed to manage the Hermes Agent ecosystem. It provides a centralized interface for handling AI chat sessions, model providers, and system configurations through a Socket.IO-powered real-time bridge. The tool integrates multi-platform channel management for eight different messaging services and includes detailed usage analytics and scheduled cron job execution. Users can organize their workflows using profile-scoped setti",
+  "description": "Hermes Web UI is a comprehensive desktop and web-based management interface for the Hermes Agent. It provides a centralized dashboard to handle AI chat sessions, model configurations, and system logs through a responsive interface. The tool integrates with multiple messaging platforms and remote backends to streamline agent deployment and monitoring. Users can manage multi-agent group chats, schedule cron jobs, and track token usage and costs across different profiles.",
   "url": "https://hermesatlas.com/projects/EKKOLearnAI/hermes-web-ui",
   "codeRepository": "https://github.com/EKKOLearnAI/hermes-web-ui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -46,13 +46,13 @@
     "name": "EKKOLearnAI",
     "url": "https://github.com/EKKOLearnAI"
   },
-  "dateModified": "2026-06-07T04:08:24.000Z",
+  "dateModified": "2026-06-08T07:35:52.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 7498
+    "userInteractionCount": 7539
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -114,7 +114,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     
     
-    <span><span class="meta-label">updated</span>2026-06-07</span>
+    <span><span class="meta-label">updated</span>2026-06-08</span>
   </div>
 
   <div class="actions">
@@ -129,11 +129,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Web UI is a comprehensive desktop application and web dashboard designed to manage the Hermes Agent ecosystem. It provides a centralized interface for handling AI chat sessions, model providers, and system configurations through a Socket.IO-powered real-time bridge. The tool integrates multi-platform channel management for eight different messaging services and includes detailed usage analytics and scheduled cron job execution. Users can organize their workflows using profile-scoped settings and a built-in file browser for remote backends.</p>
+    <p class="summary-text">Hermes Web UI is a comprehensive desktop and web-based management interface for the Hermes Agent. It provides a centralized dashboard to handle AI chat sessions, model configurations, and system logs through a responsive interface. The tool integrates with multiple messaging platforms and remote backends to streamline agent deployment and monitoring. Users can manage multi-agent group chats, schedule cron jobs, and track token usage and costs across different profiles.</p>
     <ul class="summary-highlights">
       <li>Unified configuration for 8 messaging platforms including Telegram and Discord</li>
-      <li>Multi-profile management with scoped settings, memory, and model visibility</li>
-      <li>Real-time AI chat with token tracking and usage analytics</li>
+      <li>Multi-profile management with scoped configurations, memory, and skill browsing</li>
+      <li>Usage analytics for token tracking, cost estimation, and model distribution</li>
     </ul>
   </div>
 </section>
@@ -327,13 +327,19 @@ hermes-web-ui reset-default-login
 <li>Model settings (default model &amp; provider)</li>
 <li>Profile and provider configuration</li>
 </ul>
-<h4>Voice / TTS</h4>
+<h4>Voice / TTS / STT</h4>
 <ul>
 <li>Read assistant replies aloud from chat and group-chat messages.</li>
 <li>Providers: browser Web Speech, built-in Edge TTS, OpenAI-compatible <code>/audio/speech</code>, custom OpenAI-compatible TTS endpoints, and MiMo.</li>
 <li>MiMo supports preset voices, voice design prompts, and voice clone reference audio (<code>.mp3</code>/<code>.wav</code>, max 10 MB) with selectable auth header mode (<code>Authorization</code>, <code>api-key</code>, or both).</li>
 <li>Edge/OpenAI-compatible/custom/MiMo playback uses the Web UI backend&#39;s unified <code>/api/hermes/tts/synthesize</code> endpoint, so stop/pause state is shared and in-flight fetches are aborted when possible.</li>
-<li>Limitation: external TTS providers may continue processing a request after the browser/server aborts; custom/OpenAI-compatible and MiMo base URLs must be public <code>http</code>/<code>https</code> endpoints and cannot target localhost/private networks; voice-clone reference audio is stored in browser settings as a data URI, so avoid large or sensitive samples.</li>
+<li>Provider API keys and MiMo clone reference audio are saved in server-side TTS settings, with only masked secret status shown back to the browser.</li>
+<li>Save provider settings in Settings → Voice before using OpenAI/custom/MiMo playback. Message playback sends text and non-secret playback options; the backend reads the stored per-user secret when synthesizing.</li>
+<li>Turn-based voice input is available from the chat input mic control: start/stop a voice turn, transcribe it, stage the transcript in the current input box for editing, then send it with the normal Send button.</li>
+<li>Voice input / STT can use browser speech recognition when available or a server-backed provider configured in Settings → Voice.</li>
+<li>Starting a new voice turn while assistant audio is playing stops playback first. This barge-in boundary does not implicitly cancel an active agent run; stopping a run remains an explicit action.</li>
+<li>For supported settings, security notes, and current non-goals, see <a href="https://github.com/EKKOLearnAI/hermes-web-ui/blob/main/docs/voice-dialogue.md"><code>docs/voice-dialogue.md</code></a>.</li>
+<li>Limitation: external TTS providers may continue processing a request after the browser/server aborts; custom/OpenAI-compatible and MiMo base URLs must be public <code>http</code>/<code>https</code> endpoints and cannot target localhost/private networks.</li>
 </ul>
 <h4>Web Terminal</h4>
 <ul>
@@ -416,6 +422,16 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 <td>Compatibility alias for <code>HERMES_WEB_UI_HOME</code>.</td>
 </tr>
 <tr>
+<td><code>HERMES_WEB_UI_DISABLE_MCP_AUTOINJECT</code></td>
+<td>unset</td>
+<td>Disable startup injection of the managed <code>hermes-studio</code> MCP server into Hermes profile configs.</td>
+</tr>
+<tr>
+<td><code>HERMES_WEB_UI_ALLOW_TRANSIENT_MCP_AUTOINJECT</code></td>
+<td>unset</td>
+<td>Allow managed MCP injection when <code>HERMES_WEB_UI_HOME</code> is under a temporary directory, such as Version Preview runtimes.</td>
+</tr>
+<tr>
 <td><code>UPLOAD_DIR</code></td>
 <td><code>$HERMES_WEB_UI_HOME/upload</code></td>
 <td>Upload root override. Files are stored below profile-scoped subdirectories.</td>
@@ -462,7 +478,7 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 </tr>
 <tr>
 <td><code>WORKSPACE_BASE</code></td>
-<td><code>/opt/data/workspace</code></td>
+<td>current user&#39;s home directory</td>
 <td>Base directory for workspace browsing.</td>
 </tr>
 <tr>
@@ -593,7 +609,7 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 <tr>
 <td><code>HERMES_WEB_UI_DISABLE_SKILL_INJECTION</code></td>
 <td>unset</td>
-<td>Skip startup bundled skill injection. Set <code>1</code>, <code>true</code>, <code>yes</code>, or <code>on</code> when bundled skills are managed outside Web UI or target skill directories must not be overwritten.</td>
+<td>Skip startup bundled skill injection. Set <code>1</code>, <code>true</code>, <code>yes</code>, or <code>on</code> when bundled skills are managed outside Hermes Web UI. When injection is enabled, Web UI updates only skills it previously installed or identical existing bundled copies; local edits and user-owned same-name skills are skipped.</td>
 </tr>
 <tr>
 <td><code>HERMES_WEB_UI_STOP_GATEWAYS_ON_SHUTDOWN</code></td>
@@ -646,10 +662,6 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 <tr>
 <td><code>hermes-web-ui start --port 9000</code></td>
 <td>Start on custom port</td>
-</tr>
-<tr>
-<td><code>hermes-web-ui client</code></td>
-<td>Start for a remote client (<code>HERMES_WEB_UI_DISABLE_GATEWAY_AUTOSTART=1</code>, <code>CORS_ORIGINS=*</code>)</td>
 </tr>
 <tr>
 <td><code>hermes-web-ui stop</code></td>
@@ -739,7 +751,7 @@ npm run dev
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 11.0K</div>
+        <div class="stars">★ 11.1K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -751,7 +763,7 @@ npm run dev
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 271</div>
+        <div class="stars">★ 281</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -759,11 +771,11 @@ npm run dev
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 614</div>
+        <div class="stars">★ 615</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 465</div>
+        <div class="stars">★ 466</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>
