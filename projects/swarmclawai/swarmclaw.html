@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It functions as a centralized dashboard where users can manage multi-agent workflows using heartbeats, schedules, and delegation across more than 23 LLM providers. The platform features durable agent memory and a conversation-to-skill learning system to enhance agent capabilities over time. It integrates with various CLI backends and MCP tools, providing a practical environment f",
+  "description": "SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It utilizes a multi-agent architecture that supports durable memory, delegation, and scheduled tasks across more than 23 LLM providers. The platform enables users to manage complex workflows through an interactive dashboard featuring an organizational chart view and conversation-to-skill learning. It integrates with various tools including MCP, OpenClaw gateways, and local CLI ba",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-06-02T12:01:17.000Z",
+  "dateModified": "2026-06-08T12:06:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 556
+    "userInteractionCount": 557
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">162·repos</span>
+    <span id="meta-count">168·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -111,11 +111,11 @@
   <p class="project-desc">Open-source self-hosted AI agent runtime and multi-agent framework for autonomous agent swarms. Agent memory, MCP tools, schedules, delegation, and 23+ LLM providers (Claude, GPT, Gemini, OpenRouter, Ollama). A practical Claude Code and LangChain alternative.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 556</span>
+    <span class="stars">★ 557</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-02</span>
+    <span><span class="meta-label">updated</span>2026-06-08</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It functions as a centralized dashboard where users can manage multi-agent workflows using heartbeats, schedules, and delegation across more than 23 LLM providers. The platform features durable agent memory and a conversation-to-skill learning system to enhance agent capabilities over time. It integrates with various CLI backends and MCP tools, providing a practical environment for complex, delegated task execution.</p>
+    <p class="summary-text">SwarmClaw is an open-source, self-hosted runtime and framework designed for orchestrating autonomous AI agent swarms. It utilizes a multi-agent architecture that supports durable memory, delegation, and scheduled tasks across more than 23 LLM providers. The platform enables users to manage complex workflows through an interactive dashboard featuring an organizational chart view and conversation-to-skill learning. It integrates with various tools including MCP, OpenClaw gateways, and local CLI backends like Ollama and Claude Code.</p>
     <ul class="summary-highlights">
-      <li>Supports 23+ LLM providers including Ollama, OpenAI, and Hermes.</li>
-      <li>Orchestrates agent swarms with delegation, schedules, and heartbeats.</li>
-      <li>Features durable memory and reviewed conversation-to-skill learning.</li>
+      <li>Supports 23+ LLM providers including Hermes, OpenAI, and Ollama.</li>
+      <li>Features durable agent memory and reviewed conversation-to-skill learning.</li>
+      <li>Orchestrates swarms with delegation, heartbeats, and automated scheduling.</li>
     </ul>
   </div>
 </section>
@@ -217,7 +217,7 @@ Available for macOS (Apple Silicon &amp; Intel), Windows, and Linux (AppImage + 
 credentials are configured. If a macOS build is still ad-hoc signed, first
 launch may need one manual approval:</p>
 <ul>
-<li><strong>macOS:</strong> right-click the app in Finder → <strong>Open</strong> → <strong>Open</strong> to bypass Gatekeeper. If macOS instead reports <em>&quot;SwarmClaw is damaged and can&#39;t be opened&quot;</em> (common when the dmg was quarantined by Safari), strip the quarantine attribute and relaunch:<pre><code class="language-bash">xattr -dr com.apple.quarantine /Applications/SwarmClaw.app
+<li><strong>macOS:</strong> signed/notarized releases publish both <code>.dmg</code> and <code>.zip</code>; unsigned fallback releases publish <code>.zip</code> only to avoid the damaged unsigned DMG path. Right-click the app in Finder → <strong>Open</strong> → <strong>Open</strong> to bypass Gatekeeper. If macOS instead reports <em>&quot;SwarmClaw is damaged and can&#39;t be opened&quot;</em> (common when a downloaded app was quarantined by Safari), strip the quarantine attribute and relaunch:<pre><code class="language-bash">xattr -dr com.apple.quarantine /Applications/SwarmClaw.app
 </code></pre>
 </li>
 <li><strong>Windows:</strong> if SmartScreen appears, click <strong>More info</strong> → <strong>Run anyway</strong>.</li>
@@ -259,6 +259,14 @@ docker compose up -d --build
 <pre><code class="language-bash">openclaw skills install swarmclaw
 </code></pre>
 <p><a href="https://clawhub.ai/waydelyle/swarmclaw">Browse on ClawHub</a></p>
+<h3>v1.9.38 Highlights</h3>
+<p>PR integration release for provider catalog coverage, OpenRouter context meters, and safer unsigned macOS desktop artifacts.</p>
+<ul>
+<li><strong>TokenMix provider.</strong> Added TokenMix as a built-in OpenAI-compatible provider with setup metadata, starter-agent defaults, and provider health checks.</li>
+<li><strong>OpenRouter context meters.</strong> Chat context status now uses cached OpenRouter model metadata when available so routed model context windows display accurately.</li>
+<li><strong>macOS unsigned artifact fallback.</strong> Desktop releases publish zip-only macOS artifacts when signing/notarization inputs are missing, avoiding the unsigned DMG damaged-app path.</li>
+<li><strong>Regression coverage.</strong> Added targeted tests for TokenMix setup, OpenRouter context metadata caching, and macOS target selection.</li>
+</ul>
 <h3>v1.9.37 Highlights</h3>
 <p>Theme and memory-pressure release for lighter UI preferences and leaner chat history storage.</p>
 <ul>
@@ -586,6 +594,14 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.9.38 Highlights</h4>
+<p>PR integration release for provider catalog coverage, OpenRouter context meters, and safer unsigned macOS desktop artifacts.</p>
+<ul>
+<li><strong>TokenMix provider.</strong> Added TokenMix as a built-in OpenAI-compatible provider with setup metadata, starter-agent defaults, and provider health checks.</li>
+<li><strong>OpenRouter context meters.</strong> Chat context status now uses cached OpenRouter model metadata when available so routed model context windows display accurately.</li>
+<li><strong>macOS unsigned artifact fallback.</strong> Desktop releases publish zip-only macOS artifacts when signing/notarization inputs are missing, avoiding the unsigned DMG damaged-app path.</li>
+<li><strong>Regression coverage.</strong> Added targeted tests for TokenMix setup, OpenRouter context metadata caching, and macOS target selection.</li>
+</ul>
 <h4>v1.9.37 Highlights</h4>
 <p>Theme and memory-pressure release for lighter UI preferences and leaner chat history storage.</p>
 <ul>
@@ -773,23 +789,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <ul>
 <li><strong>Architecture Health report.</strong> <code>/api/quality/architecture-health</code> returns a structured inventory of runtime domains, surfaces, owners, guardrails, tests, score, risks, warnings, and next actions.</li>
 <li><strong>Quality Center visibility.</strong> <code>/quality</code> now shows a Runtime Ownership Map beside release readiness so operators can inspect dispatch, memory, startup, and quality coverage before shipping.</li>
-<li><strong>Release gate integration.</strong> Release readiness includes architecture health when scoring the ship gate report, blocking or warning when ownership evidence is incomplete.</li>
-<li><strong>CLI access.</strong> <code>swarmclaw operations architecture-health</code> exposes the same report for automation and release scripts.</li>
-</ul>
-<h4>v1.9.12 Highlights</h4>
-<p>Local file-queue connector release: operators can bridge SwarmClaw to filesystem inbox, outbox, archive, and error folders without a hosted message bus.</p>
-<ul>
-<li><strong>File Queue connector.</strong> Configure root, inbox, outbox, archive, and error folders from the connector sheet or CLI.</li>
-<li><strong>JSON command ingress.</strong> External tools can drop command envelopes into the inbox, then SwarmClaw normalizes them into connector messages for the selected agent or chatroom.</li>
-<li><strong>Durable file handling.</strong> Processed commands move to archive, malformed commands move to errors with diagnostic sidecars, and replies are written to outbox as structured JSON.</li>
-<li><strong>Connector runtime parity.</strong> Queue traffic uses the existing connector session, policy, health, readiness, CLI, and follow-up delivery paths.</li>
-</ul>
-<h4>v1.9.11 Highlights</h4>
-<p>Task execution policy release: operators can attach ordered review, approval, and verification stages to board tasks, record decisions, and block premature completion until required stages clear.</p>
-<ul>
-<li><strong>Task execution policies.</strong> Tasks now persist <code>executionPolicy</code> and <code>executionPolicyState</code> with ordered stages, decision history, current-stage tracking, and reset support.</li>
-<li><strong>Completion guardrails.</strong> <code>PUT /api/tasks/:id</code> returns a 409 when a required execution policy is still waiting or has requested changes, keeping the task in its prior status.</li>
-<li><strong>Policy API and CLI.</strong> <code>GET /api/tasks/:id/execution-policy</code> reports policy state, while <code>swarmclaw tasks execution-policy-decision</code> records approve, request-chan</li>
+<li><strong>Release gate integration.</strong> Release readiness includes architecture health when scoring the ship gate report, blockin</li>
 </ul>
 <hr>
 <p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
@@ -809,15 +809,15 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">
-        <div class="stars">★ 89</div>
+        <div class="stars">★ 91</div>
         <div class="name"><span class="org">howdymary /</span> hermes-agent-metaharness</div>
       </a>
       <a class="related-row" href="/projects/runtimenoteslabs/gladiator">
-        <div class="stars">★ 55</div>
+        <div class="stars">★ 56</div>
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">
-        <div class="stars">★ 129</div>
+        <div class="stars">★ 131</div>
         <div class="name"><span class="org">1ilkhamov /</span> opencode-hermes-multiagent</div>
       </a>
       <a class="related-row" href="/projects/Rainhoole/hermes-agent-acp-skill">
@@ -829,11 +829,11 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">linke-ai /</span> hermes-agent-team</div>
       </a>
       <a class="related-row" href="/projects/Agent-3-7/minions">
-        <div class="stars">★ 563</div>
+        <div class="stars">★ 564</div>
         <div class="name"><span class="org">Agent-3-7 /</span> minions</div>
       </a>
       <a class="related-row" href="/projects/CryptoDmitry/hermes-agent-control-room">
-        <div class="stars">★ 836</div>
+        <div class="stars">★ 835</div>
         <div class="name"><span class="org">CryptoDmitry /</span> hermes-agent-control-room</div>
       </a>
     </div>

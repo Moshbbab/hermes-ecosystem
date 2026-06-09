@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local pre-indexed code knowledge graph designed to reduce token consumption and tool call frequency for coding agents. It replaces expensive file scanning and grep operations by providing agents with instant access to symbol relationships, call graphs, and code structure. This approach allows agents to query the graph directly rather than reading multiple files to understand architecture. It integrates via an MCP server with agents including Hermes Agent, Claude Code, Cursor, and ",
+  "description": "CodeGraph is a local pre-indexed knowledge graph designed to reduce token consumption and tool calls for coding agents. It replaces expensive file scanning and grep operations by providing agents with instant access to symbol relationships, call graphs, and code structure. This approach allows agents to query the graph directly rather than performing multiple file reads. It integrates via an MCP server with agents including Hermes Agent, Claude Code, Cursor, and Gemini.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-06-08T05:25:22.000Z",
+  "dateModified": "2026-06-09T06:42:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 44473
+    "userInteractionCount": 45302
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">162·repos</span>
+    <span id="meta-count">168·repos</span>
     <span id="meta-version">hermes·v0.10.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -111,11 +111,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 44.5K</span>
+    <span class="stars">★ 45.3K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-08</span>
+    <span><span class="meta-label">updated</span>2026-06-09</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local pre-indexed code knowledge graph designed to reduce token consumption and tool call frequency for coding agents. It replaces expensive file scanning and grep operations by providing agents with instant access to symbol relationships, call graphs, and code structure. This approach allows agents to query the graph directly rather than reading multiple files to understand architecture. It integrates via an MCP server with agents including Hermes Agent, Claude Code, Cursor, and Gemini.</p>
+    <p class="summary-text">CodeGraph is a local pre-indexed knowledge graph designed to reduce token consumption and tool calls for coding agents. It replaces expensive file scanning and grep operations by providing agents with instant access to symbol relationships, call graphs, and code structure. This approach allows agents to query the graph directly rather than performing multiple file reads. It integrates via an MCP server with agents including Hermes Agent, Claude Code, Cursor, and Gemini.</p>
     <ul class="summary-highlights">
       <li>Reduces tool calls by 58% and costs by 16% on average</li>
-      <li>Provides local semantic intelligence without requiring Node.js installation</li>
-      <li>Supports multiple agents including Hermes Agent, Cursor, and Claude Code</li>
+      <li>Provides local indexing of symbol relationships and call graphs</li>
+      <li>Supports macOS, Linux, and Windows without requiring Node.js</li>
     </ul>
   </div>
 </section>
@@ -1492,6 +1492,7 @@ is written):</p>
 </ul>
 <p><strong>MCP server not connecting</strong> — Ensure the project is initialized/indexed, verify the path in your MCP config, and check that <code>codegraph serve --mcp</code> works from the command line.</p>
 <p><strong>Missing symbols</strong> — The MCP server auto-syncs on save (wait a couple seconds). Run <code>codegraph sync</code> manually if needed. Check that the file&#39;s language is supported and isn&#39;t inside a <code>.gitignore</code>d or default-excluded directory (e.g. <code>node_modules</code>, <code>dist</code>).</p>
+<p><strong>Sharing one checkout between Windows and WSL</strong> — Don&#39;t point both at the same <code>.codegraph/</code>: the background-server lock and the SQLite index are tied to the OS that wrote them, and SQLite locking across the WSL2/Windows filesystem boundary is unreliable. Give each side its own index in the same tree by setting <code>CODEGRAPH_DIR</code> to a distinct name on one of them — e.g. <code>CODEGRAPH_DIR=.codegraph-win</code> on Windows, leaving WSL on the default <code>.codegraph</code>. CodeGraph skips any sibling <code>.codegraph-*</code> directory when indexing and watching, so the two never trip over each other.</p>
 <h3>Star History</h3>
 <a href="https://www.star-history.com/?repos=colbymchenry%2Fcodegraph&type=date&legend=top-left">
  <picture>
@@ -1521,15 +1522,15 @@ is written):</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 481</div>
+        <div class="stars">★ 482</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
-        <div class="stars">★ 1.5K</div>
+        <div class="stars">★ 1.6K</div>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
-        <div class="stars">★ 57</div>
+        <div class="stars">★ 59</div>
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/junhoyeo/tokscale">
@@ -1537,11 +1538,11 @@ is written):</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 436</div>
+        <div class="stars">★ 438</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
-        <div class="stars">★ 113</div>
+        <div class="stars">★ 116</div>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
