@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plastic-labs/honcho#software",
   "name": "honcho",
-  "description": "Honcho is a memory infrastructure designed to build stateful agents that track evolving entities like people, groups, and projects over time. It operates via a loop that stores messages and events, processes them asynchronously to extract conclusions, and provides queryable peer representations. Users can deploy the system as a managed service or self-host the FastAPI server. The library integrates with MCP, Claude Code, and Hermes to provide persistent memory and hybrid search capabilities.",
+  "description": "Honcho is a memory infrastructure designed to provide stateful agents with a persistent understanding of people, groups, and projects over time. It works by storing messages and events in sessions and using background reasoning to extract conclusions and update peer representations. Users can query these representations for natural-language insights or prompt-ready context via Python and TypeScript SDKs. The system supports both a managed cloud service and a self-hosted FastAPI server with integ",
   "url": "https://hermesatlas.com/projects/plastic-labs/honcho",
   "codeRepository": "https://github.com/plastic-labs/honcho",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plastic-labs",
     "url": "https://github.com/plastic-labs"
   },
-  "dateModified": "2026-06-08T14:59:40.000Z",
+  "dateModified": "2026-06-09T21:43:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4972
+    "userInteractionCount": 5017
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -115,7 +115,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>AGPL-3.0</span>
     <span><span class="meta-label">maintainer</span>Nous Research</span>
-    <span><span class="meta-label">updated</span>2026-06-08</span>
+    <span><span class="meta-label">updated</span>2026-06-09</span>
   </div>
 
   <div class="actions">
@@ -130,10 +130,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Honcho is a memory infrastructure designed to build stateful agents that track evolving entities like people, groups, and projects over time. It operates via a loop that stores messages and events, processes them asynchronously to extract conclusions, and provides queryable peer representations. Users can deploy the system as a managed service or self-host the FastAPI server. The library integrates with MCP, Claude Code, and Hermes to provide persistent memory and hybrid search capabilities.</p>
+    <p class="summary-text">Honcho is a memory infrastructure designed to provide stateful agents with a persistent understanding of people, groups, and projects over time. It works by storing messages and events in sessions and using background reasoning to extract conclusions and update peer representations. Users can query these representations for natural-language insights or prompt-ready context via Python and TypeScript SDKs. The system supports both a managed cloud service and a self-hosted FastAPI server with integrations for MCP, Claude Code, and Hermes.</p>
     <ul class="summary-highlights">
       <li>Reasoning-first memory that extracts conclusions from conversations</li>
-      <li>Peer-centric modeling of users, agents, and projects</li>
+      <li>Peer-centric modeling of users, agents, and evolving ideas</li>
       <li>Hybrid search combining BM25 and vector retrieval</li>
     </ul>
   </div>
@@ -514,6 +514,22 @@ do this with the following command:</p>
 the <code>AUTH_JWT_SECRET</code> environment variable. This is required for <code>AUTH_USE_AUTH</code>:</p>
 <pre><code class="language-env">AUTH_JWT_SECRET=&lt;generated_secret&gt;
 </code></pre>
+<p>Once auth is enabled, use <code>scripts/generate_jwt.py</code> to mint tokens for local
+development and scripting:</p>
+<pre><code class="language-bash"># Admin token (full access, no expiry)
+uv run python scripts/generate_jwt.py --admin
+
+# Admin token expiring in 24 hours
+uv run python scripts/generate_jwt.py --admin --expires 24h
+
+# Workspace-scoped token
+uv run python scripts/generate_jwt.py --workspace my-workspace --expires 30d
+
+# Capture a token for use in curl/scripts
+TOKEN=$(uv run python scripts/generate_jwt.py --admin --print-only)
+curl -H &quot;Authorization: Bearer $TOKEN&quot; http://localhost:8000/v3/workspaces
+</code></pre>
+<p>Duration units: <code>s</code> (seconds), <code>m</code> (minutes), <code>h</code> (hours), <code>d</code> (days), <code>w</code> (weeks), <code>y</code> (years).</p>
 <ol start="5">
 <li><strong>Run database migrations</strong></li>
 </ol>
@@ -739,11 +755,11 @@ the results.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 58.1K</div>
+        <div class="stars">★ 58.2K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 16.0K</div>
+        <div class="stars">★ 16.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -751,7 +767,7 @@ the results.</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 298</div>
+        <div class="stars">★ 299</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -759,11 +775,11 @@ the results.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 191</div>
+        <div class="stars">★ 194</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 184</div>
+        <div class="stars">★ 185</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a universal memory layer designed to provide AI agents with persistent, long-term context without requiring external cloud services. It utilizes a single SQLite database with sqlite-vec and FTS5 to manage working memory, episodic memory, and a temporal knowledge graph. The system integrates via a Python SDK or the Model Context Protocol (MCP), making it compatible with tools like Cursor, Claude Code, and OpenWebUI. It is optimized for high-speed retrieval and storage efficiency thro",
+  "description": "Mnemosyne is a universal memory layer designed to provide AI agents with persistent, long-term context without requiring external cloud services. It utilizes a SQLite-backed architecture incorporating sqlite-vec and FTS5 for efficient storage and retrieval. The system supports various integration methods including a Python SDK and the Model Context Protocol (MCP). It is compatible with platforms such as Cursor, Claude Code, OpenWebUI, and the Hermes Agent.",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-06-09T06:18:17.000Z",
+  "dateModified": "2026-06-10T06:18:12.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1024
+    "userInteractionCount": 1036
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -115,7 +115,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-09</span>
+    <span><span class="meta-label">updated</span>2026-06-10</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a universal memory layer designed to provide AI agents with persistent, long-term context without requiring external cloud services. It utilizes a single SQLite database with sqlite-vec and FTS5 to manage working memory, episodic memory, and a temporal knowledge graph. The system integrates via a Python SDK or the Model Context Protocol (MCP), making it compatible with tools like Cursor, Claude Code, and OpenWebUI. It is optimized for high-speed retrieval and storage efficiency through episodic compression.</p>
+    <p class="summary-text">Mnemosyne is a universal memory layer designed to provide AI agents with persistent, long-term context without requiring external cloud services. It utilizes a SQLite-backed architecture incorporating sqlite-vec and FTS5 for efficient storage and retrieval. The system supports various integration methods including a Python SDK and the Model Context Protocol (MCP). It is compatible with platforms such as Cursor, Claude Code, OpenWebUI, and the Hermes Agent.</p>
     <ul class="summary-highlights">
-      <li>Zero-dependency, SQLite-backed storage with sub-millisecond latency</li>
-      <li>MCP support for Cursor, Claude Code, and other MCP clients</li>
-      <li>Temporal knowledge graph and entity extraction capabilities</li>
+      <li>Zero-dependency SQLite storage with sub-millisecond retrieval latency</li>
+      <li>MCP support for seamless integration with multiple agent frameworks</li>
+      <li>Advanced memory management including temporal triples and episodic compression</li>
     </ul>
   </div>
 </section>
@@ -149,7 +149,7 @@
 <h2>Mnemosyne</h2>
 <p><em>Zero-dependency AI memory that works everywhere. SQLite-backed. Sub-millisecond.</em></p>
 <p><a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.9+-blue.svg" alt="Python"></a>
-<a href="https://pypi.org/project/mnemosyne-memory/"><img src="https://img.shields.io/pypi/v/mnemosyne-memory.svg?v=3.4.0" alt="PyPI"></a>
+<a href="https://pypi.org/project/mnemosyne-memory/"><img src="https://img.shields.io/pypi/v/mnemosyne-memory.svg?v=3.5.0" alt="PyPI"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
 <a href="https://github.com/AxDSan/mnemosyne/actions/workflows/ci.yml"><img src="https://github.com/AxDSan/mnemosyne/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 <a href="https://beam-benchmark.github.io/"><img src="https://img.shields.io/badge/BEAM-ICLR%202026-purple.svg" alt="BEAM"></a>
@@ -667,8 +667,11 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 hermes config set memory.provider mnemosyne
 hermes memory setup
 </code></pre>
-<p>Then disable Hermes&#39; built-in file memory to avoid duplication:</p>
-<pre><code class="language-bash">hermes tools disable memory
+<p>Then disable Hermes&#39; built-in MEMORY.md/USER.md system so Mnemosyne is the sole memory provider. Do NOT use <code>hermes tools disable memory</code> — that also kills all 23 Mnemosyne-registered tools.</p>
+<p>Edit <code>~/.hermes/config.yaml</code>:</p>
+<pre><code class="language-yaml">memory:
+  enabled: false
+user_profile_enabled: false
 </code></pre>
 <p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/hermes-integration.md">docs/hermes-integration.md</a> for the full setup guide.</p>
 <h4>Tool categories</h4>
@@ -736,11 +739,11 @@ hermes memory setup
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 58.1K</div>
+        <div class="stars">★ 58.2K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 16.0K</div>
+        <div class="stars">★ 16.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -748,7 +751,7 @@ hermes memory setup
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 298</div>
+        <div class="stars">★ 299</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -756,11 +759,11 @@ hermes memory setup
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 191</div>
+        <div class="stars">★ 194</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 184</div>
+        <div class="stars">★ 185</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
