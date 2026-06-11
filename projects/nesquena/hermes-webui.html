@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight browser-based interface for the Hermes Agent that provides a graphical alternative to the terminal. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The interface features a three-panel layout for managing sessions, chat, and workspace files with full parity to the CLI experience. Users can securely access their existing agent and models via an SSH tunnel or Docker deployment.",
+  "description": "Hermes WebUI is a self-hosted web interface that provides a graphical frontend for the Hermes Agent. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The application offers a three-panel layout for managing chat sessions, workspace files, and agent settings with full feature parity to the CLI. It integrates directly with existing Hermes Agent setups and models, allowing secure access via SSH tunnels.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-06-10T00:03:00.000Z",
+  "dateModified": "2026-06-11T06:19:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 14121
+    "userInteractionCount": 14197
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 14.1K</span>
+    <span class="stars">★ 14.2K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-10</span>
+    <span><span class="meta-label">updated</span>2026-06-11</span>
   </div>
 
   <div class="actions">
@@ -130,10 +130,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight browser-based interface for the Hermes Agent that provides a graphical alternative to the terminal. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The interface features a three-panel layout for managing sessions, chat, and workspace files with full parity to the CLI experience. Users can securely access their existing agent and models via an SSH tunnel or Docker deployment.</p>
+    <p class="summary-text">Hermes WebUI is a self-hosted web interface that provides a graphical frontend for the Hermes Agent. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The application offers a three-panel layout for managing chat sessions, workspace files, and agent settings with full feature parity to the CLI. It integrates directly with existing Hermes Agent setups and models, allowing secure access via SSH tunnels.</p>
     <ul class="summary-highlights">
       <li>Full feature parity with the Hermes CLI experience</li>
-      <li>Three-panel layout with workspace file browsing and inline previews</li>
+      <li>Three-panel layout with workspace file browser and inline preview</li>
       <li>Lightweight architecture using Python and vanilla JavaScript</li>
     </ul>
   </div>
@@ -318,6 +318,30 @@ python3 bootstrap.py
 ./ctl.sh stop
 </code></pre>
 <p><code>ctl.sh start</code> runs the bootstrap in foreground/no-browser mode behind the daemon wrapper, writes logs to <code>~/.hermes/webui.log</code>, and respects <code>.env</code> plus inline overrides such as <code>HERMES_WEBUI_HOST=0.0.0.0 ./ctl.sh start</code>.</p>
+<blockquote>
+<p><strong>Stopping the server.</strong> Each launch method has its own stop path because only <code>ctl.sh start</code> writes a PID file (<code>~/.hermes/webui.pid</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Launch method</th>
+<th>How to stop</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>python3 bootstrap.py</code> or <code>./start.sh</code></td>
+<td><strong>Ctrl-C</strong> in the terminal (both run in the foreground)</td>
+</tr>
+<tr>
+<td><code>./ctl.sh start</code></td>
+<td><code>./ctl.sh stop</code> (sends SIGTERM, waits, then SIGKILL)</td>
+</tr>
+<tr>
+<td>Detached <code>bootstrap.py</code> (no <code>--foreground</code>)</td>
+<td>Find the PID via <code>lsof -i :8787</code> (or <code>ss -tlnp</code>) and <code>kill</code> it</td>
+</tr>
+</tbody></table>
+<p><code>./ctl.sh stop</code> cannot stop a server launched by <code>bootstrap.py</code> or <code>start.sh</code> directly — it only manages processes it started itself.</p>
+</blockquote>
 <h4>Advanced: dynamic recall prefill &amp; Gateway-backed chat</h4>
 <p>Two optional, self-hosted-deployment features — attaching dynamic <strong>session-recall prefill</strong> to browser turns (Joplin/Obsidian/Notion/llm-wiki routers), and routing browser chat through a running <strong>Hermes Gateway</strong> — are documented in <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/advanced-chat-setup.md"><code>docs/advanced-chat-setup.md</code></a>. Most users need neither.</p>
 <p>The bootstrap will:</p>
@@ -998,7 +1022,7 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 11.6K</div>
+        <div class="stars">★ 11.8K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -1010,7 +1034,7 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 327</div>
+        <div class="stars">★ 348</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -1018,11 +1042,11 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 620</div>
+        <div class="stars">★ 624</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 469</div>
+        <div class="stars">★ 470</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>

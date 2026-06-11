@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable writing skill designed to audit and remove detectable AI writing patterns from content. It utilizes a structured two-pass detection system and a tiered word replacement table to identify and replace \"AI-isms\" with plainer alternatives. The tool supports multiple operational modes and voice profiles, making it compatible with various agent frameworks including Hermes, Claude Code, and OpenClaw.",
+  "description": "avoid-ai-writing is a portable writing skill designed to audit and remove detectable AI writing patterns from text. It utilizes a structured two-pass detection system and a tiered word replacement table to identify and fix \"AI-isms\" rather than relying on simple prompts. The tool supports multiple operational modes and voice profiles, making it compatible with Hermes, Claude Code, OpenClaw, and other agentskills.io-compatible agents.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-06-06T07:17:44.000Z",
+  "dateModified": "2026-06-10T16:03:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1761
+    "userInteractionCount": 1776
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -115,7 +115,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-06</span>
+    <span><span class="meta-label">updated</span>2026-06-10</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable writing skill designed to audit and remove detectable AI writing patterns from content. It utilizes a structured two-pass detection system and a tiered word replacement table to identify and replace &quot;AI-isms&quot; with plainer alternatives. The tool supports multiple operational modes and voice profiles, making it compatible with various agent frameworks including Hermes, Claude Code, and OpenClaw.</p>
+    <p class="summary-text">avoid-ai-writing is a portable writing skill designed to audit and remove detectable AI writing patterns from text. It utilizes a structured two-pass detection system and a tiered word replacement table to identify and fix &quot;AI-isms&quot; rather than relying on simple prompts. The tool supports multiple operational modes and voice profiles, making it compatible with Hermes, Claude Code, OpenClaw, and other agentskills.io-compatible agents.</p>
     <ul class="summary-highlights">
       <li>Three modes: Rewrite, Detect, and Edit-in-place</li>
-      <li>109-entry tiered word replacement table and 48 pattern categories</li>
-      <li>Compatible with Hermes, Claude Code, OpenClaw, and Cursor</li>
+      <li>Tiered replacement table with 109 words and 10 phrases</li>
+      <li>49 pattern categories for structural and fingerprint detection</li>
     </ul>
   </div>
 </section>
@@ -176,7 +176,7 @@
 <li><strong>Structured audit</strong> — returns identified issues with quoted text, the rewrite, a change summary, and a second-pass audit in four discrete sections. You see exactly what changed and why.</li>
 <li><strong>Two-pass detection</strong> — the second pass re-reads the rewrite and catches patterns that survive the first edit: recycled transitions, lingering inflation, copula swaps that snuck through.</li>
 <li><strong>109-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. &quot;Leverage&quot; → &quot;use.&quot; &quot;Commence&quot; → &quot;start.&quot; Tier 1 words always flag, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 3 <em>phrases</em> (multi-word boilerplate like &quot;the integration of,&quot; &quot;decentralized compute&quot;) flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
-<li><strong>48 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
+<li><strong>49 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
 <li><strong>Detect mode</strong> — flag patterns without rewriting. See which flags are real problems vs. judgment calls. Useful when patterns might be intentional or you&#39;re auditing content you don&#39;t want altered.</li>
 <li><strong>Works across platforms</strong> — one <code>SKILL.md</code> runs in Claude Code, Cowork (as a plugin), OpenClaw, and Cursor (as a ported rule). See the install paths below.</li>
 </ul>
@@ -669,6 +669,12 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 <td>&quot;That last move is the contrarian one,&quot; &quot;This is the interesting part&quot;</td>
 <td>Cut the label; let the explanation carry the weight, or reposition the item so it stands out on its own</td>
 </tr>
+<tr>
+<td>51</td>
+<td><strong>List-label periods</strong></td>
+<td><code>- **Intros.** Years of conferences and operator network.</code> (also unbolded: <code>- Intros. Years of...</code>)</td>
+<td>Use a colon, not a period, on a list label: <code>- **Intros:** years of conferences and operator network.</code></td>
+</tr>
 </tbody></table>
 <p>Two writer-side <strong>tests</strong> round out the catalog (judgment checks, not auto-detected): <strong>paragraph-reshuffle immunity</strong> (can you swap two body paragraphs without breaking the piece?) and the <strong>treadmill effect</strong> (&quot;what&#39;s actually new in this paragraph?&quot;).</p>
 <h3>Full Example</h3>
@@ -741,7 +747,7 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 15.1K</div>
+        <div class="stars">★ 15.3K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/wondelai/skills">
@@ -749,7 +755,7 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 307</div>
+        <div class="stars">★ 308</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
@@ -757,7 +763,7 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
-        <div class="stars">★ 108</div>
+        <div class="stars">★ 109</div>
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
@@ -765,11 +771,11 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
-        <div class="stars">★ 135</div>
+        <div class="stars">★ 136</div>
         <div class="name"><span class="org">esaradev /</span> icarus-plugin</div>
       </a>
       <a class="related-row" href="/projects/chigwell/skilldock.io">
-        <div class="stars">★ 72</div>
+        <div class="stars">★ 73</div>
         <div class="name"><span class="org">chigwell /</span> skilldock.io</div>
       </a>
     </div>
