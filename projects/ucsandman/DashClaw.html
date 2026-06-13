@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a governance layer that prevents AI agents from executing risky actions on real-world systems. It intercepts agent intent to evaluate declarative policies, routing high-risk actions for human approval and recording verifiable decision logs. The system supports a wide range of integrations including Claude Code, LangChain, and AutoGen via SDKs, MCP servers, or REST APIs. It also provides tools to analyze agent sessions and distill them into optimized configuration bundles.",
+  "description": "DashClaw is a governance layer that prevents AI agents from executing risky actions on real systems without oversight. It intercepts agent intent to evaluate declarative policies, routing high-risk tasks for human approval via a dashboard, CLI, or messaging apps. The system maintains a replayable decision ledger and ensures terminal outcomes are durable to prevent double-execution during retries. It integrates with various frameworks including LangChain, CrewAI, and AutoGen, as well as agents li",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,13 +47,13 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-06-12T07:04:11.000Z",
+  "dateModified": "2026-06-13T05:17:22.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 274
+    "userInteractionCount": 275
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">🛡️The governance runtime for AI agents. Intercept actions, enforce guard policies, require approvals, and produce audit-ready decision trails.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 274</span>
+    <span class="stars">★ 275</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-12</span>
+    <span><span class="meta-label">updated</span>2026-06-13</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a governance layer that prevents AI agents from executing risky actions on real-world systems. It intercepts agent intent to evaluate declarative policies, routing high-risk actions for human approval and recording verifiable decision logs. The system supports a wide range of integrations including Claude Code, LangChain, and AutoGen via SDKs, MCP servers, or REST APIs. It also provides tools to analyze agent sessions and distill them into optimized configuration bundles.</p>
+    <p class="summary-text">DashClaw is a governance layer that prevents AI agents from executing risky actions on real systems without oversight. It intercepts agent intent to evaluate declarative policies, routing high-risk tasks for human approval via a dashboard, CLI, or messaging apps. The system maintains a replayable decision ledger and ensures terminal outcomes are durable to prevent double-execution during retries. It integrates with various frameworks including LangChain, CrewAI, and AutoGen, as well as agents like Claude Code and Hermes Agent.</p>
     <ul class="summary-highlights">
       <li>Intercepts risky actions for policy enforcement and human approval</li>
-      <li>Cryptographic identity verification using JWKS-verified OIDC bearer tokens</li>
-      <li>Broad support for MCP, Python/Node SDKs, and major agent frameworks</li>
+      <li>Maintains a replayable ledger of goals, reasoning, and risk scores</li>
+      <li>Supports OIDC-verified identity and cryptographic attribution for agents</li>
     </ul>
   </div>
 </section>
@@ -172,6 +172,12 @@
     <a href="https://www.npmjs.com/package/dashclaw"><img src="https://img.shields.io/npm/v/dashclaw?style=flat-square&color=orange" alt="npm" /></a>
     <a href="https://pypi.org/project/dashclaw/"><img src="https://img.shields.io/pypi/v/dashclaw?style=flat-square&color=orange" alt="PyPI" /></a>
   </p>
+
+  <br />
+
+  <img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/docs/media/governance-loop.gif" alt="The governance loop: an agent declares intent, guard evaluates policy and scores risk, a human approves, and a replayable decision record is written" width="780" />
+
+  <p><sub>The loop, end to end: <strong>intent → guard → approve → record</strong>. Rendered with <a href="https://github.com/remotion-dev/remotion">Remotion</a> from <a href="media/remotion/">media/remotion/</a>.</sub></p>
 </div>
 
 <br />
@@ -224,6 +230,27 @@
 <td>Code Sessions ingests Claude Code transcripts (Stop-hook live or JSONL backfill), prices the spend, surfaces optimizer signals (stuck loops, cache crater, context gaps), and distills sessions into an Optimal Files bundle — root CLAUDE.md, path-scoped rules, hooks, and skill packs — applied locally via <code>dashclaw code apply</code>.</td>
 </tr>
 </tbody></table>
+<hr>
+<h3>The control plane, running</h3>
+<p>Real screenshots from a live instance governing a working agent fleet. Dark instrument panel, orange only where attention is required.</p>
+<p><strong>The decisions ledger.</strong> Every governed action lands here with its risk score, matched policies, signature state, and terminal outcome. 77,000+ decisions on this instance; each one replayable.</p>
+<img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/docs/media/shot-decisions.png" alt="Decisions Ledger: a global stream of governed agent actions with risk scores, governance chips, completed outcomes, success rate, and tracked spend" width="100%" />
+
+<p><strong>Mission Control.</strong> Fleet posture, the intervention queue, and a live ledger of governed events on one calm screen. Repeated signal occurrences collapse into one row; dismissing it clears them all.</p>
+<img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/docs/media/shot-mission-control.png" alt="Mission Control: fleet posture summary, governance categories, runtime stats, and a live stream of governed events for 58 agents" width="100%" />
+
+<p><strong>Spend and posture, measured.</strong> Analytics prices every action and breaks enforcement down by agent and type. Governance posture is one gaming-resistant score: a policy only counts when replaying real traffic proves it fires, and drafting a policy never raises the number.</p>
+<table>
+  <tr>
+    <td width="50%"><img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/docs/media/shot-analytics.png" alt="Analytics: total cost, action volume, cost trend, per-agent spend, and policy enforcement counts (blocked, approvals, warnings)" /></td>
+    <td width="50%"><img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/docs/media/shot-posture.png" alt="Governance posture: a 0-100 risk-weighted score with a prioritized remediation queue of not-fully-governed action types" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><code>/analytics</code> · cost, volume, enforcement</sub></td>
+    <td align="center"><sub><code>/posture</code> · proven coverage, not vibes</sub></td>
+  </tr>
+</table>
+
 <hr>
 <h3>Choose your integration path</h3>
 <p>DashClaw meets agents where they already are. Every path lands on the same governance primitives, audit ledger, and approval queue — pick the one closest to how your agent already runs.</p>
@@ -374,7 +401,7 @@ DashClawAutoGenIntegration(claw).instrument_agent(assistant)
 </code></pre>
 <p>It intercepts every tool-use call (<code>before_tool_call</code>, <code>llm_output</code>, <code>after_tool_call</code>, <code>agent_end</code>), calls guard / record / waitForApproval automatically, and ships a <code>HOOK.md</code> the <code>openclaw</code> CLI installs. Tool-classification vocabulary aligns with DashClaw guard action types so policies behave consistently across plugin, hook, and SDK paths.</p>
 <h4>5. Direct REST API and webhooks</h4>
-<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>320 routes</strong>: 54 stable, 24 beta, 242 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
+<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>321 routes</strong>: 54 stable, 24 beta, 243 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
 <h4>6. Work Orders — task-grade contracts + receipts</h4>
 <p>Work Orders turn an agent call into a contract: a typed input/output schema, a budget ceiling, and a self-verifying receipt. A caller submits an order against a registered type (validated, guard-gated, queued); any agent with an API key claims and completes it; the server validates the output, builds a SHA-256-hashed receipt (cost, timestamps, output hash, governance trail), and writes an audit record. DashClaw stays the control plane — execution is external workers via <code>claim</code>/<code>complete</code>, so there&#39;s no LLM key and no cron. Page at <code>/work-orders</code>, API at <code>/api/work-orders</code>, 8 SDK methods each (Node + Python), 2 MCP tools, and a ~75-line reference worker in <a href="./examples/work-order-worker/"><code>examples/work-order-worker/</code></a>.</p>
 <h4>7. Skills — governance protocol + live platform reference</h4>
@@ -430,6 +457,11 @@ try {
 <p>Python uses the same shape with <code>snake_case</code>. Full reference: <a href="https://github.com/ucsandman/DashClaw/blob/main/sdk/README.md"><code>sdk/README.md</code></a>. Step-by-step walkthrough: <a href="https://github.com/ucsandman/DashClaw/blob/main/QUICK-START.md"><code>QUICK-START.md</code></a>.</p>
 <hr>
 <h3>Deploy</h3>
+<h4>Local</h4>
+<pre><code class="language-bash">npx dashclaw up
+</code></pre>
+<p>Installs the app, provisions Postgres (Docker or embedded), generates secrets, mints your API key, applies migrations, starts on :3000, and offers to wire Claude Code hooks — one command, no accounts required.</p>
+<h4>Cloud</h4>
 <p><a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fucsandman%2FDashClaw&env=DATABASE_URL,DASHCLAW_API_KEY,ENCRYPTION_KEY,NEXTAUTH_SECRET,NEXTAUTH_URL,CRON_SECRET,DASHCLAW_LOCAL_ADMIN_PASSWORD&envDescription=Required%20DashClaw%20configuration.%20See%20.env.example%20for%20details.&envLink=https%3A%2F%2Fgithub.com%2Fucsandman%2FDashClaw%2Fblob%2Fmain%2F.env.example&project-name=my-dashclaw&repository-name=my-dashclaw&products=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22neon%22%2C%22productSlug%22%3A%22neon%22%2C%22protocol%22%3A%22storage%22%7D%5D&skippable-integrations=1"><img src="https://vercel.com/button" alt="Deploy with Vercel"></a></p>
 <p><strong>$0 to deploy.</strong> Vercel free tier plus Neon free tier. Click the button, add the Neon integration when prompted, fill in the env vars listed in <a href="./.env.example"><code>.env.example</code></a>. The schema migration runs as part of the build, so there is no manual migration step.</p>
 <h4>After deploy</h4>
@@ -445,7 +477,7 @@ try {
 <li><strong>Self-host without Vercel.</strong> A Dockerfile and standalone <code>next start</code> path are available; see <a href="./Dockerfile"><code>Dockerfile</code></a>. The schema migration in <code>scripts/auto-migrate.mjs</code> is idempotent and safe to re-run.</li>
 </ul>
 <hr>
-<h3>Durable execution finality (v2.13.3)</h3>
+<h3>Durable execution finality</h3>
 <p>Approved actions now carry a terminal outcome separate from their lifecycle status. Five states, one-shot transitions, repository-level enforcement:</p>
 <table>
 <thead>
@@ -602,6 +634,7 @@ await claw.createAction({ /* ... */, idempotency_key: key });
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/sdk-parity.md">SDK parity matrix</a>: Node v2 vs Python coverage.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/agent-identity.md">Agent identity guide</a>: JWKS verification, replay protection, and action binding (Phase 2 / 2b / 2c).</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/runtime-api.md">Runtime API contract</a>: minimal core governance endpoints.</li>
+<li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/guard-enforcement-contract.md">Guard enforcement contract</a>: fail-closed degradation, evaluation deadline, MCP/hook unavailable policy, idempotency keys, org kill switch.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md">API inventory</a>: full route list with maturity tier.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/durable-execution-finality.md">Durable execution finality spec</a>: five-state machine, sweep, idempotency.</li>
 <li><a href="https://github.com/ucsandman/DashClaw/blob/main/PROJECT_DETAILS.md">Architecture map</a>: system boundaries and SDK surface inventory.</li>
