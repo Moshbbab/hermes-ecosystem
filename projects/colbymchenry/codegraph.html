@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local knowledge graph that reduces the token consumption and tool call frequency of AI coding agents. It replaces expensive file scanning and grep operations with a pre-indexed map of symbol relationships, call graphs, and code structure. This approach enables agents to query codebase architecture instantly and locally without constant file reads. It integrates with various agents including Hermes Agent, Claude Code, and Cursor to lower operational costs and improve response speed",
+  "description": "CodeGraph is a local CLI tool that provides a pre-indexed knowledge graph of codebases to coding agents like Hermes Agent and Claude Code. It maps symbol relationships, call graphs, and code structures into a local index to replace expensive file-scanning operations like grep and glob. By providing semantic intelligence through an MCP server, it reduces token consumption and the number of tool calls required for architectural analysis. The system features an auto-sync capability that updates the",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-06-12T23:01:13.000Z",
+  "dateModified": "2026-06-13T21:10:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 48349
+    "userInteractionCount": 48729
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 48.3K</span>
+    <span class="stars">★ 48.7K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-12</span>
+    <span><span class="meta-label">updated</span>2026-06-13</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local knowledge graph that reduces the token consumption and tool call frequency of AI coding agents. It replaces expensive file scanning and grep operations with a pre-indexed map of symbol relationships, call graphs, and code structure. This approach enables agents to query codebase architecture instantly and locally without constant file reads. It integrates with various agents including Hermes Agent, Claude Code, and Cursor to lower operational costs and improve response speed.</p>
+    <p class="summary-text">CodeGraph is a local CLI tool that provides a pre-indexed knowledge graph of codebases to coding agents like Hermes Agent and Claude Code. It maps symbol relationships, call graphs, and code structures into a local index to replace expensive file-scanning operations like grep and glob. By providing semantic intelligence through an MCP server, it reduces token consumption and the number of tool calls required for architectural analysis. The system features an auto-sync capability that updates the graph in real-time as files are modified.</p>
     <ul class="summary-highlights">
-      <li>Reduces tool calls by 58% and costs by 16% on average</li>
-      <li>Provides 100% local indexing with automatic real-time syncing</li>
-      <li>Supports multiple agents including Hermes Agent, Cursor, and Claude Code</li>
+      <li>Reduces token usage and tool calls for coding agents</li>
+      <li>Provides local pre-indexed symbol relationships and call graphs</li>
+      <li>Auto-syncs the knowledge graph on every file change</li>
     </ul>
   </div>
 </section>
@@ -146,6 +146,7 @@
 
 <h2>CodeGraph</h2>
 <h3>🎉 1.0 Released!</h3>
+<p>Already installed? Run <code>codegraph upgrade</code> to update in place.</p>
 <p>Follow <a href="https://x.com/getcodegraph">@getcodegraph</a> on X for updates.</p>
 <h4>Supercharge Claude Code, Cursor, Codex, OpenCode, Hermes Agent, Gemini, Antigravity, and Kiro with Semantic Code Intelligence</h4>
 <p><strong>~16% cheaper · ~58% fewer tool calls · 100% local</strong></p>
@@ -1065,6 +1066,7 @@ codegraph uninit [path]           # Remove CodeGraph from a project (--force to 
 codegraph index [path]            # Full index (--force to re-index, --quiet for less output)
 codegraph sync [path]             # Incremental update
 codegraph status [path]           # Show statistics
+codegraph unlock [path]           # Remove a stale lock file that&#39;s blocking indexing
 codegraph query &lt;search&gt;          # Search symbols (--kind, --limit, --json)
 codegraph explore &lt;query&gt;         # Relevant symbols&#39; source + call paths in one shot (same output as the codegraph_explore MCP tool)
 codegraph node &lt;symbol|file&gt;      # One symbol&#39;s source + callers, or read a file with line numbers (same output as codegraph_node)
@@ -1073,8 +1075,11 @@ codegraph callers &lt;symbol&gt;        # Find what calls a function/method (--l
 codegraph callees &lt;symbol&gt;        # Find what a function/method calls (--limit, --json)
 codegraph impact &lt;symbol&gt;         # Analyze what code is affected by changing a symbol (--depth, --json)
 codegraph affected [files...]     # Find test files affected by changes (see below)
-codegraph serve --mcp             # Start MCP server
+codegraph daemon                  # Manage background daemons — pick one to stop (alias: daemons)
+codegraph telemetry [on|off]      # Show or change anonymous usage telemetry
 codegraph upgrade [version]       # Update to the latest release (--check, --force)
+codegraph version                 # Print the installed version (also -v, --version)
+codegraph help [command]          # Show help, optionally for one command
 </code></pre>
 <h4><code>codegraph affected</code></h4>
 <p>Traces import dependencies transitively to find which test files are affected by changed source files.</p>
@@ -1525,7 +1530,7 @@ is written):</p>
 <li><strong>You&#39;re on an old (pre-0.9) install.</strong> Reinstall to get the bundled runtime — <code>curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh</code> (macOS/Linux), <code>irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | iex</code> (Windows), or <code>npm i -g @colbymchenry/codegraph@latest</code>.</li>
 <li><strong><code>codegraph status</code> shows <code>Journal:</code> other than <code>wal</code></strong> — WAL couldn&#39;t be enabled on this filesystem (common on network shares and WSL2 <code>/mnt</code>), so reads can block on writes. Move the project (with its <code>.codegraph/</code> folder) onto a local disk.</li>
 </ul>
-<p><strong>MCP server not connecting</strong> — Ensure the project is initialized/indexed, verify the path in your MCP config, and check that <code>codegraph serve --mcp</code> works from the command line.</p>
+<p><strong>MCP server not connecting</strong> — Your agent starts the server itself, so you don&#39;t launch it by hand. Make sure the project is initialized and indexed (<code>codegraph status</code>) and that the path in your MCP config is correct. If it still won&#39;t connect, re-run <code>codegraph install</code> to rewrite the config.</p>
 <p><strong>Missing symbols</strong> — The MCP server auto-syncs on save (wait a couple seconds). Run <code>codegraph sync</code> manually if needed. Check that the file&#39;s language is supported and isn&#39;t inside a <code>.gitignore</code>d or default-excluded directory (e.g. <code>node_modules</code>, <code>dist</code>).</p>
 <p><strong>Sharing one checkout between Windows and WSL</strong> — Don&#39;t point both at the same <code>.codegraph/</code>: the background-server lock and the SQLite index are tied to the OS that wrote them, and SQLite locking across the WSL2/Windows filesystem boundary is unreliable. Give each side its own index in the same tree by setting <code>CODEGRAPH_DIR</code> to a distinct name on one of them — e.g. <code>CODEGRAPH_DIR=.codegraph-win</code> on Windows, leaving WSL on the default <code>.codegraph</code>. CodeGraph skips any sibling <code>.codegraph-*</code> directory when indexing and watching, so the two never trip over each other.</p>
 <h3>Star History</h3>
@@ -1565,7 +1570,7 @@ is written):</p>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
-        <div class="stars">★ 60</div>
+        <div class="stars">★ 61</div>
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/junhoyeo/tokscale">
@@ -1573,7 +1578,7 @@ is written):</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 450</div>
+        <div class="stars">★ 451</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -1581,7 +1586,7 @@ is written):</p>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 90</div>
+        <div class="stars">★ 91</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">
