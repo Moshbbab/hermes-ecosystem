@@ -280,18 +280,17 @@
     "auditedAt": "2026-06-08T09:29:45.635Z"
   },
   "ReinaMacCredy/maestro": {
-    "summary": "maestro is a local-first harness that provides a durable structure for coding agents to manage long-running work. It uses a Rust-based CLI to track features, tasks, and harness improvements as plain files within a `.maestro/` directory, eliminating the need for external daemons or cloud state. The system enforces a gated state machine where work must be backed by recorded proof and QA baselines before being marked as shipped. It integrates with agents like Claude Code and Codex via specialized skills and hooks to automate the lifecycle of development.",
+    "summary": "maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based system stored as plain files in the repository to track features, tasks, decisions, and proofs. Agents manage the project lifecycle via a CLI, ensuring that work is gated by dependencies and evidence-backed QA. This approach allows humans to audit agent progress through standard diffs without requiring a daemon or cloud service.",
     "highlights": [
-      "Gated lifecycles for features, tasks, and harness improvements",
-      "Local-first storage of work and proof in plain files",
-      "Integration skills for Claude Code and Codex agents"
+      "Durable card model for features, tasks, and decision tracking",
+      "Evidence-backed QA gates for verifying and shipping work",
+      "Local-first Rust binary with no daemon or cloud dependencies"
     ],
-    "readmeHash": "c445d545f66ffb40ff4f62f0b16af72acc81927baf2035fc1bac4cc3e1dfafae",
-    "generatedAt": "2026-06-05T07:54:42.542Z",
+    "readmeHash": "e61e54b1e9d7408c56d108f4f3e1c3bd08a9eb29649b4532c120e93b0118ce40",
+    "generatedAt": "2026-06-15T08:33:47.088Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-06-08T09:29:48.118Z"
+    "audit": "pass"
   },
   "tiann/execplan-skill": {
     "summary": "ExecPlan is an Agent Skill designed to help AI coding agents autonomously manage complex, long-running implementation tasks. It utilizes a structured execution plan that allows users to review and approve the approach before implementation starts. The system tracks progress in real-time and provides rollback procedures for safe recovery. It is compatible with tools such as Claude Code, Cursor, and Goose.",
@@ -1266,27 +1265,27 @@
     "auditedAt": "2026-06-08T09:34:01.991Z"
   },
   "stephenschoettler/hermes-lcm": {
-    "summary": "hermes-lcm is a context management plugin for Hermes Agent that prevents the loss of detail typically caused by flat summary compression. It utilizes a hierarchical summary DAG and a SQLite message store to persist conversation history. The agent can use specialized tools to drill back into compacted material and retrieve raw messages or child summaries. This approach provides the agent with autonomous, source-aware retrieval capabilities within the active context engine.",
+    "summary": "Hermes-LCM is a context management plugin for Hermes Agent that prevents information loss during long-running conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) that compacts older messages into depth-aware summary nodes stored in a local SQLite database. This architecture allows the agent to use specialized tools like grep and expand to retrieve exact historical details without flooding the active context window. The system also includes automated controls for redacting sensitive data and externalizing large payloads to maintain performance.",
     "highlights": [
-      "Hierarchical summary DAG for depth-aware context compaction",
-      "SQLite store for preserving raw messages and externalized payloads",
-      "Dedicated tools for grep, expansion, and source-lineage retrieval"
+      "Uses a hierarchical DAG to compact context without losing message history",
+      "Provides agent tools for searching and expanding specific historical summaries",
+      "Preserves raw messages in a local SQLite store for bounded recovery"
     ],
-    "readmeHash": "d2de6dfc6220e1643b23f627df56440c58087ff6dc38729c47814fd929fbbe60",
-    "generatedAt": "2026-06-14T08:01:57.297Z",
+    "readmeHash": "299841859d343dceb94afd9599b1ca3e1998162e0697ac43ede9d1438a2b79b3",
+    "generatedAt": "2026-06-15T08:34:45.050Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
   },
   "Codename-11/hermes-relay": {
-    "summary": "Hermes-Relay is a remote-control ecosystem that allows users to interact with a server-deployed Hermes agent via mobile and desktop interfaces. It uses a WSS relay to connect a native Android app and a desktop CLI/tray application to a central agent. The Android app enables screen reading and device interaction, while the desktop client allows the agent to execute local system commands and file operations. This architecture enables a single agent to manage multiple device surfaces without requiring SSH.",
+    "summary": "Hermes-Relay is a native Android companion and CLI tool that provides mobile access to a self-hosted Hermes agent. It connects to the agent's API server via LAN or remote routes to enable streaming chat, voice interaction, and agent management from a mobile device. Sideloaded versions allow the agent to read and act on the phone's screen, while the CLI binary enables consent-gated control over paired machines. This ecosystem allows users to maintain the agent's core logic on a central machine while interacting with it across multiple devices.",
     "highlights": [
-      "Android app for screen reading, voice, and device control",
-      "Desktop CLI and tray app for remote server interaction",
-      "Bidirectional tool execution for local file and terminal access"
+      "Native Android app with streaming chat and voice interaction",
+      "Sideloaded APKs enable agent-driven screen reading and device control",
+      "Alpha CLI for consent-gated terminal, file, and screenshot access"
     ],
-    "readmeHash": "02b445c4f2935899b0c1c53d392be630e390bdcb9bff031240e4b43eac214a86",
-    "generatedAt": "2026-06-08T09:43:30.270Z",
+    "readmeHash": "f5063ab56f425af7e1b8ee01b67de1462b90ce9bcfd0df1fb113d8fdd301f4bf",
+    "generatedAt": "2026-06-15T08:34:50.617Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1318,14 +1317,14 @@
     "audit": "pass"
   },
   "EKKOLearnAI/hermes-web-ui": {
-    "summary": "Hermes Studio is a comprehensive web dashboard and local runtime manager designed to provide a graphical interface for the Hermes Agent ecosystem. It centralizes agent interactions, model configuration, and multi-platform channel management into a single desktop or web-based console. Users can execute streaming chats, manage local SQLite session databases, and monitor usage analytics across various LLM providers. The platform also facilitates automated workflows through scheduled cron jobs, Kanban task tracking, and multi-agent group chat rooms.",
+    "summary": "Hermes Studio is a comprehensive web dashboard and desktop application designed to manage and interact with Hermes Agent environments. It provides a centralized control plane for orchestrating multi-platform AI chats, managing local model providers, and automating scheduled cron jobs. Users can configure integrations for eight messaging platforms, monitor detailed usage analytics, and execute coding-agent sessions through a unified interface. The system ensures data privacy by maintaining local SQLite storage for sessions and managing profile-scoped configurations and files.",
     "highlights": [
-      "Unified configuration for eight messaging platforms including Telegram and Discord.",
-      "Local control plane for managing models, credentials, and profile-scoped memory.",
-      "Integrated file browser and terminal for remote and local backends."
+      "Unified configuration for Telegram, Discord, Slack, WhatsApp, and more",
+      "Local session management with SQLite storage and markdown support",
+      "Multi-profile control for models, credentials, skills, and memory"
     ],
-    "readmeHash": "f67c7446878d955a55fb157c2fafdccb360b151a19095543b3940b04819cb9f2",
-    "generatedAt": "2026-06-14T08:02:01.674Z",
+    "readmeHash": "9fe24c3c8eed929a2202c000532503f2e912c97cb9aef37df8b351604348f7ee",
+    "generatedAt": "2026-06-15T08:34:56.615Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1345,14 +1344,14 @@
     "auditedAt": "2026-04-27T08:50:53.111Z"
   },
   "AxDSan/mnemosyne": {
-    "summary": "Mnemosyne is a local AI memory layer designed to provide persistent context for autonomous agents. It utilizes a SQLite-backed architecture with vector search and full-text search to manage information without external cloud dependencies. The system supports various integration methods including MCP, a Python SDK, and native plugins for platforms like Cursor and Claude Code. It features episodic compression and temporal knowledge graphs to optimize storage and retrieval efficiency.",
+    "summary": "Mnemosyne is a zero-dependency memory layer designed to provide persistent context for Hermes and other AI agents. It utilizes a single-file SQLite backend to manage working memory, episodic long-term storage, and a temporal knowledge graph without external service requirements. The system supports vector search, entity extraction, and episodic compression to reduce storage overhead while maintaining sub-millisecond retrieval speeds. It integrates natively with the Model Context Protocol (MCP) for use in tools like Cursor, Claude Code, and OpenWebUI.",
     "highlights": [
-      "Zero-dependency SQLite backend with sub-millisecond latency",
-      "Universal integration via MCP, Python SDK, and native plugins",
-      "Supports temporal knowledge graphs and episodic memory compression"
+      "Single-file SQLite architecture with zero external cloud dependencies",
+      "Sub-millisecond retrieval latency with 9.4x episodic storage compression",
+      "Native MCP support for Cursor, Claude Code, and Hermes agents"
     ],
-    "readmeHash": "e7062bd79f21889636f200a5066de71145ffe3ae90b30bbf0bf9fbf07ff2d1f8",
-    "generatedAt": "2026-06-14T08:02:07.415Z",
+    "readmeHash": "52746938deb8feaa72cc032e796e428ae43420b99ad3acbd9c8ae34758fecda9",
+    "generatedAt": "2026-06-15T08:35:01.017Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1742,14 +1741,14 @@
     "auditedAt": "2026-06-08T09:36:23.848Z"
   },
   "Eynzof/hermes-agent-cn-desktop": {
-    "summary": "Hermes Agent CN Desktop is a cross-platform desktop client designed to provide a native interface for the Hermes Agent ecosystem in Chinese-speaking environments. Built using Tauri, Rust, and React, the application manages a local agent runtime and provides a secure REST proxy layer for process communication. It features a comprehensive UI for managing MCP tools, skills, and long-term memory while supporting both cloud-based and local model providers like Ollama and vLLM. Users can also integrate the agent with third-party platforms such as Feishu and toggle a specialized 'YOLO mode' for automated command execution.",
+    "summary": "Hermes Agent CN Desktop is a cross-platform desktop client designed to provide a native Windows and macOS interface for the Hermes Agent ecosystem. Built using Tauri, Rust, and React, it encapsulates a modified Chinese community core to manage local agent runtimes, processes, and secure REST/WebSocket communication. The application features a comprehensive workbench for task control, memory management, and skill configuration while supporting both cloud-based and local model providers like Ollama and vLLM. It simplifies agent deployment for non-technical users through a managed installation process and integrated diagnostic tools.",
     "highlights": [
-      "Native Windows and macOS support using lightweight Tauri v2 architecture",
-      "Built-in management for local Hermes-CN-Core runtime installation and updates",
-      "Integrated support for MCP tools, memory management, and LaTeX rendering"
+      "Native desktop shell for Windows and macOS using Tauri v2",
+      "Integrated management for local Hermes Agent runtimes and health diagnostics",
+      "Supports MCP tools, memory management, and LaTeX/Mermaid rendering"
     ],
-    "readmeHash": "9b6dd885fde498c50a1e9104eaa3f8f996c73789f69df3935a475897afb41862",
-    "generatedAt": "2026-06-14T08:01:19.634Z",
+    "readmeHash": "6aee1daf71c10f61b5167d0bee23b447ef1ad57f0ab45f69e27529886c8d82ed",
+    "generatedAt": "2026-06-15T08:33:57.852Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1864,14 +1863,14 @@
     "audit": "pass"
   },
   "liaohch3/claude-tap": {
-    "summary": "claude-tap is a local proxy and trace viewer designed to provide visibility into the API traffic of AI coding agents. It intercepts requests to inspect system prompts, tool calls, and conversation history by running the agent's CLI through its proxy. Users can debug agent behavior using request diffs and export sessions as portable HTML files for archiving. It supports a wide range of clients including Hermes Agent, Claude Code, Cursor, and Gemini CLI.",
+    "summary": "claude-tap is a local proxy and trace viewer designed to help developers inspect the internal API traffic of AI coding agents. It captures real-time data by running CLI agents through its proxy or listening to local app transcripts. Users can analyze system prompts, tool calls, and token usage while comparing request diffs to debug agent behavior. It supports a wide range of clients, including Hermes Agent, Claude Code, Cursor, and Gemini.",
     "highlights": [
-      "Inspects system prompts, tool schemas, and token usage",
-      "Compares adjacent requests with structured diffs to debug behavior",
-      "Exports trace sessions as self-contained, portable HTML files"
+      "Inspects system prompts, tool schemas, and streaming responses",
+      "Provides structured diffs to compare adjacent API requests",
+      "Exports trace sessions to portable, self-contained HTML viewers"
     ],
-    "readmeHash": "60a51ccb3f28936c0d4be26b73f8a53ef423be36868aa48a9d18f063c15a5664",
-    "generatedAt": "2026-06-13T07:47:10.722Z",
+    "readmeHash": "62b83c541725f15988c5b15e7121c393913ac6b50fe53bb4e79682915eb11a25",
+    "generatedAt": "2026-06-15T08:34:06.275Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -2098,40 +2097,40 @@
     "auditedAt": "2026-06-08T09:37:58.003Z"
   },
   "nexu-io/open-design": {
-    "summary": "Open Design is a local-first, open-source design and prototyping system that serves as an agent-native alternative to Claude Design. It transforms design workflows into a filesystem of skills, design systems, and plugins that can be read and remixed by coding agents. The platform enables the generation of web, desktop, and mobile prototypes, motion graphics, and decks using a sandboxed iframe preview. It integrates with various coding agents, including Hermes, via a CLI and MCP server to streamline the handoff between design and code.",
+    "summary": "Open Design is a local-first, open-source design and prototyping platform that serves as an agent-native alternative to proprietary design tools. It operates by converting design systems into a filesystem of skills and plugins that coding agents can read, write, and remix to generate artifacts. The system produces web prototypes, motion graphics, pitch decks, and high-resolution images using real CSS and components. It integrates directly with various coding agents, including Hermes, through a dedicated CLI and MCP server to automate design-to-code workflows.",
     "highlights": [
-      "Generates prototypes, HyperFrames motion graphics, decks, and images",
-      "Supports 100+ skills, 150 design systems, and 261 plugins",
-      "Integrates with 22 local CLIs and OpenAI-compatible endpoints"
+      "Generates HTML prototypes, HyperFrame motion graphics, and PPTX decks",
+      "Supports 22 coding agents including Hermes via MCP server integration",
+      "Uses DESIGN.md files to enforce brand-grade design system contracts"
     ],
-    "readmeHash": "3424217bfbeaea12452f24067bef67129a854f13ac0e521d81de214e85990503",
-    "generatedAt": "2026-06-12T08:06:08.341Z",
+    "readmeHash": "6d00e65f1a25b72694f748daf7dd78f176fb03c1a749fdd69a0c84f68623cbe7",
+    "generatedAt": "2026-06-15T08:34:14.714Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
   },
   "farion1231/cc-switch": {
-    "summary": "CC Switch is a cross-platform desktop application that provides a centralized interface for managing multiple AI coding agents and command-line interfaces. Built with the Tauri 2 framework, it allows users to toggle between and configure various tools like Hermes Agent, Claude Code, and Gemini CLI from a single dashboard. The tool simplifies the installation and environment management of these diverse AI assistants across Windows, macOS, and Linux. It serves as a unified workspace for developers who utilize different specialized AI models and agents in their software engineering workflows.",
+    "summary": "CC Switch is a cross-platform manager designed to centralize the administration of various AI coding and CLI tools. It is built using Tauri 2 to provide a native desktop experience across Windows, macOS, and Linux. The tool allows users to manage multiple environments including Claude Code, Gemini CLI, and Hermes Agent from a single interface. This streamlines the workflow for developers using a variety of LLM-based agents and coding assistants.",
     "highlights": [
-      "Centralized manager for Hermes Agent and multiple AI coding CLIs",
-      "Cross-platform support for Windows, macOS, and Linux systems",
-      "Built using the Tauri 2 framework for lightweight performance"
+      "Cross-platform support for Windows, macOS, and Linux",
+      "Built with Tauri 2 for native performance",
+      "Manages Claude Code, Gemini CLI, and Hermes Agent"
     ],
-    "readmeHash": "1e9c61bb14e4b08d63253a5f4c07405d0d5aff24d1e0d42d28f9c60593c551e5",
-    "generatedAt": "2026-06-14T08:01:32.118Z",
+    "readmeHash": "5d8ef997d170226b85cf2a181dcbc21a8881c8cda3edb3bb59b9d306ea7193dd",
+    "generatedAt": "2026-06-15T08:34:26.797Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
   },
   "iOfficeAI/AionUi": {
-    "summary": "AionUi is a local open-source workspace that provides a unified graphical interface for interacting with multiple AI agents. It functions by auto-detecting installed CLI agents like Hermes Agent and Claude Code while offering a built-in engine for users without existing setups. The platform enables autonomous file operations, web searching, and the generation of editable Office documents like PPTs and spreadsheets. It also supports remote access via mobile messaging apps and scheduled task automation through cron jobs.",
+    "summary": "AionUi is a local, open-source workspace that provides a graphical interface for interacting with multiple AI agents simultaneously. It functions as a unified hub that auto-detects and integrates various CLI-based agents like Hermes Agent and Claude Code while offering its own built-in engine for users without existing setups. The platform enables autonomous file operations, web searching, and the generation of editable Office documents such as PPTs and spreadsheets. It also supports remote access via web interfaces and messaging apps like Telegram for 24/7 automated task execution.",
     "highlights": [
       "Unified GUI for Hermes Agent, Claude Code, and 13+ CLI agents",
-      "Built-in engine for file access, web search, and MCP tools",
+      "Built-in engine for file access, web search, and MCP tool integration",
       "Automated generation of editable Morph PPT, Word, and Excel files"
     ],
-    "readmeHash": "bec9dee05c4cda023f02c9cd93e26a34211cc227b2bf2070327956be7e236ac1",
-    "generatedAt": "2026-06-09T07:47:32.741Z",
+    "readmeHash": "b15444eca5a19eec2936c98ead812bdff7a16e429173e8ce116cdaf7df4c59f0",
+    "generatedAt": "2026-06-15T08:34:30.871Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -2286,14 +2285,14 @@
     "audit": "pass"
   },
   "Sahil-SS9/hermaguard": {
-    "summary": "Hermaguard is an adversarial code review skill designed to identify logic bugs and security vulnerabilities that general review tools often miss. It utilizes an orchestrator to deploy three specialized subagents that analyze edge cases, attack surfaces, and integration blast radii in parallel. A consolidator then merges these findings into a risk-tiered markdown report. The skill is delivered as a single markdown file compatible with Hermes Agent, Claude Code, and other subagent-capable frameworks.",
+    "summary": "HermaGuard is an adversarial code review skill for AI agents designed to identify vulnerabilities and logic bugs without modifying source code. It utilizes a deterministic pre-scan layer featuring tools like Semgrep and Bandit followed by three parallel subagents that analyze edge cases, exploitability, and integration blast radius. Findings are merged by a consolidator into structured Markdown and JSON reports for triage. The system includes a feedback MCP server to track fix rates and a benchmark suite to measure detection precision and recall.",
     "highlights": [
-      "Three parallel adversarial agents for exhaustive bug hunting",
-      "Risk-tiered reporting via a dedicated consolidator agent",
-      "Zero-dependency installation via a single SKILL.md file"
+      "Parallel subagents analyze edge cases, exploitability, and integration risks.",
+      "Deterministic pre-scan layer integrates Semgrep, Bandit, and Gosec.",
+      "Feedback MCP server generates suppression rules to reduce false positives."
     ],
-    "readmeHash": "41a3594d4c2e8f945a4ec4ba931b0b4b56b005cf672084e70478bb0ea2162c79",
-    "generatedAt": "2026-06-09T07:48:37.602Z",
+    "readmeHash": "3f652dd938c1064f257dd0c2569ce0d408a4d0a7c27cce448dc9aa20e36e7c25",
+    "generatedAt": "2026-06-15T08:35:13.576Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"

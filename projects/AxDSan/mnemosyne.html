@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a local AI memory layer designed to provide persistent context for autonomous agents. It utilizes a SQLite-backed architecture with vector search and full-text search to manage information without external cloud dependencies. The system supports various integration methods including MCP, a Python SDK, and native plugins for platforms like Cursor and Claude Code. It features episodic compression and temporal knowledge graphs to optimize storage and retrieval efficiency.",
+  "description": "Mnemosyne is a zero-dependency memory layer designed to provide persistent context for Hermes and other AI agents. It utilizes a single-file SQLite backend to manage working memory, episodic long-term storage, and a temporal knowledge graph without external service requirements. The system supports vector search, entity extraction, and episodic compression to reduce storage overhead while maintaining sub-millisecond retrieval speeds. It integrates natively with the Model Context Protocol (MCP) f",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-06-14T05:40:21.000Z",
+  "dateModified": "2026-06-14T23:55:27.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1115
+    "userInteractionCount": 1132
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a local AI memory layer designed to provide persistent context for autonomous agents. It utilizes a SQLite-backed architecture with vector search and full-text search to manage information without external cloud dependencies. The system supports various integration methods including MCP, a Python SDK, and native plugins for platforms like Cursor and Claude Code. It features episodic compression and temporal knowledge graphs to optimize storage and retrieval efficiency.</p>
+    <p class="summary-text">Mnemosyne is a zero-dependency memory layer designed to provide persistent context for Hermes and other AI agents. It utilizes a single-file SQLite backend to manage working memory, episodic long-term storage, and a temporal knowledge graph without external service requirements. The system supports vector search, entity extraction, and episodic compression to reduce storage overhead while maintaining sub-millisecond retrieval speeds. It integrates natively with the Model Context Protocol (MCP) for use in tools like Cursor, Claude Code, and OpenWebUI.</p>
     <ul class="summary-highlights">
-      <li>Zero-dependency SQLite backend with sub-millisecond latency</li>
-      <li>Universal integration via MCP, Python SDK, and native plugins</li>
-      <li>Supports temporal knowledge graphs and episodic memory compression</li>
+      <li>Single-file SQLite architecture with zero external cloud dependencies</li>
+      <li>Sub-millisecond retrieval latency with 9.4x episodic storage compression</li>
+      <li>Native MCP support for Cursor, Claude Code, and Hermes agents</li>
     </ul>
   </div>
 </section>
@@ -175,11 +175,13 @@
 </li>
 <li><a href="#architecture">Architecture</a></li>
 <li><a href="#why-mnemosyne">Why Mnemosyne?</a></li>
+<li><a href="#security--privacy-model">Security &amp; Privacy Model</a></li>
 <li><a href="#configuration">Configuration</a><ul>
 <li><a href="#environment-variables">Environment Variables</a></li>
 </ul>
 </li>
 <li><a href="#hermes-plugin-23-tools">Hermes Plugin (23 tools)</a></li>
+<li><a href="#mnemosyne-sync">Mnemosyne Sync</a></li>
 <li><a href="#contributing">Contributing</a></li>
 <li><a href="#support">Support</a></li>
 <li><a href="#license">License</a></li>
@@ -227,7 +229,7 @@
 <tr>
 <td><strong>Hermes Agent</strong></td>
 <td>MCP + Plugin</td>
-<td>Native — ships enabled</td>
+<td>Native -- ships enabled</td>
 </tr>
 <tr>
 <td><strong>Any MCP client</strong></td>
@@ -383,6 +385,11 @@ mnemosyne sleep                         # Run consolidation
 # Export / import
 mnemosyne export --output backup.json
 mnemosyne import --input backup.json
+
+# Sync (bidirectional memory sync between instances)
+mnemosyne sync --remote https://my-vps:8765
+mnemosyne sync --remote https://my-vps:8765 --encrypt
+mnemosyne sync serve --port 8765 --api-key &quot;sk-...&quot;
 </code></pre>
 <hr>
 <h3>Python API</h3>
@@ -441,35 +448,35 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
 </code></pre>
 <hr>
 <h3>Architecture</h3>
-<pre><code>┌────────────────────────────────────────────────────────────┐
-│                    Any AI Agent                            │
-│  (Hermes · Claude Code · Cursor · Codex · OpenWebUI · MCP) │
-└────────────────────────┬───────────────────────────────────┘
-                         │ MCP / SDK / Plugin
-┌────────────────────────▼───────────────────────────────────┐
-│                      Mnemosyne BEAM                         │
-│  ┌────────────┐  ┌──────────────┐  ┌────────────────────┐   │
-│  │ Working    │  │ Episodic     │  │ TripleStore         │   │
-│  │ Memory     │──▶│ Memory       │  │ (Temporal KG)      │   │
-│  │ (hot ctx)  │  │ (long-term)  │  └────────────────────┘   │
-│  └────────────┘  └──────┬───────┘                           │
-│                         │                                    │
-│              ┌──────────▼──────────┐                        │
-│              │     SQLite DB       │                        │
-│              │  (single file)      │                        │
-│              │  sqlite-vec + FTS5  │                        │
-│              │  MIB binary vectors │                        │
-│              └─────────────────────┘                        │
-└─────────────────────────────────────────────────────────────┘
+<pre><code>+------------------------------------------------------------+
+|                    Any AI Agent                            |
+|  (Hermes - Claude Code - Cursor - Codex - OpenWebUI - MCP) |
++------------------------+-----------------------------------+
+                         | MCP / SDK / Plugin
++------------------------v-----------------------------------+
+|                      Mnemosyne BEAM                         |
+|  +------------+  +--------------+  +--------------------+   |
+|  | Working    |  | Episodic     |  | TripleStore         |   |
+|  | Memory     |-&gt;| Memory       |  | (Temporal KG)      |   |
+|  | (hot ctx)  |  | (long-term)  |  +--------------------+   |
+|  +------------+  +------+-------+                           |
+|                         |                                    |
+|              +----------v----------+                        |
+|              |     SQLite DB       |                        |
+|              |  (single file)      |                        |
+|              |  sqlite-vec + FTS5  |                        |
+|              |  MIB binary vectors |                        |
+|              +---------------------+                        |
++-------------------------------------------------------------+
 </code></pre>
 <p><strong>BEAM</strong> (Bilevel Episodic-Associative Memory):</p>
 <ul>
-<li><strong>Working memory</strong> — Hot context, auto-injected before LLM calls, TTL-based eviction</li>
-<li><strong>Episodic memory</strong> — Long-term storage with sqlite-vec + FTS5 hybrid search</li>
-<li><strong>TripleStore</strong> — Temporal knowledge graph with version chains</li>
+<li><strong>Working memory</strong> -- Hot context, auto-injected before LLM calls, TTL-based eviction</li>
+<li><strong>Episodic memory</strong> -- Long-term storage with sqlite-vec + FTS5 hybrid search</li>
+<li><strong>TripleStore</strong> -- Temporal knowledge graph with version chains</li>
 </ul>
 <p><strong>Hybrid scoring:</strong> 50% vector similarity + 30% FTS5 rank + 20% importance, all inside SQLite.</p>
-<p><strong>Binary vectors:</strong> Information-theoretic binarization (MIB) compresses 384-dim float32 embeddings into 48 bytes — 32x reduction. Hamming distance entirely within SQLite. No ANN indices, no external vector DB.</p>
+<p><strong>Binary vectors:</strong> Information-theoretic binarization (MIB) compresses 384-dim float32 embeddings into 48 bytes -- 32x reduction. Hamming distance entirely within SQLite. No ANN indices, no external vector DB.</p>
 <hr>
 <h3>Why Mnemosyne?</h3>
 <table>
@@ -597,6 +604,59 @@ results = beam.recall(&quot;editor preferences&quot;, top_k=5)
 </tr>
 </tbody></table>
 <hr>
+<h3>Security &amp; Privacy Model</h3>
+<blockquote>
+<p><strong>You are solely responsible for the content stored in Mnemosyne.</strong>
+Mnemosyne Sync supports optional client-side encryption. When disabled, memory content travels over TLS and is stored according to your infrastructure&#39;s security settings.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Mnemosyne</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Local-first by default</strong></td>
+<td>✅</td>
+<td>No data ever leaves your machine unless you enable sync</td>
+</tr>
+<tr>
+<td><strong>No telemetry</strong></td>
+<td>✅</td>
+<td>Zero tracking, zero analytics, zero cloud dependency</td>
+</tr>
+<tr>
+<td><strong>Optional sync</strong></td>
+<td>✅</td>
+<td>Bidirectional delta sync between desktop and VPS</td>
+</tr>
+<tr>
+<td><strong>Client-side encryption (sync)</strong></td>
+<td>✅</td>
+<td>XChaCha20-Poly1305 authenticated encryption. Key never leaves your machine.</td>
+</tr>
+<tr>
+<td><strong>BYOK / data-at-rest</strong></td>
+<td>✅</td>
+<td>Via OS keychain, env vars, or passphrase-derived keys</td>
+</tr>
+<tr>
+<td><strong>Self-hostable</strong></td>
+<td>✅</td>
+<td>Docker, bare metal, Fly.io -- you control the infrastructure</td>
+</tr>
+<tr>
+<td><strong>TLS enforcement</strong></td>
+<td>✅</td>
+<td>HTTPS required in production. Dev <code>--insecure</code> flag isolated.</td>
+</tr>
+</tbody></table>
+<p>When client-side encryption is enabled, the remote sync server sees <strong>only metadata</strong> (event IDs, timestamps, operation types, device IDs). Memory content, importance scores, source fields, and vector embeddings are all encrypted before transmission. The server cannot read your memories.</p>
+<p><strong>Full documentation:</strong> <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/security.md">docs/security.md</a> / <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/sync.md">docs/sync.md</a></p>
+<p><strong>Comparison:</strong> Mnemosyne is the only memory system with client-side encryption of sync payloads as a core feature. Zep offers BYOK for data-at-rest but manages the key server-side. Every other system (Mem0, Letta, Honcho, Supermemory) relies solely on self-hosting and TLS for privacy.</p>
+<hr>
 <h3>Configuration</h3>
 <h4>Environment Variables</h4>
 <table>
@@ -661,7 +721,7 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 <p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/configuration.md#custom-embedding-models">docs/configuration.md#custom-embedding-models</a> for tradeoffs (RAM, speed, dimension changes).</p>
 <hr>
 <h3>Hermes Plugin (23 tools)</h3>
-<p>When used with Hermes Agent, Mnemosyne exposes <strong>23 tools</strong> for full memory lifecycle management — 3 lifecycle hooks (<code>pre_llm_call</code>, <code>on_session_start</code>, <code>post_tool_call</code>) for automatic context injection, plus MCP support.</p>
+<p>When used with Hermes Agent, Mnemosyne exposes <strong>23 tools</strong> for full memory lifecycle management -- 3 lifecycle hooks (<code>pre_llm_call</code>, <code>on_session_start</code>, <code>post_tool_call</code>) for automatic context injection, plus MCP support.</p>
 <blockquote>
 <p><strong>For the full Hermes setup guide, see <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/hermes-integration.md">docs/hermes-integration.md</a>.</strong> That is the canonical, most up-to-date reference.</p>
 </blockquote>
@@ -689,13 +749,13 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 </tr>
 <tr>
 <td><code>mnemosyne-memory[all]</code></td>
-<td>Full-featured — local embeddings + local LLM consolidation</td>
+<td>Full-featured -- local embeddings + local LLM consolidation</td>
 <td>~1.5 GB</td>
 <td>Adds <code>sentence-transformers</code> + local LLM deps (<code>ctransformers</code>). Maximum capability.</td>
 </tr>
 <tr>
 <td><code>mnemosyne-hermes</code></td>
-<td>Hermes Agent users — always pair with one of the above</td>
+<td>Hermes Agent users -- always pair with one of the above</td>
 <td>Same as base</td>
 <td>Wraps core library with plugin manifest + entry points. Run <code>hermes config set memory.provider mnemosyne</code> after install.</td>
 </tr>
@@ -706,7 +766,7 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 hermes config set memory.provider mnemosyne
 hermes memory setup
 </code></pre>
-<p>Then disable Hermes&#39; built-in MEMORY.md/USER.md system so Mnemosyne is the sole memory provider. Do NOT use <code>hermes tools disable memory</code> — that also kills all 23 Mnemosyne-registered tools.</p>
+<p>Then disable Hermes&#39; built-in MEMORY.md/USER.md system so Mnemosyne is the sole memory provider. Do NOT use <code>hermes tools disable memory</code> -- that also kills all 23 Mnemosyne-registered tools.</p>
 <p>Edit <code>~/.hermes/config.yaml</code>:</p>
 <pre><code class="language-yaml">memory:
   memory_enabled: false
@@ -745,26 +805,53 @@ user_profile_enabled: false
 <p>All 23 tools surface through the <code>mnemosyne-hermes</code> package, which wraps the <code>mnemosyne-memory</code> core library. The plugin manifest at <code>integrations/hermes/</code> is also discoverable by Hermes&#39; plugin system.</p>
 <p><strong>Updating:</strong> <code>pip install --upgrade mnemosyne-hermes &amp;&amp; hermes gateway restart</code> or <code>git pull &amp;&amp; pip install --upgrade integrations/hermes &amp;&amp; hermes gateway restart</code> (source).</p>
 <hr>
+<h3>Mnemosyne Sync</h3>
+<p>Bidirectional, delta-based memory sync between Mnemosyne instances. Designed for desktop-to-VPS sync, team collaboration, and backup.</p>
+<p><strong>Key features:</strong></p>
+<ul>
+<li>Delta/change-based protocol -- only transfers changes since last sync</li>
+<li>Bidirectional, push-only, or pull-only modes</li>
+<li>Optional client-side payload encryption (XChaCha20-Poly1305)</li>
+<li>API key and JWT authentication</li>
+<li>Timeline + importance conflict resolution</li>
+<li>Append-only event log for auditability</li>
+</ul>
+<pre><code class="language-bash"># Start a sync server on your VPS
+mnemosyne sync serve --port 8765 --api-key &quot;your-secret-key&quot;
+
+# On your local machine, sync bidirectionally
+mnemosyne sync --remote https://my-vps:8765
+
+# With client-side encryption
+export MNEMOSYNE_SYNC_KEY=$(mnemosyne sync generate-key)
+mnemosyne sync --remote https://my-vps:8765 --encrypt
+
+# Check sync status
+mnemosyne sync status --remote https://my-vps:8765
+</code></pre>
+<p><strong>When encryption is enabled</strong>, the remote server sees only metadata (event IDs, timestamps, operation types). Memory content is encrypted before leaving your machine and can only be decrypted with your key.</p>
+<p><strong>Full documentation:</strong> <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/sync.md">docs/sync.md</a> / <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/security.md">docs/security.md</a></p>
+<hr>
 <h3>Contributing</h3>
 <p>See <a href="https://github.com/AxDSan/mnemosyne/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for guidelines.</p>
-<p>Full docs: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/README.md"><code>docs/</code></a> · Changelog: <a href="https://github.com/AxDSan/mnemosyne/blob/main/CHANGELOG.md"><code>CHANGELOG.md</code></a> · Releases: <a href="https://github.com/AxDSan/mnemosyne/releases">GitHub Releases</a> · Integrations: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/integrations/README.md">docs/integrations/</a></p>
+<p>Full docs: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/README.md"><code>docs/</code></a> . Changelog: <a href="https://github.com/AxDSan/mnemosyne/blob/main/CHANGELOG.md"><code>CHANGELOG.md</code></a> . Releases: <a href="https://github.com/AxDSan/mnemosyne/releases">GitHub Releases</a> . Integrations: <a href="https://github.com/AxDSan/mnemosyne/blob/main/docs/integrations/README.md">docs/integrations/</a></p>
 <hr>
 <h3>Support</h3>
 <div align="center">
 
-<p><strong>Discord:</strong> <a href="https://discord.gg/Cgzpw9x3R">Join the Mnemosyne community</a> · <strong>Issues:</strong> <a href="https://github.com/AxDSan/mnemosyne/issues">GitHub Issues</a></p>
+<p><strong>Discord:</strong> <a href="https://discord.gg/Cgzpw9x3R">Join the Mnemosyne community</a> . <strong>Issues:</strong> <a href="https://github.com/AxDSan/mnemosyne/issues">GitHub Issues</a></p>
 <p><a href="https://github.com/sponsors/AxDSan"><img src="https://img.shields.io/badge/%F0%9F%92%96_GitHub_Sponsors-30363D?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Sponsors"/></a>
 <a href="https://ko-fi.com/axdsan"><img src="https://img.shields.io/badge/%E2%98%95_Ko-fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Ko-fi"/></a></p>
-<p>⭐ <strong>Star the repo if you find it useful!</strong></p>
+<p><strong>Star the repo if you find it useful!</strong></p>
 </div>
 
 <hr>
 <h3>License</h3>
-<p>MIT License — See <a href="LICENSE">LICENSE</a></p>
+<p>MIT License -- See <a href="LICENSE">LICENSE</a></p>
 <p>Copyright (c) 2026 Abdias J</p>
 <hr>
 <p align="center">
-  <em>"The faintest ink is more powerful than the strongest memory." — Hermes Trismegistus</em>
+  <em>"The faintest ink is more powerful than the strongest memory." -- Hermes Trismegistus</em>
 </p>
 
   </section>
@@ -778,11 +865,11 @@ user_profile_enabled: false
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 58.5K</div>
+        <div class="stars">★ 58.6K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 16.3K</div>
+        <div class="stars">★ 16.4K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -790,19 +877,19 @@ user_profile_enabled: false
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 302</div>
+        <div class="stars">★ 303</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 182</div>
+        <div class="stars">★ 183</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 194</div>
+        <div class="stars">★ 195</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 186</div>
+        <div class="stars">★ 199</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
