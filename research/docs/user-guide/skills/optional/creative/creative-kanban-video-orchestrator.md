@@ -162,7 +162,7 @@ Six concrete pipelines covering very different video styles — narrative film, 
     
 7.  **Don't over-decompose.** A 30-second product video does NOT need 20 tasks. Aim for the smallest task graph that still parallelizes well and exposes the right human-review gates.
     
-8.  **Verify API keys BEFORE firing.** External APIs (TTS, image-gen, image-to-video) need keys in `~/.hermes/.env` or the user's secret store. A worker that hits a missing-key error wastes a task slot. The setup script's `check_key` helper aborts cleanly if a required key is missing.
+8.  **Verify API keys BEFORE firing.** External APIs (TTS, image-gen, image-to-video) need keys in `${HERMES_HOME:-~/.hermes}/.env` or the user's secret store. A worker that hits a missing-key error wastes a task slot. The setup script's `check_key` helper aborts cleanly if a required key is missing.
     
 
 ## File map

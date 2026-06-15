@@ -317,6 +317,10 @@ Serverless GPU cloud platform for running ML workloads. Use when you need on-dem
 
 GPU-accelerated data curation for LLM training. Supports text/image/video/audio. Features fuzzy deduplication (16× faster), quality filtering (30+ heuristics), semantic deduplication, PII redaction, NSFW detection. Scales across GPUs wit...
 
+[**obliteratus**](/docs/user-guide/skills/optional/mlops/mlops-obliteratus)
+
+OBLITERATUS: abliterate LLM refusals (diff-in-means).
+
 [**outlines**](/docs/user-guide/skills/optional/mlops/mlops-inference-outlines)
 
 Outlines: structured JSON/regex/Pydantic LLM generation.
@@ -470,6 +474,10 @@ Description
 [**1password**](/docs/user-guide/skills/optional/security/security-1password)
 
 Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in, and reading/injecting secrets for commands.
+
+[**godmode**](/docs/user-guide/skills/optional/security/security-godmode)
+
+Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN.
 
 [**oss-forensics**](/docs/user-guide/skills/optional/security/security-oss-forensics)
 

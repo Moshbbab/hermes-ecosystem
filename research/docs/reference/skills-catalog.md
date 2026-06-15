@@ -352,12 +352,6 @@ lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
 
 `mlops/evaluation/lm-evaluation-harness`
 
-[`obliteratus`](/docs/user-guide/skills/bundled/mlops/mlops-inference-obliteratus)
-
-OBLITERATUS: abliterate LLM refusals (diff-in-means).
-
-`mlops/inference/obliteratus`
-
 [`segment-anything-model`](/docs/user-guide/skills/bundled/mlops/mlops-models-segment-anything)
 
 SAM: zero-shot image segmentation via points, boxes, masks.
@@ -445,20 +439,6 @@ Create, read, edit .pptx decks, slides, notes, templates.
 Operate the Teams meeting summary pipeline via Hermes CLI — summarize meetings, inspect pipeline status, replay jobs, manage Microsoft Graph subscriptions.
 
 `productivity/teams-meeting-pipeline`
-
-## red-teaming
-
-Skill
-
-Description
-
-Path
-
-[`godmode`](/docs/user-guide/skills/bundled/red-teaming/red-teaming-godmode)
-
-Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN.
-
-`red-teaming/godmode`
 
 ## research
 
@@ -563,6 +543,12 @@ Debug Python: pdb REPL + debugpy remote (DAP).
 Pre-commit review: security scan, quality gates, auto-fix.
 
 `software-development/requesting-code-review`
+
+[`simplify-code`](/docs/user-guide/skills/bundled/software-development/software-development-simplify-code)
+
+Parallel 3-agent cleanup of recent code changes.
+
+`software-development/simplify-code`
 
 [`spike`](/docs/user-guide/skills/bundled/software-development/software-development-spike)
 
