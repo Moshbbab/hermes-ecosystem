@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, providing a graphical alternative to the standard terminal or messaging app interactions. Built with Python and vanilla JavaScript, it achieves full feature parity with the CLI without requiring complex build steps or frameworks. The interface features a three-panel layout for managing chat sessions, workspace files, and agent settings while maintaining persistent memory and scheduled tasks. It allows users to access ",
+  "description": "Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or framework. The interface features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can securely access their existing agent and models via an SSH tunnel or Docker deployment.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-06-15T11:22:25.000Z",
+  "dateModified": "2026-06-16T06:00:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 14463
+    "userInteractionCount": 14520
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-15</span>
+    <span><span class="meta-label">updated</span>2026-06-16</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, providing a graphical alternative to the standard terminal or messaging app interactions. Built with Python and vanilla JavaScript, it achieves full feature parity with the CLI without requiring complex build steps or frameworks. The interface features a three-panel layout for managing chat sessions, workspace files, and agent settings while maintaining persistent memory and scheduled tasks. It allows users to access their existing Hermes models and configurations through a browser or mobile device via secure SSH tunneling.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or framework. The interface features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can securely access their existing agent and models via an SSH tunnel or Docker deployment.</p>
     <ul class="summary-highlights">
-      <li>Three-panel layout for chat, sessions, and workspace file browsing</li>
       <li>Full feature parity with the Hermes Agent CLI experience</li>
-      <li>Zero-build architecture using Python and vanilla JavaScript</li>
+      <li>Three-panel layout with workspace file browsing and inline previews</li>
+      <li>Lightweight architecture using Python and vanilla JavaScript</li>
     </ul>
   </div>
 </section>
@@ -754,13 +754,22 @@ and set <code>HERMES_WEBUI_PASSWORD</code> to enable authentication.</p>
 </blockquote>
 <hr>
 <h3>Running tests</h3>
-<p>Tests discover the repo and the Hermes agent dynamically -- no hardcoded paths.</p>
+<p>Tests discover the repo and the Hermes agent dynamically -- no hardcoded paths.
+Use the repo test runner so local runs do not accidentally use an unsupported
+system Python. It creates/uses <code>.venv</code> with Python 3.11, 3.12, or 3.13 and
+installs the dev test dependencies from <code>requirements-dev.txt</code> when missing.</p>
 <pre><code class="language-bash">cd hermes-webui
-pytest tests/ -v --timeout=60
+./scripts/test.sh
 </code></pre>
-<p>Or using the agent venv explicitly:</p>
-<pre><code class="language-bash">/path/to/hermes-agent/venv/bin/python -m pytest tests/ -v
+<p>Pass normal pytest arguments after the script for focused runs:</p>
+<pre><code class="language-bash">./scripts/test.sh tests/test_regressions.py -v
 </code></pre>
+<p>Or seed the repo <code>.venv</code> from an explicit supported base interpreter:</p>
+<pre><code class="language-bash">HERMES_WEBUI_TEST_PYTHON=/path/to/python3.12 ./scripts/test.sh tests/ -v
+</code></pre>
+<p>The override selects the Python used to create or rebuild <code>.venv</code>; dependencies
+are still installed into the repo-local virtual environment, not into the
+system/Homebrew interpreter.</p>
 <p>Tests run against an isolated server with a separate state directory.
 Production data and real cron jobs are never touched. Current snapshot:
 <strong>~7,150 tests collected</strong> across <strong>~700 test files</strong>, run in CI on Python 3.11,
@@ -1003,12 +1012,11 @@ Proper <code>Content-Disposition</code> with RFC 5987 <code>filename*=UTF-8&#39;
 A real-world blocker for anyone hosting behind Nginx Proxy Manager or similar on a port other than 80/443.</p>
 <p><strong><a href="https://github.com/betamod">@betamod</a></strong> — Security audit (PR #171)
 A comprehensive CSRF / SSRF / XSS / env-race-condition audit that shipped in v0.39.0.</p>
-<p><strong><a href="https://github.com/TaraTheStar">@TaraTheStar</a></strong> — Bot name + thinking blocks + login refactor (PRs #132, #176, #181)
-Configurable assistant display name, thinking/reasoning block display, and a login page refactor.</p>
+<ul>
+<li></li>
+</ul>
 <hr>
-<h3>Repo</h3>
-<pre><code>git@github.com:nesquena/hermes-webui.git
-</code></pre>
+<p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1029,15 +1037,15 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
-        <div class="stars">★ 106</div>
+        <div class="stars">★ 107</div>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 80</div>
+        <div class="stars">★ 81</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 433</div>
+        <div class="stars">★ 445</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -1045,7 +1053,7 @@ Configurable assistant display name, thinking/reasoning block display, and a log
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 638</div>
+        <div class="stars">★ 640</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
