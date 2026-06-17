@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "autocontext is a recursive harness that enables AI agents to iteratively improve their performance on specific goals. It works by running an improvement loop that evaluates outputs, retains successful strategies, and discards failures to produce structured traces and playbooks. This process creates a knowledge base of artifacts and distilled models that subsequent agent iterations inherit to ensure consistent progress. The system integrates with various LLM providers and supports MCP for use wit",
+  "description": "autocontext is a recursive self-improving harness that optimizes agent performance on complex tasks through iterative evaluation. It operates by testing goals against real evaluations, retaining successful strategies and discarding failures to produce structured traces and playbooks. This process allows subsequent agent iterations to inherit accumulated knowledge, including artifacts and optionally distilled local models. The system integrates with various providers including OpenAI, Anthropic, ",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-06-16T18:38:05.000Z",
+  "dateModified": "2026-06-16T21:42:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1205
+    "userInteractionCount": 1206
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">autocontext is a recursive harness that enables AI agents to iteratively improve their performance on specific goals. It works by running an improvement loop that evaluates outputs, retains successful strategies, and discards failures to produce structured traces and playbooks. This process creates a knowledge base of artifacts and distilled models that subsequent agent iterations inherit to ensure consistent progress. The system integrates with various LLM providers and supports MCP for use within coding agents like Claude Code and Hermes.</p>
+    <p class="summary-text">autocontext is a recursive self-improving harness that optimizes agent performance on complex tasks through iterative evaluation. It operates by testing goals against real evaluations, retaining successful strategies and discarding failures to produce structured traces and playbooks. This process allows subsequent agent iterations to inherit accumulated knowledge, including artifacts and optionally distilled local models. The system integrates with various providers including OpenAI, Anthropic, and the local Pi runtime, and supports MCP for tool-catalog protocol clients.</p>
     <ul class="summary-highlights">
-      <li>Iterative improvement loops that produce structured traces and playbooks</li>
-      <li>Support for multiple providers including Anthropic, OpenAI, Gemini, and Pi</li>
-      <li>MCP server integration for use in terminal-capable coding agents</li>
+      <li>Recursive improvement loops that produce persistent playbooks and artifacts</li>
+      <li>Broad provider support including local Pi runtime and major LLM APIs</li>
+      <li>MCP and CLI integration for use within existing coding agents</li>
     </ul>
   </div>
 </section>
@@ -168,7 +168,7 @@
 <p><strong>Documentation:</strong> <a href="https://autocontext.ai/docs">autocontext.ai/docs</a> · <a href="https://autocontext.ai/docs/get-started/quickstart">quickstart</a> · <a href="https://autocontext.ai/docs/cli/reference">CLI reference</a> · <a href="https://autocontext.ai/docs/changelog">changelog</a></p>
 <h3>Try It In 30 Seconds</h3>
 <p>The fastest path uses our <strong>Pi runtime</strong>, a local coding agent that handles its own auth. No API key plumbing, no provider config: install Pi, install autocontext, point one at the other.</p>
-<pre><code class="language-bash">uv tool install autocontext==0.6.0
+<pre><code class="language-bash">uv tool install autocontext==0.7.0
 
 AUTOCONTEXT_AGENT_PROVIDER=pi \
 AUTOCONTEXT_PI_COMMAND=pi \
@@ -178,7 +178,7 @@ autoctx solve \
 </code></pre>
 <p>Pi runs locally as a subprocess and emits live traces back into the harness. For a hosted Pi, set <code>AUTOCONTEXT_AGENT_PROVIDER=pi-rpc</code> and <code>AUTOCONTEXT_PI_RPC_ENDPOINT</code> instead.</p>
 <p>Prefer TypeScript? Same surface, same command:</p>
-<pre><code class="language-bash">bun add -g autoctx@0.6.0
+<pre><code class="language-bash">bun add -g autoctx@0.7.0
 AUTOCONTEXT_AGENT_PROVIDER=pi bunx autoctx solve \
   &quot;improve customer-support replies for billing disputes&quot; \
   --iterations 5 --json
@@ -192,9 +192,9 @@ autoctx solve &quot;...&quot; --iterations 3
 <h3>Or Just Talk To Your Agent</h3>
 <p>If you already work inside a coding agent, you can wire autocontext in once and give the agent a natural-language entry point. Hermes and other terminal-capable agents should start with the CLI-backed skill; MCP remains available for clients that want a tool-catalog protocol.</p>
 <p><strong>Pi</strong> ships an autocontext skill out of the box. Install the published Pi package and Pi loads natural-language wrappers over live tools such as <code>autocontext_solve_scenario</code>, <code>autocontext_evaluate_output</code>, <code>autocontext_run_improvement_loop</code>, <code>autocontext_run_status</code>, and <code>autocontext_list_scenarios</code>.</p>
-<pre><code class="language-bash">pi install npm:pi-autocontext@0.2.5
+<pre><code class="language-bash">pi install npm:pi-autocontext@0.2.6
 </code></pre>
-<p>Pi is on a separate package line: <code>pi-autocontext@0.2.5</code> currently depends on <code>autoctx@^0.5.1</code>. Use it for the current Pi tools/skills, and use <code>autocontext==0.6.0</code> or <code>autoctx@0.6.0</code> directly when you need the 0.6 runtime features until the next Pi extension release updates its bundled TypeScript dependency.</p>
+<p>Pi is on a separate package line: <code>pi-autocontext@0.2.6</code> now depends on <code>autoctx@^0.7.0</code>, matching the current Python and TypeScript 0.7 runtime line.</p>
 <p>Then you just ask:</p>
 <blockquote>
 <p>&quot;Solve: improve customer-support replies for billing disputes.&quot;</p>
@@ -305,18 +305,15 @@ const client = instrumentClient(new Anthropic(), { app: &quot;billing-bot&quot;,
 <pre><code class="language-bash">uv run autoctx train --scenario support_triage --data training/billing.jsonl --time-budget 300
 </code></pre>
 <!-- autocontext-whats-new:start -->
-<h3>What&#39;s New in 0.6.0</h3>
+<h3>What&#39;s New in 0.7.0</h3>
 <ul>
-<li><strong>CLI contract parity</strong> aligns the Python and TypeScript <code>autoctx</code> command surfaces around the shared canonical contract, including capabilities, mission lifecycle commands, queue commands, scenario creation, serve/MCP paths, show/watch, status behavior, and aliases.</li>
-<li><strong>Contract probes</strong> add terminal, directory, service, artifact, cleanup, media, and distributed probe families, plus <code>autoctx probes check</code> and <code>autoctx probes extract</code> for harness verification.</li>
-<li><strong>Mission checkpoints</strong> now share a cross-runtime checkpoint contract with collision-free filenames, camelCase/snake_case loader interop, atomic restore behavior, and async-boundary guards.</li>
+<li><strong>Agent app/runtime foundations</strong> add OSS contracts for child background sessions, sandbox adapters, session outcomes, and trust boundaries while keeping hosted orchestration out of the public package.</li>
+<li><strong>TypeScript agent app packaging</strong> adds Node and Fetch/edge build targets, capability manifests, runtime factories, conformance checks, examples, and troubleshooting docs.</li>
+<li><strong>Training/runtime improvements</strong> include TRL/OPD/R1 backend work, GRPO fixes, MLX serving handoff improvements, trace-gate review fixes, and local server read/write endpoints.</li>
+<li><strong>Experimental simplicity mode</strong> adds opt-in guide-only minimal-output prompt guidance across Python CLI solve/improve and shared app settings.</li>
 </ul>
 <!-- autocontext-whats-new:end -->
 
-<h3>On main (unreleased)</h3>
-<ul>
-<li><strong>Training pipeline work</strong> adds opt-in teacher-reasoning distillation, sampling controls, MLX-LM fine-tuning, score-conditioned generation, reward-weighted loss, and self-improving local-training loops. These features are on <code>main</code> and in <a href="https://github.com/greyhaven-ai/autocontext/blob/main/CHANGELOG.md">CHANGELOG.md</a>, but they are not included in the pinned <code>0.6.0</code> packages yet.</li>
-</ul>
 <h3>Choose Your Package</h3>
 <table>
 <thead>
@@ -347,17 +344,17 @@ const client = instrumentClient(new Anthropic(), { app: &quot;billing-bot&quot;,
 </tr>
 </tbody></table>
 <pre><code class="language-bash"># Python: library or CLI tool
-uv pip install autocontext==0.6.0
-uv tool install autocontext==0.6.0
+uv pip install autocontext==0.7.0
+uv tool install autocontext==0.7.0
 
 # TypeScript
-bun add -g autoctx@0.6.0
+bun add -g autoctx@0.7.0
 
 # Pi extension
-pi install npm:pi-autocontext@0.2.5
+pi install npm:pi-autocontext@0.2.6
 </code></pre>
 <blockquote>
-<p>The PyPI package is <code>autocontext</code>. The CLI entrypoint is <code>autoctx</code>. The npm packages are <code>autoctx</code> and <code>pi-autocontext</code> (note: an unrelated package on npm uses the name <code>autocontext</code>; that is not this project). <code>pi-autocontext@0.2.5</code> currently depends on <code>autoctx@^0.5.1</code>; it remains the current Pi extension package, but it does not bundle <code>autoctx@0.6.0</code> until the next Pi package release.</p>
+<p>The PyPI package is <code>autocontext</code>. The CLI entrypoint is <code>autoctx</code>. The npm packages are <code>autoctx</code> and <code>pi-autocontext</code> (note: an unrelated package on npm uses the name <code>autocontext</code>; that is not this project). <code>pi-autocontext@0.2.6</code> depends on <code>autoctx@^0.7.0</code>, matching the current TypeScript runtime line.</p>
 </blockquote>
 <h3>Surfaces</h3>
 <table>
@@ -564,7 +561,7 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 58.7K</div>
+        <div class="stars">★ 58.8K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -572,7 +569,7 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 309</div>
+        <div class="stars">★ 311</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -592,7 +589,7 @@ Yes. Wire <code>autoctx mcp-serve</code> (or <code>bunx autoctx mcp-serve</code>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 23.0K</div>
+        <div class="stars">★ 23.1K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>
