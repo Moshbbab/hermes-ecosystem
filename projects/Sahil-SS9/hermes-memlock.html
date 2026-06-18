@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock#software",
   "name": "hermes-memlock",
-  "description": "MemLock is a plugin for Hermes Agent that prevents the loss of standing instructions during context compaction. It monitors the conversation for compaction markers and audits the active context region to identify pinned instructions that have been demoted to background reference. When drift is detected, the tool rehydrates the missing instructions as a reminder block appended to the user's turn. This approach optimizes token usage and prompt cache stability by only reinjecting necessary instruct",
+  "description": "MemLock is a plugin for Hermes Agent that prevents standing instructions from being ignored after context compaction. It uses a pre_llm_call hook to audit the active conversation region for pinned anchors, re-injecting only the instructions that have drifted into the summary region. This approach reduces token costs and maintains prompt cache stability compared to constant reinjection. Users can manage these anchors via the guard_pin tool or a dedicated slash command.",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock",
   "codeRepository": "https://github.com/Sahil-SS9/hermes-memlock",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Sahil-SS9",
     "url": "https://github.com/Sahil-SS9"
   },
-  "dateModified": "2026-06-11T17:36:00.000Z",
+  "dateModified": "2026-06-17T20:26:12.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-11</span>
+    <span><span class="meta-label">updated</span>2026-06-17</span>
   </div>
 
   <div class="actions">
@@ -131,9 +131,9 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">MemLock is a plugin for Hermes Agent that prevents the loss of standing instructions during context compaction. It monitors the conversation for compaction markers and audits the active context region to identify pinned instructions that have been demoted to background reference. When drift is detected, the tool rehydrates the missing instructions as a reminder block appended to the user's turn. This approach optimizes token usage and prompt cache stability by only reinjecting necessary instructions rather than repeating them every turn.</p>
+    <p class="summary-text">MemLock is a plugin for Hermes Agent that prevents standing instructions from being ignored after context compaction. It uses a pre_llm_call hook to audit the active conversation region for pinned anchors, re-injecting only the instructions that have drifted into the summary region. This approach reduces token costs and maintains prompt cache stability compared to constant reinjection. Users can manage these anchors via the guard_pin tool or a dedicated slash command.</p>
     <ul class="summary-highlights">
-      <li>Audits active context to detect drifted pinned instructions</li>
+      <li>Audits active context to rehydrate only drifted instructions</li>
       <li>Supports keyword-based or semantic embedding-based drift detection</li>
       <li>Provides guard_pin tool and /guard command for anchor management</li>
     </ul>
@@ -421,11 +421,27 @@ probes. Note the model downloads lazily on first semantic audit.</p>
 <td>Distinctive keywords for drift detection (auto-derived)</td>
 </tr>
 <tr>
+<td><code>scope</code></td>
+<td>No</td>
+<td><code>session</code> (default, dies with session) or <code>global</code> (persists across sessions)</td>
+</tr>
+<tr>
 <td><code>unpin</code></td>
 <td>For unpin</td>
 <td>Anchor id to remove</td>
 </tr>
 </tbody></table>
+<h4>Cross-session persistence</h4>
+<p>Pins with <code>scope: global</code> are saved to a durable store and automatically
+re-seeded on every new session. The default backend is a zero-dependency
+filesystem store (<code>~/.hermes/memlock/persist/</code>). The backend is pluggable:
+set <code>persistence_backend</code> in config to swap in Mnemosyne or other stores.</p>
+<pre><code class="language-python"># Pin a global instruction that survives session restarts:
+guard_pin(text=&quot;Always use British English&quot;, scope=&quot;global&quot;, priority=80)
+
+# Session-scoped pins (default) die with the session:
+guard_pin(text=&quot;For this PR review, use bullet points&quot;)
+</code></pre>
 <h3>Limitations</h3>
 <ul>
 <li>Probe-based detection is best-effort. Auto-derived probes may be
@@ -459,11 +475,11 @@ downloads the embedding model on first use.</li>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 282</div>
+        <div class="stars">★ 283</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 225</div>
+        <div class="stars">★ 227</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -483,11 +499,11 @@ downloads the embedding model on first use.</li>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 346</div>
+        <div class="stars">★ 345</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
-        <div class="stars">★ 287</div>
+        <div class="stars">★ 288</div>
         <div class="name"><span class="org">stainlu /</span> hermes-labyrinth</div>
       </a>
     </div>
