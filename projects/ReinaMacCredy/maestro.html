@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ReinaMacCredy/maestro#software",
   "name": "maestro",
-  "description": "maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based system stored as plain files in the repository to track features, tasks, decisions, and proofs. Agents manage the project lifecycle via a CLI, ensuring that work is gated by dependencies and evidence-backed QA. This approach allows humans to audit agent progress through standard diffs without requiring a daemon or cloud service.",
+  "description": "maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas. Agents manage the development lifecycle via a CLI, ensuring work is gated by proof and QA requirements. This approach allows humans to audit agent progress through standard diffs and coordinate multiple agent sessions.",
   "url": "https://hermesatlas.com/projects/ReinaMacCredy/maestro",
   "codeRepository": "https://github.com/ReinaMacCredy/maestro",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "ReinaMacCredy",
     "url": "https://github.com/ReinaMacCredy"
   },
-  "dateModified": "2026-06-19T04:43:00.000Z",
+  "dateModified": "2026-06-20T04:16:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">169·repos</span>
+    <span id="meta-count">171·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-19</span>
+    <span><span class="meta-label">updated</span>2026-06-20</span>
   </div>
 
   <div class="actions">
@@ -131,10 +131,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based system stored as plain files in the repository to track features, tasks, decisions, and proofs. Agents manage the project lifecycle via a CLI, ensuring that work is gated by dependencies and evidence-backed QA. This approach allows humans to audit agent progress through standard diffs without requiring a daemon or cloud service.</p>
+    <p class="summary-text">maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas. Agents manage the development lifecycle via a CLI, ensuring work is gated by proof and QA requirements. This approach allows humans to audit agent progress through standard diffs and coordinate multiple agent sessions.</p>
     <ul class="summary-highlights">
-      <li>Durable card model for features, tasks, and decision tracking</li>
-      <li>Evidence-backed QA gates for verifying and shipping work</li>
+      <li>Durable card model for tracking features, tasks, and decisions</li>
+      <li>Proof and QA gates to verify work before shipping</li>
       <li>Local-first Rust binary with no daemon or cloud dependencies</li>
     </ul>
   </div>
@@ -363,6 +363,23 @@ maestro prints a best-effort inbox hint on stderr before ordinary commands, keep
 clean:</p>
 <pre><code>[inbox] 2 new (card-a 1, card-b 1) -&gt; maestro msg read
 </code></pre>
+<p>When two sessions end up on the same file, the holder can post a notice instead of opening a link.
+<code>maestro conflict &lt;peer&gt; &quot;&lt;why&gt;&quot;</code> aims a link-free, git-free &quot;I&#39;m taking this ground, hold off&quot;
+advisory at a peer card; the peer sees it on stderr before its next command, and <code>--clear</code> retracts
+it once merged back:</p>
+<pre><code>maestro conflict task-b &quot;taking login.rs, worktreeing it&quot;
+maestro conflict --clear task-b   # retract once merged back
+</code></pre>
+<pre><code>[CONFLICT] card-a holds card-b: src/foo.rs: mid-refactor, hold off
+           -&gt; hold off the shared file until the notice clears
+</code></pre>
+<p>The notice never writes a <code>related</code> edge and never runs git. It is liveness-scoped with no timer: it
+fades on its own when the asserter clears it, finishes its card, or falls out of the live session
+union, so a crashed or walked-away session never leaves a peer stuck. When a peer is live,
+<code>maestro feature accept</code> and <code>feature prepare</code> also print a <code>[worktree]</code> advisory suggesting you
+isolate in a git worktree before sharing a file. And because two full-suite gate runs would thrash
+one machine, <code>feature ship</code>&#39;s suite run takes a shared lock across sessions: a second run prints a
+<code>[busy]</code> waiting line and proceeds when the slot frees.</p>
 <h4>Suggested workflow</h4>
 <p>The card model composes into one operating rhythm. The <a href="#quickstart">Quickstart</a> above is the
 terse command path; this section narrates it: the agent prompt you hand off for each flow, and what
@@ -570,7 +587,7 @@ ideas, and superseded decisions after it. Every archived card appends a one-line
 <code>.maestro/archive/cards/INDEX.md</code>; <code>maestro resume</code> opens with the most recent of those
 lines, <code>maestro list --grep &lt;term&gt; --archived</code> searches the full history (kept fast by the
 local text index, which falls back to a plain scan when missing or stale), and
-<code>maestro query graph &lt;id&gt;</code> renders a card&#39;s dependency neighborhood with <code>[archived]</code>
+<code>maestro card graph &lt;id&gt;</code> renders a card&#39;s dependency neighborhood with <code>[archived]</code>
 targets marked. Closing verbs print the <code>next: maestro archive &lt;id&gt;</code> nudge, and
 <code>maestro doctor</code> warns when closed cards pile up in the live store.</p>
 <h4>Harness self-improvement</h4>
@@ -730,8 +747,8 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 <td>Wire or remove agent hooks and config (<code>--agent claude|codex</code>)</td>
 </tr>
 <tr>
-<td><code>sync</code></td>
-<td>Resync repo-local bundled resources, or global skills with <code>--global-skills</code></td>
+<td><code>sync</code> / <code>shell-init</code></td>
+<td>Resync repo-local resources (or global skills with <code>--global-skills</code>); print the shell init snippet</td>
 </tr>
 <tr>
 <td><code>upgrade</code></td>
@@ -750,10 +767,6 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 <td>Show other live sessions, their bound cards, link state, progress, and copy-paste link/message hints</td>
 </tr>
 <tr>
-<td><code>migrate-v2</code></td>
-<td>Fold old v1 artifacts into the reduced v2 layout</td>
-</tr>
-<tr>
 <td><code>migrate</code></td>
 <td>Snapshot <code>.maestro/</code> and fold legacy feature/task/decision/harness trees into <code>.maestro/cards/</code></td>
 </tr>
@@ -763,31 +776,15 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 </tr>
 <tr>
 <td><code>task</code></td>
-<td>Complete, verify, block, and query proof-gated work cards</td>
-</tr>
-<tr>
-<td><code>verify</code></td>
-<td>Verify a task against its recorded proof</td>
+<td>Create, claim, complete, <code>verify</code>, and inspect <code>proof</code> for proof-gated work cards (<code>task watch</code> for a live list)</td>
 </tr>
 <tr>
 <td><code>decision</code></td>
 <td>Create, lock, show, and list decision cards</td>
 </tr>
 <tr>
-<td><code>harness</code></td>
-<td>List, show, apply, dismiss, and measure self-improvement idea cards</td>
-</tr>
-<tr>
-<td><code>create</code> / <code>update</code> / <code>close</code></td>
-<td>Create generic cards, mutate workable-card fields, or close workable cards</td>
-</tr>
-<tr>
-<td><code>ready</code> / <code>list</code> / <code>show</code></td>
-<td>Discover and inspect cards in the flat store (<code>--parent</code>, <code>--type</code>, <code>--assignee</code>, <code>--status</code>, <code>--grep</code>)</td>
-</tr>
-<tr>
-<td><code>claim</code> / <code>note</code> / <code>dep</code> / <code>archive</code></td>
-<td>Claim a workable card, append a note, add a blocking edge, or archive a closed feature tree (<code>--loose</code> sweeps loose closed cards)</td>
+<td><code>card</code></td>
+<td>Work the flat store: <code>ready</code> / <code>list</code> / <code>show</code> / <code>create</code> / <code>update</code> / <code>close</code> / <code>claim</code> / <code>assign</code> / <code>note</code> / <code>dep</code> / <code>graph</code> / <code>archive</code> (<code>--parent</code>, <code>--type</code>, <code>--assignee</code>, <code>--status</code>, <code>--grep</code>)</td>
 </tr>
 <tr>
 <td><code>link</code></td>
@@ -798,27 +795,52 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 <td>Send, read, and list pull-only messages on linked-card channels</td>
 </tr>
 <tr>
+<td><code>conflict</code></td>
+<td>Flag a link-free, git-free &quot;I&#39;m taking this ground, hold off&quot; notice on a peer card; <code>--clear</code> retracts it</td>
+</tr>
+<tr>
+<td><code>harness</code></td>
+<td>List, show, apply, dismiss, and measure self-improvement idea cards</td>
+</tr>
+<tr>
 <td><code>event</code> / <code>query</code></td>
-<td>Record harness events and inspect computed read models, including <code>query graph</code> for a card&#39;s dependency web</td>
+<td>Record harness events and inspect computed read models (matrix, friction, backlog)</td>
+</tr>
+<tr>
+<td><code>watch</code></td>
+<td>Live dependency-tree board, or a one-shot snapshot; an optional id focuses one feature</td>
 </tr>
 <tr>
 <td><code>index</code></td>
-<td>Maintain the local text index that accelerates <code>list --grep</code></td>
+<td>Maintain the local text index that accelerates <code>card list --grep</code></td>
 </tr>
 <tr>
-<td><code>mcp</code> / <code>hook</code> / <code>watch</code></td>
-<td>Advanced integrations for MCP, agent hooks, and task snapshots</td>
+<td><code>loop</code></td>
+<td>Print a loop-orchestration recipe (or the index): <code>loop list</code>, <code>loop show &lt;name&gt;</code></td>
+</tr>
+<tr>
+<td><code>playbook</code></td>
+<td>Print a language code styleguide, or the index with no language</td>
+</tr>
+<tr>
+<td><code>lean</code></td>
+<td>Show or set the session lean mode, emit review/audit guidance, or harvest debt markers</td>
+</tr>
+<tr>
+<td><code>mcp</code> / <code>hook</code></td>
+<td>MCP server and agent-hook entry points</td>
 </tr>
 <tr>
 <td><code>version</code></td>
 <td>Print the version and binary path</td>
 </tr>
 </tbody></table>
-<p>The entity verbs (<code>feature</code>, <code>task</code>, <code>harness</code>, <code>decision</code>, <code>verify</code>) are the only surface for the
-proof- and QA-gated lifecycle; the flat card verbs are for discovery and lightweight edits. <code>ready</code>
-only shows workable cards (<code>task</code>, <code>bug</code>, <code>chore</code>) whose <code>blocks</code> dependencies are closed. <code>list</code>
-accepts the coarse status filter <code>open</code>, <code>in_progress</code>, or <code>closed</code>. Run
-<code>maestro &lt;command&gt; --help</code> from the checked-out source build for the full surface.</p>
+<p>The entity verbs (<code>feature</code>, <code>task</code>, <code>harness</code>, <code>decision</code>) own the proof- and QA-gated lifecycle;
+the <code>card</code> subcommands are for discovery and lightweight edits. <code>card ready</code> only shows workable
+cards (<code>task</code>, <code>bug</code>, <code>chore</code>) whose <code>blocks</code> dependencies are closed. <code>card list</code> accepts the
+coarse status filter <code>open</code>, <code>in_progress</code>, or <code>closed</code>. Several legacy root aliases (<code>ready</code>,
+<code>list</code>, <code>claim</code>, <code>verify</code>, ...) still dispatch but are hidden from <code>--help</code>; run
+<code>maestro &lt;command&gt; --help</code> for the full surface.</p>
 <h3>Migration</h3>
 <p>There are two migration paths, depending on what produced the existing <code>.maestro/</code> data.</p>
 <h4>From the TypeScript maestro</h4>
@@ -870,7 +892,7 @@ embedded/    shipped harness, hook, shell, and skill resources
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 16.5K</div>
+        <div class="stars">★ 16.8K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -886,7 +908,7 @@ embedded/    shipped harness, hook, shell, and skill resources
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 4.1K</div>
+        <div class="stars">★ 4.2K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
@@ -894,7 +916,7 @@ embedded/    shipped harness, hook, shell, and skill resources
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 180</div>
+        <div class="stars">★ 181</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">

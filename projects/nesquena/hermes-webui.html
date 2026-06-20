@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight browser-based interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or framework. The application features a three-panel layout for chat, session navigation, and workspace file browsing, offering full parity with the terminal experience. It integrates directly with an existing Hermes Agent setup to maintain persistent memory and provider-agnostic model access.",
+  "description": "Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The application features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can access their existing agent and models securely via an SSH tunnel without additional configuration.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-06-19T06:10:36.000Z",
+  "dateModified": "2026-06-20T07:16:05.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 14696
+    "userInteractionCount": 14747
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">169·repos</span>
+    <span id="meta-count">171·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-19</span>
+    <span><span class="meta-label">updated</span>2026-06-20</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight browser-based interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or framework. The application features a three-panel layout for chat, session navigation, and workspace file browsing, offering full parity with the terminal experience. It integrates directly with an existing Hermes Agent setup to maintain persistent memory and provider-agnostic model access.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The application features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can access their existing agent and models securely via an SSH tunnel without additional configuration.</p>
     <ul class="summary-highlights">
       <li>Full feature parity with the Hermes Agent CLI experience</li>
       <li>Three-panel layout with workspace file browsing and inline previews</li>
-      <li>Zero-build architecture using only Python and vanilla JavaScript</li>
+      <li>Lightweight architecture using only Python and vanilla JavaScript</li>
     </ul>
   </div>
 </section>
@@ -574,7 +574,7 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <tr>
 <td><code>HERMES_WEBUI_STATE_DIR</code></td>
 <td><code>$HERMES_HOME/webui</code> (Windows default <code>%LOCALAPPDATA%\hermes\webui</code>, POSIX default <code>~/.hermes/webui</code>)</td>
-<td>Where sessions and state are stored</td>
+<td>Where sessions and state are stored. <strong>Note (upgrade):</strong> the default now follows <code>HERMES_HOME</code> — if you previously relocated <code>HERMES_HOME</code> to a non-default base <strong>without</strong> setting <code>HERMES_WEBUI_STATE_DIR</code>, your WebUI state now resolves to <code>$HERMES_HOME/webui</code> instead of the old platform-default <code>~/.hermes/webui</code>. To keep using the old location, set <code>HERMES_WEBUI_STATE_DIR</code> to it (or move the directory). Installs with <code>HERMES_HOME</code> unset or at the default base are unaffected.</td>
 </tr>
 <tr>
 <td><code>HERMES_WEBUI_DEFAULT_WORKSPACE</code></td>
@@ -595,6 +595,11 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <td><code>HERMES_WEBUI_CSP_CONNECT_EXTRA</code></td>
 <td><em>(unset)</em></td>
 <td>Optional space-separated <code>http(s)://</code> or <code>ws(s)://</code> origins to append to the report-only CSP <code>connect-src</code> directive for reverse-proxy or tunnel deployments</td>
+</tr>
+<tr>
+<td><code>HERMES_WEBUI_SSE_CHUNKED</code></td>
+<td><em>(unset)</em></td>
+<td>Set truthy (<code>1</code>/<code>true</code>/<code>yes</code>/<code>on</code>) to send SSE with <code>Transfer-Encoding: chunked</code>. Needed behind buffering reverse proxies (e.g. <code>jupyter-server-proxy</code>) that otherwise buffer the whole stream; harmless but unnecessary for directly-served deployments</td>
 </tr>
 <tr>
 <td><code>HERMES_WEBUI_EXTENSION_DIR</code></td>
@@ -620,6 +625,11 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <td><code>HERMES_CONFIG_PATH</code></td>
 <td><code>$HERMES_HOME/config.yaml</code></td>
 <td>Path to Hermes config file</td>
+</tr>
+<tr>
+<td><code>HERMES_WEBUI_SERVER_CWD</code></td>
+<td><em>(unset)</em></td>
+<td>Working directory for the server process. Defaults to the agent dir; point it at a writable workspace when the agent dir is read-only so fallback relative writes land somewhere writable</td>
 </tr>
 <tr>
 <td><code>HERMES_WEBUI_AGENT_CACHE_MAX</code></td>
@@ -1002,16 +1012,7 @@ Added the Profiles entry to the mobile navigation flow, making profile switching
 The 7th built-in theme: pure black backgrounds with warm accents tuned to reduce burn-in risk.</p>
 <p><strong><a href="https://github.com/andrewy-wizard">@andrewy-wizard</a></strong> — Chinese localization (PR #177)
 Initial Simplified Chinese (<code>zh</code>) locale. One of the first non-English locales.</p>
-<p><strong><a href="https://github.com/DelightRun">@DelightRun</a></strong> — <code>session_search</code> fix for WebUI sessions (PR #356)
-Tracked down the missing <code>SessionDB</code> injection in the streaming path that was silently breaking the tool for every WebUI session.</p>
-<p><strong><a href="https://github.com/lawrencel1ng">@lawrencel1ng</a></strong> — Bandit security fixes (PR #354)
-Systematic bandit-scan fixes: URL scheme validation before <code>urlopen</code>, MD5 <code>usedforsecurity=False</code>, and 40+ bare <code>except: pass</code> blocks replaced with proper logging.</p>
-<p><strong><a href="https://github.com/shaoxianbilly">@shaoxianbilly</a></strong> — Unicode filename downloads (PR #378)
-Proper <code>Content-Disposition</code> with RFC 5987 <code>filename*=UTF-8&#39;&#39;...</code> encoding so non-ASCII filenames download without crashing.</p>
-<p><strong><a href="https://github.com/lx3133584">@lx3133584</a></strong> — CSRF fix for reverse proxy (PR #360)
-A real-world blocker for anyone hosting behind Nginx Proxy Manager or similar on a port other than 80/443.</p>
-<p><strong><a href="https://github.com/betamod">@betamod</a></strong> — Security audit (PR #171)
-A comprehensive CSRF / SSRF / XSS / env-race-condition audit that shipped in v0.39</p>
+<p><strong><a href="https://github.com/DelightRun">@DelightRun</a></strong> — <code>session_search</code> fix for WebUI</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
@@ -1030,7 +1031,7 @@ A comprehensive CSRF / SSRF / XSS / env-race-condition audit that shipped in v0.
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 12.4K</div>
+        <div class="stars">★ 12.5K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -1042,7 +1043,7 @@ A comprehensive CSRF / SSRF / XSS / env-race-condition audit that shipped in v0.
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 445</div>
+        <div class="stars">★ 469</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -1050,11 +1051,11 @@ A comprehensive CSRF / SSRF / XSS / env-race-condition audit that shipped in v0.
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 649</div>
+        <div class="stars">★ 650</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 475</div>
+        <div class="stars">★ 476</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>
