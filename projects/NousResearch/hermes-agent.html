@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/NousResearch/hermes-agent#software",
   "name": "hermes-agent",
-  "description": "Hermes Agent is a self-improving AI agent designed to maintain persistent memory and evolve its capabilities through a built-in learning loop. It autonomously creates and refines skills based on experience and uses FTS5 session search and dialectic user modeling to recall past interactions. The system supports a wide range of LLM providers and can be deployed across diverse environments, from local machines to serverless infrastructure. Users can interact with the agent via a dedicated terminal ",
+  "description": "Hermes Agent is a self-improving AI agent designed to evolve through a built-in learning loop that creates and refines skills based on experience. It utilizes agent-curated memory, FTS5 session search, and Honcho dialectic user modeling to maintain continuity across sessions. The system supports a wide array of LLM providers and can be deployed across various environments, from local machines to serverless infrastructure. Users can interact with the agent via a full TUI or through integrated pla",
   "url": "https://hermesatlas.com/projects/NousResearch/hermes-agent",
   "codeRepository": "https://github.com/NousResearch/hermes-agent",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "NousResearch",
     "url": "https://github.com/NousResearch"
   },
-  "dateModified": "2026-06-20T07:16:26.000Z",
+  "dateModified": "2026-06-21T08:07:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 197823
+    "userInteractionCount": 198514
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">171·repos</span>
+    <span id="meta-count">172·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">The agent that grows with you</p>
 
   <div class="meta-row">
-    <span class="stars">★ 197.8K</span>
+    <span class="stars">★ 198.5K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     <span><span class="meta-label">maintainer</span>Nous Research</span>
-    <span><span class="meta-label">updated</span>2026-06-20</span>
+    <span><span class="meta-label">updated</span>2026-06-21</span>
   </div>
 
   <div class="actions">
@@ -136,11 +136,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent is a self-improving AI agent designed to maintain persistent memory and evolve its capabilities through a built-in learning loop. It autonomously creates and refines skills based on experience and uses FTS5 session search and dialectic user modeling to recall past interactions. The system supports a wide range of LLM providers and can be deployed across diverse environments, from local machines to serverless infrastructure. Users can interact with the agent via a dedicated terminal interface or through multiple messaging platforms via a single gateway process.</p>
+    <p class="summary-text">Hermes Agent is a self-improving AI agent designed to evolve through a built-in learning loop that creates and refines skills based on experience. It utilizes agent-curated memory, FTS5 session search, and Honcho dialectic user modeling to maintain continuity across sessions. The system supports a wide array of LLM providers and can be deployed across various environments, from local machines to serverless infrastructure. Users can interact with the agent via a full TUI or through integrated platforms like Telegram, Discord, and Slack.</p>
     <ul class="summary-highlights">
-      <li>Autonomous skill creation and self-improvement from experience</li>
+      <li>Autonomous skill creation and self-improvement during use</li>
       <li>Deployment across six backends including Docker, SSH, and Modal</li>
-      <li>Integration with Telegram, Discord, Slack, WhatsApp, and Signal</li>
+      <li>Multi-platform access via Telegram, Discord, Slack, WhatsApp, and Signal</li>
     </ul>
   </div>
 </section>
@@ -163,6 +163,7 @@
   <a href="https://nousresearch.com"><img src="https://img.shields.io/badge/Built%20by-Nous%20Research-blueviolet?style=for-the-badge" alt="Built by Nous Research"></a>
   <a href="README.zh-CN.md"><img src="https://img.shields.io/badge/Lang-中文-red?style=for-the-badge" alt="中文"></a>
   <a href="README.ur-pk.md"><img src="https://img.shields.io/badge/Lang-اردو-green?style=for-the-badge" alt="اردو"></a>
+  <a href="README.es.md"><img src="https://img.shields.io/badge/Lang-Español-orange?style=for-the-badge" alt="Español"></a>
 </p>
 
 <p><strong>The self-improving AI agent built by <a href="https://nousresearch.com">Nous Research</a>.</strong> It&#39;s the only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, searches its own past conversations, and builds a deepening model of who you are across sessions. Run it on a $5 VPS, a GPU cluster, or serverless infrastructure that costs nearly nothing when idle. It&#39;s not tied to your laptop — talk to it from Telegram while it works on a cloud VM.</p>
@@ -199,6 +200,34 @@
 <pre><code class="language-bash">source ~/.bashrc    # reload shell (or: source ~/.zshrc)
 hermes              # start chatting!
 </code></pre>
+<h4>Troubleshooting</h4>
+<h5>Windows Defender or antivirus flags <code>uv.exe</code> as malware</h5>
+<p>If your antivirus (Bitdefender, Windows Defender, etc.) quarantines <code>uv.exe</code> from the Hermes <code>bin</code> folder (<code>%LOCALAPPDATA%\hermes\bin\uv.exe</code>), this is a <strong>false positive</strong>. The file is Astral&#39;s <code>uv</code> — the Rust Python package manager Hermes bundles to manage its Python environment. ML-based antivirus engines commonly flag unsigned Rust binaries that download and install packages.</p>
+<p><strong>To verify your copy is authentic:</strong></p>
+<pre><code class="language-powershell"># Install GitHub CLI if needed
+winget install --id GitHub.cli
+
+# Login to GitHub
+gh auth login
+
+# Run verification
+$uv = &quot;$env:LOCALAPPDATA\hermes\bin\uv.exe&quot;
+$ver = (&amp; $uv --version).Split(&#39; &#39;)[1]
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$zip = &quot;$env:TEMP\uv.zip&quot;
+Invoke-WebRequest &quot;https://github.com/astral-sh/uv/releases/download/$ver/uv-x86_64-pc-windows-msvc.zip&quot; -OutFile $zip -UseBasicParsing
+gh attestation verify $zip --repo astral-sh/uv
+Expand-Archive $zip &quot;$env:TEMP\uv_x&quot; -Force
+(Get-FileHash &quot;$env:TEMP\uv_x\uv.exe&quot;).Hash -eq (Get-FileHash $uv).Hash
+</code></pre>
+<p>If attestation says &quot;Verification succeeded&quot; and the last line prints <code>True</code>, you&#39;re good.</p>
+<p><strong>To whitelist Hermes:</strong></p>
+<ul>
+<li><strong>Windows Defender:</strong> Run PowerShell as Admin → <code>Add-MpPreference -ExclusionPath &quot;$env:LOCALAPPDATA\hermes\bin&quot;</code></li>
+<li><strong>Bitdefender:</strong> Add an exception in the Bitdefender console (Protection &gt; Antivirus &gt; Settings &gt; Manage Exceptions)</li>
+<li>Whitelist the <strong>folder</strong>, not the file hash — Hermes updates <code>uv</code> and the hash changes every version</li>
+</ul>
+<p>For more context, see the upstream Astral reports: <a href="https://github.com/astral-sh/uv/issues/13553">astral-sh/uv#13553</a>, <a href="https://github.com/astral-sh/uv/issues/15011">astral-sh/uv#15011</a>, <a href="https://github.com/astral-sh/uv/issues/10079">astral-sh/uv#10079</a>.</p>
 <hr>
 <h3>Getting Started</h3>
 <pre><code class="language-bash">hermes              # Interactive CLI — start a conversation

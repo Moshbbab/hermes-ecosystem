@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that provides observability for LLM-based workflows. It automatically exports model invocations, tool calls, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports both single-backend configuration via environment variables and multi-backend fan-out via a configuration file. It integrates with various tracing and monitoring platforms to provide visibility into session lifecycles and token usage.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that provides observability for LLM-based workflows. It automatically captures and exports model invocations, tool calls, and API requests as OTel spans to OTLP-compatible backends. The plugin supports both single-backend configuration via environment variables and multi-backend fan-out via a YAML configuration file. It integrates with various tracing and monitoring platforms to provide visibility into session lifecycles and token usage.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-06-08T14:17:54.000Z",
+  "dateModified": "2026-06-21T02:52:49.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">171·repos</span>
+    <span id="meta-count">172·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-06-08</span>
+    <span><span class="meta-label">updated</span>2026-06-21</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that provides observability for LLM-based workflows. It automatically exports model invocations, tool calls, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports both single-backend configuration via environment variables and multi-backend fan-out via a configuration file. It integrates with various tracing and monitoring platforms to provide visibility into session lifecycles and token usage.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that provides observability for LLM-based workflows. It automatically captures and exports model invocations, tool calls, and API requests as OTel spans to OTLP-compatible backends. The plugin supports both single-backend configuration via environment variables and multi-backend fan-out via a YAML configuration file. It integrates with various tracing and monitoring platforms to provide visibility into session lifecycles and token usage.</p>
     <ul class="summary-highlights">
       <li>Exports LLM tool calls and model invocations as OTel spans</li>
-      <li>Supports OTLP-compatible backends including Phoenix, Langfuse, and SigNoz</li>
-      <li>Configurable for single or parallel multi-backend export</li>
+      <li>Supports OTLP backends including Phoenix, Langfuse, LangSmith, and SigNoz</li>
+      <li>Configurable for single or multiple parallel backend exports</li>
     </ul>
   </div>
 </section>
@@ -441,7 +441,12 @@ export HERMES_OTEL_DEBUG=true             # Enable debug logging (see below)
 sample_rate: 0.25               # ParentBased(TraceIdRatioBased) — null/omit = sample everything
 root_span_ttl_ms: 600000        # orphan-sweep threshold (10 min default)
 flush_interval_ms: 60000        # metrics export cadence
-preview_max_chars: 1200         # clip_preview truncation limit
+preview_max_chars: 1200         # global clip_preview truncation fallback
+# Per-category overrides (each defaults to preview_max_chars when unset)
+tool_input_preview_max_chars: 1200
+tool_output_preview_max_chars: 2000
+llm_input_preview_max_chars: 1200
+llm_output_preview_max_chars: 1200
 capture_previews: true          # false = suppress all input.value / output.value
 capture_sender_id: false        # true = add platform-prefixed user.id to spans
 project_name: hermes-prod       # supersedes OTEL_PROJECT_NAME
@@ -480,6 +485,22 @@ headers:                        # merged onto outgoing OTLP requests
 <tr>
 <td><code>preview_max_chars</code></td>
 <td><code>HERMES_OTEL_PREVIEW_MAX_CHARS</code></td>
+</tr>
+<tr>
+<td><code>tool_input_preview_max_chars</code></td>
+<td><code>HERMES_OTEL_TOOL_INPUT_PREVIEW_MAX_CHARS</code></td>
+</tr>
+<tr>
+<td><code>tool_output_preview_max_chars</code></td>
+<td><code>HERMES_OTEL_TOOL_OUTPUT_PREVIEW_MAX_CHARS</code></td>
+</tr>
+<tr>
+<td><code>llm_input_preview_max_chars</code></td>
+<td><code>HERMES_OTEL_LLM_INPUT_PREVIEW_MAX_CHARS</code></td>
+</tr>
+<tr>
+<td><code>llm_output_preview_max_chars</code></td>
+<td><code>HERMES_OTEL_LLM_OUTPUT_PREVIEW_MAX_CHARS</code></td>
 </tr>
 <tr>
 <td><code>capture_previews</code></td>
@@ -859,7 +880,7 @@ headers:                        # merged onto outgoing OTLP requests
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 230</div>
+        <div class="stars">★ 232</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -879,7 +900,7 @@ headers:                        # merged onto outgoing OTLP requests
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 348</div>
+        <div class="stars">★ 349</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

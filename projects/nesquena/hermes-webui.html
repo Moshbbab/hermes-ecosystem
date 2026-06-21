@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The application features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can access their existing agent and models securely via an SSH tunnel without additional configuration.",
+  "description": "Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for frameworks or build steps. The interface features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can securely access their existing agent and models via an SSH tunnel or Docker deployment.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-06-20T07:16:05.000Z",
+  "dateModified": "2026-06-21T07:40:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 14747
+    "userInteractionCount": 14783
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">171·repos</span>
+    <span id="meta-count">172·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 14.7K</span>
+    <span class="stars">★ 14.8K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-20</span>
+    <span><span class="meta-label">updated</span>2026-06-21</span>
   </div>
 
   <div class="actions">
@@ -131,7 +131,7 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step or external frameworks. The application features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can access their existing agent and models securely via an SSH tunnel without additional configuration.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for frameworks or build steps. The interface features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can securely access their existing agent and models via an SSH tunnel or Docker deployment.</p>
     <ul class="summary-highlights">
       <li>Full feature parity with the Hermes Agent CLI experience</li>
       <li>Three-panel layout with workspace file browsing and inline previews</li>
@@ -594,7 +594,7 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <tr>
 <td><code>HERMES_WEBUI_CSP_CONNECT_EXTRA</code></td>
 <td><em>(unset)</em></td>
-<td>Optional space-separated <code>http(s)://</code> or <code>ws(s)://</code> origins to append to the report-only CSP <code>connect-src</code> directive for reverse-proxy or tunnel deployments</td>
+<td>Optional space-separated <code>http(s)://</code> or <code>ws(s)://</code> origins to append to the enforced and report-only CSP <code>connect-src</code> directives for trusted reverse-proxy, tunnel, or extension sidecar deployments</td>
 </tr>
 <tr>
 <td><code>HERMES_WEBUI_SSE_CHUNKED</code></td>
@@ -607,14 +607,19 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <td>Optional local directory served at <code>/extensions/</code>; must point to an existing directory before extension injection is enabled</td>
 </tr>
 <tr>
+<td><code>HERMES_WEBUI_EXTENSION_MANIFEST</code></td>
+<td><em>(unset)</em></td>
+<td>Optional relative JSON manifest inside <code>HERMES_WEBUI_EXTENSION_DIR</code> listing bundled scripts/styles to inject; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
+</tr>
+<tr>
 <td><code>HERMES_WEBUI_EXTENSION_SCRIPT_URLS</code></td>
 <td><em>(unset)</em></td>
-<td>Optional comma-separated same-origin script URLs to inject; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
+<td>Optional comma-separated same-origin script URLs to inject; appended after manifest scripts; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
 </tr>
 <tr>
 <td><code>HERMES_WEBUI_EXTENSION_STYLESHEET_URLS</code></td>
 <td><em>(unset)</em></td>
-<td>Optional comma-separated same-origin stylesheet URLs to inject; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
+<td>Optional comma-separated same-origin stylesheet URLs to inject; appended after manifest stylesheets; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md">WebUI Extensions</a></td>
 </tr>
 <tr>
 <td><code>HERMES_HOME</code></td>
@@ -642,6 +647,7 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <td>Max compact <code>Session</code> objects held in the in-memory LRU. Lighter than the agent cache; lower it on installs with hundreds of sessions</td>
 </tr>
 </tbody></table>
+<p>Extension deployments can inspect sanitized, authenticated diagnostics at <code>GET /api/extensions/status</code>; see <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/EXTENSIONS.md#diagnostics">WebUI Extensions</a>.</p>
 <hr>
 <h4>Remote access (SSH tunnel, Tailscale, phone)</h4>
 <p>The server binds to <code>127.0.0.1</code> by default. To reach it from another machine use an SSH tunnel (<code>ssh -N -L 8787:127.0.0.1:8787 user@host</code>, which <code>start.sh</code> prints for you over SSH), or join your server and phone to a <a href="https://tailscale.com">Tailscale</a> network and browse to <code>http://&lt;server-tailscale-ip&gt;:8787</code> with <code>HERMES_WEBUI_HOST=0.0.0.0</code> + <code>HERMES_WEBUI_PASSWORD</code> set. Full walkthrough (incl. a community ARM64-Android field report): <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access.md"><code>docs/remote-access.md</code></a>.</p>
@@ -1007,12 +1013,7 @@ Streaming scroll viewport stability when tool/queue cards insert (#1360), manual
 <p><strong><a href="https://github.com/DavidSchuchert">@DavidSchuchert</a></strong> — German translation (PR #190)
 Complete German locale (<code>de</code>) covering all UI strings, settings labels, commands, and system messages — and stress-tested the i18n system, exposing several elements that weren&#39;t yet translatable and getting them fixed as part of the same PR.</p>
 <p><strong><a href="https://github.com/Bobby9228">@Bobby9228</a></strong> — Mobile Profiles button (PR #265)
-Added the Profiles entry to the mobile navigation flow, making profile switching reachable on phones.</p>
-<p><strong><a href="https://github.com/kevin-ho">@kevin-ho</a></strong> — OLED theme (PR #168)
-The 7th built-in theme: pure black backgrounds with warm accents tuned to reduce burn-in risk.</p>
-<p><strong><a href="https://github.com/andrewy-wizard">@andrewy-wizard</a></strong> — Chinese localization (PR #177)
-Initial Simplified Chinese (<code>zh</code>) locale. One of the first non-English locales.</p>
-<p><strong><a href="https://github.com/DelightRun">@DelightRun</a></strong> — <code>session_search</code> fix for WebUI</p>
+Added the Profiles entry to the mobile na</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
@@ -1043,15 +1044,15 @@ Initial Simplified Chinese (<code>zh</code>) locale. One of the first non-Englis
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 469</div>
+        <div class="stars">★ 479</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
-        <div class="stars">★ 58</div>
+        <div class="stars">★ 57</div>
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 650</div>
+        <div class="stars">★ 651</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
