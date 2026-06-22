@@ -534,7 +534,7 @@ class Platform(str, Enum):
 
 ### 2\. Adapter File
 
-Create `gateway/platforms/newplat.py`:
+Create `plugins/platforms/newplat/adapter.py`:
 
 ```
 from gateway.config import Platform, PlatformConfig
@@ -799,10 +799,10 @@ Medium
 
 HTTP server, AES crypto, multi-app
 
-`telegram.py`
+`plugins/platforms/irc/adapter.py`
 
-Long-poll + Bot API
+Long-poll + IRC protocol
 
 High
 
-Full-featured adapter with groups, threads
+Full-featured plugin adapter with scoped token lock

@@ -222,6 +222,14 @@ List configured skill bundles — `/<name>` slash aliases that preload several s
 
 Manage scheduled tasks (list, add/create, edit, pause, resume, run, remove)
 
+`/suggestions [accept|dismiss N|catalog|clear]` (alias: `/suggest`)
+
+Review suggested automations. Use `/suggestions` to list pending suggestions, `/suggestions accept <id>` to create the proposed automation, `/suggestions dismiss <id>` to reject one, `/suggestions catalog` to add curated starter automations, and `/suggestions clear` to clear resolved suggestion records. Accepted jobs preserve the current surface as the delivery origin.
+
+`/blueprint [name] [slot=value ...]` (alias: `/bp`)
+
+Set up an automation from a blueprint template. Bare `/blueprint` lists the catalog; `/blueprint <name>` starts a guided slot-filling flow on the next agent turn; `/blueprint <name> slot=value ...` creates the job directly.
+
 `/curator`
 
 Background skill maintenance — `status`, `run`, `pin`, `archive`. See [Curator](/docs/user-guide/features/curator).
@@ -264,6 +272,14 @@ Show Hermes Agent version, build, and environment info.
 
 Show token usage, cost breakdown, session duration, and — when available from the active provider — an **Account limits** section with remaining quota / credits / plan usage pulled live from the provider's API.
 
+`/credits`
+
+Show your Nous credit balance and a top-up handoff link.
+
+`/billing`
+
+CLI terminal-billing flow for Nous — view balance, buy credits, and manage auto-reload / monthly limits.
+
 `/insights`
 
 Show usage insights and analytics (last 30 days)
@@ -271,10 +287,6 @@ Show usage insights and analytics (last 30 days)
 `/platforms` (alias: `/gateway`)
 
 Show gateway/messaging platform status (CLI-only summary view).
-
-`/platform <list|pause|resume> [name]`
-
-Operate a running gateway platform. `/platform list` lists every adapter and its state (running, paused-by-breaker, manually-paused); `/platform pause <name>` stops dispatching new messages to that adapter without unloading it; `/platform resume <name>` re-enables it. The gateway also auto-pauses an adapter when its circuit breaker trips on repeated retryable failures (network / rate-limit / 5xx) — use `/platform resume <name>` to clear the breaker once the upstream is healthy. Available wherever the gateway is reachable (CLI session, Telegram, Discord, …).
 
 `/paste`
 
@@ -295,10 +307,6 @@ Upload debug report (system info + logs) and get shareable links. Also available
 `/profile`
 
 Show active profile name and home directory
-
-`/gquota`
-
-Show Google Gemini Code Assist quota usage with progress bars (only available when the `google-gemini-cli` provider is active).
 
 ### Exit
 
@@ -463,6 +471,10 @@ Resume a previously named session.
 
 Show token usage, estimated cost breakdown (input/output), context window state, session duration, and — when available from the active provider — an **Account limits** section with remaining quota / credits pulled live from the provider's API.
 
+`/credits`
+
+Show your Nous credit balance and a top-up link that opens the portal billing page in a browser.
+
 `/insights [days]`
 
 Show usage analytics.
@@ -503,6 +515,14 @@ Toggle the runtime-metadata footer on final replies (shows model, context %, and
 
 Background skill maintenance controls.
 
+`/suggestions [accept|dismiss N|catalog|clear]`
+
+Review suggested automations right in chat. `/suggestions` lists pending suggestions, `catalog` adds curated starter automations, and `clear` prunes resolved suggestion records. Accepted suggestions keep this chat/thread as the job delivery origin.
+
+`/blueprint [name] [slot=value ...]`
+
+Browse cron blueprints, start a guided slot-filling conversation, or create a blueprint job directly. Directly created jobs deliver back to the current chat/thread.
+
 `/memory [pending|approve|reject|approval]`
 
 Review pending memory writes staged by the write-approval gate (`memory.write_approval`) — approve or reject them right in chat — and toggle the gate with `/memory approval on|off`. See [Controlling memory writes](/docs/user-guide/features/memory#controlling-memory-writes-write_approval).
@@ -514,6 +534,10 @@ Review pending **skill** writes staged by the write-approval gate (`skills.write
 `/kanban <action>`
 
 Drive the multi-profile, multi-project collaboration board from chat — identical argument surface to the CLI. Bypasses the running-agent guard, so `/kanban unblock t_abc`, `/kanban comment t_abc "…"`, `/kanban list --mine`, `/kanban boards switch <slug>`, etc. work mid-turn. `/kanban create …` auto-subscribes the originating chat to the new task's terminal events. See [Kanban slash command](/docs/user-guide/features/kanban#kanban-slash-command).
+
+`/platform <list|pause|resume> [name]`
+
+Operate a running gateway platform right from chat. `/platform list` shows every adapter and its state (running, paused-by-breaker, manually-paused); `/platform pause <name>` stops dispatching new messages to that adapter without unloading it; `/platform resume <name>` re-enables it and clears a tripped circuit breaker once the upstream is healthy.
 
 `/reload-mcp` (alias: `/reload_mcp`)
 
@@ -557,11 +581,11 @@ Invoke any installed skill by name.
 
 ## Notes
 
--   `/skin`, `/snapshot`, `/gquota`, `/reload`, `/tools`, `/toolsets`, `/browser`, `/config`, `/cron`, `/platforms`, `/paste`, `/image`, `/statusbar`, `/plugins`, `/busy`, `/indicator`, `/redraw`, `/clear`, `/history`, `/save`, `/copy`, `/handoff`, and `/quit` are **CLI-only** commands.
+-   `/skin`, `/snapshot`, `/reload`, `/tools`, `/toolsets`, `/browser`, `/config`, `/cron`, `/platforms`, `/paste`, `/image`, `/statusbar`, `/plugins`, `/busy`, `/indicator`, `/redraw`, `/clear`, `/history`, `/save`, `/copy`, `/handoff`, `/billing`, and `/quit` are **CLI-only** commands.
 -   `/skills` is **CLI-only for search/browse/install**; its write-approval review subcommands (`pending`, `approve`, `reject`, `diff`, `approval`) also work on messaging platforms when `skills.write_approval` is on. `/memory` works on **both** surfaces.
 -   `/verbose` is **CLI-only by default**, but can be enabled for messaging platforms by setting `display.tool_progress_command: true` in `config.yaml`. When enabled, it cycles the `display.tool_progress` mode and saves to config.
--   `/sethome`, `/update`, `/restart`, `/approve`, `/deny`, `/topic`, and `/commands` are **messaging-only** commands.
--   `/status`, `/version`, `/background`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/debug`, `/fast`, `/footer`, `/curator`, `/kanban`, `/sessions`, and `/yolo` work in **both** the CLI and the messaging gateway.
+-   `/sethome`, `/update`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, and `/commands` are **messaging-only** commands.
+-   `/status`, `/version`, `/background`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/debug`, `/fast`, `/footer`, `/curator`, `/kanban`, `/credits`, `/suggestions`, `/blueprint`, `/sessions`, and `/yolo` work in **both** the CLI and the messaging gateway.
 -   `/voice join`, `/voice channel`, and `/voice leave` are only meaningful on Discord.
 -   In the TUI, `/sessions` shows live sessions in the current TUI process. Use `/resume [name]` or `hermes --tui --resume <id-or-title>` for saved or closed transcripts.
 

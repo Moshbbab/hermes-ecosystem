@@ -4,8 +4,6 @@
 
 Hermes Agent supports Google Gemini as a native provider using the **Google AI Studio / Gemini API** — not the OpenAI-compatible endpoint. This lets Hermes translate its internal OpenAI-shaped message and tool loop into Gemini's native `generateContent` API while preserving tool calling, streaming, multimodal inputs, and Gemini-specific response metadata.
 
-Hermes also supports a separate **Google Gemini (OAuth)** provider that uses the same Cloud Code Assist backend as Google's Gemini CLI. Use the API-key provider (`gemini`) for the lowest-risk official API path.
-
 ## Prerequisites
 
 -   **Google AI Studio API key** — create one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
@@ -95,17 +93,6 @@ If you previously set `GEMINI_BASE_URL` to the `/openai` URL, remove it or chang
 ```
 GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
 ```
-
-### OAuth Provider
-
-Hermes also has a `google-gemini-cli` provider:
-
-```
-hermes model
-# → Choose "Google Gemini (OAuth)"
-```
-
-This uses browser PKCE login and the Cloud Code Assist backend. It can be useful for users who want Gemini CLI-style OAuth, but Hermes shows an explicit warning because Google may treat use of the Gemini CLI OAuth client from third-party software as a policy violation. For production or lowest-risk usage, prefer the API-key provider above.
 
 ## Available Models
 
@@ -237,16 +224,7 @@ hermes doctor
 The doctor checks:
 
 -   Whether `GOOGLE_API_KEY` or `GEMINI_API_KEY` is available
--   Whether Gemini OAuth credentials exist for `google-gemini-cli`
 -   Whether configured provider credentials can be resolved
-
-For OAuth quota usage, run this inside a Hermes session:
-
-```
-/gquota
-```
-
-`/gquota` applies to the `google-gemini-cli` OAuth provider, not the AI Studio API-key provider.
 
 ## Gateway (Messaging Platforms)
 
@@ -308,10 +286,6 @@ Change it to the native endpoint or remove the override:
 ```
 GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
 ```
-
-### OAuth login warning
-
-The `google-gemini-cli` provider uses a Gemini CLI / Cloud Code Assist OAuth flow. Hermes warns before starting it because this is distinct from the official AI Studio API-key path. Use `provider: gemini` with `GOOGLE_API_KEY` for the official API-key integration.
 
 ### Tool calling fails with schema errors
 

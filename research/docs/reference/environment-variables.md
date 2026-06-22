@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/reference/environment-variables
 
-All variables go in `~/.hermes/.env`. You can also set them with `hermes config set VAR value`.
+Hermes reads environment variables from the process environment and, for user-managed secrets, from `~/.hermes/.env`. Keep API keys, bot tokens, OAuth secrets, and other credentials in `.env`; prefer `config.yaml` for non-secret behaviour settings when a config key exists. Some variables below are process-only overrides or internal bridge variables and should not be committed to `.env` just because they are documented here.
 
 ## LLM Providers
 
@@ -229,18 +229,6 @@ Alias for `GOOGLE_API_KEY`
 `GEMINI_BASE_URL`
 
 Override Google AI Studio base URL
-
-`HERMES_GEMINI_CLIENT_ID`
-
-OAuth client ID for `google-gemini-cli` PKCE login (optional; defaults to Google's public gemini-cli client)
-
-`HERMES_GEMINI_CLIENT_SECRET`
-
-OAuth client secret for `google-gemini-cli` (optional)
-
-`HERMES_GEMINI_PROJECT_ID`
-
-GCP project ID for paid Gemini tiers (free tier auto-provisions)
 
 `ANTHROPIC_API_KEY`
 
@@ -1686,6 +1674,22 @@ Requested OIDC scopes for the self-hosted OIDC provider (default `openid profile
 
 (Desktop side) Base URL of the remote backend, e.g. `http://host:9119`. When set, overrides the in-app Gateway URL; you still sign in from the Gateway settings panel (OAuth redirect or username/password, whichever the backend advertises).
 
+`HERMES_DESKTOP_HERMES`
+
+Desktop backend command override. Used by packagers/Nix or troubleshooting to point Electron at a specific `hermes` executable after backend probing.
+
+`HERMES_DESKTOP_HERMES_ROOT`
+
+Desktop source-checkout override used by `hermes desktop --hermes-root`; checked before the packaged first-launch install or an existing `hermes` on `PATH`.
+
+`HERMES_DESKTOP_IGNORE_EXISTING`
+
+Set to `1` to make Desktop ignore an existing `hermes` on `PATH` during backend resolution. Equivalent to `hermes desktop --ignore-existing`.
+
+`HERMES_DESKTOP_CWD`
+
+Initial project directory for Desktop chat sessions. Set by `hermes desktop --cwd`.
+
 ### Microsoft Graph (Teams Meetings)
 
 App-only credentials for the Microsoft Graph REST client used by the upcoming Teams meeting summary pipeline. See [Register a Microsoft Graph application](/docs/guides/microsoft-graph-app-registration) for the Azure portal walkthrough and the exact API permissions required.
@@ -1980,6 +1984,42 @@ Inside the s6-overlay Docker image, opt out of auto-supervision when running `he
 
 Inside the s6-overlay Docker image, declare the gateway's **initial** supervised state on a fresh volume. On a blank volume there is no persisted `gateway_state.json`, so the boot reconciler registers the `gateway-default` slot but leaves it **down** (it only auto-starts when the last recorded state was `running`). Set this to `running` and the first-boot setup hook seeds `gateway_state.json` _before_ the reconciler runs, so the gateway comes up on the very first boot. Only the literal value `running` is honoured. First-boot-only: an existing `gateway_state.json` is never overwritten, so a deliberately-stopped gateway stays stopped across restarts. No-op outside the s6 image.
 
+`GATEWAY_RELAY_URL`
+
+Experimental relay connector WebSocket base URL. When set, the gateway registers the generic `relay` adapter and dials the connector outbound. Mirrors `gateway.relay_url` in `config.yaml`.
+
+`GATEWAY_RELAY_ID`
+
+Relay gateway identifier assigned by `hermes gateway enroll` or managed self-provisioning. Mirrors `gateway.relay_id`.
+
+`GATEWAY_RELAY_SECRET`
+
+Per-gateway relay secret used to authenticate the WebSocket. If this is already configured, managed self-provisioning is skipped. Mirrors `gateway.relay_secret`.
+
+`GATEWAY_RELAY_DELIVERY_KEY`
+
+Connector-issued delivery key retained for relay/passthrough authentication compatibility. Current relay inbound messages arrive on the outbound WebSocket rather than a gateway-side HTTP receiver.
+
+`GATEWAY_RELAY_ENROLL_TOKEN`
+
+Enrollment token consumed by `hermes gateway enroll` when `--token` is not passed explicitly.
+
+`GATEWAY_RELAY_PLATFORM`
+
+Optional platform name advertised in the relay capability descriptor.
+
+`GATEWAY_RELAY_BOT_ID`
+
+Optional bot identifier advertised in the relay capability descriptor.
+
+`GATEWAY_RELAY_ENDPOINT`
+
+Optional gateway endpoint advertised for connector modes that need a callback/passthrough URL; not required for the default WS-only inbound relay path. Mirrors `gateway.relay_endpoint`.
+
+`GATEWAY_RELAY_ROUTE_KEYS`
+
+Comma-separated relay route keys advertised to the connector. Mirrors `gateway.relay_route_keys`.
+
 `HERMES_FILE_MUTATION_VERIFIER`
 
 Enable the per-turn file-mutation verifier footer (default: `true`). When enabled, Hermes appends an advisory listing any `write_file` / `patch` calls that failed during the turn and were not superseded by a successful write. Set to `0`, `false`, `no`, or `off` to suppress. Mirrors `display.file_mutation_verifier` in `config.yaml`; the env var wins when set.
@@ -2072,7 +2112,7 @@ LLM API call timeout in seconds (default: `1800`)
 
 `HERMES_API_CALL_STALE_TIMEOUT`
 
-Non-streaming stale-call timeout in seconds (default: `300`). Auto-disabled for local providers when left unset. Also configurable via `providers.<id>.stale_timeout_seconds` or `providers.<id>.models.<model>.stale_timeout_seconds` in `config.yaml`.
+Non-streaming stale-call timeout in seconds (default: `90`). Auto-disabled for local providers when left unset, and may scale upward for very large contexts. Also configurable via `providers.<id>.stale_timeout_seconds` or `providers.<id>.models.<model>.stale_timeout_seconds` in `config.yaml`.
 
 `HERMES_STREAM_READ_TIMEOUT`
 
@@ -2088,7 +2128,7 @@ Number of mid-stream reconnect attempts on transient network errors (default: `3
 
 `HERMES_AGENT_TIMEOUT`
 
-Gateway inactivity timeout for a running agent in seconds (default: `900`). Resets on every tool call and streamed token. Set to `0` to disable.
+Gateway inactivity timeout for a running agent in seconds (default: `1800`, 30 minutes). Resets on every tool call and streamed token. Set to `0` to disable.
 
 `HERMES_AGENT_TIMEOUT_WARNING`
 

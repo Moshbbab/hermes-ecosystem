@@ -196,26 +196,6 @@ Iterative Python via live Jupyter kernel (hamelnb).
 
 `data-science/jupyter-live-kernel`
 
-## devops
-
-Skill
-
-Description
-
-Path
-
-[`kanban-orchestrator`](/docs/user-guide/skills/bundled/devops/devops-kanban-orchestrator)
-
-Decomposition playbook + anti-temptation rules for an orchestrator profile routing work through Kanban. The "don't do the work yourself" rule and the basic lifecycle are auto-injected into every kanban worker's system prompt; this skill...
-
-`devops/kanban-orchestrator`
-
-[`kanban-worker`](/docs/user-guide/skills/bundled/devops/devops-kanban-worker)
-
-Pitfalls, examples, and edge cases for Hermes Kanban workers. The lifecycle itself is auto-injected into every worker's system prompt as KANBAN\_GUIDANCE (from agent/prompt\_builder.py); this skill is what you load when you want deeper det...
-
-`devops/kanban-worker`
-
 ## dogfood
 
 Skill
@@ -516,7 +496,7 @@ Path
 
 [`hermes-agent-skill-authoring`](/docs/user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring)
 
-Author in-repo SKILL.md: frontmatter, validator, structure.
+Author in-repo SKILL.md: frontmatter, validator, structure, and writing-quality principles.
 
 `software-development/hermes-agent-skill-authoring`
 

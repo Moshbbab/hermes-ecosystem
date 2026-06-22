@@ -357,7 +357,7 @@ Device-code OAuth flow
 
 User signs in elsewhere, tokens land in `auth.json`
 
-Anthropic OAuth, MiniMax OAuth, Gemini Cloud Code, Qwen Portal, Nous Portal
+Anthropic OAuth, MiniMax OAuth, Qwen Portal, Nous Portal
 
 `copilot`
 

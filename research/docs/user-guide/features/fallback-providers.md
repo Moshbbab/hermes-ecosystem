@@ -136,12 +136,6 @@ Ollama Cloud
 
 `OLLAMA_API_KEY`
 
-Google Gemini (OAuth)
-
-`google-gemini-cli`
-
-`hermes model` (Google OAuth; optional: `HERMES_GEMINI_PROJECT_ID`)
-
 Google AI Studio
 
 `gemini`

@@ -300,7 +300,7 @@ This is the answer to "the agent saved a wrong assumption about me": set `write_
 
 ## Background review notifications (`display.memory_notifications`)
 
-After a turn, the background self-improvement review may quietly save a memory or update a skill. By default it surfaces a short `💾 Memory updated` line in chat so you know it happened. Control how chatty that is:
+After a turn, the background self-improvement review may quietly save a memory or update a skill. This is Hermes' consent-aware learning loop: repeated corrections and durable workflow lessons become compact memory entries or procedural skills, while `write_approval` can stage those writes for review before they affect future sessions. By default it surfaces a short `💾 Memory updated` line in chat so you know it happened. Control how chatty that is:
 
 ```
 display:

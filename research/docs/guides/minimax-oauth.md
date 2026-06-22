@@ -263,7 +263,7 @@ The auth store has no credentials for `minimax-oauth`. You have not logged in ye
 To remove stored MiniMax OAuth credentials:
 
 ```
-hermes auth remove minimax-oauth
+hermes auth logout minimax-oauth
 ```
 
 ## See Also
