@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Codename-11/hermes-relay#software",
   "name": "hermes-relay",
-  "description": "Hermes-Relay is a companion ecosystem that allows users to access and manage their Hermes agent from mobile and remote devices. It utilizes a native Android application and a CLI binary to connect to a central Hermes API server via LAN or remote routes. The system enables streaming chat, voice interaction, and agent management of models and skills from a phone. Sideloaded Android builds and the CLI provide extended capabilities, allowing the agent to interact with the device's screen, terminal, ",
+  "description": "Hermes-Relay is a companion system that enables mobile and remote access to a Hermes agent hosted on a local machine. It utilizes a native Android application and an optional CLI binary to bridge the agent's capabilities to external devices via an API server. Users can manage agent profiles, chat via streaming text or voice, and grant the agent consent-gated access to files and terminals. Sideloaded versions of the app further allow the agent to read and act upon the Android screen.",
   "url": "https://hermesatlas.com/projects/Codename-11/hermes-relay",
   "codeRepository": "https://github.com/Codename-11/hermes-relay",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "Codename-11",
     "url": "https://github.com/Codename-11"
   },
-  "dateModified": "2026-06-21T03:25:07.000Z",
+  "dateModified": "2026-06-22T02:32:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Kotlin</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-21</span>
+    <span><span class="meta-label">updated</span>2026-06-22</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-Relay is a companion ecosystem that allows users to access and manage their Hermes agent from mobile and remote devices. It utilizes a native Android application and a CLI binary to connect to a central Hermes API server via LAN or remote routes. The system enables streaming chat, voice interaction, and agent management of models and skills from a phone. Sideloaded Android builds and the CLI provide extended capabilities, allowing the agent to interact with the device's screen, terminal, and file system.</p>
+    <p class="summary-text">Hermes-Relay is a companion system that enables mobile and remote access to a Hermes agent hosted on a local machine. It utilizes a native Android application and an optional CLI binary to bridge the agent's capabilities to external devices via an API server. Users can manage agent profiles, chat via streaming text or voice, and grant the agent consent-gated access to files and terminals. Sideloaded versions of the app further allow the agent to read and act upon the Android screen.</p>
     <ul class="summary-highlights">
       <li>Native Android app for chat, voice, and agent management</li>
-      <li>CLI binary for consent-gated terminal and file system access</li>
-      <li>Sideloaded APKs enable agent-driven screen reading and phone control</li>
+      <li>Consent-gated CLI for terminal, file, and screenshot access</li>
+      <li>Sideloaded APK support for Android screen reading and control</li>
     </ul>
   </div>
 </section>
@@ -180,6 +180,10 @@
 <li><strong>⌨️ Hermes-Relay CLI</strong> <em>(alpha)</em> — a single binary that gives the agent <strong>hands on any machine you pair</strong>: files, terminal, search, screenshots — consent-gated.</li>
 </ul>
 <p>A vanilla <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a> install is enough — chat, management, and voice need <strong>no plugin</strong>. Add the optional relay only when you want terminal, phone control, or the CLI&#39;s tools. <strong>Pair once from either surface; both work.</strong></p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/docs/diagrams/architecture-homepage.png" alt="How Hermes-Relay connects — Vanilla Hermes (Chat, Manage, Voice) runs with no plugin; the optional Relay plugin adds Terminal, Bridge, relay voice and desktop tools to the app and CLI; Device Control needs the sideload build." width="900">
+</p>
+
 <h3>Quick Start (Android)</h3>
 <p>Install → connect → talk, in about two minutes.</p>
 <h4>1 · Install the app</h4>
@@ -189,7 +193,7 @@
 </ul>
 <p>Sideload builds check GitHub for updates and show a one-tap banner when you&#39;re behind; Play builds update through the Store. See <a href="https://codename-11.github.io/hermes-relay/guide/release-tracks">Release tracks</a> for the capability matrix.</p>
 <h4>2 · Have Hermes running</h4>
-<p>The app needs your Hermes <strong>API server enabled and reachable from your phone</strong>, plus an <strong>API key</strong> — the token the app sends to authenticate Chat (pick any value you like). Installing Hermes and choosing a provider is standard Hermes setup; the <a href="https://codename-11.github.io/hermes-relay/guide/getting-started">full walkthrough</a> covers Windows, the dashboard for <strong>Manage</strong>, LAN scan, and QR setup.</p>
+<p>The app needs your Hermes <strong>API server enabled and reachable from your phone</strong>, plus an <strong>API key</strong> — the token the app sends to authenticate Chat (pick any value you like). Installing Hermes and choosing a provider is vanilla Hermes setup; the <a href="https://codename-11.github.io/hermes-relay/guide/getting-started">full walkthrough</a> covers Windows, the dashboard for <strong>Manage</strong>, LAN scan, and QR setup.</p>
 <pre><code class="language-bash">hermes setup --portal                      # install / log in / pick a provider — skip if already done
 
 mkdir -p ~/.hermes
@@ -212,8 +216,8 @@ hermes gateway
 <h4>3 · Connect and talk</h4>
 <p>Open the app and pick how to connect — any of:</p>
 <ul>
-<li><strong>Standard Hermes</strong> → tap <strong>Scan for Hermes on LAN</strong> to auto-find the server, then enter your key.</li>
-<li><strong>Standard Hermes</strong> → type the address (<code>http://&lt;host&gt;:8642</code>) and key by hand.</li>
+<li><strong>Vanilla Hermes</strong> → tap <strong>Scan for Hermes on LAN</strong> to auto-find the server, then enter your key.</li>
+<li><strong>Vanilla Hermes</strong> → type the address (<code>http://&lt;host&gt;:8642</code>) and key by hand.</li>
 <li><strong>Scan setup QR</strong> → ask your Hermes agent to generate a QR with your URL + key (e.g. <code>{&quot;api_url&quot;:&quot;http://&lt;host&gt;:8642&quot;,&quot;api_key&quot;:&quot;&lt;key&gt;&quot;,&quot;dashboard_url&quot;:&quot;http://&lt;host&gt;:9119&quot;}</code>) and scan it. <code>dashboard_url</code> is optional when the dashboard uses the conventional same-host <code>:9119</code> URL.</li>
 </ul>
 <p>The wizard probes everything and finishes with a capability card:</p>
@@ -245,7 +249,7 @@ hermes gateway
 <td>Optional power tools — fine to leave unpaired</td>
 </tr>
 </tbody></table>
-<p>If your dashboard requires sign-in, do it once under the <strong>Manage</strong> tab — the same session unlocks voice. That&#39;s the whole standard setup.</p>
+<p>If your dashboard requires sign-in, do it once under the <strong>Manage</strong> tab — the same session unlocks voice. That&#39;s the whole Vanilla Hermes setup.</p>
 <blockquote>
 <p><strong>Going places?</strong> Put your server&#39;s Tailscale URL in the setup form&#39;s <em>Remote access</em> field (or add a route any time under <strong>Settings → Connections → Routes</strong>). The app uses LAN at home and switches routes automatically when you leave. See <a href="https://codename-11.github.io/hermes-relay/guide/remote-access">Remote access</a>.</p>
 </blockquote>
@@ -283,10 +287,10 @@ the QR from the phone&#39;s Connections screen — or use
     <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/04_sessions.png" alt="Session history" width="100%"><br><sub><b>Session history</b></sub></td>
   </tr>
   <tr>
-    <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/05_commands.png" alt="Command palette" width="100%"><br><sub><b>Command palette</b></sub></td>
+    <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/05_themes.png" alt="App themes" width="100%"><br><sub><b>App themes</b></sub></td>
     <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/06_manage.png" alt="Manage your agent" width="100%"><br><sub><b>Manage your agent</b></sub></td>
     <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/07_connections.png" alt="Connections and routes" width="100%"><br><sub><b>Connections &amp; routes</b></sub></td>
-    <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/08_settings.png" alt="Settings" width="100%"><br><sub><b>Settings</b></sub></td>
+    <td align="center" width="25%"><img src="https://raw.githubusercontent.com/Codename-11/hermes-relay/main/assets/screenshots/08_appearance.png" alt="Agent avatar &amp; skins" width="100%"><br><sub><b>Avatars &amp; skins</b></sub></td>
   </tr>
 </table>
 
@@ -295,7 +299,7 @@ the QR from the phone&#39;s Connections screen — or use
 <h3>Features</h3>
 <h4>Android</h4>
 <ul>
-<li><strong>Streaming chat</strong> — rides standard Hermes, preferring the dashboard gateway (<code>/api/ws</code>, live thinking) when signed in to Manage and falling back to API-server SSE otherwise, with live markdown, tool-call cards, session history, a searchable command palette, file attachments, quote-in-reply, conversation share, and send-while-streaming queuing.</li>
+<li><strong>Streaming chat</strong> — rides vanilla Hermes, preferring the dashboard gateway (<code>/api/ws</code>, live thinking) when signed in to Manage and falling back to API-server SSE otherwise, with live markdown, tool-call cards, session history, a searchable command palette, file attachments, quote-in-reply, conversation share, and send-while-streaming queuing.</li>
 <li><strong>Manage your agent</strong> — the full Hermes dashboard, native: switch models from your provider catalog, manage keys (write-only, masked, rate-limited reveal), create and edit profiles including <code>SOUL.md</code>, and browse/install/update skills. One dashboard sign-in covers it all.</li>
 <li><strong>Hands-free voice</strong> — talk on a vanilla install: speech rides your server&#39;s configured providers, unlocked by the same Manage sign-in. Relay-paired setups add per-profile voice and an opt-in provider-native Realtime Agent with background task handoff.</li>
 <li><strong>Works away from home</strong> — add a Tailscale or public URL and the app roams automatically (LAN at home, fallback elsewhere). An unreachable server gets a diagnosis, not just a red dot.</li>
@@ -325,13 +329,13 @@ hermes-relay update                            # self-update via GitHub Releases
 <li><strong>AI-agent setup recipe:</strong> <code>/hermes-relay-desktop-setup</code></li>
 </ul>
 <h3>How It Works</h3>
-<pre><code>Phone        (HTTP/WSS) --&gt; Hermes Dashboard  (:9119)   [chat gateway, manage, standard voice]
+<pre><code>Phone        (HTTP/WSS) --&gt; Hermes Dashboard  (:9119)   [chat gateway, manage, vanilla voice]
 Phone        (HTTP/SSE) --&gt; Hermes API Server (:8642)   [chat fallback, sessions, runs]
 Phone        (WSS/HTTP) --&gt; Relay             (:8767)   [terminal, bridge, media, relay voice, sessions]
 CLI          (WSS)      --&gt; Relay             (:8767)   [machine tools, tui, terminal]
 </code></pre>
 <p>Chat prefers the Hermes dashboard gateway when Manage auth is ready, then falls
-back to the upstream API server SSE path with the API key. Manage and standard
+back to the upstream API server SSE path with the API key. Manage and Vanilla Hermes
 voice ride the Hermes dashboard with its own one-time sign-in, so a vanilla
 install needs no plugin for either. The optional relay on <code>:8767</code> adds the power
 surfaces: terminal, bridge phone control, media handoff, machine tools, and
@@ -392,7 +396,7 @@ Read the canonical setup recipe before acting:
 Then guide me through:
 - Verifying hermes-agent is already installed (it&#39;s a prerequisite — Hermes-Relay is a plugin, not standalone)
 - Running the server-plugin install one-liner: `curl -fsSL https://raw.githubusercontent.com/Codename-11/hermes-relay/main/install.sh | bash`
-- Connecting my phone by Standard Hermes API URL/key first, then optionally pairing Relay via `hermes pair` or `/hermes-relay-pair` for power tools; OR pairing my laptop via the Hermes-Relay CLI (`irm https://raw.githubusercontent.com/Codename-11/hermes-relay/main/desktop/scripts/install.ps1 | iex` on Windows, then `hermes-relay pair --remote ws://&lt;host&gt;:8767`)
+- Connecting my phone by Vanilla Hermes API URL/key first, then optionally pairing Relay via `hermes pair` or `/hermes-relay-pair` for power tools; OR pairing my laptop via the Hermes-Relay CLI (`irm https://raw.githubusercontent.com/Codename-11/hermes-relay/main/desktop/scripts/install.ps1 | iex` on Windows, then `hermes-relay pair --remote ws://&lt;host&gt;:8767`)
 - Verifying with `hermes-status` (server) or `hermes-relay doctor` (CLI)
 
 Always confirm before running shell commands. Never restart hermes-gateway without asking. If any step fails, consult the Troubleshooting section in the SKILL.md and ask me for the exact error.
@@ -517,7 +521,7 @@ ln -s &quot;$PWD/plugin&quot; ~/.hermes/plugins/hermes-relay
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 324</div>
+        <div class="stars">★ 329</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -537,7 +541,7 @@ ln -s &quot;$PWD/plugin&quot; ~/.hermes/plugins/hermes-relay
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 639</div>
+        <div class="stars">★ 641</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

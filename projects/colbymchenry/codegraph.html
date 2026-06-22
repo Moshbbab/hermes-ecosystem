@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local CLI tool that provides a pre-indexed knowledge graph of codebases to coding agents like Hermes Agent and Claude Code. It maps symbol relationships, call graphs, and code structures into a local index to replace expensive file-scanning operations like grep and glob. By providing semantic intelligence through an MCP server, it reduces token consumption and the number of tool calls required for architectural analysis. The system features an auto-sync capability that updates the",
+  "description": "CodeGraph is a local developer tool that provides a pre-indexed knowledge graph of codebases to reduce the operational overhead of AI coding agents. It maps symbol relationships, call graphs, and code structures into a local index, allowing agents to query the graph directly instead of performing expensive file scans. This approach minimizes token consumption and tool calls by providing semantic context through a Model Context Protocol (MCP) server. The tool supports multiple platforms and integ",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-06-21T06:42:31.000Z",
+  "dateModified": "2026-06-21T19:36:23.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 52413
+    "userInteractionCount": 52895
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,7 +112,7 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 52.4K</span>
+    <span class="stars">★ 52.9K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local CLI tool that provides a pre-indexed knowledge graph of codebases to coding agents like Hermes Agent and Claude Code. It maps symbol relationships, call graphs, and code structures into a local index to replace expensive file-scanning operations like grep and glob. By providing semantic intelligence through an MCP server, it reduces token consumption and the number of tool calls required for architectural analysis. The system features an auto-sync capability that updates the graph in real-time as files are modified.</p>
+    <p class="summary-text">CodeGraph is a local developer tool that provides a pre-indexed knowledge graph of codebases to reduce the operational overhead of AI coding agents. It maps symbol relationships, call graphs, and code structures into a local index, allowing agents to query the graph directly instead of performing expensive file scans. This approach minimizes token consumption and tool calls by providing semantic context through a Model Context Protocol (MCP) server. The tool supports multiple platforms and integrates with agents like Hermes Agent, Claude Code, and Cursor to accelerate architectural discovery.</p>
     <ul class="summary-highlights">
-      <li>Reduces token usage and tool calls for coding agents</li>
-      <li>Provides local pre-indexed symbol relationships and call graphs</li>
-      <li>Auto-syncs the knowledge graph on every file change</li>
+      <li>Reduces tool calls by up to 58% through pre-indexed symbol mapping</li>
+      <li>Operates 100% locally with automatic background index synchronization</li>
+      <li>Integrates with Hermes Agent and other MCP-compatible coding assistants</li>
     </ul>
   </div>
 </section>
@@ -195,7 +195,7 @@ irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | 
 <p>In a <strong>new terminal</strong>, run the installer to connect CodeGraph to the agents you use:</p>
 <pre><code class="language-bash">codegraph install
 </code></pre>
-<p><sub>Detects and auto-configures Claude Code, Cursor, Codex CLI, opencode, Hermes Agent, Gemini CLI, Antigravity IDE, and Kiro — wiring the CodeGraph MCP server into each. <strong>This is the step that connects CodeGraph to your agent;</strong> installing the CLI in step 1 does not do it on its own. (Shortcut: <code>npx @colbymchenry/codegraph</code> downloads and runs this in one go.)</sub></p>
+<p><sub>Detects and auto-configures Claude Code, Cursor, Codex CLI, opencode, Hermes Agent, Gemini CLI, Antigravity IDE, and Kiro — wiring the CodeGraph MCP server into each. <strong>This is the step that connects CodeGraph to your agent;</strong> installing the CLI in step 1 does not do it on its own. It only wires up your agent — it does <strong>not</strong> index any code; building each project&#39;s graph is the separate <code>codegraph init</code> in step 3. (Shortcut: <code>npx @colbymchenry/codegraph</code> downloads and runs this in one go.)</sub></p>
 <h4>3. Initialize each project</h4>
 <pre><code class="language-bash">cd your-project
 codegraph init
@@ -729,7 +729,7 @@ codegraph init
   → sync; Widget.ts is in the index
   → next agent query sees it
 </code></pre>
-<p><strong>Verify any time</strong> with <code>codegraph_status</code> (via MCP) or <code>codegraph status</code> (CLI). If anything is pending, you&#39;ll see a <code>### Pending sync:</code> section naming the files and their edit age.</p>
+<p><strong>Verify any time</strong> with <code>codegraph status</code> (CLI). If anything is pending, you&#39;ll see a <code>### Pending sync:</code> section naming the files and their edit age.</p>
 <p>The handful of cases where manual <code>codegraph sync</code> makes sense: the watcher is disabled (sandboxed environments, or <code>CODEGRAPH_NO_DAEMON=1</code>), or you&#39;re scripting against the index outside an agent session and want a pre-flight sync at the start of your script.</p>
 <p>→ Full deep-dive in <a href="https://colbymchenry.github.io/codegraph/guides/indexing/#stay-fresh-automatically">Guides → Indexing a Project</a>.</p>
 </details>
@@ -815,7 +815,7 @@ codegraph init
 </tbody></table>
 <hr>
 <h3>Mixed iOS / React Native / Expo bridging</h3>
-<p>Real iOS and React Native codebases live across multiple languages — a Swift caller invokes an Objective-C selector that&#39;s been auto-bridged, a JS file calls into a native module via the React Native bridge, a JSX component delegates to a native view manager. Static tree-sitter extraction stops at each language boundary. CodeGraph bridges them so <code>trace</code>, <code>callers</code>, <code>callees</code>, and <code>impact</code> connect end-to-end across the gap.</p>
+<p>Real iOS and React Native codebases live across multiple languages — a Swift caller invokes an Objective-C selector that&#39;s been auto-bridged, a JS file calls into a native module via the React Native bridge, a JSX component delegates to a native view manager. Static tree-sitter extraction stops at each language boundary. CodeGraph bridges them so <code>codegraph_explore</code> connects the flow end-to-end across the gap — call paths and blast radius cross the boundary instead of stopping at it.</p>
 <table>
 <thead>
 <tr>
@@ -926,10 +926,10 @@ codegraph init
 <li>Ask which agent(s) to configure — auto-detects installed ones from: <strong>Claude Code</strong>, <strong>Cursor</strong>, <strong>Codex CLI</strong>, <strong>opencode</strong>, <strong>Hermes Agent</strong>, <strong>Gemini CLI</strong>, <strong>Antigravity IDE</strong>, <strong>Kiro</strong></li>
 <li>Prompt to install <code>codegraph</code> on your PATH (so agents can launch the MCP server)</li>
 <li>Ask whether configs apply to all your projects or just this one</li>
-<li>Write each chosen agent&#39;s MCP server config, plus a small marker-fenced CodeGraph section in the agent&#39;s instructions file (<code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>GEMINI.md</code>) — that&#39;s how subagents and non-MCP agents learn the <code>codegraph explore</code> / <code>codegraph node</code> commands, since the MCP server&#39;s own guidance only reaches the main agent. Removed cleanly by <code>codegraph uninstall</code>.</li>
+<li>Write each chosen agent&#39;s MCP server config, plus a small marker-fenced CodeGraph section in the agent&#39;s instructions file (<code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>GEMINI.md</code>) — that&#39;s how subagents and non-MCP agents learn the <code>codegraph explore</code> command, since the MCP server&#39;s own guidance only reaches the main agent. Removed cleanly by <code>codegraph uninstall</code>.</li>
 <li>Set up auto-allow permissions when Claude Code is one of the targets</li>
-<li>Initialize your current project (local installs only)</li>
 </ul>
+<p>The installer <strong>wires up your agents only — it does not index your code.</strong> After it finishes, build each project&#39;s graph yourself with <code>codegraph init</code> (step 3). One global <code>codegraph install</code> covers every project; you run <code>codegraph init</code> once per project.</p>
 <p><strong>Non-interactive (scripting / CI):</strong></p>
 <pre><code class="language-bash">codegraph install --yes                              # auto-detect agents, install global
 codegraph install --target=cursor,claude --yes       # explicit target list
@@ -999,18 +999,12 @@ codegraph init
 <pre><code class="language-json">{
   &quot;permissions&quot;: {
     &quot;allow&quot;: [
-      &quot;mcp__codegraph__codegraph_search&quot;,
-      &quot;mcp__codegraph__codegraph_explore&quot;,
-      &quot;mcp__codegraph__codegraph_callers&quot;,
-      &quot;mcp__codegraph__codegraph_callees&quot;,
-      &quot;mcp__codegraph__codegraph_impact&quot;,
-      &quot;mcp__codegraph__codegraph_node&quot;,
-      &quot;mcp__codegraph__codegraph_status&quot;,
-      &quot;mcp__codegraph__codegraph_files&quot;
+      &quot;mcp__codegraph__*&quot;
     ]
   }
 }
 </code></pre>
+<p><sub>One wildcard auto-approves every CodeGraph tool — <code>codegraph_explore</code> is the only one listed by default, but if you re-enable others via <code>CODEGRAPH_MCP_TOOLS</code> they&#39;re already permitted, no prompt.</sub></p>
 </details>
 
 <details>
@@ -1019,11 +1013,11 @@ codegraph init
 <p>CodeGraph&#39;s MCP server delivers its usage guidance to your agent <strong>automatically</strong>, in the MCP <code>initialize</code> response. In short, it tells the agent to:</p>
 <ul>
 <li><strong>Answer structural questions directly with CodeGraph</strong> — it <em>is</em> the pre-built index, so a grep/read loop just repeats work it already did. Treat the returned source as already read.</li>
-<li><strong>Pick the tool by intent:</strong> <code>codegraph_explore</code> for almost anything — &quot;how does X work&quot;, a flow/&quot;how does X reach Y&quot;, or surveying an area (one call returns the relevant symbols&#39; source grouped by file); <code>codegraph_search</code> to just locate a symbol; <code>codegraph_callers</code> for every call site (including callback registrations); <code>codegraph_node</code> for one symbol&#39;s full source + callers, or to read a file like the Read tool.</li>
+<li><strong>Reach for <code>codegraph_explore</code> for almost anything</strong> — &quot;how does X work&quot;, a flow/&quot;how does X reach Y&quot;, or surveying an area. One call returns the relevant symbols&#39; verbatim source grouped by file, the call paths between them (dynamic-dispatch hops included), and a blast-radius summary. Name a file or symbol in the query to read its current line-numbered source.</li>
 <li><strong>Trust the results — don&#39;t re-verify with grep</strong>, and check the staleness banner after edits.</li>
 <li>In a workspace with no index, CodeGraph announces itself inactive and serves no tools — indexing stays your decision.</li>
 </ul>
-<p>The exact text is <code>src/mcp/server-instructions.ts</code> — the single source of truth for the main agent. Because subagents and non-MCP harnesses never see the MCP guidance, the installer also writes a four-line marker-fenced section into the agent&#39;s instructions file pointing at the <code>codegraph explore</code> / <code>codegraph node</code> CLI equivalents.</p>
+<p>The exact text is <code>src/mcp/server-instructions.ts</code> — the single source of truth for the main agent. Because subagents and non-MCP harnesses never see the MCP guidance, the installer also writes a short marker-fenced section into the agent&#39;s instructions file pointing at the <code>codegraph explore</code> CLI equivalent.</p>
 </details>
 
 <hr>
@@ -1040,7 +1034,7 @@ codegraph init
 ┌───────────────────────────────────────────────────────────────────┐
 │                        CodeGraph MCP Server                       │
 │                                                                   │
-│       explore · search · callers · callees · impact · node        │
+│ explore  ·  one call → verbatim source + call flow + blast radius │
 │                                 │                                 │
 │                                 ▼                                 │
 │                       SQLite knowledge graph                      │
@@ -1062,7 +1056,7 @@ codegraph init
 <pre><code class="language-bash">codegraph                         # Run interactive installer
 codegraph install                 # Run installer (explicit)
 codegraph uninstall               # Remove CodeGraph from your agents (inverse of install)
-codegraph init [path]             # Initialize in a project (--index to also index)
+codegraph init [path]             # Initialize a project + build its graph (one step)
 codegraph uninit [path]           # Remove CodeGraph from a project (--force to skip prompt)
 codegraph index [path]            # Full index (--force to re-index, --quiet for less output)
 codegraph sync [path]             # Incremental update
@@ -1131,7 +1125,7 @@ fi
 </code></pre>
 <hr>
 <h3>MCP Tools</h3>
-<p>When running as an MCP server, CodeGraph exposes a focused set of four tools — measured agent behavior showed a leaner list steers agents to the right tool and saves context every session:</p>
+<p>When running as an MCP server, CodeGraph exposes a <strong>single tool</strong> — <code>codegraph_explore</code>. Measured agent behavior showed that one strong tool steers agents better than a menu of narrower ones — fewer mis-picks, and it saves context every session:</p>
 <table>
 <thead>
 <tr>
@@ -1141,22 +1135,10 @@ fi
 </thead>
 <tbody><tr>
 <td><code>codegraph_explore</code></td>
-<td><strong>Primary.</strong> Answer almost any question in one call — &quot;how does X work&quot;, a flow (&quot;how does X reach Y&quot;), or surveying an area — returning the relevant symbols&#39; verbatim source grouped by file, plus a relationship map and blast radius. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can&#39;t follow.</td>
-</tr>
-<tr>
-<td><code>codegraph_node</code></td>
-<td>One symbol&#39;s full source + caller/callee trail (every overload for an ambiguous name) — or pass a file path to <strong>read a whole file like the Read tool</strong> (same line-numbered output, <code>offset</code>/<code>limit</code>), with its dependents attached.</td>
-</tr>
-<tr>
-<td><code>codegraph_search</code></td>
-<td>Find symbols by name across the codebase</td>
-</tr>
-<tr>
-<td><code>codegraph_callers</code></td>
-<td>Every call site of a function — including where it&#39;s registered as a callback — with one section per definition when several share a name</td>
+<td>Answer almost any question in one call — &quot;how does X work&quot;, a flow (&quot;how does X reach Y&quot;), or surveying an area — returning the relevant symbols&#39; verbatim source grouped by file, plus the call paths between them and a blast-radius summary. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can&#39;t follow. Name a file or symbol in the query to read its current line-numbered source, the same shape the Read tool gives you.</td>
 </tr>
 </tbody></table>
-<p>Four more tools (<code>codegraph_callees</code>, <code>codegraph_impact</code>, <code>codegraph_files</code>, <code>codegraph_status</code>) stay fully functional but unlisted by default — measured across eval runs, agents never or rarely picked them, and their information already arrives inline on the four above (explore&#39;s blast-radius section, node&#39;s dependents note, a symbol&#39;s body as its callee list). Re-enable any of them with the <code>CODEGRAPH_MCP_TOOLS</code> environment variable (e.g. <code>CODEGRAPH_MCP_TOOLS=explore,node,search,callers,impact</code>), or use their CLI equivalents (<code>codegraph callees</code> / <code>impact</code> / <code>files</code> / <code>status</code>).</p>
+<p>The other tools (<code>codegraph_node</code>, <code>codegraph_search</code>, <code>codegraph_callers</code>, <code>codegraph_callees</code>, <code>codegraph_impact</code>, <code>codegraph_files</code>, <code>codegraph_status</code>) stay fully functional but <strong>unlisted by default</strong> — everything they return already arrives inline on <code>codegraph_explore</code> (its blast-radius section, the relationship map, a symbol&#39;s body as its callee list). Re-enable any of them for the MCP surface with the <code>CODEGRAPH_MCP_TOOLS</code> environment variable (e.g. <code>CODEGRAPH_MCP_TOOLS=explore,node,search,callers</code>), or use their CLI equivalents (<code>codegraph node</code> / <code>query</code> / <code>callers</code> / <code>callees</code> / <code>impact</code> / <code>files</code> / <code>status</code>).</p>
 <p>In a workspace with no <code>.codegraph/</code> index, the server announces itself inactive and lists <strong>no</strong> tools — agents work normally with their built-in tools, and indexing stays your decision.</p>
 <hr>
 <h3>Library Usage</h3>
@@ -1563,7 +1545,7 @@ is written):</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 627</div>
+        <div class="stars">★ 635</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1579,7 +1561,7 @@ is written):</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 462</div>
+        <div class="stars">★ 461</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -1587,7 +1569,7 @@ is written):</p>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 101</div>
+        <div class="stars">★ 102</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">

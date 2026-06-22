@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor token consumption and costs across various AI coding agents. It works by scanning local data directories and database files to aggregate usage statistics from multiple clients. The tool supports a wide array of integrations, including Hermes Agent, Claude Code, and GitHub Copilot CLI. Users can analyze their daily summaries and submit usage data to a public leaderboard.",
+  "description": "Tokscale is a monitoring tool designed to track token consumption and associated costs across various AI coding agents. It aggregates usage data by scanning local storage paths and configuration files from multiple AI clients. The tool provides a native Rust TUI and a visualization dashboard for analyzing daily summaries and overall statistics. It supports a wide range of integrations, including Hermes Agent, Claude Code, and GitHub Copilot CLI.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-06-21T00:11:06.000Z",
+  "dateModified": "2026-06-22T08:23:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 3864
+    "userInteractionCount": 3888
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-21</span>
+    <span><span class="meta-label">updated</span>2026-06-22</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor token consumption and costs across various AI coding agents. It works by scanning local data directories and database files to aggregate usage statistics from multiple clients. The tool supports a wide array of integrations, including Hermes Agent, Claude Code, and GitHub Copilot CLI. Users can analyze their daily summaries and submit usage data to a public leaderboard.</p>
+    <p class="summary-text">Tokscale is a monitoring tool designed to track token consumption and associated costs across various AI coding agents. It aggregates usage data by scanning local storage paths and configuration files from multiple AI clients. The tool provides a native Rust TUI and a visualization dashboard for analyzing daily summaries and overall statistics. It supports a wide range of integrations, including Hermes Agent, Claude Code, and GitHub Copilot CLI.</p>
     <ul class="summary-highlights">
-      <li>Tracks token usage and costs across multiple AI coding agents</li>
-      <li>Native Rust TUI with cross-platform support</li>
-      <li>Supports diverse clients including Hermes, Claude Code, and Gemini CLI</li>
+      <li>Native Rust TUI for high-performance usage tracking</li>
+      <li>Supports multiple agents including Hermes, Claude Code, and Gemini</li>
+      <li>Visualization dashboard with 3D contributions graphs and stats</li>
     </ul>
   </div>
 </section>
@@ -258,6 +258,12 @@ I drop new open-source work every week. Don&#39;t miss the next one.</p>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-openai.jpg" alt="Codex" /></td>
 <td><a href="https://github.com/openai/codex">Codex CLI</a></td>
 <td><code>~/.codex/sessions/</code></td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-sakana.png" alt="Sakana Fugu" /></td>
+<td><a href="https://sakana.ai/fugu/">Sakana Fugu</a></td>
+<td>via Codex — <code>~/.codex/sessions/*.jsonl</code> (<code>model_provider: sakana</code>)</td>
 <td>✅ Yes</td>
 </tr>
 <tr>
@@ -801,9 +807,6 @@ tokscale --client synthetic
 tokscale --client opencode,claude --week --json
 </code></pre>
 <p>Possible values: <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>copilot</code>, <code>gemini</code>, <code>cursor</code>, <code>amp</code>, <code>codebuff</code>, <code>droid</code>, <code>openclaw</code>, <code>hermes</code>, <code>pi</code>, <code>kimi</code>, <code>qwen</code>, <code>roocode</code>, <code>kilocode</code>, <code>kilo</code>, <code>mux</code>, <code>crush</code>, <code>goose</code>, <code>antigravity</code>, <code>antigravity-cli</code>, <code>zed</code>, <code>kiro</code>, <code>trae</code>, <code>warp</code>, <code>cline</code>, <code>gjc</code>, <code>grok</code>, <code>jcode</code>, <code>micode</code>, <code>commandcode</code>, <code>junie</code>, <code>synthetic</code>.</p>
-<blockquote>
-<p><strong>Deprecation notice</strong>: The legacy single-client flags (<code>--opencode</code>, <code>--claude</code>, <code>--codex</code>, etc.) still work for backward compatibility but are hidden from <code>--help</code> and will be removed in the next major release. Migrate to <code>--client</code> whenever possible. Running tokscale in an interactive terminal will print a one-line warning when a legacy flag is used.</p>
-</blockquote>
 <h4>Date Filtering</h4>
 <p>Date filters work across all commands that generate reports (<code>tokscale</code>, <code>tokscale models</code>, <code>tokscale monthly</code>, <code>tokscale graph</code>):</p>
 <pre><code class="language-bash"># Quick date shortcuts
@@ -1211,6 +1214,12 @@ tokscale usage --light
 <td>Prompt quotas per model</td>
 <td>Set <code>MINIMAX_API_KEY</code> or <code>MINIMAX_API_TOKEN</code></td>
 </tr>
+<tr>
+<td><strong>Sakana</strong> (Fugu)</td>
+<td>Session cookie (env var or file) — billing-console HTML scrape, no public API</td>
+<td>5-hour, Weekly quota windows (plan tier + monthly price as metadata)</td>
+<td>Set <code>SAKANA_SESSION_COOKIE</code> (see <a href="https://github.com/junhoyeo/tokscale/blob/main/docs/providers/sakana.md">docs/providers/sakana.md</a>)</td>
+</tr>
 </tbody></table>
 <p>Providers are auto-detected — only those with valid credentials are shown. If a provider is missing, ensure you&#39;ve logged in or set the required environment variable.</p>
 <h5>Codex Multi-Account Usage</h5>
@@ -1379,11 +1388,6 @@ tokscale codex status --name personal --json
 <tr>
 <td><code>TOKSCALE_EXTRA_DIRS</code></td>
 <td>unset</td>
-<td>One-off extra session roots as <code>client:/abs/path,client:/abs/path</code></td>
-</tr>
-<tr>
-<td><code>TOKSCALE_CONFIG_DIR</code></td>
-<td>unset</td>
 <td></td>
 </tr>
 </tbody></table>
@@ -1401,11 +1405,11 @@ tokscale codex status --name personal --json
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 52.4K</div>
+        <div class="stars">★ 52.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 627</div>
+        <div class="stars">★ 635</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1417,7 +1421,7 @@ tokscale codex status --name personal --json
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 462</div>
+        <div class="stars">★ 461</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -1425,7 +1429,7 @@ tokscale codex status --name personal --json
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 101</div>
+        <div class="stars">★ 102</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">

@@ -282,14 +282,14 @@
     "auditedAt": "2026-06-15T10:01:35.204Z"
   },
   "ReinaMacCredy/maestro": {
-    "summary": "maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas. Agents manage the development lifecycle via a CLI, ensuring work is gated by proof and QA requirements. This approach allows humans to audit agent progress through standard diffs and coordinate multiple agent sessions.",
+    "summary": "maestro is a local-first harness that provides a durable state management system for long-running AI coding agents. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas without requiring a daemon or cloud service. Agents manage the project lifecycle via a CLI, ensuring that work is gated by proof and QA requirements before being closed. This approach prevents context loss and provides a reviewable audit trail of agent reasoning and execution.",
     "highlights": [
-      "Durable card model for tracking features, tasks, and decisions",
-      "Proof and QA gates to verify work before shipping",
-      "Local-first Rust binary with no daemon or cloud dependencies"
+      "Durable card model for features, tasks, and decision tracking",
+      "Local-first storage in .maestro/ folder for easy diff reviews",
+      "Proof and QA gates to verify work before closing cards"
     ],
-    "readmeHash": "6246942ae0458e8e2a0d3c472f705447945ed2b2124e94ee77dd9bce9fd5599e",
-    "generatedAt": "2026-06-20T07:47:09.210Z",
+    "readmeHash": "f542378613018d303475f62ba866bb450754a94c6914a95c415ea09d35e9bfd4",
+    "generatedAt": "2026-06-22T08:33:20.341Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -540,18 +540,17 @@
     "auditedAt": "2026-06-15T10:02:34.452Z"
   },
   "builderz-labs/mission-control": {
-    "summary": "Mission Control is an open-source dashboard designed to centralize the management and orchestration of AI agent fleets. It utilizes a self-hosted, SQLite-backed architecture to provide real-time telemetry and task dispatching without requiring external dependencies like Redis or Postgres. The platform supports multi-agent workflows with built-in quality gates and integrates with frameworks such as CrewAI, LangGraph, and AutoGen. Users can manage agent skills, monitor costs, and implement role-based access control from a single interface.",
+    "summary": "Mission Control is a self-hosted dashboard for orchestrating AI agent fleets and managing multi-agent workflows. It utilizes a SQLite-backed stack with a Next.js frontend to provide real-time telemetry and task dispatching without external dependencies. The platform includes a built-in review system for quality gates, role-based access control, and adapters for frameworks like CrewAI, LangGraph, and AutoGen. Users can also integrate CLI tools like Claude Code for centralized observability and control.",
     "highlights": [
-      "Self-hosted SQLite stack with zero external dependencies",
+      "Self-hosted SQLite architecture with zero external dependencies",
       "Multi-gateway support for CrewAI, LangGraph, and AutoGen",
-      "Built-in Aegis review system for task quality gates"
+      "Built-in Aegis review system for task sign-off gates"
     ],
-    "readmeHash": "b41451b62e39e102f5c5b1d126c452218e8f6ff786bb481fd3f9e3b2441d30e8",
-    "generatedAt": "2026-05-31T07:46:44.978Z",
+    "readmeHash": "8c2aa88eaada6d0a6f62eef969fd1398ab5cb0ef467515e814e9eaeca4bc7e9a",
+    "generatedAt": "2026-06-22T08:33:32.620Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-06-15T10:02:36.949Z"
+    "audit": "pass"
   },
   "swarmclawai/swarmclaw": {
     "summary": "SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration platform that supports durable memory, delegation, and schedules to coordinate complex AI workflows. The system integrates with over 23 LLM providers, including Claude, GPT, Gemini, and Ollama, and provides a visual org chart for monitoring agent activity. It serves as a home base for self-hosted workflows, offering an alternative to LangChain and Claude Code.",
@@ -802,14 +801,14 @@
     "auditedAt": "2026-06-15T10:03:35.378Z"
   },
   "junhoyeo/tokscale": {
-    "summary": "Tokscale is a CLI tool and visualization dashboard designed to monitor token consumption and costs across various AI coding agents. It works by scanning local data directories and database files to aggregate usage statistics from multiple clients. The tool supports a wide array of integrations, including Hermes Agent, Claude Code, and GitHub Copilot CLI. Users can analyze their daily summaries and submit usage data to a public leaderboard.",
+    "summary": "Tokscale is a monitoring tool designed to track token consumption and associated costs across various AI coding agents. It aggregates usage data by scanning local storage paths and configuration files from multiple AI clients. The tool provides a native Rust TUI and a visualization dashboard for analyzing daily summaries and overall statistics. It supports a wide range of integrations, including Hermes Agent, Claude Code, and GitHub Copilot CLI.",
     "highlights": [
-      "Tracks token usage and costs across multiple AI coding agents",
-      "Native Rust TUI with cross-platform support",
-      "Supports diverse clients including Hermes, Claude Code, and Gemini CLI"
+      "Native Rust TUI for high-performance usage tracking",
+      "Supports multiple agents including Hermes, Claude Code, and Gemini",
+      "Visualization dashboard with 3D contributions graphs and stats"
     ],
-    "readmeHash": "5c15509e59984965386947a7d12525466003c62268ff780b2caf2157293192ec",
-    "generatedAt": "2026-06-21T08:09:45.618Z",
+    "readmeHash": "52f1b13bfdca1d1e8ec0e8f5a25d93fbcba78ac368a60d5763ede96342f6403e",
+    "generatedAt": "2026-06-22T08:34:15.817Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1264,27 +1263,27 @@
     "audit": "pass"
   },
   "stephenschoettler/hermes-lcm": {
-    "summary": "hermes-lcm is a context management plugin for Hermes Agent that prevents information loss during conversation compression. It replaces flat summaries with a hierarchical summary DAG and a SQLite message store to preserve raw data. This architecture allows the agent to use specialized tools to drill back into specific compacted material without flooding the active context. The system also includes controls for sensitive data redaction and the externalization of oversized payloads.",
+    "summary": "Hermes-LCM is a context management plugin for the Hermes Agent that prevents information loss during long conversations. It replaces standard flat summarization with a hierarchical Directed Acyclic Graph (DAG) and a local SQLite message store to preserve raw message data. The agent can use specialized tools like grep and expand to drill back into compacted details or recover original content from previous sessions. This approach ensures that even when the active context window fills up, the model maintains a path to retrieve precise historical evidence.",
     "highlights": [
-      "Hierarchical summary DAG for depth-aware context compaction",
-      "Dedicated tools for grep, expansion, and source-aware retrieval",
-      "SQLite-backed storage with sensitive pattern redaction and payload externalization"
+      "Uses a hierarchical DAG for depth-aware long-session condensation",
+      "Provides tools for precise retrieval and expansion of compacted context",
+      "Externalizes large base64 payloads to maintain SQLite database performance"
     ],
-    "readmeHash": "1d8da62d4ec21045b010b72fb00ac4d4061c360f91a5f9420afc74b1d3ae9fe7",
-    "generatedAt": "2026-06-19T08:22:03.301Z",
+    "readmeHash": "0d5e7ba98f1aa5d716580f33235fec30333bcd8f6cd0ba3d7c670c63cb6a33de",
+    "generatedAt": "2026-06-22T08:34:26.542Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
   },
   "Codename-11/hermes-relay": {
-    "summary": "Hermes-Relay is a companion ecosystem that allows users to access and manage their Hermes agent from mobile and remote devices. It utilizes a native Android application and a CLI binary to connect to a central Hermes API server via LAN or remote routes. The system enables streaming chat, voice interaction, and agent management of models and skills from a phone. Sideloaded Android builds and the CLI provide extended capabilities, allowing the agent to interact with the device's screen, terminal, and file system.",
+    "summary": "Hermes-Relay is a companion system that enables mobile and remote access to a Hermes agent hosted on a local machine. It utilizes a native Android application and an optional CLI binary to bridge the agent's capabilities to external devices via an API server. Users can manage agent profiles, chat via streaming text or voice, and grant the agent consent-gated access to files and terminals. Sideloaded versions of the app further allow the agent to read and act upon the Android screen.",
     "highlights": [
       "Native Android app for chat, voice, and agent management",
-      "CLI binary for consent-gated terminal and file system access",
-      "Sideloaded APKs enable agent-driven screen reading and phone control"
+      "Consent-gated CLI for terminal, file, and screenshot access",
+      "Sideloaded APK support for Android screen reading and control"
     ],
-    "readmeHash": "2801a0df2895dea24bfad19541ea93bb7720ec495a46413b557e6cf1eaf96ec1",
-    "generatedAt": "2026-06-17T08:19:50.077Z",
+    "readmeHash": "8ecb478316f24c4bde062d7eea77c68c9656ba738d53077cd256d862f4d0d052",
+    "generatedAt": "2026-06-22T08:34:40.184Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1739,14 +1738,14 @@
     "auditedAt": "2026-06-15T10:07:42.421Z"
   },
   "Eynzof/hermes-agent-cn-desktop": {
-    "summary": "Hermes Agent CN Desktop is a desktop client designed to provide a native user experience for Hermes Agent on Windows and macOS. It utilizes Tauri v2, Rust, and React to manage local processes, file dialogs, and runtime installations. The application integrates a modified Hermes Agent kernel and supports a wide range of cloud and local model providers. It includes specialized tools for memory management, task consoles, and Feishu platform integration.",
+    "summary": "Hermes Agent CN Desktop is a localized Windows and macOS client designed to simplify the deployment and management of Hermes Agent for Chinese-speaking users. Built with Tauri, Rust, and React, the application provides a native wrapper that manages local processes, file dialogs, and a hosted runtime environment. It features a comprehensive interface for managing MCP tools, skills, and memory, while supporting both cloud-based model providers and local backends like Ollama and vLLM. The client also includes specialized integrations for platforms like Feishu and a dedicated YOLO mode for executing high-risk commands.",
     "highlights": [
-      "Native Windows and macOS support via Tauri and Rust",
-      "Built-in Hermes Agent kernel with update and health checks",
-      "Supports local models, cloud providers, and Feishu integration"
+      "Native desktop client for Windows and macOS using Tauri v2",
+      "Built-in management for local Hermes Agent kernels and runtimes",
+      "Supports MCP tools, skills, memory management, and LaTeX rendering"
     ],
-    "readmeHash": "5b68ed25528c8be46b9047041a4f460ae88ce3f402772f14ca4ad5c74995e02e",
-    "generatedAt": "2026-06-20T07:47:28.147Z",
+    "readmeHash": "d777d10f093357cc8f797bf348d185a0de857813476a9058a3f63c71fbad6716",
+    "generatedAt": "2026-06-22T08:33:40.478Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -1792,18 +1791,17 @@
     "audit": "pass"
   },
   "colbymchenry/codegraph": {
-    "summary": "CodeGraph is a local CLI tool that provides a pre-indexed knowledge graph of codebases to coding agents like Hermes Agent and Claude Code. It maps symbol relationships, call graphs, and code structures into a local index to replace expensive file-scanning operations like grep and glob. By providing semantic intelligence through an MCP server, it reduces token consumption and the number of tool calls required for architectural analysis. The system features an auto-sync capability that updates the graph in real-time as files are modified.",
+    "summary": "CodeGraph is a local developer tool that provides a pre-indexed knowledge graph of codebases to reduce the operational overhead of AI coding agents. It maps symbol relationships, call graphs, and code structures into a local index, allowing agents to query the graph directly instead of performing expensive file scans. This approach minimizes token consumption and tool calls by providing semantic context through a Model Context Protocol (MCP) server. The tool supports multiple platforms and integrates with agents like Hermes Agent, Claude Code, and Cursor to accelerate architectural discovery.",
     "highlights": [
-      "Reduces token usage and tool calls for coding agents",
-      "Provides local pre-indexed symbol relationships and call graphs",
-      "Auto-syncs the knowledge graph on every file change"
+      "Reduces tool calls by up to 58% through pre-indexed symbol mapping",
+      "Operates 100% locally with automatic background index synchronization",
+      "Integrates with Hermes Agent and other MCP-compatible coding assistants"
     ],
-    "readmeHash": "3582e794957515e9278ee54e4eebcd52f338b44762764b02cacd7a565f5440ce",
-    "generatedAt": "2026-06-14T08:01:24.478Z",
+    "readmeHash": "d2ecd353b0135491864f7c6eef0202947d1286ef125a5b17d915ff893317bbcb",
+    "generatedAt": "2026-06-22T08:33:45.546Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-06-15T10:07:59.168Z"
+    "audit": "pass"
   },
   "Felix-Forever/hermes-agent-desktop": {
     "summary": "Hermes Agent Desktop is a native GUI client that transforms the Hermes Agent from a single-agent CLI into a collaborative multi-agent system. It utilizes a Project Manager orchestrator to decompose complex requirements and delegate tasks across a team of 20 specialized AI agents. The application is built with pywebview and supports any OpenAI-compatible LLM provider. Users can manage agents via a CRUD dashboard and install capabilities through an integrated visual Skill Store.",
@@ -2095,27 +2093,27 @@
     "auditedAt": "2026-06-15T10:09:21.333Z"
   },
   "nexu-io/open-design": {
-    "summary": "Open Design is a local-first, open-source design and prototyping system that serves as an agent-native alternative to Claude Design. It transforms the design process into a filesystem of skills, plugins, and design systems that coding agents can read and remix via a CLI or MCP server. The platform enables the generation of web, desktop, and mobile prototypes, motion graphics, and decks using real CSS and components. It integrates with various coding agents, including Hermes, Cursor, and Copilot, allowing users to export outputs as HTML, PDF, PPTX, or MP4.",
+    "summary": "Open Design is a local-first, open-source design and prototyping system that serves as an agent-native alternative to proprietary design platforms. It operates by exposing a filesystem of skills, design systems, and plugins that coding agents can read and manipulate to generate artifacts. The platform supports the creation of web prototypes, motion graphics, pitch decks, and high-resolution images using real CSS and components. It integrates with over 20 coding agents, including Hermes, through a dedicated CLI and MCP server.",
     "highlights": [
-      "Local-first desktop app for macOS and Windows",
-      "Supports 100+ skills, 150 design systems, and 261 plugins",
-      "MCP server integration for seamless coding agent connectivity"
+      "Generates HTML prototypes, HyperFrame motion graphics, and PPTX decks",
+      "Integrates with Hermes Agent and 22 other local coding CLIs",
+      "Uses DESIGN.md files to enforce brand-grade design system contracts"
     ],
-    "readmeHash": "c40780d85017e3c517cc8253d1e7d62e96591b2eb08cabfb6a9b54bdd9278d81",
-    "generatedAt": "2026-06-18T08:15:30.431Z",
+    "readmeHash": "e5fcb7f14c7d42803dc4be6485e1c436fc0ece28b6d9b8d1522efca8998996db",
+    "generatedAt": "2026-06-22T08:33:55.505Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
   },
   "farion1231/cc-switch": {
-    "summary": "CC Switch is a cross-platform manager designed to centralize the administration of various AI coding agents and CLI tools. It is built using Tauri 2 to provide a native desktop experience across Windows, macOS, and Linux. The tool allows users to manage multiple environments including Claude Code, Gemini CLI, and Hermes Agent from a single interface. This streamlines the workflow for developers using a variety of agentic models and API relay services.",
+    "summary": "CC Switch is a cross-platform desktop application that serves as a centralized manager for various AI coding agents and command-line interfaces, including Hermes Agent and Claude Code. Built using the Tauri 2 framework, it provides a unified interface to configure and switch between different AI developer tools on Windows, macOS, and Linux. The application simplifies the setup process for multiple agentic workflows by consolidating their management into a single environment. It supports a broad ecosystem of integrations such as Gemini CLI, OpenCode, and Codex, catering to developers who utilize diverse AI-assisted engineering tools.",
     "highlights": [
+      "Unified manager for Hermes Agent and other coding CLIs",
       "Cross-platform support for Windows, macOS, and Linux",
-      "Built with Tauri 2 for native performance",
-      "Manages Claude Code, Gemini CLI, and Hermes Agent"
+      "Built with Tauri 2 for lightweight desktop performance"
     ],
-    "readmeHash": "574e6169a03d3f47e583edf6dc343cdca37d8ed4088c411ca62a07040e48b308",
-    "generatedAt": "2026-06-19T08:21:22.998Z",
+    "readmeHash": "666ae4bd96e0a2812536fd13b19f695d02f680495c6be459fb4ded95a8e43cf5",
+    "generatedAt": "2026-06-22T08:34:00.069Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"

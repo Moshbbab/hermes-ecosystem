@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ReinaMacCredy/maestro#software",
   "name": "maestro",
-  "description": "maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas. Agents manage the development lifecycle via a CLI, ensuring work is gated by proof and QA requirements. This approach allows humans to audit agent progress through standard diffs and coordinate multiple agent sessions.",
+  "description": "maestro is a local-first harness that provides a durable state management system for long-running AI coding agents. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas without requiring a daemon or cloud service. Agents manage the project lifecycle via a CLI, ensuring that work is gated by proof and QA requirements before being closed. This approach prevents context loss and provides a reviewable audit trail of agent reasoning and exe",
   "url": "https://hermesatlas.com/projects/ReinaMacCredy/maestro",
   "codeRepository": "https://github.com/ReinaMacCredy/maestro",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "ReinaMacCredy",
     "url": "https://github.com/ReinaMacCredy"
   },
-  "dateModified": "2026-06-20T04:16:47.000Z",
+  "dateModified": "2026-06-21T16:58:40.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 198
+    "userInteractionCount": 199
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Agent harness for codebases. Gives Claude Code, Codex, and CI a shared task system, verdict ledger, and state store so agent work is traceable and auditable.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 198</span>
+    <span class="stars">★ 199</span>
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-20</span>
+    <span><span class="meta-label">updated</span>2026-06-21</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">maestro is a local-first harness that provides a durable workspace for coding agents to prevent context loss and unverified shipments. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas. Agents manage the development lifecycle via a CLI, ensuring work is gated by proof and QA requirements. This approach allows humans to audit agent progress through standard diffs and coordinate multiple agent sessions.</p>
+    <p class="summary-text">maestro is a local-first harness that provides a durable state management system for long-running AI coding agents. It uses a card-based model stored as plain files in the repository to track features, tasks, decisions, and ideas without requiring a daemon or cloud service. Agents manage the project lifecycle via a CLI, ensuring that work is gated by proof and QA requirements before being closed. This approach prevents context loss and provides a reviewable audit trail of agent reasoning and execution.</p>
     <ul class="summary-highlights">
-      <li>Durable card model for tracking features, tasks, and decisions</li>
-      <li>Proof and QA gates to verify work before shipping</li>
-      <li>Local-first Rust binary with no daemon or cloud dependencies</li>
+      <li>Durable card model for features, tasks, and decision tracking</li>
+      <li>Local-first storage in .maestro/ folder for easy diff reviews</li>
+      <li>Proof and QA gates to verify work before closing cards</li>
     </ul>
   </div>
 </section>
@@ -161,7 +161,7 @@ maestro fixes that by making the work itself durable, queryable, and gated:</p>
 <li>A <strong>feature card</strong> owns the contract; work cards dock to it through <code>parent</code>.</li>
 <li><code>maestro ready</code> computes unblocked work from card dependencies instead of a global counter.</li>
 <li><code>maestro claim</code> stamps the current <code>agent#session</code>, so multi-session work stays visible.</li>
-<li><strong>Proof</strong> and <strong>QA</strong> gates keep &quot;done&quot; and &quot;shipped&quot; evidence-backed.</li>
+<li><strong>Proof</strong> and <strong>QA</strong> gates keep &quot;done&quot; and &quot;closed&quot; evidence-backed.</li>
 <li>Harness suggestions and decisions are cards too, so tool-improvement and reasoning survive context loss.</li>
 </ul>
 <p>Everything is repo-local and reviewable in a diff.</p>
@@ -195,7 +195,7 @@ decision locks, and harness measurement.</p>
     G --&gt; H[maestro claim]
     H --&gt; I[task complete with proof]
     I --&gt; J[task verify]
-    J --&gt; K[feature verify + ship]
+    J --&gt; K[feature verify + close]
     K --&gt; L[archive card tree]
 
     R[run events + hooks] --&gt; I
@@ -219,7 +219,7 @@ decision locks, and harness measurement.</p>
 <tbody><tr>
 <td><code>feature</code></td>
 <td>Product contract and parent container</td>
-<td><code>feature accept</code>, <code>feature prepare</code>, <code>feature verify</code>, <code>feature ship</code>, <code>archive</code></td>
+<td><code>feature accept</code>, <code>feature prepare</code>, <code>feature verify</code>, <code>feature close</code>, <code>archive</code></td>
 </tr>
 <tr>
 <td><code>task</code> / <code>bug</code> / <code>chore</code></td>
@@ -301,7 +301,7 @@ maestro claim &lt;task-card-id&gt;                                  # stamp agen
 maestro task complete &lt;task-card-id&gt; --summary &quot;wrote csv writer&quot; \
   --claim &quot;cargo test export passes&quot; --proof &quot;observed: cargo test export passes&quot;
 
-# ship is gated on QA coverage: every [bl-NNN] baseline scenario needs a proven slice.
+# close is gated on QA coverage: every [bl-NNN] baseline scenario needs a proven slice.
 # The maestro-card skill (qa-slice reference) writes this for you; by hand, append one
 # fenced yaml block to qa.md mapping each scenario to its evidence:
 cat &gt;&gt; .maestro/cards/csv-export/qa.md &lt;&lt;&#39;EOF&#39;
@@ -313,10 +313,10 @@ slices:
 ```
 EOF
 
-# ship also sweeps the acceptance contract for fresh evidence:
+# close also sweeps the acceptance contract for fresh evidence:
 maestro feature verify csv-export --prove ac-1 --evidence &quot;observed: cargo test export passes&quot;
 maestro feature verify csv-export
-maestro feature ship csv-export --outcome &quot;Shipped streaming CSV export&quot;   # -&gt; shipped
+maestro feature close csv-export --outcome &quot;streaming CSV export closed&quot;   # -&gt; closed
 </code></pre>
 <p><code>maestro feature show &lt;id&gt;</code> and <code>maestro task show &lt;id&gt;</code> render the current state and the
 recorded reasoning at any point. Features keep slug ids (<code>csv-export</code>); tasks, decisions, and
@@ -378,7 +378,7 @@ fades on its own when the asserter clears it, finishes its card, or falls out of
 union, so a crashed or walked-away session never leaves a peer stuck. When a peer is live,
 <code>maestro feature accept</code> and <code>feature prepare</code> also print a <code>[worktree]</code> advisory suggesting you
 isolate in a git worktree before sharing a file. And because two full-suite gate runs would thrash
-one machine, <code>feature ship</code>&#39;s suite run takes a shared lock across sessions: a second run prints a
+one machine, <code>feature close</code>&#39;s suite run takes a shared lock across sessions: a second run prints a
 <code>[busy]</code> waiting line and proceeds when the slot frees.</p>
 <h4>Suggested workflow</h4>
 <p>The card model composes into one operating rhythm. The <a href="#quickstart">Quickstart</a> above is the
@@ -388,15 +388,15 @@ the run actually looks like, gates and all. <code>maestro install</code> puts th
 <code>maestro-design</code> / <code>maestro-setup</code> / <code>maestro-audit</code> stay separate. Each prompt below hands off to the
 reference that owns that flow rather than spelling out every verb. The command surface below is
 checked against the current source tree.</p>
-<h5>From a high-level idea to a shipped product</h5>
+<h5>From a high-level idea to a closed feature</h5>
 <p>One feature, start to finish: a raw idea becomes a frozen contract, the work is proven slice by slice,
-and it ships only once QA covers the baseline. This is the prompt you paste into a fresh agent session:</p>
+and it closes only once QA covers the baseline. This is the prompt you paste into a fresh agent session:</p>
 <blockquote>
 <p>We want to add rate limiting to the public API: requests over a key&#39;s limit should get an HTTP 429.
 Set it up as a maestro feature, driving each step through the right skill reference: <code>maestro-design</code>
 to map the contract and record the fixed-window-vs-token-bucket decision, the maestro-card skill&#39;s
 qa-baseline reference to capture a behavior baseline, then its work and verify references to drive it
-to shipped through proof-gated tasks, and its qa-slice reference for the ship gate. Don&#39;t skip the gates.</p>
+to closed through proof-gated tasks, and its qa-slice reference for the close gate. Don&#39;t skip the gates.</p>
 </blockquote>
 <p>How it looks end to end (the <code>qa.md</code> baseline and slices bodies are in flows 1 and 3 below,
 and copy-paste-ready in the Quickstart):</p>
@@ -443,9 +443,9 @@ auto: maestro task verify card-764dd7
 verification passed for card-764dd7 (1 claim(s), 1 proof source(s))
 next: maestro-card skill (qa-slice) -&gt; replay affected baseline scenarios
 
-# (write the qa.md slices block + sweep the contract first; see flow 3) ship then succeeds:
-$ maestro feature ship api-rate-limiting --outcome &quot;Shipped fixed-window rate limiting&quot;
-shipped api-rate-limiting (-&gt; shipped)
+# (write the qa.md slices block + sweep the contract first; see flow 3) close then succeeds:
+$ maestro feature close api-rate-limiting --outcome &quot;fixed-window rate limiting closed&quot;
+closed api-rate-limiting (-&gt; closed)
 </code></pre>
 <p>The same journey, flow by flow: each leads with the gate that blocks you until the evidence exists,
 because that gate is the point.</p>
@@ -486,26 +486,26 @@ verification failure: missing proof: no task events or proof artifacts found; ho
 verification failure: claim not backed by events/proof: cargo test ratelimit passes; record matching proof with `maestro event create --task-id card-cad8af --claim &quot;cargo test ratelimit passes&quot;`
 Error: verification failed for card-cad8af
 </code></pre>
-<h5>3. Ship the feature once QA is proven</h5>
-<p>A feature ships only when it has no live child tasks <em>and</em> its QA coverage is green: every <code>[bl-NNN]</code>
+<h5>3. Close the feature once QA is proven</h5>
+<p>A feature closes only when it has no live child tasks <em>and</em> its QA coverage is green: every <code>[bl-NNN]</code>
 scenario in the baseline must be matched by a slice in the <code>qa.md</code> slices block carrying non-empty
 evidence, <em>and</em> every acceptance item must have fresh evidence from the contract sweep
-(<code>maestro feature verify</code>). Coverage is checked, not asserted, so a green ship is a real signal.</p>
+(<code>maestro feature verify</code>). Coverage is checked, not asserted, so a green close is a real signal.</p>
 <p><em>Prompt:</em> &quot;With the maestro-card skill&#39;s qa-slice reference, map every <code>[bl-NNN]</code> baseline scenario of
 <feature> to a slice in the fenced yaml <code>slices:</code> block appended to <code>.maestro/cards/&lt;id&gt;/qa.md</code>, with
 the test that proves it as <code>evidence</code>. Sweep the contract with <code>maestro feature verify &lt;id&gt;</code>, then
-<code>feature ship --outcome &quot;...&quot;</code>. Verify the gate passes; don&#39;t <code>--force</code> it.&quot;</p>
-<p>The gate: <code>ship</code> refuses while any baseline scenario lacks a covering slice or any acceptance item
+<code>feature close --outcome &quot;...&quot;</code>. Verify the gate passes; don&#39;t <code>--force</code> it.&quot;</p>
+<p>The gate: <code>close</code> refuses while any baseline scenario lacks a covering slice or any acceptance item
 lacks fresh evidence, and lists which.</p>
-<pre><code>$ maestro feature ship api-rate-limiting --outcome &quot;Shipped fixed-window rate limiting&quot;
-Error: cannot ship api-rate-limiting:
+<pre><code>$ maestro feature close api-rate-limiting --outcome &quot;fixed-window rate limiting closed&quot;
+Error: cannot close api-rate-limiting:
   qa-slice coverage incomplete - 2 baseline scenario(s) without a counting slice: bl-001, bl-002
     skill: maestro-card (qa-slice)
     target: .maestro/cards/api-rate-limiting/qa.md
-    retry: maestro feature ship api-rate-limiting --outcome &quot;&lt;outcome&gt;&quot;
+    retry: maestro feature close api-rate-limiting --outcome &quot;&lt;outcome&gt;&quot;
   contract sweep missing - 2 acceptance item(s) need feature-level evidence
     fix: maestro feature verify api-rate-limiting
-    retry: maestro feature ship api-rate-limiting --outcome &quot;&lt;outcome&gt;&quot;
+    retry: maestro feature close api-rate-limiting --outcome &quot;&lt;outcome&gt;&quot;
 </code></pre>
 <h5>4. Improve the harness - maestro&#39;s self-improvement</h5>
 <p>The first three flows build the product; this one sharpens the tool that builds it, through the very
@@ -562,7 +562,7 @@ vanished. Either way, the improvement is tracked and backed by a verified task, 
 <p>A feature card is the product contract and the parent container for work. <code>proposed</code> is the
 editable design state; <code>accept</code> freezes the contract into <code>ready</code> and requires a behavior baseline;
 <code>prepare</code> turns a reviewed plan into child work cards; <code>verify</code> records feature-level evidence; and
-<code>ship</code> requires no live child work plus QA coverage and a passing contract sweep. Each feature is a
+<code>close</code> requires no live child work plus QA coverage and a passing contract sweep. Each feature is a
 card under <code>.maestro/cards/&lt;id&gt;/</code>: <code>card.yaml</code> holds typed state, <code>qa.md</code> holds the behavior baseline
 and slices block, <code>spec.md</code> is the design write-up, and <code>notes.md</code> accumulates the running design log.</p>
 <h4>Work Cards Gated by Proof</h4>
@@ -574,9 +574,9 @@ The result is that &quot;done&quot; is always backed by evidence you can open.</
 <h4>QA: baseline and slices</h4>
 <p>QA lives in one file per feature, <code>.maestro/cards/&lt;id&gt;/qa.md</code>: the behavior baseline (markdown with
 an <code>amend_log_position</code> frontmatter and <code>[bl-NNN]</code> scenario lines) plus a fenced yaml <code>slices:</code>
-block appended at the end, each slice mapping <code>scenarios</code> to <code>evidence</code>. A feature ships only when its
+block appended at the end, each slice mapping <code>scenarios</code> to <code>evidence</code>. A feature closes only when its
 baseline is fresh and every scenario is covered by a slice with non-empty evidence. Coverage is
-checked, not asserted, so a green ship is a real signal.</p>
+checked, not asserted, so a green close is a real signal.</p>
 <h4>Decisions</h4>
 <p><code>maestro decision new &quot;&lt;the fork&gt;&quot; --feature &lt;id&gt;</code> records an architectural decision as a card under
 <code>.maestro/cards/card-&lt;hex&gt;/</code>, so the reasoning outlives any single agent session.</p>
@@ -892,7 +892,7 @@ embedded/    shipped harness, hook, shell, and skill resources
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 17.2K</div>
+        <div class="stars">★ 18.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -904,11 +904,11 @@ embedded/    shipped harness, hook, shell, and skill resources
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 317</div>
+        <div class="stars">★ 318</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 4.3K</div>
+        <div class="stars">★ 4.4K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
@@ -916,7 +916,7 @@ embedded/    shipped harness, hook, shell, and skill resources
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 182</div>
+        <div class="stars">★ 183</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
