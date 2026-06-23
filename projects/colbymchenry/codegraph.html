@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local developer tool that provides a pre-indexed knowledge graph of codebases to reduce the operational overhead of AI coding agents. It maps symbol relationships, call graphs, and code structures into a local index, allowing agents to query the graph directly instead of performing expensive file scans. This approach minimizes token consumption and tool calls by providing semantic context through a Model Context Protocol (MCP) server. The tool supports multiple platforms and integ",
+  "description": "CodeGraph is a local pre-indexed knowledge graph designed to optimize how AI agents navigate and understand codebases. It replaces slow file-by-file searches with a structured map of symbols, call edges, and dependencies. This approach provides agents with surgical context in fewer tool calls, reducing the need for repetitive grep and read operations. It integrates via an MCP server with agents including Hermes Agent, Claude Code, Cursor, and Gemini.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-06-21T19:36:23.000Z",
+  "dateModified": "2026-06-22T23:16:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 52895
+    "userInteractionCount": 53392
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 52.9K</span>
+    <span class="stars">★ 53.4K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-21</span>
+    <span><span class="meta-label">updated</span>2026-06-22</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local developer tool that provides a pre-indexed knowledge graph of codebases to reduce the operational overhead of AI coding agents. It maps symbol relationships, call graphs, and code structures into a local index, allowing agents to query the graph directly instead of performing expensive file scans. This approach minimizes token consumption and tool calls by providing semantic context through a Model Context Protocol (MCP) server. The tool supports multiple platforms and integrates with agents like Hermes Agent, Claude Code, and Cursor to accelerate architectural discovery.</p>
+    <p class="summary-text">CodeGraph is a local pre-indexed knowledge graph designed to optimize how AI agents navigate and understand codebases. It replaces slow file-by-file searches with a structured map of symbols, call edges, and dependencies. This approach provides agents with surgical context in fewer tool calls, reducing the need for repetitive grep and read operations. It integrates via an MCP server with agents including Hermes Agent, Claude Code, Cursor, and Gemini.</p>
     <ul class="summary-highlights">
-      <li>Reduces tool calls by up to 58% through pre-indexed symbol mapping</li>
-      <li>Operates 100% locally with automatic background index synchronization</li>
-      <li>Integrates with Hermes Agent and other MCP-compatible coding assistants</li>
+      <li>100% local indexing with automatic synchronization on file changes</li>
+      <li>Reduces tool calls and file reads for faster agent responses</li>
+      <li>Supports multiple agents including Hermes Agent, Cursor, and Claude Code</li>
     </ul>
   </div>
 </section>
@@ -150,7 +150,7 @@
 <p>Already installed? Run <code>codegraph upgrade</code> to update in place.</p>
 <p>Follow <a href="https://x.com/getcodegraph">@getcodegraph</a> on X for updates.</p>
 <h4>Supercharge Claude Code, Cursor, Codex, OpenCode, Hermes Agent, Gemini, Antigravity, and Kiro with Semantic Code Intelligence</h4>
-<p><strong>~16% cheaper · ~58% fewer tool calls · 100% local</strong></p>
+<p><strong>Surgical context · fewer tool calls · faster answers · 100% local</strong></p>
 <h4><a href="https://colbymchenry.github.io/codegraph/">Documentation &amp; Website →</a></h4>
 <p><a href="https://www.npmjs.com/package/@colbymchenry/codegraph"><img src="https://img.shields.io/npm/v/@colbymchenry/codegraph.svg" alt="npm version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
@@ -215,82 +215,96 @@ codegraph init
 <p><sub>Reverses the installer — strips CodeGraph&#39;s MCP server config, instructions, and permissions from each configured agent. Your project indexes (<code>.codegraph/</code>) are left untouched; remove those per-project with <code>codegraph uninit</code>. Use <code>--target</code> to remove from specific agents, or <code>--yes</code> to run non-interactively.</sub></p>
 <hr>
 <h3>Why CodeGraph?</h3>
-<p>When Claude Code explores a codebase, it spawns <strong>Explore agents</strong> that scan files with grep, glob, and Read — consuming tokens on every tool call.</p>
-<p><strong>CodeGraph gives those agents a pre-indexed knowledge graph</strong> — symbol relationships, call graphs, and code structure. Agents query the graph instantly instead of scanning files.</p>
-<h4>Benchmark Results</h4>
-<p>Tested across <strong>7 real-world open-source codebases</strong> spanning 7 languages, comparing an agent (Claude Code, headless) answering one architecture question <strong>with</strong> and <strong>without</strong> CodeGraph. Each cell is the savings at the <strong>median of 4 runs per arm</strong>. <em>Re-validated on Opus 4.8 (2026-06-02), on the current build (<code>codegraph_explore</code> as the primary tool).</em></p>
+<p>When an AI agent needs to understand code — to answer a question or make a change — it discovers structure the slow way: grep, glob, and Read, one file at a time, rebuilding call paths and dependencies by hand. That&#39;s a pile of tool calls and round-trips before it even starts the real work.</p>
+<p><strong>CodeGraph hands the agent the exact code it needs in one call.</strong> It&#39;s a pre-built knowledge graph of every symbol, call edge, and dependency in your codebase — so instead of crawling files, the agent asks one question and gets back the relevant source, the call paths between those symbols (including dynamic-dispatch hops grep can&#39;t follow), and the blast radius of a change. <strong>Surgical context, not a file-by-file search</strong> — which means fewer tool calls and faster answers on every codebase, large or small.</p>
+<img width="1536" height="1024" alt="token-cost-savings-scale" src="https://github.com/user-attachments/assets/eb74a11a-a3ab-4b01-80a6-19f78352ae8e" />
+
 <blockquote>
-<p><strong>Average: 16% cheaper · 47% fewer tokens · 22% faster · 58% fewer tool calls</strong></p>
+<p><strong>A note on cost:</strong> CodeGraph&#39;s win on <em>every</em> codebase is precision and speed — fewer tool calls, faster answers. It cuts token and dollar cost too, but those savings are <strong>scale-dependent</strong>: small and noisy on a modest codebase, and material only once a repo is large and tangled — at the scale of a Google or Microsoft monorepo, multiplied by a whole team&#39;s daily agent usage — for them to compound into a real line item. On a 500-file project, adopt CodeGraph for the speed; the cost savings show up when the codebase (and the team) gets big.</p>
 </blockquote>
+<h4>Benchmark Results</h4>
+<p>Tested across <strong>7 real-world open-source codebases</strong> spanning 7 languages, comparing an agent (Claude Code, headless) answering one architecture question <strong>with</strong> and <strong>without</strong> CodeGraph, at the <strong>median of 4 runs per arm</strong>. <em>Re-validated on Opus 4.8 (2026-06-02), on the current build (<code>codegraph_explore</code> as the primary tool).</em></p>
+<blockquote>
+<p><strong>The universal win — every repo, every size: 58% fewer tool calls · 22% faster · file reads cut to ~zero.</strong></p>
+</blockquote>
+<p>The reliable, universal payoff is <strong>surgical context and speed</strong>: CodeGraph collapses the agent&#39;s grep/find/Read crawl into a few direct queries — returning the exact methods you asked about even when they&#39;re buried in a multi-thousand-line file — so it answers with <strong>near-zero file reads</strong> while the no-CodeGraph agent spends its budget on discovery. The <strong>Tokens</strong> and <strong>Cost</strong> columns are real too, but — as noted above — they&#39;re <strong>scale-dependent</strong>: small and noisy per query, compounding into real money only at large-codebase, high-volume scale.</p>
 <table>
 <thead>
 <tr>
 <th>Codebase</th>
 <th>Language</th>
-<th>Cost</th>
-<th>Tokens</th>
-<th>Time</th>
 <th>Tool calls</th>
+<th>Time</th>
+<th>File reads</th>
+<th>Tokens</th>
+<th>Cost</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><strong>VS Code</strong></td>
 <td>TypeScript · ~10k files</td>
-<td>18% cheaper</td>
-<td>64% fewer</td>
-<td>11% faster</td>
 <td>81% fewer</td>
+<td>11% faster</td>
+<td>0 vs 9</td>
+<td>64% fewer</td>
+<td>18% cheaper</td>
 </tr>
 <tr>
 <td><strong>Excalidraw</strong></td>
 <td>TypeScript · ~640</td>
-<td>even</td>
-<td>25% fewer</td>
-<td>27% faster</td>
 <td>40% fewer</td>
+<td>27% faster</td>
+<td>0 vs 7</td>
+<td>25% fewer</td>
+<td>even</td>
 </tr>
 <tr>
 <td><strong>Django</strong></td>
 <td>Python · ~3k</td>
-<td>8% cheaper</td>
-<td>60% fewer</td>
-<td>13% faster</td>
 <td>77% fewer</td>
+<td>13% faster</td>
+<td>0 vs 9</td>
+<td>60% fewer</td>
+<td>8% cheaper</td>
 </tr>
 <tr>
 <td><strong>Tokio</strong></td>
 <td>Rust · ~790</td>
-<td>even</td>
-<td>38% fewer</td>
-<td>18% faster</td>
 <td>57% fewer</td>
+<td>18% faster</td>
+<td>0 vs 8</td>
+<td>38% fewer</td>
+<td>even</td>
 </tr>
 <tr>
 <td><strong>OkHttp</strong></td>
 <td>Java · ~645</td>
-<td>25% cheaper</td>
-<td>54% fewer</td>
-<td>31% faster</td>
 <td>50% fewer</td>
+<td>31% faster</td>
+<td>0 vs 4</td>
+<td>54% fewer</td>
+<td>25% cheaper</td>
 </tr>
 <tr>
 <td><strong>Gin</strong></td>
 <td>Go · ~110</td>
-<td>19% cheaper</td>
-<td>23% fewer</td>
-<td>24% faster</td>
 <td>44% fewer</td>
+<td>24% faster</td>
+<td>1 vs 6</td>
+<td>23% fewer</td>
+<td>19% cheaper</td>
 </tr>
 <tr>
 <td><strong>Alamofire</strong></td>
 <td>Swift · ~110</td>
-<td>40% cheaper</td>
-<td>64% fewer</td>
-<td>33% faster</td>
 <td>58% fewer</td>
+<td>33% faster</td>
+<td>0 vs 9</td>
+<td>64% fewer</td>
+<td>40% cheaper</td>
 </tr>
 </tbody></table>
-<p>CodeGraph cuts <strong>tokens, tool calls, and wall-clock time on every repo</strong> — across small, medium, and large codebases — and answers them with <strong>near-zero file reads</strong>, while the no-CodeGraph agent spends its budget on grep/find/Read discovery. <code>codegraph_explore</code> shows the answer in full — the mechanism plus the exact methods you asked about, even when they&#39;re buried in a multi-thousand-line file — while collapsing redundant interchangeable implementations to signatures, so the response is sized to the <em>answer</em> rather than the file count. <strong>Cost stays flat-to-cheaper everywhere</strong> — largest on the small repos (Alamofire, OkHttp), roughly break-even on the most response-heavy ones (Excalidraw, Tokio), where CodeGraph trades the no-CodeGraph agent&#39;s many small grep/read round-trips for a few large, cache-heavy tool responses.</p>
+<p><sub><strong>File reads</strong> = median files the agent opened <strong>with</strong> vs <strong>without</strong> CodeGraph — the surgical-context win in one column. <strong>Tokens</strong> and <strong>Cost</strong> are the same with-vs-without deltas; they&#39;re directional (they move run-to-run) and, per query, small in absolute terms — which is why they only become a line item at scale. <code>codegraph_explore</code> also collapses redundant interchangeable implementations to signatures, so a response is sized to the <em>answer</em> rather than the file count.</sub></p>
 <details>
 <summary><strong>Per-repo breakdown — WITH vs WITHOUT (median of 4)</strong></summary>
 
@@ -679,8 +693,8 @@ codegraph init
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>Smart Context Building</strong></td>
-<td>One tool call returns entry points, related symbols, and code snippets — no expensive exploration agents</td>
+<td><strong>Surgical Context</strong></td>
+<td>One tool call returns entry points, related symbols, and code snippets — no slow file-by-file exploration</td>
 </tr>
 <tr>
 <td><strong>Full-Text Search</strong></td>
@@ -1181,9 +1195,10 @@ keep <code>@types/node</code> available and <code>skipLibCheck: true</code> (the
 </ul>
 <hr>
 <h3>Configuration</h3>
-<p>There isn&#39;t any — CodeGraph is zero-config, with <strong>no config file</strong> to write or
-keep in sync. Language support is automatic from the file extension; there&#39;s
-nothing to wire up per language.</p>
+<p>Next to none — CodeGraph is <strong>zero-config by default</strong>, with nothing to write or
+keep in sync to get started. Language support is automatic from the file
+extension; there&#39;s nothing to wire up per language. The one optional file is for
+mapping <a href="#custom-file-extensions">custom file extensions</a>.</p>
 <p>What it skips out of the box:</p>
 <ul>
 <li><strong>Dependency, build, and cache directories</strong> — <code>node_modules</code>, <code>vendor</code>,
@@ -1199,6 +1214,24 @@ directory back <strong>in</strong> (say you really do want a vendored dependency
 add a negation — <code>!vendor/</code>. The defaults apply uniformly, so committing a
 dependency or build directory doesn&#39;t force it into the graph; the <code>.gitignore</code>
 negation is the explicit opt-in.</p>
+<h4>Custom file extensions</h4>
+<p>If your project uses a non-standard extension for a <a href="#supported-languages">supported
+language</a> — say <code>.dota_lua</code> for Lua, or <code>.tpl</code> for PHP —
+those files are skipped by default, because the extension isn&#39;t one CodeGraph
+recognizes. Map them with an optional <strong><code>codegraph.json</code></strong> at your project root:</p>
+<pre><code class="language-json">{
+  &quot;extensions&quot;: {
+    &quot;.dota_lua&quot;: &quot;lua&quot;,
+    &quot;.tpl&quot;: &quot;php&quot;
+  }
+}
+</code></pre>
+<p>Each value is a supported language id. The mappings merge on top of the built-in
+defaults and win on conflict, so you can also re-point a built-in (e.g.
+<code>&quot;.h&quot;: &quot;cpp&quot;</code>). Commit the file to share the mapping with your team. A typo&#39;d
+language or a malformed file is warned about and skipped — it never breaks
+indexing — and a project with no <code>codegraph.json</code> behaves exactly as before.
+Re-index (<code>codegraph index</code>) after adding or changing mappings.</p>
 <h3>Telemetry</h3>
 <p>CodeGraph collects <strong>anonymous usage statistics</strong> — which tools and commands get
 used, which languages get indexed — to guide where language and agent support
@@ -1545,7 +1578,7 @@ is written):</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 635</div>
+        <div class="stars">★ 644</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1561,11 +1594,11 @@ is written):</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 461</div>
+        <div class="stars">★ 465</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
-        <div class="stars">★ 120</div>
+        <div class="stars">★ 121</div>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
