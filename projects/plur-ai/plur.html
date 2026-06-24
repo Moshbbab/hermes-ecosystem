@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a persistent, local-first memory layer for AI agents that stores corrections, preferences, and conventions as plain YAML engrams. It uses a hybrid retrieval system combining BM25 and BGE embeddings to inject relevant context into agent sessions without cloud API calls. The system implements an ACT-R activation model where memories strengthen with use and naturally decay over time. It integrates with tools like Claude Code, Cursor, and Hermes Agent to maintain consistent knowledge across ",
+  "description": "PLUR is a local-first shared memory layer that allows AI agents to persist preferences, corrections, and conventions across different sessions and tools. It stores knowledge as plain YAML files on disk using an open engram format, avoiding cloud APIs and black-box storage. The system utilizes a hybrid search approach combining BM25 and BGE embeddings with Reciprocal Rank Fusion for retrieval. It integrates with tools like Claude Code, Cursor, and Hermes Agent to automatically capture learnings f",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-06-22T14:46:42.000Z",
+  "dateModified": "2026-06-24T00:37:33.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">172·repos</span>
+    <span id="meta-count">173·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,12 +116,12 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-06-22</span>
+    <span><span class="meta-label">updated</span>2026-06-24</span>
   </div>
 
   <div class="actions">
     <a href="https://github.com/plur-ai/plur" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
-    
+    <a href="https://plur.ai" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
   </div>
 </section>
 
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a persistent, local-first memory layer for AI agents that stores corrections, preferences, and conventions as plain YAML engrams. It uses a hybrid retrieval system combining BM25 and BGE embeddings to inject relevant context into agent sessions without cloud API calls. The system implements an ACT-R activation model where memories strengthen with use and naturally decay over time. It integrates with tools like Claude Code, Cursor, and Hermes Agent to maintain consistent knowledge across different platforms and projects.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer that allows AI agents to persist preferences, corrections, and conventions across different sessions and tools. It stores knowledge as plain YAML files on disk using an open engram format, avoiding cloud APIs and black-box storage. The system utilizes a hybrid search approach combining BM25 and BGE embeddings with Reciprocal Rank Fusion for retrieval. It integrates with tools like Claude Code, Cursor, and Hermes Agent to automatically capture learnings from conversations.</p>
     <ul class="summary-highlights">
-      <li>Stores memory locally as open-format YAML engrams</li>
-      <li>Uses hybrid BM25 and embedding retrieval for zero-cost context injection</li>
-      <li>Automates memory capture and recall across MCP-compatible tools</li>
+      <li>Open YAML engram format for data sovereignty and portability</li>
+      <li>Local-first hybrid search with zero per-query API costs</li>
+      <li>Activation-based decay model to fade stale facts automatically</li>
     </ul>
   </div>
 </section>
@@ -143,16 +143,57 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>PLUR — Your agents share the same memory</h2>
+    <p align="center">
+  <a href="https://plur.ai"><img src="https://raw.githubusercontent.com/plur-ai/plur/main/assets/plur-banner.png" alt="PLUR — local-first shared memory for AI agents. Haiku + PLUR beats Opus without it, at ~10× less cost." width="100%"></a>
+</p>
+
+<h2>PLUR — Your agents share the same memory</h2>
+<p><a href="https://www.npmjs.com/package/@plur-ai/core"><img src="https://img.shields.io/npm/v/@plur-ai/core?logo=npm&amp;color=cb3837" alt="npm version"></a>
+<a href="https://github.com/plur-ai/plur/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/plur-ai/plur/ci.yml?branch=main&amp;logo=github&amp;label=CI" alt="CI"></a>
+<a href="LICENSE"><img src="https://img.shields.io/github/license/plur-ai/plur?color=blue" alt="License: Apache-2.0"></a>
+<a href="https://github.com/plur-ai/plur/stargazers"><img src="https://img.shields.io/github/stars/plur-ai/plur?style=social" alt="GitHub stars"></a></p>
 <p>Persistent memory for AI agents. Local-first, zero-cost, works across MCP tools.</p>
 <p><a href="https://plur.ai">plur.ai</a> · <a href="https://plur.ai/benchmark.html">Benchmark</a> · <a href="https://plur.ai/spec.html">Engram Spec</a> · <a href="https://www.npmjs.com/org/plur-ai">npm</a></p>
+<h3>Benchmarks</h3>
+<p>PLUR is memory, not just retrieval — so we measure it on more than one axis.</p>
+<p><strong>Retrieval recall</strong> — LongMemEval (R@5, chunk granularity):</p>
+<table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>R@5</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PLUR hybrid + reranker</strong></td>
+<td><strong>97.6%</strong></td>
+<td>fully local cross-encoder — no API</td>
+</tr>
+<tr>
+<td>PLUR hybrid (openai-3-large embeddings)</td>
+<td>97.0%</td>
+<td>optional cloud embedder</td>
+</tr>
+<tr>
+<td>PLUR BM25 only</td>
+<td>92.2%</td>
+<td>no embedder — fully airgapped</td>
+</tr>
+</tbody></table>
+<p><strong>Agent task impact</strong> — same task, with memory vs without: Haiku + PLUR outperforms Opus <em>without</em> it at roughly <strong>10× less cost</strong>; house rules <strong>12–0</strong> across Haiku, Sonnet, and Opus.</p>
+<p><strong>Operational</strong> — local-first, zero-cost search, data-sovereign by design.</p>
+<p><em>More benchmarks in progress: LoCoMo, end-to-end answer accuracy (N=500), agentic task suites, cross-tool portability, decay / contradiction correctness.</em> <a href="https://plur.ai/benchmark.html">Full methodology →</a></p>
 <h3>The idea</h3>
 <p>You correct your agent&#39;s coding style on Monday. On Tuesday, it makes the same mistake. You explain your architecture in Cursor. That night, Claude Code has no idea.</p>
 <p>PLUR fixes this. Install it once, and corrections, preferences, and conventions persist — across sessions, tools, and machines. Your memory is stored as plain YAML on your disk. No cloud, no API calls, no black box.</p>
 <p>The interesting part: in our tool-routing and local-knowledge benchmark, <strong>Haiku with PLUR memory outperformed Opus without it</strong> — 2.6x better on tool routing, at roughly 10x less cost. Turns out the bottleneck isn&#39;t model intelligence. It&#39;s context.</p>
 <h3>Install</h3>
 <h4>Tell your agent</h4>
-<p>Go to <a href="https://plur.ai">plur.ai</a> and tell your agent to install memory for your tool — Claude Code, Cursor, Windsurf, or OpenClaw. The site has the right config for your setup.</p>
+<p>Paste this to your coding agent (Claude Code, Cursor, Windsurf, OpenClaw):</p>
+<pre><code class="language-text">Set up PLUR memory for me: run `npx @plur-ai/mcp init`, then check my PLUR status to confirm it works.
+</code></pre>
+<p>Prefer a guided setup? <a href="https://plur.ai">plur.ai</a> has the exact config for your tool — Claude Code, Cursor, Windsurf, or OpenClaw.</p>
 <h4>Manual setup (Claude Code)</h4>
 <p>One command sets up everything — storage, MCP config, and Claude Code hooks:</p>
 <pre><code class="language-bash">npx @plur-ai/mcp init
@@ -200,6 +241,8 @@ Unused engrams          →  activation decays  →  naturally fade from injecti
 <p>Search is fully local: BM25 (with IDF weighting, TF saturation, length normalization) + BGE embeddings + Reciprocal Rank Fusion. Zero API calls, zero per-query cost. <a href="https://plur.ai/benchmark.html">Benchmark methodology →</a></p>
 <p>Plugins (OpenClaw, Hermes) automatically capture learnings from agent conversations — no manual saving needed. The agent&#39;s corrections become engrams without you doing anything.</p>
 <p>See the <a href="https://plur.ai/spec.html">full engram spec</a> for schema details, activation model, and injection algorithm.</p>
+<h3>Open format</h3>
+<p>The engram is an <strong>open, versioned format</strong> — not a black box. Every engram is plain YAML validated against a published <a href="https://plur.ai/spec.html">JSON Schema</a>, generated from the same Zod source the engine uses (the schemas live in <a href="spec/"><code>spec/</code></a>). Read it, diff it in git, write your own tooling against it, or build a different engine on the same format — your memory isn&#39;t locked to PLUR.</p>
 <h3>Usage</h3>
 <pre><code class="language-typescript">import { Plur } from &#39;@plur-ai/core&#39;
 
@@ -285,39 +328,48 @@ plur.sync(&#39;git@github.com:you/plur-memory.git&#39;)
 <td>Check system health and engram counts</td>
 </tr>
 </tbody></table>
-<h3>Benchmark</h3>
-<p>We ran 19 decisive contests across three Claude models (Haiku, Sonnet, Opus). Same task, same prompt — one agent with PLUR, one without. Ties removed.</p>
+<h3>Benchmark details</h3>
+<p>Per-category retrieval recall (hybrid + openai-3-large embeddings, chunk granularity, LongMemEval):</p>
 <table>
 <thead>
 <tr>
-<th>Knowledge type</th>
-<th>Record</th>
-<th>What it tests</th>
+<th>Category</th>
+<th>R@5</th>
+<th>R@10</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>House rules</td>
-<td>12–0</td>
-<td>Tag conventions, file routing, project structure</td>
+<td>single-session-assistant</td>
+<td>100.0%</td>
+<td>100.0%</td>
 </tr>
 <tr>
-<td>Tool routing</td>
-<td>10–2</td>
-<td>Finding the right tool among 100+ options</td>
+<td>knowledge-update</td>
+<td>98.7%</td>
+<td>100.0%</td>
 </tr>
 <tr>
-<td>Past experience</td>
-<td>4–0</td>
-<td>API quirks, debugging insights, infrastructure</td>
+<td>single-session-user</td>
+<td>98.6%</td>
+<td>100.0%</td>
 </tr>
 <tr>
-<td>Learned style</td>
-<td>5–2</td>
-<td>Communication tone, design preferences</td>
+<td>multi-session</td>
+<td>97.7%</td>
+<td>99.2%</td>
+</tr>
+<tr>
+<td>temporal-reasoning</td>
+<td>94.0%</td>
+<td>97.0%</td>
+</tr>
+<tr>
+<td>single-session-preference</td>
+<td>93.3%</td>
+<td>96.7%</td>
 </tr>
 </tbody></table>
-<p><strong>31 wins, 4 losses (89% win rate).</strong> Without memory, agents got house rules right 10–38% of the time depending on model — with PLUR, 12–0 across every model. Memory isn&#39;t a reasoning crutch — it&#39;s information the model literally cannot infer.</p>
-<p>The cost insight was unexpected: in the reported local-knowledge benchmark setup, Haiku + PLUR scored 0.80 on discoverability while Opus alone scored 0.31. A $0.25/MTok model with memory beat a $15/MTok model without it on this task set.</p>
+<p>Retrieval recall (finding the right memory) and end-to-end answer accuracy (whether the model then answers correctly) are <strong>different axes</strong> — PLUR measures and reports them separately, never conflated. The agent-impact figures above come from a same-task A/B run (memory vs none).</p>
 <p><a href="https://plur.ai/benchmark.html">Full methodology →</a></p>
 <h3>What PLUR is — and isn&#39;t</h3>
 <p>PLUR is <strong>agent memory</strong> — it stores corrections, preferences, conventions, and architectural decisions that an AI agent learns during work sessions, and injects them back when they&#39;re relevant.</p>
@@ -455,11 +507,11 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.2K</div>
+        <div class="stars">★ 59.3K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 17.0K</div>
+        <div class="stars">★ 17.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -467,15 +519,15 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 319</div>
+        <div class="stars">★ 321</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 187</div>
+        <div class="stars">★ 188</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 199</div>
+        <div class="stars">★ 200</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -483,7 +535,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 23.8K</div>
+        <div class="stars">★ 23.9K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

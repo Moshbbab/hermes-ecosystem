@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that enables observability by tracking LLM interactions and system performance. It automatically captures and exports model invocations, tool calls, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports a wide range of observability platforms including Phoenix, Langfuse, SigNoz, and Jaeger for monitoring traces, metrics, and logs. This allows developers to visualize complex agentic workflows and monitor toke",
+  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that provides observability for LLM workflows. It automatically captures and exports tool calls, model invocations, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports complex parent-child nesting for sessions and provides detailed metrics, including token usage roll-ups and request latency. It is compatible with a wide range of observability platforms including Phoenix, Langfuse, SigNoz, and Honeycomb.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-06-21T02:52:49.000Z",
+  "dateModified": "2026-06-24T02:04:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">172·repos</span>
+    <span id="meta-count">173·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-06-21</span>
+    <span><span class="meta-label">updated</span>2026-06-24</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that enables observability by tracking LLM interactions and system performance. It automatically captures and exports model invocations, tool calls, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports a wide range of observability platforms including Phoenix, Langfuse, SigNoz, and Jaeger for monitoring traces, metrics, and logs. This allows developers to visualize complex agentic workflows and monitor token usage across different session types.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that provides observability for LLM workflows. It automatically captures and exports tool calls, model invocations, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports complex parent-child nesting for sessions and provides detailed metrics, including token usage roll-ups and request latency. It is compatible with a wide range of observability platforms including Phoenix, Langfuse, SigNoz, and Honeycomb.</p>
     <ul class="summary-highlights">
       <li>Exports LLM tool calls and model invocations as OTel spans</li>
-      <li>Supports multiple backends including Phoenix, Langfuse, and SigNoz</li>
-      <li>Aggregates session tokens and tracks parent-child span hierarchies</li>
+      <li>Supports multiple OTLP-compatible backends like Phoenix, Langfuse, and Jaeger</li>
+      <li>Tracks session lifecycles with token aggregation and metric recording</li>
     </ul>
   </div>
 </section>
@@ -157,6 +157,7 @@
 <li><strong><a href="https://github.com/grafana/docker-otel-lgtm">Grafana LGTM</a></strong> (local) — traces + metrics + logs</li>
 <li><strong><a href="https://uptrace.dev">Uptrace</a></strong> (self-hosted) — traces + metrics + logs</li>
 <li><strong><a href="https://openobserve.ai">OpenObserve</a></strong> (self-hosted) — traces + metrics + logs</li>
+<li><strong><a href="https://www.honeycomb.io/">Honeycomb</a></strong> (cloud) — traces + metrics + logs — see <a href="https://github.com/briancaffey/hermes-otel/blob/main/HONEYCOMB.md">HONEYCOMB.md</a></li>
 </ul>
 <p>Any OTLP HTTP endpoint should work.</p>
 <ul>
@@ -423,6 +424,14 @@ docker compose up -d
 # OTLP: http://localhost:4318   (HTTP)  /  localhost:4317 (gRPC)
 </code></pre>
 <p>Tempo is <strong>traces-only</strong> — the plugin skips metric export when this backend is selected. The upstream example already bundles Prometheus + Grafana, so token/tool/cost metrics can be routed there via a separate Prometheus remote-write or OTel collector if needed.</p>
+<h4>Honeycomb</h4>
+<pre><code class="language-bash">export HONEYCOMB_API_KEY=&quot;hcaik_...&quot;          # x-honeycomb-team header
+# Optional — defaults to the US ingest endpoint:
+# export OTEL_HONEYCOMB_ENDPOINT=&quot;https://api.eu1.honeycomb.io/v1/traces&quot;   # EU
+export OTEL_PROJECT_NAME=hermes-otel-honeycomb
+</code></pre>
+<p>For region selection (<code>us</code>/<code>eu</code>), a dataset, and the metrics <code>unknown_metrics</code>
+gotcha, use the multi-backend <code>config.yaml</code> form instead — see <a href="https://github.com/briancaffey/hermes-otel/blob/main/HONEYCOMB.md">HONEYCOMB.md</a>.</p>
 <h4>Optional</h4>
 <pre><code class="language-bash">export OTEL_PROJECT_NAME=&quot;hermes-agent&quot;   # Shown in Phoenix
 export HERMES_OTEL_DEBUG=true             # Enable debug logging (see below)
@@ -432,7 +441,7 @@ export HERMES_OTEL_DEBUG=true             # Enable debug logging (see below)
 <pre><code class="language-bash">export HERMES_OTEL_DEBUG=true
 </code></pre>
 <p>Debug output is written to <code>~/.hermes/plugins/hermes_otel/debug.log</code> and does not clutter hermes stdout.</p>
-<p><strong>Priority order:</strong> LangSmith (if <code>LANGSMITH_TRACING=true</code>) &gt; Langfuse (if credentials set) &gt; SigNoz (<code>OTEL_SIGNOZ_ENDPOINT</code>) &gt; Jaeger (<code>OTEL_JAEGER_ENDPOINT</code>) &gt; Tempo (<code>OTEL_TEMPO_ENDPOINT</code>) &gt; Phoenix (<code>OTEL_PHOENIX_ENDPOINT</code>).</p>
+<p><strong>Priority order:</strong> LangSmith (if <code>LANGSMITH_TRACING=true</code>) &gt; Langfuse (if credentials set) &gt; SigNoz (<code>OTEL_SIGNOZ_ENDPOINT</code>) &gt; Uptrace (<code>OTEL_UPTRACE_ENDPOINT</code> + DSN) &gt; OpenObserve (<code>OTEL_OPENOBSERVE_ENDPOINT</code> + creds) &gt; Honeycomb (<code>HONEYCOMB_API_KEY</code>) &gt; Jaeger (<code>OTEL_JAEGER_ENDPOINT</code>) &gt; Tempo (<code>OTEL_TEMPO_ENDPOINT</code>) &gt; Phoenix (<code>OTEL_PHOENIX_ENDPOINT</code>).</p>
 <h4>Shaping knobs — <code>config.yaml</code> and <code>HERMES_OTEL_*</code> env vars</h4>
 <p>Backend selection stays env-var-driven (above). For telemetry <strong>shaping</strong> — sampling, preview size, resource attributes, TTL, extra headers — you can also use a YAML file at <code>~/.hermes/plugins/hermes_otel/config.yaml</code>.</p>
 <p><strong>Precedence (per-field):</strong> <code>HERMES_OTEL_*</code> env var &gt; <code>config.yaml</code> value &gt; default.</p>
@@ -661,7 +670,7 @@ headers:                        # merged onto outgoing OTLP requests
 <thead>
 <tr>
 <th>Metric</th>
-<th>Langfuse (gen_ai)</th>
+<th>OpenTelemetry GenAI</th>
 <th>Phoenix (OpenInference)</th>
 </tr>
 </thead>
@@ -677,21 +686,22 @@ headers:                        # merged onto outgoing OTLP requests
 </tr>
 <tr>
 <td>Total tokens</td>
-<td>—</td>
+<td><code>gen_ai.usage.total_tokens</code></td>
 <td><code>llm.token_count.total</code></td>
 </tr>
 <tr>
 <td>Cache read</td>
-<td><code>gen_ai.usage.cache_read_input_tokens</code></td>
-<td><code>llm.token_count.cache_read</code></td>
+<td><code>gen_ai.usage.cache_read.input_tokens</code> (<code>gen_ai.usage.cache_read_input_tokens</code> also kept)</td>
+<td><code>llm.token_count.prompt_details.cache_read</code></td>
 </tr>
 <tr>
 <td>Cache write</td>
-<td><code>gen_ai.usage.cache_creation_input_tokens</code></td>
-<td><code>llm.token_count.cache_write</code></td>
+<td><code>gen_ai.usage.cache_creation.input_tokens</code> (<code>gen_ai.usage.cache_creation_input_tokens</code> also kept)</td>
+<td><code>llm.token_count.prompt_details.cache_write</code></td>
 </tr>
 </tbody></table>
-<p>Langfuse uses <code>gen_ai.content.prompt</code> and <code>gen_ai.content.completion</code> for text. Phoenix uses <code>input.value</code> and <code>output.value</code>. Both are set on LLM spans.</p>
+<p>LLM and API spans also expose standard GenAI request/response metadata where Hermes provides it, including <code>gen_ai.provider.name</code>, <code>gen_ai.request.model</code>, request parameters such as <code>gen_ai.request.temperature</code>, and response fields such as <code>gen_ai.response.model</code> and <code>gen_ai.response.finish_reasons</code>.</p>
+<p>Phoenix uses <code>input.value</code> and <code>output.value</code> for previews. When full prompt/response capture is explicitly enabled, the plugin also writes the corresponding GenAI content attributes (<code>gen_ai.input.messages</code>, <code>gen_ai.output.messages</code>, and <code>gen_ai.system_instructions</code>).</p>
 <h3>File structure</h3>
 <table>
 <thead>
@@ -876,15 +886,15 @@ headers:                        # merged onto outgoing OTLP requests
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 309</div>
+        <div class="stars">★ 311</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 242</div>
+        <div class="stars">★ 245</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
-        <div class="stars">★ 36</div>
+        <div class="stars">★ 37</div>
         <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
@@ -896,7 +906,7 @@ headers:                        # merged onto outgoing OTLP requests
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
-        <div class="stars">★ 28</div>
+        <div class="stars">★ 29</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
