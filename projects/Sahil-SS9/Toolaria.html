@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria#software",
   "name": "Toolaria",
-  "description": "Toolaria is a zero-config plugin for Hermes Agent that prevents oversized tool results from flooding the model's context window. It implements a spill-to-disk pattern by storing large outputs in a SHA256-addressed blob store and providing the model with a compact excerpt and a fetch handle. The model can then retrieve specific slices via search, structural outlines, or direct references. This approach allows large datasets to flow between tools without ever fully entering the context window.",
+  "description": "Toolaria is a zero-config plugin for Hermes Agent that prevents large tool outputs from flooding the model's context window. It implements a spill-to-disk pattern by storing oversized results in a SHA256-addressed blob store and providing the model with a compact excerpt and a fetch handle. The model can then retrieve specific slices of data via semantic search or structural outlines. It also supports pass-by-reference, allowing large results to be passed between tools without ever entering the ",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria",
   "codeRepository": "https://github.com/Sahil-SS9/Toolaria",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Sahil-SS9",
     "url": "https://github.com/Sahil-SS9"
   },
-  "dateModified": "2026-06-13T13:54:01.000Z",
+  "dateModified": "2026-06-24T19:26:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-13</span>
+    <span><span class="meta-label">updated</span>2026-06-24</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Toolaria is a zero-config plugin for Hermes Agent that prevents oversized tool results from flooding the model's context window. It implements a spill-to-disk pattern by storing large outputs in a SHA256-addressed blob store and providing the model with a compact excerpt and a fetch handle. The model can then retrieve specific slices via search, structural outlines, or direct references. This approach allows large datasets to flow between tools without ever fully entering the context window.</p>
+    <p class="summary-text">Toolaria is a zero-config plugin for Hermes Agent that prevents large tool outputs from flooding the model's context window. It implements a spill-to-disk pattern by storing oversized results in a SHA256-addressed blob store and providing the model with a compact excerpt and a fetch handle. The model can then retrieve specific slices of data via semantic search or structural outlines. It also supports pass-by-reference, allowing large results to be passed between tools without ever entering the context window.</p>
     <ul class="summary-highlights">
-      <li>Stores oversized results in a SHA256-addressed blob store</li>
-      <li>Provides structural outlines and semantic/lexical search for blobs</li>
-      <li>Pass-by-reference allows tool-to-tool data flow without context flooding</li>
+      <li>Stores oversized results in SHA256-addressed blob store with session indexing</li>
+      <li>Provides structural outlines and semantic search for targeted data retrieval</li>
+      <li>Pass-by-reference allows tool-to-tool data transfer without context flooding</li>
     </ul>
   </div>
 </section>
@@ -235,6 +235,16 @@ hermes plugin reload
 </code></pre>
 <p>Any oversized web extract, search, or MCP result now returns a compact excerpt
 with a fetch handle instead of flooding context. Check status with <code>/rescuer</code>.</p>
+<blockquote>
+<p><strong>Availability in restricted sessions.</strong> The rescue runs as an ungated hook, so
+it fires in every session, including toolset-restricted ones (cron jobs, scoped
+profiles). For the <code>rescuer_fetch</code> handle to be redeemable there, the tool must
+be reachable. On hosts that support ambient toolsets, Toolaria marks its
+<code>rescuer</code> toolset ambient at load, so nothing more is needed. On hosts that do
+not, Toolaria logs a warning at load; add <code>rescuer</code> to those sessions&#39;
+<code>enabled_toolsets</code> so the handle can be fetched. A handle you cannot fetch is
+worse than no rescue, so Toolaria never fails this silently.</p>
+</blockquote>
 <hr>
 <h3>Prior art</h3>
 <p>Spill-to-disk is a well-established pattern, not a Toolaria invention. Toolaria&#39;s
@@ -569,11 +579,11 @@ handle. Swept-blob guidance is scoped to the owning session.</li>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 311</div>
+        <div class="stars">★ 312</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 245</div>
+        <div class="stars">★ 246</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">

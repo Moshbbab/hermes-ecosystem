@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/EKKOLearnAI/hermes-web-ui#software",
   "name": "hermes-web-ui",
-  "description": "Hermes Studio is a comprehensive web dashboard and desktop application designed to manage and interact with the Hermes Agent ecosystem. It provides a centralized control plane for running local agent sessions, managing model providers, and configuring automated workflows through a unified interface. The platform integrates multi-platform channel support for services like Telegram and Discord, alongside built-in tools for file management, usage analytics, and scheduled cron jobs. Users can also d",
+  "description": "Hermes Studio is a comprehensive management interface for Hermes Agent that provides a centralized control plane for AI agent orchestration. It utilizes a local runtime and a web console to manage profiles, models, and persistent sessions via a local SQLite database. The platform integrates multi-agent group chats, a file browser for remote backends, and a dedicated dashboard for tracking token usage and costs. It also simplifies the deployment of agents across eight different communication plat",
   "url": "https://hermesatlas.com/projects/EKKOLearnAI/hermes-web-ui",
   "codeRepository": "https://github.com/EKKOLearnAI/hermes-web-ui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -46,13 +46,13 @@
     "name": "EKKOLearnAI",
     "url": "https://github.com/EKKOLearnAI"
   },
-  "dateModified": "2026-06-24T07:03:50.000Z",
+  "dateModified": "2026-06-25T05:18:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 8339
+    "userInteractionCount": 8456
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Web dashboard for Hermes Agent — multi-platform AI chat, session management, scheduled jobs, usage analytics </p>
 
   <div class="meta-row">
-    <span class="stars">★ 8.3K</span>
+    <span class="stars">★ 8.5K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     
     
-    <span><span class="meta-label">updated</span>2026-06-24</span>
+    <span><span class="meta-label">updated</span>2026-06-25</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Studio is a comprehensive web dashboard and desktop application designed to manage and interact with the Hermes Agent ecosystem. It provides a centralized control plane for running local agent sessions, managing model providers, and configuring automated workflows through a unified interface. The platform integrates multi-platform channel support for services like Telegram and Discord, alongside built-in tools for file management, usage analytics, and scheduled cron jobs. Users can also deploy multi-agent group chats and monitor coding-agent performance while maintaining data privacy through local SQLite storage.</p>
+    <p class="summary-text">Hermes Studio is a comprehensive management interface for Hermes Agent that provides a centralized control plane for AI agent orchestration. It utilizes a local runtime and a web console to manage profiles, models, and persistent sessions via a local SQLite database. The platform integrates multi-agent group chats, a file browser for remote backends, and a dedicated dashboard for tracking token usage and costs. It also simplifies the deployment of agents across eight different communication platforms including Telegram, Discord, and Slack.</p>
     <ul class="summary-highlights">
-      <li>Unified configuration for eight messaging platforms including Telegram and Discord</li>
-      <li>Multi-profile management with scoped memory, skills, and model providers</li>
-      <li>Local runtime control with file browser and performance monitoring tools</li>
+      <li>Unified configuration for 8 platform channels and cron jobs</li>
+      <li>Multi-profile management with scoped memory, skills, and providers</li>
+      <li>Integrated file browser for local, Docker, SSH, and Singularity backends</li>
     </ul>
   </div>
 </section>
@@ -625,6 +625,11 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 <td>Timeout while waiting for the Python bridge to become ready.</td>
 </tr>
 <tr>
+<td><code>HERMES_AGENT_BRIDGE_STOP_ON_SHUTDOWN</code></td>
+<td>enabled</td>
+<td>Stop the bridge broker during Web UI shutdown and restart. Set <code>0</code>, <code>false</code>, <code>no</code>, or <code>off</code> to keep the bridge across restarts.</td>
+</tr>
+<tr>
 <td><code>HERMES_AGENT_BRIDGE_AUTO_RESTART</code></td>
 <td>enabled</td>
 <td>Auto-restart the bridge broker after unexpected exit. Set <code>0</code>, <code>false</code>, <code>no</code>, or <code>off</code> to disable.</td>
@@ -767,7 +772,7 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 </tr>
 <tr>
 <td><code>hermes-web-ui restart</code></td>
-<td>Restart background process</td>
+<td>Restart background process; stops the bridge by default</td>
 </tr>
 <tr>
 <td><code>hermes-web-ui status</code></td>
@@ -790,6 +795,7 @@ and package installs such as <code>pip install hermes-agent</code>.</p>
 <td>Show help message</td>
 </tr>
 </tbody></table>
+<p><code>restart</code>, <code>update</code>, and <code>upgrade</code> stop the Agent Bridge broker by default so restarted or updated servers do not reuse stale Python bridge processes. Set <code>HERMES_AGENT_BRIDGE_STOP_ON_SHUTDOWN=0</code> before restarting only when you explicitly want to keep the bridge broker and running bridge sessions alive.</p>
 <p><code>update</code> / <code>upgrade</code> first attempt <code>npm cache clean --force</code>, then run <code>npm install -g hermes-web-ui@latest</code> and restart. Cache cleanup is best-effort; if it fails, the updater continues with the install.</p>
 <h4>Auto Configuration</h4>
 <p>On startup the BFF server automatically:</p>
@@ -833,6 +839,9 @@ npm run dev
 
 <h3>License</h3>
 <p><a href="./LICENSE">BSL-1.1</a></p>
+<p>The license covers Hermes Studio, the former Hermes Web UI name, the
+<code>hermes-web-ui</code> npm package and CLI, desktop applications, firmware, release
+artifacts, documentation, and associated files in this repository.</p>
 
   </section>
 </details>
@@ -857,11 +866,11 @@ npm run dev
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 84</div>
+        <div class="stars">★ 85</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 538</div>
+        <div class="stars">★ 558</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -869,7 +878,7 @@ npm run dev
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 656</div>
+        <div class="stars">★ 660</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
