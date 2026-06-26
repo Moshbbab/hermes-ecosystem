@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that provides observability for LLM workflows. It automatically captures and exports tool calls, model invocations, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports complex parent-child nesting for sessions and provides detailed metrics, including token usage roll-ups and request latency. It is compatible with a wide range of observability platforms including Phoenix, Langfuse, SigNoz, and Honeycomb.",
+  "description": "hermes-otel is an OpenTelemetry plugin designed to provide observability for the Hermes Agent ecosystem. It functions by automatically capturing LLM tool calls, model invocations, and API requests as OTel spans. The plugin supports exporting data to various OTLP-compatible backends, including Phoenix, Langfuse, and SigNoz. This allows developers to monitor agent performance through traces, metrics, and logs.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-06-26T14:14:46.000Z",
+  "dateModified": "2026-06-26T14:55:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that provides observability for LLM workflows. It automatically captures and exports tool calls, model invocations, and API requests as OTel spans to any OTLP-compatible backend. The plugin supports complex parent-child nesting for sessions and provides detailed metrics, including token usage roll-ups and request latency. It is compatible with a wide range of observability platforms including Phoenix, Langfuse, SigNoz, and Honeycomb.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin designed to provide observability for the Hermes Agent ecosystem. It functions by automatically capturing LLM tool calls, model invocations, and API requests as OTel spans. The plugin supports exporting data to various OTLP-compatible backends, including Phoenix, Langfuse, and SigNoz. This allows developers to monitor agent performance through traces, metrics, and logs.</p>
     <ul class="summary-highlights">
-      <li>Exports LLM tool calls and model invocations as OTel spans</li>
-      <li>Supports multiple OTLP-compatible backends like Phoenix, Langfuse, and Jaeger</li>
-      <li>Tracks session lifecycles with token aggregation and metric recording</li>
+      <li>Automatically exports LLM tool calls and model invocations</li>
+      <li>Supports multiple backends like Phoenix, Langfuse, and SigNoz</li>
+      <li>Enables parallel data distribution to multiple backends via config.yaml</li>
     </ul>
   </div>
 </section>
@@ -708,7 +708,13 @@ headers:                        # merged onto outgoing OTLP requests
 <td><code>gen_ai.usage.cache_creation.input_tokens</code> (<code>gen_ai.usage.cache_creation_input_tokens</code> also kept)</td>
 <td><code>llm.token_count.prompt_details.cache_write</code></td>
 </tr>
+<tr>
+<td>Reasoning</td>
+<td><code>gen_ai.usage.reasoning.output_tokens</code></td>
+<td><code>llm.token_count.completion_details.reasoning</code></td>
+</tr>
 </tbody></table>
+<p>Reasoning (&quot;thinking&quot;) tokens are emitted only by reasoning-capable models that report them. They are a <strong>subset of the completion/output count</strong> — already included in the completion and total figures — and are surfaced separately for visibility, so they should not be added on top of the total.</p>
 <p>LLM and API spans also expose standard GenAI request/response metadata where Hermes provides it, including <code>gen_ai.provider.name</code>, <code>gen_ai.request.model</code>, request parameters such as <code>gen_ai.request.temperature</code>, and response fields such as <code>gen_ai.response.model</code> and <code>gen_ai.response.finish_reasons</code>.</p>
 <p>Phoenix uses <code>input.value</code> and <code>output.value</code> for previews. When full prompt/response capture is explicitly enabled, the plugin also writes the corresponding GenAI content attributes (<code>gen_ai.input.messages</code>, <code>gen_ai.output.messages</code>, and <code>gen_ai.system_instructions</code>).</p>
 <h3>Trace propagation to MCP servers</h3>
