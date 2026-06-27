@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "web-search-plus is a Hermes Agent plugin designed to provide robust web searching and URL extraction capabilities. It utilizes a capability-based routing engine that automatically selects from multiple providers based on the user's available API keys. This approach prevents tool failure by offering fallback paths and allows for<pad><pad> custom priority configurations. The plugin also includes specialized tools for clean data extraction and cost-bounded research modes.",
+  "description": "hermes-web-search-plus is a plugin for the Hermes Agent that provides flexible web search and URL extraction capabilities. It utilizes a capability-based routing system called Routing v2 to automatically select the best available provider based on the user's configured API keys. The plugin includes two primary tools for routed searching with quality diagnostics and clean content extraction. It is designed to bound costs through research mode caps and supports a wide array of search and extractio",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-06-26T11:29:10.000Z",
+  "dateModified": "2026-06-26T20:41:00.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">174·repos</span>
+    <span id="meta-count">175·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">web-search-plus is a Hermes Agent plugin designed to provide robust web searching and URL extraction capabilities. It utilizes a capability-based routing engine that automatically selects from multiple providers based on the user's available API keys. This approach prevents tool failure by offering fallback paths and allows for&lt;pad&gt;&lt;pad&gt; custom priority configurations. The plugin also includes specialized tools for clean data extraction and cost-bounded research modes.</p>
+    <p class="summary-text">hermes-web-search-plus is a plugin for the Hermes Agent that provides flexible web search and URL extraction capabilities. It utilizes a capability-based routing system called Routing v2 to automatically select the best available provider based on the user's configured API keys. The plugin includes two primary tools for routed searching with quality diagnostics and clean content extraction. It is designed to bound costs through research mode caps and supports a wide array of search and extraction backends.</p>
     <ul class="summary-highlights">
-      <li>Auto-routing across multiple search and extraction providers</li>
-      <li>Capability-based configuration requiring no global mandatory keys</li>
-      <li>&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt; de-coupled search and extraction tools</li>
+      <li>Auto-routing across 13 search and 7 extraction providers</li>
+      <li>Capability-based configuration requiring only one active API key</li>
+      <li>Dedicated tools for routed web search and clean URL extraction</li>
     </ul>
   </div>
 </section>
@@ -145,7 +145,7 @@
   <section class="readme" data-nosnippet>
     <h2>web-search-plus — Hermes Plugin</h2>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-v21-hero.png" alt="Hermes web-search-plus v2.1 hero showing the two-tool surface, Routing v2, Tavily-first extraction, and supported providers" width="100%">
+  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-v261-hero.png" alt="Hermes web-search-plus v2.6.1 hero: two-tool surface, adaptive Routing v2, Tavily-first extraction, and 13 search / 7 extract providers with search+extract markings" width="100%">
 </p>
 
 <p align="center">
@@ -223,6 +223,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py list
 python ~/.hermes/plugins/web-search-plus/setup.py setup
 python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter --open
 python ~/.hermes/plugins/web-search-plus/setup.py setup you linkup --env-path ~/.hermes/.env
+python ~/.hermes/plugins/web-search-plus/setup.py setup keenable --keyless-public
 </code></pre>
 <p>Presets:</p>
 <ul>
@@ -234,6 +235,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup you linkup --env-path ~/
 <li><code>all</code> — prompt for every supported provider.</li>
 </ul>
 <p>The CLI never prints secret values. It writes keys into the active Hermes <code>.env</code> file, then reminds you to restart Hermes or run <code>/reset</code> so the tools re-register.</p>
+<p>For keyless providers (e.g. Keenable), if you skip the key prompt the wizard offers to enable that provider&#39;s opt-in public tier and writes <code>allow_public</code> to <code>config.json</code>. Pass <code>--keyless-public</code> to skip that confirmation prompt and opt in directly (the API-key prompt still runs first). See <a href="#keenable-keyless-public-access">Keenable keyless public access</a>.</p>
 <h4>Routing preferences</h4>
 <p>Key setup and routing behavior are separate on purpose: secrets live in <code>.env</code>; provider behavior lives in <code>config.json</code>.</p>
 <pre><code class="language-bash"># Show provider/key status and routing preferences
@@ -576,7 +578,7 @@ KILOCODE_API_KEY=***
 <pre><code class="language-json">// config.json
 { &quot;keenable&quot;: { &quot;allow_public&quot;: true } }
 </code></pre>
-<p>or via environment: <code>KEENABLE_ALLOW_PUBLIC=1</code>.</p>
+<p>or via environment: <code>KEENABLE_ALLOW_PUBLIC=1</code>, or let the setup wizard do it — skip the key prompt and answer yes, or run <code>setup.py setup keenable --keyless-public</code>.</p>
 <p>When enabled, queries and fetched URLs are sent to an <strong>unauthenticated</strong> public service. The limits are <strong>per IP</strong> with <strong>no SLA</strong> — roughly <strong>1,000 requests/hour</strong> and <strong>10 requests/second</strong> — so treat the public tier as a best-effort last resort, not a dependable provider. The first request that uses the public endpoint logs a one-time warning so the egress is visible. <code>web-search-plus doctor</code> reports keyless providers as <code>key=no</code> with a separate <code>keyless=on/off</code> badge so key status stays truthful.</p>
 <hr>
 <h3>Result quality and adaptive routing</h3>
@@ -641,7 +643,7 @@ LICENSE          MIT license
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 247</div>
+        <div class="stars">★ 249</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">

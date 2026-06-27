@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension#software",
   "name": "hermes-browser-extension",
-  "description": "The Hermes Browser Extension is a Chromium side panel that integrates active web browsing context with a Hermes Agent runtime. It connects to a local or remote Hermes API server via REST or WebSockets to utilize configured models, tools, and memory. The extension captures page metadata, selected text, and readable content to provide context for persisted Hermes sessions. It also supports voice dictation through the Hermes audio transcription API and offers various desktop-style appearance themes",
+  "description": "The Hermes Browser Extension is a Chromium-based side panel that connects your active web browsing context to a Hermes Agent runtime. It functions by communicating with a local or remote Hermes Gateway via API or WebSocket to sync models, sessions, and skills. This allows users to send page metadata, selected text, and readable content directly into their existing Hermes agent workflows. The extension<pad> provides transparency through a context receipt that shows exactly what information was se",
   "url": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension",
   "codeRepository": "https://github.com/abundantbeing/hermes-browser-extension",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-06-26T08:01:23.000Z",
+  "dateModified": "2026-06-27T01:50:29.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 99
+    "userInteractionCount": 192
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">174·repos</span>
+    <span id="meta-count">175·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Browser-native side panel for Hermes Agent — connect web context to your local Hermes runtime.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 99</span>
+    <span class="stars">★ 192</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-26</span>
+    <span><span class="meta-label">updated</span>2026-06-27</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">The Hermes Browser Extension is a Chromium side panel that integrates active web browsing context with a Hermes Agent runtime. It connects to a local or remote Hermes API server via REST or WebSockets to utilize configured models, tools, and memory. The extension captures page metadata, selected text, and readable content to provide context for persisted Hermes sessions. It also supports voice dictation through the Hermes audio transcription API and offers various desktop-style appearance themes.</p>
+    <p class="summary-text">The Hermes Browser Extension is a Chromium-based side panel that connects your active web browsing context to a Hermes Agent runtime. It functions by communicating with a local or remote Hermes Gateway via API or WebSocket to sync models, sessions, and skills. This allows users to send page metadata, selected text, and readable content directly into their existing Hermes agent workflows. The extension&lt;pad&gt; provides transparency through a context receipt that shows exactly what information was sent to the agent.</p>
     <ul class="summary-highlights">
-      <li>Connects to local or remote Hermes API servers</li>
-      <li>Captures active tab text, metadata, and browser context</li>
-      <li>Supports voice dictation via Hermes audio transcription API</li>
+      <li>Connects active browser context to local or remote Hermes runtimes.</li>
+      <li>Syncs models, sessions, skills, and profiles from the gateway.</li>
+      <li>Provides read-only access to page text, headings, and metadata.</li>
     </ul>
   </div>
 </section>
@@ -159,7 +159,7 @@
 
 <h3>What it is</h3>
 <p>Hermes Browser Extension is not a browser chatbot. It is a Chrome/Edge/Chromium side panel for the real Hermes Agent runtime. It talks to your Hermes Gateway/API server — local by default, remote when you configure a reachable URL — so it can use the models, tools, skills, sessions, memory, and MCP servers already configured in Hermes.</p>
-<p>This repo is specifically for the <strong>extension</strong>. A future standalone <strong>Hermes Browser</strong> may become a separate native macOS/Linux/Windows app built on the groundwork from this extension.</p>
+<p>This repo is specifically for the <strong>Hermes Browser Extension</strong>: the Chrome/Edge/Chromium side-panel integration for Hermes Agent.</p>
 <h3>Visual tour</h3>
 <table>
 <thead>
@@ -181,9 +181,11 @@
 <li>Connects to a configurable local or remote Hermes API server. Default: <code>http://127.0.0.1:8642</code>.</li>
 <li>Supports dashboard WebSocket mode when you have a signed-in remote Hermes dashboard tab and no API key.</li>
 <li>Auto-syncs connected Hermes providers/models, profiles, skills, sessions, and capabilities.</li>
+<li>Shows a Hermes compatibility panel so older gateways degrade into explicit fallback/manual modes instead of broken route errors.</li>
 <li>Sends active tab/browser context into a persisted Hermes session.</li>
+<li>Adds a collapsible “What Hermes saw” receipt after each sent turn for transparent context/debugging.</li>
 <li>Captures active tab title/URL, open tabs, selected text, readable page text, metadata, headings, forms, links, and buttons where available.</li>
-<li>Supports voice dictation through the local Hermes audio transcription API, with a visible extension voice-tab fallback for Chromium side-panel microphone blocks.</li>
+<li>Supports voice dictation through Hermes audio transcription when available, with Browser speech fallback when the connected runtime does not expose STT.</li>
 <li>Wraps webpage text as untrusted context before sending it to Hermes.</li>
 <li>Streams Hermes responses and falls back to non-streaming chat when needed.</li>
 <li>Includes Desktop-style appearance settings: Light/Dark/System mode plus Nous, Midnight, Ember, Mono, Cyberpunk, and Slate themes.</li>
@@ -222,7 +224,7 @@ npm run build
 <pre><code class="language-bash">API_SERVER_ENABLED=true
 API_SERVER_HOST=127.0.0.1
 API_SERVER_PORT=8642
-API_SERVER_KEY=&lt;strong-local-secret&gt;
+API_SERVER_KEY=&lt;your-api-server-key&gt;
 API_SERVER_CORS_ORIGINS=chrome-extension://&lt;your-extension-id&gt;
 </code></pre>
 <p>Start or restart the gateway:</p>
@@ -249,7 +251,7 @@ curl -H &quot;Authorization: Bearer $HERMES_API_TOKEN&quot; &quot;$HERMES_GATEWA
 <pre><code class="language-bash">API_SERVER_ENABLED=true
 API_SERVER_HOST=0.0.0.0
 API_SERVER_PORT=8642
-API_SERVER_KEY=&lt;strong-remote-secret&gt;
+API_SERVER_KEY=&lt;your-api-server-key&gt;
 API_SERVER_CORS_ORIGINS=chrome-extension://&lt;your-extension-id&gt;
 </code></pre>
 <p>Use Tailscale/VPN/reverse proxy + HTTPS where possible. Do <strong>not</strong> expose the Hermes API server naked to the public internet. The Hermes API server can access the real Hermes runtime and tools.</p>
@@ -286,7 +288,7 @@ API_SERVER_CORS_ORIGINS=chrome-extension://&lt;your-extension-id&gt;
 <li>No <code>debugger</code>, <code>nativeMessaging</code>, <code>cookies</code>, <code>history</code>, <code>downloads</code>, or <code>bookmarks</code> permissions.</li>
 <li>Restricted pages include browser internals, extension pages, and obvious banking/crypto/password/payment/health/government-tax categories.</li>
 </ul>
-<p>See <a href="https://github.com/abundantbeing/hermes-browser-extension/blob/main/SECURITY.md"><code>SECURITY.md</code></a> for details.</p>
+<p>See <a href="https://github.com/abundantbeing/hermes-browser-extension/blob/main/SECURITY.md"><code>SECURITY.md</code></a>, <a href="https://github.com/abundantbeing/hermes-browser-extension/blob/main/PERMISSIONS.md"><code>PERMISSIONS.md</code></a>, <a href="https://github.com/abundantbeing/hermes-browser-extension/blob/main/DATA-FLOW.md"><code>DATA-FLOW.md</code></a>, and <a href="https://github.com/abundantbeing/hermes-browser-extension/blob/main/PRIVACY.md"><code>PRIVACY.md</code></a> for details.</p>
 <h3>Troubleshooting</h3>
 <h4>I loaded the extension but nothing works</h4>
 <p>Make sure you loaded <code>dist/</code>, not the repo root. The selected folder must contain <code>manifest.json</code> directly.</p>
@@ -300,12 +302,18 @@ curl http://&lt;trusted-remote-host&gt;:8642/health
 <h4>The DOM chip says <code>0 chars</code></h4>
 <p>Open a normal <code>https://</code> page and refresh context. Browser internal pages (<code>chrome://</code>, <code>edge://</code>, extension pages, devtools, etc.) are restricted by design.</p>
 <h4>Microphone says blocked or voice dictation does not start</h4>
-<p>Chromium side panels can suppress microphone permission prompts. Hermes Browser Extension handles this with a visible extension voice page:</p>
+<p>Chromium side panels can suppress microphone permission prompts. Hermes Browser Extension handles this with capability-gated voice modes:</p>
+<ul>
+<li><strong>Hermes STT</strong> when the connected Hermes runtime advertises audio transcription.</li>
+<li><strong>Browser speech fallback</strong> when Hermes STT is unavailable and Chromium exposes Web Speech.</li>
+<li>A visible <strong>Hermes Voice Dictation</strong> tab when the side panel cannot capture the mic directly.</li>
+</ul>
+<p>Suggested flow:</p>
 <ol>
 <li>Click the mic button in the side panel.</li>
 <li>If the side panel cannot capture the mic, a <strong>Hermes Voice Dictation</strong> tab opens.</li>
 <li>In that tab, click <strong>Start dictation</strong>. This click is the permission gesture Chromium expects.</li>
-<li>Speak, then click <strong>Stop + transcribe</strong>.</li>
+<li>Speak, then click <strong>Stop + transcribe</strong> or <strong>Stop speech</strong> depending on the active mode.</li>
 <li>The transcript is sent back to the side panel composer automatically.</li>
 </ol>
 <p>If Chromium still says the mic is blocked, click <strong>Open microphone settings</strong> in the voice tab and set Microphone to <strong>Allow</strong> for <code>chrome-extension://&lt;the Hermes extension id&gt;/</code>, then return to the voice tab and try again.</p>
@@ -398,11 +406,11 @@ tests/
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 12.7K</div>
+        <div class="stars">★ 12.8K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
-        <div class="stars">★ 108</div>
+        <div class="stars">★ 107</div>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
@@ -410,7 +418,7 @@ tests/
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 584</div>
+        <div class="stars">★ 595</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -418,11 +426,11 @@ tests/
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 661</div>
+        <div class="stars">★ 662</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 479</div>
+        <div class="stars">★ 478</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>
