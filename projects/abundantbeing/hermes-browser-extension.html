@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension#software",
   "name": "hermes-browser-extension",
-  "description": "The Hermes Browser Extension is a Chromium-based side panel that connects your active web browsing context to a Hermes Agent runtime. It functions by communicating with a local or remote Hermes Gateway via API or WebSocket to sync models, sessions, and skills. This allows users to send page metadata, selected text, and readable content directly into their existing Hermes agent workflows. The extension<pad> provides transparency through a context receipt that shows exactly what information was se",
+  "description": "The Hermes Browser Extension is a Chromium side-panel interface that integrates active web context with a Hermes Agent runtime. It connects to a local or remote Hermes API server or dashboard via REST or WebSockets to leverage configured models, tools, and memory. The extension captures page metadata, selected text, and DOM elements to provide the agent with real-time browser context for tasks like page summarization. It supports streaming responses and includes a transparency receipt to show ex",
   "url": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension",
   "codeRepository": "https://github.com/abundantbeing/hermes-browser-extension",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-06-27T01:50:29.000Z",
+  "dateModified": "2026-06-27T16:32:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 192
+    "userInteractionCount": 260
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">175·repos</span>
+    <span id="meta-count">177·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">Browser-native side panel for Hermes Agent — connect web context to your local Hermes runtime.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 192</span>
+    <span class="stars">★ 260</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">The Hermes Browser Extension is a Chromium-based side panel that connects your active web browsing context to a Hermes Agent runtime. It functions by communicating with a local or remote Hermes Gateway via API or WebSocket to sync models, sessions, and skills. This allows users to send page metadata, selected text, and readable content directly into their existing Hermes agent workflows. The extension&lt;pad&gt; provides transparency through a context receipt that shows exactly what information was sent to the agent.</p>
+    <p class="summary-text">The Hermes Browser Extension is a Chromium side-panel interface that integrates active web context with a Hermes Agent runtime. It connects to a local or remote Hermes API server or dashboard via REST or WebSockets to leverage configured models, tools, and memory. The extension captures page metadata, selected text, and DOM elements to provide the agent with real-time browser context for tasks like page summarization. It supports streaming responses and includes a transparency receipt to show exactly what context was sent to the agent.</p>
     <ul class="summary-highlights">
-      <li>Connects active browser context to local or remote Hermes runtimes.</li>
-      <li>Syncs models, sessions, skills, and profiles from the gateway.</li>
-      <li>Provides read-only access to page text, headings, and metadata.</li>
+      <li>Connects to local or remote Hermes API servers and dashboards</li>
+      <li>Captures tab titles, URLs, selected text, and readable page content</li>
+      <li>Syncs models, profiles, skills, and sessions from the Hermes gateway</li>
     </ul>
   </div>
 </section>
@@ -254,7 +254,20 @@ API_SERVER_PORT=8642
 API_SERVER_KEY=&lt;your-api-server-key&gt;
 API_SERVER_CORS_ORIGINS=chrome-extension://&lt;your-extension-id&gt;
 </code></pre>
-<p>Use Tailscale/VPN/reverse proxy + HTTPS where possible. Do <strong>not</strong> expose the Hermes API server naked to the public internet. The Hermes API server can access the real Hermes runtime and tools.</p>
+<p>Use a private same-LAN/Tailscale/VPN host with HTTP, or put the API server behind a trusted HTTPS reverse proxy for public/proxied access. Do <strong>not</strong> expose the Hermes API server naked to the public internet. The Hermes API server can access the real Hermes runtime and tools.</p>
+<p>Examples:</p>
+<pre><code class="language-text">http://192.168.1.50:8642
+http://hermes-desktop.local:8642
+https://hermes.example.com
+</code></pre>
+<p>In the extension side panel:</p>
+<ol>
+<li>Choose <strong>Remote gateway</strong>.</li>
+<li>Paste the remote API URL, including <code>http://</code> or <code>https://</code>.</li>
+<li>Paste the API key/browser token.</li>
+<li>Click <strong>Test connection</strong>.</li>
+</ol>
+<p>With a key present, Remote means <strong>Remote API server</strong> and does not force HTTPS. With the key blank, Remote means <strong>Remote dashboard WebSocket</strong> and requires an <code>https://</code> dashboard URL.</p>
 <h4>Remote dashboard mode, no API server</h4>
 <p>If you run Hermes elsewhere and only expose the OAuth-gated dashboard, select <strong>Remote</strong>, enter the dashboard&#39;s <code>https://</code> URL, and leave the API key blank. With no key, the extension connects over the dashboard&#39;s <code>/api/ws</code> socket instead of the REST API server.</p>
 <p>Auth uses a single-use WebSocket ticket minted from a signed-in dashboard tab:</p>
@@ -292,6 +305,16 @@ API_SERVER_CORS_ORIGINS=chrome-extension://&lt;your-extension-id&gt;
 <h3>Troubleshooting</h3>
 <h4>I loaded the extension but nothing works</h4>
 <p>Make sure you loaded <code>dist/</code>, not the repo root. The selected folder must contain <code>manifest.json</code> directly.</p>
+<h4>Chrome still shows version <code>0.1.4</code> after updating</h4>
+<p>The browser is still using an old unpacked folder or an unpacked extension card that was not reloaded. The shipped v0.1.5 source, built <code>dist/</code>, and release archive all contain <code>manifest.json</code> version <code>0.1.5</code>.</p>
+<p>Fix:</p>
+<ol>
+<li>Extract/download the v0.1.5 release or run <code>npm run build</code> locally.</li>
+<li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
+<li>On the Hermes Browser Extension card, click <strong>Reload</strong>.</li>
+<li>If it still says <code>0.1.4</code>, click <strong>Remove</strong>, then <strong>Load unpacked</strong> again and select the fresh v0.1.5 <code>dist/</code> folder.</li>
+<li>Click <strong>service worker</strong> / <strong>Inspect views</strong> only for debugging; it is not the version source.</li>
+</ol>
 <h4>The side panel says it cannot connect</h4>
 <p>Check that Hermes Gateway/API server is running and reachable from the browser:</p>
 <pre><code class="language-bash">curl http://127.0.0.1:8642/health
@@ -299,6 +322,26 @@ API_SERVER_CORS_ORIGINS=chrome-extension://&lt;your-extension-id&gt;
 curl http://&lt;trusted-remote-host&gt;:8642/health
 </code></pre>
 <p>If <code>/v1/models</code> fails, check <code>API_SERVER_KEY</code>, the extension&#39;s stored API key/browser token, and <code>API_SERVER_CORS_ORIGINS</code>. For remote mode, the browser extension origin (<code>chrome-extension://&lt;id&gt;</code>) must be allowlisted on the Hermes machine.</p>
+<h4>Native Hermes computer use is not working</h4>
+<p>Hermes Browser Extension does not request browser-control permissions and does not drive pages itself. Native desktop control comes from Hermes Agent&#39;s <code>computer_use</code> toolset via <code>cua-driver</code>.</p>
+<p>On the machine running Hermes, verify computer use directly:</p>
+<pre><code class="language-bash">hermes tools list
+hermes computer-use status
+hermes computer-use doctor
+</code></pre>
+<p>If <code>doctor</code> says the driver is missing:</p>
+<pre><code class="language-bash">hermes computer-use install
+</code></pre>
+<p>Then start a fresh Hermes session with the toolset enabled:</p>
+<pre><code class="language-bash">hermes -t computer_use chat
+</code></pre>
+<p>Common blockers from the Hermes docs:</p>
+<ul>
+<li>Windows over SSH runs in Session 0 and cannot see the interactive desktop; use the console/RDP session or the cua-driver Windows autostart pattern.</li>
+<li>Elevated/admin windows cannot be driven by a normal-integrity Hermes process on Windows.</li>
+<li>macOS needs Accessibility + Screen Recording permissions.</li>
+<li>Linux needs a reachable X11/Wayland display and AT-SPI.</li>
+</ul>
 <h4>The DOM chip says <code>0 chars</code></h4>
 <p>Open a normal <code>https://</code> page and refresh context. Browser internal pages (<code>chrome://</code>, <code>edge://</code>, extension pages, devtools, etc.) are restricted by design.</p>
 <h4>Microphone says blocked or voice dictation does not start</h4>
@@ -414,11 +457,11 @@ tests/
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 85</div>
+        <div class="stars">★ 86</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 595</div>
+        <div class="stars">★ 617</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -426,11 +469,11 @@ tests/
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 662</div>
+        <div class="stars">★ 664</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 478</div>
+        <div class="stars">★ 480</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>

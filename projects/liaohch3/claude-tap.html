@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/liaohch3/claude-tap#software",
   "name": "claude-tap",
-  "description": "Claude-tap is a local proxy and trace viewer designed to inspect the API traffic of AI coding agents. It works by intercepting HTTP requests between the agent and the LLM provider, allowing developers to examine system prompts, tool calls, and streaming responses in real-time. The tool helps debug agent behavior by providing structured diffs between adjacent requests and redacting sensitive authentication headers for security. It supports a wide range of clients including Hermes Agent, Claude Co",
+  "description": "claude-tap is a local proxy and trace viewer designed to help developers inspect the API traffic of various AI coding agents. It captures and visualizes real-time agent context, including system prompts, tool calls, and token usage, by intercepting local traffic. The tool<pad> provides a way to debug agent behavior through request diffing and<pad> exports traces as portable HTML files for offline review.",
   "url": "https://hermesatlas.com/projects/liaohch3/claude-tap",
   "codeRepository": "https://github.com/liaohch3/claude-tap",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "liaohch3",
     "url": "https://github.com/liaohch3"
   },
-  "dateModified": "2026-06-26T04:00:08.000Z",
+  "dateModified": "2026-06-28T03:31:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2055
+    "userInteractionCount": 2097
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">175·repos</span>
+    <span id="meta-count">177·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-26</span>
+    <span><span class="meta-label">updated</span>2026-06-28</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Claude-tap is a local proxy and trace viewer designed to inspect the API traffic of AI coding agents. It works by intercepting HTTP requests between the agent and the LLM provider, allowing developers to examine system prompts, tool calls, and streaming responses in real-time. The tool helps debug agent behavior by providing structured diffs between adjacent requests and redacting sensitive authentication headers for security. It supports a wide range of clients including Hermes Agent, Claude Code, Cursor, and Gemini CLI, exporting traces as portable HTML artifacts.</p>
+    <p class="summary-text">claude-tap is a local proxy and trace viewer designed to help developers inspect the API traffic of various AI coding agents. It captures and visualizes real-time agent context, including system prompts, tool calls, and token usage, by intercepting local traffic. The tool&lt;pad&gt; provides a way to debug agent behavior through request diffing and&lt;pad&gt; exports traces as portable HTML files for offline review.</p>
     <ul class="summary-highlights">
-      <li>Inspects system prompts, tool schemas, and reconstructed streaming responses</li>
-      <li>Generates structured diffs to compare context changes between agent turns</li>
-      <li>Exports self-contained HTML trace sessions for local review and archiving</li>
+      <li>Inspect system prompts, tool schemas, and streaming responses</li>
+      <li>Compare adjacent requests to pinpoint context changes</li>
+      <li>Supports Hermes Agent, Claude Code, Cursor, and more</li>
     </ul>
   </div>
 </section>
@@ -332,9 +332,10 @@ claude-tap -- --dangerously-skip-permissions
 # Live viewer is on by default; pass Claude flags after --
 claude-tap -- --dangerously-skip-permissions --model claude-sonnet-4-6
 </code></pre>
-<p><code>claude-tap</code> auto-detects custom Claude Code upstreams from <code>ANTHROPIC_BASE_URL</code>
-or <code>ANTHROPIC_BEDROCK_BASE_URL</code> in your environment or Claude settings. Use
-<code>--tap-target</code> only when you want to override that detected target.</p>
+<p><code>claude-tap</code> auto-detects custom Claude Code upstreams from <code>ANTHROPIC_BASE_URL</code>,
+<code>ANTHROPIC_BEDROCK_BASE_URL</code>, or <code>ANTHROPIC_VERTEX_BASE_URL</code> in your environment
+or Claude settings. Use <code>--tap-target</code> only when you want to override that
+detected target.</p>
 <p>Local proxy upstreams are supported too: if a tool such as <a href="https://github.com/farion1231/cc-switch">CC Switch</a> points Claude Code at a local <code>ANTHROPIC_BASE_URL</code>, <code>claude-tap</code> detects that value from Claude settings and records the traffic before forwarding it upstream. Use <code>claude-tap</code> in place of <code>claude</code>, such as <code>claude-tap -- &lt;claude-args&gt;</code>; no separate <code>--tap-client</code> value is needed.</p>
 <p>For the Claude Code VS Code extension, set <code>Claude Code: Claude Process Wrapper</code> to <code>claude-tap</code>; on Windows, use the full <code>claude-tap.exe</code> path if VS Code cannot find it.</p>
 </details>
@@ -362,7 +363,21 @@ export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
 <details>
 <summary>Claude Code with AWS Bedrock</summary>
 
-<p><code>claude-tap</code> supports two Bedrock scenarios and auto-detects which applies:</p>
+<p><code>claude-tap</code> supports three Bedrock scenarios and auto-detects which applies:</p>
+<p><strong>Anthropic-compatible Bedrock gateway (New API or similar, no SigV4 in Claude Code)</strong></p>
+<pre><code class="language-bash">export ANTHROPIC_AUTH_TOKEN=&quot;&lt;your gateway token&gt;&quot;
+unset ANTHROPIC_API_KEY
+export ANTHROPIC_BASE_URL=&quot;https://new-api.example.com&quot;
+export ANTHROPIC_MODEL=&quot;bedrock/claude-opus-4-6&quot;
+export ANTHROPIC_DEFAULT_OPUS_MODEL=&quot;bedrock/claude-opus-4-6&quot;
+export ANTHROPIC_DEFAULT_SONNET_MODEL=&quot;bedrock/claude-opus-4-6&quot;
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=&quot;bedrock/claude-opus-4-6&quot;
+claude-tap -- --model bedrock/claude-opus-4-6
+</code></pre>
+<p><code>claude-tap</code> records the normal Claude Code <code>/v1/messages</code> HTTP/SSE traffic, then
+forwards it to the gateway. For model names prefixed with <code>bedrock/</code>, it removes
+Claude Code beta-only request options that AWS Bedrock rejects while preserving
+the captured trace.</p>
 <p><strong>Custom Bedrock gateway (company proxy, no SigV4)</strong></p>
 <pre><code class="language-bash">export CLAUDE_CODE_USE_BEDROCK=1
 export ANTHROPIC_BEDROCK_BASE_URL=&quot;https://your-gateway.company.com/bedrock&quot;
@@ -377,6 +392,26 @@ claude-tap --tap-proxy-mode forward
 </code></pre>
 <p>When the endpoint is a real AWS domain (<code>*.amazonaws.com</code>), <code>claude-tap</code> does <strong>not</strong> rewrite <code>ANTHROPIC_BEDROCK_BASE_URL</code> to localhost — doing so would break AWS SigV4 signature validation. Use forward proxy mode (<code>--tap-proxy-mode forward</code>) to capture this traffic without modifying the signed request.</p>
 <p>Use <code>--tap-target</code> only as a manual override when auto-detection does not apply.</p>
+</details>
+
+<details>
+<summary>Claude Code with Google Vertex AI</summary>
+
+<p><code>claude-tap</code> supports Claude Code Vertex pass-through gateways that expose the
+Vertex <code>rawPredict</code>, <code>streamRawPredict</code>, and <code>count-tokens:rawPredict</code> paths.</p>
+<pre><code class="language-bash">export CLAUDE_CODE_USE_VERTEX=1
+export CLOUD_ML_REGION=&quot;us-east5&quot;
+export ANTHROPIC_VERTEX_PROJECT_ID=&quot;your-project-id&quot;
+export ANTHROPIC_VERTEX_BASE_URL=&quot;https://your-gateway.company.com/vertex&quot;
+export CLAUDE_CODE_SKIP_VERTEX_AUTH=1  # when your gateway handles auth
+claude-tap
+</code></pre>
+<p>When <code>CLAUDE_CODE_USE_VERTEX=1</code> and <code>ANTHROPIC_VERTEX_BASE_URL</code> is set,
+<code>claude-tap</code> detects that upstream, redirects both <code>ANTHROPIC_BASE_URL</code> and
+<code>ANTHROPIC_VERTEX_BASE_URL</code> to the local proxy, and records Vertex rawPredict
+HTTP/SSE traffic. If Claude Code uses native Google Vertex without
+<code>ANTHROPIC_VERTEX_BASE_URL</code>, use forward proxy mode or set the base URL
+explicitly so reverse mode has a single target to forward to.</p>
 </details>
 
 <details>
@@ -739,11 +774,11 @@ claude-tap --tap-no-open
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 55.1K</div>
+        <div class="stars">★ 55.5K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 661</div>
+        <div class="stars">★ 665</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
@@ -755,15 +790,15 @@ claude-tap --tap-no-open
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 475</div>
+        <div class="stars">★ 478</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
-        <div class="stars">★ 122</div>
+        <div class="stars">★ 123</div>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 105</div>
+        <div class="stars">★ 106</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">

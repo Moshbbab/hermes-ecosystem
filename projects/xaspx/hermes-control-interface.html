@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/xaspx/hermes-control-interface#software",
   "name": "hermes-control-interface",
-  "description": "Hermes Control Interface is a self-hosted web dashboard designed to centralize the management of the Hermes AI agent stack. It utilizes a Node.js and Express backend with a Vanilla JS frontend to provide a unified interface for agent orchestration and system monitoring. The platform integrates a swarm monitor for tracking agent health and task pipelines via a Kanban system, alongside tools for MCP server control and token analytics. Users can manage files, install skills, and interact with agent",
+  "description": "Hermes Control Interface is a self-hosted web dashboard designed to centralize the management of the Hermes AI agent stack. It utilizes a Node.js and Express backend with a Vanilla JS frontend to provide a unified interface for agent orchestration and system monitoring. The platform includes specialized tools for MCP server control, token analytics, and a multi-panel swarm monitor for tracking agent pipelines. It also implements role-based access control to isolate agent profiles across differen",
   "url": "https://hermesatlas.com/projects/xaspx/hermes-control-interface",
   "codeRepository": "https://github.com/xaspx/hermes-control-interface",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "xaspx",
     "url": "https://github.com/xaspx"
   },
-  "dateModified": "2026-06-16T16:48:05.000Z",
+  "dateModified": "2026-06-28T06:40:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 786
+    "userInteractionCount": 788
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">175·repos</span>
+    <span id="meta-count">177·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,16 +112,16 @@
   <p class="project-desc">A self-hosted web dashboard for the Hermes AI agent stack. Provides a browser-based terminal, file explorer, session overview, cron management, system metrics, and an agent status panel — all behind a single password gate.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 786</span>
+    <span class="stars">★ 788</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-16</span>
+    <span><span class="meta-label">updated</span>2026-06-28</span>
   </div>
 
   <div class="actions">
     <a href="https://github.com/xaspx/hermes-control-interface" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
-    <a href="https://x.com/bayendor" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+    
   </div>
 </section>
 
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Control Interface is a self-hosted web dashboard designed to centralize the management of the Hermes AI agent stack. It utilizes a Node.js and Express backend with a Vanilla JS frontend to provide a unified interface for agent orchestration and system monitoring. The platform integrates a swarm monitor for tracking agent health and task pipelines via a Kanban system, alongside tools for MCP server control and token analytics. Users can manage files, install skills, and interact with agents through a secure, password-protected web environment.</p>
+    <p class="summary-text">Hermes Control Interface is a self-hosted web dashboard designed to centralize the management of the Hermes AI agent stack. It utilizes a Node.js and Express backend with a Vanilla JS frontend to provide a unified interface for agent orchestration and system monitoring. The platform includes specialized tools for MCP server control, token analytics, and a multi-panel swarm monitor for tracking agent pipelines. It also implements role-based access control to isolate agent profiles across different user teams.</p>
     <ul class="summary-highlights">
-      <li>ZOO Swarm Monitor with agent health grid and Kanban pipeline</li>
-      <li>Full MCP server control plane with log tailing and config editor</li>
-      <li>Real-time streaming chat with multi-profile support and tool call cards</li>
+      <li>Real-time chat with streaming and tool call visualization</li>
+      <li>MCP server control plane for managing server lifecycles</li>
+      <li>ZOO Swarm Monitor for tracking agent health and kanban pipelines</li>
     </ul>
   </div>
 </section>
@@ -300,6 +300,21 @@ node server.js            # → http://localhost:10274
 <li>Rate limiting (global + chat), WebSocket RBAC</li>
 <li>Path traversal prevention, XSS protection</li>
 <li>20 permissions across 3 roles (admin, viewer, custom)</li>
+<li><strong>Profile-based access isolation</strong> — restrict users to specific agent profiles</li>
+</ul>
+<h4>Profile-Based Access Control</h4>
+<p>Multi-agent teams can restrict which profiles (agents) each user can see and manage:</p>
+<pre><code class="language-javascript">// User creation with profile restriction
+createUser(&#39;cx-team&#39;, &#39;password&#39;, &#39;custom&#39;, [&#39;jorah&#39;]);     // only sees Jorah
+createUser(&#39;influencer-team&#39;, &#39;password&#39;, &#39;custom&#39;, [&#39;varys&#39;]); // only sees Varys  
+createUser(&#39;admin&#39;, &#39;password&#39;, &#39;admin&#39;, [&#39;*&#39;]);             // sees all agents
+</code></pre>
+<ul>
+<li><code>allowed_profiles</code> field on each user (<code>[&quot;*&quot;]</code> = full access, <code>[&quot;jorah&quot;, &quot;varys&quot;]</code> = specific agents)</li>
+<li>Filters <code>/api/profiles</code>, <code>/api/office/agent-states</code>, and all <code>:profile</code> endpoints</li>
+<li><code>requireProfileAccess</code> middleware on gateway, config, and keys routes</li>
+<li>Profile selection UI in the Create User form (checkboxes for available agents)</li>
+<li>Nav tabs hidden based on user permissions (Files, Maintenance = admin only)</li>
 </ul>
 <h4>PWA</h4>
 <p>Installable to homescreen. Service worker with offline caching. Auto-update on new version.</p>
@@ -460,7 +475,7 @@ systemctl restart hci-staging
 </tr>
 </tbody></table>
 <hr>
-<p>Built for the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> ecosystem.<br>Upstream <a href="https://x.com/bayendor">@bayendor</a> · <a href="https://github.com/xaspx/hermes-control-interface">GitHub</a></p>
+<p>Built for the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> ecosystem.<br><a href="https://github.com/xaspx/hermes-control-interface">GitHub</a></p>
 <hr>
 <h3>❓ Frequently Asked Questions</h3>
 <h4>General</h4>
@@ -777,19 +792,23 @@ systemctl restart hci-staging
 <table>
 <thead>
 <tr>
+<th></th>
 <th>Resource</th>
 <th>Link</th>
 </tr>
 </thead>
 <tbody><tr>
+<td></td>
 <td><strong>GitHub Issues</strong></td>
 <td><a href="https://github.com/xaspx/hermes-control-interface/issues">github.com/xaspx/hermes-control-interface/issues</a></td>
 </tr>
 <tr>
-<td><strong>Twitter</strong></td>
-<td><a href="https://x.com/bayendor">@bayendor</a></td>
+<td></td>
+<td><strong>GitHub</strong></td>
+<td><a href="https://github.com/xaspx/hermes-control-interface">xaspx/hermes-control-interface</a></td>
 </tr>
 <tr>
+<td></td>
 <td><strong>Hermes Agent</strong></td>
 <td><a href="https://github.com/NousResearch/hermes-agent">NousResearch/hermes-agent</a></td>
 </tr>
@@ -821,15 +840,15 @@ systemctl restart hci-staging
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 85</div>
+        <div class="stars">★ 86</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/abundantbeing/hermes-browser-extension">
-        <div class="stars">★ 192</div>
+        <div class="stars">★ 260</div>
         <div class="name"><span class="org">abundantbeing /</span> hermes-browser-extension</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 595</div>
+        <div class="stars">★ 617</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -837,7 +856,7 @@ systemctl restart hci-staging
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 662</div>
+        <div class="stars">★ 664</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>
