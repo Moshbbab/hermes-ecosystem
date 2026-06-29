@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension#software",
   "name": "hermes-browser-extension",
-  "description": "The Hermes Browser Extension is a Chromium side-panel interface that integrates active web context with a Hermes Agent runtime. It connects to a local or remote Hermes API server or dashboard via REST or WebSockets to leverage configured models, tools, and memory. The extension captures page metadata, selected text, and DOM elements to provide the agent with real-time browser context for tasks like page summarization. It supports streaming responses and includes a transparency receipt to show ex",
+  "description": "This Chromium side-panel extension integrates the active web browser context directly with a Hermes Agent runtime. It connects to a local or remote Hermes API server or dashboard WebSocket to leverage existing models, tools, and memory. Users can send page content, selected text, and metadata into persisted sessions for tasks like summarization or explanation. The extension also supports voice dictation and provides a transparency receipt to show exactly what context was sent to the agent.",
   "url": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension",
   "codeRepository": "https://github.com/abundantbeing/hermes-browser-extension",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-06-27T16:32:25.000Z",
+  "dateModified": "2026-06-29T06:51:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 260
+    "userInteractionCount": 300
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">177·repos</span>
+    <span id="meta-count">178·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Browser-native side panel for Hermes Agent — connect web context to your local Hermes runtime.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 260</span>
+    <span class="stars">★ 300</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-27</span>
+    <span><span class="meta-label">updated</span>2026-06-29</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">The Hermes Browser Extension is a Chromium side-panel interface that integrates active web context with a Hermes Agent runtime. It connects to a local or remote Hermes API server or dashboard via REST or WebSockets to leverage configured models, tools, and memory. The extension captures page metadata, selected text, and DOM elements to provide the agent with real-time browser context for tasks like page summarization. It supports streaming responses and includes a transparency receipt to show exactly what context was sent to the agent.</p>
+    <p class="summary-text">This Chromium side-panel extension integrates the active web browser context directly with a Hermes Agent runtime. It connects to a local or remote Hermes API server or dashboard WebSocket to leverage existing models, tools, and memory. Users can send page content, selected text, and metadata into persisted sessions for tasks like summarization or explanation. The extension also supports voice dictation and provides a transparency receipt to show exactly what context was sent to the agent.</p>
     <ul class="summary-highlights">
-      <li>Connects to local or remote Hermes API servers and dashboards</li>
-      <li>Captures tab titles, URLs, selected text, and readable page content</li>
-      <li>Syncs models, profiles, skills, and sessions from the Hermes gateway</li>
+      <li>Connects to local or remote Hermes API servers and WebSockets</li>
+      <li>Captures active tab content, metadata, and selected text</li>
+      <li>Includes quick commands for summarizing, explaining, and rewriting pages</li>
     </ul>
   </div>
 </section>
@@ -183,6 +183,9 @@
 <li>Auto-syncs connected Hermes providers/models, profiles, skills, sessions, and capabilities.</li>
 <li>Shows a Hermes compatibility panel so older gateways degrade into explicit fallback/manual modes instead of broken route errors.</li>
 <li>Sends active tab/browser context into a persisted Hermes session.</li>
+<li>Adds a composer-header context menu for following the active tab, pinning a specific tab, and choosing which open tabs appear in the prompt.</li>
+<li>Keeps pinned-tab conversations isolated with per-tab local history and Hermes session bindings.</li>
+<li>Adds quick commands for common browser-context work, including <code>/summarize</code>, <code>/explain</code>, <code>/rewrite</code>, <code>/tabs</code>, and <code>/action-items</code>.</li>
 <li>Adds a collapsible “What Hermes saw” receipt after each sent turn for transparent context/debugging.</li>
 <li>Captures active tab title/URL, open tabs, selected text, readable page text, metadata, headings, forms, links, and buttons where available.</li>
 <li>Supports voice dictation through Hermes audio transcription when available, with Browser speech fallback when the connected runtime does not expose STT.</li>
@@ -305,14 +308,14 @@ https://hermes.example.com
 <h3>Troubleshooting</h3>
 <h4>I loaded the extension but nothing works</h4>
 <p>Make sure you loaded <code>dist/</code>, not the repo root. The selected folder must contain <code>manifest.json</code> directly.</p>
-<h4>Chrome still shows version <code>0.1.4</code> after updating</h4>
-<p>The browser is still using an old unpacked folder or an unpacked extension card that was not reloaded. The shipped v0.1.5 source, built <code>dist/</code>, and release archive all contain <code>manifest.json</code> version <code>0.1.5</code>.</p>
+<h4>Chrome still shows an older version after updating</h4>
+<p>The browser is still using an old unpacked folder or an unpacked extension card that was not reloaded. The shipped v0.1.6 source, built <code>dist/</code>, and release archive all contain <code>manifest.json</code> version <code>0.1.6</code>.</p>
 <p>Fix:</p>
 <ol>
-<li>Extract/download the v0.1.5 release or run <code>npm run build</code> locally.</li>
+<li>Extract/download the v0.1.6 release or run <code>npm run build</code> locally.</li>
 <li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
 <li>On the Hermes Browser Extension card, click <strong>Reload</strong>.</li>
-<li>If it still says <code>0.1.4</code>, click <strong>Remove</strong>, then <strong>Load unpacked</strong> again and select the fresh v0.1.5 <code>dist/</code> folder.</li>
+<li>If it still shows an older version, click <strong>Remove</strong>, then <strong>Load unpacked</strong> again and select the fresh v0.1.6 <code>dist/</code> folder.</li>
 <li>Click <strong>service worker</strong> / <strong>Inspect views</strong> only for debugging; it is not the version source.</li>
 </ol>
 <h4>The side panel says it cannot connect</h4>
@@ -461,15 +464,15 @@ tests/
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 617</div>
+        <div class="stars">★ 642</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
-        <div class="stars">★ 57</div>
+        <div class="stars">★ 58</div>
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 664</div>
+        <div class="stars">★ 666</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">

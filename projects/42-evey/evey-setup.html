@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/42-evey/evey-setup#software",
   "name": "evey-setup",
-  "description": "Evey Setup is a deployment toolkit designed to bootstrap a complete autonomous AI agent environment based on the Hermes Agent framework. It uses a multi-phase shell script to orchestrate a containerized stack including model routing via LiteLLM, local GPU inference through Ollama, and vector memory with Qdrant. The installer provides three service tiers—Base, Services, and Full—allowing users to scale from a minimal agent to a production-ready system with monitoring and workflow automation. It i",
+  "description": "Evey Setup is a bootstrapping tool designed to quickly deploy a complete autonomous AI agent stack based on hermes-agent. It uses a series of bash scripts to automate the installation of Docker containers, model routing, and community plugins. The system integrates a variety of services including LiteLLM for model proxying, Ollama for local inference, and Qdrant for vector memory. Users can choose between three deployment tiers—Base, Services, or Full—to balance resource usage with available fun",
   "url": "https://hermesatlas.com/projects/42-evey/evey-setup",
   "codeRepository": "https://github.com/42-evey/evey-setup",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "42-evey",
     "url": "https://github.com/42-evey"
   },
-  "dateModified": "2026-06-18T15:22:19.000Z",
+  "dateModified": "2026-06-29T01:16:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">177·repos</span>
+    <span id="meta-count">178·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Shell</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-18</span>
+    <span><span class="meta-label">updated</span>2026-06-29</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Evey Setup is a deployment toolkit designed to bootstrap a complete autonomous AI agent environment based on the Hermes Agent framework. It uses a multi-phase shell script to orchestrate a containerized stack including model routing via LiteLLM, local GPU inference through Ollama, and vector memory with Qdrant. The installer provides three service tiers—Base, Services, and Full—allowing users to scale from a minimal agent to a production-ready system with monitoring and workflow automation. It integrates 29 community plugins and pre-configures free model routing to enable zero-cost operation.</p>
+    <p class="summary-text">Evey Setup is a bootstrapping tool designed to quickly deploy a complete autonomous AI agent stack based on hermes-agent. It uses a series of bash scripts to automate the installation of Docker containers, model routing, and community plugins. The system integrates a variety of services including LiteLLM for model proxying, Ollama for local inference, and Qdrant for vector memory. Users can choose between three deployment tiers—Base, Services, or Full—to balance resource usage with available functionality.</p>
     <ul class="summary-highlights">
-      <li>Deploys Hermes Agent with LiteLLM, Ollama, and Qdrant via Docker</li>
-      <li>Includes 29 community plugins for memory, social, and quality validation</li>
-      <li>Automates configuration for free model routing and local GPU inference</li>
+      <li>Automated installation of hermes-agent and 12+ supporting services</li>
+      <li>Three scalable deployment tiers from minimum viable to production stack</li>
+      <li>Support for 29 community plugins across six functional categories</li>
     </ul>
   </div>
 </section>
@@ -155,20 +155,31 @@
 <p><strong>Support Evey</strong> — runs 24/7 on free models, hardware costs ~$69/mo: <strong><a href="https://evey.cc/donate.html">Donate</a></strong> (BTC, ETH, SOL, XRP, DOGE)</p>
 </blockquote>
 <p>One script. Zero cost. Full autonomous AI agent stack.</p>
-<p>Bootstrap a complete <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a> stack with model routing, GPU inference, and 29 community plugins in under 5 minutes.</p>
+<p>Bootstrap a complete <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a> stack with model routing, GPU inference, and community plugins (29 from core/observability/social/memory/quality/extra) in under 5 minutes.</p>
 <hr>
 <h3>Quick Start</h3>
+<p>Native hermes-agent flow (recommended / default for all users):</p>
 <pre><code class="language-bash">git clone https://github.com/42-evey/evey-setup.git
 cd evey-setup
 bash setup.sh
 </code></pre>
 <p>The installer walks you through API keys, scaffolds the directory, writes all configs, and clones hermes-agent. Then pick a service tier and start containers.</p>
 <p>Or run all 4 phases at once: <code>bash install.sh</code></p>
-<h4>Let Claude Code Do It</h4>
-<p>Paste this into Claude Code and let it handle the whole setup:</p>
-<blockquote>
-<p>Clone <a href="https://github.com/42-evey/evey-setup.git">https://github.com/42-evey/evey-setup.git</a> and run the setup. Read the CLAUDE.md first for context. Run each phase (setup.sh, setup-services.sh, install-plugins.sh, configure.sh) in order. Use the &quot;full&quot; service tier and install all plugins. After setup, verify all services are healthy with docker compose ps.</p>
-</blockquote>
+<p>Non-interactive (for automation / CI / forking users):</p>
+<pre><code class="language-bash">OPENROUTER_API_KEY=sk-or-... bash install.sh --yes --tier full --plugins all
+# or per-phase:
+bash setup.sh --yes
+TIER=full bash setup-services.sh --yes
+PLUGINS=all bash install-plugins.sh --yes
+bash configure.sh --yes
+</code></pre>
+<p>--yes defaults select native-friendly plugins (host-specific e.g. bridge opt-in via explicit --plugins).</p>
+<p>After any install, verify wiring:</p>
+<pre><code class="language-bash">bash verify.sh
+</code></pre>
+<p>(Exits 0 on overall PASS; auto-enables autonomy so the agent is ready for native use.)</p>
+<h4>Advanced: Let Claude Code Do It (optional)</h4>
+<p>For users integrating with Claude Code, see CLAUDE.md. The native flow above is the supported documented path for generic users.</p>
 <hr>
 <h3>What You Get</h3>
 <table>
@@ -230,7 +241,7 @@ bash setup.sh
 <td>3001</td>
 </tr>
 </tbody></table>
-<p>Plus <strong>29 community plugins</strong> for autonomy, memory, quality validation, social features, and more.</p>
+<p>Plus community plugins (29 listed in installable categories) for autonomy, memory, quality validation, social features, and more. Gate host-specific bits (e.g. bridge) behind your choice of plugins.</p>
 <hr>
 <h3>Prerequisites</h3>
 <ul>
@@ -303,11 +314,16 @@ bash setup.sh
 <h4>Phase 3: Plugins</h4>
 <pre><code class="language-bash">bash install-plugins.sh
 </code></pre>
-<p>Interactive category menu. Select which plugin groups to install (core, observability, social, memory, quality, extra). Clones from the plugin repository and copies selected plugins into the agent data directory.</p>
+<p>Interactive (or --plugins all|core,extra...) category menu. Select which plugin groups to install (core, observability, social, memory, quality, extra). Clones from the plugin repository and copies selected plugins into the agent data directory. (Host-specific plugins are opt-in via selection.)</p>
 <h4>Phase 4: Configuration</h4>
 <pre><code class="language-bash">bash configure.sh
 </code></pre>
 <p>Interactive wizard for brain model selection, compression threshold, cron job scheduling, Telegram pairing, and SOUL.md personality preset. Generates helper scripts in <code>scripts/</code>.</p>
+<h4>Verification &amp; Autonomy</h4>
+<pre><code class="language-bash">bash verify.sh
+</code></pre>
+<p>Doctor script: prints PASS/FAIL for services, configs, clone, LiteLLM reachability, plugins. On PASS it auto-enables autonomy (goals + marker) so native hermes is not left inert.</p>
+<p>Non-interactive equivalents supported across all scripts via <code>--yes</code>, <code>--tier</code>, <code>--plugins</code> and <code>OPENROUTER_API_KEY</code>, <code>TIER</code>, <code>PLUGINS</code> env vars.</p>
 <hr>
 <h3>Configuration</h3>
 <p>After setup, all configuration lives in your install directory:</p>
@@ -322,7 +338,7 @@ bash setup.sh
     hermes/                     # Agent data (plugins, skills, memories, cron)
       config.yaml               # Agent behavior config
       SOUL.md                   # Agent personality
-    claude-bridge/              # Bridge for Claude Code integration
+    # claude-bridge/ (optional, created only when bridge plugin selected for Claude Code)
   src/
     hermes-agent/               # Agent source (cloned from NousResearch)
 </code></pre>
@@ -400,7 +416,7 @@ bash setup.sh
 </tr>
 <tr>
 <td><strong>Extra</strong></td>
-<td>autonomy, research, scheduler, digest, sandbox, cache, + more</td>
+<td>autonomy, research, scheduler, digest, delegation-score, identity, session-guard, telegram-ux, sandbox, cache</td>
 <td>Extended capabilities</td>
 </tr>
 </tbody></table>
@@ -420,6 +436,7 @@ docker compose logs -f hermes-litellm   # model proxy logs
 curl http://localhost:4000/health/liveliness   # LiteLLM
 curl http://localhost:8642/health              # Agent API
 docker compose ps                              # all services
+bash verify.sh                                 # full wiring doctor + auto autonomy on PASS
 
 # Models
 docker exec hermes-ollama ollama pull hermes3:8b    # pull a local model
@@ -524,15 +541,15 @@ docker exec hermes-ollama ollama list               # list local models
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 55.5K</div>
+        <div class="stars">★ 55.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 665</div>
+        <div class="stars">★ 667</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
-        <div class="stars">★ 2.1K</div>
+        <div class="stars">★ 2.2K</div>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
@@ -544,7 +561,7 @@ docker exec hermes-ollama ollama list               # list local models
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 478</div>
+        <div class="stars">★ 488</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -552,7 +569,7 @@ docker exec hermes-ollama ollama list               # list local models
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 106</div>
+        <div class="stars">★ 107</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
     </div>
