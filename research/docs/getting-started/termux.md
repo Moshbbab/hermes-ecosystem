@@ -2,7 +2,11 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/getting-started/termux
 
-This is the tested path for running Hermes Agent directly on an Android phone through [Termux](https://termux.dev/).
+Tier 2 platform
+
+Termux (Android) is a [Tier 2 platform](/docs/getting-started/platform-support#tier-2). The installer script and documentation here are maintained on a best-effort basis only. Commits to `main` may break these packages at any point in time.
+
+Hermes Agent can run directly on an Android phone through [Termux](https://termux.dev/).
 
 It gives you a working local CLI on the phone, plus the core extras that are currently known to install cleanly on Android.
 

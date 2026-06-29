@@ -107,7 +107,7 @@ Quiet-period seconds (default: `0.8`) used to concatenate rapid-fire inbound tex
 
 ## Find your contact ID or display name
 
-After starting the daemon, open a conversation with your agent contact. The numeric `contactId` appears in session logs or via `hermes send_message action=list`. If you'd rather use the display name shown in the SimpleX UI, that works too — `SIMPLEX_ALLOWED_USERS` accepts either form.
+After starting the daemon, open a conversation with your agent contact. The numeric `contactId` appears in session logs. If you'd rather use the display name shown in the SimpleX UI, that works too — `SIMPLEX_ALLOWED_USERS` accepts either form.
 
 ## Authorization
 
@@ -126,7 +126,7 @@ SIMPLEX_GROUP_ALLOWED=12,34          # specific group IDs
 SIMPLEX_GROUP_ALLOWED=*              # any group the bot is in
 ```
 
-Address groups by prefixing the chat ID with `group:`, e.g. `simplex:group:12` in `send_message` or as a cron `deliver=` target.
+Address groups by prefixing the chat ID with `group:`, e.g. `simplex:group:12` as a cron `deliver=` target or in a `hermes send` call.
 
 ## Attachments
 
@@ -148,10 +148,10 @@ cronjob(
 )
 ```
 
-Or target a specific contact:
+Or target a specific contact via the cron job's `deliver:` field, or from a shell script with the [`hermes send` CLI](/docs/guides/pipe-script-output):
 
 ```
-send_message(target="simplex:<contact-id>", message="Done!")
+hermes send simplex:<contact-id> "Done!"
 ```
 
 ## Privacy notes

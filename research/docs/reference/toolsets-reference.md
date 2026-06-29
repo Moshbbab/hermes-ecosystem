@@ -70,6 +70,12 @@ Ask the user a question when the agent needs clarification.
 
 Run Python scripts that call Hermes tools programmatically.
 
+`coding`
+
+composite (`file` + `terminal` + `search` + `web` + `skills` + `browser` + `todo` + `memory` + `session_search` + `clarify` + `code_execution` + `delegation` + `vision`)
+
+Coding-focused bundle for software work: file editing, terminal, search, web docs, skills, browser, delegate, and code execution.
+
 `cronjob`
 
 `cronjob`
@@ -128,7 +134,7 @@ Smart home control via Home Assistant. Only available when `HASS_TOKEN` is set.
 
 `computer_use`
 
-Background macOS desktop control via cua-driver — does not steal cursor/focus. Works with any tool-capable model. macOS only; requires `cua-driver` on `$PATH`.
+Background desktop control via cua-driver — does not steal cursor/focus. Works with any tool-capable model. macOS, Windows, and Linux; requires `cua-driver` on `$PATH`.
 
 `context_engine`
 
@@ -160,17 +166,11 @@ Multi-agent coordination tools. Registered for dispatcher-spawned task workers (
 
 Persistent cross-session memory management.
 
-`messaging`
+`project`
 
-`send_message`
+`project_create`, `project_list`, `project_switch`
 
-Send messages to other platforms (Telegram, Discord, etc.) from within a session.
-
-`moa`
-
-`mixture_of_agents`
-
-Multi-model consensus via Mixture of Agents.
+Create and switch desktop [Projects](/docs/user-guide/cli) (named, multi-folder workspaces). GUI / desktop sessions only.
 
 `safe`
 
@@ -260,15 +260,15 @@ Differences from `hermes-cli`
 
 `hermes-cli`
 
-Full toolset — the default for interactive CLI sessions. Includes file, terminal, web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, clarify, and `safe` (read-only) bundles plus the standard messaging tools.
+Full toolset — the default for interactive CLI sessions. Includes file, terminal, web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, and clarify, plus the `safe` (read-only) bundle.
 
 `hermes-acp`
 
-Drops `clarify`, `cronjob`, `image_generate`, `send_message`, `text_to_speech`, and all four Home Assistant tools. Focused on coding tasks in IDE context.
+Drops `clarify`, `cronjob`, `image_generate`, `text_to_speech`, and all four Home Assistant tools. Focused on coding tasks in IDE context.
 
 `hermes-api-server`
 
-Drops `clarify`, `send_message`, and `text_to_speech`. Keeps everything else — suitable for programmatic access where user interaction isn't possible.
+Drops `clarify` and `text_to_speech`. Keeps everything else — suitable for programmatic access where user interaction isn't possible.
 
 `hermes-cron`
 

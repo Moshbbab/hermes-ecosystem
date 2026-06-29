@@ -137,10 +137,10 @@ cronjob(
 )
 ```
 
-Or target a specific topic explicitly:
+Or target a specific topic explicitly via the cron job's `deliver:` field, or from a shell script with the [`hermes send` CLI](/docs/guides/pipe-script-output):
 
 ```
-send_message(target="ntfy:alerts-channel", message="Done!")
+hermes send ntfy:alerts-channel "Done!"
 ```
 
 This works even when the cron runs out-of-process from the gateway — the plugin registers a `standalone_sender_fn` that opens its own HTTP connection.

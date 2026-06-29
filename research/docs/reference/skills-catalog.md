@@ -40,12 +40,6 @@ Send and receive iMessages/SMS via the imsg CLI on macOS.
 
 `apple/imessage`
 
-[`macos-computer-use`](/docs/user-guide/skills/bundled/apple/apple-macos-computer-use)
-
-Drive the macOS desktop in the background — screenshots, mouse, keyboard, scroll, drag — without stealing the user's cursor, keyboard focus, or Space. Works with any tool-capable model. Load this skill whenever the `computer_use` tool is...
-
-`apple/macos-computer-use`
-
 ## autonomous-ai-agents
 
 Skill
@@ -77,6 +71,20 @@ Configure, extend, or contribute to Hermes Agent.
 Delegate coding to OpenCode CLI (features, PR review).
 
 `autonomous-ai-agents/opencode`
+
+## computer-use
+
+Skill
+
+Description
+
+Path
+
+[`computer-use`](/docs/user-guide/skills/bundled/computer-use/computer-use-computer-use)
+
+Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable...
+
+`computer-use`
 
 ## creative
 
@@ -407,6 +415,12 @@ Notion API + ntn CLI: pages, databases, markdown, Workers.
 Extract text from PDFs/scans (pymupdf, marker-pdf).
 
 `productivity/ocr-and-documents`
+
+[`petdex`](/docs/user-guide/skills/bundled/productivity/productivity-petdex)
+
+Install and select animated petdex mascots for Hermes.
+
+`productivity/petdex`
 
 [`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
 

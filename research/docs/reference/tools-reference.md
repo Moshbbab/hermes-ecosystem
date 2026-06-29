@@ -4,7 +4,7 @@
 
 This page documents Hermes' built-in tools, grouped by toolset. Availability varies by platform, credentials, and enabled toolsets.
 
-**Quick counts (current registry):** ~71 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 2 terminal tools, 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 9 kanban tools (registered when the kanban dispatcher spawns the agent), 2 Discord tools, and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `video_generate`, `vision_analyze`, `video_analyze`, `mixture_of_agents`, `send_message`, `todo`, `computer_use`, `process`).
+**Quick counts (current registry):** ~73 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 3 terminal tools (`terminal`, `process`, `read_terminal`), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 9 kanban tools (registered when the kanban dispatcher spawns the agent), 3 project tools (desktop/GUI sessions), 2 Discord tools, and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `video_generate`, `vision_analyze`, `video_analyze`, `todo`, `computer_use`).
 
 MCP Tools
 
@@ -280,7 +280,7 @@ Requires environment
 
 `computer_use`
 
-Background macOS desktop control via cua-driver — screenshots (SOM / vision / AX), click / drag / scroll / type / key / wait, list\_apps, focus\_app. Does NOT steal the user's cursor or keyboard focus. Works with any tool-capable model. macOS only.
+Background desktop control via cua-driver — screenshots (SOM / vision / AX), click / drag / scroll / type / key / wait, list\_apps, focus\_app. Does NOT steal the user's cursor or keyboard focus. Works with any tool-capable model. macOS, Windows, and Linux.
 
 `cua-driver` on `$PATH` (install via `hermes tools`).
 
@@ -366,6 +366,34 @@ Return a blocked task to `ready`. Orchestrator-only; hidden from dispatcher-spaw
 
 profile with `kanban` toolset
 
+## `project` toolset
+
+Tools for driving desktop [Projects](/docs/user-guide/cli) — named, multi-folder workspaces. Registered when the `project` toolset is enabled (primarily the desktop app / dashboard surfaces).
+
+Tool
+
+Description
+
+Requires environment
+
+`project_create`
+
+Create a desktop Project (a named workspace) and switch this chat into it. Pass `path` to anchor it to a repo/folder.
+
+—
+
+`project_list`
+
+List the desktop Projects and which one is active.
+
+—
+
+`project_switch`
+
+Switch this chat into an existing Project (by name, slug, or id); moves the session workspace to the project's primary folder.
+
+—
+
 ## `memory` toolset
 
 Tool
@@ -379,34 +407,6 @@ Requires environment
 Save important information to persistent memory that survives across sessions. Your memory appears in your system prompt at session start -- it's how you remember things about the user and your environment between conversations. WHEN TO SA…
 
 —
-
-## `messaging` toolset
-
-Tool
-
-Description
-
-Requires environment
-
-`send_message`
-
-Send a message to a connected messaging platform, or list available targets. IMPORTANT: When the user asks to send to a specific channel or person (not just a bare platform name), call send\_message(action='list') FIRST to see available tar…
-
-—
-
-## `moa` toolset
-
-Tool
-
-Description
-
-Requires environment
-
-`mixture_of_agents`
-
-Route a hard problem through multiple frontier LLMs collaboratively. Makes 5 API calls (4 reference models + 1 aggregator) with maximum reasoning effort — use sparingly for genuinely difficult problems. Best for: complex math, advanced alg…
-
-OPENROUTER\_API\_KEY
 
 ## `session_search` toolset
 
@@ -465,6 +465,12 @@ Manage background processes started with terminal(background=true). Actions: 'li
 `terminal`
 
 Execute shell commands on a Linux environment. Filesystem persists between calls. Set `background=true` for long-running servers. Set `notify_on_complete=true` (with `background=true`) to get an automatic notification when the process finishes — no polling needed. Do NOT use cat/head/tail — use read\_file. Do NOT use grep/rg/find — use search\_files.
+
+—
+
+`read_terminal`
+
+Read what's currently shown in the in-app terminal pane of the Hermes desktop GUI (the embedded shell beside this chat). Desktop-app only.
 
 —
 

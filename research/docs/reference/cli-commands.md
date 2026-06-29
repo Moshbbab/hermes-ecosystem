@@ -80,6 +80,10 @@ Interactive or one-shot chat with the agent.
 
 Interactively choose the default provider and model.
 
+`hermes moa`
+
+Configure named Mixture of Agents presets selectable from the model picker.
+
 `hermes fallback`
 
 Manage fallback providers tried when the primary model errors.
@@ -103,6 +107,10 @@ Interactive setup wizard for all or part of the configuration.
 `hermes whatsapp`
 
 Configure and pair the WhatsApp bridge.
+
+`hermes whatsapp-cloud`
+
+Configure the official Meta WhatsApp Business Cloud API adapter (Business account + public webhook required). Distinct from `hermes whatsapp` (Baileys personal-account bridge).
 
 `hermes slack`
 
@@ -139,6 +147,10 @@ Inspect and tick the cron scheduler.
 `hermes kanban`
 
 Multi-profile collaboration board (tasks, links, dispatcher).
+
+`hermes project`
+
+Manage named, multi-folder workspaces (projects). Anchors desktop session grouping and, when bound to a kanban board, gives tasks a deterministic worktree + branch convention. State is per-profile.
 
 `hermes webhook`
 
@@ -232,6 +244,10 @@ Configure enabled tools per platform.
 
 Install or check the cua-driver backend (macOS Computer Use).
 
+`hermes pets`
+
+Browse, install, and select [petdex](/docs/user-guide/features/pets) animated pets shown across the CLI, TUI, and desktop app. Subcommands: `list`, `install`, `select`, `show`, `off`, `scale`, `remove`, `doctor`.
+
 `hermes sessions`
 
 Browse, export, prune, rename, and delete sessions.
@@ -248,6 +264,10 @@ OpenClaw migration helpers.
 
 Launch the web dashboard for managing config, API keys, and sessions.
 
+`hermes desktop` (alias `gui`)
+
+Build and launch the native Electron desktop app.
+
 `hermes profile`
 
 Manage profiles — multiple isolated Hermes instances.
@@ -262,7 +282,7 @@ Show version information.
 
 `hermes update`
 
-Pull latest code and reinstall dependencies (git installs), or check PyPI and `pip install --upgrade` (pip installs). `--check` previews without installing; `--backup` takes a pre-pull `HERMES_HOME` snapshot.
+Pull latest code and reinstall dependencies. `--check` previews without installing; `--backup` takes a pre-pull `HERMES_HOME` snapshot.
 
 `hermes uninstall`
 
@@ -504,6 +524,10 @@ Remove the installed service.
 
 Interactive messaging-platform setup.
 
+`migrate-legacy`
+
+Remove legacy `hermes.service` units left over from pre-rename installs. Profile units (`hermes-gateway-<profile>.service`) and unrelated services are never touched. Flags: `--dry-run`, `-y`/`--yes`.
+
 `enroll`
 
 Experimental: enroll this gateway with a relay connector and save relay credentials for connector-backed platforms.
@@ -522,7 +546,7 @@ On `start` / `restart` / `stop`: act on **every profile's** gateway, not just th
 
 On `run`: inside the s6-overlay Docker image, opt out of auto-supervision and use pre-s6 foreground semantics — gateway runs as the container's main process with no auto-restart. No-op outside the s6 image. Equivalent to setting `HERMES_GATEWAY_NO_SUPERVISE=1`.
 
-`hermes gateway enroll` accepts `--token`, `--connector-url`, and `--gateway-id`. It exchanges the enrollment token with the connector and writes the resulting `GATEWAY_RELAY_ID`, `GATEWAY_RELAY_SECRET`, `GATEWAY_RELAY_DELIVERY_KEY`, and optional `GATEWAY_RELAY_URL` values to the active profile's `.env`.
+`hermes gateway enroll` accepts `--token`, `--connector-url`, `--gateway-id`, and `--wake-url`. It exchanges the enrollment token with the connector and writes the resulting `GATEWAY_RELAY_ID`, `GATEWAY_RELAY_SECRET`, `GATEWAY_RELAY_DELIVERY_KEY`, optional `GATEWAY_RELAY_URL`, and (when `--wake-url` is given) `GATEWAY_RELAY_WAKE_URL` values to the active profile's `.env`.
 
 WSL users
 
@@ -1163,6 +1187,62 @@ Board resolution order (highest precedence first): `--board <slug>` flag → `HE
 All actions are also available as a slash command in the gateway (`/kanban …`), with the same argument surface — including `boards` subcommands and the `--board` flag.
 
 For the full design — comparison with Cline Kanban / Paperclip / NanoClaw / Gemini Enterprise, eight collaboration patterns, four user stories, concurrency correctness proof — see `docs/hermes-kanban-v1-spec.pdf` in the repository or the [Kanban user guide](/docs/user-guide/features/kanban).
+
+## `hermes project`
+
+```
+hermes project <create|list|show|add-folder|remove-folder|rename|set-primary|use|archive|restore|bind-board>
+```
+
+Projects are human-named workspaces that can span multiple folders / repos. They anchor desktop session grouping and, when bound to a kanban board, give tasks a deterministic worktree + branch convention. State is per-profile.
+
+Subcommand
+
+Description
+
+`create`
+
+Create a new project.
+
+`list` (alias `ls`)
+
+List projects.
+
+`show`
+
+Show a project's details.
+
+`add-folder`
+
+Add a folder / repo to a project.
+
+`remove-folder`
+
+Remove a folder from a project.
+
+`rename`
+
+Rename a project.
+
+`set-primary`
+
+Set the primary folder.
+
+`use`
+
+Set the active project.
+
+`archive`
+
+Archive a project (recoverable).
+
+`restore`
+
+Restore an archived project.
+
+`bind-board`
+
+Bind a kanban board to this project.
 
 ## `hermes webhook`
 
@@ -2009,6 +2089,18 @@ On a fresh install the first scheduled pass is deferred by one full `interval_ho
 
 See [Curator](/docs/user-guide/features/curator) for behavior and config.
 
+## `hermes moa`
+
+Configure named Mixture of Agents presets. Presets appear as selectable models under a `Mixture of Agents` provider in every model picker; `/moa <prompt>` runs one prompt through the default preset.
+
+```
+hermes moa list
+hermes moa configure [name]
+hermes moa delete <name>
+```
+
+`hermes moa configure` reuses Hermes' provider → model picker for each reference model and the aggregator. A preset is an execution-mode configuration, not a primary model or provider.
+
 ## `hermes fallback`
 
 ```
@@ -2117,7 +2209,7 @@ python -m acp_adapter
 Install support first:
 
 ```
-pip install -e '.[acp]'
+cd ~/.hermes/hermes-agent && uv pip install -e '.[acp]'
 ```
 
 See [ACP Editor Integration](/docs/user-guide/features/acp) and [ACP Internals](/docs/developer-guide/acp-internals).
@@ -2258,7 +2350,7 @@ Description
 
 `install`
 
-Run the upstream cua-driver installer (macOS only).
+Run the upstream cua-driver installer (macOS, Windows, and Linux).
 
 `install --upgrade`
 
@@ -2271,6 +2363,52 @@ Print whether `cua-driver` is on `$PATH` and which version is installed.
 `hermes computer-use install` is the stable entry point for installing the [cua-driver](https://github.com/trycua/cua) binary used by the `computer_use` toolset. It runs the same upstream installer that `hermes tools` invokes when you first enable Computer Use, so it's safe to use for re-running the install if the toolset toggle didn't trigger it (for example, on returning-user setups).
 
 `hermes update` automatically re-runs the upstream installer at the end of the update if cua-driver is on PATH, so most users will not need to call `--upgrade` manually. Use it when upstream ships a fix you want right now without waiting for the next Hermes update.
+
+## `hermes pets`
+
+```
+hermes pets <list|install|select|show|off|scale|remove|doctor>
+```
+
+[Petdex](https://github.com/crafter-station/petdex) is a public gallery of animated sprite pets for coding agents. Install one and Hermes shows it reacting to agent activity across the CLI, TUI, and desktop app.
+
+Subcommand
+
+Description
+
+`list`
+
+Browse the petdex gallery.
+
+`install`
+
+Install a pet from the gallery.
+
+`select`
+
+Set the active pet (writes `display.pet.*`).
+
+`show`
+
+Animate the active pet in the terminal.
+
+`off`
+
+Disable the pet display.
+
+`scale`
+
+Resize the pet everywhere (`display.pet.scale`).
+
+`remove`
+
+Delete an installed pet.
+
+`doctor`
+
+Check pet setup + terminal graphics support.
+
+You can also generate a brand-new pet from a text description with the `/hatch` slash command. See [Pets](/docs/user-guide/features/pets).
 
 ## `hermes sessions`
 
@@ -2415,7 +2553,7 @@ hermes claw migrate --source /home/user/old-openclaw
 hermes dashboard [options]
 ```
 
-Launch the web dashboard — a browser-based UI for managing configuration, API keys, and monitoring sessions. Requires `pip install hermes-agent[web]` (FastAPI + Uvicorn). The embedded browser Chat tab is always available and additionally needs the `pty` extra (`pip install 'hermes-agent[web,pty]'`) plus a POSIX PTY environment such as Linux, macOS, or WSL2. See [Web Dashboard](/docs/user-guide/features/web-dashboard) for full documentation.
+Launch the web dashboard — a browser-based UI for managing configuration, API keys, and monitoring sessions. Requires `cd ~/.hermes/hermes-agent && uv pip install -e ".[web]"` (FastAPI + Uvicorn). The embedded browser Chat tab is always available and additionally needs the `pty` extra (`cd ~/.hermes/hermes-agent && uv pip install -e ".[web,pty]"`) plus a POSIX PTY environment such as Linux, macOS, or WSL2. See [Web Dashboard](/docs/user-guide/features/web-dashboard) for full documentation.
 
 Option
 
@@ -2445,7 +2583,13 @@ Don't auto-open the browser
 
 off
 
-Allow binding to non-localhost hosts. Exposes dashboard credentials on the network; use only behind trusted network controls.
+**Deprecated / no-op.** Formerly bypassed auth on a non-loopback bind. Since the June 2026 hardening a public bind _always_ requires an auth provider (password or OAuth). Bind `127.0.0.1` and tunnel to keep it local.
+
+`--skip-build`
+
+off
+
+Skip the web UI build step and serve the existing `dist` directly. Useful for non-interactive contexts (Windows Scheduled Tasks, CI) where npm isn't available. Pre-build with `cd web && npm run build`.
 
 `--isolated`
 
@@ -2464,6 +2608,26 @@ Stop running `hermes dashboard` processes and exit.
 —
 
 List running `hermes dashboard` processes and exit.
+
+### `hermes dashboard register`
+
+Register this install as a self-hosted dashboard with your Nous Portal account. Creates an OAuth client, writes `HERMES_DASHBOARD_OAUTH_CLIENT_ID` into `~/.hermes/.env`, and prints how to engage the login gate. Requires being logged in (`hermes setup`).
+
+Option
+
+Description
+
+`--name`
+
+Human-readable label for the dashboard (default: auto-generated).
+
+`--redirect-uri`
+
+Public HTTPS OAuth redirect URI (e.g. `https://hermes.example.com/auth/callback`). Omit for localhost-only use.
+
+`--portal-url`
+
+Override the Nous Portal base URL for registration (default: the portal you logged into). Also settable via `HERMES_DASHBOARD_PORTAL_URL`.
 
 ```
 # Default — opens browser to http://127.0.0.1:9119
@@ -2578,11 +2742,9 @@ hermes completion fish > ~/.config/fish/completions/hermes.fish
 hermes update [--gateway] [--check] [--no-backup] [--backup] [--yes]
 ```
 
-Pulls the latest `hermes-agent` code and reinstalls dependencies in your venv, then re-runs the post-install hooks (MCP servers, skills sync, completion install). Safe to run on a live install.
+Pulls the latest `hermes-agent` code and reinstalls dependencies in the managed venv, then re-runs the post-install hooks (MCP servers, skills sync, completion install). Safe to run on a live install. Use `--check` to see whether your checkout is behind `origin/main` without installing.
 
-**pip installs:** `hermes update` detects pip-based installations automatically — it queries PyPI for the latest release and runs `pip install --upgrade hermes-agent` instead of `git pull`. PyPI releases track tagged versions (major/minor releases), not every commit on `main`. Use `--check` to see if a newer PyPI release is available without installing.
-
-**git installs:** `hermes update` pulls the configured update branch (default: `main`). If your checkout is on another branch, Hermes may check out the update branch before pulling. Commit branch work before updating when you want to keep it outside the update autostash flow.
+`hermes update` pulls the configured update branch (default: `main`). If your checkout is on another branch, Hermes may check out the update branch before pulling. Commit branch work before updating when you want to keep it outside the update autostash flow.
 
 Option
 
@@ -2633,7 +2795,7 @@ Pull latest changes and reinstall dependencies.
 
 `hermes postinstall`
 
-Internal bootstrap. Runs once after `pip install hermes-agent` (or `hermes update` on pip installs) to install non-Python dependencies that pip cannot provide — Node.js runtime, headless browser, ripgrep, ffmpeg — and then trigger `hermes setup` if the profile has not been configured yet. Safe to re-run idempotently.
+Internal bootstrap. Runs once after the install script provisions Hermes (or after `hermes update`) to install non-Python dependencies that pip cannot provide — Node.js runtime, headless browser, ripgrep, ffmpeg — and then trigger `hermes setup` if the profile has not been configured yet. Safe to re-run idempotently.
 
 `hermes uninstall [--full] [--gui] [--yes]`
 

@@ -4,6 +4,10 @@
 
 Get Hermes Agent up and running in under two minutes!
 
+Platform Support
+
+For the full platform support matrix (which OSes, distribution methods, and platform-gated features are supported), see **[Platform Support](/docs/getting-started/platform-support)**.
+
 ## Quick Install
 
 ### With the Hermes Desktop installer on macOS or Windows (recommended)
@@ -49,14 +53,6 @@ Code lives at
 `hermes` binary
 
 Data directory
-
-pip install
-
-Python site-packages
-
-`~/.local/bin/hermes` (console\_scripts)
-
-`~/.hermes/`
 
 Per-user (git installer)
 
@@ -123,7 +119,7 @@ You do **not** need to install Python, Node.js, ripgrep, or ffmpeg manually. The
 
 Nix users
 
-If you use Nix (on NixOS, macOS, or Linux), there's a dedicated setup path with a Nix flake, declarative NixOS module, and optional container mode. See the **[Nix & NixOS Setup](/docs/getting-started/nix-setup)** guide.
+Nix is **no longer an explicitly supported install path** (best-effort only). If you already use Nix (on NixOS, macOS, or Linux), there's a dedicated setup path with a Nix flake, declarative NixOS module, and optional container mode. See the **[Nix & NixOS Setup](/docs/getting-started/nix-setup)** guide.
 
 * * *
 

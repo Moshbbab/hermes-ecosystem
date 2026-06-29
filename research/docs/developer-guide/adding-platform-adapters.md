@@ -210,7 +210,7 @@ Cron delivery
 
 `requires_env` / `optional_env` in `plugin.yaml` auto-populate
 
-send\_message tool
+send engine (`tools/send_message_tool.py`)
 
 Routes through live gateway adapter
 

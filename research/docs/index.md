@@ -42,7 +42,7 @@ Run in powershell:
 iex (irm https://hermes-agent.nousresearch.com/install.ps1)
 ```
 
-See the full **[Installation Guide](/docs/getting-started/installation)** for what the installer does, the per-user vs root layout, and Windows-specific notes.
+See the full **[Installation Guide](/docs/getting-started/installation)** for what the installer does, the per-user vs root layout, and Windows-specific notes. For the complete platform support matrix, see **[Platform Support](/docs/getting-started/platform-support)**.
 
 Fastest path to a working agent
 
@@ -56,7 +56,7 @@ It's not a coding copilot tethered to an IDE or a chatbot wrapper around a singl
 
 🚀 **[Installation](/docs/getting-started/installation)**
 
-Install in 60 seconds on Linux, macOS, WSL2, or native Windows
+Install in 60 seconds on Linux, macOS, WSL2, native Windows, or Android
 
 📖 **[Quickstart Tutorial](/docs/getting-started/quickstart)**
 
@@ -144,6 +144,6 @@ Common questions and solutions
 Machine-readable entry points to this documentation:
 
 -   **[`/llms.txt`](/docs/assets/files/llms-c03199c2b1721b8eb2141fff54dcfad5.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
--   **[`/llms-full.txt`](/docs/assets/files/llms-full-9498e84478aac5095067c1c43ce8b56b.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
+-   **[`/llms-full.txt`](/docs/assets/files/llms-full-84be2f381942efb5f7d70ab48be42b83.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
 
 Both files also resolve at `/docs/llms.txt` and `/docs/llms-full.txt`. Generated fresh on every deploy.

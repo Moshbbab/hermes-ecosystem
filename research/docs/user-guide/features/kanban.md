@@ -268,7 +268,7 @@ at least one of `summary` / `result`
 
 `kanban_block`
 
-Escalate for human input with a `reason`.
+Stop work and route by why: `kind=dependency` (waits in `todo`, auto-resumes), `needs_input`/`capability`/`transient` (surface to a human). Repeated same-kind re-blocks auto-escalate to `triage`.
 
 `reason`
 
@@ -1149,15 +1149,27 @@ Worker wrote `--result` / `--summary` and task hit `done`. `summary` is the firs
 
 `blocked`
 
-`{reason}`
+`{reason, kind, recurrences}`
 
-Worker or human flipped the task to `blocked`. Synthesizes a zero-duration run when called on a never-claimed task with `--reason`.
+Worker or human flipped the task to `blocked`. `kind` is the typed block reason (`needs_input`, `capability`, `transient`, or `null` for a generic block); `recurrences` is the unblock-loop counter. Synthesizes a zero-duration run when called on a never-claimed task with `--reason`.
+
+`dependency_wait`
+
+`{reason, kind}`
+
+Worker blocked with `kind=dependency` — the task is only waiting on another task, so it routes to `todo` (parent-gated, auto-promoted) instead of `blocked`. No human needed.
+
+`block_loop_detected`
+
+`{reason, kind, recurrences, limit}`
+
+A task was unblocked and re-blocked for the same reason `BLOCK_RECURRENCE_LIMIT` times (default 2). Instead of landing in `blocked` again — where a cron would keep unblocking it — it routes to `triage` for a human decision, breaking the unblock↔re-block loop.
 
 `unblocked`
 
 —
 
-`blocked → ready`, either manually or via `/unblock`. `run_id` is `NULL`.
+`blocked → ready` (or `todo` if parents are still open), either manually or via `/unblock`. Resets the dispatcher's `consecutive_failures` but deliberately preserves `block_recurrences` so the loop breaker keeps its memory. `run_id` is `NULL`.
 
 `archived`
 

@@ -30,7 +30,7 @@ Install the required dependencies:
 ```
 pip install aiohttp cryptography
 # Optional: for terminal QR code display
-pip install hermes-agent[messaging]
+cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"
 ```
 
 ## Setup
@@ -563,4 +563,4 @@ API error from the iLink service. Check your token validity and network connecti
 
 Terminal QR code doesn't render
 
-Reinstall with the messaging extra: `pip install hermes-agent[messaging]`. Alternatively, open the URL printed above the QR
+Reinstall with the messaging extra: `cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"`. Alternatively, open the URL printed above the QR

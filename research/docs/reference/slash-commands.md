@@ -50,6 +50,10 @@ Show conversation history
 
 Save the current conversation
 
+`/prompt` (alias: `/compose`)
+
+Compose your next prompt in `$EDITOR` (markdown) instead of the inline input — useful for long, multi-line, or carefully-formatted prompts.
+
 `/retry`
 
 Retry the last message (resend to agent)
@@ -93,6 +97,10 @@ Set a standing goal Hermes works toward across turns — our take on the Ralph l
 `/subgoal <text>`
 
 Append a user-supplied criterion to the active goal mid-loop. The continuation prompt surfaces all subgoals to the agent verbatim, and the judge factors them into its DONE/CONTINUE verdict — so the goal isn't marked done until the original goal **and** every subgoal are met. Subcommands: `/subgoal` (list), `/subgoal remove <N>`, `/subgoal clear`. Requires an active `/goal`.
+
+`/moa <prompt>`
+
+Run a single prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore your current model. One-shot — does not change your session model.
 
 `/resume [name]`
 
@@ -188,6 +196,10 @@ CLI-only: control what pressing Enter does while Hermes is working — queue the
 
 CLI-only: pick the TUI busy-indicator style.
 
+`/timestamps [on|off|status]`
+
+CLI-only: toggle `[HH:MM]` timestamps on messages and in `/history`.
+
 ### Tools & Skills
 
 Command
@@ -217,6 +229,10 @@ Review pending memory writes staged by the write-approval gate (`memory.write_ap
 `/bundles`
 
 List configured skill bundles — `/<name>` slash aliases that preload several skills at once. Configure under `bundles:` in `~/.hermes/config.yaml`. See [Skill Bundles](/docs/user-guide/features/skills#skill-bundles).
+
+`/learn <what to learn from>`
+
+Distill a reusable skill from anything you describe — a directory, a URL, the workflow you just walked the agent through, or pasted notes. Open-ended: the agent gathers the sources with its own tools and authors a `SKILL.md` following the house authoring standards. Works in the CLI, the messaging gateway, the TUI, and the dashboard Skills page.
 
 `/cron`
 
@@ -253,6 +269,14 @@ Reload `.env` variables into the running session (picks up new API keys without 
 `/plugins`
 
 List installed plugins and their status
+
+`/pet [list|<slug>]`
+
+Toggle or adopt a [petdex](/docs/user-guide/features/pets) mascot. `/pet` toggles the pane, `/pet list` shows installed pets, `/pet <slug>` adopts a specific one.
+
+`/hatch <description>` (alias: `/generate-pet`)
+
+Generate a brand-new petdex pet from a text description, using the configured image backend (OpenRouter / Nous Portal). See [Pets](/docs/user-guide/features/pets).
 
 ### Info
 
@@ -585,7 +609,7 @@ Invoke any installed skill by name.
 -   `/skills` is **CLI-only for search/browse/install**; its write-approval review subcommands (`pending`, `approve`, `reject`, `diff`, `approval`) also work on messaging platforms when `skills.write_approval` is on. `/memory` works on **both** surfaces.
 -   `/verbose` is **CLI-only by default**, but can be enabled for messaging platforms by setting `display.tool_progress_command: true` in `config.yaml`. When enabled, it cycles the `display.tool_progress` mode and saves to config.
 -   `/sethome`, `/update`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, and `/commands` are **messaging-only** commands.
--   `/status`, `/version`, `/background`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/debug`, `/fast`, `/footer`, `/curator`, `/kanban`, `/credits`, `/suggestions`, `/blueprint`, `/sessions`, and `/yolo` work in **both** the CLI and the messaging gateway.
+-   `/status`, `/version`, `/background`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/debug`, `/fast`, `/footer`, `/curator`, `/kanban`, `/credits`, `/suggestions`, `/blueprint`, `/learn`, `/sessions`, and `/yolo` work in **both** the CLI and the messaging gateway.
 -   `/voice join`, `/voice channel`, and `/voice leave` are only meaningful on Discord.
 -   In the TUI, `/sessions` shows live sessions in the current TUI process. Use `/resume [name]` or `hermes --tui --resume <id-or-title>` for saved or closed transcripts.
 

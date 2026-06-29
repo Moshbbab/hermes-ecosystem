@@ -8,7 +8,7 @@ When you have many MCP servers or non-core plugin tools attached to a session, t
 
 Built-in Hermes tools never defer
 
-The tools that make up Hermes' core capability set (`terminal`, `read_file`, `write_file`, `patch`, `search_files`, `todo`, `memory`, `browser_*`, `web_search`, `web_extract`, `clarify`, `execute_code`, `delegate_task`, `session_search`, `send_message`, and the rest of `_HERMES_CORE_TOOLS`) are _always_ loaded directly. Only MCP tools and non-core plugin tools are eligible for deferral.
+The tools that make up Hermes' core capability set (`terminal`, `read_file`, `write_file`, `patch`, `search_files`, `todo`, `memory`, `browser_*`, `web_search`, `web_extract`, `clarify`, `execute_code`, `delegate_task`, `session_search`, and the rest of `_HERMES_CORE_TOOLS`) are _always_ loaded directly. Only MCP tools and non-core plugin tools are eligible for deferral.
 
 ## How it works
 

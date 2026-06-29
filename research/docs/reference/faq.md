@@ -24,21 +24,9 @@ Hermes Agent works with any OpenAI-compatible API. Supported providers include:
 
 Set your provider with `hermes model` or by editing `~/.hermes/.env`. See the [Environment Variables](/docs/reference/environment-variables) reference for all provider keys.
 
-### Does it work on Windows?
+### Does it work on Windows/Android/Termux/my plataform??
 
-**Yes, natively.** Hermes supports native Windows via the PowerShell installer — no WSL required. Run in PowerShell:
-
-```
-iex (irm https://hermes-agent.nousresearch.com/install.ps1)
-```
-
-The installer provisions a PortableGit that backs the terminal tool's shell. See the [Windows (Native) Guide](/docs/user-guide/windows-native) for details.
-
-WSL2 remains a fully supported alternative. To run Hermes inside WSL2, install [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install) and use the standard install command:
-
-```
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
-```
+See **[Platform Support](/docs/getting-started/platform-support)** for the full platform availability matrix.
 
 ### I run Hermes in WSL2. What's the best way to control my normal Windows Chrome?
 
@@ -57,20 +45,6 @@ See:
 
 -   [Use MCP with Hermes](/docs/guides/use-mcp-with-hermes#wsl2-bridge-hermes-in-wsl-to-windows-chrome)
 -   [Browser Automation](/docs/user-guide/features/browser#wsl2--windows-chrome-prefer-mcp-over-browser-connect)
-
-### Does it work on Android / Termux?
-
-Yes — Hermes now has a tested Termux install path for Android phones.
-
-Quick install:
-
-```
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
-```
-
-For the fully explicit manual steps, supported extras, and current limitations, see the [Termux guide](/docs/getting-started/termux).
-
-Important caveat: the full `.[all]` extra is not currently available on Android because the `voice` extra depends on `faster-whisper` → `ctranslate2`, and `ctranslate2` does not publish Android wheels. Use the tested `.[termux]` extra instead.
 
 ### Is my data sent anywhere?
 
@@ -479,7 +453,7 @@ Configure in `~/.hermes/config.yaml` under your gateway's settings. See the [Mes
 
 ```
 # Install core messaging gateway dependencies
-pip install "hermes-agent[messaging]"  # Telegram, Discord, Slack, and shared gateway deps
+cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"  # Telegram, Discord, Slack, and shared gateway deps
 
 # Check for port conflicts
 lsof -i :8080

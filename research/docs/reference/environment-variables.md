@@ -464,6 +464,10 @@ Override the Tavily API endpoint. Useful for corporate proxies and self-hosted T
 
 Exa API key for AI-native web search and contents ([exa.ai](https://exa.ai/))
 
+`BRAVE_SEARCH_API_KEY`
+
+Brave Search API subscription token for web search (free tier available) ([brave.com/search/api](https://brave.com/search/api/))
+
 `BROWSERBASE_API_KEY`
 
 Browser automation ([browserbase.com](https://browserbase.com/))
@@ -508,9 +512,17 @@ Browser session inactivity timeout in seconds
 
 Extra Chromium launch flags (comma- or newline-separated). Hermes auto-injects `--no-sandbox,--disable-dev-shm-usage` when running as root or on AppArmor-restricted unprivileged user namespaces (Ubuntu 23.10+, DGX Spark, many container images); set this manually only to override or add other flags.
 
+`AGENT_BROWSER_ENGINE`
+
+Browser engine for local mode: `auto` (default — Chromium-family via CDP), or a specific engine override.
+
 `FAL_KEY`
 
 Image generation ([fal.ai](https://fal.ai/))
+
+`KREA_API_KEY`
+
+Krea API key for Krea 2 image generation ([krea.ai](https://krea.ai/))
 
 `GROQ_API_KEY`
 
@@ -559,6 +571,40 @@ Semantic long-term memory with profile recall and session ingest ([supermemory.a
 `DAYTONA_API_KEY`
 
 Daytona cloud sandboxes ([daytona.io](https://daytona.io/))
+
+### Skill API Keys
+
+Secrets consumed by specific bundled / optional skills. Each is only needed if you use the corresponding skill.
+
+Variable
+
+Used by skill
+
+Description
+
+`NOTION_API_KEY`
+
+`notion`
+
+Notion integration token.
+
+`LINEAR_API_KEY`
+
+`linear`
+
+Linear personal API key.
+
+`AIRTABLE_API_KEY`
+
+`airtable`
+
+Airtable personal access token.
+
+`TENOR_API_KEY`
+
+`gif-search`
+
+Tenor API key for GIF search.
 
 ### Langfuse Observability
 
@@ -772,6 +818,10 @@ Telegram bot token (from @BotFather)
 
 Comma-separated user IDs allowed to use the bot (applies to DMs, groups, and forums)
 
+`TELEGRAM_ALLOW_ALL_USERS`
+
+Allow any Telegram user to trigger the bot (dev only).
+
 `TELEGRAM_GROUP_ALLOWED_USERS`
 
 Comma-separated sender user IDs authorized in groups/forums only (does NOT grant DM access). Chat-ID-shaped values (starting with `-`) are still honored as chat IDs for backward compat with pre-#17686 configs, with a deprecation warning.
@@ -839,6 +889,10 @@ Discord bot token
 `DISCORD_ALLOWED_USERS`
 
 Comma-separated Discord user IDs allowed to use the bot
+
+`DISCORD_ALLOW_ALL_USERS`
+
+Allow any Discord user to trigger the bot (dev only).
 
 `DISCORD_ALLOWED_ROLES`
 
@@ -928,6 +982,10 @@ Slack app-level token (`xapp-...`, required for Socket Mode)
 
 Comma-separated Slack user IDs
 
+`SLACK_ALLOW_ALL_USERS`
+
+Allow any Slack user to trigger the bot (dev only).
+
 `SLACK_HOME_CHANNEL`
 
 Default Slack channel for cron delivery
@@ -995,6 +1053,14 @@ Comma-separated phone numbers (with country code, no `+`), or `*` to allow all s
 `WHATSAPP_ALLOW_ALL_USERS`
 
 Allow all WhatsApp senders without an allowlist (`true`/`false`)
+
+`WHATSAPP_HOME_CHANNEL`
+
+Default chat ID for cron / notification delivery.
+
+`WHATSAPP_HOME_CHANNEL_NAME`
+
+Display name for the WhatsApp home channel.
 
 `WHATSAPP_DEBUG`
 
@@ -1196,6 +1262,18 @@ DingTalk bot AppSecret from developer portal
 
 Comma-separated DingTalk user IDs allowed to message the bot
 
+`DINGTALK_WEBHOOK_URL`
+
+Static robot webhook URL for cross-platform / cron delivery.
+
+`DINGTALK_HOME_CHANNEL`
+
+Default conversation ID for cron / notification delivery.
+
+`DINGTALK_HOME_CHANNEL_NAME`
+
+Display name for the DingTalk home channel.
+
 `FEISHU_APP_ID`
 
 Feishu/Lark bot App ID from [open.feishu.cn](https://open.feishu.cn/)
@@ -1235,6 +1313,14 @@ Comma-separated Feishu user IDs allowed to message the bot
 `FEISHU_HOME_CHANNEL`
 
 Feishu chat ID for cron delivery and notifications
+
+`FEISHU_HOME_CHANNEL_NAME`
+
+Display name for the Feishu home channel.
+
+`FEISHU_ALLOW_ALL_USERS`
+
+Allow any Feishu user to trigger the bot (dev only).
 
 `WECOM_BOT_ID`
 
@@ -1408,6 +1494,10 @@ Display name for the QQ home channel
 
 Override the QQ portal host (set to `sandbox.q.qq.com` to route through the sandbox gateway; default: `q.qq.com`).
 
+`QQ_SANDBOX`
+
+Enable QQ sandbox mode for development testing (`true`/`false`)
+
 `MATTERMOST_URL`
 
 Mattermost server URL (e.g. `https://mm.example.com`)
@@ -1419,6 +1509,14 @@ Bot token or personal access token for Mattermost
 `MATTERMOST_ALLOWED_USERS`
 
 Comma-separated Mattermost user IDs allowed to message the bot
+
+`MATTERMOST_ALLOW_ALL_USERS`
+
+Allow any Mattermost user to trigger the bot (dev only).
+
+`MATTERMOST_ALLOWED_CHANNELS`
+
+If set, the bot only responds in these channels (whitelist).
 
 `MATTERMOST_HOME_CHANNEL`
 
@@ -1455,6 +1553,18 @@ Matrix password (alternative to access token)
 `MATRIX_ALLOWED_USERS`
 
 Comma-separated Matrix user IDs allowed to message the bot (e.g. `@alice:matrix.org`)
+
+`MATRIX_ALLOW_ALL_USERS`
+
+Allow any Matrix user to trigger the bot (dev only).
+
+`MATRIX_HOME_CHANNEL`
+
+Default room ID for cron / notification delivery.
+
+`MATRIX_HOME_CHANNEL_NAME`
+
+Display name for the Matrix home room.
 
 `MATRIX_ALLOWED_ROOMS`
 
@@ -1527,6 +1637,10 @@ Allow outbound `@room` mentions to notify all room members (default: `false`)
 `MATRIX_AUTO_THREAD`
 
 Auto-create threads for room messages (default: `true`)
+
+`MATRIX_DM_AUTO_THREAD`
+
+Auto-create threads for DM messages in Matrix (default: `false`)
 
 `MATRIX_DM_MENTION_THREADS`
 
@@ -1892,6 +2006,212 @@ Human label for the home channel (defaults to the topic name).
 
 See [the ntfy messaging guide](/docs/user-guide/messaging/ntfy) — particularly the **identity model** section — before deploying with untrusted topics.
 
+### IRC
+
+Connect Hermes to an IRC server. No external dependencies. See [the IRC messaging guide](/docs/user-guide/messaging/irc).
+
+Variable
+
+Description
+
+`IRC_SERVER`
+
+IRC server hostname (e.g. `irc.libera.chat`). Required.
+
+`IRC_CHANNEL`
+
+Channel(s) to join (e.g. `#hermes`); comma-separate for multiple. Required.
+
+`IRC_NICKNAME`
+
+Bot nickname (default: `hermes-bot`). Required.
+
+`IRC_PORT`
+
+Server port (default: `6697` with TLS, `6667` without).
+
+`IRC_USE_TLS`
+
+Use TLS (`true`/`false`; default `true` on port 6697).
+
+`IRC_SERVER_PASSWORD`
+
+Server password for the `PASS` command (optional).
+
+`IRC_NICKSERV_PASSWORD`
+
+NickServ password for automatic IDENTIFY on connect (optional).
+
+`IRC_ALLOWED_USERS`
+
+Comma-separated nicks allowed to talk to the bot.
+
+`IRC_ALLOW_ALL_USERS`
+
+Allow anyone in the channel to talk to the bot (dev only).
+
+`IRC_HOME_CHANNEL`
+
+Channel for cron / notification delivery (defaults to `IRC_CHANNEL`).
+
+### SimpleX
+
+Connect Hermes to a [SimpleX Chat](https://simplex.chat/) network via a local `simplex-chat` daemon. See [the SimpleX messaging guide](/docs/user-guide/messaging/simplex).
+
+Variable
+
+Description
+
+`SIMPLEX_WS_URL`
+
+WebSocket URL of the simplex-chat daemon (e.g. `ws://127.0.0.1:5225`).
+
+`SIMPLEX_ALLOWED_USERS`
+
+Comma-separated SimpleX contact IDs allowed to talk to the bot.
+
+`SIMPLEX_ALLOW_ALL_USERS`
+
+Allow any contact to talk to the bot (dev only — disables allowlist).
+
+`SIMPLEX_AUTO_ACCEPT`
+
+Auto-accept incoming contact requests (default: `true`).
+
+`SIMPLEX_GROUP_ALLOWED`
+
+Comma-separated SimpleX group IDs the bot should participate in, or `*` to allow any group. Omit to ignore group messages entirely (safer default — a bot in a group otherwise processes every member's traffic).
+
+`SIMPLEX_HOME_CHANNEL`
+
+Default contact/group ID for cron / notification delivery.
+
+`SIMPLEX_HOME_CHANNEL_NAME`
+
+Human label for the home channel (defaults to the ID).
+
+### Photon
+
+Connect Hermes to [Photon](https://photon.codes/) / Spectrum (iMessage and other Spectrum platforms) via the Node sidecar. See [the Photon messaging guide](/docs/user-guide/messaging/photon).
+
+Variable
+
+Description
+
+`PHOTON_PROJECT_ID`
+
+Spectrum project id (the project's `spectrumProjectId`; set by `hermes photon setup`).
+
+`PHOTON_PROJECT_SECRET`
+
+Project secret paired with the Spectrum project id (set by `hermes photon setup`).
+
+`PHOTON_ALLOWED_USERS`
+
+Comma-separated E.164 phone numbers allowed to talk to the bot.
+
+`PHOTON_ALLOW_ALL_USERS`
+
+Allow any sender to trigger the bot (dev only — disables allowlist).
+
+`PHOTON_REQUIRE_MENTION`
+
+Ignore group-chat messages unless they match a mention wake word (`true`/`false`, default `false`).
+
+`PHOTON_MENTION_PATTERNS`
+
+Mention wake-word regexes for group chats (JSON list or comma/newline-separated; defaults to Hermes wake words).
+
+`PHOTON_HOME_CHANNEL`
+
+Default Photon target for cron / notification delivery: Spectrum space id, DM GUID, or bare E.164 phone number.
+
+`PHOTON_HOME_CHANNEL_NAME`
+
+Human label for the home channel.
+
+`PHOTON_MARKDOWN`
+
+Send agent replies as markdown — iMessage renders it natively, other Spectrum platforms degrade to plain text (`true`/`false`, default `true`).
+
+`PHOTON_REACTIONS`
+
+Tapback 👀/👍/👎 on messages as processing status and route tapbacks on bot messages to the agent (`true`/`false`, default `false`).
+
+`PHOTON_TELEMETRY`
+
+Enable Spectrum SDK telemetry in the sidecar (`true`/`false`, default `false`; toggle with \`hermes photon telemetry on
+
+`PHOTON_SIDECAR_PORT`
+
+Loopback port for the Node sidecar control + inbound channel (default `8789`).
+
+`PHOTON_SIDECAR_AUTOSTART`
+
+Spawn the Node sidecar on connect (`true`/`false`, default `true`).
+
+`PHOTON_NODE_BIN`
+
+Path to the node binary (default: `shutil.which('node')`).
+
+`PHOTON_DASHBOARD_HOST`
+
+Photon Dashboard API host (default `https://app.photon.codes`).
+
+`PHOTON_SPECTRUM_HOST`
+
+Photon Spectrum API host (default `https://spectrum.photon.codes`).
+
+### Microsoft Teams (adapter)
+
+The Microsoft Teams platform adapter (Bot Framework / Azure AD), distinct from the [Microsoft Graph (Teams Meetings)](#microsoft-graph-teams-meetings) integration above. See [the Teams messaging guide](/docs/user-guide/messaging/teams).
+
+Variable
+
+Description
+
+`TEAMS_CLIENT_ID`
+
+Azure AD application (Bot Framework) client ID.
+
+`TEAMS_CLIENT_SECRET`
+
+Azure AD application client secret.
+
+`TEAMS_TENANT_ID`
+
+Azure AD tenant ID hosting the bot application.
+
+`TEAMS_PORT`
+
+Webhook listen port (Bot Framework default: `3978`).
+
+`TEAMS_ALLOWED_USERS`
+
+Comma-separated Teams user IDs / UPNs allowed to talk to the bot.
+
+`TEAMS_ALLOW_ALL_USERS`
+
+Allow any Teams user to trigger the bot (dev only).
+
+`TEAMS_HOME_CHANNEL`
+
+Default chat/channel ID for cron / notification delivery.
+
+`TEAMS_HOME_CHANNEL_NAME`
+
+Display name for the Teams home channel.
+
+### Raft
+
+Variable
+
+Description
+
+`RAFT_PROFILE`
+
+Raft agent profile slug — auto-enables the adapter when set.
+
 ### Advanced Messaging Tuning
 
 Advanced per-platform knobs for throttling the outbound message batcher. Most users never need to touch these; defaults are set to respect each platform's rate limits without feeling sluggish.
@@ -1907,6 +2227,10 @@ Grace window before flushing a queued Telegram text chunk (default: `0.6`).
 `HERMES_TELEGRAM_TEXT_BATCH_SPLIT_DELAY_SECONDS`
 
 Delay between split chunks when a single Telegram message exceeds the length limit (default: `2.0`).
+
+`HERMES_SIMPLEX_TEXT_BATCH_DELAY`
+
+Quiet-period seconds (default: `0.8`) used to concatenate rapid-fire inbound text messages into a single MessageEvent — same pattern as Telegram's text batching.
 
 `HERMES_TELEGRAM_MEDIA_BATCH_DELAY_SECONDS`
 
@@ -1935,6 +2259,14 @@ Grace window before flushing a queued Discord text chunk (default: `0.6`).
 `HERMES_DISCORD_TEXT_BATCH_SPLIT_DELAY_SECONDS`
 
 Delay between split chunks when a Discord message exceeds the length limit (default: `2.0`).
+
+`HERMES_DISCORD_LIVENESS_INTERVAL_SECONDS`
+
+Internal bridge for `discord.liveness_interval_seconds` (config.yaml). Interval for the Discord REST liveness probe that detects zombie clients behind dead proxies/NATs (default: `60`; set to `0` to disable). Prefer setting `discord.liveness_interval_seconds` in `config.yaml`.
+
+`HERMES_DISCORD_LIVENESS_FAILURE_THRESHOLD`
+
+Internal bridge for `discord.liveness_failure_threshold` (config.yaml). Consecutive probe failures before forcing a Discord reconnect (default: `3`). Prefer setting `discord.liveness_failure_threshold` in `config.yaml`.
 
 `HERMES_MATRIX_TEXT_BATCH_DELAY_SECONDS` / `_SPLIT_DELAY_SECONDS`
 
@@ -2176,7 +2508,7 @@ Path to a JSON file of ephemeral prefill messages injected at API-call time.
 
 `HERMES_WRITE_SAFE_ROOT`
 
-Optional directory prefix that restricts `write_file`/`patch` writes; paths outside require approval.
+Optional directory prefix that restricts `write_file`/`patch` writes; paths outside require approval. Supports multiple directories separated by `os.pathsep` (`:` on Unix, `;` on Windows).
 
 `HERMES_DISABLE_LAZY_INSTALLS`
 
