@@ -47,7 +47,7 @@
     "name": "DanielLi202",
     "url": "https://github.com/DanielLi202"
   },
-  "dateModified": "2026-06-29T07:03:37.000Z",
+  "dateModified": "2026-06-29T09:58:08.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -150,7 +150,7 @@
 <li><strong>Auditable, and it never stores your message bodies.</strong> <code>/tag admin audit</code> returns redacted events (scope, time, counts — never message text); <code>/tag admin clear|disable</code> removes a chat&#39;s retained data. The <code>enabled_chats</code> allowlist is the only storage and processing boundary.</li>
 </ol>
 <p>The <code>ContextSelector</code> chooses bounded evidence with <code>focused_reply</code>, <code>thread</code>, <code>deictic_recent</code>, and <code>plain</code> scopes instead of dumping the transcript. That means no full-history RAG and no ambient auto-answering.</p>
-<p><strong>Shipped now vs. roadmap.</strong> Shipped: bounded multimodal evidence, Tier-0/Tier-1 memory, per-chat isolation, admin lifecycle, and redacted audit — on Feishu/Lark and Slack. Roadmap: deeper connector/source-binding parity. The Claude-Tag comparison is the goal we measure against, not a claim that every Claude-Tag feature already ships.</p>
+<p><strong>Shipped now vs. roadmap.</strong> Shipped: bounded multimodal evidence, Tier-0/Tier-1 memory, per-chat isolation, admin lifecycle, and redacted audit — on Feishu/Lark and Slack. DingTalk is also supported, but with <strong>reduced capability</strong>: DingTalk bots only receive messages that @-mention them in groups (no equivalent of Feishu&#39;s <code>im:message.group_msg</code>), so ambient group context (Tier-0) isn&#39;t available there — see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/dingtalk.md">docs/dingtalk.md</a>. Roadmap: deeper connector/source-binding parity. The Claude-Tag comparison is the goal we measure against, not a claim that every Claude-Tag feature already ships.</p>
 <p>This repository, the Python/pip package, and the manifest name are all <code>hermes-tag</code>.</p>
 <h3>Security &amp; Risk Warnings (Read Before Use)</h3>
 <ul>
@@ -209,7 +209,7 @@ platforms:
         admins: [ou_xxx_admin_open_id]
         encryption_posture: plaintext-db-on-local-disk
 </code></pre>
-<p>Full onboarding + live verification: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/after-install.md">after-install.md</a>. Slack setup: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/slack-setup.md">docs/slack-setup.md</a>.</p>
+<p>Full onboarding + live verification: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/after-install.md">after-install.md</a>. Slack setup: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/slack-setup.md">docs/slack-setup.md</a>. DingTalk setup + capability limits: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/dingtalk.md">docs/dingtalk.md</a>.</p>
 <h3>Usage</h3>
 <p>In groups, <code>/tag</code> commands require @-mention.</p>
 <ul>
@@ -265,6 +265,7 @@ platforms:
 <li><code>src/hermes_tag/base.py</code> — TagAdapterMixin: the platform-agnostic orchestration.</li>
 <li><code>src/hermes_tag/platforms/feishu.py</code> — Feishu binding: mention detection, media fetch/download, registration.</li>
 <li><code>src/hermes_tag/platforms/slack.py</code> — Slack binding: mention detection, media buffering, registration.</li>
+<li><code>src/hermes_tag/platforms/dingtalk.py</code> — DingTalk binding: <code>is_in_at_list</code> mention detection, registration (reduced capability — see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/dingtalk.md">docs/dingtalk.md</a>).</li>
 <li><code>src/hermes_tag/i18n.py</code> — locale strings.</li>
 <li><code>src/hermes_tag/adapter.py</code> — back-compat re-export shim.</li>
 </ul>
