@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/NousResearch/hermes-agent#software",
   "name": "hermes-agent",
-  "description": "Hermes Agent is a self-improving AI agent designed to grow alongside users through a built-in learning loop. It utilizes agent-curated memory, autonomous skill creation, and dialectic user modeling to maintain context across sessions. The system supports diverse execution backends and multiple messaging platforms, allowing for persistent, unattended automation.",
+  "description": "Hermes Agent is a self-improving AI agent designed to grow in capability through continuous learning and memory retention. It utilizes a closed learning loop to autonomously create and refine skills from experience while maintaining long-term user models. The system supports diverse deployment environments, from local terminals to serverless cloud backends, and integrates with various messaging platforms.",
   "url": "https://hermesatlas.com/projects/NousResearch/hermes-agent",
   "codeRepository": "https://github.com/NousResearch/hermes-agent",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "NousResearch",
     "url": "https://github.com/NousResearch"
   },
-  "dateModified": "2026-06-29T09:42:57.000Z",
+  "dateModified": "2026-06-30T07:54:49.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 205336
+    "userInteractionCount": 205976
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">The agent that grows with you</p>
 
   <div class="meta-row">
-    <span class="stars">★ 205.3K</span>
+    <span class="stars">★ 206.0K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     <span><span class="meta-label">maintainer</span>Nous Research</span>
-    <span><span class="meta-label">updated</span>2026-06-29</span>
+    <span><span class="meta-label">updated</span>2026-06-30</span>
   </div>
 
   <div class="actions">
@@ -136,11 +136,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent is a self-improving AI agent designed to grow alongside users through a built-in learning loop. It utilizes agent-curated memory, autonomous skill creation, and dialectic user modeling to maintain context across sessions. The system supports diverse execution backends and multiple messaging platforms, allowing for persistent, unattended automation.</p>
+    <p class="summary-text">Hermes Agent is a self-improving AI agent designed to grow in capability through continuous learning and memory retention. It utilizes a closed learning loop to autonomously create and refine skills from experience while maintaining long-term user models. The system supports diverse deployment environments, from local terminals to serverless cloud backends, and integrates with various messaging platforms.</p>
     <ul class="summary-highlights">
-      <li>Autonomous skill creation and self-improvement from experience</li>
-      <li>Cross-platform connectivity via Telegram, Discord, Slack, and more</li>
-      <li>Flexible deployment across local, Docker, SSH, and serverless backends</li>
+      <li>Autonomous skill creation and self-improvement loop</li>
+      <li>Multi-platform support including Telegram, Discord, and Slack</li>
+      <li>Flexible deployment across local, Docker, and serverless backends</li>
     </ul>
   </div>
 </section>
@@ -418,9 +418,12 @@ scripts/run_tests.sh
 </code></pre>
 <p>Manual clone fallback (for throwaway clones/CI where you intentionally do not
 want the managed install layout):</p>
+<p>Create the venv outside the cloned source tree — a venv inside the directory
+the agent operates from can be wiped by a relative-path command the agent runs
+against its own checkout, destroying the running runtime mid-session.</p>
 <pre><code class="language-bash">curl -LsSf https://astral.sh/uv/install.sh | sh
-uv venv .venv --python 3.11
-source .venv/bin/activate
+uv venv ~/.hermes/venvs/hermes-dev --python 3.11
+source ~/.hermes/venvs/hermes-dev/bin/activate
 uv pip install -e &quot;.[all,dev]&quot;
 scripts/run_tests.sh
 </code></pre>

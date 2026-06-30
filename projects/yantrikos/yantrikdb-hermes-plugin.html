@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin#software",
   "name": "yantrikdb-hermes-plugin",
-  "description": "yantrikdb-hermes-plugin is a memory provider for Hermes Agent designed to prevent the loss of important constraints during long sessions. It utilizes a temporal context graph and a maintenance pass to manage memory lifecycles through promotion, demotion, and supersession. The plugin features an embedded in-process backend by default, eliminating the need for a separate server or GPU. It also enables agents to author and track the outcomes of their own skills natively within the database.",
+  "description": "The yantrikdb-hermes-plugin is a self-maintaining memory provider for Hermes Agent that replaces standard vector similarity with a temporal context graph. It manages the memory lifecycle through canonicalization, contradiction tracking, and recency-aware ranking to prevent constraint loss during long sessions. The plugin includes an outcome ledger for agent-authored skills and provides explainable retrieval by tagging every recall with a specific reason. It operates as an embedded, in-process ba",
   "url": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin",
   "codeRepository": "https://github.com/yantrikos/yantrikdb-hermes-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "yantrikos",
     "url": "https://github.com/yantrikos"
   },
-  "dateModified": "2026-06-29T04:39:34.000Z",
+  "dateModified": "2026-06-29T16:39:52.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 63
+    "userInteractionCount": 64
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,7 +112,7 @@
   <p class="project-desc">YantrikDB memory provider for NousResearch/hermes-agent — self-maintaining memory with benchmarked recall, self-tuning ranking, contradiction tracking, proactive hygiene, and explainable recall.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 63</span>
+    <span class="stars">★ 64</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">yantrikdb-hermes-plugin is a memory provider for Hermes Agent designed to prevent the loss of important constraints during long sessions. It utilizes a temporal context graph and a maintenance pass to manage memory lifecycles through promotion, demotion, and supersession. The plugin features an embedded in-process backend by default, eliminating the need for a separate server or GPU. It also enables agents to author and track the outcomes of their own skills natively within the database.</p>
+    <p class="summary-text">The yantrikdb-hermes-plugin is a self-maintaining memory provider for Hermes Agent that replaces standard vector similarity with a temporal context graph. It manages the memory lifecycle through canonicalization, contradiction tracking, and recency-aware ranking to prevent constraint loss during long sessions. The plugin includes an outcome ledger for agent-authored skills and provides explainable retrieval by tagging every recall with a specific reason. It operates as an embedded, in-process backend by default, requiring no external server or GPU.</p>
     <ul class="summary-highlights">
-      <li>Explainable recall with why_retrieved tags for every result</li>
-      <li>First-class contradiction tracking and canonicalization of duplicates</li>
-      <li>Embedded in-process backend requiring no separate server or GPU</li>
+      <li>Surfaces contradictions and explains recall with why_retrieved tags</li>
+      <li>Maintains memory hygiene through automated consolidation and stale scans</li>
+      <li>Supports agent-authored skills with a native outcome ledger</li>
     </ul>
   </div>
 </section>
@@ -148,7 +148,7 @@
 <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/actions"><img src="https://img.shields.io/badge/tests-128%20passing-brightgreen" alt="Tests"></a>
 <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin"><img src="https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue" alt="Python"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
-<a href="https://github.com/yantrikos/yantrikdb-server"><img src="https://img.shields.io/badge/yantrikdb-%E2%89%A50.7.6-orange" alt="YantrikDB"></a>
+<a href="https://github.com/yantrikos/yantrikdb-server"><img src="https://img.shields.io/badge/yantrikdb-%E2%89%A50.9.0-orange" alt="YantrikDB"></a>
 <a href="https://github.com/NousResearch/hermes-agent"><img src="https://img.shields.io/badge/hermes--agent-plugin-8a2be2" alt="Hermes Agent"></a>
 <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
 <a href="https://mypy-lang.org/"><img src="https://img.shields.io/badge/mypy-checked-2a6db2" alt="mypy"></a></p>
@@ -217,8 +217,23 @@
 </tr>
 <tr>
 <td>Proactive memory hygiene (<code>yantrikdb_hygiene</code>)</td>
-<td>✓ v0.6.0 — scan/apply consolidate-or-forget</td>
+<td>✓ v0.7.0 — engine-backed stale scan + consolidate-or-forget</td>
 <td>manual cleanup</td>
+</tr>
+<tr>
+<td>Knowledge gaps (<code>yantrikdb_knowledge_gaps</code>)</td>
+<td>✓ v0.7.0 — &quot;what is my memory missing?&quot; from real recall demand</td>
+<td>not surfaced</td>
+</tr>
+<tr>
+<td>Verbatim conversation buffer (<code>yantrikdb_recent_turns</code>)</td>
+<td>✓ v0.7.0 — survives compression, auto-captured</td>
+<td>host context only</td>
+</tr>
+<tr>
+<td>Durable task store (<code>yantrikdb_tasks</code>)</td>
+<td>✓ v0.7.0 — namespace-scoped chores in the substrate</td>
+<td>ephemeral / external</td>
 </tr>
 </tbody></table>
 <h3>End-to-end demo — substrate growing through the skill lifecycle</h3>
@@ -736,15 +751,15 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 205</div>
+        <div class="stars">★ 206</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 209</div>
+        <div class="stars">★ 212</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 36</div>
+        <div class="stars">★ 38</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
     </div>
