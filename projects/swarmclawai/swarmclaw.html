@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/swarmclawai/swarmclaw#software",
   "name": "swarmclaw",
-  "description": "SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration platform that supports durable memory, delegation, and schedules to coordinate complex AI workflows. The system integrates with over 23 LLM providers, including Claude, GPT, Gemini, and Ollama, and provides a visual org chart for monitoring agent activity. It serves as a home base for self-hosted workflows, offering an alternative to LangChain and Clau",
+  "description": "SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration layer that supports agent delegation, durable memory, and scheduled tasks to coordinate complex workflows. The platform integrates with over 23 LLM providers, including OpenAI, Claude, and Ollama, and provides a visual dashboard for monitoring agent activity via an organizational chart. It can be deployed as a desktop application, a global npm package,",
   "url": "https://hermesatlas.com/projects/swarmclawai/swarmclaw",
   "codeRepository": "https://github.com/swarmclawai/swarmclaw",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "swarmclawai",
     "url": "https://github.com/swarmclawai"
   },
-  "dateModified": "2026-06-11T10:16:10.000Z",
+  "dateModified": "2026-06-30T20:58:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 595
+    "userInteractionCount": 596
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">178·repos</span>
+    <span id="meta-count">182·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Open-source self-hosted AI agent runtime and multi-agent framework for autonomous agent swarms. Agent memory, MCP tools, schedules, delegation, and 23+ LLM providers (Claude, GPT, Gemini, OpenRouter, Ollama). A practical Claude Code and LangChain alternative.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 595</span>
+    <span class="stars">★ 596</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-11</span>
+    <span><span class="meta-label">updated</span>2026-06-30</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration platform that supports durable memory, delegation, and schedules to coordinate complex AI workflows. The system integrates with over 23 LLM providers, including Claude, GPT, Gemini, and Ollama, and provides a visual org chart for monitoring agent activity. It serves as a home base for self-hosted workflows, offering an alternative to LangChain and Claude Code.</p>
+    <p class="summary-text">SwarmClaw is a self-hosted AI agent runtime and multi-agent framework designed for managing autonomous agent swarms. It utilizes an orchestration layer that supports agent delegation, durable memory, and scheduled tasks to coordinate complex workflows. The platform integrates with over 23 LLM providers, including OpenAI, Claude, and Ollama, and provides a visual dashboard for monitoring agent activity via an organizational chart. It can be deployed as a desktop application, a global npm package, or via Docker.</p>
     <ul class="summary-highlights">
-      <li>Supports 23+ LLM providers including OpenRouter and Ollama</li>
-      <li>Features durable agent memory, delegation, and scheduled runs</li>
-      <li>Includes visual org charts for agent team orchestration</li>
+      <li>Orchestrates agent swarms with delegation and durable memory</li>
+      <li>Supports 23+ LLM providers and MCP tools</li>
+      <li>Visualizes agent teams and activity through an org chart</li>
     </ul>
   </div>
 </section>
@@ -606,6 +606,12 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <p>If you need a trace-specific endpoint, set <code>OTEL_EXPORTER_OTLP_TRACES_ENDPOINT</code> directly instead.</p>
 <p>Operational docs: <a href="https://swarmclaw.ai/docs/observability">https://swarmclaw.ai/docs/observability</a></p>
 <h3>Releases</h3>
+<h4>v1.9.40 Highlights</h4>
+<p>Multi-architecture container images and a new provider.</p>
+<ul>
+<li><strong>Multi-arch Docker images.</strong> <code>ghcr.io/swarmclawai/swarmclaw</code> is now published for both <code>linux/amd64</code> and <code>linux/arm64</code>, so ARM64 servers (and Apple Silicon) can pull <code>:latest</code> or a pinned tag directly instead of building the image locally.</li>
+<li><strong>Requesty provider.</strong> Added <a href="https://requesty.ai">Requesty</a> as a built-in OpenAI-compatible provider, with setup defaults and a key link, following the standard provider pattern.</li>
+</ul>
 <h4>v1.9.39 Highlights</h4>
 <p>Scheduled-run reliability release: stale workspace rebinding, fail-fast credential checks, and durable delivery evidence for schedule-driven sends.</p>
 <ul>
@@ -776,12 +782,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
 <li><strong>CLI access.</strong> <code>swarmclaw schedules preview --data &#39;{...}&#39;</code> exposes the same forecast for scripts and release automation.</li>
 </ul>
 <h4>v1.9.17 Highlights</h4>
-<p>Agent configuration history release: SwarmClaw now surfaces saved agent versions directly in the agent editor, giving operators a fast rollback path for agent settings.</p>
-<ul>
-<li><strong>Agent sheet history.</strong> Advanced settings list recent saved versions with relative time, actor, and provider/model snapshot.</li>
-<li><strong>One-click restore.</strong> Operators can restore a prior agent configuration through the existing version-restore API without leaving the agent workflow.</li>
-<li><strong>Stale-form protection.</strong> Successful restore reloads agent state and close</li>
-</ul>
+<p>Agent configuration </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/swarmclawai/swarmclaw#readme">Continue reading on GitHub</a></em></p>
 
@@ -804,7 +805,7 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">howdymary /</span> hermes-agent-metaharness</div>
       </a>
       <a class="related-row" href="/projects/runtimenoteslabs/gladiator">
-        <div class="stars">★ 59</div>
+        <div class="stars">★ 60</div>
         <div class="name"><span class="org">runtimenoteslabs /</span> gladiator</div>
       </a>
       <a class="related-row" href="/projects/1ilkhamov/opencode-hermes-multiagent">
@@ -812,11 +813,11 @@ OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer your-token
         <div class="name"><span class="org">1ilkhamov /</span> opencode-hermes-multiagent</div>
       </a>
       <a class="related-row" href="/projects/Rainhoole/hermes-agent-acp-skill">
-        <div class="stars">★ 45</div>
+        <div class="stars">★ 46</div>
         <div class="name"><span class="org">Rainhoole /</span> hermes-agent-acp-skill</div>
       </a>
       <a class="related-row" href="/projects/linke-ai/hermes-agent-team">
-        <div class="stars">★ 151</div>
+        <div class="stars">★ 152</div>
         <div class="name"><span class="org">linke-ai /</span> hermes-agent-team</div>
       </a>
       <a class="related-row" href="/projects/Agent-3-7/minions">

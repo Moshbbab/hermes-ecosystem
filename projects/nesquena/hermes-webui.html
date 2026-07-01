@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI provides a browser-based interface for interacting with the Hermes autonomous agent. It utilizes a lightweight architecture of Python and vanilla JavaScript to offer full parity with the existing command-line interface. Users can manage sessions, browse workspace files, and monitor token usage through a three-panel layout. The interface is designed to be accessible via web browsers or mobile devices, often through secure SSH tunnels.",
+  "description": "Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step, framework, or bundler. The interface features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can securely access their existing agent and models through an SSH tunnel or Docker deployment.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-06-30T06:24:31.000Z",
+  "dateModified": "2026-07-01T08:10:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 15210
+    "userInteractionCount": 15264
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">178·repos</span>
+    <span id="meta-count">182·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 15.2K</span>
+    <span class="stars">★ 15.3K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-30</span>
+    <span><span class="meta-label">updated</span>2026-07-01</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI provides a browser-based interface for interacting with the Hermes autonomous agent. It utilizes a lightweight architecture of Python and vanilla JavaScript to offer full parity with the existing command-line interface. Users can manage sessions, browse workspace files, and monitor token usage through a three-panel layout. The interface is designed to be accessible via web browsers or mobile devices, often through secure SSH tunnels.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight web interface that provides a graphical alternative to the Hermes Agent CLI. It is built using Python and vanilla JavaScript without the need for a build step, framework, or bundler. The interface features a three-panel layout for managing sessions, chat, and workspace files while maintaining full parity with the terminal experience. Users can securely access their existing agent and models through an SSH tunnel or Docker deployment.</p>
     <ul class="summary-highlights">
-      <li>Full feature parity with the Hermes CLI</li>
-      <li>Three-panel layout with workspace file browsing</li>
-      <li>&lt;pad&gt; Lightweight design using Python and vanilla JS</li>
+      <li>Full parity with Hermes CLI in a three-panel web layout</li>
+      <li>Integrated workspace file browser with inline previews</li>
+      <li>Zero-build architecture using Python and vanilla JavaScript</li>
     </ul>
   </div>
 </section>
@@ -460,6 +460,8 @@ If an AI assistant is helping with install, reinstall, bootstrap, provider setup
 <li>Enable via <code>HERMES_WEBUI_PASSWORD</code> env var or Settings panel</li>
 <li>Optional passkeys/WebAuthn -- register from Settings -&gt; System after signing in with a password; the login page only shows passkey sign-in after at least one passkey exists</li>
 <li>After registering at least one passkey, Settings -&gt; System can remove the password and keep passkey-only sign-in enabled. Password auth remains the bootstrap/recovery path until you choose to go passwordless; passkeys are same-origin and stored locally in the WebUI state directory</li>
+<li>Optional native OIDC login for WebUI sessions -- configure <code>webui_oidc.issuer</code>, <code>client_id</code>, <code>allow_claim</code>, and <code>allow_values</code> in <code>config.yaml</code>, or set the matching <code>HERMES_WEBUI_OIDC_*</code> environment variables. OIDC stays disabled until all four are present, and startup prints a warning if the config is partial.</li>
+<li>Native OIDC stores the PKCE/state nonce flow in process memory. That works for the shipped single-process server, and it also works behind a load balancer when callbacks stay sticky to the same WebUI instance. Multi-instance deployments need session affinity, or the callback can land on a different process and fail state validation.</li>
 <li>Signed HMAC HTTP-only cookie with 24h TTL</li>
 <li>Minimal dark-themed login page at <code>/login</code></li>
 <li>Security headers on all responses (X-Content-Type-Options, X-Frame-Options, Referrer-Policy)</li>
@@ -1018,11 +1020,7 @@ A three-layer approach (ephemeral anti-hallucination prompt, live token filterin
 <p><strong><a href="https://github.com/Hinotoi-agent">@Hinotoi-agent</a></strong> — Profile + session security (PRs #351, #2048)
 Profile <code>.env</code> secret isolation fix (PR #351) preventing API key leakage between profiles, and session-import workspace validation (PR #2048) blocking a crafted-JSON file-read against <code>/</code>.</p>
 <p><strong><a href="https://github.com/Sanjays2402">@Sanjays2402</a></strong> — Endless-scroll + Start-jump race fix (PR #1949)
-A generation-token + mutex pair fixing the v0.51.30 race between endless-scroll prefetch and Start-jump&#39;s <code>_ensureAllMessagesLoaded</code>. The naive same-flag-check approach (proposed in #1942 and #1962) was a no-op for the post-await race — Sanjays2402&#39;s fix was the correct shape.</p>
-<p><strong><a href="https://github.com/fxd-jason">@fxd-jason</a></strong> — Real-time approval + clarify via SSE (PRs #1350, #1355)
-Replaced 1.5s HTTP polling with SSE long-connections for both approval and clarify, cutting latency from up to 1.5s to near-instant. Got all the correctness details right (atomic subscribe + snapshot, notify-inside-lock, head-of-queue payload, trailing event re-emission).</p>
-<p><strong><a href="https://github.com/happy5318">@happy5318</a></strong> — Custom provider model dedup (PR #1947)
-Fixed the same </p>
+A generation-token + mutex pair fixing the v0.51.30 race between endless-scroll prefetch and Start-jump&#39;s `_e</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
@@ -1053,19 +1051,19 @@ Fixed the same </p>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/abundantbeing/hermes-browser-extension">
-        <div class="stars">★ 319</div>
+        <div class="stars">★ 376</div>
         <div class="name"><span class="org">abundantbeing /</span> hermes-browser-extension</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 660</div>
+        <div class="stars">★ 666</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
-        <div class="stars">★ 59</div>
+        <div class="stars">★ 60</div>
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 669</div>
+        <div class="stars">★ 673</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>

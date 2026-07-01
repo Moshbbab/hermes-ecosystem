@@ -47,13 +47,13 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-06-29T11:54:15.000Z",
+  "dateModified": "2026-07-01T06:15:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 322
+    "userInteractionCount": 321
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">178·repos</span>
+    <span id="meta-count">182·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes Agent flagship plugin for multi-provider web search and extraction with intelligent routing, quality reports, and research mode.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 322</span>
+    <span class="stars">★ 321</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-29</span>
+    <span><span class="meta-label">updated</span>2026-07-01</span>
   </div>
 
   <div class="actions">
@@ -145,7 +145,7 @@
   <section class="readme" data-nosnippet>
     <h2>web-search-plus — Hermes Plugin</h2>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-v261-hero.png" alt="Hermes web-search-plus v2.6.1 hero: two-tool surface, adaptive Routing v2, Tavily-first extraction, and 13 search / 7 extract providers with search+extract markings" width="100%">
+  <img src="https://raw.githubusercontent.com/robbyczgw-cla/hermes-web-search-plus/main/docs/assets/web-search-plus-v261-hero.png" alt="Hermes web-search-plus hero: two-tool surface, adaptive Routing v2, research mode, quality diagnostics, and 14 search / 7 extraction providers" width="100%">
 </p>
 
 <p align="center">
@@ -154,7 +154,7 @@
   <img alt="Hermes Plugin" src="https://img.shields.io/badge/Hermes-plugin-a78bfa.svg">
 </p>
 
-<p><strong>Web search and URL extraction for Hermes — now with Routing v2: benchmarked, class-aware auto-routing across the providers your keys can actually support.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Tavily-first extraction for fast, reliable fetches; Exa, Linkup, Firecrawl, Parallel, and You.com remain fallback paths when available.</p>
+<p><strong>Web search and URL extraction for Hermes — Routing v2 across 14 search providers and 7 extraction-capable providers, with private extract-target guards, keyless-provider onboarding, and a fast-path doctor for public Hermes installs.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Tavily-first extraction for fast, reliable fetches; Exa, Linkup, Firecrawl, Parallel, and You.com remain fallback paths when available.</p>
 <p><code>web-search-plus</code> adds two Hermes tools:</p>
 <ul>
 <li><code>web_search_plus</code> — routed multi-provider web search with quality diagnostics</li>
@@ -170,7 +170,7 @@
 <li><strong>No global required key.</strong> Configure one search-capable provider and search works.</li>
 <li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, Parallel, or You.com for URL extraction.</li>
 <li><strong>Routing v2 is conservative.</strong> You.com, Serper, Exa, Firecrawl, Tavily, and Linkup form the default search pool; Brave, SerpBase, Querit, Parallel, and Perplexity/Kilo stay explicit/guarded unless opted in.</li>
-<li><strong>Costs stay bounded.</strong> Research mode caps provider work and keeps partial results when extraction fails.</li>
+<li><strong>Costs stay bounded.</strong> Research mode caps provider work and keeps partial results when extraction fails. Extraction target URLs are guarded before provider dispatch so local/private networks are not fetched by accident.</li>
 </ul>
 <hr>
 <h3>Quick Start</h3>
@@ -195,6 +195,9 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup
 # 4) Optional shell smoke test
 cd ~/.hermes/plugins/web-search-plus
 python3 search.py --query &quot;Hermes Agent latest release&quot; --provider auto --quality-report
+
+# 5) Optional Hermes fast-path check
+python ~/.hermes/plugins/web-search-plus/setup.py fastpath
 </code></pre>
 <p>Notes:</p>
 <ul>
@@ -202,6 +205,18 @@ python3 search.py --query &quot;Hermes Agent latest release&quot; --provider aut
 <li>Keys are written to the active Hermes environment file by the setup helper; they should never be committed to the repo.</li>
 <li>Python 3.8+ is required. Runtime code is stdlib-only; manual development can still run <code>python3 -m pip install -r requirements.txt</code> safely before installing dev tools like <code>pytest</code> and <code>ruff</code>.</li>
 </ul>
+<h4>Fast-path performance setup</h4>
+<p>Web Search Plus is most reliably routed when Hermes can call <code>web_search_plus</code> and <code>web_extract_plus</code> as registered plugin tools instead of falling back to legacy web tools. This feature intentionally targets <strong>current public Hermes behavior</strong> and does not require local Hermes core patches.</p>
+<p>Recommended current-Hermes config:</p>
+<pre><code class="language-yaml">agent:
+  disabled_toolsets: [web]
+</code></pre>
+<p>That keeps the old built-in web toolset from competing with Web Search Plus in installations that use WSP as their preferred web layer. It is the only Hermes-side config Web Search Plus recommends here because it exists in current Hermes builds.</p>
+<p>Run the dependency-free checker to see whether the local install is likely on the fast path:</p>
+<pre><code class="language-bash">python ~/.hermes/plugins/web-search-plus/setup.py fastpath
+python ~/.hermes/plugins/web-search-plus/setup.py fastpath --json
+</code></pre>
+<p>The checker is advisory. If <code>agent.disabled_toolsets</code> is not configured, the plugin still works; Hermes may simply have more tool choices before it settles on WSP. Some forks/local builds may offer extra tool-pinning options, but this feature does not document or require them.</p>
 <hr>
 <h3>Updating</h3>
 <p>Update an existing install with the Hermes plugin manager:</p>
@@ -220,6 +235,7 @@ python3 search.py --query &quot;Hermes Agent latest release&quot; --provider aut
 <p>The setup wizard is intentionally nicer than “paste keys and pray”:</p>
 <pre><code class="language-bash">python ~/.hermes/plugins/web-search-plus/setup.py status
 python ~/.hermes/plugins/web-search-plus/setup.py list
+python ~/.hermes/plugins/web-search-plus/setup.py fastpath
 python ~/.hermes/plugins/web-search-plus/setup.py setup
 python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter --open
 python ~/.hermes/plugins/web-search-plus/setup.py setup you linkup --env-path ~/.hermes/.env
@@ -668,11 +684,11 @@ LICENSE          MIT license
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
-        <div class="stars">★ 293</div>
+        <div class="stars">★ 294</div>
         <div class="name"><span class="org">stainlu /</span> hermes-labyrinth</div>
       </a>
       <a class="related-row" href="/projects/clawshell/clawshell">
-        <div class="stars">★ 299</div>
+        <div class="stars">★ 298</div>
         <div class="name"><span class="org">clawshell /</span> clawshell</div>
       </a>
     </div>

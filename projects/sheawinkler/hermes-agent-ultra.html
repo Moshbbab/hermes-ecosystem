@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra#software",
   "name": "hermes-agent-ultra",
-  "description": "Hermes Agent Ultra is a Rust-native autonomous agent runtime designed for high-performance execution and functional parity with the original Hermes Agent. It implements a deterministic core that manages agent loops, tool policies, and multi-provider inference routing without relying on a Python runtime. The project provides advanced operator controls such as session time-travel, runtime policy enforcement, and deep diagnostic snapshots for debugging complex local or gateway sessions. It supports",
+  "description": "Hermes Agent Ultra is a Rust-based runtime designed to provide a high-performance, secure alternative to the standard Hermes Agent framework. It achieves this through a native Rust core that implements deterministic execution paths,<pad><pad><pad><pad><pad><pad><pad><pad><pad> de-coupled tool policies, and advanced session management. The system supports extensive local backends like Ollama and llama.cpp, alongside specialized features for session replay and tool-call simulation.",
   "url": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra",
   "codeRepository": "https://github.com/sheawinkler/hermes-agent-ultra",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "sheawinkler",
     "url": "https://github.com/sheawinkler"
   },
-  "dateModified": "2026-06-30T07:03:21.000Z",
+  "dateModified": "2026-06-30T23:02:18.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">178·repos</span>
+    <span id="meta-count">182·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent Ultra is a Rust-native autonomous agent runtime designed for high-performance execution and functional parity with the original Hermes Agent. It implements a deterministic core that manages agent loops, tool policies, and multi-provider inference routing without relying on a Python runtime. The project provides advanced operator controls such as session time-travel, runtime policy enforcement, and deep diagnostic snapshots for debugging complex local or gateway sessions. It supports a wide range of local backends including Ollama, llama.cpp, and vLLM, alongside integration with the Nous Portal for managed model access.</p>
+    <p class="summary-text">Hermes Agent Ultra is a Rust-based runtime designed to provide a high-performance, secure alternative to the standard Hermes Agent framework. It achieves this through a native Rust core that implements deterministic execution paths,&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt; de-coupled tool policies, and advanced session management. The system supports extensive local backends like Ollama and llama.cpp, alongside specialized features for session replay and tool-call simulation.</p>
     <ul class="summary-highlights">
-      <li>Rust-native implementation of the Hermes Agent autonomous runtime</li>
-      <li>Session branching and time-travel for checkpointing and replaying traces</li>
-      <li>Extensive support for local backends like Ollama, vLLM, and MLX</li>
+      <li>Rust-native runtime for deterministic agent execution</li>
+      <li>Extensive support for local LLM backends and providers</li>
+      <li>Advanced session branching and time-travel debugging</li>
     </ul>
   </div>
 </section>
@@ -182,6 +182,7 @@
 <li><code>Live session eval harness</code>: score real saved sessions and gate quality trends from actual usage</li>
 <li><code>RTK raw-mode controls</code>: inspect unwrapped tool payloads when debugging integrations</li>
 <li><code>Memory fusion</code>: ContextLattice + external memory providers with scoring/fusion logic</li>
+<li><code>One-true-harness cockpit</code>: <code>/harness</code> and <code>harness_cockpit</code> unify skills, proof, OIDC, replay, objectives, onboarding, and chaos probes</li>
 <li><code>Advanced sync gates</code>: differential parity checks, red-team/adversarial gating, elite sync gate</li>
 <li><code>Operational tooling</code>: deep doctor snapshots, replay traces, queue-based upstream webhook sync</li>
 <li><code>Rust-only implementation strategy</code>: parity in Rust first; no direct Python runtime vendoring</li>
@@ -342,6 +343,9 @@ hermes-ultra mcp sentrux-status
 <h3>Skills and Registry Surface</h3>
 <p>Skills commands support multi-registry search/install and local tap flows.</p>
 <ul>
+<li>Default GitHub skill taps include OpenAI, Anthropic, VoltAgent, Matt Pocock,
+Addy Osmani, Google, Obsidian, design-skill, Loopy, GitHub Copilot, gstack,
+and MiniMax roots where those repos expose a clear skill directory.</li>
 <li>Registry-aware installs include:<ul>
 <li><code>official/...</code></li>
 <li><code>skills.sh/...</code></li>
@@ -353,6 +357,23 @@ hermes-ultra mcp sentrux-status
 </li>
 <li>Mandatory skill security scanning runs before install and before use.</li>
 </ul>
+<p>Use <code>/harness</code> in the TUI or the <code>harness_cockpit</code> tool for the curated
+one-true-harness index, including Matt Pocock <code>teach</code>, <code>domain-modeling</code>,
+<code>grill-with-docs</code>, <code>codebase-design</code>, and architecture-deepening workflows.</p>
+<h3>Dashboard OIDC</h3>
+<p><code>hermes-http</code> supports a Rust-native dashboard OIDC mode while preserving
+<code>HERMES_HTTP_API_KEY</code> bearer access for machine clients.</p>
+<p>Minimum OIDC env:</p>
+<pre><code class="language-bash">HERMES_DASHBOARD_AUTH_PROVIDER=oidc
+HERMES_DASHBOARD_OIDC_ISSUER=https://issuer.example
+HERMES_DASHBOARD_OIDC_CLIENT_ID=hermes-dashboard
+HERMES_DASHBOARD_SESSION_SECRET=&#39;replace-with-strong-random-secret&#39;
+</code></pre>
+<p>Optional env includes <code>HERMES_DASHBOARD_OIDC_CLIENT_SECRET</code>,
+<code>HERMES_DASHBOARD_OIDC_REDIRECT_URI</code>, <code>HERMES_DASHBOARD_OIDC_SCOPES</code>,
+<code>HERMES_DASHBOARD_OIDC_ALLOWED_EMAILS</code>, <code>HERMES_DASHBOARD_OIDC_ALLOWED_DOMAINS</code>,
+<code>HERMES_DASHBOARD_COOKIE_SECURE</code>, and explicit authorization/token/JWKS endpoint
+overrides.</p>
 <p>OpenHuman runbooks and matrices:</p>
 <ul>
 <li><code>docs/implementation/openhuman-p0-p1-runbook.md</code></li>
@@ -466,7 +487,7 @@ hermes-ultra mcp sentrux-status
         <div class="name"><span class="org">nativ3ai /</span> hermes-agent-camel</div>
       </a>
       <a class="related-row" href="/projects/kaminocorp/hermes-alpha">
-        <div class="stars">★ 223</div>
+        <div class="stars">★ 222</div>
         <div class="name"><span class="org">kaminocorp /</span> hermes-alpha</div>
       </a>
       <a class="related-row" href="/projects/beardthelion/hermes-skill-distillation">
