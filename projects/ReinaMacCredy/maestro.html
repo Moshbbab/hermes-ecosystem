@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ReinaMacCredy/maestro#software",
   "name": "maestro",
-  "description": "maestro is a local-first harness designed to provide coding agents with a durable, file-based environment for managing long-running work. It utilizes a structured card and task model stored in plain files within the repository to track features, decisions, and executable progress without requiring a daemon or cloud service. This approach ensures that agent reasoning, work history, and QA evidence remain queryable and reviewable via standard diffs.",
+  "description": "maestro is a local-first harness that provides a durable substrate for coding agents to manage long-running work. It uses a file-backed card model stored in the repository to track features, tasks, and decisions, ensuring work is queryable and auditable without requiring a daemon or cloud service. This approach prevents context loss across agent sessions by gating progress through proof and QA requirements and allowing agents to record their own reasoning and tool improvements.",
   "url": "https://hermesatlas.com/projects/ReinaMacCredy/maestro",
   "codeRepository": "https://github.com/ReinaMacCredy/maestro",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "ReinaMacCredy",
     "url": "https://github.com/ReinaMacCredy"
   },
-  "dateModified": "2026-06-29T21:11:27.000Z",
+  "dateModified": "2026-07-01T16:03:18.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 202
+    "userInteractionCount": 204
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">182·repos</span>
+    <span id="meta-count">184·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Agent harness for codebases. Gives Claude Code, Codex, and CI a shared task system, verdict ledger, and state store so agent work is traceable and auditable.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 202</span>
+    <span class="stars">★ 204</span>
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-29</span>
+    <span><span class="meta-label">updated</span>2026-07-01</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">maestro is a local-first harness designed to provide coding agents with a durable, file-based environment for managing long-running work. It utilizes a structured card and task model stored in plain files within the repository to track features, decisions, and executable progress without requiring a daemon or cloud service. This approach ensures that agent reasoning, work history, and QA evidence remain queryable and reviewable via standard diffs.</p>
+    <p class="summary-text">maestro is a local-first harness that provides a durable substrate for coding agents to manage long-running work. It uses a file-backed card model stored in the repository to track features, tasks, and decisions, ensuring work is queryable and auditable without requiring a daemon or cloud service. This approach prevents context loss across agent sessions by gating progress through proof and QA requirements and allowing agents to record their own reasoning and tool improvements.</p>
     <ul class="summary-highlights">
-      <li>Durable, repo-local state stored in .maestro/ as plain files</li>
-      <li>Three-level work model using cards, card-kinds, and atomic tasks</li>
-      <li>Gated lifecycles for feature contracts, proof, and QA verification</li>
+      <li>Local-first storage using plain files or SQLite in .maestro/</li>
+      <li>Three-level work model consisting of cards, workflow kinds, and tasks</li>
+      <li>Gated lifecycle verbs for evidence-backed proof and QA verification</li>
     </ul>
   </div>
 </section>
@@ -174,13 +174,15 @@ Low  = task
 <p>A <strong>card</strong> owns identity, container/lifecycle state, and governance. A <strong>task</strong>
 is the atomic executable progress unit. A <strong>facet</strong> is an optional sidecar that
 describes or proves a card.</p>
-<p>Cards live under <code>.maestro/cards/&lt;id&gt;/</code>; <code>card.yaml</code> carries identity, type,
-state, parent, ownership, links, and timestamps. Feature, Bug, Chore, Custom,
-Decision, Idea, and Progress are CardKinds / workflow kinds on cards, not
-separate high-level objects. Progress is the lightweight CardKind for small
-work: its <code>progress.yml</code> stores many Low Tasks compactly without requiring the
-full feature pipeline. Facets such as <code>spec.md</code>, <code>qa.md</code>, and <code>notes.md</code> are
-optional sidecars for any card type that needs contract, evidence, or history.</p>
+<p>Cards live in the local card store. File-backed cards still appear under
+<code>.maestro/cards/&lt;id&gt;/</code>; DB-backed cards live in <code>.maestro/store.sqlite</code> and are
+projected through the same card APIs. <code>card.yaml</code> carries identity, type, state,
+parent, ownership, links, and timestamps. Feature, Bug, Chore, Custom, Decision,
+Idea, and Progress are CardKinds / workflow kinds on cards, not separate
+high-level objects. Progress is the lightweight CardKind for small work: its
+<code>progress.yml</code> stores many Low Tasks compactly without requiring the full feature
+pipeline. Facets such as <code>spec.md</code>, <code>qa.md</code>, and <code>notes.md</code> are optional
+sidecars for any card type that needs contract, evidence, or history.</p>
 <p><img src="https://raw.githubusercontent.com/ReinaMacCredy/maestro/main/docs/readme/maestro-card-model.png" alt="Maestro card model"></p>
 <p>Tasks are not CardTypes. They live inside card-backed task records for
 legacy/gated work or inside a Progress card&#39;s <code>progress.yml</code> for low-ceremony
@@ -624,8 +626,10 @@ checked, not asserted, so a green close is a real signal.</p>
 <code>.maestro/cards/card-&lt;hex&gt;/</code>, so the reasoning outlives any single agent session.</p>
 <h4>The archive is memory</h4>
 <p>Closing work does not discard it. <code>maestro archive &lt;feature&gt;</code> moves a closed feature tree
-into <code>.maestro/archive/cards/</code>, and <code>maestro archive --loose</code> sweeps closed loose tasks,
-ideas, and superseded decisions after it. Every archived card appends a one-line digest to
+out of the live store, and <code>maestro archive --loose</code> sweeps closed loose tasks, ideas,
+superseded decisions, and DB-backed loose cards after it. Archived snapshots live in
+<code>.maestro/archive/cards.sqlite</code>; legacy folder archives under <code>.maestro/archive/cards/</code>
+remain readable. Every archived card appends a one-line digest to
 <code>.maestro/archive/cards/INDEX.md</code>; <code>maestro resume</code> opens with the most recent of those
 lines, <code>maestro list --grep &lt;term&gt; --archived</code> searches the full history (kept fast by the
 local text index, which falls back to a plain scan when missing or stale), and
@@ -797,16 +801,24 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 <td>Upgrade the binary and refresh resources</td>
 </tr>
 <tr>
+<td><code>design</code></td>
+<td>List or initialize a repo-root <code>DESIGN.md</code> from shipped design guides</td>
+</tr>
+<tr>
 <td><code>doctor</code></td>
 <td>Diagnose the installation</td>
 </tr>
 <tr>
-<td><code>status</code> / <code>resume</code></td>
-<td>Print the current handoff, next action, or clean-session resume packet</td>
+<td><code>status</code> / <code>next</code> / <code>resume</code></td>
+<td>Print the current handoff, next safe action, or clean-session resume packet</td>
 </tr>
 <tr>
 <td><code>active</code></td>
 <td>Show other live sessions, their bound cards, link state, progress, and copy-paste link/message hints</td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td>Show one session&#39;s joined activity, lifecycle, and proof story</td>
 </tr>
 <tr>
 <td><code>migrate</code></td>
@@ -815,6 +827,10 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 <tr>
 <td><code>feature</code></td>
 <td>Manage the product contract and its lifecycle</td>
+</tr>
+<tr>
+<td><code>qa</code></td>
+<td>Record feature QA baselines and slice evidence</td>
 </tr>
 <tr>
 <td><code>task</code></td>
@@ -827,6 +843,18 @@ edits. <code>maestro sync --global-skills</code> refreshes only the user-level g
 <tr>
 <td><code>card</code></td>
 <td>Work the flat store: <code>ready</code> / <code>list</code> / <code>show</code> / <code>create</code> / <code>update</code> / <code>close</code> / <code>claim</code> / <code>assign</code> / <code>note</code> / <code>dep</code> / <code>graph</code> / <code>archive</code> (<code>--parent</code>, <code>--type</code>, <code>--assignee</code>, <code>--status</code>, <code>--grep</code>)</td>
+</tr>
+<tr>
+<td><code>worktree</code></td>
+<td>Record passive worktree handoff and cleanup ledger facts</td>
+</tr>
+<tr>
+<td><code>grep</code></td>
+<td>Search Maestro memory and source through the indexed grep engine</td>
+</tr>
+<tr>
+<td><code>memory</code> / <code>scorer</code></td>
+<td>Manage Memory candidates, suggestions, scorer contracts, and receipts</td>
 </tr>
 <tr>
 <td><code>link</code></td>
@@ -934,7 +962,7 @@ embedded/    shipped harness, hook, shell, and skill resources
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.6K</div>
+        <div class="stars">★ 23.9K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -946,19 +974,19 @@ embedded/    shipped harness, hook, shell, and skill resources
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 326</div>
+        <div class="stars">★ 327</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 4.9K</div>
+        <div class="stars">★ 5.0K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
-        <div class="stars">★ 116</div>
+        <div class="stars">★ 117</div>
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 198</div>
+        <div class="stars">★ 202</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">

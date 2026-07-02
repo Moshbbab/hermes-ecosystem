@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/aivrar/portable-hermes-agent#software",
   "name": "portable-hermes-agent",
-  "description": "Portable Hermes Agent is a standalone Windows desktop application that provides a graphical interface for the Hermes Agent framework without requiring system-wide installations or administrative rights. It operates by bundling an embedded Python environment and connecting to local models via LM Studio or cloud providers through an OpenAI-compatible API. The platform features over 100 tools for tasks such as music generation, text-to-speech, and ComfyUI image creation, alongside a workflow engine",
+  "description": "Portable Hermes Agent is a Windows-based desktop distribution of the Hermes Agent designed for users who cannot or prefer not to use Docker or administrative installations. It utilizes an embedded Python environment and a Tkinter GUI to provide a standalone workspace for managing AI agents and local models. The project integrates local model support via LM Studio and includes specialized servers for text-to-speech, music generation, and image creation. Users can automate complex tasks through a ",
   "url": "https://hermesatlas.com/projects/aivrar/portable-hermes-agent",
   "codeRepository": "https://github.com/aivrar/portable-hermes-agent",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "aivrar",
     "url": "https://github.com/aivrar"
   },
-  "dateModified": "2026-07-01T08:06:51.000Z",
+  "dateModified": "2026-07-01T17:11:21.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 178
+    "userInteractionCount": 181
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">182·repos</span>
+    <span id="meta-count">184·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">Hermes Agent made portable desktop for Windows — 100 tools, GUI, local models via LM Studio, TTS, Music, ComfyUI, workflows, tool maker. No install. No Docker. No admin rights.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 178</span>
+    <span class="stars">★ 181</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Portable Hermes Agent is a standalone Windows desktop application that provides a graphical interface for the Hermes Agent framework without requiring system-wide installations or administrative rights. It operates by bundling an embedded Python environment and connecting to local models via LM Studio or cloud providers through an OpenAI-compatible API. The platform features over 100 tools for tasks such as music generation, text-to-speech, and ComfyUI image creation, alongside a workflow engine for multi-step automation. Users can also extend the agent's capabilities at runtime using a built-in dynamic tool maker for API wrapping and Python scripting.</p>
+    <p class="summary-text">Portable Hermes Agent is a Windows-based desktop distribution of the Hermes Agent designed for users who cannot or prefer not to use Docker or administrative installations. It utilizes an embedded Python environment and a Tkinter GUI to provide a standalone workspace for managing AI agents and local models. The project integrates local model support via LM Studio and includes specialized servers for text-to-speech, music generation, and image creation. Users can automate complex tasks through a built-in workflow engine or create new tools at runtime via a dynamic tool maker.</p>
     <ul class="summary-highlights">
-      <li>Zero-install Windows desktop GUI with granular permission controls</li>
-      <li>Over 100 tools including TTS, MusicGen, and ComfyUI integrations</li>
-      <li>Dynamic tool maker for creating API wrappers and Python handlers</li>
+      <li>Zero-install setup requiring no admin rights or Docker</li>
+      <li>100 tools including local TTS, Music, and ComfyUI extensions</li>
+      <li>Workflow engine for scheduled, multi-step automation pipelines</li>
     </ul>
   </div>
 </section>
@@ -218,7 +218,7 @@
 <tr>
 <td><strong>Hermes Update</strong></td>
 <td>2</td>
-<td>Pull upstream updates + auto-reinject custom tools</td>
+<td>Update from this portable repo with backups and runtime preservation</td>
 </tr>
 </tbody></table>
 <p>Plus all built-in hermes-agent tools: web search, file operations, browser automation, code execution, delegation, memory, skills, messaging, Home Assistant, and more.</p>
@@ -261,15 +261,38 @@
 <p>No API key? No problem. The chat works offline using a built-in 1,054-line user guide. New users get step-by-step guidance to set up their first AI model.</p>
 <hr>
 <h3>Quick Start</h3>
-<h4>1. Install</h4>
+<h4>1. Download</h4>
+<p>Download the latest <code>portable-hermes-agent-v*.zip</code> from <a href="https://github.com/aivrar/portable-hermes-agent/releases/latest">Releases</a>, then extract it to a normal folder.</p>
+<p>Recommended:</p>
+<pre><code class="language-text">C:\Users\YourName\Portable-Hermes-Agent
+</code></pre>
+<p>Avoid protected folders such as <code>C:\Program Files</code>.</p>
+<h4>2. Start</h4>
+<p>Double-click:</p>
+<pre><code class="language-batch">START.bat
+</code></pre>
+<p>On first launch, <code>START.bat</code> runs the portable setup automatically. It downloads embedded Python, dependencies, LM Studio SDK, and Node.js tools into this folder only. No admin rights are needed.</p>
+<p>Manual setup:</p>
 <pre><code class="language-batch">install.bat
 </code></pre>
-<p>Downloads embedded Python 3.13, all dependencies, LM Studio SDK, and Node.js tools. No admin rights needed.</p>
-<h4>2. Launch</h4>
-<pre><code class="language-batch">hermes.bat          :: CLI mode
-hermes_gui.bat      :: GUI mode
+<p>PowerShell users can run:</p>
+<pre><code class="language-powershell">.\scripts\install.ps1
 </code></pre>
-<h4>3. Connect an AI Model</h4>
+<h4>3. Launch Again</h4>
+<pre><code class="language-batch">START.bat           :: easiest GUI launch
+UPDATE.bat          :: safest one-click update
+hermes_gui.bat      :: GUI mode
+hermes.bat          :: CLI mode
+</code></pre>
+<h4>Updating</h4>
+<p>For the easiest safe update, double-click:</p>
+<pre><code class="language-batch">UPDATE.bat
+</code></pre>
+<p>Or run:</p>
+<pre><code class="language-batch">hermes.bat update --backup --yes
+</code></pre>
+<p>Updates come from <code>aivrar/portable-hermes-agent</code>. Runtime folders such as <code>.hermes/</code>, <code>.hermes/custom_tools/</code>, <code>.hermes/extensions/</code>, <code>extensions/</code>, and <code>python_embedded/</code> are preserved. Upstream Hermes changes from NousResearch are included only after this portable repo has merged, tested, and released them.</p>
+<h4>4. Connect an AI Model</h4>
 <p><strong>Cloud (2 minutes, free):</strong></p>
 <ol>
 <li>File &gt; API Key Setup &gt; OpenRouter</li>
@@ -348,7 +371,7 @@ AIAgent (run_agent.py)
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 12.9K</div>
+        <div class="stars">★ 13.0K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -356,15 +379,15 @@ AIAgent (run_agent.py)
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 86</div>
+        <div class="stars">★ 87</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/abundantbeing/hermes-browser-extension">
-        <div class="stars">★ 376</div>
+        <div class="stars">★ 435</div>
         <div class="name"><span class="org">abundantbeing /</span> hermes-browser-extension</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 666</div>
+        <div class="stars">★ 690</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -372,7 +395,7 @@ AIAgent (run_agent.py)
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 673</div>
+        <div class="stars">★ 675</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>
