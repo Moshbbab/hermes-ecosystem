@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a governance layer designed to manage AI agents that interact with real-world systems by intercepting risky actions before execution. It evaluates actions against declarative policies, routes required approvals to human operators, and maintains a verifiable ledger of decisions and outcomes. The system prevents double-execution of retried agents and provides cryptographic identity verification using OIDC bearer tokens. It integrates with a wide range of frameworks including LangChain,",
+  "description": "DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It operates by enforcing declarative policies, scoring risks, and routing high-stakes actions to human approval queues via a centralized dashboard or CLI. The platform records every intent as a verifiable decision record and tracks terminal outcomes to prevent silent double-execution during retries. It integrates directly with various age",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-07-03T03:55:27.000Z",
+  "dateModified": "2026-07-03T07:35:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a governance layer designed to manage AI agents that interact with real-world systems by intercepting risky actions before execution. It evaluates actions against declarative policies, routes required approvals to human operators, and maintains a verifiable ledger of decisions and outcomes. The system prevents double-execution of retried agents and provides cryptographic identity verification using OIDC bearer tokens. It integrates with a wide range of frameworks including LangChain, CrewAI, AutoGen, and various Claude-based agents via SDKs or MCP.</p>
+    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It operates by enforcing declarative policies, scoring risks, and routing high-stakes actions to human approval queues via a centralized dashboard or CLI. The platform records every intent as a verifiable decision record and tracks terminal outcomes to prevent silent double-execution during retries. It integrates directly with various agent frameworks including Hermes Agent, LangChain, and Claude Code through MCP, SDKs, or lifecycle hooks.</p>
     <ul class="summary-highlights">
-      <li>Policy-based interception for blocking, warning, or holding risky actions</li>
-      <li>Cryptographic identity verification and replay protection for agent authentication</li>
-      <li>Comprehensive audit ledger with replayable decision records and risk scoring</li>
+      <li>Evaluates agent intent against risk policies before system execution</li>
+      <li>Routes pending actions to human approval via dashboard or mobile</li>
+      <li>Records verifiable decision ledgers with cryptographic attribution and replay protection</li>
     </ul>
   </div>
 </section>
@@ -285,7 +285,12 @@
 <td><code>npm install @dashclaw/openclaw-plugin</code></td>
 </tr>
 <tr>
-<td>Claude Desktop, any MCP host</td>
+<td>Claude Desktop (chat, web, Cowork)</td>
+<td>Custom connector (OAuth, no install)</td>
+<td>Settings → Connectors → paste <code>https://&lt;instance&gt;/api/mcp</code></td>
+</tr>
+<tr>
+<td>Any stdio MCP host</td>
 <td>MCP server (stdio)</td>
 <td><code>npx @dashclaw/mcp-server</code></td>
 </tr>
@@ -349,7 +354,7 @@ powershell -File scripts/install-hermes-plugin.ps1   # Windows
 <h4>2. MCP server (zero code, any MCP host)</h4>
 <p><a href="./mcp-server"><code>@dashclaw/mcp-server</code></a> exposes <strong>33 governance MCP tools</strong> across 12 groups — core governance, optimal files, session continuity, credential hygiene, skill safety, open loops, learning + retrospection, agent inbox, agent identity, behavior learning, governance posture, work orders — plus 6 read-only resources (<code>dashclaw://policies</code>, <code>dashclaw://capabilities</code>, <code>dashclaw://agent/{agent_id}/history</code>, <code>dashclaw://status</code>, <code>dashclaw://code-sessions/projects</code>, <code>dashclaw://code-sessions/sessions/{session_id}</code>).</p>
 <p>As of v2.0.0 the local stdio server also carries <strong>governed execution</strong>: provider tools for GitHub, Vercel, Neon, Stripe and ten more (each registering only when its credential env var is present), and stateful <strong>launch plans</strong> (<code>create_launch_plan</code> / <code>get_launch_status</code> / <code>preflight_launch</code> / <code>verify_launch</code>) that track the launch tail with reality-checked, never self-reported completion — every step through the same guard/policy/approval path. See <a href="https://github.com/ucsandman/DashClaw/blob/main/mcp-server/README.md"><code>mcp-server/README.md</code></a> and <a href="https://github.com/ucsandman/DashClaw/blob/main/mcp-server/docs/launch-plans.md"><code>mcp-server/docs/launch-plans.md</code></a>.</p>
-<p><strong>Stdio (Claude Code, Claude Desktop, any stdio MCP client):</strong></p>
+<p><strong>Stdio (Claude Code, any stdio MCP client — not Claude Desktop chat, whose bundled Node crashes local MCP servers; Desktop uses the OAuth connector below):</strong></p>
 <pre><code class="language-json">{
   "mcpServers": {
     "dashclaw": {
@@ -363,7 +368,7 @@ powershell -File scripts/install-hermes-plugin.ps1   # Windows
   }
 }
 </code></pre>
-<p><strong>Streamable HTTP (Claude Managed Agents, any remote MCP client):</strong> every DashClaw instance serves MCP at <code>/api/mcp</code> — no npm package, no client install.</p>
+<p><strong>Streamable HTTP (Claude Managed Agents, any remote MCP client):</strong> every DashClaw instance serves MCP at <code>/api/mcp</code> — no npm package, no client install. For Claude Desktop / claude.ai, add it as a <strong>custom connector</strong> (Settings → Connectors → paste <code>https://&lt;instance&gt;/api/mcp</code>): OAuth auto-discovers — no key in the UI — and tool calls attribute to the <code>claude-desktop</code> agent identity. Full walkthrough: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/CLAUDE-DESKTOP-PLUGIN.md"><code>docs/CLAUDE-DESKTOP-PLUGIN.md</code></a>.</p>
 <pre><code class="language-python">agent = client.beta.agents.create(
     name="Governed Agent",
     model="claude-sonnet-4-6",
@@ -402,7 +407,7 @@ DashClawAutoGenIntegration(claw).instrument_agent(assistant)
 </code></pre>
 <p>It intercepts every tool-use call (<code>before_tool_call</code>, <code>llm_output</code>, <code>after_tool_call</code>, <code>agent_end</code>), calls guard / record / waitForApproval automatically, and ships a <code>HOOK.md</code> the <code>openclaw</code> CLI installs. Tool-classification vocabulary aligns with DashClaw guard action types so policies behave consistently across plugin, hook, and SDK paths.</p>
 <h4>5. Direct REST API and webhooks</h4>
-<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>325 routes</strong>: 55 stable, 24 beta, 246 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
+<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>326 routes</strong>: 55 stable, 24 beta, 247 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
 <h4>6. Work Orders — task-grade contracts + receipts</h4>
 <p>Work Orders turn an agent call into a contract: a typed input/output schema, a budget ceiling, and a self-verifying receipt. A caller submits an order against a registered type (validated, guard-gated, queued); any agent with an API key claims and completes it; the server validates the output, builds a SHA-256-hashed receipt (cost, timestamps, output hash, governance trail), and writes an audit record. DashClaw stays the control plane — execution is external workers via <code>claim</code>/<code>complete</code>, so there's no LLM key and no cron. Page at <code>/work-orders</code>, API at <code>/api/work-orders</code>, 8 SDK methods each (Node + Python), 2 MCP tools, and a ~75-line reference worker in <a href="./examples/work-order-worker/"><code>examples/work-order-worker/</code></a>.</p>
 <h4>7. Skills — governance protocol + live platform reference</h4>
