@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 188
+    "userInteractionCount": 189
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">On-device memory layer for AI agents. Claude Code, Hermes and OpenClaw. Hooks + MCP server + hybrid RAG search.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 188</span>
+    <span class="stars">★ 189</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -167,11 +167,11 @@
 <li><strong>Evolves memory metadata</strong> as new documents create or refine connections</li>
 <li><strong>Infers causal relationships</strong> between facts extracted from session observations</li>
 <li><strong>Detects contradictions</strong> between new and prior decisions, auto-decaying superseded ones (with an additional merge-time contradiction gate in the consolidation worker that blocks cross-observation contradictions before they land, v0.7.1)</li>
-<li><strong>Guards against cross-entity merges</strong> during consolidation — name-aware dual-threshold merge safety compares entity anchors before merging similar observations, preventing &quot;Alice decided X&quot; from merging into &quot;Bob decided X&quot; (v0.7.1)</li>
+<li><strong>Guards against cross-entity merges</strong> during consolidation — name-aware dual-threshold merge safety compares entity anchors before merging similar observations, preventing "Alice decided X" from merging into "Bob decided X" (v0.7.1)</li>
 <li><strong>Prevents context bleed in derived insights</strong> — the Phase 3 deductive synthesis pipeline validates every draft against an anti-contamination wrapper (deterministic entity contamination check + LLM validator + dedupe) before writing cross-session deductive observations (v0.7.1)</li>
 <li><strong>Frames surfaced facts as background knowledge</strong> — <code>context-surfacing</code> wraps injected content in <code>&lt;instruction&gt;</code> + <code>&lt;facts&gt;</code> + <code>&lt;relationships&gt;</code> blocks, telling the model to treat facts as already-known and exposing memory-graph edges between surfaced docs directly in-prompt (v0.7.1)</li>
-<li><strong>Injects knowledge-graph facts as structured triples</strong> — when the user&#39;s prompt mentions entities already known to the vault, <code>context-surfacing</code> resolves them via a three-path prompt-only extractor (canonical IDs, proper nouns, lowercased n-grams), queries the SPO graph for current-state triples, and appends a <code>&lt;vault-facts&gt;</code> block of raw <code>subject predicate object</code> lines to <code>&lt;vault-context&gt;</code> — off for <code>speed</code>, 200 tokens on <code>balanced</code>, 250 on <code>deep</code>, token-truncated at the triple boundary (v0.9.0)</li>
-<li><strong>Session-scoped focus topic boost</strong> — <code>clawmem focus set &quot;&lt;topic&gt;&quot; --session-id &lt;id&gt;</code> writes a per-session focus file that steers query expansion, reranking, chunk selection, snippet extraction, and post-composite-score topic boosting (1.4× match / 0.75× demote) for that session only — session-isolated, fail-open, never writes to SQLite or lifecycle columns (v0.9.0)</li>
+<li><strong>Injects knowledge-graph facts as structured triples</strong> — when the user's prompt mentions entities already known to the vault, <code>context-surfacing</code> resolves them via a three-path prompt-only extractor (canonical IDs, proper nouns, lowercased n-grams), queries the SPO graph for current-state triples, and appends a <code>&lt;vault-facts&gt;</code> block of raw <code>subject predicate object</code> lines to <code>&lt;vault-context&gt;</code> — off for <code>speed</code>, 200 tokens on <code>balanced</code>, 250 on <code>deep</code>, token-truncated at the triple boundary (v0.9.0)</li>
+<li><strong>Session-scoped focus topic boost</strong> — <code>clawmem focus set "&lt;topic&gt;" --session-id &lt;id&gt;</code> writes a per-session focus file that steers query expansion, reranking, chunk selection, snippet extraction, and post-composite-score topic boosting (1.4× match / 0.75× demote) for that session only — session-isolated, fail-open, never writes to SQLite or lifecycle columns (v0.9.0)</li>
 <li><strong>Scores document quality</strong> using structure, keywords, and metadata richness signals</li>
 <li><strong>Boosts co-accessed documents</strong> — notes frequently surfaced together get retrieval reinforcement</li>
 <li><strong>Decomposes complex queries</strong> into typed retrieval clauses (BM25/vector/graph) for multi-topic questions</li>
@@ -254,7 +254,7 @@ cd ~/clawmem &amp;&amp; bun install
 ln -sf ~/clawmem/bin/clawmem ~/.bun/bin/clawmem
 </code></pre>
 <h4>Setup roadmap</h4>
-<p>After installing, here&#39;s the full journey from zero to working memory:</p>
+<p>After installing, here's the full journey from zero to working memory:</p>
 <table>
 <thead>
 <tr>
@@ -346,9 +346,9 @@ clawmem embed             # Re-embed if upgrading embedding models (not needed f
 clawmem setup mcp      # Register MCP server in ~/.claude.json (31 tools)
 </code></pre>
 <p><strong>Automatic (90%):</strong> <code>context-surfacing</code> injects relevant memory on every prompt. <code>postcompact-inject</code> re-injects state after compaction. <code>decision-extractor</code>, <code>handoff-generator</code>, <code>feedback-loop</code> capture session state on stop.</p>
-<p><strong>Agent-initiated (10%):</strong> MCP tools (<code>query</code>, <code>intent_search</code>, <code>find_causal_links</code>, <code>timeline</code>, etc.) for targeted retrieval when hooks don&#39;t surface what&#39;s needed.</p>
+<p><strong>Agent-initiated (10%):</strong> MCP tools (<code>query</code>, <code>intent_search</code>, <code>find_causal_links</code>, <code>timeline</code>, etc.) for targeted retrieval when hooks don't surface what's needed.</p>
 <h5>OpenClaw</h5>
-<p>ClawMem registers as a native OpenClaw memory plugin (<code>kind: memory</code>, v0.10.0+). Same 90/10 automatic retrieval, delivered through OpenClaw&#39;s plugin-hook bus instead of Claude Code hooks.</p>
+<p>ClawMem registers as a native OpenClaw memory plugin (<code>kind: memory</code>, v0.10.0+). Same 90/10 automatic retrieval, delivered through OpenClaw's plugin-hook bus instead of Claude Code hooks.</p>
 <pre><code class="language-bash"># v0.10.4+: profile-aware. Delegates to `openclaw plugins install --force` when the OpenClaw CLI
 # is on PATH (auto-enables the plugin, honors OPENCLAW_STATE_DIR, OPENCLAW_CONFIG_PATH, --profile).
 # Falls back to a recursive copy honoring OPENCLAW_STATE_DIR when the CLI is absent.
@@ -361,21 +361,21 @@ OPENCLAW_STATE_DIR=~/.openclaw-dev clawmem setup openclaw
 <ul>
 <li><strong><code>before_prompt_build</code> hook (load-bearing)</strong> - prompt-aware retrieval (context-surfacing + session-bootstrap) AND the pre-emptive <code>precompact-extract</code> run when token usage approaches the compaction threshold. This is the authoritative path for precompact state capture because it runs synchronously before the LLM call that would trigger compaction, so it cannot race the compactor.</li>
 <li><strong><code>agent_end</code> hook</strong> - decision extraction, handoff generation, feedback loop (parallel, fire-and-forget at the OpenClaw call site). OpenClaw v2026.4.26+ also enforces a 30s default void-hook timeout on <code>agent_end</code> — slow handlers are logged but the underlying postrun work is not cancelled (fail-open).</li>
-<li><strong><code>before_compaction</code> hook (defense-in-depth fallback)</strong> - fires <code>precompact-extract</code> again for the rare case where <code>before_prompt_build</code>&#39;s proximity heuristic missed a sudden token-count jump. Fire-and-forget at OpenClaw&#39;s call site, so it races the compactor and offers no correctness guarantee on its own — the <code>before_prompt_build</code> path is what actually holds the invariant.</li>
+<li><strong><code>before_compaction</code> hook (defense-in-depth fallback)</strong> - fires <code>precompact-extract</code> again for the rare case where <code>before_prompt_build</code>'s proximity heuristic missed a sudden token-count jump. Fire-and-forget at OpenClaw's call site, so it races the compactor and offers no correctness guarantee on its own — the <code>before_prompt_build</code> path is what actually holds the invariant.</li>
 <li><strong><code>session_start</code> hook</strong> - session registration + cached first-turn bootstrap context</li>
 <li><strong>5 agent tools</strong> - <code>clawmem_search</code>, <code>clawmem_get</code>, <code>clawmem_session_log</code>, <code>clawmem_timeline</code>, <code>clawmem_similar</code></li>
 </ul>
-<p>Disable OpenClaw&#39;s native memory search to avoid duplicate injection:</p>
-<pre><code class="language-bash">openclaw config set agents.defaults.memorySearch.extraPaths &quot;[]&quot;
+<p>Disable OpenClaw's native memory search to avoid duplicate injection:</p>
+<pre><code class="language-bash">openclaw config set agents.defaults.memorySearch.extraPaths "[]"
 </code></pre>
-<p>ClawMem coexists cleanly with OpenClaw&#39;s <a href="https://docs.openclaw.ai/concepts/active-memory">Active Memory</a> plugin (v2026.4.10+) and, on OpenClaw v2026.4.18+ (#65411), with the <code>memory-core</code> dreaming sidecar — both run alongside ClawMem instead of being mutually exclusive. They search different backends and inject into different prompt regions, so they do not conflict. See the <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/openclaw-plugin.md#coexistence-with-openclaw-active-memory">OpenClaw plugin guide — Active Memory coexistence</a> and the <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/openclaw-plugin.md#coexistence-with-memory-core-dreaming-sidecar">memory-core dreaming sidecar section</a> for the two patterns.</p>
+<p>ClawMem coexists cleanly with OpenClaw's <a href="https://docs.openclaw.ai/concepts/active-memory">Active Memory</a> plugin (v2026.4.10+) and, on OpenClaw v2026.4.18+ (#65411), with the <code>memory-core</code> dreaming sidecar — both run alongside ClawMem instead of being mutually exclusive. They search different backends and inject into different prompt regions, so they do not conflict. See the <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/openclaw-plugin.md#coexistence-with-openclaw-active-memory">OpenClaw plugin guide — Active Memory coexistence</a> and the <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/openclaw-plugin.md#coexistence-with-memory-core-dreaming-sidecar">memory-core dreaming sidecar section</a> for the two patterns.</p>
 <p><strong>Pair ClawMem (memory) with a context-engine plugin (v0.10.0+).</strong> OpenClaw and Hermes maintainers have converged on a two-surface plugin model: one slot for memory plugins (cross-session, retrieval-first) and a separate slot for context-engine plugins (in-session, compression/compaction-first). Under that model ClawMem is a memory layer — it has always been one in Hermes via the <code>MemoryProvider</code> ABC, and v0.10.0 moves the OpenClaw integration to the same semantic slot. You can now run ClawMem in the <code>memory</code> slot alongside an LCM-style compression plugin (for example, <code>lossless-claw</code>) in the <code>context-engine</code> slot. The two plugins do not overlap: one persists across sessions, the other reshapes the live window. See the <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/openclaw-plugin.md#memory-vs-context-engine--the-dual-plugin-surface">OpenClaw plugin guide — memory vs context engine</a> for the full rationale.</p>
 <blockquote>
 <p><strong>OpenClaw v2026.4.11+ recommended (required for ClawMem v0.10.0+).</strong> v2026.4.11 introduced a new plugin discovery contract that requires each plugin directory to ship a <code>package.json</code> with <code>openclaw.extensions</code> declared, and that rejects symlinked plugin directories. ClawMem v0.10.0 includes both fixes. Older ClawMem versions (&lt; v0.10.0) on OpenClaw v2026.4.11+ will fail to discover silently — upgrade ClawMem, then re-run <code>clawmem setup openclaw</code>. See <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/upgrading.md#v090--v0100">docs/guides/upgrading.md</a>.</p>
 </blockquote>
-<p><strong>Alternative:</strong> OpenClaw agents can also use ClawMem&#39;s MCP server directly (<code>clawmem setup mcp</code>), with or without hooks. This gives full access to all 31 MCP tools but bypasses OpenClaw&#39;s plugin lifecycle, so you lose token budget awareness, native compaction orchestration, and the <code>agent_end</code> message pipeline. The native OpenClaw plugin is recommended for new setups; MCP is available as an additional or standalone integration.</p>
+<p><strong>Alternative:</strong> OpenClaw agents can also use ClawMem's MCP server directly (<code>clawmem setup mcp</code>), with or without hooks. This gives full access to all 31 MCP tools but bypasses OpenClaw's plugin lifecycle, so you lose token budget awareness, native compaction orchestration, and the <code>agent_end</code> message pipeline. The native OpenClaw plugin is recommended for new setups; MCP is available as an additional or standalone integration.</p>
 <h5>Hermes Agent</h5>
-<p>ClawMem integrates as a native MemoryProvider plugin — Hermes&#39;s pluggable interface for agent memory. Same automatic retrieval and extraction, delivered through Hermes&#39;s memory lifecycle instead of Claude Code hooks.</p>
+<p>ClawMem integrates as a native MemoryProvider plugin — Hermes's pluggable interface for agent memory. Same automatic retrieval and extraction, delivered through Hermes's memory lifecycle instead of Claude Code hooks.</p>
 <p><strong>Install:</strong></p>
 <pre><code class="language-bash"># Preferred — user-plugin path (Hermes #10529, v2026.4.13+).
 # Survives `git pull` of hermes-agent and avoids dual-registration with bundled providers.
@@ -388,10 +388,10 @@ cp -r /path/to/ClawMem/src/hermes /path/to/hermes-agent/plugins/memory/clawmem
 # Symlink alternative for in-place development (either path).
 ln -s /path/to/ClawMem/src/hermes ${HERMES_HOME:-~/.hermes}/plugins/clawmem
 </code></pre>
-<p><strong>Configure</strong> in your Hermes profile&#39;s <code>.env</code> or environment:</p>
-<pre><code class="language-bash">CLAWMEM_BIN=/path/to/clawmem          # Path to clawmem binary (or ensure it&#39;s on PATH)
+<p><strong>Configure</strong> in your Hermes profile's <code>.env</code> or environment:</p>
+<pre><code class="language-bash">CLAWMEM_BIN=/path/to/clawmem          # Path to clawmem binary (or ensure it's on PATH)
 CLAWMEM_SERVE_PORT=7438                # REST API port (default: 7438)
-CLAWMEM_SERVE_MODE=external            # &quot;external&quot; (you run clawmem serve) or &quot;managed&quot; (plugin manages it)
+CLAWMEM_SERVE_MODE=external            # "external" (you run clawmem serve) or "managed" (plugin manages it)
 CLAWMEM_PROFILE=balanced               # speed | balanced | deep
 </code></pre>
 <p>Then set <code>memory.provider: clawmem</code> in your Hermes <code>config.yaml</code>, or run <code>hermes memory setup</code> to configure interactively.</p>
@@ -405,7 +405,7 @@ CLAWMEM_PROFILE=balanced               # speed | balanced | deep
 <li><strong>Plugin-managed transcript</strong> — maintains its own JSONL transcript for ClawMem hooks</li>
 </ul>
 <p><strong>Requirements:</strong> <code>clawmem</code> binary on PATH and <code>clawmem serve</code> running (external mode) or the plugin starts it automatically (managed mode). Python 3.10+. No pip dependencies beyond Hermes itself (uses <code>urllib</code> for REST calls, <code>httpx</code> optional for better performance).</p>
-<p><strong>Alternative:</strong> Hermes also has built-in MCP client support. You can add ClawMem as an MCP server in Hermes&#39;s <code>config.yaml</code> under <code>mcp_servers</code> for tool-only access. But this misses the lifecycle hooks (prefetch, session_end, pre_compress), so the native plugin is recommended.</p>
+<p><strong>Alternative:</strong> Hermes also has built-in MCP client support. You can add ClawMem as an MCP server in Hermes's <code>config.yaml</code> under <code>mcp_servers</code> for tool-only access. But this misses the lifecycle hooks (prefetch, session_end, pre_compress), so the native plugin is recommended.</p>
 <p>See <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/hermes-plugin.md">Hermes plugin guide</a> for architecture details, lifecycle mapping, and troubleshooting.</p>
 <h5>Multi-Framework Operation</h5>
 <p>All three integrations share the same SQLite vault by default. Claude Code, OpenClaw, and Hermes can run simultaneously — decisions captured in one runtime are immediately available in the others, giving agents persistent shared memory across sessions and platforms. WAL mode + busy_timeout handles concurrent access.</p>
@@ -417,21 +417,21 @@ CLAWMEM_PROFILE=balanced               # speed | balanced | deep
   personal: ~/.cache/clawmem/personal.sqlite
 </code></pre>
 <p><strong>Or via environment variable:</strong></p>
-<pre><code class="language-bash">export CLAWMEM_VAULTS=&#39;{&quot;work&quot;:&quot;~/.cache/clawmem/work.sqlite&quot;,&quot;personal&quot;:&quot;~/.cache/clawmem/personal.sqlite&quot;}&#39;
+<pre><code class="language-bash">export CLAWMEM_VAULTS='{"work":"~/.cache/clawmem/work.sqlite","personal":"~/.cache/clawmem/personal.sqlite"}'
 </code></pre>
 <p><strong>Using vaults with MCP tools:</strong></p>
 <p>All retrieval tools (<code>memory_retrieve</code>, <code>query</code>, <code>search</code>, <code>vsearch</code>, <code>intent_search</code>) accept an optional <code>vault</code> parameter. Omit it to use the default vault.</p>
 <pre><code># Search the default vault (no vault param needed)
-query(&quot;authentication flow&quot;)
+query("authentication flow")
 
 # Search a named vault
-query(&quot;project timeline&quot;, vault=&quot;work&quot;)
+query("project timeline", vault="work")
 
 # List configured vaults
 list_vaults()
 
 # Sync content into a vault
-vault_sync(vault=&quot;work&quot;, content_root=&quot;~/work/docs&quot;)
+vault_sync(vault="work", content_root="~/work/docs")
 </code></pre>
 <p><strong>Single-vault users:</strong> No action needed. Everything works without configuration. The <code>vault</code> parameter is always optional and ignored when no vaults are configured.</p>
 <h4>Inference services (GPU, in-process, or cloud)</h4>
@@ -477,12 +477,12 @@ vault_sync(vault=&quot;work&quot;, content_root=&quot;~/work/docs&quot;)
 <pre><code class="language-bash">./bin/clawmem setup mcp   # Registers in ~/.claude.json
 </code></pre>
 <p><strong>Manual (any MCP client):</strong></p>
-<p>Add to your MCP config (e.g. <code>~/.claude.json</code>, <code>claude_desktop_config.json</code>, or your client&#39;s equivalent):</p>
+<p>Add to your MCP config (e.g. <code>~/.claude.json</code>, <code>claude_desktop_config.json</code>, or your client's equivalent):</p>
 <pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;clawmem&quot;: {
-      &quot;command&quot;: &quot;/absolute/path/to/clawmem/bin/clawmem&quot;,
-      &quot;args&quot;: [&quot;mcp&quot;]
+  "mcpServers": {
+    "clawmem": {
+      "command": "/absolute/path/to/clawmem/bin/clawmem",
+      "args": ["mcp"]
     }
   }
 }
@@ -603,8 +603,8 @@ CLAWMEM_API_TOKEN=secret ./bin/clawmem serve # with bearer token auth
 <p><strong>Auth:</strong> Set <code>CLAWMEM_API_TOKEN</code> env var to require <code>Authorization: Bearer &lt;token&gt;</code> on all requests. If unset, access is open (localhost-only by default). See <code>.env.example</code>.</p>
 <p><strong>Search example:</strong></p>
 <pre><code class="language-bash">curl -X POST http://localhost:7438/search \
-  -H &#39;Content-Type: application/json&#39; \
-  -d &#39;{&quot;query&quot;: &quot;authentication decisions&quot;, &quot;mode&quot;: &quot;hybrid&quot;, &quot;compact&quot;: true}&#39;
+  -H 'Content-Type: application/json' \
+  -d '{"query": "authentication decisions", "mode": "hybrid", "compact": true}'
 </code></pre>
 <h4>Verify Installation</h4>
 <pre><code class="language-bash">./bin/clawmem doctor   # Full health check
@@ -648,9 +648,9 @@ bun test               # Run test suite
 </tr>
 </tbody></table>
 <p><strong>Working in the ClawMem repo:</strong> No action needed — <code>CLAUDE.md</code> (which imports <code>AGENTS.md</code>) loads automatically.</p>
-<p><strong>Using ClawMem from other projects:</strong> Your agent needs instructions on how to use ClawMem&#39;s hooks and MCP tools. Two options:</p>
+<p><strong>Using ClawMem from other projects:</strong> Your agent needs instructions on how to use ClawMem's hooks and MCP tools. Two options:</p>
 <h4>Option A: Copy instructions into your project</h4>
-<p>Copy the contents of <code>AGENTS.md</code> (or the relevant sections) into your project&#39;s own <code>AGENTS.md</code> or <code>CLAUDE.md</code>. Simple but requires manual updates when ClawMem changes.</p>
+<p>Copy the contents of <code>AGENTS.md</code> (or the relevant sections) into your project's own <code>AGENTS.md</code> or <code>CLAUDE.md</code>. Simple but requires manual updates when ClawMem changes.</p>
 <h4>Option B: Add a trigger block (recommended)</h4>
 <p>Add this minimal trigger block to your global <code>~/.claude/CLAUDE.md</code>. It gives the agent routing rules always loaded, and tells it how to find the full reference (SKILL.md) shipped with your installation when deeper guidance is needed:</p>
 <pre><code class="language-markdown">## ClawMem
@@ -662,7 +662,7 @@ Vault: `~/.cache/clawmem/index.sqlite` | Config: `~/.config/clawmem/config.yaml`
 ### Escalation Gate (3 rules — ONLY escalate to MCP tools when one fires)
 
 1. **Low-specificity injection** — `&lt;vault-context&gt;` is empty or lacks the specific fact needed
-2. **Cross-session question** — &quot;why did we decide X&quot;, &quot;what changed since last time&quot;
+2. **Cross-session question** — "why did we decide X", "what changed since last time"
 3. **Pre-irreversible check** — before destructive or hard-to-reverse changes
 
 ### Tool Routing (once escalated)
@@ -671,14 +671,14 @@ Vault: `~/.cache/clawmem/index.sqlite` | Config: `~/.config/clawmem/config.yaml`
 
 **Direct routing** (when calling specific tools):
 
-    &quot;why did we decide X&quot;         → intent_search(query)          NOT query()
-    &quot;what happened last session&quot;  → session_log()                 NOT query()
-    &quot;what else relates to X&quot;      → find_similar(file)            NOT query()
+    "why did we decide X"         → intent_search(query)          NOT query()
+    "what happened last session"  → session_log()                 NOT query()
+    "what else relates to X"      → find_similar(file)            NOT query()
     Complex multi-topic           → query_plan(query)             NOT query()
     General recall                → query(query, compact=true)
     Keyword spot check            → search(query, compact=true)
     Conceptual/fuzzy              → vsearch(query, compact=true)
-    Full content                  → multi_get(&quot;path1,path2&quot;)
+    Full content                  → multi_get("path1,path2")
     Lifecycle health              → lifecycle_status()
     Stale sweep                   → lifecycle_sweep(dry_run=true)
     Restore archived              → lifecycle_restore(query)
@@ -687,7 +687,7 @@ ALWAYS `compact=true` first → review → `multi_get` for full content.
 
 ### Proactive Use (no escalation gate needed)
 
-- User says &quot;remember this&quot; / critical decision made → `memory_pin(query)` immediately
+- User says "remember this" / critical decision made → `memory_pin(query)` immediately
 - User corrects a misconception → `memory_pin(query)` the correction
 - `&lt;vault-context&gt;` surfaces irrelevant/noisy content → `memory_snooze(query, until)` for 30 days
 - Need to correct a memory → `memory_forget(query)`
@@ -697,13 +697,13 @@ ALWAYS `compact=true` first → review → `multi_get` for full content.
 
 - Do NOT use `query()` for everything — match query type to tool, or use `memory_retrieve`
 - Do NOT call query/intent_search every turn — 3 rules above are the only gates
-- Do NOT re-search what&#39;s already in `&lt;vault-context&gt;`
+- Do NOT re-search what's already in `&lt;vault-context&gt;`
 - Do NOT pin everything — pin is for persistent high-priority items, not routine decisions
-- Do NOT forget memories to &quot;clean up&quot; — let confidence decay handle it
+- Do NOT forget memories to "clean up" — let confidence decay handle it
 - Do NOT wait for curator to pin decisions — pin immediately when critical
 
 For detailed operating guidance (escalation gate, tool routing, query-optimization levers, pipeline behavior, composite scoring, lifecycle), find and read the shipped SKILL.md (setup, inference, and internals live in AGENTS.md + docs/):
-  Bash: CLAWMEM_ROOT=$(cd &quot;$(dirname &quot;$(which clawmem)&quot;)/..&quot; &amp;&amp; pwd) &amp;&amp; echo &quot;$CLAWMEM_ROOT/SKILL.md&quot;
+  Bash: CLAWMEM_ROOT=$(cd "$(dirname "$(which clawmem)")/.." &amp;&amp; pwd) &amp;&amp; echo "$CLAWMEM_ROOT/SKILL.md"
   Then: Read the file at that path.
 </code></pre>
 <p>This gives your agent the 3-rule gate, tool routing, and proactive behaviors always loaded. When it needs deeper guidance, it locates and reads the full SKILL.md reference shipped with your installation — no symlinks or skill registration required.</p>
@@ -785,7 +785,7 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>query</code></td>
-<td>Full hybrid pipeline (BM25 + vector + rerank) — general-purpose when query type is unclear. WRONG for &quot;why&quot; questions (use <code>intent_search</code>) or cross-session queries (use <code>session_log</code>). Prefer <code>memory_retrieve</code> for auto-routing. Intent hint, strong-signal bypass, chunk dedup, candidateLimit, MMR diversity, compact mode.</td>
+<td>Full hybrid pipeline (BM25 + vector + rerank) — general-purpose when query type is unclear. WRONG for "why" questions (use <code>intent_search</code>) or cross-session queries (use <code>session_log</code>). Prefer <code>memory_retrieve</code> for auto-routing. Intent hint, strong-signal bypass, chunk dedup, candidateLimit, MMR diversity, compact mode.</td>
 </tr>
 <tr>
 <td><code>get</code></td>
@@ -797,7 +797,7 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>find_similar</code></td>
-<td>USE THIS for &quot;what else relates to X&quot;, &quot;show me similar docs&quot;. Finds k-NN vector neighbors — discovers connections beyond keyword overlap that search/query cannot find.</td>
+<td>USE THIS for "what else relates to X", "show me similar docs". Finds k-NN vector neighbors — discovers connections beyond keyword overlap that search/query cannot find.</td>
 </tr>
 </tbody></table>
 <h4>Intent-Aware Search</h4>
@@ -810,11 +810,11 @@ clawmem status                                  Quick index status
 </thead>
 <tbody><tr>
 <td><code>intent_search</code></td>
-<td>USE THIS for &quot;why did we decide X&quot;, &quot;what caused Y&quot;, &quot;who worked on Z&quot;. Classifies intent (WHY/WHEN/ENTITY/WHAT), traverses causal + semantic graph edges. Returns decision chains that <code>query()</code> cannot find.</td>
+<td>USE THIS for "why did we decide X", "what caused Y", "who worked on Z". Classifies intent (WHY/WHEN/ENTITY/WHAT), traverses causal + semantic graph edges. Returns decision chains that <code>query()</code> cannot find.</td>
 </tr>
 <tr>
 <td><code>query_plan</code></td>
-<td>USE THIS for complex multi-topic queries (&quot;tell me about X and also Y&quot;, &quot;compare A with B&quot;). Decomposes into parallel typed clauses (bm25/vector/graph), executes each, merges via RRF. <code>query()</code> searches as one blob — this tool splits topics and routes each optimally.</td>
+<td>USE THIS for complex multi-topic queries ("tell me about X and also Y", "compare A with B"). Decomposes into parallel typed clauses (bm25/vector/graph), executes each, merges via RRF. <code>query()</code> searches as one blob — this tool splits topics and routes each optimally.</td>
 </tr>
 </tbody></table>
 <p><strong><code>intent_search</code> pipeline:</strong> Query → Intent Classification → BM25 + Vector → Intent-Weighted RRF → Graph Expansion (WHY/ENTITY intents) → Cross-Encoder Reranking → Composite Scoring</p>
@@ -833,15 +833,15 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>find_causal_links</code></td>
-<td>Trace decision chains: &quot;what led to X&quot;, &quot;how we got from A to B&quot;. Follow up <code>intent_search</code> with this tool on a top result to walk the full causal chain. Traverses causes / caused_by / both up to N hops with depth-annotated reasoning.</td>
+<td>Trace decision chains: "what led to X", "how we got from A to B". Follow up <code>intent_search</code> with this tool on a top result to walk the full causal chain. Traverses causes / caused_by / both up to N hops with depth-annotated reasoning.</td>
 </tr>
 <tr>
 <td><code>kg_query</code></td>
-<td>Query the SPO knowledge graph: &quot;what does X relate to?&quot;, &quot;what was true about X when?&quot;. Returns temporal entity-relationship triples with validity windows. Accepts entity name (resolved via <code>searchEntities</code>) or canonical ID in <code>vault:type:slug</code> form. Triples are populated by the decision-extractor hook from observer-emitted <code>&lt;triples&gt;</code> blocks.</td>
+<td>Query the SPO knowledge graph: "what does X relate to?", "what was true about X when?". Returns temporal entity-relationship triples with validity windows. Accepts entity name (resolved via <code>searchEntities</code>) or canonical ID in <code>vault:type:slug</code> form. Triples are populated by the decision-extractor hook from observer-emitted <code>&lt;triples&gt;</code> blocks.</td>
 </tr>
 <tr>
 <td><code>memory_evolution_status</code></td>
-<td>Show how a document&#39;s A-MEM metadata evolved over time</td>
+<td>Show how a document's A-MEM metadata evolved over time</td>
 </tr>
 <tr>
 <td><code>timeline</code></td>
@@ -909,7 +909,7 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>memory_pin</code></td>
-<td>Pin a memory for +0.3 composite boost. USE PROACTIVELY when: user states a persistent constraint, makes an architecture decision, or corrects a misconception. Don&#39;t wait for curator — pin critical decisions immediately.</td>
+<td>Pin a memory for +0.3 composite boost. USE PROACTIVELY when: user states a persistent constraint, makes an architecture decision, or corrects a misconception. Don't wait for curator — pin critical decisions immediately.</td>
 </tr>
 <tr>
 <td><code>memory_snooze</code></td>
@@ -929,7 +929,7 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>session_log</code></td>
-<td>USE THIS for &quot;last time&quot;, &quot;yesterday&quot;, &quot;what happened&quot;, &quot;what did we do&quot;. Returns session history with handoffs and file changes. DO NOT use <code>query()</code> for cross-session questions — this tool has session-specific data that search cannot find.</td>
+<td>USE THIS for "last time", "yesterday", "what happened", "what did we do". Returns session history with handoffs and file changes. DO NOT use <code>query()</code> for cross-session questions — this tool has session-specific data that search cannot find.</td>
 </tr>
 <tr>
 <td><code>profile</code></td>
@@ -1051,7 +1051,7 @@ clawmem status                                  Quick index status
 <li><strong>Temporal</strong> — chronological document ordering</li>
 <li><strong>Causal</strong> — LLM-inferred cause→effect from Observer facts + Beads <code>blocks</code>/<code>waits-for</code> deps</li>
 <li><strong>Supporting</strong> — LLM-analyzed document relationships + Beads <code>discovered-from</code> deps</li>
-<li><strong>Contradicts</strong> — LLM-analyzed document relationships. Additional <code>contradicts</code> edges are inserted by the consolidation worker&#39;s merge-time contradiction gate (v0.7.1) when it blocks a Phase 2 merge under the <code>link</code> policy, and by Phase 3 deductive synthesis when a new draft contradicts a prior deductive observation.</li>
+<li><strong>Contradicts</strong> — LLM-analyzed document relationships. Additional <code>contradicts</code> edges are inserted by the consolidation worker's merge-time contradiction gate (v0.7.1) when it blocks a Phase 2 merge under the <code>link</code> policy, and by Phase 3 deductive synthesis when a new draft contradicts a prior deductive observation.</li>
 </ul>
 <h4>Content Type Scoring</h4>
 <table>
@@ -1148,7 +1148,7 @@ clawmem status                                  Quick index status
 <p><strong>Frequency boost:</strong> Documents with higher revision counts or duplicate counts get a durability signal: <code>freqSignal = (revisions - 1) × 2 + (duplicates - 1)</code>, <code>freqBoost = min(0.10, log1p(freqSignal) × 0.03)</code>. Revision count (content evolution) is weighted 2× vs duplicate count (ingest repetition). Capped at 10%.</p>
 <p><strong>Pin boost:</strong> Pinned documents get +0.3 additive boost (capped at 1.0). Use <code>memory_pin</code> to pin critical memories.</p>
 <p><strong>Snooze:</strong> Snoozed documents are filtered out of context surfacing until their snooze date. Use <code>memory_snooze</code> for temporary suppression.</p>
-<p><strong>Contradiction detection:</strong> When <code>decision-extractor</code> identifies a new decision that contradicts a prior one, the old decision&#39;s confidence is automatically lowered (−0.25 for contradictions, −0.15 for updates). Superseded decisions naturally fade from context surfacing without manual intervention. <strong>v0.7.1 adds a second layer at the consolidation boundary:</strong> before the background worker merges a new pattern into an existing consolidated observation, a deterministic heuristic (negation asymmetry, number/date mismatch) plus an LLM check detect contradictions. Blocked merges route to either <code>link</code> policy (both rows remain active + a <code>contradicts</code> edge is inserted, default) or <code>supersede</code> policy (old row marked <code>status=&#39;inactive&#39;</code>). Configurable via <code>CLAWMEM_CONTRADICTION_POLICY</code> and <code>CLAWMEM_CONTRADICTION_MIN_CONFIDENCE</code>.</p>
+<p><strong>Contradiction detection:</strong> When <code>decision-extractor</code> identifies a new decision that contradicts a prior one, the old decision's confidence is automatically lowered (−0.25 for contradictions, −0.15 for updates). Superseded decisions naturally fade from context surfacing without manual intervention. <strong>v0.7.1 adds a second layer at the consolidation boundary:</strong> before the background worker merges a new pattern into an existing consolidated observation, a deterministic heuristic (negation asymmetry, number/date mismatch) plus an LLM check detect contradictions. Blocked merges route to either <code>link</code> policy (both rows remain active + a <code>contradicts</code> edge is inserted, default) or <code>supersede</code> policy (old row marked <code>status='inactive'</code>). Configurable via <code>CLAWMEM_CONTRADICTION_POLICY</code> and <code>CLAWMEM_CONTRADICTION_MIN_CONFIDENCE</code>.</p>
 <h3>Features</h3>
 <h4>A-MEM (Adaptive Memory Evolution)</h4>
 <p>Documents are automatically enriched with structured metadata when indexed:</p>
@@ -1157,7 +1157,7 @@ clawmem status                                  Quick index status
 <li><strong>Tags</strong> (3-5 broad categories)</li>
 <li><strong>Context</strong> (1-2 sentence description)</li>
 </ul>
-<p>When new documents create links, neighboring documents&#39; metadata evolves — keywords merge, context updates, and the evolution history is tracked with vers</p>
+<p>When new documents create links, neighboring documents' metadata evolves — keywords merge, context updates, and the evolution history is tracked with vers</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/yoloshii/ClawMem#readme">Continue reading on GitHub</a></em></p>
 
@@ -1172,7 +1172,7 @@ clawmem status                                  Quick index status
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.9K</div>
+        <div class="stars">★ 60.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -1184,7 +1184,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 334</div>
+        <div class="stars">★ 335</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -1192,7 +1192,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 213</div>
+        <div class="stars">★ 214</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -1200,7 +1200,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 24.8K</div>
+        <div class="stars">★ 24.9K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

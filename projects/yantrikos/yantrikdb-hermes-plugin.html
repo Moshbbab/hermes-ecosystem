@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 65
+    "userInteractionCount": 67
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">YantrikDB memory provider for NousResearch/hermes-agent — self-maintaining memory with benchmarked recall, self-tuning ranking, contradiction tracking, proactive hygiene, and explainable recall.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 65</span>
+    <span class="stars">★ 67</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -155,18 +155,18 @@
 <blockquote>
 <p><strong>YantrikDB as a memory provider for <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a>.</strong> Self-maintaining memory — canonicalizes duplicates, surfaces contradictions, explains recall — in a drop-in plugin. As of <strong>v0.2.0</strong> the default backend is <strong>in-process</strong> (<code>pip install</code> and go, no separate server).</p>
 </blockquote>
-<p>This repository <strong>is</strong> the canonical distribution. Per Hermes maintainer guidance, new memory providers aren&#39;t being merged upstream — the recommended pattern is standalone plugins that users install via <code>pip</code> and register with their Hermes home directory. That keeps the version cadence, CI gating, issue triage, and review cycle on the plugin author&#39;s side, so fixes ship the same day they&#39;re ready instead of waiting on upstream review bandwidth.</p>
+<p>This repository <strong>is</strong> the canonical distribution. Per Hermes maintainer guidance, new memory providers aren't being merged upstream — the recommended pattern is standalone plugins that users install via <code>pip</code> and register with their Hermes home directory. That keeps the version cadence, CI gating, issue triage, and review cycle on the plugin author's side, so fixes ship the same day they're ready instead of waiting on upstream review bandwidth.</p>
 <h3>Why this exists</h3>
 <p>Two recurring observations from the Hermes community map directly to what yantrikdb does:</p>
 <blockquote>
-<p>&quot;Compression was silently dropping earlier constraints by turn 50.&quot; — Hermes developer building a long-running coding agent (<a href="https://hermes-agent.nousresearch.com/docs/user-stories">user-stories</a>)</p>
+<p>"Compression was silently dropping earlier constraints by turn 50." — Hermes developer building a long-running coding agent (<a href="https://hermes-agent.nousresearch.com/docs/user-stories">user-stories</a>)</p>
 </blockquote>
 <p>The <code>on_pre_compress</code> hook injects the highest-salience memories before Hermes compresses, so constraints survive long sessions. Recency-aware ranking + <code>conflicts()</code> makes superseded claims visible instead of letting them silently outrank their replacements.</p>
 <blockquote>
-<p>&quot;Spent 200-400 hours building a memory kernel because standard vector approaches dropped important constraints; successful implementations used temporal context graphs with lifecycle management — promotion / demotion / supersession — rather than vector similarity alone.&quot; — Hermes developer who built their own memory layer after vector approaches failed (<a href="https://hermes-agent.nousresearch.com/docs/user-stories">user-stories</a>)</p>
+<p>"Spent 200-400 hours building a memory kernel because standard vector approaches dropped important constraints; successful implementations used temporal context graphs with lifecycle management — promotion / demotion / supersession — rather than vector similarity alone." — Hermes developer who built their own memory layer after vector approaches failed (<a href="https://hermes-agent.nousresearch.com/docs/user-stories">user-stories</a>)</p>
 </blockquote>
-<p>This is the substrate yantrikdb already ships: temporal context graph via <code>relate()</code>, lifecycle via <code>consolidation_status</code> + <code>forget()</code> + the <code>think()</code> maintenance pass, recency ranking, first-class conflicts/canonicalization. Drop-in via <code>hermes plugins install</code>. The 200-400 hours are someone else&#39;s; you get the substrate.</p>
-<h4>And what other Hermes memory providers don&#39;t have</h4>
+<p>This is the substrate yantrikdb already ships: temporal context graph via <code>relate()</code>, lifecycle via <code>consolidation_status</code> + <code>forget()</code> + the <code>think()</code> maintenance pass, recency ranking, first-class conflicts/canonicalization. Drop-in via <code>hermes plugins install</code>. The 200-400 hours are someone else's; you get the substrate.</p>
+<h4>And what other Hermes memory providers don't have</h4>
 <table>
 <thead>
 <tr>
@@ -177,13 +177,13 @@
 </thead>
 <tbody><tr>
 <td>Agent-authored skills with outcome ledger (<code>yantrikdb_skill_define</code> / <code>_search</code> / <code>_outcome</code>)</td>
-<td>✓ first-class, DB-native peer to Hermes&#39; filesystem Markdown skills</td>
+<td>✓ first-class, DB-native peer to Hermes' filesystem Markdown skills</td>
 <td>filesystem-only (Hermes built-in)</td>
 </tr>
 <tr>
 <td>Contradiction tracking (<code>conflicts()</code> + <code>resolve_conflict()</code>)</td>
 <td>✓ first-class primitive</td>
-<td>not in <a href="https://docs.mem0.ai">mem0&#39;s 2026 taxonomy</a></td>
+<td>not in <a href="https://docs.mem0.ai">mem0's 2026 taxonomy</a></td>
 </tr>
 <tr>
 <td>Explainable recall (<code>why_retrieved</code> per result)</td>
@@ -222,7 +222,7 @@
 </tr>
 <tr>
 <td>Knowledge gaps (<code>yantrikdb_knowledge_gaps</code>)</td>
-<td>✓ v0.7.0 — &quot;what is my memory missing?&quot; from real recall demand</td>
+<td>✓ v0.7.0 — "what is my memory missing?" from real recall demand</td>
 <td>not surfaced</td>
 </tr>
 <tr>
@@ -239,21 +239,21 @@
 <h3>End-to-end demo — substrate growing through the skill lifecycle</h3>
 <p><img src="https://raw.githubusercontent.com/yantrikos/yantrikdb-hermes-plugin/main/assets/demos/skill-lifecycle/demo_visual.gif" alt="Constellation animation of the substrate growing"></p>
 <p>Six skills from prior sessions, color-coded by type. Session 1: the agent adds a 7th (pink, just-created). Session 2 search highlights the relevant node, outcome recorded turns it green. Source: <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/assets/demos/skill-lifecycle/demo_visual.py"><code>demo_visual.py</code></a>.</p>
-<h4>What&#39;s actually running underneath</h4>
+<h4>What's actually running underneath</h4>
 <p><img src="https://raw.githubusercontent.com/yantrikos/yantrikdb-hermes-plugin/main/assets/demos/skill-lifecycle/demo_llm.gif" alt="LLM-driven skill lifecycle"></p>
-<p><code>gpt-4o-mini</code> receives the plugin&#39;s 15 tool schemas via OpenAI&#39;s chat-completions API and chooses when to call each one. In session 1 it autonomously picks the <code>skill_id</code> (<code>release.yantrikos.clean</code>), <code>applies_to</code> tags, and body for a workflow it just learned. In session 2 — fresh provider instance, same substrate — it searches the substrate, finds the skill, follows it, and records an outcome. Two real rids land. The autonomy loop closes in ~10 seconds.</p>
+<p><code>gpt-4o-mini</code> receives the plugin's 15 tool schemas via OpenAI's chat-completions API and chooses when to call each one. In session 1 it autonomously picks the <code>skill_id</code> (<code>release.yantrikos.clean</code>), <code>applies_to</code> tags, and body for a workflow it just learned. In session 2 — fresh provider instance, same substrate — it searches the substrate, finds the skill, follows it, and records an outcome. Two real rids land. The autonomy loop closes in ~10 seconds.</p>
 <p>Sources: <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/assets/demos/skill-lifecycle/demo_llm.py"><code>demo_llm.py</code></a> + <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/assets/demos/skill-lifecycle/transcript-llm.txt"><code>transcript-llm.txt</code></a> + <a href="./assets/demos/skill-lifecycle/demo_llm.tape"><code>demo_llm.tape</code></a> for rendering. A scripted (no API key required) deterministic version is also included: <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/assets/demos/skill-lifecycle/demo.py"><code>demo.py</code></a> / <a href="./assets/demos/skill-lifecycle/demo.gif"><code>demo.gif</code></a>.</p>
-<p>The plugin&#39;s <code>handle_tool_call</code> dispatch path you see in both demos is the same entry point Hermes invokes internally. For larger-scale evidence of LLM-driven autonomy: <a href="https://yantrikdb.com/guides/autonomous-skills/"><code>yantrikdb.com/guides/autonomous-skills/</code></a> documents 17 skills authored by Claude across many sessions on one production substrate, with 9 showing cross-session reuse via the outcome ledger.</p>
+<p>The plugin's <code>handle_tool_call</code> dispatch path you see in both demos is the same entry point Hermes invokes internally. For larger-scale evidence of LLM-driven autonomy: <a href="https://yantrikdb.com/guides/autonomous-skills/"><code>yantrikdb.com/guides/autonomous-skills/</code></a> documents 17 skills authored by Claude across many sessions on one production substrate, with 9 showing cross-session reuse via the outcome ledger.</p>
 <h3>Install (default — embedded backend)</h3>
 <p>The v0.2.0 default backend is <strong>in-process</strong>: no separate server, no token, no GPU, no network. Bundled <code>potion-base-2M</code> static embedder (<del>8 MB, dim=64) loads on first call (</del>80 ms one-time warmup) and stays in-process.</p>
 <h4>Option A — <code>hermes plugins install</code> (v0.4.5+, one command for the plugin source)</h4>
 <pre><code class="language-bash">source ~/.hermes/hermes-agent/venv/bin/activate
 hermes plugins install yantrikos/yantrikdb-hermes-plugin
 pip install yantrikdb                    # ~10 MB; in the same Python env as Hermes
-hermes memory setup                      # → Select &quot;yantrikdb&quot; and press Enter
+hermes memory setup                      # → Select "yantrikdb" and press Enter
 hermes memory status                     # → Provider: yantrikdb  Status: available ✓
 </code></pre>
-<p><code>hermes plugins install</code> clones the repo into <code>~/.hermes/plugins/yantrikdb/</code> based on <code>plugin.yaml</code>&#39;s <code>name:</code> field. The <code>pip install yantrikdb</code> step gets the engine — <code>hermes plugins install</code> doesn&#39;t auto-install pip dependencies, so this is a separate step. <strong>Crucially: pip-install into the same Python environment Hermes runs from.</strong> If Hermes was installed via <code>pipx</code>, use <code>pipx inject hermes-agent yantrikdb</code>. If you&#39;re using a regular venv, source it first.</p>
+<p><code>hermes plugins install</code> clones the repo into <code>~/.hermes/plugins/yantrikdb/</code> based on <code>plugin.yaml</code>'s <code>name:</code> field. The <code>pip install yantrikdb</code> step gets the engine — <code>hermes plugins install</code> doesn't auto-install pip dependencies, so this is a separate step. <strong>Crucially: pip-install into the same Python environment Hermes runs from.</strong> If Hermes was installed via <code>pipx</code>, use <code>pipx inject hermes-agent yantrikdb</code>. If you're using a regular venv, source it first.</p>
 <p>If your Hermes environment uses <code>uv</code> and does not have <code>pip</code> available, install with the Hermes Python explicitly:</p>
 <pre><code class="language-bash">uv pip install --python ~/.hermes/hermes-agent/venv/bin/python yantrikdb
 </code></pre>
@@ -261,7 +261,7 @@ hermes memory status                     # → Provider: yantrikdb  Status: avai
 <pre><code class="language-bash">source ~/.hermes/hermes-agent/venv/bin/activate
 pip install yantrikdb-hermes-plugin     # pulls yantrikdb engine + the provider source
 yantrikdb-hermes install                # registers ~/.hermes/plugins/yantrikdb
-hermes memory setup                     # → Select &quot;yantrikdb&quot; and press Enter
+hermes memory setup                     # → Select "yantrikdb" and press Enter
 hermes memory status                    # → Provider: yantrikdb  Status: available ✓
 </code></pre>
 <p>If your Hermes environment uses <code>uv</code> and does not have <code>pip</code> available, install with the Hermes Python explicitly:</p>
@@ -293,7 +293,7 @@ uv pip install --python ~/.hermes/hermes-agent/venv/bin/python --upgrade yantrik
 </code></pre>
 <p><code>--force</code> replaces the registered plugin directory. Back up any plugin-local files first if you keep custom files under <code>~/.hermes/plugins/yantrikdb/</code>; normal YantrikDB settings belong in <code>~/.hermes/.env</code> and are not touched.</p>
 <h4>Uninstalling</h4>
-<p>Option A uses Hermes&#39; plugin manager for the plugin source, plus pip for the engine dependency:</p>
+<p>Option A uses Hermes' plugin manager for the plugin source, plus pip for the engine dependency:</p>
 <pre><code class="language-bash">source ~/.hermes/hermes-agent/venv/bin/activate
 hermes plugins remove yantrikdb
 pip uninstall yantrikdb
@@ -322,12 +322,12 @@ pip uninstall yantrikdb-hermes-plugin yantrikdb
 </ul>
 <p>If <code>hermes memory status</code> shows <code>Status: not available ✗</code> after install, the most common cause is the plugin landed in a different Python than Hermes is using. <code>which hermes &amp;&amp; which python</code> will confirm.</p>
 <h4>Optional: tier up the embedder</h4>
-<pre><code class="language-bash">echo &quot;YANTRIKDB_EMBEDDER=potion-base-8M&quot; &gt;&gt; ~/.hermes/.env     # 28 MB, dim=256, ~92% MiniLM
+<pre><code class="language-bash">echo "YANTRIKDB_EMBEDDER=potion-base-8M" &gt;&gt; ~/.hermes/.env     # 28 MB, dim=256, ~92% MiniLM
 # or potion-base-32M for 121 MB, dim=512, ~95% MiniLM
 # or multilingual via the v0.4.2 model2vec path:
-echo &quot;YANTRIKDB_EMBEDDER_MODEL2VEC=minishlab/potion-multilingual-128M&quot; &gt;&gt; ~/.hermes/.env
+echo "YANTRIKDB_EMBEDDER_MODEL2VEC=minishlab/potion-multilingual-128M" &gt;&gt; ~/.hermes/.env
 # or the broader HF ecosystem via sentence-transformers:
-echo &quot;YANTRIKDB_EMBEDDER_HF=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2&quot; &gt;&gt; ~/.hermes/.env
+echo "YANTRIKDB_EMBEDDER_HF=sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2" &gt;&gt; ~/.hermes/.env
 </code></pre>
 <h4>Optional: quiet the HuggingFace embedder</h4>
 <p><code>YANTRIKDB_EMBEDDER_HF</code> uses <code>sentence-transformers</code>, which by default emits noise to stdout — tqdm progress bars on every encode and a one-time HF Hub auth warning at startup. The plugin disables the per-encode progress bars internally (v0.4.12+). For the rest, add to your <code>.env</code>:</p>
@@ -336,7 +336,7 @@ TRANSFORMERS_VERBOSITY=error
 # Optional, when running fully offline after the first download:
 HF_HUB_OFFLINE=1
 </code></pre>
-<p>Without these, sentence-transformers / huggingface_hub output can pollute the agent&#39;s own stdout stream.</p>
+<p>Without these, sentence-transformers / huggingface_hub output can pollute the agent's own stdout stream.</p>
 <h3>Install (alternative — HTTP backend, for HA cluster setups)</h3>
 <p>If you run multiple Hermes instances that need to share one memory store, or you want HA via raft:</p>
 <pre><code class="language-bash">docker run -d -p 7438:7438 -v yantrikdb-data:/var/lib/yantrikdb \
@@ -354,7 +354,7 @@ EOF
 <p>Same plugin, same 8 tools, same hooks, same provider contract — just talks HTTP to a separately-managed server instead of running the engine in-process.</p>
 <p>Full config, tool reference, troubleshooting: <strong><a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/yantrikdb/README.md">yantrikdb/README.md</a></strong>.</p>
 <h3>What it does</h3>
-<p>The differentiator versus other Hermes memory plugins is not the vector store — it&#39;s what happens <em>after</em> the write:</p>
+<p>The differentiator versus other Hermes memory plugins is not the vector store — it's what happens <em>after</em> the write:</p>
 <table>
 <thead>
 <tr>
@@ -391,21 +391,21 @@ EOF
 </tbody></table>
 <p>Twelve tools exposed to the agent by default: <code>yantrikdb_remember</code>, <code>_recall</code>, <code>_forget</code>, <code>_think</code>, <code>_conflicts</code>, <code>_resolve_conflict</code>, <code>_relate</code>, <code>_stats</code>, plus the trigger-lifecycle consumers <code>_pending_triggers</code>, <code>_acknowledge_trigger</code>, <code>_dismiss_trigger</code>, <code>_act_on_trigger</code> (v0.4.13+). Three additional <strong>opt-in</strong> skill tools (v0.3.0+): <code>_skill_search</code>, <code>_skill_define</code>, <code>_skill_outcome</code> — see <a href="#skills-opt-in-v030">Skills</a> below.</p>
 <h4>Tool response envelope (v0.4.16+)</h4>
-<p>Every tool response carries the same four envelope fields so an LLM later asked &quot;what did I just do?&quot; can&#39;t confabulate success on a silent failure:</p>
+<p>Every tool response carries the same four envelope fields so an LLM later asked "what did I just do?" can't confabulate success on a silent failure:</p>
 <pre><code class="language-json">{
-  &quot;status&quot;: &quot;ok&quot; | &quot;failed&quot;,
-  &quot;ok&quot;: true | false,
-  &quot;tool&quot;: &quot;yantrikdb_remember&quot;,
-  &quot;ts&quot;: 1748394801.42,
+  "status": "ok" | "failed",
+  "ok": true | false,
+  "tool": "yantrikdb_remember",
+  "ts": 1748394801.42,
   ...tool-specific keys preserved verbatim (rid, stored, results, ...)
 }
 </code></pre>
 <p>Failure responses additionally carry <code>error</code> (legacy key) and <code>reason</code> (alias). The envelope is purely additive — existing agent code that reads <code>rid</code> / <code>stored</code> / <code>results</code> / etc. continues working unchanged.</p>
-<p>Why this matters: tool failures used to be communicated as <code>{&quot;error&quot;: &quot;...&quot;}</code> only. When the agent&#39;s narrative LLM was later asked to summarize the session, it could confabulate plausible completion because the failure wasn&#39;t loudly present in machine-readable form. The new <code>status: &quot;failed&quot;</code> + <code>ok: false</code> are intentionally redundant — the word &quot;failed&quot; lands during narrative summarization, the boolean lands for programmatic consumers. Pattern documented by yantrikdb-agi after a real incident where the agent described a <code>telegram_send</code> that never happened.</p>
+<p>Why this matters: tool failures used to be communicated as <code>{"error": "..."}</code> only. When the agent's narrative LLM was later asked to summarize the session, it could confabulate plausible completion because the failure wasn't loudly present in machine-readable form. The new <code>status: "failed"</code> + <code>ok: false</code> are intentionally redundant — the word "failed" lands during narrative summarization, the boolean lands for programmatic consumers. Pattern documented by yantrikdb-agi after a real incident where the agent described a <code>telegram_send</code> that never happened.</p>
 <h4>Trigger lifecycle (v0.4.13+)</h4>
 <p><code>yantrikdb_think</code> flags redundancies, conflicts, and surprise cross-domain connections as <strong>triggers</strong> — substrate signals the agent can inspect and close out:</p>
 <ul>
-<li><code>yantrikdb_pending_triggers</code> — list what&#39;s waiting (with <code>urgency</code>, <code>reason</code>, <code>suggested_action</code>, and the <code>source_rids</code> that produced it).</li>
+<li><code>yantrikdb_pending_triggers</code> — list what's waiting (with <code>urgency</code>, <code>reason</code>, <code>suggested_action</code>, and the <code>source_rids</code> that produced it).</li>
 <li><code>yantrikdb_acknowledge_trigger</code> — agent saw it, no follow-up needed.</li>
 <li><code>yantrikdb_dismiss_trigger</code> — false positive or out of scope.</li>
 <li><code>yantrikdb_act_on_trigger</code> — agent took action; records an audit-trail entry.</li>
@@ -439,7 +439,7 @@ EOF
 <tr>
 <td><a href="https://github.com/NousResearch/hermes-agent/tree/main/plugins/memory/byterover">byterover</a></td>
 <td>cloud</td>
-<td>couldn&#39;t verify — requires <code>brv</code> CLI auth</td>
+<td>couldn't verify — requires <code>brv</code> CLI auth</td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
@@ -469,7 +469,7 @@ EOF
 <tr>
 <td><a href="https://github.com/NousResearch/hermes-agent/tree/main/plugins/memory/honcho">honcho</a></td>
 <td>self-hosted</td>
-<td>couldn&#39;t verify — requires honcho-server URL or api key</td>
+<td>couldn't verify — requires honcho-server URL or api key</td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
@@ -479,7 +479,7 @@ EOF
 <tr>
 <td><a href="https://github.com/NousResearch/hermes-agent/tree/main/plugins/memory/mem0">mem0</a></td>
 <td>cloud or self-host</td>
-<td>couldn&#39;t verify — requires <code>mem0.api_key</code></td>
+<td>couldn't verify — requires <code>mem0.api_key</code></td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
@@ -489,7 +489,7 @@ EOF
 <tr>
 <td><a href="https://github.com/NousResearch/hermes-agent/tree/main/plugins/memory/openviking">openviking</a></td>
 <td>self-hosted</td>
-<td>couldn&#39;t verify — requires <code>OPENVIKING_ENDPOINT</code></td>
+<td>couldn't verify — requires <code>OPENVIKING_ENDPOINT</code></td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
@@ -499,7 +499,7 @@ EOF
 <tr>
 <td><a href="https://github.com/NousResearch/hermes-agent/tree/main/plugins/memory/retaindb">retaindb</a></td>
 <td>cloud</td>
-<td>couldn&#39;t verify — requires <code>RETAINDB_API_KEY</code></td>
+<td>couldn't verify — requires <code>RETAINDB_API_KEY</code></td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
@@ -509,7 +509,7 @@ EOF
 <tr>
 <td><a href="https://github.com/NousResearch/hermes-agent/tree/main/plugins/memory/supermemory">supermemory</a></td>
 <td>cloud</td>
-<td>couldn&#39;t verify — requires <code>SUPERMEMORY_API_KEY</code></td>
+<td>couldn't verify — requires <code>SUPERMEMORY_API_KEY</code></td>
 <td>—</td>
 <td>—</td>
 <td>—</td>
@@ -517,10 +517,10 @@ EOF
 <td>—</td>
 </tr>
 </tbody></table>
-<p>[^queuecap]: yantrikdb v0.4.2 plugin against yantrikdb engine 0.7.8 on Linux: the engine&#39;s ingest queue is bounded at 256 pending ops and didn&#39;t drain during the 1000-fact burst (probe hit <code>RuntimeError(&#39;ingest queue full ...; retry after 50ms&#39;)</code> from fact 257 onward, even with 60-attempt × 100 ms backoff). Recall on the 256 stored facts is solid (P@5 = 0.80). Surfaced upstream as a likely queue-drain regression in the manylinux build of 0.7.8 — the Hermes plugin itself doesn&#39;t loop the writes.</p>
+<p>[^queuecap]: yantrikdb v0.4.2 plugin against yantrikdb engine 0.7.8 on Linux: the engine's ingest queue is bounded at 256 pending ops and didn't drain during the 1000-fact burst (probe hit <code>RuntimeError('ingest queue full ...; retry after 50ms')</code> from fact 257 onward, even with 60-attempt × 100 ms backoff). Recall on the 256 stored facts is solid (P@5 = 0.80). Surfaced upstream as a likely queue-drain regression in the manylinux build of 0.7.8 — the Hermes plugin itself doesn't loop the writes.</p>
 <p>[^localstub]: <code>HINDSIGHT_MODE=local_embedded</code> was set so <code>is_available()</code> returns true without an API key, but in this configuration writes return immediately (sub-millisecond) and recall returns no results — the local mode appears to be a no-op stub rather than a real local backend. Full retrieval almost certainly requires the cloud account.</p>
-<p>[^hrrcap]: At ~256 stored items, the engine emits <code>HRR storage near capacity: SNR=2.00 (dim=1024, n_items=...)</code> warnings on every subsequent write. The capacity warning is part of holographic&#39;s normal output; it&#39;s not an error and writes continue to succeed, but retrieval quality is expected to degrade past that point.</p>
-<p>[^keyword]: Holographic&#39;s recall is keyword-based (FTS5 + HRR cleanup); the probe&#39;s queries are full sentences (<code>&quot;What color scheme does the user prefer in VS Code?&quot;</code>). The 0/20 result is a query-format mismatch, not a retrieval failure — keyword-shaped queries probably hit. The honest takeaway is that holographic and yantrikdb target different query shapes, not that one is &quot;better&quot;.</p>
+<p>[^hrrcap]: At ~256 stored items, the engine emits <code>HRR storage near capacity: SNR=2.00 (dim=1024, n_items=...)</code> warnings on every subsequent write. The capacity warning is part of holographic's normal output; it's not an error and writes continue to succeed, but retrieval quality is expected to degrade past that point.</p>
+<p>[^keyword]: Holographic's recall is keyword-based (FTS5 + HRR cleanup); the probe's queries are full sentences (<code>"What color scheme does the user prefer in VS Code?"</code>). The 0/20 result is a query-format mismatch, not a retrieval failure — keyword-shaped queries probably hit. The honest takeaway is that holographic and yantrikdb target different query shapes, not that one is "better".</p>
 <p><strong>Where the verified data lives</strong> — every cell in the table maps to a file:</p>
 <ul>
 <li><code>findings_scale.yaml</code> — structured cells (the table is generated from these by <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/tests/comparison/compare.py"><code>compare.py</code></a>)</li>
@@ -531,9 +531,9 @@ EOF
 <p><strong>How to re-run it</strong> — clone the repo, <code>scp tests/comparison/</code> to a Hermes-installed machine, <code>python3 runner_scale.py --all</code>. The harness will skip-with-honest-reason for any provider whose <code>is_available()</code> returns False (e.g. missing API key); for the ones that initialise, it produces a fresh <code>findings_scale.yaml</code>. Pull requests welcomed when accounts unlock more rows.</p>
 <p>Three optional lifecycle hooks: <code>on_session_end</code> auto-consolidates, <code>on_pre_compress</code> preserves high-salience memories through context compression, <code>on_memory_write</code> mirrors built-in <code>MEMORY.md</code> / <code>USER.md</code> additions.</p>
 <h3>Skills (opt-in, v0.3.0+)</h3>
-<p>Skills are <strong>procedural memory</strong>: reusable patterns the agent distills from observed success and pulls back next session. They live in YantrikDB&#39;s shared <code>skill_substrate</code> namespace alongside skills authored by other consumers (Lane B SDK, server handlers, WisePick). Hermes-authored skills are tagged <code>metadata.source=hermes</code> so any downstream consumer can filter them in or out cleanly.</p>
-<p><strong>Disabled by default.</strong> Adding the plugin to an existing Hermes install doesn&#39;t change the tool schema the model sees. Enable explicitly when you want the agentic skill loop:</p>
-<pre><code class="language-bash">echo &quot;YANTRIKDB_SKILLS_ENABLED=true&quot; &gt;&gt; ~/.hermes/.env
+<p>Skills are <strong>procedural memory</strong>: reusable patterns the agent distills from observed success and pulls back next session. They live in YantrikDB's shared <code>skill_substrate</code> namespace alongside skills authored by other consumers (Lane B SDK, server handlers, WisePick). Hermes-authored skills are tagged <code>metadata.source=hermes</code> so any downstream consumer can filter them in or out cleanly.</p>
+<p><strong>Disabled by default.</strong> Adding the plugin to an existing Hermes install doesn't change the tool schema the model sees. Enable explicitly when you want the agentic skill loop:</p>
+<pre><code class="language-bash">echo "YANTRIKDB_SKILLS_ENABLED=true" &gt;&gt; ~/.hermes/.env
 </code></pre>
 <p>When enabled, three new tools join the schema:</p>
 <table>
@@ -549,26 +549,26 @@ EOF
 </tr>
 <tr>
 <td><code>yantrikdb_skill_define</code></td>
-<td>Distill a procedural pattern into a reusable skill (<code>skill_id</code>, <code>body</code>, <code>skill_type</code>, <code>applies_to</code>). Client-side validation reproduces yantrikdb-server&#39;s wrapper checks.</td>
+<td>Distill a procedural pattern into a reusable skill (<code>skill_id</code>, <code>body</code>, <code>skill_type</code>, <code>applies_to</code>). Client-side validation reproduces yantrikdb-server's wrapper checks.</td>
 </tr>
 <tr>
 <td><code>yantrikdb_skill_outcome</code></td>
-<td>Record success/failure for a skill after it&#39;s used. Append-only event log; rollup is the agent&#39;s call, not the substrate&#39;s.</td>
+<td>Record success/failure for a skill after it's used. Append-only event log; rollup is the agent's call, not the substrate's.</td>
 </tr>
 </tbody></table>
 <p>The agentic loop closes: agent observes a successful sequence → distills it via <code>define</code> → next session pulls it via <code>search</code> → records outcome via <code>outcome</code> → over time, ranking reflects what actually works.</p>
-<p><strong>Lifecycle distinction worth understanding.</strong> Hermes&#39; own filesystem skills (<code>$HERMES_HOME/skills/*.md</code>) are <em>human-authored, durable, version-controlled</em>. YantrikDB skills are <em>agent-authored, runtime-evolving, semantic-search-queryable</em>. Different kinds of canonical, not competing authorities. The model picks by lifecycle.</p>
+<p><strong>Lifecycle distinction worth understanding.</strong> Hermes' own filesystem skills (<code>$HERMES_HOME/skills/*.md</code>) are <em>human-authored, durable, version-controlled</em>. YantrikDB skills are <em>agent-authored, runtime-evolving, semantic-search-queryable</em>. Different kinds of canonical, not competing authorities. The model picks by lifecycle.</p>
 <h4>Explainability is a side effect, not a bolt-on</h4>
-<p>Every <code>recall()</code> result already carries the structured ranking-reason list — that&#39;s the engine&#39;s standard response shape. The model can <em>read</em> it without prompt engineering. From the live Hermes session captured in <code>VERIFICATION.md</code>, DeepSeek&#39;s natural-language summary of the recall:</p>
+<p>Every <code>recall()</code> result already carries the structured ranking-reason list — that's the engine's standard response shape. The model can <em>read</em> it without prompt engineering. From the live Hermes session captured in <code>VERIFICATION.md</code>, DeepSeek's natural-language summary of the recall:</p>
 <blockquote>
-<p><em>&quot;All 3 memories returned, ranked by relevance × recency × importance. The top result ranked highest (semantic match + keyword + high importance + recency), followed by [...] (keyword match), then [...] (high importance but no direct keyword overlap).&quot;</em></p>
+<p><em>"All 3 memories returned, ranked by relevance × recency × importance. The top result ranked highest (semantic match + keyword + high importance + recency), followed by [...] (keyword match), then [...] (high importance but no direct keyword overlap)."</em></p>
 </blockquote>
-<p>DeepSeek wasn&#39;t told the reason codes existed; it parsed them from the tool response and reflected them in its explanation. That&#39;s the architectural shape we wanted: the explainability surface is the recall response itself, transport-agnostic, model-agnostic, and visible to anyone who looks at the JSON. No separate &quot;explain&quot; tool. No second LLM call. The cost of explainability is zero because it was never separate.</p>
+<p>DeepSeek wasn't told the reason codes existed; it parsed them from the tool response and reflected them in its explanation. That's the architectural shape we wanted: the explainability surface is the recall response itself, transport-agnostic, model-agnostic, and visible to anyone who looks at the JSON. No separate "explain" tool. No second LLM call. The cost of explainability is zero because it was never separate.</p>
 <h3>Verification</h3>
 <ul>
 <li><strong>96 unit tests</strong> covering request formation, error taxonomy, provider contract, hook semantics, circuit breaker, text truncation, mode-aware availability — all mocked, no network required.</li>
 <li><strong>2 live integration tests</strong> (<code>tests/integration/test_live.py</code>) that exercise the full flow against a real <code>yantrikdb-server</code>. Skipped by default; run with <code>YANTRIKDB_INTEGRATION_URL</code> + <code>YANTRIKDB_INTEGRATION_TOKEN</code> set.</li>
-<li><strong>End-to-end Hermes demos</strong> against an unmodified Hermes 0.9.0 install for both backends, captured in <strong><a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/VERIFICATION.md">VERIFICATION.md</a></strong> — DeepSeek-driven sessions calling all 8 tools, with <code>why_retrieved</code> reason codes flowing through the model&#39;s reasoning verbatim.</li>
+<li><strong>End-to-end Hermes demos</strong> against an unmodified Hermes 0.9.0 install for both backends, captured in <strong><a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/VERIFICATION.md">VERIFICATION.md</a></strong> — DeepSeek-driven sessions calling all 8 tools, with <code>why_retrieved</code> reason codes flowing through the model's reasoning verbatim.</li>
 </ul>
 <h4>Performance (steady-state, post-warmup)</h4>
 <table>
@@ -618,10 +618,10 @@ EOF
 <p>Even embedded p99 tail latency is faster than HTTP p50 — bad-case embedded beats typical-case HTTP. Long-running soak validation is in progress upstream (<a href="https://github.com/yantrikos/yantrikdb">yantrikos/yantrikdb saga task #2</a>); these numbers are 100-iteration micro-benchmarks, not 24-hour production traces.</p>
 <h4>About the embedder quality claims</h4>
 <p>Tier 1 (<code>with_default()</code>, ~8 MB) uses <a href="https://huggingface.co/minishlab/potion-base-2M"><code>potion-base-2M</code></a> via <a href="https://github.com/MinishLab/model2vec-rs"><code>model2vec-rs</code></a> — a pure-Rust static embedding (lookup table + mean-pool + L2-normalize), no transformer forward pass. Tier 2 (<code>potion-base-8M</code>, 28 MB) and Tier 3 (<code>potion-base-32M</code>, 121 MB) trade larger model files for higher recall and live behind <code>set_embedder_named()</code> (downloaded on first use, cached under user data dir).</p>
-<p><strong>Quality numbers cited in this README are R@5 vs <code>sentence-transformers/all-MiniLM-L6-v2</code> (dim=384) on the upstream <a href="https://github.com/yantrikos/yantrikdb/blob/main/scratch/eval_potion_2m.py">evaluation corpus</a>.</strong> The &quot;~89% / ~92% / ~95% of MiniLM&quot; approximations are from that specific eval; your mileage will vary on a different corpus or task. Semantic separation is also corpus-size dependent — at 3 records all vectors look similar (top score ~0.58); at 8+ with real diversity the score range opens up (top score ~0.84). If you&#39;re evaluating, run against your own data.</p>
+<p><strong>Quality numbers cited in this README are R@5 vs <code>sentence-transformers/all-MiniLM-L6-v2</code> (dim=384) on the upstream <a href="https://github.com/yantrikos/yantrikdb/blob/main/scratch/eval_potion_2m.py">evaluation corpus</a>.</strong> The "~89% / ~92% / ~95% of MiniLM" approximations are from that specific eval; your mileage will vary on a different corpus or task. Semantic separation is also corpus-size dependent — at 3 records all vectors look similar (top score ~0.58); at 8+ with real diversity the score range opens up (top score ~0.84). If you're evaluating, run against your own data.</p>
 <p>CI runs ruff + mypy + pytest on Python 3.11 / 3.12 / 3.13 / 3.14 on every push.</p>
 <h3>Benchmarks (recall quality, v0.6.0+)</h3>
-<p>&quot;Best in class&quot; is only worth saying if you can reproduce it. <code>benchmarks/run_recall_bench.py</code> spins up a real embedded YantrikDB, ingests a curated MIT-clean memory-QA corpus (<code>benchmarks/dataset.json</code> — 40 memories, 37 queries across preferences / architecture / people / work / infra), runs the real provider recall path, and scores it:</p>
+<p>"Best in class" is only worth saying if you can reproduce it. <code>benchmarks/run_recall_bench.py</code> spins up a real embedded YantrikDB, ingests a curated MIT-clean memory-QA corpus (<code>benchmarks/dataset.json</code> — 40 memories, 37 queries across preferences / architecture / people / work / infra), runs the real provider recall path, and scores it:</p>
 <pre><code class="language-bash">python benchmarks/run_recall_bench.py            # baseline
 python benchmarks/run_recall_bench.py --reinforce  # + self-tuning lift
 </code></pre>
@@ -648,7 +648,7 @@ python benchmarks/run_recall_bench.py --reinforce  # + self-tuning lift
 <td>1.000</td>
 </tr>
 </tbody></table>
-<p><strong>MRR 0.928.</strong> With <code>--reinforce</code>, reinforcing each query&#39;s gold memory lifts recall@1 to 0.865 and MRR to 0.928 — a measurable self-tuning gain that the loop produces on its own. <code>tests/test_recall_benchmark.py</code> asserts conservative floors so a ranking regression fails CI (it skips when the native engine wheel isn&#39;t installed). Extend the corpus to benchmark against your own data. Details: <strong><a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/benchmarks/README.md">benchmarks/README.md</a></strong>.</p>
+<p><strong>MRR 0.928.</strong> With <code>--reinforce</code>, reinforcing each query's gold memory lifts recall@1 to 0.865 and MRR to 0.928 — a measurable self-tuning gain that the loop produces on its own. <code>tests/test_recall_benchmark.py</code> asserts conservative floors so a ranking regression fails CI (it skips when the native engine wheel isn't installed). Extend the corpus to benchmark against your own data. Details: <strong><a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/benchmarks/README.md">benchmarks/README.md</a></strong>.</p>
 <h3>Running the tests</h3>
 <pre><code class="language-bash">python -m pytest tests/                          # unit tests
 YANTRIKDB_INTEGRATION_URL=http://localhost:7438 \
@@ -698,7 +698,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
 </tr>
 </tbody></table>
 <h4>Durability signals</h4>
-<p>The maintainer doesn&#39;t promise &quot;I won&#39;t quit&quot; — promises like that aren&#39;t testable. What&#39;s testable:</p>
+<p>The maintainer doesn't promise "I won't quit" — promises like that aren't testable. What's testable:</p>
 <ul>
 <li>Every release ships with tests + CI (Python 3.11 / 3.12 / 3.13) + tagged CHANGELOG + a publish gate where 151 tests + ruff + mypy must pass before the wheel uploads to PyPI.</li>
 <li>First user issue on this repo (multilingual embedding support) was filed and shipped to PyPI the same day — 25 minutes from raised to released.</li>
@@ -706,7 +706,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
 <li>Independent recognition: accepted into the <a href="https://cursor.directory/plugins/yantrikdb">Cursor Directory</a> (300k+ developer reach) and (sibling project) the Anthropic MCP Directory.</li>
 <li>Substrate design deposited as a peer-citable preprint: <a href="https://doi.org/10.5281/zenodo.20128887">10.5281/zenodo.20128887</a>.</li>
 </ul>
-<p>That&#39;s what I can give you. The technical merits are above; the maintenance shape is here so you can audit before adopting.</p>
+<p>That's what I can give you. The technical merits are above; the maintenance shape is here so you can audit before adopting.</p>
 <p>See <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/yantrikdb/CHANGELOG.md">yantrikdb/CHANGELOG.md</a> for full release notes and <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/yantrikdb/ARCHITECTURE.md">yantrikdb/ARCHITECTURE.md</a> for the control flow, error taxonomy, and threading model (covering both backends).</p>
 <h3>License</h3>
 <p>This plugin is <strong>MIT</strong> (matching Hermes — the code is intended for upstream contribution). The <a href="https://github.com/yantrikos/yantrikdb-server">YantrikDB server</a> itself is AGPL-3.0; the plugin only talks to it over HTTP and does not embed or redistribute any server code, so the boundary is the same as any MIT client talking to an AGPL service. See <a href="https://github.com/yantrikos/yantrikdb-hermes-plugin/blob/main/yantrikdb/SECURITY.md#license-boundary-agpl-vs-mit">yantrikdb/SECURITY.md</a> for the full note.</p>
@@ -731,7 +731,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.9K</div>
+        <div class="stars">★ 60.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -743,11 +743,11 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 334</div>
+        <div class="stars">★ 335</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 188</div>
+        <div class="stars">★ 189</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -755,7 +755,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 213</div>
+        <div class="stars">★ 214</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">

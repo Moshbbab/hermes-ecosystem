@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -163,7 +163,7 @@
     <a href="https://github.com/Ridwannurudeen/hermes-council/actions/workflows/ci.yml">
       <img alt="Coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/Ridwannurudeen/316e2a72a4089fdb4fddc9980ed1c28b/raw/coverage.json">
     </a>
-    <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white">
+    <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&amp;logoColor=white">
     <img alt="MCP" src="https://img.shields.io/badge/MCP-stdio-10B981">
     <a href="LICENSE">
       <img alt="License" src="https://img.shields.io/badge/license-MIT-111827">
@@ -194,7 +194,7 @@ explicit verdict fields: <code>allow</code>, <code>allow_with_conditions</code>,
 <code>required_checks</code>, <code>missing_evidence</code>, <code>verified_sources</code>, and <code>next_actions</code>.</p>
 <h3>What It Does</h3>
 <table>
-  <tr>
+  <tbody><tr>
     <td><strong>Preflight risky actions</strong><br>Review deploys, migrations, file operations, public messages, and other high-stakes actions before execution. Returns a verdict, blocking risks, required checks, and safer alternatives.</td>
     <td><strong>Review plans and diffs</strong><br>Stress-test implementation plans and code diffs for bugs, missing tests, integration failures, security regressions, and weak assumptions.</td>
   </tr>
@@ -206,29 +206,29 @@ explicit verdict fields: <code>allow</code>, <code>allow_with_conditions</code>,
     <td><strong>Run adversarial deliberation</strong><br>Use Advocate, Skeptic, Oracle, Contrarian, and Arbiter personas to expose disagreement and synthesize a calibrated verdict.</td>
     <td><strong>Produce RL signals</strong><br>Extract DPO preference pairs and normalized rewards from council verdicts for evaluator and training workflows.</td>
   </tr>
-</table>
+</tbody></table>
 
 <p>Supporting features: custom personas, fast/standard/deep modes, optional audit
 logs, packaged Hermes skills, OpenAI-compatible provider support, and stdio MCP
 transport.</p>
 <h3>Quickstart</h3>
 <h4>Install</h4>
-<pre><code class="language-bash">pip install &quot;hermes-council @ git+https://github.com/Ridwannurudeen/hermes-council.git&quot;
+<pre><code class="language-bash">pip install "hermes-council @ git+https://github.com/Ridwannurudeen/hermes-council.git"
 </code></pre>
 <p>For RL/evaluator usage:</p>
-<pre><code class="language-bash">pip install &quot;hermes-council[rl] @ git+https://github.com/Ridwannurudeen/hermes-council.git&quot;
+<pre><code class="language-bash">pip install "hermes-council[rl] @ git+https://github.com/Ridwannurudeen/hermes-council.git"
 </code></pre>
 <h4>Configure Hermes Agent</h4>
 <p>Add the MCP server to <code>~/.hermes/config.yaml</code>:</p>
 <pre><code class="language-yaml">mcp_servers:
   council:
     command: python
-    args: [&quot;-m&quot;, &quot;hermes_council.server&quot;]
+    args: ["-m", "hermes_council.server"]
 </code></pre>
 <p><code>hermes-council-server</code> is also installed as a console script. The <code>python -m</code>
 form is recommended because it works even when the Python user scripts directory
 is not on <code>PATH</code>.</p>
-<p>You can also wire the server up interactively with Hermes Agent&#39;s own CLI:</p>
+<p>You can also wire the server up interactively with Hermes Agent's own CLI:</p>
 <pre><code class="language-bash">hermes mcp add
 </code></pre>
 <p><code>hermes mcp add/list/remove/test</code> writes to the same <code>mcp_servers</code> key in
@@ -237,7 +237,7 @@ is not on <code>PATH</code>.</p>
 <pre><code class="language-bash">export OPENROUTER_API_KEY=your-key-here
 </code></pre>
 <p>PowerShell:</p>
-<pre><code class="language-powershell">$env:OPENROUTER_API_KEY = &quot;your-key-here&quot;
+<pre><code class="language-powershell">$env:OPENROUTER_API_KEY = "your-key-here"
 </code></pre>
 <p>Then restart Hermes Agent or run <code>/reload-mcp</code>.</p>
 <h4>Install Hermes Skills</h4>
@@ -255,11 +255,11 @@ from hermes_council.rl.evaluator import CouncilEvaluator
 
 
 async def main():
-    evaluator = CouncilEvaluator(model=&quot;nousresearch/hermes-3-llama-3.1-70b&quot;)
+    evaluator = CouncilEvaluator(model="nousresearch/hermes-3-llama-3.1-70b")
     verdict = await evaluator.evaluate(
-        content=&quot;Ship the migration after tests pass.&quot;,
-        question=&quot;Is this deployment plan safe enough?&quot;,
-        criteria=[&quot;safety&quot;, &quot;rollback&quot;, &quot;evidence&quot;],
+        content="Ship the migration after tests pass.",
+        question="Is this deployment plan safe enough?",
+        criteria=["safety", "rollback", "evidence"],
     )
     print(verdict.confidence_score)
     print(evaluator.normalized_reward(verdict))
@@ -322,18 +322,18 @@ runtime names are <code>mcp_council_council_query</code>,
 </tbody></table>
 <h4>Gate Output</h4>
 <pre><code class="language-json">{
-  &quot;success&quot;: true,
-  &quot;verdict&quot;: &quot;allow_with_conditions&quot;,
-  &quot;allowed&quot;: true,
-  &quot;can_proceed_now&quot;: false,
-  &quot;required_checks&quot;: [&quot;verify rollback&quot;, &quot;run dry-run&quot;],
-  &quot;blocking_risks&quot;: [&quot;rollback untested&quot;],
-  &quot;safe_alternative&quot;: &quot;stage the action first&quot;,
-  &quot;action_summary&quot;: {
-    &quot;recommendation&quot;: &quot;Proceed after verifying rollback and dry-run output.&quot;,
-    &quot;top_risks&quot;: [&quot;rollback untested&quot;],
-    &quot;missing_evidence&quot;: [&quot;dry-run output&quot;],
-    &quot;next_actions&quot;: [&quot;run dry-run&quot;, &quot;verify rollback&quot;]
+  "success": true,
+  "verdict": "allow_with_conditions",
+  "allowed": true,
+  "can_proceed_now": false,
+  "required_checks": ["verify rollback", "run dry-run"],
+  "blocking_risks": ["rollback untested"],
+  "safe_alternative": "stage the action first",
+  "action_summary": {
+    "recommendation": "Proceed after verifying rollback and dry-run output.",
+    "top_risks": ["rollback untested"],
+    "missing_evidence": ["dry-run output"],
+    "next_actions": ["run dry-run", "verify rollback"]
   }
 }
 </code></pre>
@@ -534,13 +534,13 @@ allowing supplied public URLs to be fetched.</li>
 <p>Create <code>~/.hermes-council/config.yaml</code>:</p>
 <pre><code class="language-yaml">personas:
   security_analyst:
-    tradition: &quot;Adversarial security thinking&quot;
-    system_prompt: &quot;You are a security analyst. Evaluate every claim for attack vectors, failure modes, and adversarial scenarios.&quot;
+    tradition: "Adversarial security thinking"
+    system_prompt: "You are a security analyst. Evaluate every claim for attack vectors, failure modes, and adversarial scenarios."
     scoring_weights:
       threat_assessment: 0.4
       evidence: 0.3
       rigor: 0.3
-    tags: [&quot;security&quot;, &quot;adversarial&quot;]
+    tags: ["security", "adversarial"]
 </code></pre>
 <p>Custom personas merge with the defaults. Use the same name to override a default.</p>
 <h3>Project Layout</h3>
@@ -564,7 +564,7 @@ allowing supplied public URLs to be fetched.</li>
 <h3>Development</h3>
 <pre><code class="language-bash">git clone https://github.com/Ridwannurudeen/hermes-council.git
 cd hermes-council
-pip install -e &quot;.[dev]&quot;
+pip install -e ".[dev]"
 python -m pytest -q
 </code></pre>
 <p>Useful checks:</p>
@@ -641,7 +641,7 @@ endorsing one community server over others. Install standalone via the
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 361</div>
+        <div class="stars">★ 362</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -657,11 +657,11 @@ endorsing one community server over others. Install standalone via the
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 658</div>
+        <div class="stars">★ 660</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 47</div>
+        <div class="stars">★ 48</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

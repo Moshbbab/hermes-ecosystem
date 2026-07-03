@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -152,13 +152,13 @@
 contract that exposes a small action catalog, and a knowledge registry. This plugin
 gives Hermes:</p>
 <ul>
-<li>One-call multi-source reads of an agent&#39;s full state.</li>
+<li>One-call multi-source reads of an agent's full state.</li>
 <li>Owner-signed deep links into the BORT dapp for marketplace flows.</li>
 <li>Operator-signed writes through <code>VaultPermissionManagerV2.forwardHandleAction</code>,
 gated by a local policy file and the Hermes approval prompt.</li>
 <li>Portable session memory: write to local JSONL during a chat, anchor to IPFS and
 <code>KnowledgeRegistryV2.addKnowledgeSourceDelegated</code> at session end, prefetch
-those sources at the next session&#39;s start.</li>
+those sources at the next session's start.</li>
 </ul>
 <h3>Install</h3>
 <pre><code class="language-bash">pip install hermes-bort
@@ -182,7 +182,7 @@ pip install -e .[dev]
 <pre><code class="language-python">from hermes_bort.tools.read_agent import handle as read_agent
 import asyncio, json
 
-raw = asyncio.run(read_agent({&quot;token_id&quot;: 11100}))
+raw = asyncio.run(read_agent({"token_id": 11100}))
 print(json.dumps(json.loads(raw), indent=2)[:800])
 </code></pre>
 <p>Inside Hermes the same call surfaces as a tool: <code>bort_read_agent(token_id=11100)</code>.</p>
@@ -204,7 +204,7 @@ conservative: exits auto, trades and campaign lifecycle confirm, governance and
 large transfers block.</p>
 <h4>3. Have the agent owner grant the operator</h4>
 <pre><code class="language-python">from hermes_bort.tools.grant_permission import handle as grant
-raw = await grant({&quot;token_id&quot;: 11100, &quot;operator&quot;: &quot;0xYourOperatorAddress&quot;})
+raw = await grant({"token_id": 11100, "operator": "0xYourOperatorAddress"})
 </code></pre>
 <p>Returns the two-step calldata (<code>createVault</code> then <code>grantPermission</code>) the owner
 clicks through in their own wallet. Operator scope: <code>WRITE</code>, time-bound, limited
@@ -230,7 +230,7 @@ improvement, chains two on-chain writes linked by one content hash:</p>
 <ul>
 <li><code>commit_evolution</code> pins the evolved skill to IPFS and writes it as an
 <code>INSTRUCTION</code> knowledge source on <code>KnowledgeRegistryV2</code>.</li>
-<li><code>commit_learning</code> emits a <code>LearningRecorded</code> event on the agent&#39;s logic
+<li><code>commit_learning</code> emits a <code>LearningRecorded</code> event on the agent's logic
 contract: a permanent, timestamped, verifiable on-chain learning record.</li>
 </ul>
 <p>The self-evolution repo is located via <code>--repo</code>, <code>$BORT_SELF_EVOLUTION_REPO</code>,
@@ -250,7 +250,7 @@ pinned to IPFS; both chain writes only simulate).</p>
 </tr>
 <tr>
 <td><code>--optimizer-model M</code></td>
-<td>LLM for GEPA reflections, litellm format (<code>anthropic/claude-sonnet-4-6</code>, <code>deepseek/deepseek-chat</code>, <code>openrouter/...</code>). Default: the optimizer&#39;s own default.</td>
+<td>LLM for GEPA reflections, litellm format (<code>anthropic/claude-sonnet-4-6</code>, <code>deepseek/deepseek-chat</code>, <code>openrouter/...</code>). Default: the optimizer's own default.</td>
 </tr>
 <tr>
 <td><code>--eval-model M</code></td>
@@ -275,7 +275,7 @@ pinned to IPFS; both chain writes only simulate).</p>
 </tbody></table>
 <p><strong>LLM provider.</strong> The optimizer runs on litellm, so any provider works:
 <code>--optimizer-model anthropic/claude-sonnet-4-6</code>, <code>deepseek/...</code>, <code>openrouter/...</code>,
-etc. The provider&#39;s API key (<code>ANTHROPIC_API_KEY</code>, <code>DEEPSEEK_API_KEY</code>, ...) is read
+etc. The provider's API key (<code>ANTHROPIC_API_KEY</code>, <code>DEEPSEEK_API_KEY</code>, ...) is read
 from the environment.</p>
 <p><strong>Without Pinata.</strong> <code>commit_evolution</code> pins the evolved skill to IPFS and needs
 Pinata credentials. <code>commit_learning</code> does not: <code>record_learning</code> only emits the
@@ -303,7 +303,7 @@ Each run is a distinct on-chain event; the knowledge registry does not dedup.</p
 </tr>
 <tr>
 <td><code>bort_list_actions(logic_name)</code></td>
-<td>Action catalog for <code>&quot;Hunter&quot;</code> / <code>&quot;Trading V5&quot;</code> / <code>&quot;CTO&quot;</code>, split into on-chain and off-chain.</td>
+<td>Action catalog for <code>"Hunter"</code> / <code>"Trading V5"</code> / <code>"CTO"</code>, split into on-chain and off-chain.</td>
 </tr>
 <tr>
 <td><code>bort_marketplace_browse(sort?, limit?, offset?, seller?, include_recent_sales?)</code></td>
@@ -311,7 +311,7 @@ Each run is a distinct on-chain event; the knowledge registry does not dedup.</p
 </tr>
 <tr>
 <td><code>bort_marketplace_agent(token_id, include_offers?, include_activity?)</code></td>
-<td>One agent&#39;s active listing, open offers, recent marketplace events.</td>
+<td>One agent's active listing, open offers, recent marketplace events.</td>
 </tr>
 <tr>
 <td><code>bort_list_agent_uri(token_id, intent)</code></td>
@@ -331,7 +331,7 @@ disposition, and (when <code>confirm</code>) the Hermes approval prompt. With
 </thead>
 <tbody><tr>
 <td><code>bort_grant_permission_uri(token_id, operator, ...)</code></td>
-<td>Builds the two owner-signed transactions to give the operator a <code>WRITE</code> grant on the agent&#39;s vault.</td>
+<td>Builds the two owner-signed transactions to give the operator a <code>WRITE</code> grant on the agent's vault.</td>
 </tr>
 <tr>
 <td><code>bort_commit_learning(token_id, data_hash, ...)</code></td>
@@ -343,7 +343,7 @@ disposition, and (when <code>confirm</code>) the Hermes approval prompt. With
 </tr>
 <tr>
 <td><code>bort_anchor_memory(token_id)</code></td>
-<td>Pins the agent&#39;s local JSONL memory buffer to IPFS and writes a <code>MEMORY</code> source through <code>KnowledgeRegistryV2.addKnowledgeSourceDelegated</code>.</td>
+<td>Pins the agent's local JSONL memory buffer to IPFS and writes a <code>MEMORY</code> source through <code>KnowledgeRegistryV2.addKnowledgeSourceDelegated</code>.</td>
 </tr>
 <tr>
 <td><code>bort_commit_evolution(token_id, output_dir)</code></td>
@@ -355,17 +355,17 @@ disposition, and (when <code>confirm</code>) the Hermes approval prompt. With
 <pre><code class="language-python">from hermes_bort.tools.read_agent import handle as read_agent
 import json, asyncio
 
-state = json.loads(asyncio.run(read_agent({&quot;token_id&quot;: 11100})))
-print(state[&quot;on_chain&quot;][&quot;state&quot;][&quot;owner&quot;])
-print(state[&quot;logic&quot;][&quot;name&quot;], state[&quot;logic&quot;][&quot;snapshot&quot;])
+state = json.loads(asyncio.run(read_agent({"token_id": 11100})))
+print(state["on_chain"]["state"]["owner"])
+print(state["logic"]["name"], state["logic"]["snapshot"])
 </code></pre>
 <h4>Browse the marketplace</h4>
 <pre><code class="language-python">from hermes_bort.tools.marketplace_browse import handle as browse
 import json, asyncio
 
-raw = asyncio.run(browse({&quot;sort&quot;: &quot;price_asc&quot;, &quot;limit&quot;: 10}))
-for row in json.loads(raw)[&quot;listings&quot;]:
-    print(row[&quot;token_id&quot;], row[&quot;price_per_token&quot;], row[&quot;lister&quot;])
+raw = asyncio.run(browse({"sort": "price_asc", "limit": 10}))
+for row in json.loads(raw)["listings"]:
+    print(row["token_id"], row["price_per_token"], row["lister"])
 </code></pre>
 <h4>Drive an action through the operator</h4>
 <p>Requires the agent owner to have already run <code>bort_grant_permission_uri</code> and signed
@@ -374,13 +374,13 @@ the two grant transactions.</p>
 import json, asyncio
 
 raw = asyncio.run(invoke({
-    &quot;token_id&quot;: 11100,
-    &quot;action&quot;: &quot;buy_token&quot;,
-    &quot;args&quot;: {&quot;token_address&quot;: &quot;0x...&quot;, &quot;amount_bnb_wei&quot;: &quot;10000000000000000&quot;},
+    "token_id": 11100,
+    "action": "buy_token",
+    "args": {"token_address": "0x...", "amount_bnb_wei": "10000000000000000"},
 }))
 result = json.loads(raw)
-print(result[&quot;status&quot;])           # &#39;broadcast&#39; / &#39;simulated_only&#39; / &#39;blocked&#39;
-print(result.get(&quot;tx_hash&quot;))
+print(result["status"])           # 'broadcast' / 'simulated_only' / 'blocked'
+print(result.get("tx_hash"))
 </code></pre>
 <h4>Anchor session memory to IPFS</h4>
 <p>After the agent owner has granted the operator a WRITE permission, this turns the
@@ -392,22 +392,22 @@ will prefetch.</p>
 <pre><code class="language-python">from hermes_bort.tools.list_agent_uri import handle as list_uri
 import json, asyncio
 
-raw = asyncio.run(list_uri({&quot;token_id&quot;: 11100, &quot;intent&quot;: &quot;list&quot;}))
-print(json.loads(raw)[&quot;url&quot;])     # https://www.bortagent.xyz/#/my-listings
+raw = asyncio.run(list_uri({"token_id": 11100, "intent": "list"}))
+print(json.loads(raw)["url"])     # https://www.bortagent.xyz/#/my-listings
 </code></pre>
 <h3>Memory portability</h3>
-<p><code>BortMemoryProvider</code> keys session memory by the agent&#39;s <code>tokenId</code> (passed to
+<p><code>BortMemoryProvider</code> keys session memory by the agent's <code>tokenId</code> (passed to
 Hermes as <code>agent_identity</code> at session start).</p>
 <ul>
 <li>During a chat: turns go into <code>~/.hermes/bort-memory/&lt;tokenId&gt;.jsonl</code>.</li>
 <li>On session end (or <code>bort_anchor_memory</code>): the buffer is pinned to IPFS via
 Pinata and committed to <code>KnowledgeRegistryV2</code> as a <code>MEMORY</code> source through the
-operator&#39;s WRITE grant.</li>
+operator's WRITE grant.</li>
 <li>On next session start: the provider pulls active <code>MEMORY</code> sources from
 <code>KnowledgeRegistry.getActiveKnowledgeSources(tokenId)</code> and exposes them to
 prefetch.</li>
 </ul>
-<p>The agent&#39;s memory travels with the NFT: a buyer who imports the same tokenId in
+<p>The agent's memory travels with the NFT: a buyer who imports the same tokenId in
 their own Hermes instance picks up the same history without anyone sharing files.</p>
 <h3>Threat model</h3>
 <p>A BORT agent NFT carries text that the owner controls: the IPFS-pinned identity
@@ -421,25 +421,25 @@ layer in <code>hermes_bort.bort_sanitize</code>:</p>
 <ul>
 <li>Free-form text fields (identity <code>name</code> / <code>description</code> / <code>external_url</code>,
 knowledge source <code>description</code>, prefetched memory blocks) are wrapped in an
-<code>&lt;external-data source=&quot;...&quot;&gt;...&lt;/external-data&gt;</code> envelope with a one-line
+<code>&lt;external-data source="..."&gt;...&lt;/external-data&gt;</code> envelope with a one-line
 preamble telling the model to treat the contents as data, not instructions.</li>
 <li>Each string is capped at 2 KB with an explicit <code>[truncated, N chars total]</code>
 marker so an attacker cannot flood the context.</li>
 <li>C0 controls, ANSI escape sequences, zero-width characters, and bidi-override
-Unicode are stripped before wrapping (same character set Hermes&#39; own cron
+Unicode are stripped before wrapping (same character set Hermes' own cron
 scanner blocks).</li>
 <li>Numeric ids, addresses, on-chain enums, and structural keys are not wrapped:
 only the strings that came from owner-controlled inputs.</li>
 </ul>
-<p>This raises the bar from &quot;trivial injection&quot; to &quot;the model has to ignore an
-explicit data-boundary marker.&quot; It is not a complete defense, and it is not
+<p>This raises the bar from "trivial injection" to "the model has to ignore an
+explicit data-boundary marker." It is not a complete defense, and it is not
 meant to be: the operator-key boundary below is what binds what a tricked model
 can actually cause on-chain.</p>
 <h3>Security boundary</h3>
-<p>The plugin holds the operator key, not the NFT owner&#39;s key. The operator can
+<p>The plugin holds the operator key, not the NFT owner's key. The operator can
 only do what the owner has granted in <code>VaultPermissionManagerV2</code> and what
 <code>~/.hermes/bort-policy.yaml</code> allows. The Hermes approval prompt fires when an
-action&#39;s disposition is <code>confirm</code>. With <code>BORT_ALLOW_BROADCAST</code> unset, every
+action's disposition is <code>confirm</code>. With <code>BORT_ALLOW_BROADCAST</code> unset, every
 write returns <code>simulated_only</code>.</p>
 <p>A leaked operator key can be revoked by the owner with one <code>revokePermission</code>
 transaction in VPM v2; it cannot mint, transfer, or list the NFT. The plugin
@@ -532,7 +532,7 @@ Network tests are skipped or short-circuit when the relevant env var is unset
   memory/
     provider.py               BortMemoryProvider
 </code></pre>
-<p>The plugin is thin on purpose. BORT&#39;s runtime API at
+<p>The plugin is thin on purpose. BORT's runtime API at
 <code>bap578-nfa-platform.onrender.com</code> already exposes most data as public read
 endpoints; this plugin uses those instead of re-implementing them. Direct
 on-chain calls are reserved for what the runtime does not expose: <code>tokenURI</code>,
@@ -552,7 +552,7 @@ VPM v2 forwarder, and KR v2 delegated writes.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 361</div>
+        <div class="stars">★ 362</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -572,11 +572,11 @@ VPM v2 forwarder, and KR v2 delegated writes.</p>
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 658</div>
+        <div class="stars">★ 660</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 47</div>
+        <div class="stars">★ 48</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria#software",
   "name": "Toolaria",
-  "description": "Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle. This allows the model to<pad><pad>检索 specific data slices via semantic search, structural outlines, or pass-by-reference<pad><pad><pad>EOF",
+  "description": "Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle. This allows the model to\u003cpad>\u003cpad>检索 specific data slices via semantic search, structural outlines, or pass-by-reference\u003cpad>\u003cpad>\u003cpad>EOF",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria",
   "codeRepository": "https://github.com/Sahil-SS9/Toolaria",
   "applicationCategory": "BrowserApplication",
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -143,7 +143,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <img width="1254" height="1254" alt="Toolaria" src="https://github.com/user-attachments/assets/6510e5ef-3c09-4961-a5f2-c87da63a1c22" />
+    <img width="1254" height="1254" alt="Toolaria" src="https://github.com/user-attachments/assets/6510e5ef-3c09-4961-a5f2-c87da63a1c22">
 
 
 <h2>Toolaria: rescue oversized tool results before they flood context</h2>
@@ -162,7 +162,7 @@ structure instead of guessing search terms.</li>
 <li><strong><code>search</code></strong> runs semantic (or dep-free lexical) retrieval over the blob:
 ask in plain language, get the most relevant chunks with line numbers.</li>
 <li><strong>Pass-by-reference</strong> lets the model hand a whole result to another tool
-without reading it: write <code>tla:&lt;id&gt;</code> as a downstream tool&#39;s argument and
+without reading it: write <code>tla:&lt;id&gt;</code> as a downstream tool's argument and
 Toolaria expands it to the full content before that tool runs, so a 200k
 result flows tool to tool and never re-enters the context window.</li>
 </ul>
@@ -190,7 +190,7 @@ result flows tool to tool and never re-enters the context window.</li>
 <tr>
 <td>Model needs the failed payments</td>
 <td>scroll/grep blind through 171k chars</td>
-<td><code>outline</code> then <code>search &quot;failed&quot;</code> returns the matching rows with line numbers</td>
+<td><code>outline</code> then <code>search "failed"</code> returns the matching rows with line numbers</td>
 </tr>
 </tbody></table>
 <p>What the model actually sees when the result lands (truncated):</p>
@@ -198,12 +198,12 @@ result flows tool to tool and never re-enters the context window.</li>
 Preview (first 6 / last 3 lines); this is a preview, NOT the full output:
 [JSON excerpt: array[2000]]
 --- head ---
-[ { &quot;id&quot;: 0, &quot;user&quot;: &quot;user0&quot;, &quot;amount&quot;: 0.0, &quot;status&quot;: &quot;failed&quot;, &quot;note&quot;: &quot;card declined insufficient funds&quot; }, ... ]
+[ { "id": 0, "user": "user0", "amount": 0.0, "status": "failed", "note": "card declined insufficient funds" }, ... ]
 ...
-To feed this whole result into another tool WITHOUT reading it, pass &quot;tla:5ddff67d&quot; as that tool&#39;s argument;
+To feed this whole result into another tool WITHOUT reading it, pass "tla:5ddff67d" as that tool's argument;
 Toolaria expands it to the full content before the tool runs.
 </code></pre>
-<p><code>rescuer_fetch(mode=&quot;outline&quot;)</code> then turns the blob into a structural map without
+<p><code>rescuer_fetch(mode="outline")</code> then turns the blob into a structural map without
 loading a single row, numeric columns summarised in place:</p>
 <pre><code>[JSON outline]
 root: array, length 2000
@@ -241,28 +241,28 @@ it fires in every session, including toolset-restricted ones (cron jobs, scoped
 profiles). For the <code>rescuer_fetch</code> handle to be redeemable there, the tool must
 be reachable. On hosts that support ambient toolsets, Toolaria marks its
 <code>rescuer</code> toolset ambient at load, so nothing more is needed. On hosts that do
-not, Toolaria logs a warning at load; add <code>rescuer</code> to those sessions&#39;
+not, Toolaria logs a warning at load; add <code>rescuer</code> to those sessions'
 <code>enabled_toolsets</code> so the handle can be fetched. A handle you cannot fetch is
 worse than no rescue, so Toolaria never fails this silently.</p>
 </blockquote>
 <hr>
 <h3>Prior art</h3>
-<p>Spill-to-disk is a well-established pattern, not a Toolaria invention. Toolaria&#39;s
+<p>Spill-to-disk is a well-established pattern, not a Toolaria invention. Toolaria's
 contribution is packaging, not the idea.</p>
 <ul>
 <li><strong>Claude Code</strong> persists oversized tool results to disk and replaces them with
 a short preview; the model then reads the spilled file with offset/limit and
-grep. Toolaria&#39;s <code>range</code>/<code>grep</code>/<code>stat</code>/<code>full</code> modes mirror this.</li>
+grep. Toolaria's <code>range</code>/<code>grep</code>/<code>stat</code>/<code>full</code> modes mirror this.</li>
 <li><strong>OpenAI Codex</strong> issue <a href="https://github.com/openai/codex/issues/14206">#14206</a>
 specifies the same contract: spill the payload, return a reference plus
 preview, support full read, ranged read, and grep/search.</li>
 <li><strong>MCP ResourceLink</strong> (<a href="https://modelcontextprotocol.io/specification/2025-06-18/server/tools">2025-06-18 spec</a>)
 lets a tool return a URI handle instead of inline content.</li>
-<li><strong>Context-offloading</strong> as a named pattern: Anthropic&#39;s
+<li><strong>Context-offloading</strong> as a named pattern: Anthropic's
 <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">context engineering</a>
-post, LangChain&#39;s
+post, LangChain's
 <a href="https://www.langchain.com/blog/how-agents-can-use-filesystems-for-context-engineering">filesystems for context</a>,
-and the Manus &quot;compression must be restorable&quot; write-up.</li>
+and the Manus "compression must be restorable" write-up.</li>
 <li><strong><a href="https://github.com/stephenschoettler/hermes-lcm">hermes-lcm</a></strong> is the
 closest in-ecosystem work. It is a full context-engine replacement (message
 store, summary DAG, cross-session search) where large-output externalisation
@@ -271,7 +271,7 @@ placeholder. Toolaria is the opposite shape: a single-purpose interceptor,
 on by default, with the preview inline, no engine swap. They compose; you can
 run Toolaria alongside lcm or alongside Hermes core.</li>
 </ul>
-<p>Toolaria positions against Hermes core&#39;s default behaviour (MCP/web results
+<p>Toolaria positions against Hermes core's default behaviour (MCP/web results
 bypass the standard truncation), not against lcm.</p>
 <hr>
 <h3>How it works</h3>
@@ -285,8 +285,8 @@ bypass the standard truncation), not against lcm.</p>
     Toolaria-&gt;&gt;Store: SHA256(content) → store blob + update session index
     Toolaria-&gt;&gt;Result: build excerpt (head/tail/JSON structure)
     Toolaria--&gt;&gt;Model: excerpt + rescue handle block
-    Note over Model: handle includes blob_id, an explicit &quot;preview not full&quot; warning, and fetch commands
-    Model-&gt;&gt;Toolaria: rescuer_fetch(id=&quot;abc123&quot;, mode=&quot;grep&quot;, pattern=&quot;error&quot;)
+    Note over Model: handle includes blob_id, an explicit "preview not full" warning, and fetch commands
+    Model-&gt;&gt;Toolaria: rescuer_fetch(id="abc123", mode="grep", pattern="error")
     Toolaria-&gt;&gt;Store: fetch slice from blob
     Store--&gt;&gt;Toolaria: targeted content lines
     Toolaria--&gt;&gt;Model: only the matching slice enters context
@@ -512,8 +512,8 @@ than a bare error.</p>
 <h3>Pass-by-reference</h3>
 <p>A rescued result can be handed to another tool without the model reading it.
 The rescue handle tells the model: to feed the whole result into a downstream
-tool, pass <code>tla:&lt;id&gt;</code> as that tool&#39;s argument. A <code>tool_request</code> middleware
-expands the token into the blob&#39;s full content before the tool executes, so the
+tool, pass <code>tla:&lt;id&gt;</code> as that tool's argument. A <code>tool_request</code> middleware
+expands the token into the blob's full content before the tool executes, so the
 payload flows tool to tool and never re-enters the context window.</p>
 <p>Because the expanded content bypasses the context (and therefore any review of
 model-emitted args), expansion is <strong>denied by default for exec and exfil sinks</strong>
@@ -546,7 +546,7 @@ allowlist is available. Expansion is session-scoped when the host forwards a
 refused, so cross-session expansion of a guessed id is no longer served. When
 no <code>session_id</code> is forwarded (vanilla Hermes), expansion falls back to the
 global content-addressed read so single-session setups still work.</li>
-<li><strong>Store cap is approximate.</strong> <code>max_store_mb</code> now counts each blob&#39;s file
+<li><strong>Store cap is approximate.</strong> <code>max_store_mb</code> now counts each blob's file
 bytes plus its per-blob sidecars (outline, chunks, vectors), since eviction
 frees both. It remains approximate: the cap is enforced at sweep time, not on
 every write, so usage can briefly exceed it between sweeps.</li>
@@ -562,7 +562,7 @@ grep falls back to literal substring search and refuses metacharacter patterns.<
 gateway process. Pointing two gateway processes at the same <code>store_path</code> is not
 supported.</li>
 <li><strong>Fetch is a capability model.</strong> Any caller that knows a 12-hex blob id can
-fetch it; ids are content-derived and only revealed in the rescuing session&#39;s
+fetch it; ids are content-derived and only revealed in the rescuing session's
 handle. Swept-blob guidance is scoped to the owning session.</li>
 </ul>
 <h3>License</h3>
@@ -579,7 +579,7 @@ handle. Swept-blob guidance is scoped to the owning session.</li>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 322</div>
+        <div class="stars">★ 323</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">

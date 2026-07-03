@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 483
+    "userInteractionCount": 484
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">Hermes Desktop - OS1 Edition: native macOS workspace for Hermes Agent on Orgo cloud computers and SSH hosts</p>
 
   <div class="meta-row">
-    <span class="stars">★ 483</span>
+    <span class="stars">★ 484</span>
     <span><span class="meta-label">lang</span>Swift</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -157,11 +157,11 @@ The product you touch is OS1.</p>
 <ul>
 <li><strong>Cloud computers, end to end</strong>: paste your API key once, pick a
 workspace, pick a computer (or create one), save. The app talks
-directly to the platform&#39;s HTTP API and the per-VM websocket
+directly to the platform's HTTP API and the per-VM websocket
 terminal — no SSH, no gateway, no helper service on the VM.</li>
 <li><strong>One-click agent install</strong> on a fresh computer. The first time you
-open the workspace and the agent isn&#39;t there, the Overview screen
-surfaces an &quot;Install Hermes Agent&quot; button. ~60–90 seconds later
+open the workspace and the agent isn't there, the Overview screen
+surfaces an "Install Hermes Agent" button. ~60–90 seconds later
 Sessions, Kanban, Files, Skills, and Cron all populate.</li>
 <li><strong>Real interactive shell</strong> over the per-VM terminal websocket.
 Bytes stream in real time; resize works; output and history reflow
@@ -195,7 +195,7 @@ and Hermes already installed.</p>
 <p>Download the latest <code>OS1.app.zip</code> from the GitHub Releases page,
 unzip it, drag <code>OS1.app</code> into <code>/Applications</code>, and launch.</p>
 <p>The build is universal (Apple Silicon + Intel) and ad-hoc signed.
-On first launch macOS may say it can&#39;t verify the developer — right-click
+On first launch macOS may say it can't verify the developer — right-click
 the app, choose Open, and confirm.</p>
 <h3>Setup</h3>
 <h4>Cloud computer (recommended)</h4>
@@ -208,7 +208,7 @@ the macOS Keychain; subsequent connections reuse it.</li>
 <li>Pick a computer, or click <strong>Create new computer…</strong> to spin one up
 inline (defaults: Linux, 8 GB RAM, 4 CPU, 50 GB disk).</li>
 <li>Save → the connection is selectable from the host list.</li>
-<li>If the agent isn&#39;t installed on the VM, the <strong>Overview</strong> screen
+<li>If the agent isn't installed on the VM, the <strong>Overview</strong> screen
 shows an install banner. One click runs the official Hermes
 Agent installer. You can use the rest of the app while it runs.</li>
 </ol>
@@ -234,11 +234,11 @@ Swift endpoint keeps <code>OPENAI_API_KEY</code> server-side, forwards the SDP t
 <p>Use the <strong>Providers</strong> tab to save an OpenAI key in the macOS Keychain.
 For local development, <code>OPENAI_API_KEY</code> is also supported as a fallback.</p>
 <p>Run from source with an environment fallback:</p>
-<pre><code class="language-sh">OPENAI_API_KEY=&quot;sk-...&quot; swift run OS1
+<pre><code class="language-sh">OPENAI_API_KEY="sk-..." swift run OS1
 </code></pre>
 <p>Run the packaged app from a shell with an environment fallback:</p>
 <pre><code class="language-sh">./scripts/build-macos-app.sh
-OPENAI_API_KEY=&quot;sk-...&quot; ./dist/OS1.app/Contents/MacOS/OS1
+OPENAI_API_KEY="sk-..." ./dist/OS1.app/Contents/MacOS/OS1
 </code></pre>
 <p>The packaging script signs ad-hoc with an explicit designated
 requirement for <code>com.elementsoftware.os1</code>, which gives macOS a stable
@@ -258,23 +258,23 @@ model tool calls back to <code>tools/call</code>; Orgo credentials stay in the
 Swift app and are never sent to the browser or model. By default the
 Realtime voice bridge exposes <code>core,screen,files</code>, disables file upload,
 uses the saved Orgo API key in OS1 or <code>ORGO_API_KEY</code> if no key is saved,
-and passes the active Orgo connection&#39;s computer ID as
+and passes the active Orgo connection's computer ID as
 <code>ORGO_DEFAULT_COMPUTER_ID</code>.</p>
 <p>Voice mode runs <code>npx -y @orgo-ai/mcp</code> by default. You can override the
 bridge with:</p>
-<pre><code class="language-sh">OS1_ORGO_MCP_JS_PATH=&quot;/absolute/path/to/dist/index.js&quot;
-OS1_ORGO_MCP_PACKAGE=&quot;@orgo-ai/mcp&quot;
-OS1_REALTIME_ORGO_TOOLSETS=&quot;core,screen,files&quot;
-OS1_REALTIME_ORGO_DISABLED_TOOLS=&quot;orgo_upload_file&quot;
-OS1_REALTIME_ORGO_READ_ONLY=&quot;true&quot;
+<pre><code class="language-sh">OS1_ORGO_MCP_JS_PATH="/absolute/path/to/dist/index.js"
+OS1_ORGO_MCP_PACKAGE="@orgo-ai/mcp"
+OS1_REALTIME_ORGO_TOOLSETS="core,screen,files"
+OS1_REALTIME_ORGO_DISABLED_TOOLS="orgo_upload_file"
+OS1_REALTIME_ORGO_READ_ONLY="true"
 </code></pre>
 <p><code>shell</code> and <code>admin</code> are opt-in through <code>OS1_REALTIME_ORGO_TOOLSETS</code>.
 Only enable them for agents and computers you are comfortable letting a
 voice model operate.</p>
 <p>Live integration tests (skipped by default) hit a real cloud computer:</p>
 <pre><code class="language-sh">ORGO_LIVE_TESTS=1 \
-ORGO_API_KEY=&quot;sk_live_...&quot; \
-ORGO_DEFAULT_COMPUTER_ID=&quot;&lt;uuid&gt;&quot; \
+ORGO_API_KEY="sk_live_..." \
+ORGO_DEFAULT_COMPUTER_ID="&lt;uuid&gt;" \
 swift test --filter OrgoTransportLiveTests
 </code></pre>
 <h3>How it routes</h3>
@@ -293,7 +293,7 @@ first.</li>
 feeding bytes into SwiftTerm.</li>
 </ol>
 <p>VM clock drift, missing system git, stale apt locks from earlier
-attempts — all handled in the install path so you don&#39;t have to wrestle
+attempts — all handled in the install path so you don't have to wrestle
 with the VM by hand.</p>
 <h3>Acknowledgements</h3>
 <p>OS1 builds on two layers of generous prior work:</p>
@@ -301,7 +301,7 @@ with the VM by hand.</p>
 <li>The original native macOS application code is forked from
 <a href="https://github.com/dodo-reach/hermes-desktop">dodo-reach/hermes-desktop</a>,
 the SSH-first companion for the Hermes Agent. The conventions, panels,
-discovery model, and most of the SSH-side code are that author&#39;s
+discovery model, and most of the SSH-side code are that author's
 design.</li>
 <li>The cloud-computer transport, websocket terminal, agent auto-install,
 and connection picker were added on top to make OS1 work directly
@@ -339,15 +339,15 @@ for bugs and feature requests.</p>
         <div class="name"><span class="org">sanchomuzax /</span> hermes-webui</div>
       </a>
       <a class="related-row" href="/projects/Euraika-Labs/pan-ui">
-        <div class="stars">★ 87</div>
+        <div class="stars">★ 88</div>
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/abundantbeing/hermes-browser-extension">
-        <div class="stars">★ 435</div>
+        <div class="stars">★ 449</div>
         <div class="name"><span class="org">abundantbeing /</span> hermes-browser-extension</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 690</div>
+        <div class="stars">★ 707</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -355,7 +355,7 @@ for bugs and feature requests.</p>
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 675</div>
+        <div class="stars">★ 678</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>

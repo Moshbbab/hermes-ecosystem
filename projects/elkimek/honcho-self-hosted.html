@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 334
+    "userInteractionCount": 335
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">Self-host Honcho memory layer for Hermes Agent — OpenRouter + Venice, no code changes</p>
 
   <div class="meta-row">
-    <span class="stars">★ 334</span>
+    <span class="stars">★ 335</span>
     <span><span class="meta-label">lang</span>Shell</span>
     <span><span class="meta-label">license</span>GPL-3.0</span>
     
@@ -149,15 +149,15 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <h2>Self-Hosted Honcho for Hermes Agent</h2>
-<p>Self-host <a href="https://github.com/plastic-labs/honcho">Honcho</a> (Plastic Labs&#39; memory layer) on your own server instead of using their cloud. Works with <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> out of the box.</p>
+<p>Self-host <a href="https://github.com/plastic-labs/honcho">Honcho</a> (Plastic Labs' memory layer) on your own server instead of using their cloud. Works with <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> out of the box.</p>
 <p><strong>No fork required</strong> — just 3 config files on top of upstream Honcho.</p>
 <h3>Background: Hermes L4 Memory</h3>
 <p>Hermes Agent has a 4-layer memory system. The cross-session memory layer is powered by <a href="https://github.com/plastic-labs/honcho">Honcho</a>, which builds a deepening model of the user across conversations — extracting observations, recalling context, and consolidating memories over time.</p>
-<p>By default, Hermes uses Plastic Labs&#39; managed cloud (<a href="https://honcho.dev">honcho.dev</a>) + their <a href="https://plasticlabs.ai/neuromancer">Neuromancer</a> models. This works out of the box but means your conversation data and user profile live on their servers.</p>
+<p>By default, Hermes uses Plastic Labs' managed cloud (<a href="https://honcho.dev">honcho.dev</a>) + their <a href="https://plasticlabs.ai/neuromancer">Neuromancer</a> models. This works out of the box but means your conversation data and user profile live on their servers.</p>
 <h4>What are Neuromancer models?</h4>
-<p><a href="https://blog.plasticlabs.ai/research/Introducing-Neuromancer-XR">Neuromancer XR</a> is a specialized 8B model fine-tuned from Qwen3-8B specifically for extracting logical conclusions from conversations. Unlike general-purpose LLMs which are optimized for plausible text generation, Neuromancer is trained on ~10,000 curated social reasoning traces to follow formal logic — extracting both explicit facts (&quot;user said they like Python&quot;) and deductive conclusions (&quot;user is likely a developer&quot;).</p>
+<p><a href="https://blog.plasticlabs.ai/research/Introducing-Neuromancer-XR">Neuromancer XR</a> is a specialized 8B model fine-tuned from Qwen3-8B specifically for extracting logical conclusions from conversations. Unlike general-purpose LLMs which are optimized for plausible text generation, Neuromancer is trained on ~10,000 curated social reasoning traces to follow formal logic — extracting both explicit facts ("user said they like Python") and deductive conclusions ("user is likely a developer").</p>
 <p>It scores 86.9% on the LoCoMo memory benchmark vs. 69.6% for base Qwen3-8B and 80.0% for Claude 4 Sonnet.</p>
-<p><strong>Tradeoff of not using it:</strong> General-purpose models work well for observation extraction and memory recall — Honcho&#39;s prompts and tool-calling pipeline compensate for much of the gap. You may get slightly less precise deductive reasoning, but capable models (GLM-5, Grok 4.1) with strong function calling largely close the difference. The main advantage of self-hosting is data sovereignty, not matching Neuromancer&#39;s exact reasoning quality.</p>
+<p><strong>Tradeoff of not using it:</strong> General-purpose models work well for observation extraction and memory recall — Honcho's prompts and tool-calling pipeline compensate for much of the gap. You may get slightly less precise deductive reasoning, but capable models (GLM-5, Grok 4.1) with strong function calling largely close the difference. The main advantage of self-hosting is data sovereignty, not matching Neuromancer's exact reasoning quality.</p>
 <h3>Deployment Options</h3>
 <table>
 <thead>
@@ -195,12 +195,12 @@
 <td>Hardware only</td>
 </tr>
 </tbody></table>
-<p><strong>Managed cloud</strong> — Zero setup. Best for getting started. Your data is on Plastic Labs&#39; infrastructure.</p>
-<p><strong>Self-hosted + API</strong> — This repo. Your data stays on your machine. LLM calls go to a cloud API for inference only — the provider sees request content but doesn&#39;t store your memory data. Best balance of privacy and capability.</p>
+<p><strong>Managed cloud</strong> — Zero setup. Best for getting started. Your data is on Plastic Labs' infrastructure.</p>
+<p><strong>Self-hosted + API</strong> — This repo. Your data stays on your machine. LLM calls go to a cloud API for inference only — the provider sees request content but doesn't store your memory data. Best balance of privacy and capability.</p>
 <p><strong>Self-hosted + local model</strong> — Maximum privacy. No data leaves your network. Requires a GPU or capable CPU on your LAN running an inference server (Ollama, vLLM, llama.cpp). Set <code>LLM_VLLM_BASE_URL</code> to your local server. Trade-off: smaller models may produce lower quality observations and reasoning than cloud APIs.</p>
 <h3>What this does</h3>
 <ul>
-<li>Runs Honcho&#39;s full memory stack (API, Deriver, PostgreSQL, Redis) on your machine</li>
+<li>Runs Honcho's full memory stack (API, Deriver, PostgreSQL, Redis) on your machine</li>
 <li>Routes LLM calls through any OpenAI-compatible provider (primary + backup)</li>
 <li>All your data stays on your machine — no third-party cloud storage</li>
 <li>Works with OpenRouter, Venice, Routstr, Together, Ollama, or any other provider</li>
@@ -234,8 +234,8 @@ bash /tmp/setup.sh
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
-echo &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-  https://download.docker.com/linux/ubuntu $(. /etc/os-release &amp;&amp; echo $VERSION_CODENAME) stable&quot; \
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
+  https://download.docker.com/linux/ubuntu $(. /etc/os-release &amp;&amp; echo $VERSION_CODENAME) stable" \
   | sudo tee /etc/apt/sources.list.d/docker.list
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -261,16 +261,16 @@ cp ~/honcho-self-hosted/env.example ~/honcho/.env
 <p>Replace the placeholder values with your actual API keys:</p>
 <ul>
 <li><code>LLM_VLLM_API_KEY</code> — primary LLM provider</li>
-<li><code>LLM_VLLM_BASE_URL</code> — primary provider&#39;s API URL</li>
+<li><code>LLM_VLLM_BASE_URL</code> — primary provider's API URL</li>
 <li><code>LLM_EMBEDDING_API_KEY</code> — embedding provider (can be same as primary)</li>
-<li><code>LLM_EMBEDDING_BASE_URL</code> — embedding provider&#39;s API URL</li>
+<li><code>LLM_EMBEDDING_BASE_URL</code> — embedding provider's API URL</li>
 <li><code>LLM_EMBEDDING_MODEL</code> — embedding model name (default: <code>openai/text-embedding-3-small</code>)</li>
 <li><code>LLM_OPENAI_COMPATIBLE_API_KEY</code> — backup LLM provider (optional)</li>
 <li><code>LLM_OPENAI_API_KEY</code> — same as your primary key (needed for client init)</li>
 </ul>
 <p>Any OpenAI-compatible provider works (OpenRouter, Venice, Routstr, Together, etc.) — just set the key and URL. See <a href="#using-different-providers">Using different providers</a> for details.</p>
 <p><strong>Embedding fallback:</strong> if <code>LLM_EMBEDDING_API_KEY</code> or <code>LLM_EMBEDDING_BASE_URL</code> is left empty, Honcho falls back to the backup provider credentials (<code>LLM_OPENAI_COMPATIBLE_*</code>). This is useful if your backup provider (e.g. Venice) supports embeddings at negligible cost.</p>
-<p><strong>If you don&#39;t want a backup provider:</strong> remove all <code>BACKUP_PROVIDER</code> and <code>BACKUP_MODEL</code> lines from <code>config.toml</code>, and set <code>LLM_OPENAI_COMPATIBLE_API_KEY</code> + <code>OPENAI_COMPATIBLE_BASE_URL</code> to the same values as your primary. The setup script handles this automatically.</p>
+<p><strong>If you don't want a backup provider:</strong> remove all <code>BACKUP_PROVIDER</code> and <code>BACKUP_MODEL</code> lines from <code>config.toml</code>, and set <code>LLM_OPENAI_COMPATIBLE_API_KEY</code> + <code>OPENAI_COMPATIBLE_BASE_URL</code> to the same values as your primary. The setup script handles this automatically.</p>
 <h4>4. Start Honcho</h4>
 <pre><code class="language-bash">cd ~/honcho
 docker compose up -d
@@ -291,12 +291,12 @@ hermes gateway restart
 <h3>Model Configuration</h3>
 <p>Honcho has 4 background components that use LLM calls:</p>
 <ul>
-<li><strong>Deriver</strong> — Reads every message and extracts observations about the user (&quot;prefers Python&quot;, &quot;privacy-focused&quot;). Memory formation.</li>
+<li><strong>Deriver</strong> — Reads every message and extracts observations about the user ("prefers Python", "privacy-focused"). Memory formation.</li>
 <li><strong>Dialectic</strong> — Answers questions about the user on demand, with 5 reasoning levels (minimal → max). Memory recall.</li>
 <li><strong>Summary</strong> — Compresses long sessions into short/long summaries to keep context manageable.</li>
 <li><strong>Dream</strong> — Runs every ~8 hours. Merges redundant observations, deletes outdated ones, infers higher-level patterns. Memory consolidation.</li>
 </ul>
-<p>LLM calls are tiered by task complexity. Defaults are chosen for <strong>function-calling reliability</strong> (the primary requirement for Honcho&#39;s tool-using agents):</p>
+<p>LLM calls are tiered by task complexity. Defaults are chosen for <strong>function-calling reliability</strong> (the primary requirement for Honcho's tool-using agents):</p>
 <table>
 <thead>
 <tr>
@@ -391,12 +391,12 @@ docker compose up -d --build
 </tbody></table>
 <p>You can mix providers per component in <code>config.toml</code>:</p>
 <pre><code class="language-toml">[deriver]
-PROVIDER = &quot;groq&quot;          # fast for frequent tasks
-MODEL = &quot;llama-3.3-70b&quot;
+PROVIDER = "groq"          # fast for frequent tasks
+MODEL = "llama-3.3-70b"
 
 [dream]
-PROVIDER = &quot;anthropic&quot;     # best reasoning for rare tasks
-MODEL = &quot;claude-sonnet-4-6&quot;
+PROVIDER = "anthropic"     # best reasoning for rare tasks
+MODEL = "claude-sonnet-4-6"
 </code></pre>
 <h3>Local / LAN Inference</h3>
 <p>For maximum privacy, run a local model instead of a cloud API. Any server with an OpenAI-compatible endpoint works.</p>
@@ -444,21 +444,21 @@ vllm serve THUDM/GLM-4.7-Flash --port 8001 --enable-auto-tool-choice
 <p>Setup: <code>http://localhost:8001/v1</code> with model name <code>THUDM/GLM-4.7-Flash</code></p>
 <h4>Considerations</h4>
 <ul>
-<li><strong>Model size matters</strong> — Honcho&#39;s agents need reliable function calling and structured JSON. Models under 14B may miss tool calls or malform output. 32B+ recommended.</li>
-<li><strong>Embeddings need a cloud API</strong> — local servers typically can&#39;t serve embedding models. The setup script asks for a separate cloud API key, URL, and model name for embeddings (e.g. OpenRouter with <code>openai/text-embedding-3-small</code>, or Venice with <code>text-embedding-bge-m3</code>), or lets you disable embeddings entirely (Honcho works but without vector search).</li>
-<li><strong>Same model for all tiers</strong> — locally you&#39;ll typically run one model. The script sets it for all components. You can differentiate later in <code>config.toml</code> if you serve multiple models.</li>
-<li><strong>No backup provider</strong> — local mode uses a single server. If it goes down, Honcho&#39;s deriver queues work until it&#39;s back.</li>
+<li><strong>Model size matters</strong> — Honcho's agents need reliable function calling and structured JSON. Models under 14B may miss tool calls or malform output. 32B+ recommended.</li>
+<li><strong>Embeddings need a cloud API</strong> — local servers typically can't serve embedding models. The setup script asks for a separate cloud API key, URL, and model name for embeddings (e.g. OpenRouter with <code>openai/text-embedding-3-small</code>, or Venice with <code>text-embedding-bge-m3</code>), or lets you disable embeddings entirely (Honcho works but without vector search).</li>
+<li><strong>Same model for all tiers</strong> — locally you'll typically run one model. The script sets it for all components. You can differentiate later in <code>config.toml</code> if you serve multiple models.</li>
+<li><strong>No backup provider</strong> — local mode uses a single server. If it goes down, Honcho's deriver queues work until it's back.</li>
 </ul>
 <h3>MCP Server (optional)</h3>
 <p>Honcho includes an MCP server that exposes memory tools (search, chat, observations, peer cards) to any MCP-compatible client like Claude Code or Claude Desktop.</p>
-<p>The hosted version at <code>mcp.honcho.dev</code> points at Plastic Labs&#39; cloud. For self-hosted, run the MCP server locally and point it at your Honcho instance.</p>
+<p>The hosted version at <code>mcp.honcho.dev</code> points at Plastic Labs' cloud. For self-hosted, run the MCP server locally and point it at your Honcho instance.</p>
 <p>The setup script offers to configure MCP automatically. To set it up manually:</p>
 <h4>Setup</h4>
 <p>Requires Node.js 22+ and Bun on the server:</p>
 <pre><code class="language-bash">cd ~/honcho/mcp
 
 # Patch to use local Honcho instead of honcho.dev
-sed -i &#39;s|https://api.honcho.dev|http://localhost:8000|&#39; src/config.ts
+sed -i 's|https://api.honcho.dev|http://localhost:8000|' src/config.ts
 
 bun install
 </code></pre>
@@ -489,25 +489,25 @@ sudo systemctl enable --now honcho-mcp
 </code></pre>
 <p>Then add to Claude Code:</p>
 <pre><code class="language-bash">claude mcp add --transport http honcho http://localhost:8787 \
-  --header &quot;Authorization: Bearer local&quot; \
-  --header &quot;X-Honcho-User-Name: your-name&quot; \
-  --header &quot;X-Honcho-Workspace-ID: hermes&quot;
+  --header "Authorization: Bearer local" \
+  --header "X-Honcho-User-Name: your-name" \
+  --header "X-Honcho-Workspace-ID: hermes"
 </code></pre>
 <h4>Connect Claude Desktop</h4>
 <p>Add to your Claude Desktop config (<code>claude_desktop_config.json</code>):</p>
 <pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;honcho&quot;: {
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [
-        &quot;mcp-remote&quot;,
-        &quot;http://localhost:8787&quot;,
-        &quot;--header&quot;, &quot;Authorization:${AUTH_HEADER}&quot;,
-        &quot;--header&quot;, &quot;X-Honcho-User-Name:${USER_NAME}&quot;
+  "mcpServers": {
+    "honcho": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://localhost:8787",
+        "--header", "Authorization:${AUTH_HEADER}",
+        "--header", "X-Honcho-User-Name:${USER_NAME}"
       ],
-      &quot;env&quot;: {
-        &quot;AUTH_HEADER&quot;: &quot;Bearer local&quot;,
-        &quot;USER_NAME&quot;: &quot;your-name&quot;
+      "env": {
+        "AUTH_HEADER": "Bearer local",
+        "USER_NAME": "your-name"
       }
     }
   }
@@ -522,7 +522,7 @@ git pull
 docker compose up -d --build
 </code></pre>
 <p>If you use the MCP server, re-apply the patch after pulling:</p>
-<pre><code class="language-bash">sed -i &#39;s|https://api.honcho.dev|http://localhost:8000|&#39; mcp/src/config.ts
+<pre><code class="language-bash">sed -i 's|https://api.honcho.dev|http://localhost:8000|' mcp/src/config.ts
 sudo systemctl restart honcho-mcp
 </code></pre>
 <p><strong>View logs:</strong></p>
@@ -538,7 +538,7 @@ sudo systemctl restart honcho-mcp
 <ul>
 <li><strong>Embedding fallback shares backup config</strong> — if <code>LLM_EMBEDDING_API_KEY</code> / <code>LLM_EMBEDDING_BASE_URL</code> are empty, Honcho falls back to <code>LLM_OPENAI_COMPATIBLE_*</code> (backup provider). This is intentional and works well when your backup supports embeddings (e.g. Venice with <code>text-embedding-bge-m3</code>). Set the embedding env vars explicitly if you want embeddings routed separately.</li>
 <li><strong>One backup per component</strong> — Honcho supports primary + one backup provider, not a full failover chain. Using a multi-provider router (e.g. OpenRouter) as primary mitigates this.</li>
-<li><strong>No E2EE</strong> — Honcho&#39;s agents use function calling, which isn&#39;t compatible with end-to-end encryption. LLM request content is visible to the provider, but your stored data (sessions, observations, embeddings) stays on your machine.</li>
+<li><strong>No E2EE</strong> — Honcho's agents use function calling, which isn't compatible with end-to-end encryption. LLM request content is visible to the provider, but your stored data (sessions, observations, embeddings) stays on your machine.</li>
 </ul>
 <h3>Files</h3>
 <table>
@@ -588,7 +588,7 @@ sudo systemctl restart honcho-mcp
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.9K</div>
+        <div class="stars">★ 60.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -600,7 +600,7 @@ sudo systemctl restart honcho-mcp
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 188</div>
+        <div class="stars">★ 189</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -608,7 +608,7 @@ sudo systemctl restart honcho-mcp
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 213</div>
+        <div class="stars">★ 214</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -616,7 +616,7 @@ sudo systemctl restart honcho-mcp
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 24.8K</div>
+        <div class="stars">★ 24.9K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

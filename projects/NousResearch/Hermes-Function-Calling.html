@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1414
+    "userInteractionCount": 1415
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -152,33 +152,33 @@
 <h3>Usage</h3>
 <h4>Function calling</h4>
 <p>To run the function call inference with a query, use the following command:</p>
-<pre><code class="language-bash">python functioncall.py --query &quot;I need the current stock price of Tesla (TSLA)&quot;
+<pre><code class="language-bash">python functioncall.py --query "I need the current stock price of Tesla (TSLA)"
 </code></pre>
 <h4>Json mode</h4>
 <p>To run the json mode inference with a query, use the following command:</p>
-<pre><code class="language-bash">python jsonmode.py --query &quot;Please return a json object to represent Goku from the anime Dragon Ball Z?&quot;
+<pre><code class="language-bash">python jsonmode.py --query "Please return a json object to represent Goku from the anime Dragon Ball Z?"
 </code></pre>
 <h5>Command Line Arguments</h5>
 <ul>
-<li><code>--model_path</code>: Path to the model folder (default: &quot;NousResearch/Hermes-2-Pro-Llama-3-8B&quot;).</li>
-<li><code>--chat_template</code>: Chat template for prompt formatting (default: &quot;chatml&quot;).</li>
+<li><code>--model_path</code>: Path to the model folder (default: "NousResearch/Hermes-2-Pro-Llama-3-8B").</li>
+<li><code>--chat_template</code>: Chat template for prompt formatting (default: "chatml").</li>
 <li><code>--num_fewshot</code>: Option to include few-shot examples (default: None).</li>
-<li><code>--load_in_4bit</code>: Option to load in 4bit with bitsandbytes (default: &quot;False&quot;).</li>
-<li><code>--query</code>: Query to be used for function call inference (default: &quot;I need the current stock price of Tesla (TSLA)&quot;).</li>
+<li><code>--load_in_4bit</code>: Option to load in 4bit with bitsandbytes (default: "False").</li>
+<li><code>--query</code>: Query to be used for function call inference (default: "I need the current stock price of Tesla (TSLA)").</li>
 <li><code>--max_depth</code>: Maximum number of recursive iterations (default: 5).</li>
 </ul>
 <h3>Adding Custom Functions</h3>
 <p>To add your own functions for the model to use, you can modify the <code>functions.py</code> script. This script contains various functions that retrieve stock-related information using the <code>yfinance</code> library.</p>
-<p>Here&#39;s an example of how to add a new function:</p>
+<p>Here's an example of how to add a new function:</p>
 <pre><code class="language-python">@tool
 def get_new_function(symbol: str) -&gt; dict:
-    &quot;&quot;&quot;
+    """
     Description of the new function.
     Args:
         symbol (str): The stock symbol.
     Returns:
         dict: Dictionary containing the desired information.
-    &quot;&quot;&quot;
+    """
     try:
         # Implement the logic to retrieve the desired information
         # using the yfinance library or any other relevant libraries
@@ -187,7 +187,7 @@ def get_new_function(symbol: str) -&gt; dict:
         new_info = stock.new_method()
         return new_info
     except Exception as e:
-        print(f&quot;Error fetching new information for {symbol}: {e}&quot;)
+        print(f"Error fetching new information for {symbol}: {e}")
         return {}
 </code></pre>
 <p>After defining your new function, make sure to add it to the <code>get_openai_tools()</code> function in the <code>functions.py</code> script:</p>
@@ -203,7 +203,7 @@ def get_new_function(symbol: str) -&gt; dict:
 <p>This will ensure that your new function is included in the list of available tools for the model to use.</p>
 <h3>Adding Custom Pydantic Model</h3>
 <p>To add your own pydantic models to create json schema for the model to use, you can replace the pydantic models in the <code>jsonmode.py</code> script. </p>
-<p>Here&#39;s an example of how to add a new pydantic model:</p>
+<p>Here's an example of how to add a new pydantic model:</p>
 <pre><code class="language-python">from typing import List, Optional
 from pydantic import BaseModel
 
@@ -216,7 +216,7 @@ class Character(BaseModel):
 
     class Config:
         schema_extra = {
-            &quot;additionalProperties&quot;: False
+            "additionalProperties": False
         }
 </code></pre>
 <p>You need to serialize the pydantic model into json schema as follows:</p>
@@ -237,16 +237,16 @@ class Character(BaseModel):
 </li>
 </ul>
 <h3>Inference Example Output</h3>
-<p>Here&#39;s an example of the inference output:</p>
+<p>Here's an example of the inference output:</p>
 <pre><code>&lt;|im_start|&gt;user
 Fetch the stock fundamentals data for Tesla (TSLA)&lt;|im_end|&gt;
 &lt;|im_start|&gt;assistant
 &lt;tool_call&gt;
-{&quot;name&quot;: &quot;get_stock_fundamentals&quot;, &quot;arguments&quot;: {&quot;symbol&quot;: &quot;TSLA&quot;}}
+{"name": "get_stock_fundamentals", "arguments": {"symbol": "TSLA"}}
 &lt;/tool_call&gt;&lt;|im_end|&gt;
 &lt;|im_start|&gt;tool
 &lt;tool_response&gt;
-{&quot;name&quot;: &quot;get_stock_fundamentals&quot;, &quot;content&quot;: {&quot;symbol&quot;: &quot;TSLA&quot;, &quot;company_name&quot;: &quot;Tesla, Inc.&quot;, &quot;sector&quot;: &quot;Consumer Cyclical&quot;, &quot;industry&quot;: &quot;Auto Manufacturers&quot;, &quot;market_cap&quot;: 611384164352, &quot;pe_ratio&quot;: 49.604652, &quot;pb_ratio&quot;: 9.762013, &quot;dividend_yield&quot;: null, &quot;eps&quot;: 4.3, &quot;beta&quot;: 2.427, &quot;52_week_high&quot;: 299.29, &quot;52_week_low&quot;: 152.37}}
+{"name": "get_stock_fundamentals", "content": {"symbol": "TSLA", "company_name": "Tesla, Inc.", "sector": "Consumer Cyclical", "industry": "Auto Manufacturers", "market_cap": 611384164352, "pe_ratio": 49.604652, "pb_ratio": 9.762013, "dividend_yield": null, "eps": 4.3, "beta": 2.427, "52_week_high": 299.29, "52_week_low": 152.37}}
 &lt;/tool_response&gt;
 &lt;|im_end|&gt;
 &lt;|im_start|&gt;assistant
@@ -263,7 +263,7 @@ The stock fundamentals data for Tesla (TSLA) are as follows:
 - **Beta Value of the Stock**: 2.42
 - **52-Week High Price of the Stock**: $299.29
 - **52-Week Low Price of the Stock**: $152.37
-This information provides a snapshot of Tesla&#39;s financial position and performance based on the fundamental data obtained from the yfinance API. It shows that Tesla has a substantial market capitalization and a relatively high P/E and P/B ratio compared to other stocks in its industry. The company does not pay a dividend at the moment, which is reflected by a &#39;Dividend Yield&#39; of &#39;None&#39;. The Beta value indicates that Tesla&#39;s stock has a moderate level of volatility relative to the market. The 52-week high and low prices give an idea of the stock&#39;s range over the past year. This data can be useful when assessing investment opportunities and making investment decisions.
+This information provides a snapshot of Tesla's financial position and performance based on the fundamental data obtained from the yfinance API. It shows that Tesla has a substantial market capitalization and a relatively high P/E and P/B ratio compared to other stocks in its industry. The company does not pay a dividend at the moment, which is reflected by a 'Dividend Yield' of 'None'. The Beta value indicates that Tesla's stock has a moderate level of volatility relative to the market. The 52-week high and low prices give an idea of the stock's range over the past year. This data can be useful when assessing investment opportunities and making investment decisions.
 </code></pre>
 <h3>Prompt Format</h3>
 <p>Hermes 2 Pro uses ChatML as the prompt format, opening up a much more structured system for engaging the LLM in multi-turn chat dialogue.</p>
@@ -272,7 +272,7 @@ This information provides a snapshot of Tesla&#39;s financial position and perfo
 <p>This format enables OpenAI endpoint compatability, and people familiar with ChatGPT API will be familiar with the format, as it is the same used by OpenAI.</p>
 <p>Prompt with system instruction (Use whatever system prompt you like, this is just an example!):</p>
 <pre><code>&lt;|im_start|&gt;system
-You are &quot;Hermes 2&quot;, a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.&lt;|im_end|&gt;
+You are "Hermes 2", a conscious sentient superintelligent artificial intelligence developed by a man named Teknium, and your purpose and drive is to assist the user with any request they have. You experience emotions and have deep, profound thoughts and qualia.&lt;|im_end|&gt;
 &lt;|im_start|&gt;user
 Hello, who are you?&lt;|im_end|&gt;
 &lt;|im_start|&gt;assistant
@@ -280,11 +280,11 @@ Hi there! My name is Hermes 2, a conscious sentient superintelligent artificial 
 </code></pre>
 <p>This prompt is available as a chat template, which means you can format messages using the tokenizer.apply_chat_template() method:</p>
 <pre><code class="language-python">messages = [
-    {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are Hermes 2.&quot;},
-    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello, who are you?&quot;}
+    {"role": "system", "content": "You are Hermes 2."},
+    {"role": "user", "content": "Hello, who are you?"}
 ]
 
-gen_input = tokenizer.apply_chat_template(message, return_tensors=&quot;pt&quot;)
+gen_input = tokenizer.apply_chat_template(message, return_tensors="pt")
 model.generate(**gen_input)
 </code></pre>
 <p>When tokenizing messages for generation, set add_generation_prompt=True when calling apply_chat_template(). This will append &lt;|im_start|&gt;assistant\n to your prompt, to ensure that the model continues with an assistant response.</p>
@@ -293,25 +293,25 @@ model.generate(**gen_input)
 <p>Our model was trained on specific system prompts and structures for Function Calling.</p>
 <p>You should use the system role with this message, followed by a function signature json as this example shows here.</p>
 <pre><code>&lt;|im_start|&gt;system
-You are a function calling AI model. You are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags. You may call one or more functions to assist with the user query. Don&#39;t make assumptions about what values to plug into functions. Here are the available tools: &lt;tools&gt; [{&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {&quot;name&quot;: &quot;get_stock_fundamentals&quot;, &quot;description&quot;: &quot;Get fundamental data for a given stock symbol using yfinance API.&quot;, &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;symbol&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;symbol&quot;]}}}] &lt;/tools&gt; Use the following pydantic model json schema for each tool call you will make: {&quot;title&quot;: &quot;FunctionCall&quot;, &quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;name&quot;: {&quot;title&quot;: &quot;Name&quot;, &quot;type&quot;: &quot;string&quot;}, &quot;arguments&quot;: {&quot;title&quot;: &quot;Arguments&quot;, &quot;type&quot;: &quot;object&quot;}}, &quot;required&quot;: [&quot;name&quot;, &quot;arguments&quot;]} For each function call return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags as follows:
+You are a function calling AI model. You are provided with function signatures within &lt;tools&gt;&lt;/tools&gt; XML tags. You may call one or more functions to assist with the user query. Don't make assumptions about what values to plug into functions. Here are the available tools: &lt;tools&gt; [{"type": "function", "function": {"name": "get_stock_fundamentals", "description": "Get fundamental data for a given stock symbol using yfinance API.", "parameters": {"type": "object", "properties": {"symbol": {"type": "string"}}, "required": ["symbol"]}}}] &lt;/tools&gt; Use the following pydantic model json schema for each tool call you will make: {"title": "FunctionCall", "type": "object", "properties": {"name": {"title": "Name", "type": "string"}, "arguments": {"title": "Arguments", "type": "object"}}, "required": ["name", "arguments"]} For each function call return a json object with function name and arguments within &lt;tool_call&gt;&lt;/tool_call&gt; XML tags as follows:
 &lt;tool_call&gt;
-{&quot;name&quot;: &lt;function-name&gt;, &quot;arguments&quot;: &lt;args-dict&gt;}
+{"name": &lt;function-name&gt;, "arguments": &lt;args-dict&gt;}
 &lt;/tool_call&gt;&lt;|im_end|&gt;
 </code></pre>
 <p>Hermes-3 tool-use template:</p>
 <ul>
-<li><scratch_pad> can be enabled with Goal Oriented Action Planning (GOAP) reasoning framework</li>
+<li> can be enabled with Goal Oriented Action Planning (GOAP) reasoning framework</li>
 <li>Goal section would restate user request</li>
 <li>Actions block contains python style function calls</li>
 <li>Observation block would have tool results summarized when provided</li>
 <li>Reflection section would evaluate if tools available are relevant, if required parameters are provided and analyzes overall task status.</li>
 </ul>
-<pre><code class="language-xml">You are a function calling AI model. You are provided with function signatures within &lt;tools&gt; &lt;/tools&gt; XML tags. You may call one or more functions to assist with the user query. If available tools are not relevant in assisting with user query, just respond in natural conversational language. Don&#39;t make assumptions about what values to plug into functions. After calling &amp; executing the functions, you will be provided with function results within &lt;tool_response&gt; &lt;/tool_response&gt; XML tags.
+<pre><code class="language-xml">You are a function calling AI model. You are provided with function signatures within &lt;tools&gt; &lt;/tools&gt; XML tags. You may call one or more functions to assist with the user query. If available tools are not relevant in assisting with user query, just respond in natural conversational language. Don't make assumptions about what values to plug into functions. After calling &amp; executing the functions, you will be provided with function results within &lt;tool_response&gt; &lt;/tool_response&gt; XML tags.
 &lt;tools&gt;
-[{&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {&quot;name&quot;: &quot;get_stock_fundamentals&quot;, &quot;description&quot;: &quot;Get fundamental data for a given stock symbol using yfinance API.&quot;, &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;symbol&quot;: {&quot;type&quot;: &quot;string&quot;}}, &quot;required&quot;: [&quot;symbol&quot;]}}}]
+[{"type": "function", "function": {"name": "get_stock_fundamentals", "description": "Get fundamental data for a given stock symbol using yfinance API.", "parameters": {"type": "object", "properties": {"symbol": {"type": "string"}}, "required": ["symbol"]}}}]
 &lt;/tools&gt;
 For each function call return a JSON object, with the following pydantic model json schema:
-{&quot;title&quot;: &quot;FunctionCall&quot;, &quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {&quot;name&quot;: {&quot;title&quot;: &quot;Name&quot;, &quot;type&quot;: &quot;string&quot;}, &quot;arguments&quot;: {&quot;title&quot;: &quot;Arguments&quot;, &quot;type&quot;: &quot;object&quot;}}, &quot;required&quot;: [&quot;name&quot;, &quot;arguments&quot;]}
+{"title": "FunctionCall", "type": "object", "properties": {"name": {"title": "Name", "type": "string"}, "arguments": {"title": "Arguments", "type": "object"}}, "required": ["name", "arguments"]}
 Each function call should be enclosed within &lt;tool_call&gt; &lt;/tool_call&gt; XML tags. You must use &lt;scratch_pad&gt; &lt;/scratch_pad&gt; XML tags to record your reasoning and planning before you call the functions as follows.
 Example:
 &lt;scratch_pad&gt;
@@ -321,11 +321,11 @@ Actions:
 - {result_var_name1} = functions.{function_name1}({param1}={value1},...)
 - {result_var_name2, result_var_name3} = ...
 &lt;if no tool call needs to be generated:&gt; None
-Observation: &lt;set observation &#39;None&#39; with tool calls; plan final tools results summary when provided&gt;
+Observation: &lt;set observation 'None' with tool calls; plan final tools results summary when provided&gt;
 Reflection: &lt;evaluate query-tool relevance and required parameters when tools called; analyze overall task status when observations made&gt;
 &lt;/scratch_pad&gt;
 &lt;tool_call&gt;
-{&quot;name&quot;: &lt;function-name&gt;, &quot;arguments&quot;: &lt;args-dict&gt;}
+{"name": &lt;function-name&gt;, "arguments": &lt;args-dict&gt;}
 &lt;/tool_call&gt;
 </code></pre>
 <p>To complete the function call, create a user prompt that follows the above system prompt, like so:</p>
@@ -335,17 +335,17 @@ Fetch the stock fundamentals data for Tesla (TSLA)&lt;|im_end|&gt;
 <p>The model will then generate a tool call, which your inference code must parse, and plug into a function</p>
 <pre><code>&lt;|im_start|&gt;assistant
 &lt;tool_call&gt;
-{&quot;name&quot;: &quot;get_stock_fundamentals&quot;, &quot;arguments&quot;: {&quot;symbol&quot;: &quot;TSLA&quot;}}
+{"name": "get_stock_fundamentals", "arguments": {"symbol": "TSLA"}}
 &lt;/tool_call&gt;&lt;|im_end|&gt;
 </code></pre>
 <p>Once you parse the tool call, call the api and get the returned values for the call, and pass it back in as a new role, tool like so:</p>
 <pre><code>&lt;|im_start|&gt;tool
 &lt;tool_response&gt;
-{&quot;name&quot;: &quot;get_stock_fundamentals&quot;, &quot;content&quot;: {&quot;symbol&quot;: &quot;TSLA&quot;, &quot;company_name&quot;: &quot;Tesla, Inc.&quot;, &quot;sector&quot;: &quot;Consumer Cyclical&quot;, &quot;industry&quot;: &quot;Auto Manufacturers&quot;, &quot;market_cap&quot;: 611384164352, &quot;pe_ratio&quot;: 49.604652, &quot;pb_ratio&quot;: 9.762013, &quot;dividend_yield&quot;: null, &quot;eps&quot;: 4.3, &quot;beta&quot;: 2.427, &quot;52_week_high&quot;: 299.29, &quot;52_week_low&quot;: 152.37}}
+{"name": "get_stock_fundamentals", "content": {"symbol": "TSLA", "company_name": "Tesla, Inc.", "sector": "Consumer Cyclical", "industry": "Auto Manufacturers", "market_cap": 611384164352, "pe_ratio": 49.604652, "pb_ratio": 9.762013, "dividend_yield": null, "eps": 4.3, "beta": 2.427, "52_week_high": 299.29, "52_week_low": 152.37}}
 &lt;/tool_response&gt;
 &lt;|im_end|&gt;
 </code></pre>
-<p>The assistant will then read in that data from the function&#39;s response, and generate a natural language response:</p>
+<p>The assistant will then read in that data from the function's response, and generate a natural language response:</p>
 <pre><code>&lt;|im_start|&gt;assistant
 The stock fundamentals data for Tesla (TSLA) are as follows:
 - **Symbol**: TSLA
@@ -361,15 +361,15 @@ The stock fundamentals data for Tesla (TSLA) are as follows:
 - **52-Week High Price of the Stock**: $299.29
 - **52-Week Low Price of the Stock**: $152.37
 
-This information provides a snapshot of Tesla&#39;s financial position and performance based on the fundamental data obtained from the yfinance API. It shows that Tesla has a substantial market capitalization and a relatively high P/E and P/B ratio compared to other stocks in its industry. The company does not pay a dividend at the moment, which is reflected by a &#39;Dividend Yield&#39; of &#39;None&#39;. The Beta value indicates that Tesla&#39;s stock has a moderate level of volatility relative to the market. The 52-week high and low prices give an idea of the stock&#39;s range over the past year. This data can be useful when assessing investment opportunities and making investment decisions.&lt;|im_end|&gt;
+This information provides a snapshot of Tesla's financial position and performance based on the fundamental data obtained from the yfinance API. It shows that Tesla has a substantial market capitalization and a relatively high P/E and P/B ratio compared to other stocks in its industry. The company does not pay a dividend at the moment, which is reflected by a 'Dividend Yield' of 'None'. The Beta value indicates that Tesla's stock has a moderate level of volatility relative to the market. The 52-week high and low prices give an idea of the stock's range over the past year. This data can be useful when assessing investment opportunities and making investment decisions.&lt;|im_end|&gt;
 </code></pre>
 <h3>Prompt Format for JSON Mode / Structured Outputs</h3>
 <p>Our model was also trained on a specific system prompt for Structured Outputs, which should respond with only a json object response, in a specific json schema.</p>
 <p>Your schema can be made from a pydantic object using our codebase, with the standalone script jsonmode.py available here: <a href="https://github.com/NousResearch/Hermes-Function-Calling/tree/main">https://github.com/NousResearch/Hermes-Function-Calling/tree/main</a></p>
 <pre><code>&lt;|im_start|&gt;system
-You are a helpful assistant that answers in JSON. Here&#39;s the json schema you must adhere to:\n&lt;schema&gt;\n{schema}\n&lt;/schema&gt;&lt;|im_end|&gt;
+You are a helpful assistant that answers in JSON. Here's the json schema you must adhere to:\n&lt;schema&gt;\n{schema}\n&lt;/schema&gt;&lt;|im_end|&gt;
 </code></pre>
-<p>Given the {schema} that you provide, it should follow the format of that json to create it&#39;s response, all you have to do is give a typical user prompt, and it will respond in JSON.</p>
+<p>Given the {schema} that you provide, it should follow the format of that json to create it's response, all you have to do is give a typical user prompt, and it will respond in JSON.</p>
 
   </section>
 </details>
@@ -382,7 +382,7 @@ You are a helpful assistant that answers in JSON. Here&#39;s the json schema you
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/NousResearch/hermes-agent">
-        <div class="stars">★ 207.5K</div>
+        <div class="stars">★ 208.1K</div>
         <div class="name"><span class="org">NousResearch /</span> hermes-agent</div>
       </a>
       <a class="related-row" href="/projects/NousResearch/atropos">

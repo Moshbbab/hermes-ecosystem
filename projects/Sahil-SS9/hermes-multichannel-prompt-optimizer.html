@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -148,7 +148,7 @@
 <p>Same agent, sharper prompts, lower token bills, better answers — without you having to think about prompt craft.</p>
 <hr>
 <h3>Why</h3>
-<p>A senior PM types <code>&quot;hey could you maybe explain to me very kindly what python generators are please when you get a chance&quot;</code> — 18 words, mostly filler. The model burns context on politeness and noise. With this plugin, the agent sees <code>&quot;Explain Python generators.&quot;</code> — clearer, cheaper, and the answer comes back sharper.</p>
+<p>A senior PM types <code>"hey could you maybe explain to me very kindly what python generators are please when you get a chance"</code> — 18 words, mostly filler. The model burns context on politeness and noise. With this plugin, the agent sees <code>"Explain Python generators."</code> — clearer, cheaper, and the answer comes back sharper.</p>
 <p>This pattern repeats across every conversation. Over a month, the savings are meaningful: in dogfooding so far the optimiser averages <strong>+55 quality points</strong> and <strong>20–80% token reduction</strong> per rewrite. You also build up a private dataset of your own prompt patterns and improvements, viewable via <code>/prompt-insights</code>.</p>
 <hr>
 <h3>What it does</h3>
@@ -196,14 +196,14 @@
 <p>The plugin <strong>automatically detects non-English prompts</strong> and preserves the original language during rewriting. If you type in Arabic, French, Chinese, Spanish, German, Russian, or any other language:</p>
 <ul>
 <li>The rewriter is instructed to <strong>keep the same language</strong> — no translation.</li>
-<li>The heuristic quality scorer <strong>skips English-only checks</strong> (action verbs, context words) so non-English prompts aren&#39;t unfairly penalised.</li>
+<li>The heuristic quality scorer <strong>skips English-only checks</strong> (action verbs, context words) so non-English prompts aren't unfairly penalised.</li>
 <li>Detection uses <code>langid</code> (97 languages) with a Unicode-range fallback for CJK, Arabic, Cyrillic, Hebrew, Devanagari, etc.</li>
 </ul>
 <p>The detection runs at the engine level, so it applies to <strong>all surfaces equally</strong> — CLI, TUI, Discord, Telegram.</p>
 <p>To install the language detection dependency:</p>
 <pre><code class="language-bash">pip install langid
 </code></pre>
-<p>Without <code>langid</code>, the plugin falls back to a Unicode-range heuristic that catches CJK, Arabic, Cyrillic, Hebrew, and other non-Latin scripts, but won&#39;t distinguish French/Spanish/German etc. from English for all-ASCII text.</p>
+<p>Without <code>langid</code>, the plugin falls back to a Unicode-range heuristic that catches CJK, Arabic, Cyrillic, Hebrew, and other non-Latin scripts, but won't distinguish French/Spanish/German etc. from English for all-ASCII text.</p>
 <hr>
 <h3>Requirements</h3>
 <ul>
@@ -213,7 +213,7 @@
 </li>
 <li>Python 3.11+</li>
 <li><strong>Optional:</strong> <code>pip install langid</code> for accurate language detection across 97 languages. Without it, only non-Latin scripts (CJK, Arabic, Cyrillic, etc.) are detected via Unicode-range heuristic.</li>
-<li>An LLM provider configured in Hermes for the optimiser model (the plugin uses Hermes&#39;s <code>ctx.llm</code> facade, so it inherits your active provider/auth — no separate keys needed by default).</li>
+<li>An LLM provider configured in Hermes for the optimiser model (the plugin uses Hermes's <code>ctx.llm</code> facade, so it inherits your active provider/auth — no separate keys needed by default).</li>
 </ul>
 <hr>
 <h3>Install</h3>
@@ -224,13 +224,13 @@
   enabled:
     - prompt-optimizer
 </code></pre>
-<p>Restart your Hermes session. Confirm it&#39;s loaded:</p>
+<p>Restart your Hermes session. Confirm it's loaded:</p>
 <pre><code class="language-bash">hermes plugins list | grep prompt-optimizer
 </code></pre>
 <p>You should see it as <code>enabled</code>. Then in <code>hermes chat</code>:</p>
 <pre><code>/prompt-optimizer status
 </code></pre>
-<p>If the status block prints, you&#39;re set.</p>
+<p>If the status block prints, you're set.</p>
 <hr>
 <h3>Modes</h3>
 <table>
@@ -242,7 +242,7 @@
 </thead>
 <tbody><tr>
 <td><code>auto</code> <em>(default)</em></td>
-<td>Silent rewrite — agent sees the optimised version, you don&#39;t see the diff.</td>
+<td>Silent rewrite — agent sees the optimised version, you don't see the diff.</td>
 </tr>
 <tr>
 <td><code>interactive</code></td>
@@ -312,7 +312,7 @@
         allowed_providers:
           - nous
 </code></pre>
-<p>This isolates the optimiser&#39;s LLM cost from your main session model — you can run Claude Opus for the agent while a £0.05/M token model handles rewrites.</p>
+<p>This isolates the optimiser's LLM cost from your main session model — you can run Claude Opus for the agent while a £0.05/M token model handles rewrites.</p>
 <h4>Model profiles — how the rewrite gets tailored</h4>
 <p>Every model resolves along two orthogonal axes:</p>
 <ol>
@@ -398,29 +398,29 @@
 <pre><code class="language-yaml">families:
   claude:
     prompt_tactics:
-      - &quot;Use XML tags (&lt;thinking&gt;, &lt;answer&gt;, &lt;example&gt;) to mark structure&quot;
-      - &quot;State constraints and boundaries explicitly&quot;
+      - "Use XML tags (&lt;thinking&gt;, &lt;answer&gt;, &lt;example&gt;) to mark structure"
+      - "State constraints and boundaries explicitly"
       # … add or override any rule …
     token_efficiency_rules:
-      - &quot;Replace &#39;Could you please&#39; with imperative verbs&quot;
+      - "Replace 'Could you please' with imperative verbs"
 
 capabilities:
   reasoning:
     prompt_tactics:
-      - &quot;Front-load ALL constraints — no incremental hints&quot;
+      - "Front-load ALL constraints — no incremental hints"
       # …
 
 family_aliases:
-  claude: [&quot;claude-&quot;, &quot;anthropic/&quot;]
+  claude: ["claude-", "anthropic/"]
   # …
 
 reasoning_indicators:
-  - &quot;o1&quot;
-  - &quot;o3&quot;
-  - &quot;thinking&quot;
+  - "o1"
+  - "o3"
+  - "thinking"
   # …
 </code></pre>
-<p>The tactics are sourced from each vendor&#39;s published prompt-engineering guidance:</p>
+<p>The tactics are sourced from each vendor's published prompt-engineering guidance:</p>
 <ul>
 <li>Claude — <a href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering">https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering</a></li>
 <li>OpenAI (general) — <a href="https://platform.openai.com/docs/guides/prompt-engineering">https://platform.openai.com/docs/guides/prompt-engineering</a></li>
@@ -433,7 +433,7 @@ reasoning_indicators:
 <h3>Privacy</h3>
 <ul>
 <li>All metrics live in a <strong>local SQLite database</strong> at <code>~/.hermes/plugins/prompt-optimizer/metrics.db</code>. Nothing is uploaded.</li>
-<li>The optimiser does call your configured LLM provider for the rewrite step — that&#39;s a third-party API call subject to your provider&#39;s privacy policy. If you don&#39;t want any external calls, set <code>/prompt-optimizer off</code>.</li>
+<li>The optimiser does call your configured LLM provider for the rewrite step — that's a third-party API call subject to your provider's privacy policy. If you don't want any external calls, set <code>/prompt-optimizer off</code>.</li>
 <li>The local database keeps 90 days of rewrites by default before pruning. Delete <code>metrics.db</code> any time to reset.</li>
 </ul>
 <hr>
@@ -455,7 +455,7 @@ reasoning_indicators:
 </tr>
 <tr>
 <td><code>transform_llm_output</code></td>
-<td>Append an inline quality-badge to the assistant&#39;s reply when a rewrite happened.</td>
+<td>Append an inline quality-badge to the assistant's reply when a rewrite happened.</td>
 </tr>
 </tbody></table>
 <hr>
@@ -467,7 +467,7 @@ reasoning_indicators:
 <li>it contains a fenced code block (<code>```</code>), or</li>
 <li>its first word is an orchestration verb: <code>delegate_task</code> or <code>delegate</code> (trailing <code>:</code> tolerated).</li>
 </ul>
-<p>Extend the verb list with the <code>PROMPT_OPTIMIZER_BYPASS_VERBS</code> environment variable (comma-separated), e.g. <code>PROMPT_OPTIMIZER_BYPASS_VERBS=fanout,council</code>. Verbs only match as the first word; prose like &quot;should I delegate this?&quot; is still optimised.</p>
+<p>Extend the verb list with the <code>PROMPT_OPTIMIZER_BYPASS_VERBS</code> environment variable (comma-separated), e.g. <code>PROMPT_OPTIMIZER_BYPASS_VERBS=fanout,council</code>. Verbs only match as the first word; prose like "should I delegate this?" is still optimised.</p>
 <hr>
 <h3>Development</h3>
 <p>Clone, edit, link into Hermes:</p>
@@ -483,7 +483,7 @@ venv/bin/pytest tests/plugins/test_prompt_optimizer_plugin.py -v
 <h3>Roadmap</h3>
 <ul>
 <li><input checked="" disabled="" type="checkbox"> Family + capability composition for model-tailored rewrites.</li>
-<li><input checked="" disabled="" type="checkbox"> Fix CLI <code>model=&quot;&quot;</code> plumbing so the target model reaches the optimiser.</li>
+<li><input checked="" disabled="" type="checkbox"> Fix CLI <code>model=""</code> plumbing so the target model reaches the optimiser.</li>
 <li><input checked="" disabled="" type="checkbox"> Multi-language support — auto-detect non-English prompts, preserve original language during rewrite.</li>
 <li><input disabled="" type="checkbox"> LLM-judged second-pass scoring (ask the target model to rate the rewrite). Adds latency; pending data on whether composition alone is enough.</li>
 <li><input disabled="" type="checkbox"> Per-user model-profile overrides scoped per session.</li>
@@ -491,7 +491,7 @@ venv/bin/pytest tests/plugins/test_prompt_optimizer_plugin.py -v
 </ul>
 <hr>
 <h3>Credits</h3>
-<p>Built by <a href="https://github.com/Sahil-SS9">Sahil Saghir</a> for the KENSEI / Octacon personal-agent stack. Released under MIT in case it&#39;s useful to anyone else running Hermes Agent in production.</p>
+<p>Built by <a href="https://github.com/Sahil-SS9">Sahil Saghir</a> for the KENSEI / Octacon personal-agent stack. Released under MIT in case it's useful to anyone else running Hermes Agent in production.</p>
 <hr>
 <h3>License</h3>
 <p>MIT — see <a href="./LICENSE">LICENSE</a>.</p>
@@ -507,7 +507,7 @@ venv/bin/pytest tests/plugins/test_prompt_optimizer_plugin.py -v
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.9K</div>
+        <div class="stars">★ 24.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">

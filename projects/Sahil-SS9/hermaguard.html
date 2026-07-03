@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 11
+    "userInteractionCount": 12
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">Adversarial bug-hunting code review for AI agents. 3 parallel subagents attack code from different angles, then a consolidator merges and triages findings. Read-only — finds problems, doesn't fix.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 11</span>
+    <span class="stars">★ 12</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -144,7 +144,7 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <h2>HermaGuard v2.0.0</h2>
-<p>Adversarial bug-hunting code review for AI agents. Deterministic pre-scan + 3 parallel subagents attack your code changes from different angles, then a consolidator merges and triages the findings. Read-only — finds problems, doesn&#39;t touch your code.</p>
+<p>Adversarial bug-hunting code review for AI agents. Deterministic pre-scan + 3 parallel subagents attack your code changes from different angles, then a consolidator merges and triages the findings. Read-only — finds problems, doesn't touch your code.</p>
 <pre><code>                   ┌──────────────────────────────┐
                    │   Phase 0: Deterministic      │
                    │   Pre-Scan (semgrep, bandit,  │
@@ -174,13 +174,13 @@
                      │ JSON)        │
                      └──────────────┘
 </code></pre>
-<h3>What&#39;s new in v2.0.0</h3>
+<h3>What's new in v2.0.0</h3>
 <ul>
 <li><strong>Deterministic pre-scan layer:</strong> Runs semgrep, bandit, eslint, gosec, and ruff on your diff BEFORE the LLM agents. Catches SQL injection, unsafe deserialisation, hardcoded secrets, and other patterns that language scanners find. Agents then investigate exploitability instead of guessing from scratch.</li>
 <li><strong>JSON output mode:</strong> <code>--json</code> flag writes structured machine-readable findings alongside the markdown report. Enables CI integration, dashboards, and precision tracking.</li>
-<li><strong>Batch agent dispatch:</strong> the 3 agents run in parallel via your harness&#39;s subagent mechanism (Hermes: one batched <code>delegate_task</code>; Claude Code: parallel subagent spawn; Codex/others: concurrent delegation). Fewer round-trips, less hallucination surface. Harness-agnostic by design.</li>
+<li><strong>Batch agent dispatch:</strong> the 3 agents run in parallel via your harness's subagent mechanism (Hermes: one batched <code>delegate_task</code>; Claude Code: parallel subagent spawn; Codex/others: concurrent delegation). Fewer round-trips, less hallucination surface. Harness-agnostic by design.</li>
 <li><strong>Feedback MCP server:</strong> Track which findings get fixed vs dismissed. Query agent precision (computed over triaged findings only) over time. Auto-generate suppression rules for repeatedly false-positive patterns.</li>
-<li><strong>Benchmark suite (score-only):</strong> Seeded corpus of bugs with ground truth; scores any harness&#39;s <code>--json</code> output for precision/recall/F1/severity accuracy and writes an HTML report. It does NOT run HermaGuard itself (it&#39;s a skill, not a binary) — your harness produces the report, the benchmark scores it.</li>
+<li><strong>Benchmark suite (score-only):</strong> Seeded corpus of bugs with ground truth; scores any harness's <code>--json</code> output for precision/recall/F1/severity accuracy and writes an HTML report. It does NOT run HermaGuard itself (it's a skill, not a binary) — your harness produces the report, the benchmark scores it.</li>
 <li><strong>GitHub Action:</strong> Runs the deterministic pre-scan and posts findings as PR comments; optionally blocks merge on CRITICAL. The LLM review is interactive and is not run inside CI (the action is honest about this).</li>
 <li><strong>Suppression rules:</strong> Dismiss a pattern 3 times → it becomes a rule that future runs skip. Reduces false positive noise.</li>
 <li><strong>AGENTS.md linter:</strong> A regex keyword/structure heuristic inspired by (not derived from) the Instructions-as-Code criteria. A high score is necessary, not sufficient.</li>
@@ -189,7 +189,7 @@
 <ul>
 <li><strong>Agent 1 (Edge Case Hunter):</strong> Exhaustive path tracer. Walks every branching path and boundary condition in the diff — null/empty, off-by-one, type coercion, async gaps, race conditions. Reports only unhandled paths.</li>
 <li><strong>Agent 2 (Adversarial Reviewer):</strong> Investigates exploitability of pre-scan findings and hunts additional vulnerabilities. 9 attack surfaces: auth, data integrity, race conditions, rollback safety, schema drift, error handling, observability, input validation, return value integrity.</li>
-<li><strong>Agent 3 (Blast Radius + Integration):</strong> Traces every caller and callee. Maps config coupling, migration safety, API contract changes. Answers: &quot;what else breaks if this ships?&quot;</li>
+<li><strong>Agent 3 (Blast Radius + Integration):</strong> Traces every caller and callee. Maps config coupling, migration safety, API contract changes. Answers: "what else breaks if this ships?"</li>
 <li><strong>Consolidator:</strong> Merges, de-duplicates, triages by risk tier (CRITICAL/HIGH/MEDIUM/LOW), writes structured markdown + JSON report.</li>
 </ul>
 <h3>Project structure</h3>
@@ -218,7 +218,7 @@
 └── data/                             # Runtime data (gitignored)
 </code></pre>
 <h3>Quick start</h3>
-<p>Drop <code>SKILL.md</code> into your agent&#39;s skills directory. On Hermes Agent:</p>
+<p>Drop <code>SKILL.md</code> into your agent's skills directory. On Hermes Agent:</p>
 <pre><code class="language-bash">cp SKILL.md ~/.hermes/skills/software-development/hermaguard/SKILL.md
 </code></pre>
 <p>Install the pre-scan tool for deterministic analysis:</p>
@@ -239,7 +239,7 @@ sudo ln -sf $(pwd)/tools/hermaguard-prescan/hermaguard-prescan.py /usr/local/bin
 # delete a tool and its tests error rather than pass.
 </code></pre>
 <h3>Benchmark</h3>
-<p>Score-only: your harness emits a <code>--json</code> report per bug, this scores it against a seeded corpus&#39;s ground truth. It does not run the skill itself.</p>
+<p>Score-only: your harness emits a <code>--json</code> report per bug, this scores it against a seeded corpus's ground truth. It does not run the skill itself.</p>
 <pre><code class="language-bash">python3 tools/hermaguard-benchmark/benchmark.py \
   --bugs tools/hermaguard-benchmark/bugs --results tools/hermaguard-benchmark/results
 </code></pre>
@@ -276,7 +276,7 @@ sudo ln -sf $(pwd)/tools/hermaguard-prescan/hermaguard-prescan.py /usr/local/bin
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.9K</div>
+        <div class="stars">★ 24.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">

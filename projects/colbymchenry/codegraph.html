@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local tool that provides coding agents with a pre-indexed knowledge graph of a codebase to improve context retrieval. It builds a map of symbols, dependencies, and call paths, allowing agents to query specific code structures instead of manually searching through files. The system integrates with various agents like Claude Code and Cursor via an MCP server and automatically syncs changes as files are modified.",
+  "description": "CodeGraph is a local developer tool that provides a pre-indexed semantic knowledge graph of a codebase to coding agents like Hermes Agent. It maps every symbol, call edge, and dependency to allow agents to retrieve surgical context through a single tool call rather than manual file crawling. By maintaining a persistent local index that auto-syncs on file changes, it reduces the number of tool calls and file reads required for complex architectural tasks. The project integrates via the Model Cont",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-07-02T03:18:13.000Z",
+  "dateModified": "2026-07-03T00:02:33.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 56878
+    "userInteractionCount": 57120
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 56.9K</span>
+    <span class="stars">★ 57.1K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-02</span>
+    <span><span class="meta-label">updated</span>2026-07-03</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local tool that provides coding agents with a pre-indexed knowledge graph of a codebase to improve context retrieval. It builds a map of symbols, dependencies, and call paths, allowing agents to query specific code structures instead of manually searching through files. The system integrates with various agents like Claude Code and Cursor via an MCP server and automatically syncs changes as files are modified.</p>
+    <p class="summary-text">CodeGraph is a local developer tool that provides a pre-indexed semantic knowledge graph of a codebase to coding agents like Hermes Agent. It maps every symbol, call edge, and dependency to allow agents to retrieve surgical context through a single tool call rather than manual file crawling. By maintaining a persistent local index that auto-syncs on file changes, it reduces the number of tool calls and file reads required for complex architectural tasks. The project integrates via the Model Context Protocol (MCP) and supports multiple environments including macOS, Linux, and Windows.</p>
     <ul class="summary-highlights">
-      <li>Reduces tool calls and file reads for AI agents</li>
-      <li>Supports automatic indexing and real-time file syncing</li>
-      <li>Integrates with Claude Code, Cursor, and Hermes Agent</li>
+      <li>Builds local knowledge graphs of symbols, call edges, and dependencies</li>
+      <li>Reduces agent tool calls and file reads for faster answers</li>
+      <li>Auto-syncs the index in real-time as files are modified</li>
     </ul>
   </div>
 </section>
@@ -187,7 +187,7 @@ irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | 
 
 <pre><code class="language-bash">npm i -g @colbymchenry/codegraph
 </code></pre>
-<p><sub>CodeGraph bundles its own runtime — nothing to compile, no native build, works the same everywhere. The installer puts <code>codegraph</code> on your PATH but <strong>doesn&#39;t change your current shell</strong> — open a new terminal before the next step so the command resolves.</sub></p>
+<p><sub>CodeGraph bundles its own runtime — nothing to compile, no native build, works the same everywhere. The installer puts <code>codegraph</code> on your PATH but <strong>doesn't change your current shell</strong> — open a new terminal before the next step so the command resolves.</sub></p>
 <p><sub><strong>Upgrade any time</strong> with <code>codegraph upgrade</code> — it detects how you installed (bundle, npm, or npx) and updates in place. Add <code>--check</code> to see if an update is available, or <code>codegraph upgrade &lt;version&gt;</code> to pin one.</sub></p>
 </details>
 
@@ -195,7 +195,7 @@ irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | 
 <p>In a <strong>new terminal</strong>, run the installer to connect CodeGraph to the agents you use:</p>
 <pre><code class="language-bash">codegraph install
 </code></pre>
-<p><sub>Detects and auto-configures Claude Code, Cursor, Codex CLI, opencode, Hermes Agent, Gemini CLI, Antigravity IDE, and Kiro — wiring the CodeGraph MCP server into each. <strong>This is the step that connects CodeGraph to your agent;</strong> installing the CLI in step 1 does not do it on its own. It only wires up your agent — it does <strong>not</strong> index any code; building each project&#39;s graph is the separate <code>codegraph init</code> in step 3. (Shortcut: <code>npx @colbymchenry/codegraph</code> downloads and runs this in one go.)</sub></p>
+<p><sub>Detects and auto-configures Claude Code, Cursor, Codex CLI, opencode, Hermes Agent, Gemini CLI, Antigravity IDE, and Kiro — wiring the CodeGraph MCP server into each. <strong>This is the step that connects CodeGraph to your agent;</strong> installing the CLI in step 1 does not do it on its own. It only wires up your agent — it does <strong>not</strong> index any code; building each project's graph is the separate <code>codegraph init</code> in step 3. (Shortcut: <code>npx @colbymchenry/codegraph</code> downloads and runs this in one go.)</sub></p>
 <h4>3. Initialize each project</h4>
 <pre><code class="language-bash">cd your-project
 codegraph init
@@ -212,22 +212,22 @@ codegraph init
 <p>Changed your mind? One command removes CodeGraph from every agent it configured:</p>
 <pre><code class="language-bash">codegraph uninstall
 </code></pre>
-<p><sub>Reverses the installer — strips CodeGraph&#39;s MCP server config, instructions, and permissions from each configured agent. Your project indexes (<code>.codegraph/</code>) are left untouched; remove those per-project with <code>codegraph uninit</code>. Use <code>--target</code> to remove from specific agents, or <code>--yes</code> to run non-interactively.</sub></p>
+<p><sub>Reverses the installer — strips CodeGraph's MCP server config, instructions, and permissions from each configured agent. Your project indexes (<code>.codegraph/</code>) are left untouched; remove those per-project with <code>codegraph uninit</code>. Use <code>--target</code> to remove from specific agents, or <code>--yes</code> to run non-interactively.</sub></p>
 <hr>
 <h3>Why CodeGraph?</h3>
-<p>When an AI agent needs to understand code — to answer a question or make a change — it discovers structure the slow way: grep, glob, and Read, one file at a time, rebuilding call paths and dependencies by hand. That&#39;s a pile of tool calls and round-trips before it even starts the real work.</p>
-<p><strong>CodeGraph hands the agent the exact code it needs in one call.</strong> It&#39;s a pre-built knowledge graph of every symbol, call edge, and dependency in your codebase — so instead of crawling files, the agent asks one question and gets back the relevant source, the call paths between those symbols (including dynamic-dispatch hops grep can&#39;t follow), and the blast radius of a change. <strong>Surgical context, not a file-by-file search</strong> — which means fewer tool calls and faster answers on every codebase, large or small.</p>
-<img width="1536" height="1024" alt="token-cost-savings-scale" src="https://github.com/user-attachments/assets/eb74a11a-a3ab-4b01-80a6-19f78352ae8e" />
+<p>When an AI agent needs to understand code — to answer a question or make a change — it discovers structure the slow way: grep, glob, and Read, one file at a time, rebuilding call paths and dependencies by hand. That's a pile of tool calls and round-trips before it even starts the real work.</p>
+<p><strong>CodeGraph hands the agent the exact code it needs in one call.</strong> It's a pre-built knowledge graph of every symbol, call edge, and dependency in your codebase — so instead of crawling files, the agent asks one question and gets back the relevant source, the call paths between those symbols (including dynamic-dispatch hops grep can't follow), and the blast radius of a change. <strong>Surgical context, not a file-by-file search</strong> — which means fewer tool calls and faster answers on every codebase, large or small.</p>
+<img width="1536" height="1024" alt="token-cost-savings-scale" src="https://github.com/user-attachments/assets/eb74a11a-a3ab-4b01-80a6-19f78352ae8e">
 
 <blockquote>
-<p><strong>A note on cost:</strong> CodeGraph&#39;s win on <em>every</em> codebase is precision and speed — fewer tool calls, faster answers. It cuts token and dollar cost too, but those savings are <strong>scale-dependent</strong>: small and noisy on a modest codebase, and material only once a repo is large and tangled — at the scale of a Google or Microsoft monorepo, multiplied by a whole team&#39;s daily agent usage — for them to compound into a real line item. On a 500-file project, adopt CodeGraph for the speed; the cost savings show up when the codebase (and the team) gets big.</p>
+<p><strong>A note on cost:</strong> CodeGraph's win on <em>every</em> codebase is precision and speed — fewer tool calls, faster answers. It cuts token and dollar cost too, but those savings are <strong>scale-dependent</strong>: small and noisy on a modest codebase, and material only once a repo is large and tangled — at the scale of a Google or Microsoft monorepo, multiplied by a whole team's daily agent usage — for them to compound into a real line item. On a 500-file project, adopt CodeGraph for the speed; the cost savings show up when the codebase (and the team) gets big.</p>
 </blockquote>
 <h4>Benchmark Results</h4>
 <p>Tested across <strong>7 real-world open-source codebases</strong> spanning 7 languages, comparing an agent (Claude Code, headless) answering one architecture question <strong>with</strong> and <strong>without</strong> CodeGraph, at the <strong>median of 4 runs per arm</strong>. <em>Re-validated on Opus 4.8 (2026-06-02), on the current build (<code>codegraph_explore</code> as the primary tool).</em></p>
 <blockquote>
 <p><strong>The universal win — every repo, every size: 58% fewer tool calls · 22% faster · file reads cut to ~zero.</strong></p>
 </blockquote>
-<p>The reliable, universal payoff is <strong>surgical context and speed</strong>: CodeGraph collapses the agent&#39;s grep/find/Read crawl into a few direct queries — returning the exact methods you asked about even when they&#39;re buried in a multi-thousand-line file — so it answers with <strong>near-zero file reads</strong> while the no-CodeGraph agent spends its budget on discovery. The <strong>Tokens</strong> and <strong>Cost</strong> columns are real too, but — as noted above — they&#39;re <strong>scale-dependent</strong>: small and noisy per query, compounding into real money only at large-codebase, high-volume scale.</p>
+<p>The reliable, universal payoff is <strong>surgical context and speed</strong>: CodeGraph collapses the agent's grep/find/Read crawl into a few direct queries — returning the exact methods you asked about even when they're buried in a multi-thousand-line file — so it answers with <strong>near-zero file reads</strong> while the no-CodeGraph agent spends its budget on discovery. The <strong>Tokens</strong> and <strong>Cost</strong> columns are real too, but — as noted above — they're <strong>scale-dependent</strong>: small and noisy per query, compounding into real money only at large-codebase, high-volume scale.</p>
 <table>
 <thead>
 <tr>
@@ -304,7 +304,7 @@ codegraph init
 <td>40% cheaper</td>
 </tr>
 </tbody></table>
-<p><sub><strong>File reads</strong> = median files the agent opened <strong>with</strong> vs <strong>without</strong> CodeGraph — the surgical-context win in one column. <strong>Tokens</strong> and <strong>Cost</strong> are the same with-vs-without deltas; they&#39;re directional (they move run-to-run) and, per query, small in absolute terms — which is why they only become a line item at scale. <code>codegraph_explore</code> also collapses redundant interchangeable implementations to signatures, so a response is sized to the <em>answer</em> rather than the file count.</sub></p>
+<p><sub><strong>File reads</strong> = median files the agent opened <strong>with</strong> vs <strong>without</strong> CodeGraph — the surgical-context win in one column. <strong>Tokens</strong> and <strong>Cost</strong> are the same with-vs-without deltas; they're directional (they move run-to-run) and, per query, small in absolute terms — which is why they only become a line item at scale. <code>codegraph_explore</code> also collapses redundant interchangeable implementations to signatures, so a response is sized to the <em>answer</em> rather than the file count.</sub></p>
 <details>
 <summary><strong>Per-repo breakdown — WITH vs WITHOUT (median of 4)</strong></summary>
 
@@ -642,7 +642,7 @@ codegraph init
 <details>
 <summary><strong>Full benchmark details</strong></summary>
 
-<p><strong>Methodology.</strong> Each arm is <code>claude -p</code> (Claude Opus 4.8) run headlessly against the repo with <code>--strict-mcp-config</code>: <strong>WITH</strong> = CodeGraph&#39;s MCP server enabled, <strong>WITHOUT</strong> = an empty MCP config. Built-in Read/Grep/Bash stay available to both. Same question per repo, <strong>4 runs per arm, median reported</strong>. Cost = the run&#39;s <code>total_cost_usd</code>; Tokens = total tokens processed (input incl. cached + output); Time = wall-clock; Tool calls = every tool invocation, including those inside any sub-agents the model spawns. Repos cloned at <code>--depth 1</code> and indexed by the same CodeGraph build that served them. Re-validated 2026-06-02 on the current build. These numbers are lower than the prior Opus 4.7 validation — not a CodeGraph regression but a stronger native baseline: Opus 4.8 greps/reads efficiently on the main thread instead of fanning out into large Explore-subagent sweeps, so the no-CodeGraph arm is leaner than it used to be. Per-repo numbers move run-to-run with how hard the without-arm thrashes (the median-of-4 smooths it, but tails remain — e.g. Django&#39;s without-arm hit $2.71/14m one batch).</p>
+<p><strong>Methodology.</strong> Each arm is <code>claude -p</code> (Claude Opus 4.8) run headlessly against the repo with <code>--strict-mcp-config</code>: <strong>WITH</strong> = CodeGraph's MCP server enabled, <strong>WITHOUT</strong> = an empty MCP config. Built-in Read/Grep/Bash stay available to both. Same question per repo, <strong>4 runs per arm, median reported</strong>. Cost = the run's <code>total_cost_usd</code>; Tokens = total tokens processed (input incl. cached + output); Time = wall-clock; Tool calls = every tool invocation, including those inside any sub-agents the model spawns. Repos cloned at <code>--depth 1</code> and indexed by the same CodeGraph build that served them. Re-validated 2026-06-02 on the current build. These numbers are lower than the prior Opus 4.7 validation — not a CodeGraph regression but a stronger native baseline: Opus 4.8 greps/reads efficiently on the main thread instead of fanning out into large Explore-subagent sweeps, so the no-CodeGraph arm is leaner than it used to be. Per-repo numbers move run-to-run with how hard the without-arm thrashes (the median-of-4 smooths it, but tails remain — e.g. Django's without-arm hit $2.71/14m one batch).</p>
 <p><strong>Queries:</strong></p>
 <table>
 <thead>
@@ -653,31 +653,31 @@ codegraph init
 </thead>
 <tbody><tr>
 <td>VS Code</td>
-<td>&quot;How does the extension host communicate with the main process?&quot;</td>
+<td>"How does the extension host communicate with the main process?"</td>
 </tr>
 <tr>
 <td>Excalidraw</td>
-<td>&quot;How does Excalidraw render and update canvas elements?&quot;</td>
+<td>"How does Excalidraw render and update canvas elements?"</td>
 </tr>
 <tr>
 <td>Django</td>
-<td>&quot;How does Django&#39;s ORM build and execute a query from a QuerySet?&quot;</td>
+<td>"How does Django's ORM build and execute a query from a QuerySet?"</td>
 </tr>
 <tr>
 <td>Tokio</td>
-<td>&quot;How does tokio schedule and run async tasks on its runtime?&quot;</td>
+<td>"How does tokio schedule and run async tasks on its runtime?"</td>
 </tr>
 <tr>
 <td>OkHttp</td>
-<td>&quot;How does OkHttp process a request through its interceptor chain?&quot;</td>
+<td>"How does OkHttp process a request through its interceptor chain?"</td>
 </tr>
 <tr>
 <td>Gin</td>
-<td>&quot;How does gin route requests through its middleware chain?&quot;</td>
+<td>"How does gin route requests through its middleware chain?"</td>
 </tr>
 <tr>
 <td>Alamofire</td>
-<td>&quot;How does Alamofire build, send, and validate a request?&quot;</td>
+<td>"How does Alamofire build, send, and validate a request?"</td>
 </tr>
 </tbody></table>
 <p><strong>Why CodeGraph wins:</strong> with the index available, the agent answers directly — usually one <code>codegraph_explore</code> returns the relevant source — and stops, usually with zero file reads. Without it, the agent spends most of its budget on discovery (find/ls/grep) before reading the right code. CodeGraph only helps when queried <em>directly</em>, so its instructions steer agents to answer directly rather than delegate exploration to file-reading sub-agents — otherwise a sub-agent reads files regardless and CodeGraph becomes overhead.</p>
@@ -710,7 +710,7 @@ codegraph init
 </tr>
 <tr>
 <td><strong>20+ Languages</strong></td>
-<td>TypeScript, JavaScript, Python, Go, Rust, Java, C#, PHP, Ruby, C, C++, Objective-C, Swift, Kotlin, Scala, Dart, Lua, Luau, R, Svelte, Vue, Astro, Liquid, Pascal/Delphi</td>
+<td>TypeScript, JavaScript, Python, Go, Rust, Java, C#, PHP, Ruby, C, C++, Objective-C, Metal, Swift, Kotlin, Scala, Dart, Lua, Luau, R, CFML, Svelte, Vue, Astro, Liquid, Pascal/Delphi</td>
 </tr>
 <tr>
 <td><strong>Framework-aware Routes</strong></td>
@@ -732,9 +732,9 @@ codegraph init
 <ol>
 <li><p><strong>File watcher with debounced auto-sync.</strong> A native FSEvents / inotify / ReadDirectoryChangesW watcher captures every source-file create / modify / delete and triggers a re-index after a debounce window (default <code>2000ms</code>, tunable via <code>CODEGRAPH_WATCH_DEBOUNCE_MS</code>, clamped to <code>[100ms, 60s]</code>). Bursts of edits collapse into a single sync.</p>
 </li>
-<li><p><strong>Per-file staleness banner.</strong> During the brief debounce window, MCP tool responses that would reference a still-pending file prepend a <code>⚠️</code> banner naming it and telling the agent to <code>Read</code> it directly. Pending files NOT referenced by the response surface as a small footer instead. Either way, the agent gets an explicit signal — validated with Claude Code, where the agent literally says &quot;Reading the file directly for the live content&quot; before opening it.</p>
+<li><p><strong>Per-file staleness banner.</strong> During the brief debounce window, MCP tool responses that would reference a still-pending file prepend a <code>⚠️</code> banner naming it and telling the agent to <code>Read</code> it directly. Pending files NOT referenced by the response surface as a small footer instead. Either way, the agent gets an explicit signal — validated with Claude Code, where the agent literally says "Reading the file directly for the live content" before opening it.</p>
 </li>
-<li><p><strong>Connect-time catch-up.</strong> When the MCP server (re)connects, codegraph runs a fast <code>(size, mtime)</code> + content-hash reconciliation against the working tree before answering the first query — so edits made while no MCP server was running (a <code>git pull</code> from the terminal, edits from another editor, a previous agent session that exited) get absorbed on the next session&#39;s first tool call.</p>
+<li><p><strong>Connect-time catch-up.</strong> When the MCP server (re)connects, codegraph runs a fast <code>(size, mtime)</code> + content-hash reconciliation against the working tree before answering the first query — so edits made while no MCP server was running (a <code>git pull</code> from the terminal, edits from another editor, a previous agent session that exited) get absorbed on the next session's first tool call.</p>
 </li>
 </ol>
 <pre><code>agent writes src/Widget.ts
@@ -743,8 +743,8 @@ codegraph init
   → sync; Widget.ts is in the index
   → next agent query sees it
 </code></pre>
-<p><strong>Verify any time</strong> with <code>codegraph status</code> (CLI). If anything is pending, you&#39;ll see a <code>### Pending sync:</code> section naming the files and their edit age.</p>
-<p>The handful of cases where manual <code>codegraph sync</code> makes sense: the watcher is disabled (sandboxed environments, or <code>CODEGRAPH_NO_DAEMON=1</code>), or you&#39;re scripting against the index outside an agent session and want a pre-flight sync at the start of your script.</p>
+<p><strong>Verify any time</strong> with <code>codegraph status</code> (CLI). If anything is pending, you'll see a <code>### Pending sync:</code> section naming the files and their edit age.</p>
+<p>The handful of cases where manual <code>codegraph sync</code> makes sense: the watcher is disabled (sandboxed environments, or <code>CODEGRAPH_NO_DAEMON=1</code>), or you're scripting against the index outside an agent session and want a pre-flight sync at the start of your script.</p>
 <p>→ Full deep-dive in <a href="https://colbymchenry.github.io/codegraph/guides/indexing/#stay-fresh-automatically">Guides → Indexing a Project</a>.</p>
 </details>
 
@@ -764,7 +764,7 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Flask</strong></td>
-<td><code>@app.route(&#39;/path&#39;, methods=[...])</code>, blueprint routes</td>
+<td><code>@app.route('/path', methods=[...])</code>, blueprint routes</td>
 </tr>
 <tr>
 <td><strong>FastAPI</strong></td>
@@ -788,7 +788,7 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Rails</strong></td>
-<td><code>get &#39;/x&#39;, to: &#39;users#index&#39;</code>, hash-rocket <code>=&gt;</code> syntax</td>
+<td><code>get '/x', to: 'users#index'</code>, hash-rocket <code>=&gt;</code> syntax</td>
 </tr>
 <tr>
 <td><strong>Spring</strong></td>
@@ -804,15 +804,15 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Axum / actix / Rocket</strong></td>
-<td><code>.route(&quot;/x&quot;, get(handler))</code></td>
+<td><code>.route("/x", get(handler))</code></td>
 </tr>
 <tr>
 <td><strong>ASP.NET</strong></td>
-<td><code>[HttpGet(&quot;/x&quot;)]</code> attributes on action methods</td>
+<td><code>[HttpGet("/x")]</code> attributes on action methods</td>
 </tr>
 <tr>
 <td><strong>Vapor</strong></td>
-<td><code>app.get(&quot;x&quot;, use: handler)</code></td>
+<td><code>app.get("x", use: handler)</code></td>
 </tr>
 <tr>
 <td><strong>React Router</strong> / <strong>SvelteKit</strong></td>
@@ -829,7 +829,7 @@ codegraph init
 </tbody></table>
 <hr>
 <h3>Mixed iOS / React Native / Expo bridging</h3>
-<p>Real iOS and React Native codebases live across multiple languages — a Swift caller invokes an Objective-C selector that&#39;s been auto-bridged, a JS file calls into a native module via the React Native bridge, a JSX component delegates to a native view manager. Static tree-sitter extraction stops at each language boundary. CodeGraph bridges them so <code>codegraph_explore</code> connects the flow end-to-end across the gap — call paths and blast radius cross the boundary instead of stopping at it.</p>
+<p>Real iOS and React Native codebases live across multiple languages — a Swift caller invokes an Objective-C selector that's been auto-bridged, a JS file calls into a native module via the React Native bridge, a JSX component delegates to a native view manager. Static tree-sitter extraction stops at each language boundary. CodeGraph bridges them so <code>codegraph_explore</code> connects the flow end-to-end across the gap — call paths and blast radius cross the boundary instead of stopping at it.</p>
 <table>
 <thead>
 <tr>
@@ -859,20 +859,20 @@ codegraph init
 </tr>
 <tr>
 <td><strong>React Native TurboModules</strong></td>
-<td>JS <code>import M from &#39;./NativeM&#39;; M.fn(...)</code></td>
+<td>JS <code>import M from './NativeM'; M.fn(...)</code></td>
 <td>Native impl matching the Codegen spec</td>
 <td>Treats the <code>Native&lt;X&gt;.ts</code> spec interface as ground truth</td>
 </tr>
 <tr>
 <td><strong>RN native → JS events</strong></td>
-<td>JS <code>new NativeEventEmitter(...).addListener(&#39;e&#39;, cb)</code></td>
-<td>ObjC <code>[self sendEventWithName:@&quot;e&quot; body:...]</code> · Swift <code>sendEvent(withName: &quot;e&quot;, ...)</code> · Java/Kotlin <code>.emit(&quot;e&quot;, ...)</code></td>
+<td>JS <code>new NativeEventEmitter(...).addListener('e', cb)</code></td>
+<td>ObjC <code>[self sendEventWithName:@"e" body:...]</code> · Swift <code>sendEvent(withName: "e", ...)</code> · Java/Kotlin <code>.emit("e", ...)</code></td>
 <td>Synthesized cross-language event channel keyed by literal event name</td>
 </tr>
 <tr>
 <td><strong>Expo Modules</strong></td>
-<td>JS <code>requireNativeModule(&#39;X&#39;).fn(...)</code></td>
-<td>Swift / Kotlin <code>Module { Name(&quot;X&quot;); AsyncFunction(&quot;fn&quot;) { ... } }</code></td>
+<td>JS <code>requireNativeModule('X').fn(...)</code></td>
+<td>Swift / Kotlin <code>Module { Name("X"); AsyncFunction("fn") { ... } }</code></td>
 <td>Parses the Expo DSL literals; synthetic method nodes resolve via existing name-match</td>
 </tr>
 <tr>
@@ -929,7 +929,7 @@ codegraph init
 <td><a href="https://github.com/Shopify/react-native-skia">react-native-skia</a></td>
 </tr>
 </tbody></table>
-<p>Each bridge emits edges tagged <code>provenance:&#39;heuristic&#39;</code> with <code>metadata.synthesizedBy:</code> set to a stable channel name (e.g. <code>swift-objc-bridge</code>, <code>rn-event-channel</code>, <code>fabric-native-impl</code>, <code>expo-module-extract</code>), so the agent can tell at a glance how a hop got into the graph.</p>
+<p>Each bridge emits edges tagged <code>provenance:'heuristic'</code> with <code>metadata.synthesizedBy:</code> set to a stable channel name (e.g. <code>swift-objc-bridge</code>, <code>rn-event-channel</code>, <code>fabric-native-impl</code>, <code>expo-module-extract</code>), so the agent can tell at a glance how a hop got into the graph.</p>
 <hr>
 <h3>Quick Start</h3>
 <h4>1. Run the Installer</h4>
@@ -940,10 +940,10 @@ codegraph init
 <li>Ask which agent(s) to configure — auto-detects installed ones from: <strong>Claude Code</strong>, <strong>Cursor</strong>, <strong>Codex CLI</strong>, <strong>opencode</strong>, <strong>Hermes Agent</strong>, <strong>Gemini CLI</strong>, <strong>Antigravity IDE</strong>, <strong>Kiro</strong></li>
 <li>Prompt to install <code>codegraph</code> on your PATH (so agents can launch the MCP server)</li>
 <li>Ask whether configs apply to all your projects or just this one</li>
-<li>Write each chosen agent&#39;s MCP server config, plus a small marker-fenced CodeGraph section in the agent&#39;s instructions file (<code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>GEMINI.md</code>) — that&#39;s how subagents and non-MCP agents learn the <code>codegraph explore</code> command, since the MCP server&#39;s own guidance only reaches the main agent. Removed cleanly by <code>codegraph uninstall</code>.</li>
+<li>Write each chosen agent's MCP server config, plus a small marker-fenced CodeGraph section in the agent's instructions file (<code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>GEMINI.md</code>) — that's how subagents and non-MCP agents learn the <code>codegraph explore</code> command, since the MCP server's own guidance only reaches the main agent. Removed cleanly by <code>codegraph uninstall</code>.</li>
 <li>Set up auto-allow permissions when Claude Code is one of the targets</li>
 </ul>
-<p>The installer <strong>wires up your agents only — it does not index your code.</strong> After it finishes, build each project&#39;s graph yourself with <code>codegraph init</code> (step 3). One global <code>codegraph install</code> covers every project; you run <code>codegraph init</code> once per project.</p>
+<p>The installer <strong>wires up your agents only — it does not index your code.</strong> After it finishes, build each project's graph yourself with <code>codegraph init</code> (step 3). One global <code>codegraph install</code> covers every project; you run <code>codegraph init</code> once per project.</p>
 <p><strong>Non-interactive (scripting / CI):</strong></p>
 <pre><code class="language-bash">codegraph install --yes                              # auto-detect agents, install global
 codegraph install --target=cursor,claude --yes       # explicit target list
@@ -991,7 +991,7 @@ codegraph install --print-config codex               # print snippet, no file wr
 codegraph init
 </code></pre>
 <p>Builds the per-project knowledge graph index, which then auto-syncs on every file change. A single global <code>codegraph install</code> works in every project you open — no need to re-run the installer per project.</p>
-<p>That&#39;s it — your agent will use CodeGraph tools automatically when a <code>.codegraph/</code> directory exists.</p>
+<p>That's it — your agent will use CodeGraph tools automatically when a <code>.codegraph/</code> directory exists.</p>
 <details>
 <summary><strong>Manual Setup (Alternative)</strong></summary>
 
@@ -1000,38 +1000,38 @@ codegraph init
 </code></pre>
 <p><strong>Add to <code>~/.claude.json</code>:</strong></p>
 <pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;codegraph&quot;: {
-      &quot;type&quot;: &quot;stdio&quot;,
-      &quot;command&quot;: &quot;codegraph&quot;,
-      &quot;args&quot;: [&quot;serve&quot;, &quot;--mcp&quot;]
+  "mcpServers": {
+    "codegraph": {
+      "type": "stdio",
+      "command": "codegraph",
+      "args": ["serve", "--mcp"]
     }
   }
 }
 </code></pre>
 <p><strong>Add to <code>~/.claude/settings.json</code> (optional, for auto-allow):</strong></p>
 <pre><code class="language-json">{
-  &quot;permissions&quot;: {
-    &quot;allow&quot;: [
-      &quot;mcp__codegraph__*&quot;
+  "permissions": {
+    "allow": [
+      "mcp__codegraph__*"
     ]
   }
 }
 </code></pre>
-<p><sub>One wildcard auto-approves every CodeGraph tool — <code>codegraph_explore</code> is the only one listed by default, but if you re-enable others via <code>CODEGRAPH_MCP_TOOLS</code> they&#39;re already permitted, no prompt.</sub></p>
+<p><sub>One wildcard auto-approves every CodeGraph tool — <code>codegraph_explore</code> is the only one listed by default, but if you re-enable others via <code>CODEGRAPH_MCP_TOOLS</code> they're already permitted, no prompt.</sub></p>
 </details>
 
 <details>
 <summary><strong>Agent Tool Guidance</strong></summary>
 
-<p>CodeGraph&#39;s MCP server delivers its usage guidance to your agent <strong>automatically</strong>, in the MCP <code>initialize</code> response. In short, it tells the agent to:</p>
+<p>CodeGraph's MCP server delivers its usage guidance to your agent <strong>automatically</strong>, in the MCP <code>initialize</code> response. In short, it tells the agent to:</p>
 <ul>
 <li><strong>Answer structural questions directly with CodeGraph</strong> — it <em>is</em> the pre-built index, so a grep/read loop just repeats work it already did. Treat the returned source as already read.</li>
-<li><strong>Reach for <code>codegraph_explore</code> for almost anything</strong> — &quot;how does X work&quot;, a flow/&quot;how does X reach Y&quot;, or surveying an area. One call returns the relevant symbols&#39; verbatim source grouped by file, the call paths between them (dynamic-dispatch hops included), and a blast-radius summary. Name a file or symbol in the query to read its current line-numbered source.</li>
-<li><strong>Trust the results — don&#39;t re-verify with grep</strong>, and check the staleness banner after edits.</li>
+<li><strong>Reach for <code>codegraph_explore</code> for almost anything</strong> — "how does X work", a flow/"how does X reach Y", or surveying an area. One call returns the relevant symbols' verbatim source grouped by file, the call paths between them (dynamic-dispatch hops included), and a blast-radius summary. Name a file or symbol in the query to read its current line-numbered source.</li>
+<li><strong>Trust the results — don't re-verify with grep</strong>, and check the staleness banner after edits.</li>
 <li>Works <strong>per project</strong>: query any project that has a <code>.codegraph/</code> index by passing <code>projectPath</code> — so a monorepo where only some services are indexed, or a second repo, works in one session. A path with no index returns clean guidance to use built-in tools; indexing stays your decision.</li>
 </ul>
-<p>The exact text is <code>src/mcp/server-instructions.ts</code> — the single source of truth for the main agent. Because subagents and non-MCP harnesses never see the MCP guidance, the installer also writes a short marker-fenced section into the agent&#39;s instructions file pointing at the <code>codegraph explore</code> CLI equivalent.</p>
+<p>The exact text is <code>src/mcp/server-instructions.ts</code> — the single source of truth for the main agent. Because subagents and non-MCP harnesses never see the MCP guidance, the installer also writes a short marker-fenced section into the agent's instructions file pointing at the <code>codegraph explore</code> CLI equivalent.</p>
 </details>
 
 <hr>
@@ -1039,7 +1039,7 @@ codegraph init
 <pre><code>┌───────────────────────────────────────────────────────────────────┐
 │                            Claude Code                            │
 │                                                                   │
-│   &quot;How does a request reach the database?&quot;                        │
+│   "How does a request reach the database?"                        │
 │       calls CodeGraph tools directly — no Explore sub-agent       │
 │                                 │                                 │
 └─────────────────────────────────┬─────────────────────────────────┘
@@ -1075,10 +1075,10 @@ codegraph uninit [path]           # Remove CodeGraph from a project (--force to 
 codegraph index [path]            # Full index (--force to re-index, --quiet for less output)
 codegraph sync [path]             # Incremental update
 codegraph status [path]           # Show statistics
-codegraph unlock [path]           # Remove a stale lock file that&#39;s blocking indexing
+codegraph unlock [path]           # Remove a stale lock file that's blocking indexing
 codegraph query &lt;search&gt;          # Search symbols (--kind, --limit, --json)
-codegraph explore &lt;query&gt;         # Relevant symbols&#39; source + call paths in one shot (same output as the codegraph_explore MCP tool)
-codegraph node &lt;symbol|file&gt;      # One symbol&#39;s source + callers, or read a file with line numbers (same output as codegraph_node)
+codegraph explore &lt;query&gt;         # Relevant symbols' source + call paths in one shot (same output as the codegraph_explore MCP tool)
+codegraph node &lt;symbol|file&gt;      # One symbol's source + callers, or read a file with line numbers (same output as codegraph_node)
 codegraph files [path]            # Show file structure (--format, --filter, --max-depth, --json)
 codegraph callers &lt;symbol&gt;        # Find what calls a function/method (--limit, --json)
 codegraph callees &lt;symbol&gt;        # Find what a function/method calls (--limit, --json)
@@ -1094,7 +1094,7 @@ codegraph help [command]          # Show help, optionally for one command
 <p>Traces import dependencies transitively to find which test files are affected by changed source files.</p>
 <pre><code class="language-bash">codegraph affected src/utils.ts src/api.ts         # Pass files as arguments
 git diff --name-only | codegraph affected --stdin   # Pipe from git diff
-codegraph affected src/auth.ts --filter &quot;e2e/*&quot;     # Custom test file pattern
+codegraph affected src/auth.ts --filter "e2e/*"     # Custom test file pattern
 </code></pre>
 <table>
 <thead>
@@ -1133,7 +1133,7 @@ codegraph affected src/auth.ts --filter &quot;e2e/*&quot;     # Custom test file
 <p><strong>CI/hook example:</strong></p>
 <pre><code class="language-bash">#!/usr/bin/env bash
 AFFECTED=$(git diff --name-only HEAD | codegraph affected --stdin --quiet)
-if [ -n &quot;$AFFECTED&quot; ]; then
+if [ -n "$AFFECTED" ]; then
   npx vitest run $AFFECTED
 fi
 </code></pre>
@@ -1149,30 +1149,30 @@ fi
 </thead>
 <tbody><tr>
 <td><code>codegraph_explore</code></td>
-<td>Answer almost any question in one call — &quot;how does X work&quot;, a flow (&quot;how does X reach Y&quot;), or surveying an area — returning the relevant symbols&#39; verbatim source grouped by file, plus the call paths between them and a blast-radius summary. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can&#39;t follow. Name a file or symbol in the query to read its current line-numbered source, the same shape the Read tool gives you.</td>
+<td>Answer almost any question in one call — "how does X work", a flow ("how does X reach Y"), or surveying an area — returning the relevant symbols' verbatim source grouped by file, plus the call paths between them and a blast-radius summary. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can't follow. Name a file or symbol in the query to read its current line-numbered source, the same shape the Read tool gives you.</td>
 </tr>
 </tbody></table>
-<p>The other tools (<code>codegraph_node</code>, <code>codegraph_search</code>, <code>codegraph_callers</code>, <code>codegraph_callees</code>, <code>codegraph_impact</code>, <code>codegraph_files</code>, <code>codegraph_status</code>) stay fully functional but <strong>unlisted by default</strong> — everything they return already arrives inline on <code>codegraph_explore</code> (its blast-radius section, the relationship map, a symbol&#39;s body as its callee list). Re-enable any of them for the MCP surface with the <code>CODEGRAPH_MCP_TOOLS</code> environment variable (e.g. <code>CODEGRAPH_MCP_TOOLS=explore,node,search,callers</code>), or use their CLI equivalents (<code>codegraph node</code> / <code>query</code> / <code>callers</code> / <code>callees</code> / <code>impact</code> / <code>files</code> / <code>status</code>).</p>
-<p>Even when the server&#39;s own root has no <code>.codegraph/</code> index, the tools stay available: pass <code>projectPath</code> to query any indexed project — a sub-service in a monorepo, or a second repo — in the same session. A path that has no index returns clean guidance to use built-in tools instead, so nothing fails loudly, and indexing stays your decision.</p>
+<p>The other tools (<code>codegraph_node</code>, <code>codegraph_search</code>, <code>codegraph_callers</code>, <code>codegraph_callees</code>, <code>codegraph_impact</code>, <code>codegraph_files</code>, <code>codegraph_status</code>) stay fully functional but <strong>unlisted by default</strong> — everything they return already arrives inline on <code>codegraph_explore</code> (its blast-radius section, the relationship map, a symbol's body as its callee list). Re-enable any of them for the MCP surface with the <code>CODEGRAPH_MCP_TOOLS</code> environment variable (e.g. <code>CODEGRAPH_MCP_TOOLS=explore,node,search,callers</code>), or use their CLI equivalents (<code>codegraph node</code> / <code>query</code> / <code>callers</code> / <code>callees</code> / <code>impact</code> / <code>files</code> / <code>status</code>).</p>
+<p>Even when the server's own root has no <code>.codegraph/</code> index, the tools stay available: pass <code>projectPath</code> to query any indexed project — a sub-service in a monorepo, or a second repo — in the same session. A path that has no index returns clean guidance to use built-in tools instead, so nothing fails loudly, and indexing stays your decision.</p>
 <hr>
 <h3>Library Usage</h3>
 <p>CodeGraph can be embedded directly. The npm package re-exports its programmatic
 API, so both <code>import</code> and <code>require</code> resolve the <code>CodeGraph</code> class in your own
 process — handy for embedding it in an app (e.g. an Electron main process).</p>
-<pre><code class="language-typescript">import CodeGraph from &#39;@colbymchenry/codegraph&#39;;
+<pre><code class="language-typescript">import CodeGraph from '@colbymchenry/codegraph';
 // CommonJS works too:
-//   const { CodeGraph } = require(&#39;@colbymchenry/codegraph&#39;);
+//   const { CodeGraph } = require('@colbymchenry/codegraph');
 
-const cg = await CodeGraph.init(&#39;/path/to/project&#39;);
-// Or: const cg = await CodeGraph.open(&#39;/path/to/project&#39;);
+const cg = await CodeGraph.init('/path/to/project');
+// Or: const cg = await CodeGraph.open('/path/to/project');
 
 await cg.indexAll({
   onProgress: (p) =&gt; console.log(`${p.phase}: ${p.current}/${p.total}`)
 });
 
-const results = cg.searchNodes(&#39;UserService&#39;);
+const results = cg.searchNodes('UserService');
 const callers = cg.getCallers(results[0].node.id);
-const context = await cg.buildContext(&#39;fix login bug&#39;, { maxNodes: 20, includeCode: true, format: &#39;markdown&#39; });
+const context = await cg.buildContext('fix login bug', { maxNodes: 20, includeCode: true, format: 'markdown' });
 const impact = cg.getImpactRadius(results[0].node.id, 2);
 
 cg.watch();   // auto-sync on file changes
@@ -1197,7 +1197,7 @@ keep <code>@types/node</code> available and <code>skipLibCheck: true</code> (the
 <h3>Configuration</h3>
 <p>Next to none — CodeGraph is <strong>zero-config by default</strong>, with nothing to write or
 keep in sync to get started. Language support is automatic from the file
-extension; there&#39;s nothing to wire up per language. The one optional file is for
+extension; there's nothing to wire up per language. The one optional file is for
 mapping <a href="#custom-file-extensions">custom file extensions</a>.</p>
 <p>What it skips out of the box:</p>
 <ul>
@@ -1212,32 +1212,32 @@ non-git projects by reading <code>.gitignore</code> directly (root and nested).<
 <p>To keep something else out, add it to <code>.gitignore</code>. To pull a default-excluded
 directory back <strong>in</strong> (say you really do want a vendored dependency indexed),
 add a negation — <code>!vendor/</code>. The defaults apply uniformly, so committing a
-dependency or build directory doesn&#39;t force it into the graph; the <code>.gitignore</code>
+dependency or build directory doesn't force it into the graph; the <code>.gitignore</code>
 negation is the explicit opt-in.</p>
-<p><code>.gitignore</code> can&#39;t drop a directory you&#39;ve <strong>committed</strong>, though. For a vendored
-theme or SDK that&#39;s checked into the repo (e.g. a Metronic theme under
+<p><code>.gitignore</code> can't drop a directory you've <strong>committed</strong>, though. For a vendored
+theme or SDK that's checked into the repo (e.g. a Metronic theme under
 <code>static/</code>), list it under <code>exclude</code> in <code>codegraph.json</code> — gitignore-style
 patterns, matched against repo-root-relative paths, honored on index, sync, and
 watch:</p>
 <pre><code class="language-json">{
-  &quot;exclude&quot;: [&quot;static/&quot;, &quot;**/vendor/**&quot;]
+  "exclude": ["static/", "**/vendor/**"]
 }
 </code></pre>
 <h4>Custom file extensions</h4>
 <p>If your project uses a non-standard extension for a <a href="#supported-languages">supported
 language</a> — say <code>.dota_lua</code> for Lua, or <code>.tpl</code> for PHP —
-those files are skipped by default, because the extension isn&#39;t one CodeGraph
+those files are skipped by default, because the extension isn't one CodeGraph
 recognizes. Map them with an optional <strong><code>codegraph.json</code></strong> at your project root:</p>
 <pre><code class="language-json">{
-  &quot;extensions&quot;: {
-    &quot;.dota_lua&quot;: &quot;lua&quot;,
-    &quot;.tpl&quot;: &quot;php&quot;
+  "extensions": {
+    ".dota_lua": "lua",
+    ".tpl": "php"
   }
 }
 </code></pre>
 <p>Each value is a supported language id. The mappings merge on top of the built-in
 defaults and win on conflict, so you can also re-point a built-in (e.g.
-<code>&quot;.h&quot;: &quot;cpp&quot;</code>). Commit the file to share the mapping with your team. A typo&#39;d
+<code>".h": "cpp"</code>). Commit the file to share the mapping with your team. A typo'd
 language or a malformed file is warned about and skipped — it never breaks
 indexing — and a project with no <code>codegraph.json</code> behaves exactly as before.
 Re-index (<code>codegraph index</code>) after adding or changing mappings.</p>
@@ -1365,6 +1365,11 @@ is written):</p>
 <td>Partial support (classes, protocols, methods, <code>@property</code>, <code>#import</code>, message sends; <code>.mm</code> ObjC++ may parse incompletely)</td>
 </tr>
 <tr>
+<td>Metal</td>
+<td><code>.metal</code></td>
+<td>Full support (vertex/fragment/kernel functions, structs, type aliases, call edges — MSL parses as C++, with <code>[[attribute]]</code> annotations handled)</td>
+</tr>
+<tr>
 <td>Swift</td>
 <td><code>.swift</code></td>
 <td>Full support</td>
@@ -1423,6 +1428,11 @@ is written):</p>
 <td>Luau</td>
 <td><code>.luau</code></td>
 <td>Full support (everything in Lua, plus <code>type</code>/<code>export type</code> aliases, typed signatures, and Roblox instance-path <code>require</code>)</td>
+</tr>
+<tr>
+<td>CFML</td>
+<td><code>.cfc</code>, <code>.cfm</code>, <code>.cfs</code></td>
+<td>Full support (tag-based <code>&lt;cfcomponent&gt;</code>/<code>&lt;cffunction&gt;</code> and bare-script <code>component { ... }</code> styles, <code>extends</code>/<code>implements</code>, embedded <code>&lt;cfscript&gt;</code> delegation, call edges)</td>
 </tr>
 </tbody></table>
 <h3>Measured cross-file coverage</h3>
@@ -1548,23 +1558,23 @@ is written):</p>
 </tbody></table>
 <p>Framework routing is validated the same way, on a canonical app per framework: Express 100%, FastAPI 98%, Flask 100%, NestJS 96.8%, Gin 96.5%, Axum 100%, Rocket 93.8%, Vapor 100%, Laravel 92%, Rails 89.6%, React Router 100% — and the convention/reflection-heavy ones at their honest static-analysis ceiling: ASP.NET 83.9%, Spring 83.3%, Drupal 78.9%, Play 76.3%, Django 74.1%. SvelteKit, Vue/Nuxt, and Astro use file-based routing, so their page/endpoint coverage is the Svelte/SvelteKit (100%), Vue/Nuxt (93.5%), and Astro (93.0% — every <code>src/pages/</code> file maps to a route node on the two validation repos) figures in the table above.</p>
 <h3>Troubleshooting</h3>
-<p><strong>&quot;CodeGraph not initialized&quot;</strong> — Run <code>codegraph init</code> in your project directory first.</p>
+<p><strong>"CodeGraph not initialized"</strong> — Run <code>codegraph init</code> in your project directory first.</p>
 <p><strong>Indexing is slow</strong> — Check that <code>node_modules</code> and other large directories are excluded. Use <code>--quiet</code> to reduce output overhead.</p>
-<p><strong>MCP hits <code>database is locked</code></strong> — current builds shouldn&#39;t: CodeGraph bundles its own Node runtime and uses Node&#39;s built-in <code>node:sqlite</code> in WAL mode, where concurrent reads never block on a writer. If you still see it:</p>
+<p><strong>MCP hits <code>database is locked</code></strong> — current builds shouldn't: CodeGraph bundles its own Node runtime and uses Node's built-in <code>node:sqlite</code> in WAL mode, where concurrent reads never block on a writer. If you still see it:</p>
 <ul>
-<li><strong>You&#39;re on an old (pre-0.9) install.</strong> Reinstall to get the bundled runtime — <code>curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh</code> (macOS/Linux), <code>irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | iex</code> (Windows), or <code>npm i -g @colbymchenry/codegraph@latest</code>.</li>
-<li><strong><code>codegraph status</code> shows <code>Journal:</code> other than <code>wal</code></strong> — WAL couldn&#39;t be enabled on this filesystem (common on network shares and WSL2 <code>/mnt</code>), so reads can block on writes. Move the project (with its <code>.codegraph/</code> folder) onto a local disk.</li>
+<li><strong>You're on an old (pre-0.9) install.</strong> Reinstall to get the bundled runtime — <code>curl -fsSL https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.sh | sh</code> (macOS/Linux), <code>irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | iex</code> (Windows), or <code>npm i -g @colbymchenry/codegraph@latest</code>.</li>
+<li><strong><code>codegraph status</code> shows <code>Journal:</code> other than <code>wal</code></strong> — WAL couldn't be enabled on this filesystem (common on network shares and WSL2 <code>/mnt</code>), so reads can block on writes. Move the project (with its <code>.codegraph/</code> folder) onto a local disk.</li>
 </ul>
-<p><strong>MCP server not connecting</strong> — Your agent starts the server itself, so you don&#39;t launch it by hand. Make sure the project is initialized and indexed (<code>codegraph status</code>) and that the path in your MCP config is correct. If it still won&#39;t connect, re-run <code>codegraph install</code> to rewrite the config.</p>
-<p><strong>MCP tool calls fail with <code>Transport closed</code> while <code>codegraph status</code>/<code>sync</code> are healthy</strong> — almost always WSL2 with the project on a Windows drive (a <code>/mnt/c</code> or <code>/mnt/d</code> path), where the local socket CodeGraph uses to share one background server across sessions is unreliable. CodeGraph now falls back to serving the session in-process instead of dropping the connection, but if you still hit it, set <code>CODEGRAPH_NO_DAEMON=1</code> in your MCP server&#39;s environment to skip the shared server entirely (each session runs in its own process). Moving the project onto the Linux-native filesystem (e.g. under <code>~/</code> instead of <code>/mnt/</code>) restores the shared server.</p>
-<p><strong>Missing symbols</strong> — The MCP server auto-syncs on save (wait a couple seconds). Run <code>codegraph sync</code> manually if needed. Check that the file&#39;s language is supported and isn&#39;t inside a <code>.gitignore</code>d or default-excluded directory (e.g. <code>node_modules</code>, <code>dist</code>).</p>
-<p><strong>Sharing one checkout between Windows and WSL</strong> — Don&#39;t point both at the same <code>.codegraph/</code>: the background-server lock and the SQLite index are tied to the OS that wrote them, and SQLite locking across the WSL2/Windows filesystem boundary is unreliable. Give each side its own index in the same tree by setting <code>CODEGRAPH_DIR</code> to a distinct name on one of them — e.g. <code>CODEGRAPH_DIR=.codegraph-win</code> on Windows, leaving WSL on the default <code>.codegraph</code>. CodeGraph skips any sibling <code>.codegraph-*</code> directory when indexing and watching, so the two never trip over each other.</p>
+<p><strong>MCP server not connecting</strong> — Your agent starts the server itself, so you don't launch it by hand. Make sure the project is initialized and indexed (<code>codegraph status</code>) and that the path in your MCP config is correct. If it still won't connect, re-run <code>codegraph install</code> to rewrite the config.</p>
+<p><strong>MCP tool calls fail with <code>Transport closed</code> while <code>codegraph status</code>/<code>sync</code> are healthy</strong> — almost always WSL2 with the project on a Windows drive (a <code>/mnt/c</code> or <code>/mnt/d</code> path), where the local socket CodeGraph uses to share one background server across sessions is unreliable. CodeGraph now falls back to serving the session in-process instead of dropping the connection, but if you still hit it, set <code>CODEGRAPH_NO_DAEMON=1</code> in your MCP server's environment to skip the shared server entirely (each session runs in its own process). Moving the project onto the Linux-native filesystem (e.g. under <code>~/</code> instead of <code>/mnt/</code>) restores the shared server.</p>
+<p><strong>Missing symbols</strong> — The MCP server auto-syncs on save (wait a couple seconds). Run <code>codegraph sync</code> manually if needed. Check that the file's language is supported and isn't inside a <code>.gitignore</code>d or default-excluded directory (e.g. <code>node_modules</code>, <code>dist</code>).</p>
+<p><strong>Sharing one checkout between Windows and WSL</strong> — Don't point both at the same <code>.codegraph/</code>: the background-server lock and the SQLite index are tied to the OS that wrote them, and SQLite locking across the WSL2/Windows filesystem boundary is unreliable. Give each side its own index in the same tree by setting <code>CODEGRAPH_DIR</code> to a distinct name on one of them — e.g. <code>CODEGRAPH_DIR=.codegraph-win</code> on Windows, leaving WSL on the default <code>.codegraph</code>. CodeGraph skips any sibling <code>.codegraph-*</code> directory when indexing and watching, so the two never trip over each other.</p>
 <h3>Star History</h3>
-<a href="https://www.star-history.com/?repos=colbymchenry%2Fcodegraph&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=colbymchenry%2Fcodegraph&amp;type=date&amp;legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=colbymchenry/codegraph&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=colbymchenry/codegraph&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=colbymchenry/codegraph&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=colbymchenry/codegraph&amp;type=date&amp;theme=dark&amp;legend=top-left">
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=colbymchenry/codegraph&amp;type=date&amp;legend=top-left">
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=colbymchenry/codegraph&amp;type=date&amp;legend=top-left">
  </picture>
 </a>
 
@@ -1588,7 +1598,7 @@ is written):</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 676</div>
+        <div class="stars">★ 681</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1608,7 +1618,7 @@ is written):</p>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
-        <div class="stars">★ 125</div>
+        <div class="stars">★ 126</div>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">

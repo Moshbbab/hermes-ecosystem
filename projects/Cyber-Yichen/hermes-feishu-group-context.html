@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Cyber-Yichen/hermes-feishu-group-context#software",
   "name": "hermes-feishu-group-context",
-  "description": "Local Feishu/Lark group chat archiving and on-demand context for Hermes Agent.",
+  "description": "Hermes Feishu Group Context is a plugin that provides local archiving and on-demand context retrieval for Feishu/Lark group chats. It uses a local SQLite database to store messages, ensuring that model tokens are only consumed when the agent is explicitly triggered. The system automatically injects recent history during empty mentions or provides specific time-range summaries via a dedicated tool. This approach allows the agent to maintain group awareness without processing every message in real",
   "url": "https://hermesatlas.com/projects/Cyber-Yichen/hermes-feishu-group-context",
   "codeRepository": "https://github.com/Cyber-Yichen/hermes-feishu-group-context",
   "applicationCategory": "BrowserApplication",
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -128,9 +128,20 @@
 
 
 
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">Hermes Feishu Group Context is a plugin that provides local archiving and on-demand context retrieval for Feishu/Lark group chats. It uses a local SQLite database to store messages, ensuring that model tokens are only consumed when the agent is explicitly triggered. The system automatically injects recent history during empty mentions or provides specific time-range summaries via a dedicated tool. This approach allows the agent to maintain group awareness without processing every message in real-time.</p>
+    <ul class="summary-highlights">
+      <li>Local SQLite storage for group chat archiving and persistence</li>
+      <li>Automatic context injection for empty mentions and relevant queries</li>
+      <li>Customizable retention periods and context window sizes per group</li>
+    </ul>
+  </div>
+</section>
 
-<details class="readme-details" open>
-  <summary class="readme-toggle">readme</summary>
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <blockquote>
 <p>[!IMPORTANT]
@@ -276,20 +287,20 @@
 <p>运行时主体仍然是 Hermes Gateway。本项目只是一个用户插件，加上三处受控的适配器 Hook。</p>
 <h3>工作原理</h3>
 <pre><code class="language-mermaid">flowchart TD
-    A[&quot;飞书群消息事件&quot;] --&gt; B[&quot;Hermes Feishu Adapter&quot;]
-    B --&gt; C[&quot;过滤前归档 Hook&quot;]
-    C --&gt; D[(&quot;本地 SQLite&quot;)]
-    B --&gt; E{&quot;是否 @机器人&quot;}
-    E -- &quot;否&quot; --&gt; F[&quot;停止，不调用模型&quot;]
-    E -- &quot;是且包含文字&quot; --&gt; L[&quot;检查最近 5 条的关联性&quot;]
-    L -- &quot;相关且并非全部已 @&quot; --&gt; G[&quot;附带可选上下文&quot;]
-    L -- &quot;无关或全部已 @&quot; --&gt; M[&quot;直接处理当前消息&quot;]
-    E -- &quot;只有一个纯 @&quot; --&gt; H[&quot;读取最近 N 条归档&quot;]
+    A["飞书群消息事件"] --&gt; B["Hermes Feishu Adapter"]
+    B --&gt; C["过滤前归档 Hook"]
+    C --&gt; D[("本地 SQLite")]
+    B --&gt; E{"是否 @机器人"}
+    E -- "否" --&gt; F["停止，不调用模型"]
+    E -- "是且包含文字" --&gt; L["检查最近 5 条的关联性"]
+    L -- "相关且并非全部已 @" --&gt; G["附带可选上下文"]
+    L -- "无关或全部已 @" --&gt; M["直接处理当前消息"]
+    E -- "只有一个纯 @" --&gt; H["读取最近 N 条归档"]
     H --&gt; G
     M --&gt; I
-    G --&gt; I[&quot;模型生成回复&quot;]
-    I --&gt; J[&quot;发送到飞书群&quot;]
-    G -. &quot;用户明确要求复盘&quot; .-&gt; K[&quot;feishu_group_history 工具&quot;]
+    G --&gt; I["模型生成回复"]
+    I --&gt; J["发送到飞书群"]
+    G -. "用户明确要求复盘" .-&gt; K["feishu_group_history 工具"]
     K --&gt; D
 </code></pre>
 <p>项目由两部分组成：</p>
@@ -364,7 +375,7 @@ FEISHU_CONNECTION_MODE=websocket
 <li>重启 Hermes Gateway。</li>
 </ol>
 <p>安装完成后检查：</p>
-<pre><code class="language-powershell">$env:HERMES_HOME = &#39;D:\env\hermes&#39;
+<pre><code class="language-powershell">$env:HERMES_HOME = 'D:\env\hermes'
 D:\env\hermes\hermes-agent\venv\Scripts\hermes.exe plugins list --plain --no-bundled
 D:\env\hermes\hermes-agent\venv\Scripts\hermes.exe gateway status
 </code></pre>
@@ -525,7 +536,7 @@ git pull
 </ul>
 <h3>停用与恢复</h3>
 <p>先停用插件：</p>
-<pre><code class="language-powershell">$env:HERMES_HOME = &#39;D:\env\hermes&#39;
+<pre><code class="language-powershell">$env:HERMES_HOME = 'D:\env\hermes'
 D:\env\hermes\hermes-agent\venv\Scripts\hermes.exe plugins disable feishu-context-archive
 D:\env\hermes\hermes-agent\venv\Scripts\hermes.exe gateway restart
 </code></pre>
@@ -593,7 +604,7 @@ D:\env\hermes\hermes-agent\venv\Scripts\hermes.exe gateway restart
   .\scripts\backfill_history.py
 </code></pre>
 <p>功能测试：</p>
-<pre><code class="language-powershell">$env:PYTHONDONTWRITEBYTECODE = &#39;1&#39;
+<pre><code class="language-powershell">$env:PYTHONDONTWRITEBYTECODE = '1'
 D:\env\hermes\hermes-agent\venv\Scripts\python.exe -m unittest discover -s tests -v
 </code></pre>
 <p>检查当前 Hermes 适配器是否可安装：</p>
@@ -644,7 +655,7 @@ D:\env\hermes\hermes-agent\venv\Scripts\python.exe -m unittest discover -s tests
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 322</div>
+        <div class="stars">★ 323</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">

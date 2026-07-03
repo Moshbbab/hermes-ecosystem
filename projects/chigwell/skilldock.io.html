@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 76
+    "userInteractionCount": 77
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">SkillDock.io is a registry of reusable AI Skills based on the AgentSkills specification. Discover, install, and publish versioned Skills that work across OpenClaw, Claude, and any Skills-compatible agent.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 76</span>
+    <span class="stars">★ 77</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
@@ -144,8 +144,8 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <div align="center">
-  <a target="_blank" href="https://skilldock.io/?utm_source=github&utm_medium=readme">
-   <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=SkillDock.io&fontSize=50&fontAlignY=35&animation=fadeIn&fontColor=FFFFFF&descAlignY=55&descAlign=62" alt="SkillDock" width="100%" />
+  <a href="https://skilldock.io/?utm_source=github&amp;utm_medium=readme">
+   <img src="https://capsule-render.vercel.app/api?type=waving&amp;color=gradient&amp;height=200&amp;section=header&amp;text=SkillDock.io&amp;fontSize=50&amp;fontAlignY=35&amp;animation=fadeIn&amp;fontColor=FFFFFF&amp;descAlignY=55&amp;descAlign=62" alt="SkillDock" width="100%">
   </a>
 </div>
 
@@ -184,13 +184,13 @@ skilldock tokens list
 </code></pre>
 <p>CLI output is rendered with <a href="https://pypi.org/project/rich/">Rich</a> tables/formatting for better readability.</p>
 <p>Call an endpoint by <code>operationId</code>:</p>
-<pre><code class="language-bash">skilldock call SomeOperationId --param foo=bar --json &#39;{&quot;hello&quot;:&quot;world&quot;}&#39;
+<pre><code class="language-bash">skilldock call SomeOperationId --param foo=bar --json '{"hello":"world"}'
 </code></pre>
 <p>Search skills:</p>
-<pre><code class="language-bash">skilldock skills search &quot;docker&quot;
+<pre><code class="language-bash">skilldock skills search "docker"
 </code></pre>
 <p><code>skills search</code> uses <code>POST /v2/search</code> and returns the same listing contract shape (<code>page</code>, <code>per_page</code>, <code>items</code>, <code>has_more</code>).</p>
-<p>Search output includes <code>LATEST_VERSIONS</code> from each skill&#39;s embedded <code>latest_releases</code> (up to 5 items).</p>
+<p>Search output includes <code>LATEST_VERSIONS</code> from each skill's embedded <code>latest_releases</code> (up to 5 items).</p>
 <p>Get a single skill (latest metadata + latest description source):</p>
 <pre><code class="language-bash">skilldock skills get acme/my-skill
 </code></pre>
@@ -209,11 +209,11 @@ skilldock skills stripe-connect-status
 
 # Payout methods
 skilldock skills set-ton-wallet --ton-wallet-address UQ...
-skilldock skills set-stripe-payout --stripe-account-id acct_1ABCDEF... --stripe-account-label &quot;Stripe Express&quot;
+skilldock skills set-stripe-payout --stripe-account-id acct_1ABCDEF... --stripe-account-label "Stripe Express"
 skilldock skills payout-methods
 
 # Mark the skill as sellable
-skilldock skills set-commerce acme/my-skill --is-for-sale true --visibility private --selling-description-md &quot;What buyer sees&quot;
+skilldock skills set-commerce acme/my-skill --is-for-sale true --visibility private --selling-description-md "What buyer sees"
 
 # Dual-rail pricing (set either or both)
 skilldock skills set-price acme/my-skill --pricing-mode fixed_usd --price-usd 29.00
@@ -289,14 +289,14 @@ The CLI packages upload archives with top-level folder name equal to <code>--slu
 <p>If your API supports release dependencies, you can pass them from CLI too:</p>
 <pre><code class="language-bash"># Repeatable string form:
 skilldock skill upload --namespace myorg --slug my-skill --path . \
-  --dependency &quot;core/base-utils@^1.2.0&quot; \
-  --dependency &quot;tools/lint@&gt;=2.0.0 &lt;3.0.0&quot;
+  --dependency "core/base-utils@^1.2.0" \
+  --dependency "tools/lint@&gt;=2.0.0 &lt;3.0.0"
 
 # JSON form (array or map), inline or from file:
 skilldock skill upload --namespace myorg --slug my-skill --path . \
   --dependencies-json @dependencies.json
 </code></pre>
-<p>If you haven&#39;t created the namespace yet:</p>
+<p>If you haven't created the namespace yet:</p>
 <pre><code class="language-bash">skilldock namespaces create myorg
 skilldock namespaces list
 </code></pre>
@@ -308,21 +308,21 @@ skilldock namespaces list
 
 client = SkilldockClient(
     # Optional: override if needed
-    openapi_url=&quot;https://api.skilldock.io/openapi.json&quot;,
-    # base_url=&quot;https://api.skilldock.io&quot;,
+    openapi_url="https://api.skilldock.io/openapi.json",
+    # base_url="https://api.skilldock.io",
     token=None,  # set after `skilldock auth login`
 )
 
 ops = client.operation_ids()
-print(&quot;operations:&quot;, len(ops))
+print("operations:", len(ops))
 
 # Call by operationId (params are split into path/query/header based on OpenAPI metadata)
-result = client.call_operation(&quot;SomeOperationId&quot;, params={&quot;id&quot;: &quot;123&quot;})
+result = client.call_operation("SomeOperationId", params={"id": "123"})
 print(result)
 
 # Or call by a generated python-friendly name:
 # (see `skilldock ops` output and use the `python_name`-like identifier)
-# result = client.ops.someoperationid(id=&quot;123&quot;)
+# result = client.ops.someoperationid(id="123")
 
 client.close()
 </code></pre>
@@ -357,7 +357,7 @@ skilldock config show
 </code></pre>
 <p>You can set config values:</p>
 <pre><code class="language-bash">skilldock config set --base-url https://api.skilldock.io --openapi-url https://api.skilldock.io/openapi.json
-skilldock config set --token &quot;YOUR_TOKEN&quot;
+skilldock config set --token "YOUR_TOKEN"
 </code></pre>
 <p>Environment variables (override config):</p>
 <ul>
@@ -384,7 +384,7 @@ The exact details are derived from the OpenAPI <code>securitySchemes</code> when
 <li>The CLI lists personal API tokens; if none are active, it creates one and saves it as the default token</li>
 </ol>
 <p>If you want to set a token manually:</p>
-<pre><code class="language-bash">skilldock auth set-token &quot;PASTE_TOKEN_HERE&quot;
+<pre><code class="language-bash">skilldock auth set-token "PASTE_TOKEN_HERE"
 </code></pre>
 <p>To create a personal API token (recommended for longer-lived auth):</p>
 <pre><code class="language-bash">skilldock tokens create --save
@@ -405,7 +405,7 @@ The exact details are derived from the OpenAPI <code>securitySchemes</code> when
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.9K</div>
+        <div class="stars">★ 24.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">

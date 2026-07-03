@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -144,7 +144,7 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <div align="center">
-  <img src="https://raw.githubusercontent.com/EfficientContext/ContextPilot/main/assets/about.png" alt="ContextPilot Logo" width="600"/>
+  <img src="https://raw.githubusercontent.com/EfficientContext/ContextPilot/main/assets/about.png" alt="ContextPilot Logo" width="600">
 
   <h2><strong>ContextPilot: Fast Long-Context Inference via Context Reuse</strong></h2>
 
@@ -177,7 +177,7 @@
 </ol>
 <p>It maintains a <strong>Context Index</strong> of cached content, then per request applies <strong>Reorder</strong> (align shared blocks into a common prefix) and/or <strong>Deduplicate</strong> (replace repeats with reference hints), plus <strong>cache-aware scheduling</strong> to maximize prefix sharing. The optimized prompt is sent via the OpenAI-compatible API; <code>POST /evict</code> keeps the index synced when KV cache is reclaimed. See its design overview below.</p>
 <div align="center">
-<img src="https://raw.githubusercontent.com/EfficientContext/ContextPilot/main/assets/system_description.jpg" alt="ContextPilot Architecture" width="600"/>
+<img src="https://raw.githubusercontent.com/EfficientContext/ContextPilot/main/assets/system_description.jpg" alt="ContextPilot Architecture" width="600">
 </div>
 
 <blockquote>
@@ -304,9 +304,9 @@
 </code></pre>
 <p>Then enable in <code>~/.openclaw/openclaw.json</code>:</p>
 <pre><code class="language-json">{
-  &quot;plugins&quot;: {
-    &quot;slots&quot;: { &quot;contextEngine&quot;: &quot;contextpilot&quot; },
-    &quot;entries&quot;: { &quot;contextpilot&quot;: { &quot;enabled&quot;: true } }
+  "plugins": {
+    "slots": { "contextEngine": "contextpilot" },
+    "entries": { "contextpilot": { "enabled": true } }
   }
 }
 </code></pre>
@@ -319,7 +319,7 @@ python -m contextpilot.server.http_server \
   # or: --infer-api-url https://api.anthropic.com      # Anthropic
   # or: --infer-api-url https://api.openai.com         # OpenAI
 </code></pre>
-<p>Then set OpenClaw&#39;s base URL to <code>http://localhost:8765/v1</code>. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">full OpenClaw integration guide</a> for details.</p>
+<p>Then set OpenClaw's base URL to <code>http://localhost:8765/v1</code>. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">full OpenClaw integration guide</a> for details.</p>
 <hr>
 <h4>Hermes Agent</h4>
 <p>Native plugin — zero Hermes source changes, zero external dependencies:</p>
@@ -331,13 +331,13 @@ hermes plugins   # select: Context Engine → contextpilot
 <h4>vLLM / SGLang</h4>
 <p><strong>From PyPI</strong> — the vLLM and SGLang hooks are installed automatically:</p>
 <pre><code class="language-bash">pip install contextpilot          # CPU index computation
-pip install &quot;contextpilot[gpu]&quot;   # GPU index computation (CUDA 12.x)
+pip install "contextpilot[gpu]"   # GPU index computation (CUDA 12.x)
 </code></pre>
 <p><strong>From source</strong> — run <code>install_hook</code> manually after install, since editable installs do not copy the <code>.pth</code> file to site-packages:</p>
 <pre><code class="language-bash">git clone https://github.com/EfficientContext/ContextPilot.git
 cd ContextPilot
 pip install -e .                  # CPU
-pip install -e &quot;.[gpu]&quot;           # GPU (CUDA 12.x)
+pip install -e ".[gpu]"           # GPU (CUDA 12.x)
 python -m contextpilot.install_hook   # one-time: enables automatic vLLM / SGLang integration
 </code></pre>
 <p>The <code>install_hook</code> step writes a <code>.pth</code> file into your site-packages so the vLLM and SGLang hooks load automatically at Python startup — no code changes required. To uninstall: <code>python -m contextpilot.install_hook --remove</code>.</p>
@@ -362,9 +362,9 @@ xcode-select --install    # one-time: provides clang++ to compile the native hoo
 <h3>Getting Started</h3>
 <h4>Quick Start with OpenClaw</h4>
 <pre><code class="language-bash"># Ask OpenClaw to analyze vendor contracts (ContextPilot deduplicates shared content automatically)
-openclaw agent --message &quot;Read contracts/contract_alpha_cloud.txt and summarize the liability terms.&quot;
-openclaw agent --message &quot;Read contracts/contract_beta_ai.txt and compare its liability with Alpha.&quot;
-openclaw agent --message &quot;Read contracts/contract_gamma_security.txt. Rank all three by liability exposure.&quot;
+openclaw agent --message "Read contracts/contract_alpha_cloud.txt and summarize the liability terms."
+openclaw agent --message "Read contracts/contract_beta_ai.txt and compare its liability with Alpha."
+openclaw agent --message "Read contracts/contract_gamma_security.txt. Rank all three by liability exposure."
 </code></pre>
 <p>When the agent reads multiple documents sharing content (contracts from the same template, proposals with shared methodology), ContextPilot automatically deduplicates identical blocks — reducing prefill tokens by ~27% with zero accuracy loss. See the <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/guides/openclaw.md">integration guide</a> and <a href="https://github.com/EfficientContext/ContextPilot/blob/main/docs/benchmarks/openclaw.md">benchmark</a>.</p>
 <hr>
@@ -392,12 +392,12 @@ openclaw agent --message &quot;Read contracts/contract_gamma_security.txt. Rank 
 <p>Both modes work with any OpenAI-compatible endpoint (vLLM, SGLang, etc.) — no changes to your inference deployment. They support both direct API calls (shown below) and HTTP server deployment (see the <a href="https://efficientcontext.github.io/contextpilot-docs/guides/online_usage">online usage guide</a>).</p>
 <hr>
 <h5>Accelerating Online Inference</h5>
-<p>Multi-turn chatbot with Mem0 or RAG where each turn&#39;s context blocks partially overlap. <code>cp_instance.optimize()</code> moves shared blocks to the prefix so the engine reuses cached KV states.</p>
+<p>Multi-turn chatbot with Mem0 or RAG where each turn's context blocks partially overlap. <code>cp_instance.optimize()</code> moves shared blocks to the prefix so the engine reuses cached KV states.</p>
 <pre><code class="language-python">from openai import OpenAI
 # Step 1: Import ContextPilot
 import contextpilot as cp
 
-client = OpenAI(base_url=&quot;http://localhost:30000/v1&quot;, api_key=&quot;EMPTY&quot;)
+client = OpenAI(base_url="http://localhost:30000/v1", api_key="EMPTY")
 # Step 2: Create a ContextPilot instance
 cp_instance = cp.ContextPilot(use_gpu=False)
 
@@ -407,13 +407,13 @@ for query in queries:
     messages = cp_instance.optimize(contexts, query)
 
     response = client.chat.completions.create(
-        model=&quot;Qwen/Qwen3-4B&quot;,
+        model="Qwen/Qwen3-4B",
         messages=messages,
     )
-    print(f&quot;Q: {query}\nA: {response.choices[0].message.content}\n&quot;)
+    print(f"Q: {query}\nA: {response.choices[0].message.content}\n")
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> When the engine evicts KV-cache entries under memory pressure, ContextPilot&#39;s index can go stale. Set <code>CONTEXTPILOT_INDEX_URL</code> when launching <a href="https://efficientcontext.github.io/contextpilot-docs/guides/online_usage#inference-engine-integration">SGLang or vLLM</a> to enable automatic eviction sync. For distributed setups, see <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/installation#distributed-setup">Distributed Setup</a>.</p>
+<p><strong>Note:</strong> When the engine evicts KV-cache entries under memory pressure, ContextPilot's index can go stale. Set <code>CONTEXTPILOT_INDEX_URL</code> when launching <a href="https://efficientcontext.github.io/contextpilot-docs/guides/online_usage#inference-engine-integration">SGLang or vLLM</a> to enable automatic eviction sync. For distributed setups, see <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/installation#distributed-setup">Distributed Setup</a>.</p>
 </blockquote>
 <hr>
 <h5>Accelerating Offline Inference</h5>
@@ -423,7 +423,7 @@ import openai
 # Step 1: Import ContextPilot
 import contextpilot as cp
 
-BASE_URL = &quot;http://localhost:30000/v1&quot;
+BASE_URL = "http://localhost:30000/v1"
 # Step 2: Create a ContextPilot instance
 cp_instance = cp.ContextPilot(use_gpu=False)
 
@@ -433,13 +433,13 @@ messages_batch, order = cp_instance.optimize_batch(all_contexts, queries)
 
 # Send all requests concurrently
 async def generate_all():
-    ac = openai.AsyncOpenAI(base_url=BASE_URL, api_key=&quot;EMPTY&quot;)
+    ac = openai.AsyncOpenAI(base_url=BASE_URL, api_key="EMPTY")
     return await asyncio.gather(*[ac.chat.completions.create(
-        model=&quot;Qwen/Qwen3-4B&quot;, messages=m
+        model="Qwen/Qwen3-4B", messages=m
     ) for m in messages_batch])
 
 for resp, idx in zip(asyncio.run(generate_all()), order):
-    print(f&quot;Q: {queries[idx]}\nA: {resp.choices[0].message.content}\n&quot;)
+    print(f"Q: {queries[idx]}\nA: {resp.choices[0].message.content}\n")
 </code></pre>
 <p>For a detailed walkthrough with concrete examples, see the <a href="https://efficientcontext.github.io/contextpilot-docs/getting_started/quickstart">Quick Start Guide</a>. For more fine-grained control, you can also use <code>cp_instance.reorder()</code> and <code>cp_instance.deduplicate()</code> directly — see the <a href="https://efficientcontext.github.io/contextpilot-docs/reference/api">API reference</a> and <a href="https://efficientcontext.github.io/contextpilot-docs/guides/multi_turn">multi-turn deduplication guide</a>.</p>
 <h4>Adoption Examples</h4>
@@ -467,7 +467,7 @@ for resp, idx in zip(asyncio.run(generate_all()), order):
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.9K</div>
+        <div class="stars">★ 60.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -479,11 +479,11 @@ for resp, idx in zip(asyncio.run(generate_all()), order):
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 334</div>
+        <div class="stars">★ 335</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 188</div>
+        <div class="stars">★ 189</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -491,7 +491,7 @@ for resp, idx in zip(asyncio.run(generate_all()), order):
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 213</div>
+        <div class="stars">★ 214</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">

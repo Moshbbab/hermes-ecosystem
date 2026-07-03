@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nujovich/hermes-telemetry#software",
   "name": "hermes-telemetry",
-  "description": "hermes-telemetry is an observability and budget management plugin for Hermes Agent that prevents runaway API costs. It hooks directly into the agent's runtime to track token usage and costs in real time, allowing it to block LLM calls before they exceed defined spending limits. The plugin stores data in a SQLite database and provides cost analysis via slash commands and a local web dashboard.",
+  "description": "hermes-telemetry is a plugin for Hermes Agent designed to prevent uncontrolled spending during autonomous runs. It integrates directly into the runtime to monitor token usage and costs in real time via a hook pipeline. This allows the system to enforce hard budget limits by blocking LLM calls before they occur. Users can manage spending through slash commands or a local web dashboard.",
   "url": "https://hermesatlas.com/projects/nujovich/hermes-telemetry",
   "codeRepository": "https://github.com/nujovich/hermes-telemetry",
   "applicationCategory": "BrowserApplication",
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-telemetry is an observability and budget management plugin for Hermes Agent that prevents runaway API costs. It hooks directly into the agent's runtime to track token usage and costs in real time, allowing it to block LLM calls before they exceed defined spending limits. The plugin stores data in a SQLite database and provides cost analysis via slash commands and a local web dashboard.</p>
+    <p class="summary-text">hermes-telemetry is a plugin for Hermes Agent designed to prevent uncontrolled spending during autonomous runs. It integrates directly into the runtime to monitor token usage and costs in real time via a hook pipeline. This allows the system to enforce hard budget limits by blocking LLM calls before they occur. Users can manage spending through slash commands or a local web dashboard.</p>
     <ul class="summary-highlights">
-      <li>Enforces hard budget limits to stop overspending mid-session</li>
-      <li>Provides real-time cost analysis via /stats and /budget commands</li>
-      <li>Includes a local HTML dashboard for visual usage tracking</li>
+      <li>Enforces hard budget limits mid-session</li>
+      <li>Provides real-time cost and token tracking</li>
+      <li>Includes a standalone HTML dashboard</li>
     </ul>
   </div>
 </section>
@@ -149,14 +149,14 @@
 </blockquote>
 <p><strong>Budget enforcement + observability for Hermes Agent. The only plugin that can stop a run before it overspends.</strong></p>
 <p>A comprehensive telemetry plugin that captures real usage data, enforces budget limits, and provides detailed cost analysis for AI agent operations. Built for the <a href="https://dev.to/devteam/join-the-hermes-agent-challenge-1000-in-prizes-13cd">Hermes Agent Challenge</a> by <a href="https://nadiaujovich.dev">Nadia Ujovich</a>.</p>
-<p><strong>The differentiator: it can <em>stop</em> work that&#39;s about to overspend — not just report it after the fact.</strong> Set a daily cap below current spend, and the next cron run is blocked by the budget:</p>
+<p><strong>The differentiator: it can <em>stop</em> work that's about to overspend — not just report it after the fact.</strong> Set a daily cap below current spend, and the next cron run is blocked by the budget:</p>
 <p><img src="https://raw.githubusercontent.com/nujovich/hermes-telemetry/main/docs/budget_enforcement.gif" alt="Budget enforcement demo: a $0.001 daily global cap is set, current spend already exceeds it, and the next marketing cron run is blocked by the resulting hard breach"></p>
 <p><em><code>/budget set global daily 0.001</code> writes the cap to <code>budget.yaml</code>; current spend ($0.0102) already exceeds it, so <code>/budget</code> re-renders at 1020% <code>[daily]</code> — a hard breach — and the next marketing cron run is blocked by the budget.</em></p>
 <p><a href="https://raw.githubusercontent.com/NousResearch/hermes-agent/HEAD/assets/banner.png"><img src="https://raw.githubusercontent.com/NousResearch/hermes-agent/HEAD/assets/banner.png" alt="Hermes Agent"></a></p>
 <p><a href="https://camo.githubusercontent.com/08cef40a9105b6526ca22088bc514fbfdbc9aac1ddbf8d4e6c750e3a88a44dca/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d626c75652e737667"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a> <a href="https://img.shields.io/badge/Tests-263%20passing-green.svg"><img src="https://img.shields.io/badge/Tests-263%20passing-green.svg" alt="Tests: 263 passing"></a> <a href="https://img.shields.io/badge/Providers-OpenRouter-orange.svg"><img src="https://img.shields.io/badge/Providers-OpenRouter-orange.svg" alt="Provider Support"></a> <a href="https://camo.githubusercontent.com/d0c993fdf35127e435629279025d4b1892e351f5e04ce1547329686aa4223366/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4865726d65732532304167656e742d4368616c6c656e6765253230456e7472792d707572706c652e737667"><img src="https://img.shields.io/badge/Hermes%20Agent-Challenge%20Entry-purple.svg" alt="Challenge Entry"></a></p>
 <hr>
 <p>Hermes Agent runs autonomously — across sessions, platforms, and cron jobs — which 
-means it can keep spending even when you&#39;re not watching.<br><strong>hermes-telemetry lives inside the runtime</strong> and enforces hard budget limits before 
+means it can keep spending even when you're not watching.<br><strong>hermes-telemetry lives inside the runtime</strong> and enforces hard budget limits before 
 the next LLM call is made.</p>
 <blockquote>
 <p>This plugin targets a gap raised repeatedly in the Hermes tracker: <strong>budget
@@ -273,7 +273,7 @@ explicit <code>pricing.yaml</code> entry overrides the automatic <code>$0</code>
 <h4>Dashboard (Web UI)</h4>
 <p>A standalone HTML dashboard for users who prefer a visual interface over slash commands. Served locally, reads directly from the telemetry SQLite database.</p>
 <p><a href="https://github.com/nujovich/hermes-telemetry/blob/main/docs/screenshots/dashboard-overview.png"><img src="https://github.com/nujovich/hermes-telemetry/raw/main/docs/screenshots/dashboard-overview.png" alt="Dashboard overview"></a></p>
-<p><em>Current dashboard home view with the tabbed layout (<code>Home / Breakdown / Request / Tool / Error</code>), header auto-refresh controls, budget windows rendered in the viewer&#39;s local timezone, and the refreshed recent-session tables.</em></p>
+<p><em>Current dashboard home view with the tabbed layout (<code>Home / Breakdown / Request / Tool / Error</code>), header auto-refresh controls, budget windows rendered in the viewer's local timezone, and the refreshed recent-session tables.</em></p>
 <h4>Slash Commands</h4>
 <h5><code>/stats</code> — Session analytics</h5>
 <p><a href="https://github.com/nujovich/hermes-telemetry/blob/main/docs/screenshots/stats-output.png"><img src="https://github.com/nujovich/hermes-telemetry/raw/main/docs/screenshots/stats-output.png" alt="Stats output"></a></p>
@@ -435,7 +435,7 @@ ln -s ~/.hermes/plugins/hermes-telemetry/hermes-telemetry ~/.local/bin/hermes-te
 <h4>How discovery works</h4>
 <p>When the Hermes dashboard process starts, it scans for <code>~/.hermes/plugins/&lt;name&gt;/dashboard/manifest.json</code> (verified against <a href="https://github.com/NousResearch/hermes-agent/blob/main/hermes_cli/web_server.py"><code>hermes_cli/web_server.py</code></a>). Because the standalone dashboard at <code>dashboard/serve.py</code> and the plugin manifest at <code>dashboard/manifest.json</code> live in the same directory, <strong>a single <code>git pull</code> brings both surfaces up to date</strong>.</p>
 <h4>Install / update (git pull, no PyPI)</h4>
-<p>If you already installed the plugin via Option B (manual clone) above, you don&#39;t need to do anything — <code>git pull</code> updates both the runtime hooks and the dashboard plugin surface in lockstep:</p>
+<p>If you already installed the plugin via Option B (manual clone) above, you don't need to do anything — <code>git pull</code> updates both the runtime hooks and the dashboard plugin surface in lockstep:</p>
 <pre><code class="language-bash">cd ~/.hermes/plugins/hermes-telemetry
 git pull
 hermes gateway restart
@@ -559,8 +559,8 @@ hermes-telemetry budget --json | jq ‘.global’
 <h4>Date range filters (<code>--from</code> / <code>--to</code>)</h4>
 <p>Every <code>stats</code> subcommand also accepts <code>--from</code> and <code>--to</code> (ISO-8601 dates or full
 timestamps). <code>--from</code> is inclusive, <code>--to</code> is exclusive, and either can be
-omitted — leaving <code>--to</code> off means &quot;up to now&quot;.</p>
-<pre><code class="language-bash"># Everything since a specific instant (good for &quot;post-deploy&quot; windows)
+omitted — leaving <code>--to</code> off means "up to now".</p>
+<pre><code class="language-bash"># Everything since a specific instant (good for "post-deploy" windows)
 hermes-telemetry stats models --from 2026-06-16T12:00:00Z
 
 # Bounded range
@@ -571,16 +571,16 @@ hermes-telemetry stats today --from 2026-06-01
 
 # Combine with --json for scripting
 hermes-telemetry stats models --from 2026-06-16T12:00:00Z --json \
-  | jq &#39;.[] | {model, calls: .total_calls, cost: .cost_usd}&#39;
+  | jq '.[] | {model, calls: .total_calls, cost: .cost_usd}'
 </code></pre>
 <p>Presets <code>today</code>, <code>week</code>, <code>month</code>, plus <code>last-7-days</code> / <code>last-30-days</code> are also
-available as subcommands when you don&#39;t need an arbitrary boundary.</p>
+available as subcommands when you don't need an arbitrary boundary.</p>
 <h5>Use case: validating a pricing fix without waiting for the 24h window to roll</h5>
 <p>If you land a fix that changes how a model is priced (e.g. you correct a
 provider-resolution bug so a model that was being billed against the wrong
 gateway now bills against the right one), the rolling 24-hour window in
 <code>/stats models</code> will keep mixing pre-fix and post-fix calls until enough time
-passes for the old ones to age out. The cost column is &quot;right&quot; for new calls
+passes for the old ones to age out. The cost column is "right" for new calls
 but the <em>aggregate</em> is misleading.</p>
 <p><code>--from &lt;fix-deploy-timestamp&gt;</code> lets you see only the post-fix calls
 immediately, so you can confirm the new unit cost without dropping to raw SQL
@@ -591,14 +591,14 @@ hermes-telemetry stats models --from 2026-06-16T12:00:00Z
 # nous       deepseek/deepseek-v4-pro     17    ...  $0.034000   ← new pricing, isolated
 </code></pre>
 <p>The same flags work from inside Hermes Chat via the <code>/stats</code> slash command,
-so you don&#39;t have to leave the session to run the check:</p>
+so you don't have to leave the session to run the check:</p>
 <pre><code>/stats models --from 2026-06-16T12:00:00Z
 /stats providers --from 2026-06-10 --to 2026-06-15
 /stats --from 2026-06-16     # date-only → 00:00:00 UTC of that day
 </code></pre>
 <p>The <code>Notes</code> column (subscription/free-tier vs no price entry) and footer
 behaviour described in <a href="#stats"><code>/stats models</code></a> work the same way under a
-date filter — they&#39;re computed against whatever rows the filter selected.</p>
+date filter — they're computed against whatever rows the filter selected.</p>
 <hr>
 <h3>Setup Wizard</h3>
 <p>hermes-telemetry includes a first-time setup wizard that runs automatically on first
@@ -702,7 +702,7 @@ changes require a restart.</p>
 </code></pre>
 <p>Any subcommand also accepts <code>--from &lt;iso&gt;</code> and <code>--to &lt;iso&gt;</code> (inclusive /
 exclusive) to override the preset window with an arbitrary date range — useful
-for isolating &quot;post-deploy&quot; or &quot;post-fix&quot; data without waiting 24 h. Examples:</p>
+for isolating "post-deploy" or "post-fix" data without waiting 24 h. Examples:</p>
 <pre><code>/stats models --from 2026-06-16T12:00:00Z
 /stats providers --from 2026-06-10 --to 2026-06-15
 </code></pre>
@@ -761,7 +761,7 @@ for isolating &quot;post-deploy&quot; or &quot;post-fix&quot; data without waiti
   1 model(s) at $0.00 have no price entry in pricing.yaml — run /setup pricing auto
   to refresh, or add them manually.
 </code></pre>
-<p>Breaks each provider&#39;s spend down to individual models. Rows are grouped by provider (ascending), then ordered by call count within each provider; the <code>Model</code> column is kept wide so dated model keys stay readable. Columns: <code>Calls</code> (total), <code>Real</code> (calls with provider-reported usage), <code>Est</code> (calls with locally estimated tokens), <code>Cost</code>, and <code>Notes</code>.</p>
+<p>Breaks each provider's spend down to individual models. Rows are grouped by provider (ascending), then ordered by call count within each provider; the <code>Model</code> column is kept wide so dated model keys stay readable. Columns: <code>Calls</code> (total), <code>Real</code> (calls with provider-reported usage), <code>Est</code> (calls with locally estimated tokens), <code>Cost</code>, and <code>Notes</code>.</p>
 <p>The <code>Notes</code> column disambiguates <code>$0.000000</code> rows so the user can tell intentional zeros from missing pricing:</p>
 <ul>
 <li><strong><code>subscription/free-tier</code></strong> — the model is declared with <code>_subscription: true</code> in <code>pricing.yaml</code>. The $0 is intentional (subscription plan or free tier), not a bug. Pricing refresh preserves these entries verbatim.</li>
@@ -821,7 +821,7 @@ for isolating &quot;post-deploy&quot; or &quot;post-fix&quot; data without waiti
 <li><strong>Error</strong>: run-status groups, failed tools, recent incidents, and cron failure / waste center</li>
 <li><strong>Investigation workspace</strong>: click-through drilldown by provider, model, day, status, platform, cron job, tool, and free-text search</li>
 <li><strong>Drawers</strong>: session detail and request detail side drawers with click-back chips into filtered investigation views</li>
-<li><strong>Viewer-local timestamps</strong>: rendered dates/times follow the browser&#39;s timezone; budget windows are computed for that viewer timezone too</li>
+<li><strong>Viewer-local timestamps</strong>: rendered dates/times follow the browser's timezone; budget windows are computed for that viewer timezone too</li>
 <li><strong>Soft-hidden deleted sessions</strong>: sessions marked deleted in Hermes metadata are hidden from session-facing tables by default, but aggregate historical totals remain intact</li>
 <li><strong>Time range selector</strong>: <code>Last 24h / Last 7 days / Last 30 days / Last 90 days / All time</code></li>
 </ul>
@@ -841,7 +841,7 @@ two options:</p>
 <p><strong>Recommended — SSH tunnel</strong> (no server-side change, leaves the safe default in
 place):</p>
 <pre><code class="language-bash"># Start the dashboard on the server as usual
-ssh server &quot;cd ~/.hermes/plugins/hermes-telemetry/dashboard &amp;&amp; python3 serve.py &amp;&quot;
+ssh server "cd ~/.hermes/plugins/hermes-telemetry/dashboard &amp;&amp; python3 serve.py &amp;"
 
 # Tunnel from your client
 ssh -L 8765:localhost:8765 -N server &amp;
@@ -872,12 +872,12 @@ one).</p>
 <p><strong>Full format:</strong></p>
 <pre><code class="language-yaml">models:
   # Free model
-  &quot;openrouter/owl-alpha&quot;:
+  "openrouter/owl-alpha":
     input: 0.00
     output: 0.00
 
   # Paid model with full cache/reasoning split
-  &quot;openrouter/anthropic/claude-sonnet-4-6&quot;:
+  "openrouter/anthropic/claude-sonnet-4-6":
     input: 3.00
     output: 15.00
     cache_read: 0.30
@@ -885,7 +885,7 @@ one).</p>
     reasoning: 15.00
 
   # Minimal override (cache prices derived from multipliers)
-  &quot;openrouter/anthropic/claude-opus-4-7&quot;:
+  "openrouter/anthropic/claude-opus-4-7":
     input: 5.00
     output: 25.00
 
@@ -901,18 +901,18 @@ defaults:
 <li>Unknown → <code>$0.00</code> with a one-time warning in <code>telemetry.log</code></li>
 </ol>
 <p>Prices are auto-fetched from the OpenRouter API and cached locally.</p>
-<p><strong>Provider-aware lookup.</strong> Each candidate is filtered by the call&#39;s provider so
+<p><strong>Provider-aware lookup.</strong> Each candidate is filtered by the call's provider so
 an OpenRouter-sourced price is never applied to a call another provider served
 (e.g. the OpenRouter Qwen rate must not cost a Nous Portal call, and a NIM call
-of <code>nvidia/...</code> must not borrow OpenRouter&#39;s rate for the same id). Entries
+of <code>nvidia/...</code> must not borrow OpenRouter's rate for the same id). Entries
 auto-fetched from OpenRouter carry <code>_source: openrouter</code> and are skipped for
 non-OpenRouter calls; built-in and hand-added entries (no <code>_source</code>) are
 provider-neutral.</p>
 <p><strong>Subscription / flat-rate models.</strong> If a provider serves a model on a flat
 subscription or free tier (incremental per-token cost = $0), declare it under
-the provider&#39;s <strong>native model id</strong> so it stays distinct from a lookup miss:</p>
+the provider's <strong>native model id</strong> so it stays distinct from a lookup miss:</p>
 <pre><code class="language-yaml">models:
-  qwen3.7-plus:          # Nous Portal&#39;s native id (not the OpenRouter qwen/ form)
+  qwen3.7-plus:          # Nous Portal's native id (not the OpenRouter qwen/ form)
     input: 0.0
     output: 0.0
     _subscription: true  # declared $0 — survives every OpenRouter refresh
@@ -982,7 +982,7 @@ on_estimated:
 </li>
 </ul>
 <blockquote>
-<p><strong>NVIDIA NIM</strong> (<code>build.nvidia.com</code>) is supported out of the box: the Nemotron lineup ships as built-in seed prices, so NIM-served calls cost correctly even though NIM has no auto-refresh source. The seeds are immune to OpenRouter syncs, and a NIM call never borrows OpenRouter&#39;s rate for a colliding model id. Any <code>…:free</code> id resolves to <code>$0.00</code> via the free-tier suffix rule (so a seeded model&#39;s <code>:free</code> variant is never mis-billed at its paid rate); the <code>nemotron-3-ultra:free</code> promo ends 2026-06-18 (see the notice above).</p>
+<p><strong>NVIDIA NIM</strong> (<code>build.nvidia.com</code>) is supported out of the box: the Nemotron lineup ships as built-in seed prices, so NIM-served calls cost correctly even though NIM has no auto-refresh source. The seeds are immune to OpenRouter syncs, and a NIM call never borrows OpenRouter's rate for a colliding model id. Any <code>…:free</code> id resolves to <code>$0.00</code> via the free-tier suffix rule (so a seeded model's <code>:free</code> variant is never mis-billed at its paid rate); the <code>nemotron-3-ultra:free</code> promo ends 2026-06-18 (see the notice above).</p>
 </blockquote>
 <h4>Estimated-Price Models</h4>
 <p>Some OpenRouter models have no fixed pricing (e.g. <code>auto</code> routing, experimental models). These are represented with negative prices in the API.</p>
@@ -1037,10 +1037,10 @@ Updated 3 model(s):
 <pre><code class="language-python">from hermes_telemetry.pricing_refresh import PricingSource, register_source
 
 class AnthropicSource(PricingSource):
-    name = &quot;anthropic&quot;
+    name = "anthropic"
 
     def fetch(self) -&gt; dict[str, dict]:
-        # Fetch from Anthropic&#39;s pricing page or API
+        # Fetch from Anthropic's pricing page or API
         ...
 
 register_source(AnthropicSource)
@@ -1139,7 +1139,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
 <p><strong><code>budget_alerts</code></strong> — anti-spam ledger:</p>
 <p><code>scope</code>, <code>scope_id</code>, <code>window</code>, <code>period_key</code>, <code>level</code>, <code>fired_at</code>, <code>spent_usd</code>, <code>limit_usd</code>. Unique constraint prevents duplicate alerts.</p>
 <p><strong><code>known_free_models</code></strong> — free→paid transition tracking (schema v5):</p>
-<p><code>model TEXT</code>, <code>provider TEXT</code>, <code>first_seen_at TEXT</code>. Primary key is <code>(model, provider)</code>. Every <code>(model, provider)</code> pair seen at explicit $0 is recorded here. A <code>provider=&#39;&#39;</code> wildcard row is inserted at plugin load for all explicitly-$0 models in the pricing table, covering sessions started before a model was first seen live.</p>
+<p><code>model TEXT</code>, <code>provider TEXT</code>, <code>first_seen_at TEXT</code>. Primary key is <code>(model, provider)</code>. Every <code>(model, provider)</code> pair seen at explicit $0 is recorded here. A <code>provider=''</code> wildcard row is inserted at plugin load for all explicitly-$0 models in the pricing table, covering sessions started before a model was first seen live.</p>
 <h4>Concurrency Model</h4>
 <p>Cron jobs run in a <code>ThreadPoolExecutor</code> (Hermes <code>cron/scheduler.py</code>). Multiple jobs can write to the DB simultaneously from different threads.</p>
 <p><strong>Design:</strong> per-thread SQLite connections via <code>threading.local()</code>. Each thread opens its own connection to the same WAL-mode DB file. A serializable <code>_schema_lock</code> protects DDL migrations on first connect (WAL mode switch requires a brief lock that <code>busy_timeout</code> alone doesn’t handle).</p>
@@ -1153,7 +1153,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
 <p>Every time the agent is about to do work, the plugin checks:</p>
 <ol>
 <li><strong><code>pre_llm_call</code></strong> (fires once per turn): evaluates all applicable budget scopes. If any has a <code>soft</code> or <code>hard</code> verdict that hasn’t been alerted yet this window, injects a one-time notice into the conversation context (anti-spam via <code>budget_alerts</code> table). Also injects a one-shot warning when the current model was previously seen as free but is now incurring cost (free→paid transition). Captures <code>sender_id</code>.</li>
-<li><strong><code>pre_tool_call</code></strong> (fires before every tool): re-evaluates budgets. If any scope is in <code>hard</code> breach, returns <code>{&quot;action&quot;:&quot;block&quot;,&quot;message&quot;:...}</code> which aborts the tool call.</li>
+<li><strong><code>pre_tool_call</code></strong> (fires before every tool): re-evaluates budgets. If any scope is in <code>hard</code> breach, returns <code>{"action":"block","message":...}</code> which aborts the tool call.</li>
 <li><strong>For cron jobs with <code>hard</code> breach:</strong> additionally calls <code>cron.jobs.pause_job</code> to pause future runs.</li>
 </ol>
 <h4>Enforcement Levels</h4>
@@ -1218,15 +1218,15 @@ pre_tool_call             Hard budget enforcement (tool-gate)
 <h4>Pricing Capture</h4>
 <p>Added models to <code>~/.hermes/telemetry/pricing.yaml</code>:</p>
 <pre><code class="language-yaml">models:
-  &quot;openrouter/owl-alpha&quot;:
+  "openrouter/owl-alpha":
     input: 0.00
     output: 0.00
-  &quot;openrouter/anthropic/claude-sonnet-4-6&quot;:
+  "openrouter/anthropic/claude-sonnet-4-6":
     input: 3.00
     output: 15.00
     cache_read: 0.30
     cache_write: 3.75
-  &quot;openrouter/anthropic/claude-opus-4-7&quot;:
+  "openrouter/anthropic/claude-opus-4-7":
     input: 5.00
     output: 25.00
     cache_read: 0.50
@@ -1270,7 +1270,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 322</div>
+        <div class="stars">★ 323</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">

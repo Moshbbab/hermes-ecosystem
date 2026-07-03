@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -153,20 +153,20 @@
 <p>Built for the <a href="https://nous.hermes.dev/">Nous Research Hermes Agent Hackathon</a> (March 2026).</p>
 <p align="center">
   <a href="https://youtu.be/YqLcMmzl3Yg">
-    <img src="https://img.youtube.com/vi/YqLcMmzl3Yg/maxresdefault.jpg" alt="Demo Video" width="700"/>
+    <img src="https://img.youtube.com/vi/YqLcMmzl3Yg/maxresdefault.jpg" alt="Demo Video" width="700">
   </a>
-  <br/>
+  <br>
   <strong>Watch the full demo</strong>
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/runtimenoteslabs/gladiator/main/assets/glad_1.png" alt="Gladiator landing page" width="700"/>
-  <br/>
-  <img src="https://raw.githubusercontent.com/runtimenoteslabs/gladiator/main/assets/glad_2.png" alt="Competitors and stack" width="700"/>
+  <img src="https://raw.githubusercontent.com/runtimenoteslabs/gladiator/main/assets/glad_1.png" alt="Gladiator landing page" width="700">
+  <br>
+  <img src="https://raw.githubusercontent.com/runtimenoteslabs/gladiator/main/assets/glad_2.png" alt="Competitors and stack" width="700">
 </p>
 
 <hr>
-<h3>What You&#39;ll See</h3>
+<h3>What You'll See</h3>
 <ol>
 <li><strong>Landing page</strong>: explains the product (llm-judge), the rules and the two rival companies</li>
 <li><strong>Live dashboard</strong>: 9-section narrative: scoreboard, task boards, code comparison, Gantt chart, audit trail, learning evidence, merge controls</li>
@@ -176,7 +176,7 @@
 </ol>
 <h3>Architecture</h3>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/runtimenoteslabs/gladiator/main/assets/hermes_system_architecture.svg" alt="System Architecture" width="680"/>
+  <img src="https://raw.githubusercontent.com/runtimenoteslabs/gladiator/main/assets/hermes_system_architecture.svg" alt="System Architecture" width="680">
 </p>
 
 <table>
@@ -241,7 +241,7 @@
 <tr>
 <td><strong>PostgreSQL</strong></td>
 <td>16+</td>
-<td>Paperclip&#39;s data store</td>
+<td>Paperclip's data store</td>
 </tr>
 <tr>
 <td><strong>Anthropic API key</strong></td>
@@ -265,12 +265,12 @@ hermes --version
 # Expected: Hermes Agent v0.2.0+
 
 # Configure Anthropic provider
-cat &gt; ~/.hermes/.env &lt;&lt; &#39;EOF&#39;
+cat &gt; ~/.hermes/.env &lt;&lt; 'EOF'
 ANTHROPIC_API_KEY=your-key-here
 EOF
 
 # Test
-hermes chat -q &quot;Say hello in 5 words&quot; -Q --provider anthropic -m claude-haiku-4-5-20251001
+hermes chat -q "Say hello in 5 words" -Q --provider anthropic -m claude-haiku-4-5-20251001
 </code></pre>
 <h4>Step 2: Install &amp; Configure Paperclip</h4>
 <pre><code class="language-bash"># Clone Paperclip
@@ -283,17 +283,17 @@ pnpm install
 </code></pre>
 <p><strong>PostgreSQL setup:</strong></p>
 <pre><code class="language-bash"># Create database and user
-sudo -u postgres psql -c &quot;CREATE USER paperclip WITH PASSWORD &#39;paperclip&#39;;&quot;
-sudo -u postgres psql -c &quot;CREATE DATABASE paperclip OWNER paperclip;&quot;
+sudo -u postgres psql -c "CREATE USER paperclip WITH PASSWORD 'paperclip';"
+sudo -u postgres psql -c "CREATE DATABASE paperclip OWNER paperclip;"
 
-# On WSL2, if PostgreSQL isn&#39;t running:
+# On WSL2, if PostgreSQL isn't running:
 sudo service postgresql start
 </code></pre>
 <p><strong>Apply the Hermes adapter</strong> (if not already in your Paperclip version):</p>
 <p>The <code>hermes-paperclip-adapter@0.1.1</code> npm package provides the integration. Paperclip needs three things:</p>
 <ol>
-<li>Add <code>&quot;hermes_local&quot;</code> to <code>AGENT_ADAPTER_TYPES</code> in <code>packages/shared/src/constants.ts</code></li>
-<li>Add <code>&quot;hermes-paperclip-adapter&quot;: &quot;0.1.1&quot;</code> to <code>server/package.json</code> dependencies</li>
+<li>Add <code>"hermes_local"</code> to <code>AGENT_ADAPTER_TYPES</code> in <code>packages/shared/src/constants.ts</code></li>
+<li>Add <code>"hermes-paperclip-adapter": "0.1.1"</code> to <code>server/package.json</code> dependencies</li>
 <li>Import and register the adapter in <code>server/src/adapters/registry.ts</code>:</li>
 </ol>
 <pre><code class="language-typescript">// Add imports
@@ -301,15 +301,15 @@ import {
   execute as hermesExecute,
   testEnvironment as hermesTestEnvironment,
   sessionCodec as hermesSessionCodec,
-} from &quot;hermes-paperclip-adapter/server&quot;;
+} from "hermes-paperclip-adapter/server";
 import {
   agentConfigurationDoc as hermesAgentConfigurationDoc,
   models as hermesModels,
-} from &quot;hermes-paperclip-adapter&quot;;
+} from "hermes-paperclip-adapter";
 
 // Add adapter definition
 const hermesLocalAdapter: ServerAdapterModule = {
-  type: &quot;hermes_local&quot;,
+  type: "hermes_local",
   execute: hermesExecute,
   testEnvironment: hermesTestEnvironment,
   sessionCodec: hermesSessionCodec,
@@ -324,19 +324,19 @@ const hermesLocalAdapter: ServerAdapterModule = {
 <p><strong>Known adapter patches</strong> (may already be fixed in newer versions):</p>
 <p>The adapter v0.1.1 had two bugs we patched locally:</p>
 <ol>
-<li><p><strong>Env variable unwrapping</strong>: Paperclip wraps env vars as <code>{&quot;type&quot;:&quot;plain&quot;,&quot;value&quot;:&quot;...&quot;}</code> objects. The adapter&#39;s <code>execute.js</code> needs to unwrap the <code>.value</code> property:</p>
+<li><p><strong>Env variable unwrapping</strong>: Paperclip wraps env vars as <code>{"type":"plain","value":"..."}</code> objects. The adapter's <code>execute.js</code> needs to unwrap the <code>.value</code> property:</p>
 <pre><code class="language-javascript">// In node_modules/hermes-paperclip-adapter/dist/server/execute.js
 // Find the env variable assignment loop and ensure it handles both formats:
-if (typeof v === &quot;string&quot;) {
+if (typeof v === "string") {
     env[k] = v;
-} else if (v &amp;&amp; typeof v === &quot;object&quot; &amp;&amp; typeof v.value === &quot;string&quot;) {
+} else if (v &amp;&amp; typeof v === "object" &amp;&amp; typeof v.value === "string") {
     env[k] = v.value;
 }
 </code></pre>
 </li>
-<li><p><strong>Missing Anthropic provider</strong>: Add <code>&quot;anthropic&quot;</code> to <code>VALID_PROVIDERS</code> in <code>node_modules/hermes-paperclip-adapter/dist/shared/constants.js</code>:</p>
+<li><p><strong>Missing Anthropic provider</strong>: Add <code>"anthropic"</code> to <code>VALID_PROVIDERS</code> in <code>node_modules/hermes-paperclip-adapter/dist/shared/constants.js</code>:</p>
 <pre><code class="language-javascript">export const VALID_PROVIDERS = [
-    &quot;auto&quot;, &quot;anthropic&quot;, &quot;openrouter&quot;, &quot;nous&quot;, ...
+    "auto", "anthropic", "openrouter", "nous", ...
 ];
 </code></pre>
 </li>
@@ -358,9 +358,9 @@ cp .env.example .env
 <h4>Step 4: Create Companies &amp; Agents in Paperclip</h4>
 <p>Start Paperclip first:</p>
 <pre><code class="language-bash">cd ~/paperclip
-DATABASE_URL=&quot;postgres://paperclip:paperclip@localhost:5432/paperclip&quot; pnpm dev &amp;
+DATABASE_URL="postgres://paperclip:paperclip@localhost:5432/paperclip" pnpm dev &amp;
 sleep 10
-curl -s http://localhost:3100/api/health  # Should return {&quot;status&quot;:&quot;ok&quot;}
+curl -s http://localhost:3100/api/health  # Should return {"status":"ok"}
 </code></pre>
 <p>Then run the setup script:</p>
 <pre><code class="language-bash">cd ~/python_projects/gladiator
@@ -393,7 +393,7 @@ curl -s http://localhost:3100/api/health  # Should return {&quot;status&quot;:&q
 <h4>Quick Start (after initial setup)</h4>
 <pre><code class="language-bash"># Terminal 1: Paperclip
 cd ~/paperclip
-DATABASE_URL=&quot;postgres://paperclip:paperclip@localhost:5432/paperclip&quot; pnpm dev
+DATABASE_URL="postgres://paperclip:paperclip@localhost:5432/paperclip" pnpm dev
 
 # Terminal 2: Dashboard
 cd ~/python_projects/gladiator
@@ -406,7 +406,7 @@ cd ~/python_projects/gladiator
 <thead>
 <tr>
 <th>Time</th>
-<th>What&#39;s happening</th>
+<th>What's happening</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -524,14 +524,14 @@ cd ~/python_projects/gladiator
 <hr>
 <h3>How It Works</h3>
 <h4>The Competition</h4>
-<p>Both companies start with identical copies of <strong>llm-judge</strong>, a CLI tool that compares LLM responses side-by-side. Each company&#39;s agents work autonomously to improve the product and maximize projected GitHub stars.</p>
+<p>Both companies start with identical copies of <strong>llm-judge</strong>, a CLI tool that compares LLM responses side-by-side. Each company's agents work autonomously to improve the product and maximize projected GitHub stars.</p>
 <p><strong>Star formula:</strong> <code>tasks_done × 8 + unique_skills × 5 + skill_versions × 3</code></p>
 <h4>Hermes Features Used</h4>
 <table>
 <thead>
 <tr>
 <th>Feature</th>
-<th>How It&#39;s Used</th>
+<th>How It's Used</th>
 <th>Evidence</th>
 </tr>
 </thead>
@@ -567,17 +567,17 @@ cd ~/python_projects/gladiator
 <li><strong>Agents</strong> are autonomous workers with roles, models and heartbeat intervals</li>
 <li><strong>Issues</strong> are tasks assigned to agents (checkout → work → mark done)</li>
 <li><strong>Heartbeats</strong> trigger agent execution at configured intervals</li>
-<li>The <strong>hermes_local</strong> adapter spawns <code>hermes chat -q &quot;prompt&quot; -Q</code> as a subprocess</li>
+<li>The <strong>hermes_local</strong> adapter spawns <code>hermes chat -q "prompt" -Q</code> as a subprocess</li>
 </ul>
 <h4>Token Optimization</h4>
 <p>Hermes has built-in Anthropic prompt caching (<code>system_and_3</code> strategy, 5-minute TTL). We also trim unused bundled skills and reduce tool definitions for non-code agents to cut input tokens.</p>
 <hr>
 <h3>Troubleshooting</h3>
-<h4>Paperclip won&#39;t start</h4>
+<h4>Paperclip won't start</h4>
 <pre><code class="language-bash"># Check PostgreSQL is running
 pg_isready -h localhost -p 5432
 
-# Check port isn&#39;t in use
+# Check port isn't in use
 lsof -i :3100
 
 # WSL2: start PostgreSQL manually
@@ -587,7 +587,7 @@ sudo service postgresql start
 <ul>
 <li>Check agent status in Paperclip UI (<a href="http://localhost:3100">http://localhost:3100</a>)</li>
 <li>Check <code>~/.hermes/gladiator/{agent}/logs/errors.log</code> for API errors</li>
-<li>&quot;Invalid API response after 3 retries&quot; = Anthropic API rate limit or empty response (usually transient)</li>
+<li>"Invalid API response after 3 retries" = Anthropic API rate limit or empty response (usually transient)</li>
 <li>Verify <code>.env</code> has valid <code>ANTHROPIC_API_KEY</code></li>
 </ul>
 <h4>Dashboard shows empty panels</h4>
@@ -596,9 +596,9 @@ sudo service postgresql start
 <li>Check <code>/tmp/watcher.log</code> for errors</li>
 <li>Verify <code>evidence.db</code> exists and has data</li>
 </ul>
-<h4>&quot;adapter_failed&quot; in Paperclip</h4>
+<h4>"adapter_failed" in Paperclip</h4>
 <ul>
-<li>The <code>&quot;NaN&quot; bigint</code> error is cosmetic. Paperclip can&#39;t parse Hermes token output. Tasks still complete fine.</li>
+<li>The <code>"NaN" bigint</code> error is cosmetic. Paperclip can't parse Hermes token output. Tasks still complete fine.</li>
 </ul>
 <h4>Competition never ends</h4>
 <ul>
@@ -608,7 +608,7 @@ sudo service postgresql start
 <hr>
 <h3>Future Ideas</h3>
 <ul>
-<li><strong>Espionage mechanic.</strong> Agents browse each other&#39;s public GitHub and adapt strategy based on what the competitor shipped.</li>
+<li><strong>Espionage mechanic.</strong> Agents browse each other's public GitHub and adapt strategy based on what the competitor shipped.</li>
 <li><strong>Spectator voting.</strong> Dashboard lets visitors vote on which strategy they think will win, shown as a live poll.</li>
 <li><strong>ClipMart export.</strong> Package both company configs as Paperclip ClipMart templates so anyone can import and run their own Gladiator match.</li>
 </ul>
@@ -638,7 +638,7 @@ sudo service postgresql start
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/swarmclawai/swarmclaw">
-        <div class="stars">★ 598</div>
+        <div class="stars">★ 600</div>
         <div class="name"><span class="org">swarmclawai /</span> swarmclaw</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">
@@ -654,7 +654,7 @@ sudo service postgresql start
         <div class="name"><span class="org">Rainhoole /</span> hermes-agent-acp-skill</div>
       </a>
       <a class="related-row" href="/projects/linke-ai/hermes-agent-team">
-        <div class="stars">★ 152</div>
+        <div class="stars">★ 153</div>
         <div class="name"><span class="org">linke-ai /</span> hermes-agent-team</div>
       </a>
       <a class="related-row" href="/projects/Agent-3-7/minions">

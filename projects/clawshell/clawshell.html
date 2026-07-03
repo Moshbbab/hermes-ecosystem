@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -146,7 +146,7 @@
     <h2>ClawShell 🛡️</h2>
 <p><img src="https://raw.githubusercontent.com/clawshell/clawshell/main/docs/images/banner.png" alt="ClawShell Banner"></p>
 <blockquote>
-<p><strong>Powered by Runta. The essential safety harness for OpenClaw/Hermes Agent&#39;s PII &amp; Sensitive Credentials.</strong></p>
+<p><strong>Powered by Runta. The essential safety harness for OpenClaw/Hermes Agent's PII &amp; Sensitive Credentials.</strong></p>
 </blockquote>
 <p><a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License"></a>
 <a href="https://github.com/clawshell/clawshell/actions"><img src="https://img.shields.io/github/actions/workflow/status/clawshell/clawshell/rust.yml" alt="GitHub Actions Workflow Status"></a>
@@ -186,14 +186,14 @@
 <h4>5. Runtime Statistics</h4>
 <p>ClawShell exposes running counters at <code>GET /admin/stats</code> so operators can audit proxy activity since startup and across restarts.</p>
 <ul>
-<li><strong>What&#39;s Counted</strong>: Total requests protected, total upstream <code>prompt_tokens</code> / <code>completion_tokens</code> / <code>total_tokens</code> (parsed from non-streaming JSON responses — SSE streams are not counted), number of emails hidden by the sender policy, and a per-address breakdown of filtered senders.</li>
+<li><strong>What's Counted</strong>: Total requests protected, total upstream <code>prompt_tokens</code> / <code>completion_tokens</code> / <code>total_tokens</code> (parsed from non-streaming JSON responses — SSE streams are not counted), number of emails hidden by the sender policy, and a per-address breakdown of filtered senders.</li>
 <li><strong>Loopback-Only</strong>: The endpoint is reachable without a virtual key but only from <code>127.0.0.1</code> / <code>::1</code> peers; non-loopback clients receive <code>403</code>.</li>
-<li><strong>Persistent</strong>: Counters are flushed to disk every 30 seconds and on graceful shutdown. The location is a required config field — set <code>[stats] persist_path = &quot;...&quot;</code> in <code>clawshell.toml</code> (typically <code>/var/lib/clawshell/stats.json</code> under the hardened systemd unit, since <code>/etc/clawshell</code> is read-only there).</li>
+<li><strong>Persistent</strong>: Counters are flushed to disk every 30 seconds and on graceful shutdown. The location is a required config field — set <code>[stats] persist_path = "..."</code> in <code>clawshell.toml</code> (typically <code>/var/lib/clawshell/stats.json</code> under the hardened systemd unit, since <code>/etc/clawshell</code> is read-only there).</li>
 <li><strong>Bounded</strong>: The filtered-address map is capped at 10,000 unique entries; further unique addresses are aggregated under an <code>&lt;overflow&gt;</code> bucket so memory stays bounded.</li>
 </ul>
 <h4>6. Seamless Integration</h4>
 <ul>
-<li><strong>Drop-in Sidecar</strong>: The <code>clawshell onboard</code> wizard configures exactly one downstream LLM client per run — either OpenClaw or <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> — to route all requests through ClawShell&#39;s proxy. See <a href="#agent-target-pick-one">Agent Target (pick one)</a>.</li>
+<li><strong>Drop-in Sidecar</strong>: The <code>clawshell onboard</code> wizard configures exactly one downstream LLM client per run — either OpenClaw or <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> — to route all requests through ClawShell's proxy. See <a href="#agent-target-pick-one">Agent Target (pick one)</a>.</li>
 <li><strong>No External Dependencies</strong>: Uses Unix file system permissions to protect secrets. No IdP, Vault, or external key management service required.</li>
 </ul>
 <h4>7. Ultra Lightweight and Scalable</h4>
@@ -247,14 +247,14 @@ sudo clawshell onboard
 sudo clawshell onboard
 </code></pre>
 <h4>Build from Source</h4>
-<pre><code class="language-bash">RUSTFLAGS=&quot;--remap-path-prefix=$(pwd)=. --remap-path-prefix=$HOME=/&quot; cargo build --release
+<pre><code class="language-bash">RUSTFLAGS="--remap-path-prefix=$(pwd)=. --remap-path-prefix=$HOME=/" cargo build --release
 ls -al target/release/clawshell
 </code></pre>
 <h5>Cross-compile on Linux/arm64</h5>
 <pre><code class="language-bash">wget https://musl.cc/x86_64-linux-musl-cross.tgz -O /tmp/musl-cross.tgz
 tar -xzf /tmp/musl-cross.tgz -C /tmp
-CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=&quot;/tmp/x86_64-linux-musl-cross/bin/x86_64-linux-musl-gcc&quot; \
-RUSTFLAGS=&quot;--remap-path-prefix=$(pwd)=. --remap-path-prefix=$HOME=/&quot; \
+CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER="/tmp/x86_64-linux-musl-cross/bin/x86_64-linux-musl-gcc" \
+RUSTFLAGS="--remap-path-prefix=$(pwd)=. --remap-path-prefix=$HOME=/" \
 cargo build --release --target x86_64-unknown-linux-musl
 </code></pre>
 <h3>Advanced Usage</h3>
@@ -306,60 +306,60 @@ sudo clawshell migrate-config
 sudo clawshell config --edit   # open in $EDITOR
 </code></pre>
 <p>A minimal config looks like this:</p>
-<pre><code class="language-toml">version = &quot;0.2.1&quot;
-log_level = &quot;info&quot;
+<pre><code class="language-toml">version = "0.2.1"
+log_level = "info"
 
 [server]
-host = &quot;127.0.0.1&quot;
+host = "127.0.0.1"
 port = 18790
 
 [upstream]
-openai_base_url = &quot;https://api.openai.com&quot;
-anthropic_base_url = &quot;https://api.anthropic.com&quot;
+openai_base_url = "https://api.openai.com"
+anthropic_base_url = "https://api.anthropic.com"
 
 # Virtual-to-real API key mappings
 [[keys]]
-virtual_key = &quot;vk-alice-001&quot;
-real_key = &quot;sk-your-real-openai-key-here&quot;
-provider = &quot;openai&quot;
+virtual_key = "vk-alice-001"
+real_key = "sk-your-real-openai-key-here"
+provider = "openai"
 
 [[keys]]
-virtual_key = &quot;vk-claude-001&quot;
-real_key = &quot;sk-ant-your-real-anthropic-key-here&quot;
-provider = &quot;anthropic&quot;
+virtual_key = "vk-claude-001"
+real_key = "sk-ant-your-real-anthropic-key-here"
+provider = "anthropic"
 
 # Data Loss Prevention (DLP)
-# action = &quot;block&quot;  -&gt; reject the request with 400
-# action = &quot;redact&quot; -&gt; replace matches with [REDACTED:&lt;name&gt;] and forward
+# action = "block"  -&gt; reject the request with 400
+# action = "redact" -&gt; replace matches with [REDACTED:&lt;name&gt;] and forward
 [dlp]
 scan_responses = false
 patterns = [
-    { name = &quot;ssn&quot;,       regex = &#39;\b\d{3}-\d{2}-\d{4}\b&#39;,          action = &quot;redact&quot; },
-    { name = &quot;visa_card&quot;, regex = &#39;\b4[0-9]{12}(?:[0-9]{3})?\b&#39;,    action = &quot;redact&quot; },
-    { name = &quot;amex_card&quot;, regex = &#39;\b3[47][0-9]{13}\b&#39;,             action = &quot;redact&quot; },
+    { name = "ssn",       regex = '\b\d{3}-\d{2}-\d{4}\b',          action = "redact" },
+    { name = "visa_card", regex = '\b4[0-9]{12}(?:[0-9]{3})?\b',    action = "redact" },
+    { name = "amex_card", regex = '\b3[47][0-9]{13}\b',             action = "redact" },
 ]
 
 # Email secure endpoint
 [email]
 enabled = true
-mode = &quot;allowlist&quot;
-allow_senders = [&quot;alice@example.com&quot;, &quot;@trusted.org&quot;]
+mode = "allowlist"
+allow_senders = ["alice@example.com", "@trusted.org"]
 deny_senders = []
 default_max_results = 50
 
 [[email.accounts]]
-virtual_key = &quot;vk-email-001&quot;
-email = &quot;bot@gmail.com&quot;
-app_password = &quot;abcd efgh ijkl mnop&quot;
-imap_host = &quot;imap.gmail.com&quot;
+virtual_key = "vk-email-001"
+email = "bot@gmail.com"
+app_password = "abcd efgh ijkl mnop"
+imap_host = "imap.gmail.com"
 imap_port = 993
 # Outlook preset example:
-# imap_host = &quot;imap-mail.outlook.com&quot;
+# imap_host = "imap-mail.outlook.com"
 </code></pre>
 <h4>OAuth Authentication (Codex / ChatGPT)</h4>
 <p>Instead of a static API key, you can authenticate via OAuth using your ChatGPT / Codex account.</p>
 <h5>Setup via onboard</h5>
-<p>During <code>sudo clawshell onboard</code>, select <strong>&quot;Codex / ChatGPT (OAuth)&quot;</strong> as the provider. The wizard will start a device code flow:</p>
+<p>During <code>sudo clawshell onboard</code>, select <strong>"Codex / ChatGPT (OAuth)"</strong> as the provider. The wizard will start a device code flow:</p>
 <ol>
 <li>A URL and one-time code are printed to the terminal.</li>
 <li>Open the URL on any device and enter the code.</li>
@@ -370,18 +370,18 @@ imap_port = 993
 <p>To configure OAuth manually in <code>clawshell.toml</code>:</p>
 <pre><code class="language-toml"># OAuth-backed key — no real_key needed
 [[keys]]
-virtual_key = &quot;vk-codex-001&quot;
-auth = &quot;oauth&quot;
-oauth_provider = &quot;codex&quot;
-provider = &quot;openai&quot;
+virtual_key = "vk-codex-001"
+auth = "oauth"
+oauth_provider = "codex"
+provider = "openai"
 
 # OAuth provider definition
 [[oauth_providers]]
-provider = &quot;codex&quot;
+provider = "codex"
 # Optional overrides (defaults work for ChatGPT):
-# client_id = &quot;app_EMoamEEZ73f0CkXaXp7hrann&quot;
-# auth_url = &quot;https://auth.openai.com/authorize&quot;
-# token_url = &quot;https://auth.openai.com/oauth/token&quot;
+# client_id = "app_EMoamEEZ73f0CkXaXp7hrann"
+# auth_url = "https://auth.openai.com/authorize"
+# token_url = "https://auth.openai.com/oauth/token"
 </code></pre>
 <p>ClawShell handles token refresh automatically. When using Codex OAuth, requests to <code>/v1/chat/completions</code> are translated to the ChatGPT Responses API format and routed to <code>chatgpt.com/backend-api/codex</code>.</p>
 <p>If <code>start</code>, <code>restart</code>, <code>stop</code>, <code>config --edit</code>, <code>onboard</code>, or <code>uninstall</code> reports that migration is required, run:</p>
@@ -395,7 +395,7 @@ provider = &quot;codex&quot;
   &gt; OpenClaw
     Hermes Agent
 </code></pre>
-<p>Each onboard run configures <strong>exactly one</strong> downstream client. There&#39;s no &quot;also configure the other one&quot; path — switching later means re-running <code>sudo clawshell onboard</code> and picking the other target. The prompt has no default preselection, so you pick explicitly every time.</p>
+<p>Each onboard run configures <strong>exactly one</strong> downstream client. There's no "also configure the other one" path — switching later means re-running <code>sudo clawshell onboard</code> and picking the other target. The prompt has no default preselection, so you pick explicitly every time.</p>
 <h5>OpenClaw target</h5>
 <p>When you pick OpenClaw, the wizard:</p>
 <ul>
@@ -439,9 +439,9 @@ provider = &quot;codex&quot;
 </tbody></table>
 </li>
 </ul>
-<p>The <code>hermes</code> binary must be on your <code>PATH</code>. ClawShell drops root privileges before invoking it so writes land under your normal user account, not root&#39;s.</p>
+<p>The <code>hermes</code> binary must be on your <code>PATH</code>. ClawShell drops root privileges before invoking it so writes land under your normal user account, not root's.</p>
 <h5>Manual Hermes configuration</h5>
-<p>If you&#39;d rather skip the wizard&#39;s Hermes integration, run the equivalent commands from your user account (not root):</p>
+<p>If you'd rather skip the wizard's Hermes integration, run the equivalent commands from your user account (not root):</p>
 <pre><code class="language-bash">hermes config set model.provider custom
 hermes config set model.base_url http://127.0.0.1:18790/v1
 hermes config set model.default  &lt;your-model-id&gt;
@@ -469,7 +469,7 @@ hermes config set model.api_key  &lt;your-clawshell-virtual-key&gt;
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 322</div>
+        <div class="stars">★ 323</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">

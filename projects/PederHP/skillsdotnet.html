@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -149,7 +149,7 @@
 <blockquote>
 <p><strong>Experimental:</strong> This package is under active development and its API is subject to change.</p>
 </blockquote>
-<p>Skills provide &quot;context-as-progressive-disclosure&quot; via <code>SKILL.md</code> files. This library uses a <code>skill://</code> URI convention to distribute skills as MCP resources -- clients can load frontmatter for discovery (~50-100 tokens), full SKILL.md on demand, and supporting files as needed.</p>
+<p>Skills provide "context-as-progressive-disclosure" via <code>SKILL.md</code> files. This library uses a <code>skill://</code> URI convention to distribute skills as MCP resources -- clients can load frontmatter for discovery (~50-100 tokens), full SKILL.md on demand, and supporting files as needed.</p>
 <h3>Installation</h3>
 <pre><code>dotnet add package SkillsDotNet.Mcp
 </code></pre>
@@ -161,13 +161,13 @@
 <h4>Register a single skill directory</h4>
 <pre><code class="language-csharp">builder.Services
     .AddMcpServer()
-    .WithSkill(&quot;/path/to/my-skill&quot;);
+    .WithSkill("/path/to/my-skill");
 </code></pre>
 <h4>Register all skills from a directory</h4>
 <p>Each subdirectory containing a <code>SKILL.md</code> is registered as a skill:</p>
 <pre><code class="language-csharp">builder.Services
     .AddMcpServer()
-    .WithSkillsDirectory(&quot;/path/to/skills&quot;);
+    .WithSkillsDirectory("/path/to/skills");
 </code></pre>
 <h4>Vendor shortcuts</h4>
 <p>Register skills from well-known agent directories:</p>
@@ -184,13 +184,13 @@
 <h4>Options</h4>
 <pre><code class="language-csharp">builder.Services
     .AddMcpServer()
-    .WithSkillsDirectory(&quot;/path/to/skills&quot;, new SkillOptions
+    .WithSkillsDirectory("/path/to/skills", new SkillOptions
     {
         // List every file as a separate resource (default: Template)
         SupportingFiles = SkillFileMode.Resources,
 
-        // Custom main file name (default: &quot;SKILL.md&quot;)
-        MainFileName = &quot;SKILL.md&quot;
+        // Custom main file name (default: "SKILL.md")
+        MainFileName = "SKILL.md"
     });
 </code></pre>
 <h3>Client-Side Usage</h3>
@@ -198,24 +198,24 @@
 <pre><code class="language-csharp">var skills = await client.ListSkillsAsync();
 foreach (var skill in skills)
 {
-    Console.WriteLine($&quot;{skill.Name}: {skill.Description}&quot;);
+    Console.WriteLine($"{skill.Name}: {skill.Description}");
 }
 </code></pre>
-<h4>Read a skill&#39;s manifest</h4>
-<pre><code class="language-csharp">var manifest = await client.GetSkillManifestAsync(&quot;code-review&quot;);
+<h4>Read a skill's manifest</h4>
+<pre><code class="language-csharp">var manifest = await client.GetSkillManifestAsync("code-review");
 foreach (var file in manifest.Files)
 {
-    Console.WriteLine($&quot;  {file.Path} ({file.Size} bytes, {file.Hash})&quot;);
+    Console.WriteLine($"  {file.Path} ({file.Size} bytes, {file.Hash})");
 }
 </code></pre>
 <h4>Download a skill locally</h4>
-<pre><code class="language-csharp">var path = await client.DownloadSkillAsync(&quot;code-review&quot;, targetDirectory: &quot;./skills&quot;);
+<pre><code class="language-csharp">var path = await client.DownloadSkillAsync("code-review", targetDirectory: "./skills");
 </code></pre>
 <h4>Sync all skills from a server</h4>
-<pre><code class="language-csharp">var paths = await client.SyncSkillsAsync(targetDirectory: &quot;./skills&quot;);
+<pre><code class="language-csharp">var paths = await client.SyncSkillsAsync(targetDirectory: "./skills");
 </code></pre>
 <h4>Using skills with <code>IChatClient</code></h4>
-<p><code>SkillCatalog</code> discovers skills from one or more MCP servers and provides two things for use with <a href="https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai"><code>Microsoft.Extensions.AI</code></a>: context blocks (frontmatter summaries for the system prompt) and a <code>load_skill</code> tool the model can call to load a skill&#39;s full content on demand.</p>
+<p><code>SkillCatalog</code> discovers skills from one or more MCP servers and provides two things for use with <a href="https://learn.microsoft.com/en-us/dotnet/ai/microsoft-extensions-ai"><code>Microsoft.Extensions.AI</code></a>: context blocks (frontmatter summaries for the system prompt) and a <code>load_skill</code> tool the model can call to load a skill's full content on demand.</p>
 <pre><code class="language-csharp">// Build a catalog from one or more MCP servers
 var catalog = new SkillCatalog();
 await catalog.AddClientAsync(mcpClient1);
@@ -228,10 +228,10 @@ var contexts = catalog.GetSkillContexts(); // IReadOnlyList&lt;TextContent&gt;
 var messages = new List&lt;ChatMessage&gt;
 {
     new(ChatRole.System, [
-        new TextContent(&quot;You are a helpful assistant. The following skills are available:&quot;),
+        new TextContent("You are a helpful assistant. The following skills are available:"),
         .. contexts
     ]),
-    new(ChatRole.User, &quot;Help me review this pull request&quot;),
+    new(ChatRole.User, "Help me review this pull request"),
 };
 
 // Add catalog.Tools to ChatOptions.Tools — this is load_skill plus, once any skill
@@ -257,7 +257,7 @@ dependencies: [everything-server]
 <p>When a skill with dependencies is loaded via the <code>load_skill</code> tool, the <code>OnDependenciesRequired</code> callback fires so the client host can connect to the required servers on demand:</p>
 <pre><code class="language-csharp">catalog.OnDependenciesRequired = async (request, cancellationToken) =&gt;
 {
-    Console.WriteLine($&quot;Skill &#39;{request.SkillName}&#39; requires: {string.Join(&quot;, &quot;, request.ServerNames)}&quot;);
+    Console.WriteLine($"Skill '{request.SkillName}' requires: {string.Join(", ", request.ServerNames)}");
 
     foreach (var serverName in request.ServerNames)
     {
@@ -273,11 +273,11 @@ dependencies: [everything-server]
 <p>The callback receives a <code>SkillDependencyRequest</code> with the skill name and the list of required server names. Return <code>true</code> when all servers are connected, or <code>false</code> to abort (which causes <code>LoadSkillAsync</code> to throw <code>InvalidOperationException</code>). If the callback is not set, skills with dependencies load silently without notification.</p>
 <p>See the <a href="samples/DynamicMcpServers/">DynamicMcpServers sample</a> for a complete example.</p>
 <h4>Unloading skills</h4>
-<p>Progressive disclosure shouldn&#39;t become progressive accumulation. Once at least one skill is loaded, <code>SkillCatalog.UnloadSkillTool</code> becomes available alongside <code>load_skill</code> — the model is told about it via a short postscript appended to each <code>load_skill</code> response, and can call it to free a skill&#39;s context when finished. The <code>unload_skill</code> AIFunction and its accompanying guidance only appear while at least one skill is currently loaded.</p>
+<p>Progressive disclosure shouldn't become progressive accumulation. Once at least one skill is loaded, <code>SkillCatalog.UnloadSkillTool</code> becomes available alongside <code>load_skill</code> — the model is told about it via a short postscript appended to each <code>load_skill</code> response, and can call it to free a skill's context when finished. The <code>unload_skill</code> AIFunction and its accompanying guidance only appear while at least one skill is currently loaded.</p>
 <p>The <code>OnSkillUnloaded</code> callback fires every time a skill is unloaded. The host wires it to do two things:</p>
 <ol>
-<li><strong>Disconnect any released MCP servers.</strong> The catalog passes only the servers no longer needed by any other still-loaded skill, so there&#39;s no ref-counting to do.</li>
-<li><strong>Scrub the prior <code>load_skill</code> call/result pair from chat history</strong> — that&#39;s where the SKILL.md content actually lives. The library doesn&#39;t touch your message list; the host is in charge.</li>
+<li><strong>Disconnect any released MCP servers.</strong> The catalog passes only the servers no longer needed by any other still-loaded skill, so there's no ref-counting to do.</li>
+<li><strong>Scrub the prior <code>load_skill</code> call/result pair from chat history</strong> — that's where the SKILL.md content actually lives. The library doesn't touch your message list; the host is in charge.</li>
 </ol>
 <p>Mutating the chat history while <code>FunctionInvokingChatClient</code> is iterating is unsafe, so queue scrub work during the callback and process it after <code>GetStreamingResponseAsync</code> returns:</p>
 <pre><code class="language-csharp">var pendingScrubs = new List&lt;string&gt;();
@@ -295,7 +295,7 @@ foreach (var skillName in pendingScrubs)
     ScrubLoadCallsForSkill(messages, skillName);
 pendingScrubs.Clear();
 </code></pre>
-<p>The scrub itself is a simple predicate over the messages list — match <code>FunctionCallContent</code> whose <code>Name == &quot;load_skill&quot;</code> and <code>Arguments[&quot;skillName&quot;]</code> equals the unloaded skill, then drop those calls and the matching <code>FunctionResultContent</code>. See <a href="samples/DynamicMcpServers/Program.cs">DynamicMcpServers/Program.cs</a> for the complete implementation.</p>
+<p>The scrub itself is a simple predicate over the messages list — match <code>FunctionCallContent</code> whose <code>Name == "load_skill"</code> and <code>Arguments["skillName"]</code> equals the unloaded skill, then drop those calls and the matching <code>FunctionResultContent</code>. See <a href="samples/DynamicMcpServers/Program.cs">DynamicMcpServers/Program.cs</a> for the complete implementation.</p>
 <h3>URI Convention</h3>
 <p>Each skill exposes three resources following the <a href="https://github.com/jlowin/fastmcp">FastMCP</a> convention:</p>
 <table>
@@ -324,10 +324,10 @@ pendingScrubs.Clear();
 </tbody></table>
 <h4>Manifest format</h4>
 <pre><code class="language-json">{
-  &quot;skill&quot;: &quot;code-review&quot;,
-  &quot;files&quot;: [
-    { &quot;path&quot;: &quot;SKILL.md&quot;, &quot;size&quot;: 512, &quot;hash&quot;: &quot;sha256:abc123...&quot; },
-    { &quot;path&quot;: &quot;references/checklist.md&quot;, &quot;size&quot;: 256, &quot;hash&quot;: &quot;sha256:def456...&quot; }
+  "skill": "code-review",
+  "files": [
+    { "path": "SKILL.md", "size": 512, "hash": "sha256:abc123..." },
+    { "path": "references/checklist.md", "size": 256, "hash": "sha256:def456..." }
   ]
 }
 </code></pre>
@@ -345,7 +345,7 @@ license: MIT
 compatibility: claude, cursor
 metadata:
   author: your-name
-  version: &quot;1.0&quot;
+  version: "1.0"
 ---
 
 # My Skill
@@ -429,7 +429,7 @@ Instructions for the agent go here.
 <li>.NET 8</li>
 </ul>
 <h3>Acknowledgements</h3>
-<p>Many conventions and especially the server-side resource implementations in this library are inspired by <a href="https://github.com/jlowin/fastmcp">FastMCP 3.0</a>. We&#39;ve tried to align with FastMCP whenever possible.</p>
+<p>Many conventions and especially the server-side resource implementations in this library are inspired by <a href="https://github.com/jlowin/fastmcp">FastMCP 3.0</a>. We've tried to align with FastMCP whenever possible.</p>
 <h3>License</h3>
 <p>MIT</p>
 
@@ -444,7 +444,7 @@ Instructions for the agent go here.
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.9K</div>
+        <div class="stars">★ 24.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">

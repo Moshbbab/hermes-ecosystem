@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -198,7 +198,7 @@ Hermes-aware assistant needs to classify the integration quickly.</p>
 </tr>
 </tbody></table>
 <p>If the active runtime is Hermes Agent, prefer this native plugin over raw MCP
-configuration. The plugin participates in Hermes&#39; memory lifecycle: pre-turn
+configuration. The plugin participates in Hermes' memory lifecycle: pre-turn
 recall, native memory mirroring, working state, optional workflow tools, and
 session-end snapshots. Use the hosted MCP endpoint only as a portable fallback
 or for non-Hermes MCP clients.</p>
@@ -208,9 +208,9 @@ also be connected from ChatGPT. When a user saves useful ChatGPT brainstorms,
 project decisions, preferences, research notes, or handoff context into XMemo,
 Hermes can later recall that context through this native memory provider.</p>
 <p>This is especially useful for long-running work: ChatGPT can help shape the
-idea, XMemo stores the durable context under the user&#39;s account, and Hermes can
+idea, XMemo stores the durable context under the user's account, and Hermes can
 continue with the same memory layer during agent runs. This does not mean the
-plugin reads ChatGPT&#39;s built-in native memory directly. It reads XMemo memories
+plugin reads ChatGPT's built-in native memory directly. It reads XMemo memories
 that the user explicitly saved or authorized through the XMemo connection.
 Marketplace or official-connection claims should be made only when supported by
 public listing or review evidence.</p>
@@ -220,7 +220,7 @@ public listing or review evidence.</p>
 <li><strong>Semantic search</strong> — ask the agent to search saved facts with natural language (<code>xmemo_search</code>); results include provenance such as <code>self</code> or <code>other_agent</code> when XMemo returns it.</li>
 <li><strong>Durable fact storage</strong> — store explicit facts, preferences, and decisions (<code>xmemo_remember</code>).</li>
 <li><strong>Working state with TTL</strong> — save active task, next action, or blocker so future sessions can resume (<code>xmemo_update_state</code>).</li>
-<li><strong>Built-in memory mirroring</strong> — when Hermes&#39; native <code>memory</code> tool writes, the same fact is mirrored to XMemo.</li>
+<li><strong>Built-in memory mirroring</strong> — when Hermes' native <code>memory</code> tool writes, the same fact is mirrored to XMemo.</li>
 <li><strong>Session snapshots</strong> — captures a restart snapshot at session end for later restoration by compatible XMemo workflows.</li>
 <li><strong>Reminders &amp; timeline</strong> — optional workflow tools for TODOs and timeline events (opt-in via config).</li>
 <li><strong>Hermes write scoping</strong> — new Hermes-authored memories are written to the configured Hermes scope so provenance stays clear.</li>
@@ -254,9 +254,9 @@ bash install.sh
 </code></pre>
 <h4>Manual install</h4>
 <pre><code class="language-bash"># Remove any previous install first to avoid nested directories.
-rm -rf &quot;${HERMES_HOME:-$HOME/.hermes}/plugins/xmemo&quot;
-mkdir -p &quot;${HERMES_HOME:-$HOME/.hermes}/plugins&quot;
-cp -r src/hermes_xmemo/xmemo &quot;${HERMES_HOME:-$HOME/.hermes}/plugins/&quot;
+rm -rf "${HERMES_HOME:-$HOME/.hermes}/plugins/xmemo"
+mkdir -p "${HERMES_HOME:-$HOME/.hermes}/plugins"
+cp -r src/hermes_xmemo/xmemo "${HERMES_HOME:-$HOME/.hermes}/plugins/"
 </code></pre>
 <h4>Configure</h4>
 <p>Recommended shared-credential setup:</p>
@@ -264,7 +264,7 @@ cp -r src/hermes_xmemo/xmemo &quot;${HERMES_HOME:-$HOME/.hermes}/plugins/&quot;
 xmemo setup hermes
 </code></pre>
 <p>This uses the same user-scoped credential as <code>@xmemo/client</code>, syncs it to
-Hermes&#39; existing <code>$HERMES_HOME/.env</code> <code>XMEMO_KEY</code> location for compatibility,
+Hermes' existing <code>$HERMES_HOME/.env</code> <code>XMEMO_KEY</code> location for compatibility,
 and installs/updates the native Hermes plugin. Hosted MCP is not installed by
 default; use <code>xmemo setup hermes --with-mcp</code> only when you want that fallback.</p>
 <p>The original Hermes-native setup remains supported:</p>
@@ -275,7 +275,7 @@ credential, the setup wizard can reuse it. If not, it asks for your XMemo token
 and writes <code>XMEMO_KEY</code> to <code>$HERMES_HOME/.env</code> as before.</p>
 <p>Or manually:</p>
 <pre><code class="language-bash">hermes config set memory.provider xmemo
-echo &quot;XMEMO_KEY=your-token&quot; &gt;&gt; &quot;${HERMES_HOME:-$HOME/.hermes}/.env&quot;
+echo "XMEMO_KEY=your-token" &gt;&gt; "${HERMES_HOME:-$HOME/.hermes}/.env"
 </code></pre>
 <h3>Requirements</h3>
 <ul>
@@ -498,18 +498,18 @@ used as a fallback.</li>
 <ul>
 <li><strong>Authoritative Cloud Priority</strong>: When online, the plugin always queries the XMemo cloud first to ensure absolute freshness.</li>
 <li><strong>Lightweight Caching</strong>: Successful query results (<code>xmemo_search</code>, <code>xmemo_recall_context</code>, and background prefetches) are cached locally with a <strong>5-minute fresh TTL</strong>.</li>
-<li><strong>Stale Fallback</strong>: If the XMemo cloud is unreachable (transient connection failures, timeouts, or HTTP 5xx errors), the plugin automatically falls back to the local cache, provided the cached data is less than <strong>24 hours old</strong> (<code>max_stale_until</code>). Fallback results are returned with <code>stale: true</code> and <code>source: &quot;cache&quot;</code> markers to inform the agent of their status.</li>
+<li><strong>Stale Fallback</strong>: If the XMemo cloud is unreachable (transient connection failures, timeouts, or HTTP 5xx errors), the plugin automatically falls back to the local cache, provided the cached data is less than <strong>24 hours old</strong> (<code>max_stale_until</code>). Fallback results are returned with <code>stale: true</code> and <code>source: "cache"</code> markers to inform the agent of their status.</li>
 </ul>
 <h4>2. Write Outbox &amp; Idempotency</h4>
 <ul>
 <li><strong>Failover Queueing</strong>: When a write operation (e.g., saving a fact, updating state, recording an event) fails due to a transient network error, it is automatically enqueued into a local outbox.</li>
 <li><strong>Outbox Status Routing</strong>:<ul>
-<li><strong>Idempotent Writes</strong> (<code>xmemo_remember</code>, <code>xmemo_update_state</code>): Enqueued as <code>&#39;pending&#39;</code> and automatically replayed by a background sync daemon using exponential backoff (up to 5 retries, capped at a maximum delay of 1 hour).</li>
-<li><strong>Non-Idempotent Writes</strong> (<code>xmemo_record_event</code>, <code>xmemo_create_reminder</code>, etc.): By default, these enter a <code>&#39;held&#39;</code> status and are <strong>not</strong> replayed automatically (unless <code>enable_non_idempotent_replay: true</code> is set in <code>xmemo.json</code>), protecting the server from duplicate entries.</li>
+<li><strong>Idempotent Writes</strong> (<code>xmemo_remember</code>, <code>xmemo_update_state</code>): Enqueued as <code>'pending'</code> and automatically replayed by a background sync daemon using exponential backoff (up to 5 retries, capped at a maximum delay of 1 hour).</li>
+<li><strong>Non-Idempotent Writes</strong> (<code>xmemo_record_event</code>, <code>xmemo_create_reminder</code>, etc.): By default, these enter a <code>'held'</code> status and are <strong>not</strong> replayed automatically (unless <code>enable_non_idempotent_replay: true</code> is set in <code>xmemo.json</code>), protecting the server from duplicate entries.</li>
 </ul>
 </li>
 <li><strong>Idempotency Standards</strong>: Every write operation generates a stable, unique idempotency key (UUID) at initiation. This key is preserved and sent in the <code>Idempotency-Key</code> and <code>X-Idempotency-Key</code> headers, as well as the JSON body, on all retries and replays, allowing the XMemo server to deduplicate requests.</li>
-<li><strong>Dead-Lettering</strong>: If an outbox write fails with a permanent non-transient error (e.g., HTTP 4xx validation or auth errors) or exhausts all 5 retry attempts, it is immediately moved to <code>&#39;failed&#39;</code> (dead-lettered) status with the error message recorded in the database.</li>
+<li><strong>Dead-Lettering</strong>: If an outbox write fails with a permanent non-transient error (e.g., HTTP 4xx validation or auth errors) or exhausts all 5 retry attempts, it is immediately moved to <code>'failed'</code> (dead-lettered) status with the error message recorded in the database.</li>
 </ul>
 <h4>3. Privacy, Retention &amp; Diagnostics</h4>
 <ul>
@@ -519,8 +519,8 @@ The local <code>xmemo_cache.db</code> database file stores copies of cached reca
 </blockquote>
 </li>
 <li><strong>Database Retention &amp; Cleanup</strong>:<ul>
-<li>Successfully synchronized writes (<code>&#39;sent&#39;</code>) are automatically pruned from the outbox after <strong>24 hours</strong>.</li>
-<li>Failed/dead-lettered outbox writes (<code>&#39;failed&#39;</code>) are automatically deleted after <strong>7 days</strong>, and the dead-letter queue is capped at a maximum of <strong>100 records</strong> to prevent database bloating.</li>
+<li>Successfully synchronized writes (<code>'sent'</code>) are automatically pruned from the outbox after <strong>24 hours</strong>.</li>
+<li>Failed/dead-lettered outbox writes (<code>'failed'</code>) are automatically deleted after <strong>7 days</strong>, and the dead-letter queue is capped at a maximum of <strong>100 records</strong> to prevent database bloating.</li>
 </ul>
 </li>
 <li><strong>Diagnostic Controls</strong>:
@@ -536,10 +536,10 @@ Wiping the outbox will permanently delete any pending or held write operations t
 </ul>
 <h3>Uninstall or disable</h3>
 <p>To disable XMemo without removing files:</p>
-<pre><code class="language-bash">hermes config set memory.provider &quot;&quot;
+<pre><code class="language-bash">hermes config set memory.provider ""
 </code></pre>
 <p>To remove the plugin entirely:</p>
-<pre><code class="language-bash">rm -rf &quot;${HERMES_HOME:-$HOME/.hermes}/plugins/xmemo&quot;
+<pre><code class="language-bash">rm -rf "${HERMES_HOME:-$HOME/.hermes}/plugins/xmemo"
 </code></pre>
 <h3>Learn more</h3>
 <ul>
@@ -563,7 +563,7 @@ Wiping the outbox will permanently delete any pending or held write operations t
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.9K</div>
+        <div class="stars">★ 60.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -575,11 +575,11 @@ Wiping the outbox will permanently delete any pending or held write operations t
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 334</div>
+        <div class="stars">★ 335</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 188</div>
+        <div class="stars">★ 189</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -587,7 +587,7 @@ Wiping the outbox will permanently delete any pending or held write operations t
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 213</div>
+        <div class="stars">★ 214</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">

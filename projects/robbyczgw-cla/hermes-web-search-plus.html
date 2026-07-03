@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "This plugin provides multi-provider web search and URL extraction capabilities for the Hermes Agent. It utilizes a capability-based routing engine that automatically selects the best available provider based on the user's configured API keys. The system includes a dedicated setup wizard for managing provider priorities and cost controls to bound research expenses. It supports a wide array of search and extraction backends, including Tavily, Exa, and Firecrawl, to ensure reliable data retrieval.",
+  "description": "Web Search Plus is a multi-provider web layer for the Hermes Agent that replaces hard-coded search tools with a flexible, capability-based plugin. It utilizes a conservative routing engine to manage 14 search and 7 extraction providers, automatically falling back to available APIs when others fail. The plugin prevents context window overflow by providing compact previews of large pages and includes a benchmarking tool to optimize provider priority based on latency and result quality.",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-07-01T20:32:56.000Z",
+  "dateModified": "2026-07-02T13:42:46.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 322
+    "userInteractionCount": 323
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,11 +112,11 @@
   <p class="project-desc">Hermes Agent flagship plugin for multi-provider web search and extraction with intelligent routing, quality reports, and research mode.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 322</span>
+    <span class="stars">★ 323</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-01</span>
+    <span><span class="meta-label">updated</span>2026-07-02</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This plugin provides multi-provider web search and URL extraction capabilities for the Hermes Agent. It utilizes a capability-based routing engine that automatically selects the best available provider based on the user's configured API keys. The system includes a dedicated setup wizard for managing provider priorities and cost controls to bound research expenses. It supports a wide array of search and extraction backends, including Tavily, Exa, and Firecrawl, to ensure reliable data retrieval.</p>
+    <p class="summary-text">Web Search Plus is a multi-provider web layer for the Hermes Agent that replaces hard-coded search tools with a flexible, capability-based plugin. It utilizes a conservative routing engine to manage 14 search and 7 extraction providers, automatically falling back to available APIs when others fail. The plugin prevents context window overflow by providing compact previews of large pages and includes a benchmarking tool to optimize provider priority based on latency and result quality.</p>
     <ul class="summary-highlights">
-      <li>Class-aware auto-routing across multiple search and extraction providers</li>
-      <li>Two dedicated tools for routed web search and clean extraction</li>
-      <li>CLI setup wizard with presets for rapid provider configuration</li>
+      <li>Routes queries across 14 search and 7 extraction providers automatically.</li>
+      <li>Prevents token bombs using head/tail previews for large web pages.</li>
+      <li>Includes a diagnostic bench command to measure provider success rates.</li>
     </ul>
   </div>
 </section>
@@ -154,7 +154,7 @@
   <img alt="Hermes Plugin" src="https://img.shields.io/badge/Hermes-plugin-a78bfa.svg">
 </p>
 
-<p><strong>Web search and URL extraction for Hermes — Routing v2 across 14 search providers and 7 extraction-capable providers, with private extract-target guards, keyless-provider onboarding, and a fast-path doctor for public Hermes installs.</strong> <code>web_extract_plus(provider=&quot;auto&quot;)</code> defaults to Tavily-first extraction for fast, reliable fetches; Exa, Linkup, Firecrawl, Parallel, and You.com remain fallback paths when available.</p>
+<p><strong>Web Search Plus is the operator-grade web layer for Hermes: one search tool, one extraction tool, many providers, conservative routing, safe large-page handling, freshness controls, and provider benchmarking without locking you into a single API.</strong> Routing v2 spans 14 search providers and 7 extraction-capable providers; <code>web_extract_plus(provider="auto")</code> defaults to Tavily-first extraction for fast, reliable fetches, with Exa, Linkup, Firecrawl, Parallel, and You.com as fallback paths when available.</p>
 <p><code>web-search-plus</code> adds two Hermes tools:</p>
 <ul>
 <li><code>web_search_plus</code> — routed multi-provider web search with quality diagnostics</li>
@@ -165,12 +165,15 @@
 </blockquote>
 <hr>
 <h3>Why this exists</h3>
-<p>Most web-search tools fail in one of two boring ways: they hard-code a single provider, or they pretend every user has every API key. This plugin is capability-based instead:</p>
+<p>Most web-search tools fail in one of two boring ways: they hard-code a single provider, or they pretend every user has every API key. Web Search Plus is capability-based instead: it lets Hermes search, extract, compare, and recover across the providers you actually configured.</p>
 <ul>
 <li><strong>No global required key.</strong> Configure one search-capable provider and search works.</li>
 <li><strong>Extraction is additive.</strong> Add Linkup, Firecrawl, Tavily, Exa, Parallel, or You.com for URL extraction.</li>
 <li><strong>Routing v2 is conservative.</strong> You.com, Serper, Exa, Firecrawl, Tavily, and Linkup form the default search pool; Brave, SerpBase, Querit, Parallel, and Perplexity/Kilo stay explicit/guarded unless opted in.</li>
-<li><strong>Costs stay bounded.</strong> Research mode caps provider work and keeps partial results when extraction fails. Extraction target URLs are guarded before provider dispatch so local/private networks are not fetched by accident.</li>
+<li><strong>Large pages stay usable.</strong> Long extracts return a compact head/tail preview plus a <code>read_file</code> footer for the full cleaned text, instead of dumping token bombs into the agent context.</li>
+<li><strong>Freshness is explicit.</strong> Ask for day/week/month/year recency once; providers that support native date filters receive the right value, and unsupported providers report that freshness was not applied.</li>
+<li><strong>Provider quality is measurable.</strong> The built-in bench command compares configured providers on success rate, latency, result volume, URL diversity, and snippet coverage, then suggests a provider-priority order without writing config automatically.</li>
+<li><strong>Costs and safety stay bounded.</strong> Research mode caps provider work and keeps partial results when extraction fails. Extraction target URLs are guarded before provider dispatch so local/private networks are not fetched by accident.</li>
 </ul>
 <hr>
 <h3>Quick Start</h3>
@@ -194,7 +197,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup
 
 # 4) Optional shell smoke test
 cd ~/.hermes/plugins/web-search-plus
-python3 search.py --query &quot;Hermes Agent latest release&quot; --provider auto --quality-report
+python3 search.py --query "Hermes Agent latest release" --provider auto --quality-report
 
 # 5) Optional Hermes fast-path check
 python ~/.hermes/plugins/web-search-plus/setup.py fastpath
@@ -227,6 +230,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py fastpath --json
 <h3>Documentation</h3>
 <ul>
 <li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a> — detailed setup, provider tuning, routing, extraction, reliability, and cost controls.</li>
+<li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/PROVIDERS.md">Provider Reference</a> — generated per-provider matrix: capabilities, env vars, auto-routing defaults, free tiers, and signup links.</li>
 <li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/FAQ.md">FAQ</a> — common setup, SerpBase auto-allow, provider selection, cache, quota, and troubleshooting questions.</li>
 <li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/ARCHITECTURE.md">Architecture</a> — plugin boundary, routing engine, auto-allow gate, cache/cooldown state, data flow, and provider-extension notes.</li>
 </ul>
@@ -251,7 +255,7 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup keenable --keyless-publi
 <li><code>all</code> — prompt for every supported provider.</li>
 </ul>
 <p>The CLI never prints secret values. It writes keys into the active Hermes <code>.env</code> file, then reminds you to restart Hermes or run <code>/reset</code> so the tools re-register.</p>
-<p>For keyless providers (e.g. Keenable), if you skip the key prompt the wizard offers to enable that provider&#39;s opt-in public tier and writes <code>allow_public</code> to <code>config.json</code>. Pass <code>--keyless-public</code> to skip that confirmation prompt and opt in directly (the API-key prompt still runs first). See <a href="#keenable-keyless-public-access">Keenable keyless public access</a>.</p>
+<p>For keyless providers (e.g. Keenable), if you skip the key prompt the wizard offers to enable that provider's opt-in public tier and writes <code>allow_public</code> to <code>config.json</code>. Pass <code>--keyless-public</code> to skip that confirmation prompt and opt in directly (the API-key prompt still runs first). See <a href="#keenable-keyless-public-access">Keenable keyless public access</a>.</p>
 <h4>Routing preferences</h4>
 <p>Key setup and routing behavior are separate on purpose: secrets live in <code>.env</code>; provider behavior lives in <code>config.json</code>.</p>
 <pre><code class="language-bash"># Show provider/key status and routing preferences
@@ -288,13 +292,13 @@ python ~/.hermes/plugins/web-search-plus/setup.py config set-default you --dry-r
 <h4>GroktoCrawl / local Firecrawl-compatible backends</h4>
 <p>The Firecrawl provider can target a local Firecrawl-v2-compatible backend by overriding its search and scrape URLs in <code>config.json</code>. For example, a local <a href="https://github.com/groktopus/groktocrawl">GroktoCrawl</a> instance listening on <code>127.0.0.1:8080</code> can be used without adding a separate provider:</p>
 <pre><code class="language-json">{
-  &quot;firecrawl&quot;: {
-    &quot;api_url&quot;: &quot;http://127.0.0.1:8080/v2/search&quot;,
-    &quot;scrape_url&quot;: &quot;http://127.0.0.1:8080/v2/scrape&quot;
+  "firecrawl": {
+    "api_url": "http://127.0.0.1:8080/v2/search",
+    "scrape_url": "http://127.0.0.1:8080/v2/scrape"
   }
 }
 </code></pre>
-<p>Keep <code>FIRECRAWL_API_KEY</code> configured if your backend enforces bearer authentication; local development instances may ignore the header. This recipe has been smoke-tested for Firecrawl-style search and URL scrape responses, including GitHub repository extraction through GroktoCrawl&#39;s adapter layer. It does not make GroktoCrawl the default, and it does not claim coverage for every Firecrawl endpoint, pagination edge case, or provider-specific error shape.</p>
+<p>Keep <code>FIRECRAWL_API_KEY</code> configured if your backend enforces bearer authentication; local development instances may ignore the header. This recipe has been smoke-tested for Firecrawl-style search and URL scrape responses, including GitHub repository extraction through GroktoCrawl's adapter layer. It does not make GroktoCrawl the default, and it does not claim coverage for every Firecrawl endpoint, pagination edge case, or provider-specific error shape.</p>
 <hr>
 <h3>Capability model</h3>
 <table>
@@ -329,19 +333,19 @@ Capabilities: search=yes, extraction=yes
 <h3>Tool overview</h3>
 <h4><code>web_search_plus</code></h4>
 <p>Use this when the agent needs search results and routing metadata.</p>
-<pre><code class="language-python">web_search_plus(query=&quot;Graz weather today&quot;)
+<pre><code class="language-python">web_search_plus(query="Graz weather today")
 # → auto-routed current-info search
 
-web_search_plus(query=&quot;Singapore CPI latest&quot;, provider=&quot;you&quot;)
+web_search_plus(query="Singapore CPI latest", provider="you")
 # → force You.com search
 
-web_search_plus(query=&quot;alternatives to Notion&quot;, provider=&quot;exa&quot;)
+web_search_plus(query="alternatives to Notion", provider="exa")
 # → semantic discovery
 
-web_search_plus(query=&quot;compare recent reviews of turntables under 1000&quot;, mode=&quot;research&quot;, research_time_budget=45)
+web_search_plus(query="compare recent reviews of turntables under 1000", mode="research", research_time_budget=45)
 # → opt-in multi-provider research; keeps partial results if extraction hits errors/budget
 
-web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_report=True)
+web_search_plus(query="best bookshelf speakers under 1000", quality_report=True)
 # → normal search plus routing/result-quality diagnostics
 </code></pre>
 <p>Parameters:</p>
@@ -363,13 +367,13 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 <tr>
 <td><code>provider</code></td>
 <td>string</td>
-<td><code>&quot;auto&quot;</code></td>
+<td><code>"auto"</code></td>
 <td><code>auto</code>, <code>serper</code>, <code>brave</code>, <code>tavily</code>, <code>exa</code>, <code>linkup</code>, <code>firecrawl</code>, <code>parallel</code>, <code>perplexity</code>, <code>kilo-perplexity</code>, <code>you</code>, <code>searxng</code>, <code>serpbase</code>, <code>querit</code>, <code>keenable</code></td>
 </tr>
 <tr>
 <td><code>depth</code></td>
 <td>string</td>
-<td><code>&quot;normal&quot;</code></td>
+<td><code>"normal"</code></td>
 <td>Exa only: <code>normal</code>, <code>deep</code>, <code>deep-reasoning</code></td>
 </tr>
 <tr>
@@ -383,6 +387,12 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 <td>string</td>
 <td>—</td>
 <td><code>day</code>, <code>week</code>, <code>month</code>, <code>year</code></td>
+</tr>
+<tr>
+<td><code>freshness</code></td>
+<td>string</td>
+<td>—</td>
+<td>Unified recency filter: <code>day</code>, <code>week</code>, <code>month</code>, <code>year</code> (case-insensitive). Applied natively by Serper, Brave, Querit, Firecrawl, Keenable, You.com, Perplexity/Kilo Perplexity, and SearXNG; other providers still search and report <code>freshness.applied=false</code> in result metadata</td>
 </tr>
 <tr>
 <td><code>include_domains</code></td>
@@ -405,7 +415,7 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 <tr>
 <td><code>mode</code></td>
 <td>string</td>
-<td><code>&quot;normal&quot;</code></td>
+<td><code>"normal"</code></td>
 <td><code>normal</code> or opt-in <code>research</code></td>
 </tr>
 <tr>
@@ -417,13 +427,21 @@ web_search_plus(query=&quot;best bookshelf speakers under 1000&quot;, quality_re
 </tbody></table>
 <h4><code>web_extract_plus</code></h4>
 <p>Use this when you already have URLs and want clean content.</p>
-<pre><code class="language-python">web_extract_plus(urls=[&quot;https://example.com&quot;], provider=&quot;firecrawl&quot;)
+<pre><code class="language-python">web_extract_plus(urls=["https://example.com"], provider="firecrawl")
 # → extract clean markdown from a URL
 
-web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linkup&quot;, render_js=False)
+web_extract_plus(urls=["https://docs.linkup.so"], provider="linkup", render_js=False)
 # → Linkup fetch endpoint
 </code></pre>
 <p>Auto extraction currently tries Tavily, then Exa, Linkup, Parallel, Firecrawl, and You.com when keys are available, then Keenable as the last resort <strong>only if it is configured</strong> (a <code>KEENABLE_API_KEY</code>, or the opted-in keyless public endpoint). Tavily is the fast reliable default; Exa is the fast docs/academic backup; Linkup stays the clean long-form/RAG fallback; Parallel is the excerpt-heavy LLM-ready backup; Firecrawl remains the robust scraper safety net; You.com is a fallback; Keenable is the lowest-priority fallback. The keyless public tier is off by default — see <a href="#keenable-keyless-public-access">Keenable keyless public access</a> — so <code>web_extract_plus</code> is available only when at least one extraction provider is configured.</p>
+<p>Large extracted pages use <strong>truncate-and-store</strong> output handling instead of dumping the full provider markdown into the agent context. By default, each result returns up to <code>web.extract_char_limit</code> cleaned characters (<code>15000</code>) as a head/tail preview. The full cleaned text is stored under <code>cache/web/&lt;sha256-url&gt;.md</code>, and the footer includes a concrete <code>read_file(path=..., offset=..., limit=500)</code> call so the agent can page into the omitted middle on demand. Inline base64 image data is replaced with <code>[IMAGE: alt]</code>; normal <code>http(s)</code> image links are preserved.</p>
+<p>The full-text store is local plaintext cache data. It can contain the complete cleaned contents of URLs you extracted, grows until you clear it, and has no automatic TTL or total-size eviction yet. Monitor it with <code>python3 search.py --cache-stats</code> and purge it with <code>python3 search.py --clear-cache</code>; normal provider-health state is preserved. If you do not want extracted pages retained, clear the cache after extraction-heavy sessions or point <code>WSP_CACHE_DIR</code> at a disposable directory.</p>
+<pre><code class="language-json">{
+  "web": {
+    "extract_char_limit": 15000
+  }
+}
+</code></pre>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -443,13 +461,13 @@ web_extract_plus(urls=[&quot;https://docs.linkup.so&quot;], provider=&quot;linku
 <tr>
 <td><code>provider</code></td>
 <td>string</td>
-<td><code>&quot;auto&quot;</code></td>
+<td><code>"auto"</code></td>
 <td><code>auto</code>, <code>firecrawl</code>, <code>linkup</code>, <code>parallel</code>, <code>tavily</code>, <code>exa</code>, <code>you</code></td>
 </tr>
 <tr>
 <td><code>format</code></td>
 <td>string</td>
-<td><code>&quot;markdown&quot;</code></td>
+<td><code>"markdown"</code></td>
 <td><code>markdown</code> or <code>html</code></td>
 </tr>
 <tr>
@@ -586,13 +604,13 @@ SERPBASE_API_KEY=***      # https://www.serpbase.dev — explicit/fallback-only 
 PARALLEL_API_KEY=***      # https://platform.parallel.ai — explicit/guarded LLM-ready search + extraction
 QUERIT_API_KEY=***        # https://querit.ai — explicit/fallback-only by default
 
-# Kilo gateway alternate provider (`provider=&quot;kilo-perplexity&quot;`)
+# Kilo gateway alternate provider (`provider="kilo-perplexity"`)
 KILOCODE_API_KEY=***
 </code></pre>
 <h4>Keenable keyless public access</h4>
-<p>Keenable also exposes keyless <code>/public</code> endpoints, but they are <strong>opt-in and off by default</strong>. With a <code>KEENABLE_API_KEY</code> set, requests always use the authenticated endpoints. Without a key, Keenable is treated as unconfigured (it won&#39;t auto-route, fall back, or enable <code>web_extract_plus</code>) unless you explicitly enable the public tier:</p>
+<p>Keenable also exposes keyless <code>/public</code> endpoints, but they are <strong>opt-in and off by default</strong>. With a <code>KEENABLE_API_KEY</code> set, requests always use the authenticated endpoints. Without a key, Keenable is treated as unconfigured (it won't auto-route, fall back, or enable <code>web_extract_plus</code>) unless you explicitly enable the public tier:</p>
 <pre><code class="language-json">// config.json
-{ &quot;keenable&quot;: { &quot;allow_public&quot;: true } }
+{ "keenable": { "allow_public": true } }
 </code></pre>
 <p>or via environment: <code>KEENABLE_ALLOW_PUBLIC=1</code>, or let the setup wizard do it — skip the key prompt and answer yes, or run <code>setup.py setup keenable --keyless-public</code>.</p>
 <p>When enabled, queries and fetched URLs are sent to an <strong>unauthenticated</strong> public service. The limits are <strong>per IP</strong> with <strong>no SLA</strong> — roughly <strong>1,000 requests/hour</strong> and <strong>10 requests/second</strong> — so treat the public tier as a best-effort last resort, not a dependable provider. The first request that uses the public endpoint logs a one-time warning so the egress is visible. <code>web-search-plus doctor</code> reports keyless providers as <code>key=no</code> with a separate <code>keyless=on/off</code> badge so key status stays truthful.</p>
@@ -606,9 +624,9 @@ KILOCODE_API_KEY=***
 </ul>
 <h3>Reliability and cost controls</h3>
 <ul>
-<li><strong>Safe extraction targets:</strong> <code>web_extract_plus</code> rejects private/internal target URLs by default before provider dispatch, including loopback, RFC1918, CGNAT/shared-address ranges, IPv6 ULA/link-local/mapped-private addresses, multicast, cloud metadata, and hostnames that resolve to private IPs. This protects local/self-hosted extraction backends from being used to fetch internal resources. Operator-configured provider endpoints such as a local Firecrawl-compatible <code>firecrawl.scrape_url</code> are not blocked; if you intentionally need trusted intranet target extraction, set <code>{ &quot;extract&quot;: { &quot;allow_private_urls&quot;: true } }</code> in <code>config.json</code>. This guard validates the initial extraction target before dispatch; redirect-follow hardening belongs in provider fetch layers and should be treated as a follow-up for local backends.</li>
+<li><strong>Safe extraction targets:</strong> <code>web_extract_plus</code> rejects private/internal target URLs by default before provider dispatch, including loopback, RFC1918, CGNAT/shared-address ranges, IPv6 ULA/link-local/mapped-private addresses, multicast, cloud metadata, and hostnames that resolve to private IPs. This protects local/self-hosted extraction backends from being used to fetch internal resources. Operator-configured provider endpoints such as a local Firecrawl-compatible <code>firecrawl.scrape_url</code> are not blocked; if you intentionally need trusted intranet target extraction, set <code>{ "extract": { "allow_private_urls": true } }</code> in <code>config.json</code>. This guard validates the initial extraction target before dispatch; redirect-follow hardening belongs in provider fetch layers and should be treated as a follow-up for local backends.</li>
 <li><strong>Provider cooldowns:</strong> failed providers are skipped for 1 hour before retry.</li>
-<li><strong>Research budget:</strong> <code>mode=&quot;research&quot;</code> checks the wall-clock budget between provider calls and extraction steps.</li>
+<li><strong>Research budget:</strong> <code>mode="research"</code> checks the wall-clock budget between provider calls and extraction steps.</li>
 <li><strong>Partial results:</strong> search results already collected are preserved if extraction fails or times out.</li>
 <li><strong>Truthful warnings:</strong> missing extraction keys, quota failures, empty results, and budget exhaustion appear in response metadata.</li>
 </ul>
@@ -622,8 +640,8 @@ python3 -m compileall -q __init__.py search.py setup.py scripts tests
 <p>Useful smoke tests:</p>
 <pre><code class="language-bash">python3 setup.py list --json
 python3 setup.py status
-python3 search.py --query &quot;Hermes Agent latest release&quot; --provider auto --quality-report --compact
-python3 search.py --query &quot;Hermes Agent latest release&quot; --provider brave --max-results 2 --compact
+python3 search.py --query "Hermes Agent latest release" --provider auto --quality-report --compact
+python3 search.py --query "Hermes Agent latest release" --provider brave --max-results 2 --compact
 </code></pre>
 <p>Compatibility shims in <code>search.py</code> intentionally preserve legacy imports and monkeypatch seams while the modular split settles. The public shim policy is available via <code>get_compatibility_shim_policy()</code> and must keep wrappers in place until the ProviderSpec registry has stabilized for a documented minor release window.</p>
 <p>Golden snapshot quality checks are offline/replayable and safe for CI. They assert source-quality expectations such as canonical-domain presence, blocked mirror domains, duplicate counts, and extracted-content substance without making live provider calls:</p>

@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1670
+    "userInteractionCount": 1675
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -154,10 +154,10 @@
 <li><strong>Structured transcript parsing</strong> — Raw Hermes stdout is parsed into typed <code>TranscriptEntry</code> objects so Paperclip renders proper tool cards with status icons and expand/collapse</li>
 <li><strong>Rich post-processing</strong> — Converts Hermes ASCII banners, setext headings, and <code>+--+</code> table borders into clean GFM markdown</li>
 <li><strong>Comment-driven wakes</strong> — Agents wake to respond to issue comments, not just task assignments</li>
-<li><strong>Auto model detection</strong> — Reads <code>~/.hermes/config.yaml</code> to pre-populate the UI with the user&#39;s configured model</li>
+<li><strong>Auto model detection</strong> — Reads <code>~/.hermes/config.yaml</code> to pre-populate the UI with the user's configured model</li>
 <li><strong>Session codec</strong> — Structured validation and migration of session state across heartbeats</li>
-<li><strong>Benign stderr reclassification</strong> — MCP init messages and structured logs are reclassified so they don&#39;t appear as errors in the UI</li>
-<li><strong>Session source tagging</strong> — Sessions are tagged as <code>tool</code> source so they don&#39;t clutter the user&#39;s interactive history</li>
+<li><strong>Benign stderr reclassification</strong> — MCP init messages and structured logs are reclassified so they don't appear as errors in the UI</li>
+<li><strong>Session source tagging</strong> — Sessions are tagged as <code>tool</code> source so they don't clutter the user's interactive history</li>
 <li><strong>Filesystem checkpoints</strong> — Optional <code>--checkpoints</code> for rollback safety</li>
 <li><strong>Thinking effort control</strong> — Passes <code>--reasoning-effort</code> for thinking/reasoning models</li>
 </ul>
@@ -231,8 +231,8 @@
 </ul>
 <h3>Quick Start</h3>
 <h4>1. Register the adapter in your Paperclip server</h4>
-<p>Add to your Paperclip server&#39;s adapter registry (<code>server/src/adapters/registry.ts</code>):</p>
-<pre><code class="language-typescript">import * as hermesLocal from &quot;hermes-paperclip-adapter&quot;;
+<p>Add to your Paperclip server's adapter registry (<code>server/src/adapters/registry.ts</code>):</p>
+<pre><code class="language-typescript">import * as hermesLocal from "hermes-paperclip-adapter";
 import {
   execute,
   testEnvironment,
@@ -240,9 +240,9 @@ import {
   listSkills,
   syncSkills,
   sessionCodec,
-} from &quot;hermes-paperclip-adapter/server&quot;;
+} from "hermes-paperclip-adapter/server";
 
-registry.set(&quot;hermes_local&quot;, {
+registry.set("hermes_local", {
   ...hermesLocal,
   execute,
   testEnvironment,
@@ -255,14 +255,14 @@ registry.set(&quot;hermes_local&quot;, {
 <h4>2. Create a Hermes agent in Paperclip</h4>
 <p>In the Paperclip UI or via API, create an agent with adapter type <code>hermes_local</code>:</p>
 <pre><code class="language-json">{
-  &quot;name&quot;: &quot;Hermes Engineer&quot;,
-  &quot;adapterType&quot;: &quot;hermes_local&quot;,
-  &quot;adapterConfig&quot;: {
-    &quot;model&quot;: &quot;anthropic/claude-sonnet-4&quot;,
-    &quot;maxIterations&quot;: 50,
-    &quot;timeoutSec&quot;: 300,
-    &quot;persistSession&quot;: true,
-    &quot;enabledToolsets&quot;: [&quot;terminal&quot;, &quot;file&quot;, &quot;web&quot;]
+  "name": "Hermes Engineer",
+  "adapterType": "hermes_local",
+  "adapterConfig": {
+    "model": "anthropic/claude-sonnet-4",
+    "maxIterations": 50,
+    "timeoutSec": 300,
+    "persistSession": true,
+    "enabledToolsets": ["terminal", "file", "web"]
   }
 }
 </code></pre>
@@ -324,7 +324,7 @@ registry.set(&quot;hermes_local&quot;, {
 <td><code>toolsets</code></td>
 <td>string</td>
 <td><em>(all)</em></td>
-<td>Comma-separated toolsets to enable (e.g. <code>&quot;terminal,file,web&quot;</code>)</td>
+<td>Comma-separated toolsets to enable (e.g. <code>"terminal,file,web"</code>)</td>
 </tr>
 </tbody></table>
 <p>Available toolsets: <code>terminal</code>, <code>file</code>, <code>web</code>, <code>browser</code>, <code>code_execution</code>, <code>vision</code>, <code>mcp</code>, <code>creative</code>, <code>productivity</code></p>
@@ -489,17 +489,17 @@ registry.set(&quot;hermes_local&quot;, {
 │  Org Chart       │               │                  │
 └──────────────────┘               └──────────────────┘
 </code></pre>
-<p>The adapter spawns Hermes Agent&#39;s CLI in single-query mode (<code>-q</code>). Hermes
+<p>The adapter spawns Hermes Agent's CLI in single-query mode (<code>-q</code>). Hermes
 processes the task using its full tool suite, then exits. The adapter:</p>
 <ol>
 <li><strong>Captures</strong> stdout/stderr and parses token usage, session IDs, and cost</li>
 <li><strong>Parses</strong> raw output into structured <code>TranscriptEntry</code> objects (tool cards with status icons)</li>
 <li><strong>Post-processes</strong> Hermes ASCII formatting (banners, setext headings, table borders) into clean GFM markdown</li>
-<li><strong>Reclassifies</strong> benign stderr (MCP init, structured logs) so they don&#39;t show as errors</li>
+<li><strong>Reclassifies</strong> benign stderr (MCP init, structured logs) so they don't show as errors</li>
 <li><strong>Tags</strong> sessions as <code>tool</code> source to keep them separate from interactive usage</li>
 <li><strong>Reports</strong> results back to Paperclip with cost, usage, and session state</li>
 </ol>
-<p>Session persistence works via Hermes&#39;s <code>--resume</code> flag — each run picks
+<p>Session persistence works via Hermes's <code>--resume</code> flag — each run picks
 up where the last one left off, maintaining conversation context,
 memories, and tool state across heartbeats. The <code>sessionCodec</code> validates
 and migrates session state between runs.</p>
@@ -538,7 +538,7 @@ npm run build
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/NousResearch/hermes-agent">
-        <div class="stars">★ 207.5K</div>
+        <div class="stars">★ 208.1K</div>
         <div class="name"><span class="org">NousResearch /</span> hermes-agent</div>
       </a>
       <a class="related-row" href="/projects/NousResearch/Hermes-Function-Calling">

@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -193,12 +193,12 @@ qmd flow start --watch ~/.codex/sessions/current.log --lite
 <h3>Demo Path</h3>
 <p>The best live demo for judges or teammates:</p>
 <ol>
-<li>Index a repo&#39;s <code>docs/</code>, <code>notes/</code>, <code>CHANGELOG.md</code>, and ADRs.</li>
+<li>Index a repo's <code>docs/</code>, <code>notes/</code>, <code>CHANGELOG.md</code>, and ADRs.</li>
 <li>Start <code>qmd flow</code> on an active coding-agent session log.</li>
 <li>Ask a question like:<ul>
-<li>&quot;Why did we roll back the auth migration?&quot;</li>
-<li>&quot;What changed after the database incident?&quot;</li>
-<li>&quot;What did we decide about the API contract in the ADR?&quot;</li>
+<li>"Why did we roll back the auth migration?"</li>
+<li>"What changed after the database incident?"</li>
+<li>"What did we decide about the API contract in the ADR?"</li>
 </ul>
 </li>
 <li>Have the agent call <code>fetch_anticipatory_context</code> before a regular search.</li>
@@ -223,32 +223,32 @@ qmd flow start --watch ~/.codex/sessions/current.log --lite
 </ul>
 <h3>Core Workflow</h3>
 <h4>1. Index project memory</h4>
-<pre><code class="language-bash">qmd collection add . --name repo-memory --mask &#39;**/*.md&#39;
+<pre><code class="language-bash">qmd collection add . --name repo-memory --mask '**/*.md'
 
 # Compatibility alias
-qmd index . --name repo-memory --mask &#39;**/*.md&#39;
+qmd index . --name repo-memory --mask '**/*.md'
 </code></pre>
 <h4>2. Add context overlays</h4>
-<pre><code class="language-bash">qmd context add qmd://repo-memory/docs &quot;Project documentation and architecture notes&quot;
-qmd context add qmd://repo-memory/adr &quot;Architecture decision records and tradeoff history&quot;
-qmd context add / &quot;Answer as a coding agent using the repo&#39;s documented decisions&quot;
+<pre><code class="language-bash">qmd context add qmd://repo-memory/docs "Project documentation and architecture notes"
+qmd context add qmd://repo-memory/adr "Architecture decision records and tradeoff history"
+qmd context add / "Answer as a coding agent using the repo's documented decisions"
 </code></pre>
 <h4>3. Generate embeddings</h4>
 <pre><code class="language-bash">qmd embed
 </code></pre>
 <h4>4. Query project memory</h4>
 <pre><code class="language-bash"># Auto-expand + rerank
-qmd query &quot;why was the rollout reverted&quot;
+qmd query "why was the rollout reverted"
 
 # Structured search for better control
-qmd query $&#39;lex: &quot;auth rollback&quot; migration\nvec: why did we revert the auth migration?&#39;
+qmd query $'lex: "auth rollback" migration\nvec: why did we revert the auth migration?'
 
 # Inspect why memories were chosen
-qmd query --json --explain &quot;performance regression in auth service&quot;
+qmd query --json --explain "performance regression in auth service"
 </code></pre>
 <h4>5. Fetch exact evidence</h4>
-<pre><code class="language-bash">qmd get &quot;#abc123&quot;
-qmd multi-get &quot;docs/**/*.md,CHANGELOG.md&quot;
+<pre><code class="language-bash">qmd get "#abc123"
+qmd multi-get "docs/**/*.md,CHANGELOG.md"
 </code></pre>
 <h4>6. Run as MCP memory for agents</h4>
 <pre><code class="language-bash">qmd mcp
@@ -263,8 +263,8 @@ qmd multi-get &quot;docs/**/*.md,CHANGELOG.md&quot;
 <h3>MCP Setup</h3>
 <h4>Claude Code / Codex-style local agents</h4>
 <pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;qmd&quot;: { &quot;command&quot;: &quot;qmd&quot;, &quot;args&quot;: [&quot;mcp&quot;] }
+  "mcpServers": {
+    "qmd": { "command": "qmd", "args": ["mcp"] }
   }
 }
 </code></pre>
@@ -303,9 +303,9 @@ qmd doctor --json
 <p><code>fetch_anticipatory_context</code> prefers the FlowState cache and falls back to a live project-memory query when needed.</p>
 <p>Example payload:</p>
 <pre><code class="language-json">{
-  &quot;recent_conversation&quot;: &quot;What changed in the auth rollback plan and why did we revert the migration?&quot;,
-  &quot;refresh&quot;: false,
-  &quot;lite_mode&quot;: false
+  "recent_conversation": "What changed in the auth rollback plan and why did we revert the migration?",
+  "refresh": false,
+  "lite_mode": false
 }
 </code></pre>
 <p>Typical uses:</p>
@@ -317,7 +317,7 @@ qmd doctor --json
 <h3>CLI Highlights</h3>
 <pre><code class="language-bash">qmd status
 qmd collection list
-qmd collection update-cmd docs &#39;git pull --rebase --ff-only&#39;
+qmd collection update-cmd docs 'git pull --rebase --ff-only'
 qmd collection exclude archive
 qmd ls repo-memory/docs
 qmd cleanup
@@ -345,7 +345,7 @@ qmd cleanup
 <li>The best results come from markdown knowledge, not arbitrary binary project assets.</li>
 <li>Anticipatory memory depends on having an active session log to watch.</li>
 <li>First model-backed search can be slower while local models warm up.</li>
-<li><code>qmd collection add</code>, <code>qmd embed</code>, and <code>qmd update</code> are intentionally manual operations; they are not auto-run by this repo&#39;s agents.</li>
+<li><code>qmd collection add</code>, <code>qmd embed</code>, and <code>qmd update</code> are intentionally manual operations; they are not auto-run by this repo's agents.</li>
 </ul>
 <h3>Development</h3>
 <p>Use Bun in this repo.</p>
@@ -430,7 +430,7 @@ bun bench/tool-calls.ts    # MCP tool round-trip simulation
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 59.9K</div>
+        <div class="stars">★ 60.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -442,11 +442,11 @@ bun bench/tool-calls.ts    # MCP tool round-trip simulation
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 334</div>
+        <div class="stars">★ 335</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 188</div>
+        <div class="stars">★ 189</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -454,11 +454,11 @@ bun bench/tool-calls.ts    # MCP tool round-trip simulation
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 213</div>
+        <div class="stars">★ 214</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 24.8K</div>
+        <div class="stars">★ 24.9K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

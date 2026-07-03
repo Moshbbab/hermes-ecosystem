@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -144,7 +144,7 @@
   <section class="readme" data-nosnippet>
     <div align="center">
 
-<img src="https://raw.githubusercontent.com/armelhbobdad/bmad-module-skill-forge/main/website/public/img/skf-logo-animated.svg" alt="Skill Forge Logo" width="120" />
+<img src="https://raw.githubusercontent.com/armelhbobdad/bmad-module-skill-forge/main/website/public/img/skf-logo-animated.svg" alt="Skill Forge Logo" width="120">
 
 <h2>Skill Forge (SKF)</h2>
 <p><strong>Turn code and docs into instructions AI agents can actually follow.</strong></p>
@@ -157,22 +157,22 @@
 <a href="https://armelhbobdad.github.io/bmad-module-skill-forge/"><img src="https://img.shields.io/badge/docs-online-green" alt="Docs"></a>
 <a href="https://discord.gg/gk8jAdXWmj"><img src="https://img.shields.io/badge/Discord-Join%20Community-7289da?logo=discord&amp;logoColor=white" alt="Discord"></a>
 <a href="https://github.com/armelhbobdad/bmad-module-skill-forge/stargazers"><img src="https://img.shields.io/github/stars/armelhbobdad/bmad-module-skill-forge?style=social" alt="GitHub stars"></a></p>
-<p><em>Skill Forge analyzes your code repositories, documentation, and developer discourse to build verified instruction files for AI agents. Every instruction links back to its upstream — a specific <code>file:line</code> at a pinned commit when source is available, or a documentation URL when it isn&#39;t.</em></p>
-<p><strong>If SKF fixes your agent&#39;s API guesses, give it a ⭐ — it helps others find this tool.</strong>
+<p><em>Skill Forge analyzes your code repositories, documentation, and developer discourse to build verified instruction files for AI agents. Every instruction links back to its upstream — a specific <code>file:line</code> at a pinned commit when source is available, or a documentation URL when it isn't.</em></p>
+<p><strong>If SKF fixes your agent's API guesses, give it a ⭐ — it helps others find this tool.</strong>
 <strong>If it saved you an afternoon, <a href="https://buymeacoffee.com/armelhbobdad">grab me a coffee ☕</a> — it helps me keep forging.</strong></p>
 </div>
 
 <hr>
 <h3>The Problem</h3>
-<p>You ask an AI agent to use a library. It invents function names that don&#39;t exist. It guesses parameter types. You paste documentation into the context — it still gets details wrong. You write instructions by hand — they go stale the moment the code changes.</p>
-<p>This isn&#39;t an edge case. It&#39;s the default experience.</p>
+<p>You ask an AI agent to use a library. It invents function names that don't exist. It guesses parameter types. You paste documentation into the context — it still gets details wrong. You write instructions by hand — they go stale the moment the code changes.</p>
+<p>This isn't an edge case. It's the default experience.</p>
 <p>For the full story behind SKF, read <a href="https://medium.com/@armelhbobdad/hallucination-has-a-line-number-32209b4688de"><em>Hallucination has a line number</em></a> on Medium.</p>
 <h3>Before vs After</h3>
 <p><strong>Without SKF</strong> — your agent guesses:</p>
 <pre><code class="language-python">import cognee
 
 # Agent hallucinates: sync call, wrong parameter name, missing await
-results = cognee.search(&quot;What does Cognee do?&quot;, mode=&quot;graph&quot;)
+results = cognee.search("What does Cognee do?", mode="graph")
 </code></pre>
 <p><strong>With SKF</strong> — your agent reads the verified skill:</p>
 <pre><code class="language-python">import cognee
@@ -181,16 +181,16 @@ results = cognee.search(&quot;What does Cognee do?&quot;, mode=&quot;graph&quot;
 # `search(query_text: str, query_type: SearchType = GRAPH_COMPLETION) -&gt; List[SearchResult]`
 # [AST:cognee/api/v1/search/search.py:L27]
 results = await cognee.search(
-    query_text=&quot;What does Cognee do?&quot;,
+    query_text="What does Cognee do?",
     query_type=cognee.SearchType.GRAPH_COMPLETION
 )
 </code></pre>
-<p>The skill told the agent the real function name, the real parameters, and that the call is async — all traced to the exact source line. This example is from the real <a href="https://github.com/armelhbobdad/oh-my-skills/blob/main/skills/oms-cognee/1.0.0/oms-cognee/SKILL.md"><code>oms-cognee</code></a> skill in <a href="https://github.com/armelhbobdad/oh-my-skills"><strong>oh-my-skills</strong></a> — SKF&#39;s reference output. The <a href="#verifying-a-skill"><strong>Verifying a Skill</strong></a> section below shows how to walk the citation chain yourself.</p>
+<p>The skill told the agent the real function name, the real parameters, and that the call is async — all traced to the exact source line. This example is from the real <a href="https://github.com/armelhbobdad/oh-my-skills/blob/main/skills/oms-cognee/1.0.0/oms-cognee/SKILL.md"><code>oms-cognee</code></a> skill in <a href="https://github.com/armelhbobdad/oh-my-skills"><strong>oh-my-skills</strong></a> — SKF's reference output. The <a href="#verifying-a-skill"><strong>Verifying a Skill</strong></a> section below shows how to walk the citation chain yourself.</p>
 <h3>Install</h3>
 <p>Linux, Windows, and macOS supported (<a href="https://armelhbobdad.github.io/bmad-module-skill-forge/getting-started/#platform-support">platform details</a>). Requires <a href="https://nodejs.org/">Node.js</a> &gt;= 22, <a href="https://www.python.org/">Python</a> &gt;= 3.10, and <a href="https://docs.astral.sh/uv/">uv</a> (Python package runner).</p>
 <pre><code class="language-bash">npx bmad-module-skill-forge install
 </code></pre>
-<p>You&#39;ll be prompted for project name, output folders, and IDE configuration. When the install completes, open your IDE and invoke <code>@Ferris SF</code> to confirm Ferris is reachable. Ferris reports your detected tools and capability tier. See the <a href="https://armelhbobdad.github.io/bmad-module-skill-forge/getting-started/">docs</a> for other install methods.</p>
+<p>You'll be prompted for project name, output folders, and IDE configuration. When the install completes, open your IDE and invoke <code>@Ferris SF</code> to confirm Ferris is reachable. Ferris reports your detected tools and capability tier. See the <a href="https://armelhbobdad.github.io/bmad-module-skill-forge/getting-started/">docs</a> for other install methods.</p>
 <h3>Quick Start</h3>
 <ol>
 <li><strong>Set up your environment:</strong> <code>@Ferris SF</code> <em>(Setup Forge)</em> — detects your tools and sets your capability tier</li>
@@ -207,7 +207,7 @@ results = await cognee.search(
 <ul>
 <li><strong>You use AI agents to write code</strong> and they keep guessing API calls wrong</li>
 <li><strong>You maintain a library</strong> and want to ship official, verified instruction files so AI agents use your API correctly</li>
-<li><strong>You manage a codebase with many dependencies</strong> and want a consolidated &quot;stack skill&quot; that teaches your agent how all the pieces fit together</li>
+<li><strong>You manage a codebase with many dependencies</strong> and want a consolidated "stack skill" that teaches your agent how all the pieces fit together</li>
 <li><strong>You use a SaaS API or closed-source tool</strong> with no public code — SKF can generate skills from documentation alone</li>
 <li><strong>You need different skills for different use cases</strong> from the same target — compile multiple skills with different scopes from one repo or doc set (e.g., a core API skill and a migration guide skill)</li>
 </ul>
@@ -266,26 +266,26 @@ results = await cognee.search(
 <td>no</td>
 </tr>
 </tbody></table>
-<p>The others aren&#39;t bad. They solve different problems. <strong>SKF solves exactly one: the claim your agent is reading about a library was true at a specific commit on a specific day, and you can prove it in under a minute.</strong></p>
+<p>The others aren't bad. They solve different problems. <strong>SKF solves exactly one: the claim your agent is reading about a library was true at a specific commit on a specific day, and you can prove it in under a minute.</strong></p>
 <h3>How Skill Forge Fixes This</h3>
 <p>SKF extracts real function signatures, types, and patterns from code, docs, and developer discourse — every instruction links to the exact file and line it came from. On top of that foundation:</p>
 <ol>
-<li><strong>Version-pinned</strong> — skills are stored per-version, so updating to v2.0 doesn&#39;t replace your v1.x skill. Compatible with <a href="https://skills.sh">skills.sh</a> and <a href="https://www.npmjs.com/package/skills">npx skills</a></li>
+<li><strong>Version-pinned</strong> — skills are stored per-version, so updating to v2.0 doesn't replace your v1.x skill. Compatible with <a href="https://skills.sh">skills.sh</a> and <a href="https://www.npmjs.com/package/skills">npx skills</a></li>
 <li><strong>Lifecycle tooling</strong> — rename skills and drop deprecated versions without manual file surgery. Destructive operations are transactional.</li>
 <li><strong>Follows an open standard</strong> — skills comply with the <a href="https://agentskills.io">agentskills.io</a> spec and work across Claude, Cursor, Copilot, and other AI agents</li>
 </ol>
 <blockquote>
-<p><strong>Every skill ships two files — <code>SKILL.md</code> (the full instruction set, loaded on trigger) and <code>context-snippet.md</code> (an 80–120 token always-on index that the export step injects into <code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>.cursorrules</code>). Why both?</strong> Per Vercel&#39;s agent evals, passive context achieves a <strong>100% pass rate vs. 79% for active skills loaded alone</strong> (see <a href="https://armelhbobdad.github.io/bmad-module-skill-forge/skill-model/#dual-output-strategy">Skill Model → Dual-Output Strategy</a>).</p>
+<p><strong>Every skill ships two files — <code>SKILL.md</code> (the full instruction set, loaded on trigger) and <code>context-snippet.md</code> (an 80–120 token always-on index that the export step injects into <code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>.cursorrules</code>). Why both?</strong> Per Vercel's agent evals, passive context achieves a <strong>100% pass rate vs. 79% for active skills loaded alone</strong> (see <a href="https://armelhbobdad.github.io/bmad-module-skill-forge/skill-model/#dual-output-strategy">Skill Model → Dual-Output Strategy</a>).</p>
 </blockquote>
 <h3>Verifying a Skill</h3>
 <p>You can falsify any citation in an SKF-compiled skill in under a minute:</p>
 <ol>
-<li><strong>Open the skill&#39;s <code>provenance-map.json</code></strong> — find your symbol; read its <code>source_file</code> and <code>source_line</code>.</li>
-<li><strong>Open the skill&#39;s <code>metadata.json</code></strong> — read <code>source_commit</code> and <code>source_repo</code>.</li>
-<li><strong>Jump to the upstream repo at that commit</strong>, open that file, find that line. The signature in <code>SKILL.md</code> should match the one you&#39;re reading.</li>
+<li><strong>Open the skill's <code>provenance-map.json</code></strong> — find your symbol; read its <code>source_file</code> and <code>source_line</code>.</li>
+<li><strong>Open the skill's <code>metadata.json</code></strong> — read <code>source_commit</code> and <code>source_repo</code>.</li>
+<li><strong>Jump to the upstream repo at that commit</strong>, open that file, find that line. The signature in <code>SKILL.md</code> should match the one you're reading.</li>
 </ol>
-<p>For docs-only skills, the audit shape is the same — <code>provenance-map.json</code> still lists every symbol — but entries cite <code>[EXT:{url}]</code> instead of <code>file:line@SHA</code>, and step 3 becomes &quot;open the doc URL and confirm the signature matches.&quot;</p>
-<p>If it doesn&#39;t, that&#39;s a bug — open an issue and SKF will republish the skill with a fresh provenance map (a new commit SHA for source skills, a fresh fetch for docs-only). Falsifiability isn&#39;t a feature; it&#39;s the whole deal.</p>
+<p>For docs-only skills, the audit shape is the same — <code>provenance-map.json</code> still lists every symbol — but entries cite <code>[EXT:{url}]</code> instead of <code>file:line@SHA</code>, and step 3 becomes "open the doc URL and confirm the signature matches."</p>
+<p>If it doesn't, that's a bug — open an issue and SKF will republish the skill with a fresh provenance map (a new commit SHA for source skills, a fresh fetch for docs-only). Falsifiability isn't a feature; it's the whole deal.</p>
 <p><strong>Reference output: <a href="https://github.com/armelhbobdad/oh-my-skills">oh-my-skills</a></strong> — four Deep-tier skills compiled by SKF (cocoindex, cognee, Storybook v10, uitripled), each shipping its full audit trail in-repo. Scores range from 99.0% to 99.49%. Every claim walks to an upstream line in under 60 seconds. Serves as both the worked example for this section and ongoing proof that the pipeline does what it says.</p>
 <h3>Help SKF Improve</h3>
 <p>Workflows end with a health check that files bug reports as GitHub issues (auto-deduped by fingerprint — re-reporting is safe); friction notes go to a local queue you can opt in to submit live. <strong>Please let workflows run to completion</strong>, or <a href="https://github.com/armelhbobdad/bmad-module-skill-forge/issues/new/choose">open an issue</a> directly. <a href="https://armelhbobdad.github.io/bmad-module-skill-forge/workflows/#terminal-step-health-check">Full details →</a></p>
@@ -386,7 +386,7 @@ results = await cognee.search(
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.9K</div>
+        <div class="stars">★ 24.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">

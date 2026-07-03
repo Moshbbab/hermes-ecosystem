@@ -52,7 +52,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 26
+    "userInteractionCount": 27
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -111,7 +111,7 @@
   <p class="project-desc">Nix package and NixOS module for Hermes Agent by Nous Research</p>
 
   <div class="meta-row">
-    <span class="stars">★ 26</span>
+    <span class="stars">★ 27</span>
     <span><span class="meta-label">lang</span>Nix</span>
     
     
@@ -144,11 +144,11 @@
   <section class="readme" data-nosnippet>
     <h2>nix-hermes-agent</h2>
 <p>Declarative Nix package and NixOS module for <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> by Nous Research.</p>
-<p>Everything is configured in Nix. Config, documents, secrets, service — one <code>nixos-rebuild switch</code> and it&#39;s live.</p>
+<p>Everything is configured in Nix. Config, documents, secrets, service — one <code>nixos-rebuild switch</code> and it's live.</p>
 <h3>Quick Start</h3>
 <h4>1. Add to your flake</h4>
 <pre><code class="language-nix">{
-  inputs.nix-hermes.url = &quot;github:0xrsydn/nix-hermes-agent&quot;;
+  inputs.nix-hermes.url = "github:0xrsydn/nix-hermes-agent";
 
   outputs = { self, nixpkgs, nix-hermes, ... }: {
     nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
@@ -170,17 +170,17 @@
     # ── Declarative config (renders to cli-config.yaml) ──
     config = {
       model = {
-        default = &quot;anthropic/claude-opus-4.6&quot;;
-        provider = &quot;openrouter&quot;;
+        default = "anthropic/claude-opus-4.6";
+        provider = "openrouter";
       };
       terminal = {
-        backend = &quot;local&quot;;
+        backend = "local";
         timeout = 180;
         lifetime_seconds = 300;
       };
       agent = {
         max_turns = 60;
-        reasoning_effort = &quot;medium&quot;;
+        reasoning_effort = "medium";
       };
       memory = {
         memory_enabled = true;
@@ -191,48 +191,48 @@
       compression = {
         enabled = true;
         threshold = 0.85;
-        summary_model = &quot;google/gemini-3-flash-preview&quot;;
+        summary_model = "google/gemini-3-flash-preview";
       };
-      toolsets = [ &quot;all&quot; ];
+      toolsets = [ "all" ];
     };
 
     # ── Secrets (not in Nix store) ──
     environmentFiles = [
-      &quot;/run/secrets/hermes-env&quot;  # ANTHROPIC_API_KEY, TELEGRAM_TOKEN, etc.
+      "/run/secrets/hermes-env"  # ANTHROPIC_API_KEY, TELEGRAM_TOKEN, etc.
     ];
 
     # ── Non-secret env vars ──
     environment = {
-      LLM_MODEL = &quot;anthropic/claude-opus-4.6&quot;;
+      LLM_MODEL = "anthropic/claude-opus-4.6";
     };
 
     # ── Workspace documents (inline or file paths) ──
     documents = {
-      &quot;SOUL.md&quot; = &#39;&#39;
+      "SOUL.md" = ''
         # SOUL.md
         You are a sharp, pragmatic AI assistant.
-      &#39;&#39;;
-      &quot;AGENTS.md&quot; = &#39;&#39;
+      '';
+      "AGENTS.md" = ''
         # AGENTS.md
         Read SOUL.md first. Then help the user.
-      &#39;&#39;;
-      &quot;USER.md&quot; = &#39;&#39;
+      '';
+      "USER.md" = ''
         # USER.md
         Name: Your Human
-      &#39;&#39;;
+      '';
       # Or reference a file:
-      # &quot;SOUL.md&quot; = ./documents/SOUL.md;
+      # "SOUL.md" = ./documents/SOUL.md;
     };
 
     # ── Declarative skills (phase 1) ──
     skills = {
       bundled.enable = true;
       optional = [
-        &quot;creative/blender-mcp&quot;
+        "creative/blender-mcp"
       ];
       custom = {
         repo-watch = {
-          category = &quot;research&quot;;
+          category = "research";
           source = ./skills/repo-watch;
         };
       };
@@ -241,8 +241,8 @@
     # ── MCP servers ──
     mcpServers = {
       context7 = {
-        command = &quot;npx&quot;;
-        args = [ &quot;-y&quot; &quot;@upstash/context7-mcp@latest&quot; ];
+        command = "npx";
+        args = [ "-y" "@upstash/context7-mcp@latest" ];
       };
     };
 
@@ -254,30 +254,30 @@
 <h4>Secrets Management</h4>
 <h5>Plain files approach</h5>
 <pre><code class="language-nix">services.hermes-agent = {
-  environmentFiles = [ &quot;/run/secrets/hermes-env&quot; ];
-  authFile = &quot;/run/secrets/hermes-auth.json&quot;;  # optional, for OAuth tokens
+  environmentFiles = [ "/run/secrets/hermes-env" ];
+  authFile = "/run/secrets/hermes-auth.json";  # optional, for OAuth tokens
 };
 </code></pre>
 <h5>sops-nix approach</h5>
-<pre><code class="language-nix">sops.secrets.&quot;hermes/env&quot; = {
+<pre><code class="language-nix">sops.secrets."hermes/env" = {
   sopsFile = ./secrets/hermes.yaml;
-  owner = &quot;hermes&quot;;
-  group = &quot;hermes&quot;;
+  owner = "hermes";
+  group = "hermes";
 };
 
-sops.secrets.&quot;hermes/auth&quot; = {
+sops.secrets."hermes/auth" = {
   sopsFile = ./secrets/hermes.yaml;
-  owner = &quot;hermes&quot;;
-  group = &quot;hermes&quot;;
+  owner = "hermes";
+  group = "hermes";
 };
 
 services.hermes-agent = {
   enable = true;
-  environmentFiles = [ config.sops.secrets.&quot;hermes/env&quot;.path ];
-  authFile = config.sops.secrets.&quot;hermes/auth&quot;.path;
+  environmentFiles = [ config.sops.secrets."hermes/env".path ];
+  authFile = config.sops.secrets."hermes/auth".path;
   config.model = {
-    default = &quot;anthropic/claude-opus-4.6&quot;;
-    provider = &quot;openrouter&quot;;
+    default = "anthropic/claude-opus-4.6";
+    provider = "openrouter";
   };
 };
 </code></pre>
@@ -288,7 +288,7 @@ services.hermes-agent = {
     TELEGRAM_TOKEN=123456:ABC...
     GLM_API_KEY=...
 hermes/auth: |
-    {&quot;nous&quot;: {&quot;token&quot;: &quot;...&quot;, &quot;refresh&quot;: &quot;...&quot;}, &quot;codex&quot;: {&quot;token&quot;: &quot;...&quot;}}
+    {"nous": {"token": "...", "refresh": "..."}, "codex": {"token": "..."}}
 </code></pre>
 <h4>3. Create secrets file</h4>
 <pre><code class="language-bash"># /run/secrets/hermes-env (or wherever you manage secrets)
@@ -328,7 +328,7 @@ journalctl -u hermes-agent -f
     └── gateway.log           # Service log
 </code></pre>
 <h3>Declarative Skills vs Native Hermes Skills</h3>
-<p>The <code>skills</code> option is designed to <strong>augment Hermes</strong>, not replace Hermes&#39; native skill workflow.</p>
+<p>The <code>skills</code> option is designed to <strong>augment Hermes</strong>, not replace Hermes' native skill workflow.</p>
 <p>Both approaches compose into the same runtime directory:</p>
 <ul>
 <li><code>${stateDir}/.hermes/skills/</code></li>
@@ -455,13 +455,13 @@ journalctl -u hermes-agent -f
 <tr>
 <td><code>user</code></td>
 <td>string</td>
-<td><code>&quot;hermes&quot;</code></td>
+<td><code>"hermes"</code></td>
 <td>Service user</td>
 </tr>
 <tr>
 <td><code>group</code></td>
 <td>string</td>
-<td><code>&quot;hermes&quot;</code></td>
+<td><code>"hermes"</code></td>
 <td>Service group</td>
 </tr>
 <tr>
@@ -497,7 +497,7 @@ journalctl -u hermes-agent -f
 <tr>
 <td><code>restart</code></td>
 <td>string</td>
-<td><code>&quot;always&quot;</code></td>
+<td><code>"always"</code></td>
 <td>systemd Restart policy</td>
 </tr>
 <tr>
@@ -508,7 +508,7 @@ journalctl -u hermes-agent -f
 </tr>
 </tbody></table>
 <h3>Config Reference</h3>
-<p>The <code>config</code> attrset maps directly to Hermes&#39; <code>cli-config.yaml</code>. Key sections:</p>
+<p>The <code>config</code> attrset maps directly to Hermes' <code>cli-config.yaml</code>. Key sections:</p>
 <table>
 <thead>
 <tr>
@@ -594,11 +594,11 @@ nixpkgs.overlays = [ nix-hermes.overlays.default ];
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/AbuZar-Ansarii/Hermes-Agent-On-Android">
-        <div class="stars">★ 131</div>
+        <div class="stars">★ 132</div>
         <div class="name"><span class="org">AbuZar-Ansarii /</span> Hermes-Agent-On-Android</div>
       </a>
       <a class="related-row" href="/projects/ultraworkers/hermes-agent-helm-chart">
-        <div class="stars">★ 107</div>
+        <div class="stars">★ 108</div>
         <div class="name"><span class="org">ultraworkers /</span> hermes-agent-helm-chart</div>
       </a>
       <a class="related-row" href="/projects/marshallrichards/ClawPhone">
@@ -610,11 +610,11 @@ nixpkgs.overlays = [ nix-hermes.overlays.default ];
         <div class="name"><span class="org">numtide /</span> llm-agents.nix</div>
       </a>
       <a class="related-row" href="/projects/TheAiSingularity/hermesclaw">
-        <div class="stars">★ 54</div>
+        <div class="stars">★ 55</div>
         <div class="name"><span class="org">TheAiSingularity /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/rookiemann/portable-hermes-agent">
-        <div class="stars">★ 181</div>
+        <div class="stars">★ 182</div>
         <div class="name"><span class="org">rookiemann /</span> portable-hermes-agent</div>
       </a>
       <a class="related-row" href="/projects/xmbshwll/hermes-agent-docker">

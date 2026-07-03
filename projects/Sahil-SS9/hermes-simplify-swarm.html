@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -146,12 +146,12 @@
 <p>Most code simplification tools check for style violations and linting. Simplify Swarm breaks your code down into risk tiers and cleans with surgical precision.</p>
 <p>Three parallel subagents attack your diff from different angles: <strong>Hygiene</strong> hunts dead code, AI slop, pass-through wrappers, and stale state — the stuff that rots silently. <strong>Clarity</strong> goes after duplication, naming rot, nested ternaries, and structural bloat — the stuff that makes your teammates sigh. <strong>Correctness</strong> traces N+1 queries, memory leaks, concurrency races, leaky abstractions, and silent failures — the stuff that breaks at 3am.</p>
 <p>Then a consolidator merges, de-duplicates, and triages everything into a risk-tiered application order: SAFE (auto-applied — unused imports, dead branches), CAREFUL (applied with test verification — renames, extracted helpers), RISKY (flagged for human review — N+1 restructures, public API changes, concurrency fixes).</p>
-<p>It&#39;s read-only during analysis — finds problems, doesn&#39;t touch your code until you&#39;ve seen the consolidated report. Opt-in only, no auto-trigger. Run <code>/simplify</code> when you want to know what you actually shipped.</p>
-<p>Built by synthesising 11 implementations: Anthropic&#39;s official code-simplifier plugin, nicknisi&#39;s essentials fork (AI slop detection, dead code removal), Navigator&#39;s ROI-gated config-driven approach, Addy Osmani&#39;s language-specific guidance and Chesterton&#39;s Fence, OMC&#39;s ai-slop-cleaner and 4-pass workflow, ECC&#39;s refactor-cleaner (knip/depcheck/ts-prune), WalletConnect&#39;s early-return patterns, Meta OpenEnv&#39;s TDD Red-Green-Refactor integration, GitHub Copilot&#39;s structured output format, and the Claude Code <code>/simplify</code> stop-hook architecture.</p>
-<p>Langauge-specific detectors for TypeScript/JavaScript, Python, and Go. N+1 query patterns. Memory leak signatures. Concurrency anti-patterns. Silent failure spots. All the things a general-purpose reviewer misses because it&#39;s looking too broad.</p>
-<p>Companion to Hermes Agent&#39;s built-in <code>simplify-code</code> skill. That one&#39;s 175 lines, general-purpose, fast. This one&#39;s the deep clean — use it before PRs, before deploys, when you inherit code you don&#39;t trust.</p>
-<p>Upstream enhancement PR is open with the 5 highest-value additions (risk-tiered application, Chesterton&#39;s Fence, AI slop detection, silent failure detection, structured output): <a href="https://github.com/NousResearch/hermes-agent/compare/main...Sahil-SS9/KenseiAgent:feat/enhance-simplify-code">https://github.com/NousResearch/hermes-agent/compare/main...Sahil-SS9/KenseiAgent:feat/enhance-simplify-code</a></p>
-<p>If you write a skill that pairs with this (CI integration, auto-test generator for findings, language pack for Rust/Zig/Kotlin), open a PR. Bug reports appreciated. If the Correctness agent flagged your code and you&#39;re annoyed — it&#39;s designed to be thorough.</p>
+<p>It's read-only during analysis — finds problems, doesn't touch your code until you've seen the consolidated report. Opt-in only, no auto-trigger. Run <code>/simplify</code> when you want to know what you actually shipped.</p>
+<p>Built by synthesising 11 implementations: Anthropic's official code-simplifier plugin, nicknisi's essentials fork (AI slop detection, dead code removal), Navigator's ROI-gated config-driven approach, Addy Osmani's language-specific guidance and Chesterton's Fence, OMC's ai-slop-cleaner and 4-pass workflow, ECC's refactor-cleaner (knip/depcheck/ts-prune), WalletConnect's early-return patterns, Meta OpenEnv's TDD Red-Green-Refactor integration, GitHub Copilot's structured output format, and the Claude Code <code>/simplify</code> stop-hook architecture.</p>
+<p>Langauge-specific detectors for TypeScript/JavaScript, Python, and Go. N+1 query patterns. Memory leak signatures. Concurrency anti-patterns. Silent failure spots. All the things a general-purpose reviewer misses because it's looking too broad.</p>
+<p>Companion to Hermes Agent's built-in <code>simplify-code</code> skill. That one's 175 lines, general-purpose, fast. This one's the deep clean — use it before PRs, before deploys, when you inherit code you don't trust.</p>
+<p>Upstream enhancement PR is open with the 5 highest-value additions (risk-tiered application, Chesterton's Fence, AI slop detection, silent failure detection, structured output): <a href="https://github.com/NousResearch/hermes-agent/compare/main...Sahil-SS9/KenseiAgent:feat/enhance-simplify-code">https://github.com/NousResearch/hermes-agent/compare/main...Sahil-SS9/KenseiAgent:feat/enhance-simplify-code</a></p>
+<p>If you write a skill that pairs with this (CI integration, auto-test generator for findings, language pack for Rust/Zig/Kotlin), open a PR. Bug reports appreciated. If the Correctness agent flagged your code and you're annoyed — it's designed to be thorough.</p>
 <h3>Installation</h3>
 <pre><code class="language-bash">mkdir -p ~/.hermes/skills/software-development
 cd ~/.hermes/skills/software-development
@@ -159,10 +159,10 @@ git clone https://github.com/Sahil-SS9/hermes-simplify-swarm.git simplify-swarm
 </code></pre>
 <p>No dependencies. No config required. Works on any Hermes Agent install.</p>
 <h3>Quick Start</h3>
-<pre><code>&quot;simplify my changes&quot;
+<pre><code>"simplify my changes"
 /cleanup
-&quot;deslop this module&quot;
-&quot;/simplify focus on correctness&quot;
+"deslop this module"
+"/simplify focus on correctness"
 </code></pre>
 <p>The skill auto-detects scope via <code>git diff</code>. SAFE changes applied automatically. CAREFUL changes applied with test verification. RISKY findings flagged for you to decide.</p>
 <h3>The Three Agents</h3>
@@ -195,12 +195,12 @@ git clone https://github.com/Sahil-SS9/hermes-simplify-swarm.git simplify-swarm
 <pre><code class="language-yaml">simplify:
   auto_apply: true          # Skip approval for SAFE+CAREFUL tiers
   skip_patterns:
-    - &quot;*.test.*&quot;
-    - &quot;*.generated.*&quot;
+    - "*.test.*"
+    - "*.generated.*"
   max_file_lines: 800
 </code></pre>
 <h3>Credits</h3>
-<p>Built by Sahil Saghir (KENSEI). Inspired by Claude Code&#39;s <code>/simplify</code> and the upstream Hermes Agent <code>simplify-code</code> skill.</p>
+<p>Built by Sahil Saghir (KENSEI). Inspired by Claude Code's <code>/simplify</code> and the upstream Hermes Agent <code>simplify-code</code> skill.</p>
 <h3>License</h3>
 <p>MIT — use it, fork it, ship it.</p>
 
@@ -215,7 +215,7 @@ git clone https://github.com/Sahil-SS9/hermes-simplify-swarm.git simplify-swarm
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 23.9K</div>
+        <div class="stars">★ 24.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">

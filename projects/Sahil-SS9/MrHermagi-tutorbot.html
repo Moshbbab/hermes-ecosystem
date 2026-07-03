@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -145,7 +145,7 @@
     <h2>MrHermagi-tutorbot 🧘</h2>
 <p><strong>A Discord AI tutor bot — daily lessons, curriculum YAML, HTML + audio delivery.</strong></p>
 <p>MrHermagi turns your Discord server into a personal learning academy. Pick any subject, define a curriculum in YAML, and get daily lessons delivered to a forum with full HTML deep-dives and TTS audio summaries for commute listening.</p>
-<p>Named after Mr. Miyagi: the student thinks they&#39;re learning one thing, but they&#39;re learning something deeper underneath. Wax on, wax off.</p>
+<p>Named after Mr. Miyagi: the student thinks they're learning one thing, but they're learning something deeper underneath. Wax on, wax off.</p>
 <h3>What you get</h3>
 <ul>
 <li><strong>Daily lessons</strong> — delivered to a Discord forum at 07:00 UK. One thread per week, lessons as replies</li>
@@ -165,28 +165,28 @@ nano ~/.hermes/profiles/mrhermagi/curriculum.yaml # Your subject (or use the AI/
 
 # 4. Set up the Q&amp;A channel prompt in config.yaml
 #    Add under discord.channel_prompts:
-#    &quot;YOUR_CHANNEL_ID&quot;: &quot;You are MrHermagi, ...&quot;
+#    "YOUR_CHANNEL_ID": "You are MrHermagi, ..."
 
 # 5. Create the cron
 hermes cron create \
   --profile mrhermagi \
-  --schedule &quot;0 7 * * *&quot; \
-  --deliver &quot;discord:YOUR_FORUM_CHANNEL_ID&quot; \
-  --prompt &quot;$(cat templates/cron-prompt.md)&quot; \
-  --name &quot;MrHermagi Daily Lesson&quot;
+  --schedule "0 7 * * *" \
+  --deliver "discord:YOUR_FORUM_CHANNEL_ID" \
+  --prompt "$(cat templates/cron-prompt.md)" \
+  --name "MrHermagi Daily Lesson"
 
 # 6. Threaded delivery (HTML + audio as ONE comment inside the weekly thread)
 #    Recent Hermes builds deliver lesson files correctly into the week thread.
 #    If your build posts the text, HTML and audio as THREE separate posts (or
 #    spawns a new thread per attachment), see scheduler.diff for the fix and
-#    apply it to your Hermes checkout&#39;s cron/scheduler.py + Discord adapter,
+#    apply it to your Hermes checkout's cron/scheduler.py + Discord adapter,
 #    then restart the gateway. Path varies by install — find it with:
-#      python -c &quot;import cron.scheduler as s; print(s.__file__)&quot;
+#      python -c "import cron.scheduler as s; print(s.__file__)"
 </code></pre>
 <blockquote>
 <p><strong>Note on the delivery fix.</strong> Older versions of this repo shipped a
 <code>scheduler.diff</code> that only combined text with a single attachment. The real
-cause of the &quot;three separate posts&quot; clutter is that the Discord file-send
+cause of the "three separate posts" clutter is that the Discord file-send
 path ignored the target <code>thread_id</code> and created a new forum thread per file.
 The current fix is two-part: (1) the file-send methods honour <code>thread_id</code> so
 attachments land in the existing weekly thread, and (2) the cron scheduler
@@ -216,25 +216,25 @@ message plus the audio follow-up. Audio always posts as a separate message
 <li>Write a new <code>curriculum.yaml</code> for the new subject (use <code>template.yaml</code>)</li>
 <li>Move the old one to <code>curriculum-old.yaml</code> for reference</li>
 <li>MrHermagi reads the new YAML and delivers the first pending lesson</li>
-<li>That&#39;s it. No profile changes, no cron rewriting, no gateway restarts</li>
+<li>That's it. No profile changes, no cron rewriting, no gateway restarts</li>
 </ol>
 <h4>Example: Switch from AI/ML to AI-Computing (Build Your Own PC)</h4>
 <pre><code class="language-yaml"># curriculum.yaml
 meta:
-  title: &quot;AI-Computing: Build Your Own PC&quot;
-  description: &quot;From zero hardware knowledge to understanding every component&quot;
+  title: "AI-Computing: Build Your Own PC"
+  description: "From zero hardware knowledge to understanding every component"
   total_days: 28
 
 weeks:
   - week: 1
-    theme: &quot;CPU Architecture&quot;
+    theme: "CPU Architecture"
     days:
       - day: 1
-        title: &quot;What Is a CPU?&quot;
-        topic: &quot;Fetch-decode-execute cycle, cores, threads, clock speed&quot;
+        title: "What Is a CPU?"
+        topic: "Fetch-decode-execute cycle, cores, threads, clock speed"
       ...
 </code></pre>
-<p>Swap the file. Tomorrow&#39;s lesson picks up from Day 1.</p>
+<p>Swap the file. Tomorrow's lesson picks up from Day 1.</p>
 <h3>Example curriculum included</h3>
 <p>The <code>curriculum/ai-ml-learning.yaml</code> covers a complete 4-week AI/ML foundations sprint:</p>
 <table>

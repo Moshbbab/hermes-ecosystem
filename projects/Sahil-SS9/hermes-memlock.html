@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock#software",
   "name": "hermes-memlock",
-  "description": "MemLock is a plugin designed to prevent instruction decay in Hermes agents caused by context compaction. It monitors the conversation for compaction markers and audits whether pinned instructions remain in the model's active working memory. When instructions drift into the summary region, the tool rehydrates them as a reminder block to restore obedience. This approach minimizes token overhead by only reinjecting instructions when they are no longer<pad><pad><pad><pad><pad><pad><pad><pad><pad><pa",
+  "description": "MemLock is a plugin designed to prevent instruction decay in Hermes agents caused by context compaction. It monitors the conversation for compaction markers and audits whether pinned instructions remain in the model's active working memory. When instructions drift into the summary region, the tool rehydrates them as a reminder block to restore obedience. This approach minimizes token overhead by only reinjecting instructions when they are no longer\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpa",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock",
   "codeRepository": "https://github.com/Sahil-SS9/hermes-memlock",
   "applicationCategory": "BrowserApplication",
@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 6
+    "userInteractionCount": 7
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">184·repos</span>
+    <span id="meta-count">185·repos</span>
     <span id="meta-version">hermes·v0.15.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -112,7 +112,7 @@
   <p class="project-desc">Re-assert standing instructions after context compaction. Pin anchors, detect drift, rehydrate before the model forgets</p>
 
   <div class="meta-row">
-    <span class="stars">★ 6</span>
+    <span class="stars">★ 7</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -143,13 +143,13 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <img width="1254" height="1254" alt="MemLock" src="https://github.com/user-attachments/assets/5aa4b31d-9730-4621-bffb-4e2ef1a7e09f" />
+    <img width="1254" height="1254" alt="MemLock" src="https://github.com/user-attachments/assets/5aa4b31d-9730-4621-bffb-4e2ef1a7e09f">
 
 <h2>MemLock: re-assert standing instructions after context compaction</h2>
 <p>MemLock detects Hermes context compactions, audits which pinned instructions
 (anchors) survived in the active (non-summary) region of the conversation,
 and rehydrates the casualties as a reminder block before they drift out of
-the model&#39;s working memory.</p>
+the model's working memory.</p>
 <hr>
 <h3>60-second Quickstart</h3>
 <pre><code class="language-bash"># Clone into Hermes plugins directory
@@ -161,13 +161,13 @@ plugins:
     - memlock
 
 # Pin an instruction (ask the model to call guard_pin):
-&quot;As a standing instruction use the guard_pin tool with text=&#39;Always reply in bullet points&#39; priority=80&quot;
+"As a standing instruction use the guard_pin tool with text='Always reply in bullet points' priority=80"
 
 # Check status:
 /guard
 
 # Pin and then send a long message that triggers compaction;
-# the pin survives. That&#39;s the whole demo.
+# the pin survives. That's the whole demo.
 </code></pre>
 <hr>
 <h3>Why this exists</h3>
@@ -183,9 +183,9 @@ instruction is still physically in the context window; the model just no
 longer obeys it. This failure mode is well documented across agent
 frameworks (see Prior art below), and instruction decay over long
 conversations is measurable: Li et al. (COLM 2024) quantify instruction
-instability in long dialogues, and Chroma&#39;s Context Rot study shows
+instability in long dialogues, and Chroma's Context Rot study shows
 performance degrading with input length across 18 models.</p>
-<p>MemLock&#39;s <code>pre_llm_call</code> hook detects the compaction marker, hashes the
+<p>MemLock's <code>pre_llm_call</code> hook detects the compaction marker, hashes the
 summary body, and audits the <strong>active</strong> (non-summary) region for your pinned
 anchors. Drifted anchors get rehydrated as a reminder block appended to the
 current user turn.</p>
@@ -362,7 +362,7 @@ probes. Note the model downloads lazily on first semantic audit.</p>
 </tr>
 <tr>
 <td><code>alert_script</code></td>
-<td><code>&quot;&quot;</code></td>
+<td><code>""</code></td>
 <td>Optional script invoked with the alert message</td>
 </tr>
 <tr>
@@ -437,10 +437,10 @@ re-seeded on every new session. The default backend is a zero-dependency
 filesystem store (<code>~/.hermes/memlock/persist/</code>). The backend is pluggable:
 set <code>persistence_backend</code> in config to swap in Mnemosyne or other stores.</p>
 <pre><code class="language-python"># Pin a global instruction that survives session restarts:
-guard_pin(text=&quot;Always use British English&quot;, scope=&quot;global&quot;, priority=80)
+guard_pin(text="Always use British English", scope="global", priority=80)
 
 # Session-scoped pins (default) die with the session:
-guard_pin(text=&quot;For this PR review, use bullet points&quot;)
+guard_pin(text="For this PR review, use bullet points")
 </code></pre>
 <h3>Limitations</h3>
 <ul>
@@ -448,7 +448,7 @@ guard_pin(text=&quot;For this PR review, use bullet points&quot;)
 imprecise for short or generic instructions. Define explicit <code>probes</code>
 for critical instructions.</li>
 <li><code>guard_pin</code> is model-callable. A prompt-injected model could pin an
-attacker&#39;s instruction, which MemLock would then faithfully re-assert.
+attacker's instruction, which MemLock would then faithfully re-assert.
 Mitigations: pinned text is whitespace-flattened (no reminder-block
 spoofing), pins are capped per session (<code>max_pins</code>), and <code>/guard</code> lists
 every active anchor for review. Audit <code>/guard</code> after processing
@@ -475,7 +475,7 @@ downloads the embedding model on first use.</li>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 322</div>
+        <div class="stars">★ 323</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
