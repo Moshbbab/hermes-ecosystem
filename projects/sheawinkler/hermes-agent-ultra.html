@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra#software",
   "name": "hermes-agent-ultra",
-  "description": "Hermes Agent Ultra is a Rust-based runtime designed to provide a high-performance, secure alternative to the standard Hermes Agent framework. It achieves this through a native Rust core that implements deterministic execution paths,\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad> de-coupled tool policies, and advanced session management. The system supports extensive local backends like Ollama and llama.cpp, alongside specialized features for session replay and tool-call simulation.",
+  "description": "Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance alternative to the original Hermes Agent. It implements the upstream agent's feature set using a deterministic Rust execution path to improve reliability, security, and operator control. The project includes a runtime policy engine for tool auditing, session time-travel for checkpointing, and extensive support for local backends like Ollama and vLLM. It is tailored for operators requiring deep obs",
   "url": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra",
   "codeRepository": "https://github.com/sheawinkler/hermes-agent-ultra",
   "applicationCategory": "DeveloperApplication",
@@ -46,13 +46,13 @@
     "name": "sheawinkler",
     "url": "https://github.com/sheawinkler"
   },
-  "dateModified": "2026-07-02T21:48:28.000Z",
+  "dateModified": "2026-07-04T06:52:37.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 63
+    "userInteractionCount": 64
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Hermes Agent Ultra (built from hermes-agent-rs core by lumioresearch, @oxterrybit). Hermes-agent feature parity at commit level. Rust Performance</p>
 
   <div class="meta-row">
-    <span class="stars">★ 63</span>
+    <span class="stars">★ 64</span>
     <span><span class="meta-label">lang</span>Rust</span>
     
     
-    <span><span class="meta-label">updated</span>2026-07-02</span>
+    <span><span class="meta-label">updated</span>2026-07-04</span>
   </div>
 
   <div class="actions">
@@ -130,11 +130,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent Ultra is a Rust-based runtime designed to provide a high-performance, secure alternative to the standard Hermes Agent framework. It achieves this through a native Rust core that implements deterministic execution paths,&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt; de-coupled tool policies, and advanced session management. The system supports extensive local backends like Ollama and llama.cpp, alongside specialized features for session replay and tool-call simulation.</p>
+    <p class="summary-text">Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance alternative to the original Hermes Agent. It implements the upstream agent's feature set using a deterministic Rust execution path to improve reliability, security, and operator control. The project includes a runtime policy engine for tool auditing, session time-travel for checkpointing, and extensive support for local backends like Ollama and vLLM. It is tailored for operators requiring deep observability and precise control over long-running local or gateway sessions.</p>
     <ul class="summary-highlights">
-      <li>Rust-native runtime for deterministic agent execution</li>
-      <li>Extensive support for local LLM backends and providers</li>
-      <li>Advanced session branching and time-travel debugging</li>
+      <li>Fully Rust-native core runtime for improved performance and determinism</li>
+      <li>Runtime policy engine for auditing and simulating tool invocations</li>
+      <li>Session branching with checkpoint, rollback, and replay capabilities</li>
     </ul>
   </div>
 </section>
@@ -153,6 +153,22 @@
         A G E N T   U L T R A
 </code></pre>
 <p>Rust-first autonomous agent runtime with functional parity goals against <code>NousResearch/hermes-agent</code>, plus an Ultra reliability, security, and operator-control layer.</p>
+<h3>Current Release And Parity Baseline</h3>
+<p>Current release baseline: <a href="https://github.com/sheawinkler/hermes-agent-ultra/blob/main/docs/releases/v0.21.3.md"><code>v0.21.3</code></a>.</p>
+<p>As of <code>v0.21.3</code>, the tracked upstream parity backlog is closed in the local
+governance artifacts: upstream queue pending is <code>0</code>, shared-diff pending
+classification/review is <code>0 / 0</code>, coverage critical gaps are <code>0</code>, and SOTA
+harness critical gaps are <code>0</code>. Future upstream changes can create new drift;
+the scheduled parity audit and release-readiness summary are the public guard.</p>
+<p>Fast confidence check against published artifacts:</p>
+<pre><code class="language-bash">bash scripts/smoke-release-artifact.sh --version v0.21.3
+</code></pre>
+<p>Repo-local CI is the authoritative gate for development and release confidence.
+GitHub Actions are a hosted mirror of the repo contract when they run; they are
+not required as the source of truth.</p>
+<pre><code class="language-bash">CARGO_TARGET_DIR=${CARGO_TARGET_DIR:-target} bash scripts/run-repo-ci.sh
+</code></pre>
+<p>See <a href="https://github.com/sheawinkler/hermes-agent-ultra/blob/main/docs/demo.md">docs/demo.md</a> for the one-command demo/readiness path.</p>
 <h3>What You Get</h3>
 <ul>
 <li>Fully Rust-native core runtime (agent loop, tools, gateway, skills, CLI/TUI)</li>

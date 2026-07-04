@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension#software",
   "name": "hermes-browser-extension",
-  "description": "The Hermes Browser Extension provides a Chromium-based side panel that connects your active web browsing context to a local or remote Hermes Agent runtime. It functions by communicating with a Hermes API server to sync models, tools, skills, and sessions directly into the browser interface. Users can leverage browser-specific data like page text, headings, and selected content to enhance agent prompts and workflows.",
+  "description": "The Hermes Browser Extension is a Chromium side-panel interface that integrates active web browsing context with a Hermes Agent runtime. It connects to a local or remote Hermes API server to utilize configured models, tools, and memory without being a standalone chatbot. Users can send page metadata, selected text, and tab information into persisted sessions for tasks like summarization and explanation. The extension also supports voice dictation and provides a transparent activity strip to moni",
   "url": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension",
   "codeRepository": "https://github.com/abundantbeing/hermes-browser-extension",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-07-03T00:38:01.000Z",
+  "dateModified": "2026-07-04T03:19:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 450
+    "userInteractionCount": 454
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Browser-native side panel for Hermes Agent — connect web context to your local Hermes runtime.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 450</span>
+    <span class="stars">★ 454</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-03</span>
+    <span><span class="meta-label">updated</span>2026-07-04</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">The Hermes Browser Extension provides a Chromium-based side panel that connects your active web browsing context to a local or remote Hermes Agent runtime. It functions by communicating with a Hermes API server to sync models, tools, skills, and sessions directly into the browser interface. Users can leverage browser-specific data like page text, headings, and selected content to enhance agent prompts and workflows.</p>
+    <p class="summary-text">The Hermes Browser Extension is a Chromium side-panel interface that integrates active web browsing context with a Hermes Agent runtime. It connects to a local or remote Hermes API server to utilize configured models, tools, and memory without being a standalone chatbot. Users can send page metadata, selected text, and tab information into persisted sessions for tasks like summarization and explanation. The extension also supports voice dictation and provides a transparent activity strip to monitor real-time tool calls.</p>
     <ul class="summary-highlights">
-      <li>Connects to local or remote Hermes API gateways</li>
-      <li>Provides read-only browser context for agent prompts</li>
-      <li>Supports&lt;pad&gt;&lt;pad&gt;多种 themes and&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt; de-&lt;pad&gt;&lt;pad&gt; ом-style appearance settings</li>
+      <li>Connects to local or remote Hermes API servers</li>
+      <li>Captures active tab text, metadata, and browser context</li>
+      <li>Includes quick commands for summarizing, explaining, and rewriting</li>
     </ul>
   </div>
 </section>
@@ -199,6 +199,8 @@
 <li>Keeps pinned-tab conversations isolated with per-tab local history and Hermes session bindings.</li>
 <li>Adds quick commands for common browser-context work, including <code>/summarize</code>, <code>/explain</code>, <code>/rewrite</code>, <code>/tabs</code>, and <code>/action-items</code>.</li>
 <li>Adds a collapsible “What Hermes saw” receipt after each sent turn for transparent context/debugging.</li>
+<li>Shows a live Tool Activity Strip while Hermes streams, so tool calls appear as structured runtime activity instead of raw <code>[tool]</code> markdown appended into answers.</li>
+<li>Classifies upstream Hermes runtime/tool exceptions as connected-with-warning diagnostics when the gateway is reachable, including the known Python <code>NoneType</code>/<code>int()</code> traceback class.</li>
 <li>Captures active tab title/URL, open tabs, selected text, readable page text, metadata, headings, forms, links, and buttons where available.</li>
 <li>Supports voice dictation through Hermes audio transcription when available, with Browser speech fallback when the connected runtime does not expose STT.</li>
 <li>Wraps webpage text as untrusted context before sending it to Hermes.</li>
@@ -321,13 +323,13 @@ https://hermes.example.com
 <h4>I loaded the extension but nothing works</h4>
 <p>Make sure you loaded <code>dist/</code>, not the repo root. The selected folder must contain <code>manifest.json</code> directly.</p>
 <h4>Chrome still shows an older version after updating</h4>
-<p>The browser is still using an old unpacked folder or an unpacked extension card that was not reloaded. The shipped v0.1.6 source, built <code>dist/</code>, and release archive all contain <code>manifest.json</code> version <code>0.1.6</code>.</p>
+<p>The browser is still using an old unpacked folder or an unpacked extension card that was not reloaded. For v0.1.8, the source manifest, built <code>dist/</code> manifest, and release archive should all contain <code>manifest.json</code> version <code>0.1.8</code>.</p>
 <p>Fix:</p>
 <ol>
-<li>Extract/download the v0.1.6 release or run <code>npm run build</code> locally.</li>
+<li>Extract/download the v0.1.8 release or run <code>npm run build</code> locally.</li>
 <li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li>
 <li>On the Hermes Browser Extension card, click <strong>Reload</strong>.</li>
-<li>If it still shows an older version, click <strong>Remove</strong>, then <strong>Load unpacked</strong> again and select the fresh v0.1.6 <code>dist/</code> folder.</li>
+<li>If it still shows an older version, click <strong>Remove</strong>, then <strong>Load unpacked</strong> again and select the fresh v0.1.8 <code>dist/</code> folder.</li>
 <li>Click <strong>service worker</strong> / <strong>Inspect views</strong> only for debugging; it is not the version source.</li>
 </ol>
 <h4>The side panel says it cannot connect</h4>
@@ -337,6 +339,12 @@ https://hermes.example.com
 curl http://&lt;trusted-remote-host&gt;:8642/health
 </code></pre>
 <p>If <code>/v1/models</code> fails, check <code>API_SERVER_KEY</code>, the extension's stored API key/browser token, and <code>API_SERVER_CORS_ORIGINS</code>. For remote mode, the browser extension origin (<code>chrome-extension://&lt;id&gt;</code>) must be allowlisted on the Hermes machine.</p>
+<h4>The side panel shows a runtime warning but still says connected</h4>
+<p>v0.1.8 separates gateway reachability from upstream Hermes runtime/tool failures. If <code>/health</code> works but Hermes raises a runtime traceback, the Browser stays connected and shows the warning instead of turning the whole connection red.</p>
+<p>For tracebacks like <code>int() argument must be a string, a bytes-like object or a real number, not 'NoneType'</code>, check the Hermes Agent logs on the machine running the gateway. If the traceback mentions <code>computer_use</code> or <code>cua-driver</code>, run:</p>
+<pre><code class="language-bash">hermes computer-use doctor
+</code></pre>
+<p>That diagnostic belongs to the Hermes runtime/tool layer, not to Browser extension packaging or Chrome permissions.</p>
 <h4>Native Hermes computer use is not working</h4>
 <p>Hermes Browser Extension does not request browser-control permissions and does not drive pages itself. Native desktop control comes from Hermes Agent's <code>computer_use</code> toolset via <code>cua-driver</code>.</p>
 <p>On the machine running Hermes, verify computer use directly:</p>
@@ -473,7 +481,7 @@ tests/
         <div class="name"><span class="org">outsourc-e /</span> hermes-workspace</div>
       </a>
       <a class="related-row" href="/projects/fathah/hermes-desktop">
-        <div class="stars">★ 13.0K</div>
+        <div class="stars">★ 13.1K</div>
         <div class="name"><span class="org">fathah /</span> hermes-desktop</div>
       </a>
       <a class="related-row" href="/projects/sanchomuzax/hermes-webui">
@@ -485,7 +493,7 @@ tests/
         <div class="name"><span class="org">Euraika-Labs /</span> pan-ui</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/hermes-agent-cn-desktop">
-        <div class="stars">★ 718</div>
+        <div class="stars">★ 726</div>
         <div class="name"><span class="org">Eynzof /</span> hermes-agent-cn-desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -493,7 +501,7 @@ tests/
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 681</div>
+        <div class="stars">★ 683</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">

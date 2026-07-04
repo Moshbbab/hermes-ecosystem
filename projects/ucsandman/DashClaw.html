@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It operates by enforcing declarative policies, scoring risks, and routing high-stakes actions to human approval queues via a centralized dashboard or CLI. The platform records every intent as a verifiable decision record and tracks terminal outcomes to prevent silent double-execution during retries. It integrates directly with various age",
+  "description": "DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It functions as a middleware that enforces declarative policies, calculates risk scores, and routes high-stakes tasks to humans for approval via a centralized dashboard or CLI. The platform records every action as a verifiable, replayable decision record to prevent double-execution during agent retries. It integrates directly with various",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-07-03T08:14:34.000Z",
+  "dateModified": "2026-07-04T06:59:06.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-03</span>
+    <span><span class="meta-label">updated</span>2026-07-04</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It operates by enforcing declarative policies, scoring risks, and routing high-stakes actions to human approval queues via a centralized dashboard or CLI. The platform records every intent as a verifiable decision record and tracks terminal outcomes to prevent silent double-execution during retries. It integrates directly with various agent frameworks including Hermes Agent, LangChain, and Claude Code through MCP, SDKs, or lifecycle hooks.</p>
+    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It functions as a middleware that enforces declarative policies, calculates risk scores, and routes high-stakes tasks to humans for approval via a centralized dashboard or CLI. The platform records every action as a verifiable, replayable decision record to prevent double-execution during agent retries. It integrates directly with various agent frameworks including Hermes Agent, Claude Code, LangChain, and CrewAI through MCP, SDKs, or lifecycle hooks.</p>
     <ul class="summary-highlights">
-      <li>Evaluates agent intent against risk policies before system execution</li>
-      <li>Routes pending actions to human approval via dashboard or mobile</li>
-      <li>Records verifiable decision ledgers with cryptographic attribution and replay protection</li>
+      <li>Intercepts risky agent actions for policy evaluation and human approval</li>
+      <li>Provides verifiable decision records with cryptographic attribution and replay protection</li>
+      <li>Integrates with Hermes Agent, LangChain, CrewAI, and MCP-compatible hosts</li>
     </ul>
   </div>
 </section>
@@ -407,7 +407,7 @@ DashClawAutoGenIntegration(claw).instrument_agent(assistant)
 </code></pre>
 <p>It intercepts every tool-use call (<code>before_tool_call</code>, <code>llm_output</code>, <code>after_tool_call</code>, <code>agent_end</code>), calls guard / record / waitForApproval automatically, and ships a <code>HOOK.md</code> the <code>openclaw</code> CLI installs. Tool-classification vocabulary aligns with DashClaw guard action types so policies behave consistently across plugin, hook, and SDK paths.</p>
 <h4>5. Direct REST API and webhooks</h4>
-<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>326 routes</strong>: 55 stable, 24 beta, 247 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
+<p>Every governance primitive is reachable as HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>328 routes</strong>: 56 stable, 24 beta, 248 experimental) is at <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhook events include <code>signal.detected</code>, <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, and the rest of the catalog — configurable per org.</p>
 <h4>6. Work Orders — task-grade contracts + receipts</h4>
 <p>Work Orders turn an agent call into a contract: a typed input/output schema, a budget ceiling, and a self-verifying receipt. A caller submits an order against a registered type (validated, guard-gated, queued); any agent with an API key claims and completes it; the server validates the output, builds a SHA-256-hashed receipt (cost, timestamps, output hash, governance trail), and writes an audit record. DashClaw stays the control plane — execution is external workers via <code>claim</code>/<code>complete</code>, so there's no LLM key and no cron. Page at <code>/work-orders</code>, API at <code>/api/work-orders</code>, 8 SDK methods each (Node + Python), 2 MCP tools, and a ~75-line reference worker in <a href="./examples/work-order-worker/"><code>examples/work-order-worker/</code></a>.</p>
 <h4>7. Skills — governance protocol + live platform reference</h4>
@@ -627,8 +627,13 @@ await claw.createAction({ /* ... */, idempotency_key: key });
 </tr>
 <tr>
 <td>Doctor</td>
-<td><code>npm run doctor</code> (local) or <code>dashclaw doctor</code> (remote + machine checks). Report-only by default; <code>--fix</code> applies safe auto-fixes (migrations, default policy, CORS, timestamp hygiene, stale mcp-server lib, and more).</td>
+<td><code>npm run doctor</code> (local) or <code>dashclaw doctor</code> (remote + machine checks). Report-only by default (the write-path canary proves inserts land using synthetic, self-cleaning rows in an isolated canary org); <code>--fix</code> applies safe auto-fixes (migrations, default policy, CORS, timestamp hygiene, stale mcp-server lib, and more).</td>
 <td><a href="https://github.com/ucsandman/DashClaw/blob/main/sdk/README.md">SDK README</a></td>
+</tr>
+<tr>
+<td>Live host canary</td>
+<td><code>scripts/live-canary.mjs</code> probes your production hosts hourly as a real unauthenticated client (marketing, docs, demo entry, trial-mint fail-closed, OAuth discovery, MCP handshake) from a GitHub Actions cron and files its verdict to <code>POST /api/live-canary</code>. Failures render on <code>/setup#live-canary</code> and raise a posture auditability finding.</td>
+<td><a href="https://github.com/ucsandman/DashClaw/blob/main/.github/workflows/live-canary.yml">.github/workflows/live-canary.yml</a></td>
 </tr>
 </tbody></table>
 <hr>
@@ -669,7 +674,7 @@ await claw.createAction({ /* ... */, idempotency_key: key });
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Lethe044/hermes-incident-commander">
-        <div class="stars">★ 52</div>
+        <div class="stars">★ 53</div>
         <div class="name"><span class="org">Lethe044 /</span> hermes-incident-commander</div>
       </a>
       <a class="related-row" href="/projects/Christabel337/job-scout-agent">
@@ -685,7 +690,7 @@ await claw.createAction({ /* ... */, idempotency_key: key });
         <div class="name"><span class="org">JackTheGit /</span> hermes-ai-infrastructure-monitoring-toolkit</div>
       </a>
       <a class="related-row" href="/projects/bigph00t/hermescraft">
-        <div class="stars">★ 48</div>
+        <div class="stars">★ 49</div>
         <div class="name"><span class="org">bigph00t /</span> hermescraft</div>
       </a>
       <a class="related-row" href="/projects/hxsteric/mercury">

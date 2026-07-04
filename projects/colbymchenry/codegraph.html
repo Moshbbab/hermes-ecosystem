@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local tool that provides coding agents with a pre-indexed knowledge graph of a codebase to improve context retrieval. It builds a map of symbols, dependencies, and call paths, allowing agents to query specific code structures instead of manually searching through files. This approach reduces the number of tool calls and file reads required for an agent to understand complex repositories. It integrates with various tools including Claude Code, Cursor, and Hermes Agent via an MCP se",
+  "description": "CodeGraph is a local CLI tool that provides AI agents with a pre-indexed semantic knowledge graph of a codebase to eliminate manual file crawling. It maps every symbol, call edge, and dependency, allowing agents to retrieve surgical context through a Model Context Protocol (MCP) server rather than repetitive file reads. The system features an auto-sync capability that updates the graph in real-time as files are modified. By reducing tool calls and discovery overhead, it accelerates response time",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-07-03T16:55:47.000Z",
+  "dateModified": "2026-07-04T00:38:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 57325
+    "userInteractionCount": 57411
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 57.3K</span>
+    <span class="stars">★ 57.4K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-03</span>
+    <span><span class="meta-label">updated</span>2026-07-04</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local tool that provides coding agents with a pre-indexed knowledge graph of a codebase to improve context retrieval. It builds a map of symbols, dependencies, and call paths, allowing agents to query specific code structures instead of manually searching through files. This approach reduces the number of tool calls and file reads required for an agent to understand complex repositories. It integrates with various tools including Claude Code, Cursor, and Hermes Agent via an MCP server.</p>
+    <p class="summary-text">CodeGraph is a local CLI tool that provides AI agents with a pre-indexed semantic knowledge graph of a codebase to eliminate manual file crawling. It maps every symbol, call edge, and dependency, allowing agents to retrieve surgical context through a Model Context Protocol (MCP) server rather than repetitive file reads. The system features an auto-sync capability that updates the graph in real-time as files are modified. By reducing tool calls and discovery overhead, it accelerates response times for agents like Hermes, Claude Code, and Cursor.</p>
     <ul class="summary-highlights">
-      <li>Provides surgical context through a pre-built symbol knowledge graph</li>
-      <li>Reduces tool calls and token usage for AI coding agents</li>
-      <li>Supports automatic synchronization as files change</li>
+      <li>Builds local semantic knowledge graphs of symbols and call paths</li>
+      <li>Reduces agent tool calls by providing direct surgical context</li>
+      <li>Auto-syncs the index on every file change for zero-stale data</li>
     </ul>
   </div>
 </section>
@@ -710,7 +710,7 @@ codegraph init
 </tr>
 <tr>
 <td><strong>20+ Languages</strong></td>
-<td>TypeScript, JavaScript, Python, Go, Rust, Java, C#, VB.NET, PHP, Ruby, C, C++, Objective-C, Metal, Swift, Kotlin, Scala, Dart, Lua, Luau, R, CFML, COBOL, Svelte, Vue, Astro, Liquid, Pascal/Delphi</td>
+<td>TypeScript, JavaScript, Python, Go, Rust, Java, C#, VB.NET, PHP, Ruby, C, C++, CUDA, Objective-C, Metal, Swift, Kotlin, Scala, Dart, Lua, Luau, R, Erlang, CFML, COBOL, Solidity, Terraform/OpenTofu, Svelte, Vue, Astro, Liquid, Pascal/Delphi</td>
 </tr>
 <tr>
 <td><strong>Framework-aware Routes</strong></td>
@@ -1370,6 +1370,11 @@ is written):</p>
 <td>Full support (vertex/fragment/kernel functions, structs, type aliases, call edges — MSL parses as C++, with <code>[[attribute]]</code> annotations handled)</td>
 </tr>
 <tr>
+<td>CUDA</td>
+<td><code>.cu</code>, <code>.cuh</code></td>
+<td>Full support (kernels and device/host functions, structs, classes, host→kernel call edges through <code>&lt;&lt;&lt;grid, block&gt;&gt;&gt;</code> launch syntax — templated launches, function-pointer launches (<code>auto kernel = &amp;fn&lt;...&gt;</code>), <code>dim3{...}</code> configs, and macro-defined kernels included; <code>__global__</code>/<code>__device__</code>/<code>__launch_bounds__</code> specifiers handled; CUDA in plain <code>.h</code>/<code>.hpp</code> headers recognized by content)</td>
+</tr>
+<tr>
 <td>Swift</td>
 <td><code>.swift</code></td>
 <td>Full support</td>
@@ -1443,6 +1448,21 @@ is written):</p>
 <td>Visual Basic .NET</td>
 <td><code>.vb</code></td>
 <td>Full support (classes, Modules, interfaces, structures, enums, properties, events, <code>Declare</code> P/Invoke, <code>Handles</code>/<code>WithEvents</code>, <code>Inherits</code>/<code>Implements</code> edges, call edges through VB's call/index paren ambiguity, <code>As New</code> instantiation, interpolated strings, LINQ, Unicode identifiers)</td>
+</tr>
+<tr>
+<td>Erlang</td>
+<td><code>.erl</code>, <code>.hrl</code>, <code>.escript</code>, <code>.app.src</code>, <code>.app</code></td>
+<td>Full support (functions with multi-clause/multi-arity grouping, <code>-spec</code> signatures, records with fields, <code>-type</code>/<code>-opaque</code> aliases, <code>-define</code> macros, <code>-include</code>/<code>-include_lib</code>/<code>-import</code> edges, local and <code>mod:fn</code> remote call edges, <code>fun name/arity</code> references, <code>spawn</code>/<code>apply</code>/<code>proc_lib</code>/<code>timer</code>/<code>rpc</code> MFA-argument call edges, <code>gen_server:call/cast(?MODULE)</code> → own <code>handle_call</code>/<code>handle_cast</code> links, <code>-behaviour</code> links, <code>-export</code>-based visibility)</td>
+</tr>
+<tr>
+<td>Solidity</td>
+<td><code>.sol</code></td>
+<td>Full support (contracts, libraries, interfaces, structs, enums, modifiers, events, errors, state variables, <code>import</code>/<code>using</code> directives, <code>emit</code>/<code>revert</code> calls)</td>
+</tr>
+<tr>
+<td>Terraform / OpenTofu</td>
+<td><code>.tf</code>, <code>.tfvars</code>, <code>.tofu</code></td>
+<td>Full support (resources, data sources, modules, variables, outputs, providers incl. aliases, <code>locals</code>; <code>var.</code>/<code>local.</code>/<code>module.</code>/resource references with Terraform's per-directory scoping enforced; module calls bridged across the boundary — inputs to the child module's variables, <code>module.M.out</code> to the child's output, <code>source</code> to the module's files; cloudposse/atmos <code>remote-state</code> cross-component wiring when the component is statically named; <code>provider = aws.east</code> selections resolved up the module tree; <code>moved</code>/<code>import</code>/<code>removed</code>/<code>check</code> block references; <code>.tfvars</code> assignments linked to the variables they set)</td>
 </tr>
 </tbody></table>
 <h3>Measured cross-file coverage</h3>
@@ -1628,7 +1648,7 @@ is written):</p>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
-        <div class="stars">★ 126</div>
+        <div class="stars">★ 127</div>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
