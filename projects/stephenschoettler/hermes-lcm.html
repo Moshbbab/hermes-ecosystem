@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-LCM is a context management plugin for Hermes Agent that replaces standard one-shot compression with a persistent, DAG-based engine. It utilizes a local SQLite store to preserve raw message history and builds depth-aware summary nodes to maintain a bounded active prompt without losing information. The system provides agents with specific tools to search, inspect, and expand compacted material through a hierarchical retrieval process. This approach ensures that even after compaction, the m",
+  "description": "hermes-lcm is a context management plugin for Hermes Agent that replaces standard lossy compression with a persistent, DAG-based memory system. It utilizes a local SQLite store to archive raw messages and organizes compacted history into depth-aware summary nodes. This architecture allows the agent to maintain a bounded active prompt while retaining the ability to retrieve exact details through specialized recall tools. By preserving source lineage and providing hierarchical drill-down capabilit",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-07-01T15:05:03.000Z",
+  "dateModified": "2026-07-05T07:36:19.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 819
+    "userInteractionCount": 821
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 819</span>
+    <span class="stars">★ 821</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-01</span>
+    <span><span class="meta-label">updated</span>2026-07-05</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-LCM is a context management plugin for Hermes Agent that replaces standard one-shot compression with a persistent, DAG-based engine. It utilizes a local SQLite store to preserve raw message history and builds depth-aware summary nodes to maintain a bounded active prompt without losing information. The system provides agents with specific tools to search, inspect, and expand compacted material through a hierarchical retrieval process. This approach ensures that even after compaction, the model can recover exact details and source lineage from previous conversation turns.</p>
+    <p class="summary-text">hermes-lcm is a context management plugin for Hermes Agent that replaces standard lossy compression with a persistent, DAG-based memory system. It utilizes a local SQLite store to archive raw messages and organizes compacted history into depth-aware summary nodes. This architecture allows the agent to maintain a bounded active prompt while retaining the ability to retrieve exact details through specialized recall tools. By preserving source lineage and providing hierarchical drill-down capabilities, it ensures that no conversation data is permanently lost during long-running sessions.</p>
     <ul class="summary-highlights">
-      <li>Uses a SQLite-backed DAG to manage hierarchical context summaries.</li>
-      <li>Provides agent tools like lcm_grep and lcm_expand for precise recall.</li>
-      <li>Maintains bounded active prompts while preserving raw message lineage.</li>
+      <li>Replaces one-shot compression with a SQLite-backed DAG context engine</li>
+      <li>Provides agent tools for searching and expanding compacted message history</li>
+      <li>Maintains raw message integrity through depth-aware summary nodes</li>
     </ul>
   </div>
 </section>
@@ -215,7 +215,8 @@ stable refs for later expansion.</p>
 <li><strong>Bounded recovery</strong> - pages raw messages, child summaries, and externalized
 payloads instead of dumping everything into the prompt</li>
 <li><strong>Agent tools</strong> - <code>lcm_grep</code>, <code>lcm_load_session</code>, <code>lcm_describe</code>,
-<code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, and <code>lcm_doctor</code></li>
+<code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, <code>lcm_inspect</code>, and
+<code>lcm_doctor</code></li>
 <li><strong>Source-aware retrieval</strong> - filters raw rows and summaries by descendant
 source lineage</li>
 <li><strong>Session controls</strong> - ignore noisy sessions or keep sessions read-only with
@@ -291,17 +292,19 @@ context:
 <li>plugin list includes <code>hermes-lcm</code></li>
 <li>selected context engine is <code>lcm</code></li>
 <li>tool list includes <code>lcm_grep</code>, <code>lcm_load_session</code>, <code>lcm_describe</code>,
-<code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, and <code>lcm_doctor</code></li>
+<code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, <code>lcm_inspect</code>, and
+<code>lcm_doctor</code></li>
 </ul>
 <p>Typical output:</p>
 <pre><code class="language-text">Plugins (1):
-  ✓ hermes-lcm v0.18.1 (7 tools)
+  ✓ hermes-lcm v0.18.1 (8 tools)
 
 Provider Plugins:
   Context Engine: lcm
 </code></pre>
-<p>For source checkouts, <code>lcm_status</code>, <code>/lcm status</code>, <code>lcm_doctor</code>, and
-<code>/lcm doctor</code> also report the loaded plugin path and best-effort git identity:
+<p>For source checkouts, <code>lcm_status</code>, <code>/lcm status</code>, <code>lcm_inspect</code>,
+<code>lcm_doctor</code>, and <code>/lcm doctor</code> also report the loaded plugin path and
+best-effort git identity:
 <code>plugin_git_commit</code>, <code>plugin_git_branch</code>, and <code>plugin_git_dirty</code>.</p>
 <p>If startup logs say LCM tools are available through <code>context-engine schemas</code> or
 mention the <code>Path B fallback</code>, that is expected on older Hermes hosts such as
@@ -354,6 +357,10 @@ outside the LCM database.</p>
 <tr>
 <td><code>lcm_status</code></td>
 <td>Show runtime health, context pressure, config, source lineage, and lifecycle stats.</td>
+</tr>
+<tr>
+<td><code>lcm_inspect</code></td>
+<td>Read-only operator inventory for current-session lineage, frontier/fresh-tail metadata, externalized refs/readability, compaction skip/no-op reasons, and matched ignore/stateless patterns. Returns metadata only; use retrieval tools for content.</td>
 </tr>
 <tr>
 <td><code>lcm_doctor</code></td>
@@ -622,7 +629,7 @@ FTS shadow tables, DAG summaries, or externalized payload JSON that were written
 before the setting was enabled. Non-password placeholders include a short
 truncated SHA-256 digest for correlation. <code>password_assignment</code> placeholders omit
 the digest to avoid making password-like values easier to dictionary-check.
-<code>lcm_status</code> and <code>lcm_doctor</code> expose the enabled state, configured pattern names,
+<code>lcm_status</code>, <code>lcm_inspect</code>, and <code>lcm_doctor</code> expose the enabled state, configured pattern names,
 unknown names, source, and placeholder format without exposing raw secret values.</p>
 <h4>Threshold ownership</h4>
 <p>When <code>context.engine: lcm</code> is active, <code>LCM_CONTEXT_THRESHOLD</code> is the compaction
@@ -763,6 +770,15 @@ it.</p>
 <p><code>lcm_status</code> surfaces the full filter contract under <code>session_filters</code>, including
 pattern sources, whether the current session is ignored/stateless, and a
 process-lifetime <code>ignored_message_count</code>.</p>
+<p>Ignored/stateless sessions are a storage ownership boundary, not a context-window
+opt-out. LCM does not ingest raw messages or create DAG nodes for sessions that
+match <code>LCM_IGNORE_SESSION_PATTERNS</code>, <code>LCM_STATELESS_SESSION_PATTERNS</code>, or the
+in-process auxiliary/thread stateless marker. If those sessions cross the normal
+context threshold, LCM delegates the compaction call to Hermes' native
+<code>ContextCompressor</code> so the active request is still bounded before model overflow.
+If the native compressor is unavailable, LCM falls back to a deterministic
+head/tail trim as a last-resort safety net, still without writing the bypassed
+session to <code>lcm.db</code>.</p>
 <h4>Large tool-output handling</h4>
 <p>Storage-boundary payload guard contract: LCM prevents media-ish inline payloads from being written into plugin-local SQLite rows at the storage boundary.</p>
 <p>Externalization for ordinary large tool output is opt-in. When enabled,
@@ -825,11 +841,31 @@ their source eligibility still comes from descendant raw messages. Expanding a
 carried-over current-session node recovers the original raw message sources even
 when those sources still belong to a previous session.</p>
 <h3>OpenClaw/lossless-claw import</h3>
-<p><code>hermes-lcm</code> includes an opt-in operator script for backfilling raw message rows
-from a lossless-claw/OpenClaw LCM SQLite database into the local hermes-lcm
-SQLite store:</p>
+<p><code>hermes-lcm</code> includes an opt-in operator script for backfilling OpenClaw history
+into the local hermes-lcm SQLite store. It supports two source shapes:</p>
+<ol>
+<li><strong>SQLite LCM database</strong> (<code>--source-db</code>) for migrations from an existing
+lossless-claw/OpenClaw <code>lcm.db</code>.</li>
+<li><strong>JSONL session exports</strong> (<code>--source-jsonl</code> / <code>--source-jsonl-dir</code>) for fresh
+installs, plugin-off catch-up, or migrations where no source SQLite database
+is available.</li>
+</ol>
+<p>SQLite source example:</p>
 <pre><code class="language-bash">python scripts/import_lossless_claw.py \
   --source-db ~/.openclaw/path/to/lcm.db \
+  --target-db ~/.hermes/lcm.db \
+  --agent sammy
+</code></pre>
+<p>JSONL source example:</p>
+<pre><code class="language-bash">python scripts/import_lossless_claw.py \
+  --source-jsonl ~/.openclaw/agents/sammy/sessions/session-a.jsonl \
+  --target-db ~/.hermes/lcm.db \
+  --agent sammy \
+  --json
+</code></pre>
+<p>For a directory of session exports:</p>
+<pre><code class="language-bash">python scripts/import_lossless_claw.py \
+  --source-jsonl-dir ~/.openclaw/agents/sammy/sessions \
   --target-db ~/.hermes/lcm.db \
   --agent sammy
 </code></pre>
@@ -840,23 +876,29 @@ SQLite store:</p>
 for that profile</li>
 <li>writes create a timestamped target DB backup first when the target already
 exists</li>
-<li>only raw messages are imported; summary DAG import is out of scope</li>
+<li>SQLite imports can include OpenClaw summaries with <code>--include-summaries</code>; this
+migrates compatible summary rows into Hermes <code>summary_nodes</code></li>
+<li>JSONL imports migrate raw message rows only; JSONL does not carry a summary DAG</li>
 <li>imported rows keep explicit provenance in <code>session_id</code> and <code>source</code>, for
-example <code>openclaw-lcm:agent:sammy:&lt;source-session&gt;</code></li>
-<li>the default provenance identity is the source <code>conversations.session_id</code>,
+example <code>openclaw-lcm:agent:sammy:&lt;source-session&gt;</code> or
+<code>openclaw-jsonl:agent:sammy:&lt;source-session&gt;</code></li>
+<li>the SQLite default provenance identity is the source <code>conversations.session_id</code>,
 preserving source session boundaries even when many conversations share one
 <code>session_key</code></li>
-<li>pass <code>--session-identity session_key</code> only when you intentionally want
-conversations with the same source session key grouped into one imported LCM
-session</li>
+<li>pass <code>--session-identity session_key</code> only for SQLite imports when you
+intentionally want conversations with the same source session key grouped into
+one imported LCM session</li>
 <li>reruns are idempotent for the same <code>--import-id</code>; the default <code>import_id</code> is
-path-derived, so pass a stable <code>--import-id</code> if you may import the same copied
-DB from different paths</li>
+source-path-derived, so pass a stable <code>--import-id</code> if you may import the same
+copied DB or JSONL export set from different paths</li>
+<li><code>--json</code> prints a reconciliation report with <code>scanned</code>, <code>eligible</code>,
+<code>would_import</code>, <code>imported</code>, <code>skipped_existing</code>, <code>skipped_empty</code>,
+<code>invalid_rows</code>, <code>warnings</code>, and summary counters</li>
 <li>changing <code>--agent</code>, <code>--namespace</code>, or <code>--session-identity</code> under the same
 <code>--import-id</code> is treated as the same import and will skip already-tracked
 source messages; use a new <code>--import-id</code> for a different mapping</li>
-<li>no OpenClaw config or separate secret tables are imported, but raw transcripts
-and tool payloads are imported and may contain sensitive user data</li>
+<li>no OpenClaw config or separate secret tables are imported, but raw transcripts,
+summaries, and tool payloads may contain sensitive user data</li>
 </ul>
 <p>This is a local archive migration path. It does not make LCM a general memory
 provider, and it does not change the current-session retrieval contract for
