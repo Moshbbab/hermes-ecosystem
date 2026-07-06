@@ -298,9 +298,9 @@ Requires environment
 
 `image_generate`
 
-Generate images from text prompts (text-to-image) or edit/transform an existing image (image-to-image) via the user-configured backend (FAL.ai, OpenAI, xAI, Krea). Pass `image_url` to edit an image and `reference_image_urls` for style references; omit both for text-to-image. The model is user-configured and not selectable by the agent. Returns a single image URL or local path.
+Generate images from text prompts (text-to-image) or edit/transform an existing image (image-to-image) via the user-configured backend (FAL.ai, OpenAI, OpenAI Codex auth, xAI, Krea). Pass `image_url` to edit an image and `reference_image_urls` for style references; omit both for text-to-image. The model is user-configured and not selectable by the agent. Returns a single image URL or local path.
 
-FAL\_KEY / OPENAI\_API\_KEY / xAI OAuth / KREA\_API\_KEY
+FAL\_KEY / OPENAI\_API\_KEY / Codex OAuth / xAI OAuth / KREA\_API\_KEY
 
 ## `kanban` toolset
 

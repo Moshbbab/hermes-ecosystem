@@ -224,11 +224,11 @@ reference-guided generation (`image_style_references`)
 
 **OpenAI (Codex auth)**
 
-✗
+✓
 
-—
+up to 16
 
-text-to-image only
+Codex Responses `image_generation` tool with `input_image` content parts
 
 FAL models with an editing endpoint: `flux-2/klein/9b`, `flux-2-pro`, `nano-banana-pro`, `gpt-image-1.5`, `gpt-image-2`, `ideogram/v3`, and `qwen-image`. Pure text-to-image FAL models (`z-image/turbo`, `recraft`, `krea/*`) reject image inputs with a clear error pointing you at an edit-capable model.
 

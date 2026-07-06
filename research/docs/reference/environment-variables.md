@@ -2244,6 +2244,10 @@ Delay before sending a follow-up after the agent finishes, to avoid racing the l
 
 Override the underlying `python-telegram-bot` HTTP timeouts (seconds).
 
+`HERMES_TELEGRAM_INIT_TIMEOUT`
+
+Per-attempt cap (seconds) on the Telegram `initialize()` connect chain during gateway startup, so an unreachable fallback-IP chain can't block startup indefinitely (default: `30`).
+
 `HERMES_TELEGRAM_HTTP_POOL_SIZE`
 
 Max concurrent HTTP connections to the Telegram API.
@@ -2292,13 +2296,17 @@ WeCom batcher tuning.
 
 Timeout in seconds for downloading an image before handing it to vision models (default: `30`).
 
+`HERMES_VISION_MAX_CONCURRENCY`
+
+Max concurrent image **encode/resize** bursts across the whole process (override for `auxiliary.vision.max_concurrency`; default: host CPU core count, no ceiling). Bounds only the CPU-bound encode step so a video-frame fan-out can't saturate every core and starve the event loop — the LLM calls stay fully concurrent. Values `< 1` are ignored.
+
 `HERMES_RESTART_DRAIN_TIMEOUT`
 
 Gateway: seconds to wait for active runs to drain on `/restart` before forcing the restart (default: `900`).
 
 `HERMES_GATEWAY_PLATFORM_CONNECT_TIMEOUT`
 
-Per-platform connect timeout during gateway startup (seconds).
+Per-platform connect timeout during gateway startup and reconnect (seconds; `0`/negative waits indefinitely). Applies to the connect attempt _and_ the Discord adapter's ready-wait, so accounts with many slash commands to sync don't get killed mid-startup. Bridged from `gateway.platform_connect_timeout` in `config.yaml` (default `30`); this env var is the manual override and wins if set explicitly.
 
 `HERMES_GATEWAY_BUSY_INPUT_MODE`
 
@@ -2362,7 +2370,7 @@ Inactivity timeout for cron job agent runs in seconds (default: `600`). The agen
 
 `HERMES_CRON_SCRIPT_TIMEOUT`
 
-Timeout for pre-run scripts attached to cron jobs in seconds (default: `120`). Override for scripts that need longer execution (e.g., randomized delays for anti-bot timing). Also configurable via `cron.script_timeout_seconds` in `config.yaml`.
+Timeout for pre-run scripts attached to cron jobs in seconds (default: `3600`). Bounds the script only — skill/agent jobs use the separate `HERMES_CRON_TIMEOUT` inactivity budget. Also configurable via `cron.script_timeout_seconds` in `config.yaml`.
 
 `HERMES_CRON_MAX_PARALLEL`
 

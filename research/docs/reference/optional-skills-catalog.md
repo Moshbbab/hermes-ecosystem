@@ -505,6 +505,10 @@ Supply chain investigation, evidence recovery, and forensic analysis for GitHub 
 
 OSINT username search across 400+ social networks. Hunt down social media accounts by username.
 
+[**unbroker**](/docs/user-guide/skills/optional/security/security-unbroker)
+
+Autonomously remove your info from data-broker sites.
+
 [**web-pentest**](/docs/user-guide/skills/optional/security/security-web-pentest)
 
 Authorized web application penetration testing — reconnaissance, vulnerability analysis, proof-based exploitation, and professional reporting. Adapts Shannon's "No Exploit, No Report" methodology with hard guardrails for scope, authoriza...
