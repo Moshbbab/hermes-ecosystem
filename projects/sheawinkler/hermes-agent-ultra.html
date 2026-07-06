@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra#software",
   "name": "hermes-agent-ultra",
-  "description": "Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance alternative to the original Hermes Agent. It implements the upstream agent's feature set using a deterministic Rust execution path to improve reliability, security, and operator control. The project includes a runtime policy engine for tool auditing, session time-travel for checkpointing, and extensive support for local backends like Ollama and vLLM. It is tailored for operators requiring deep obs",
+  "description": "Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance, secure alternative to the original Hermes Agent. It implements a fully Rust-based core for the agent loop, tools, and gateway to ensure deterministic execution and improved observability. The project adds advanced operator controls, including a runtime policy engine for tool enforcement and session time-travel for checkpointing and replaying interactions. It supports a wide array of local backend",
   "url": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra",
   "codeRepository": "https://github.com/sheawinkler/hermes-agent-ultra",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "sheawinkler",
     "url": "https://github.com/sheawinkler"
   },
-  "dateModified": "2026-07-05T09:22:34.000Z",
+  "dateModified": "2026-07-06T09:37:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -115,7 +115,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     
     
-    <span><span class="meta-label">updated</span>2026-07-05</span>
+    <span><span class="meta-label">updated</span>2026-07-06</span>
   </div>
 
   <div class="actions">
@@ -130,9 +130,9 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance alternative to the original Hermes Agent. It implements the upstream agent's feature set using a deterministic Rust execution path to improve reliability, security, and operator control. The project includes a runtime policy engine for tool auditing, session time-travel for checkpointing, and extensive support for local backends like Ollama and vLLM. It is tailored for operators requiring deep observability and precise control over long-running local or gateway sessions.</p>
+    <p class="summary-text">Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance, secure alternative to the original Hermes Agent. It implements a fully Rust-based core for the agent loop, tools, and gateway to ensure deterministic execution and improved observability. The project adds advanced operator controls, including a runtime policy engine for tool enforcement and session time-travel for checkpointing and replaying interactions. It supports a wide array of local backends like Ollama and vLLM, as well as multi-provider inference routing via OAuth.</p>
     <ul class="summary-highlights">
-      <li>Fully Rust-native core runtime for improved performance and determinism</li>
+      <li>Full Rust-native implementation of the agent runtime and CLI/TUI</li>
       <li>Runtime policy engine for auditing and simulating tool invocations</li>
       <li>Session branching with checkpoint, rollback, and replay capabilities</li>
     </ul>
@@ -199,6 +199,8 @@ not required as the source of truth.</p>
 <li><code>RTK raw-mode controls</code>: inspect unwrapped tool payloads when debugging integrations</li>
 <li><code>Memory fusion</code>: ContextLattice + external memory providers with scoring/fusion logic</li>
 <li><code>One-true-harness cockpit</code>: <code>/harness</code> and <code>harness_cockpit</code> unify skills, proof, OIDC, replay, objectives, onboarding, and chaos probes</li>
+<li><code>Ultra autonomy cockpit</code>: <code>ultra_autonomy</code>, <code>/harness autonomy</code>, and <code>harness.autonomy</code> expose task boards, loop detection, resource-governed subagents, ContextLattice-first memory lifecycle, channel surfaces, and objective-to-board planning</li>
+<li><code>One-command always-on UX</code>: <code>hermes-ultra up</code> composes gateway service install/start/status into a single operator command</li>
 <li><code>Advanced sync gates</code>: differential parity checks, red-team/adversarial gating, elite sync gate</li>
 <li><code>Operational tooling</code>: deep doctor snapshots, replay traces, queue-based upstream webhook sync</li>
 <li><code>Rust-only implementation strategy</code>: parity in Rust first; no direct Python runtime vendoring</li>
@@ -375,7 +377,11 @@ and MiniMax roots where those repos expose a clear skill directory.</li>
 </ul>
 <p>Use <code>/harness</code> in the TUI or the <code>harness_cockpit</code> tool for the curated
 one-true-harness index, including Matt Pocock <code>teach</code>, <code>domain-modeling</code>,
-<code>grill-with-docs</code>, <code>codebase-design</code>, and architecture-deepening workflows.</p>
+<code>grill-with-docs</code>, <code>codebase-design</code>, and architecture-deepening workflows.
+Use <code>/harness autonomy</code> or the <code>ultra_autonomy</code> tool for board execution,
+loop detection, resource admission, ContextLattice-first memory lifecycle, and
+objective-to-board planning. Dashboard clients can call <code>harness.autonomy</code> via
+<code>/v1/rpc</code>; see <a href="https://github.com/sheawinkler/hermes-agent-ultra/blob/main/docs/ultra-autonomy-surfaces.md">Ultra Autonomy Surfaces</a>.</p>
 <h3>Dashboard OIDC</h3>
 <p><code>hermes-http</code> supports a Rust-native dashboard OIDC mode while preserving
 <code>HERMES_HTTP_API_KEY</code> bearer access for machine clients.</p>

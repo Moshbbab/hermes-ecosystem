@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock#software",
   "name": "hermes-memlock",
-  "description": "MemLock is a plugin designed to prevent instruction decay in Hermes agents caused by context compaction. It monitors the conversation for compaction markers and audits whether pinned instructions remain in the model's active working memory. When instructions drift into the summary region, the tool rehydrates them as a reminder block to restore obedience. This approach minimizes token overhead by only reinjecting instructions when they are no longer\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpad>\u003cpa",
+  "description": "MemLock is a context management plugin for Hermes that prevents standing instructions from being ignored after context compaction. It monitors the conversation for compaction markers and audits the active context to ensure pinned instructions, or anchors, have not drifted into the summary region. When an instruction is no longer detected in the model's working memory, the plugin rehydrates it as a reminder block in the current turn. This approach maintains model obedience over long dialogues wit",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock",
   "codeRepository": "https://github.com/Sahil-SS9/hermes-memlock",
   "applicationCategory": "BrowserApplication",
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">MemLock is a plugin designed to prevent instruction decay in Hermes agents caused by context compaction. It monitors the conversation for compaction markers and audits whether pinned instructions remain in the model's active working memory. When instructions drift into the summary region, the tool rehydrates them as a reminder block to restore obedience. This approach minimizes token overhead by only reinjecting instructions when they are no longer&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;&lt;pad&gt; de-prioritized by the model.</p>
+    <p class="summary-text">MemLock is a context management plugin for Hermes that prevents standing instructions from being ignored after context compaction. It monitors the conversation for compaction markers and audits the active context to ensure pinned instructions, or anchors, have not drifted into the summary region. When an instruction is no longer detected in the model's working memory, the plugin rehydrates it as a reminder block in the current turn. This approach maintains model obedience over long dialogues without the token overhead of constant reinjection.</p>
     <ul class="summary-highlights">
-      <li>Detects context compaction via summary prefix monitoring</li>
-      <li>Audits instruction survival using keyword or semantic probes</li>
-      <li>Rehydrates drifted anchors to maintain instruction adherence</li>
+      <li>Detects context compaction and audits active region for instruction drift</li>
+      <li>Rehydrates missing instructions using keyword probes or semantic embedding similarity</li>
+      <li>Provides a guard_pin tool for setting instruction priority and persistence</li>
     </ul>
   </div>
 </section>
