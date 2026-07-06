@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It functions as a gatekeeper that evaluates declarative policies, routes high-risk actions for human approval, and maintains a verifiable ledger of every decision. The platform provides cryptographic attribution for agent identities and tracks terminal outcomes to prevent accidental double-execution during retries. It integrates directly ",
+  "description": "DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate AI agent actions before they reach real-world systems. It functions by routing risky intents through declarative guard policies, risk assessment scoring, and human approval queues to prevent unauthorized or double-executed actions. The system records every decision in a verifiable ledger, providing cryptographic attribution and terminal outcome tracking for agent fleets. It integrates directly with Herm",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-07-06T07:20:42.000Z",
+  "dateModified": "2026-07-06T14:45:33.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -66,7 +66,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<script>(function(){try{var s=localStorage.getItem('theme');var o=window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches;var t=s||(o?'light':'dark');document.documentElement.setAttribute('data-theme',t)}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();</script>
+<script src="/assets/js/theme-init.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate risky AI agent actions before they execute in real-world systems. It functions as a gatekeeper that evaluates declarative policies, routes high-risk actions for human approval, and maintains a verifiable ledger of every decision. The platform provides cryptographic attribution for agent identities and tracks terminal outcomes to prevent accidental double-execution during retries. It integrates directly with various runtimes and frameworks including Hermes Agent, Claude Code, LangChain, and MCP-compatible tools.</p>
+    <p class="summary-text">DashClaw is a governance and decision infrastructure layer designed to intercept and evaluate AI agent actions before they reach real-world systems. It functions by routing risky intents through declarative guard policies, risk assessment scoring, and human approval queues to prevent unauthorized or double-executed actions. The system records every decision in a verifiable ledger, providing cryptographic attribution and terminal outcome tracking for agent fleets. It integrates directly with Hermes Agent, Claude Code, and various agent frameworks via MCP, SDKs, or REST hooks.</p>
     <ul class="summary-highlights">
-      <li>Intercepts risky actions for policy evaluation and human approval</li>
-      <li>Maintains a verifiable, replayable ledger of all agent decisions</li>
-      <li>Verifies agent identity using OIDC bearer tokens and replay protection</li>
+      <li>Intercepts risky agent actions for policy evaluation and human approval.</li>
+      <li>Maintains a verifiable ledger of replayable decision records and outcomes.</li>
+      <li>Provides cryptographic attribution using JWKS-verified OIDC bearer tokens.</li>
     </ul>
   </div>
 </section>
@@ -687,7 +687,7 @@ Approval <em>volume</em> is governed too: when one policy (or the fleet) exceeds
 <h3>Project status</h3>
 <p>Honest expectations, stated plainly:</p>
 <ul>
-<li><strong>Young and fast-moving.</strong> First commit February 2026; releases land near-daily. The API surface is explicitly tiered for exactly this reason — 57 stable routes pinned in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json">OpenAPI contract</a>, 24 beta, 251 experimental. Build against stable; experimental routes can change without notice.</li>
+<li><strong>Young and fast-moving.</strong> First commit February 2026; releases land near-daily. The API surface is explicitly tiered for exactly this reason — 57 stable routes pinned in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json">OpenAPI contract</a>, 24 beta, 254 experimental. Build against stable; experimental routes can change without notice.</li>
 <li><strong>Proven by dogfood, not by scale.</strong> The core loop is exercised continuously by the maintainer's own agent fleet (the screenshots above) and by a CI policy-smoke harness that live-proves the public claims on every push. External production deployments are early. Treat this as young infrastructure that takes correctness seriously, not a battle-tested incumbent.</li>
 <li><strong>AI-maintained, human-governed.</strong> Day-to-day maintenance is done by an AI agent under the human-held charter in <a href="https://github.com/ucsandman/DashClaw/blob/main/MAINTAINER.md">MAINTAINER.md</a>; risk-bearing invariants (blocks are absolute, no self-approval, humans ratify policy changes, credentials stay human) cannot be changed by the maintainer. The <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/maintainer-log.md">maintainer log</a> records every decision in public.</li>
 </ul>
@@ -754,7 +754,7 @@ Approval <em>volume</em> is governed too: when one policy (or the fleet) exceeds
   <div>v2 · 2026.04</div>
 </footer>
 
-<script>(function(){var t=document.getElementById('theme-toggle');if(!t)return;function render(){var c=document.documentElement.getAttribute('data-theme');t.querySelector('.tt-light').classList.toggle('tt-active',c==='light');t.querySelector('.tt-dark').classList.toggle('tt-active',c!=='light');}render();t.addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n)}catch(e){}render();});})();</script>
+<script src="/assets/js/theme-toggle.js" defer></script>
 <script src="/assets/js/masthead-fetch.js" defer></script>
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
