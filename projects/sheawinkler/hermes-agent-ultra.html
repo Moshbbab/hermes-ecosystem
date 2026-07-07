@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra#software",
   "name": "hermes-agent-ultra",
-  "description": "Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance, secure alternative to the original Hermes Agent. It implements a fully Rust-based core for the agent loop, tools, and gateway to ensure deterministic execution and improved observability. The project adds advanced operator controls, including a runtime policy engine for tool enforcement and session time-travel for checkpointing and replaying interactions. It supports a wide array of local backend",
+  "description": "Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance, secure alternative to the original Hermes Agent. It implements a deterministic execution path with a dedicated policy engine to enforce and audit tool decisions at runtime. The project integrates a wide array of local and cloud inference backends, including Ollama and vLLM, while adding advanced operator tools for session branching and memory fusion. It is specifically built for users requiring d",
   "url": "https://hermesatlas.com/projects/sheawinkler/hermes-agent-ultra",
   "codeRepository": "https://github.com/sheawinkler/hermes-agent-ultra",
   "applicationCategory": "DeveloperApplication",
@@ -46,13 +46,13 @@
     "name": "sheawinkler",
     "url": "https://github.com/sheawinkler"
   },
-  "dateModified": "2026-07-06T09:37:44.000Z",
+  "dateModified": "2026-07-07T22:03:41.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 64
+    "userInteractionCount": 66
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -111,11 +111,11 @@
   <p class="project-desc">Hermes Agent Ultra (built from hermes-agent-rs core by lumioresearch, @oxterrybit). Hermes-agent feature parity at commit level. Rust Performance</p>
 
   <div class="meta-row">
-    <span class="stars">★ 64</span>
+    <span class="stars">★ 66</span>
     <span><span class="meta-label">lang</span>Rust</span>
     
     
-    <span><span class="meta-label">updated</span>2026-07-06</span>
+    <span><span class="meta-label">updated</span>2026-07-07</span>
   </div>
 
   <div class="actions">
@@ -130,10 +130,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance, secure alternative to the original Hermes Agent. It implements a fully Rust-based core for the agent loop, tools, and gateway to ensure deterministic execution and improved observability. The project adds advanced operator controls, including a runtime policy engine for tool enforcement and session time-travel for checkpointing and replaying interactions. It supports a wide array of local backends like Ollama and vLLM, as well as multi-provider inference routing via OAuth.</p>
+    <p class="summary-text">Hermes Agent Ultra is a Rust-native autonomous agent runtime designed to provide a high-performance, secure alternative to the original Hermes Agent. It implements a deterministic execution path with a dedicated policy engine to enforce and audit tool decisions at runtime. The project integrates a wide array of local and cloud inference backends, including Ollama and vLLM, while adding advanced operator tools for session branching and memory fusion. It is specifically built for users requiring deep observability, incident debugging, and strict control over long-running agent sessions.</p>
     <ul class="summary-highlights">
-      <li>Full Rust-native implementation of the agent runtime and CLI/TUI</li>
-      <li>Runtime policy engine for auditing and simulating tool invocations</li>
+      <li>Rust-native core with full parity against NousResearch Hermes Agent</li>
+      <li>Runtime policy engine for tool enforcement and outcome simulation</li>
       <li>Session branching with checkpoint, rollback, and replay capabilities</li>
     </ul>
   </div>
@@ -228,6 +228,10 @@ doctor/auth/setup probes are skipped by default; run setup later with
 <p>Setup:</p>
 <pre><code class="language-bash">hermes-ultra setup
 </code></pre>
+<p>Mem0 memory setup supports cloud, self-hosted, and OSS-style endpoints:</p>
+<pre><code class="language-bash">hermes-ultra memory setup mem0 --mode selfhosted --host http://127.0.0.1:24220 -y
+</code></pre>
+<p>Add <code>--api-key ...</code> only when the self-hosted server requires auth; Hermes writes the host to <code>mem0.json</code> and the secret to <code>$HERMES_HOME/.env</code>.</p>
 <p>Interactive session:</p>
 <pre><code class="language-bash">hermes-ultra
 </code></pre>

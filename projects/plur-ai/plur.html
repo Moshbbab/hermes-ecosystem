@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer that allows AI agents to persist knowledge and preferences across different tools and sessions. It stores information as plain-text YAML \"engrams\" on the user's disk, utilizing a hybrid search approach of BM25 and embeddings for retrieval. The system automatically captures learnings from agent conversations and applies an activation model where frequently accessed facts strengthen while unused ones naturally decay. It integrates with various platforms in",
+  "description": "PLUR is a local-first shared memory layer that allows AI agents to persist preferences, corrections, and conventions across different sessions and tools. It stores knowledge as plain-text YAML engrams on disk, utilizing a hybrid retrieval system with optional rerankers to inject relevant context into LLM calls. This approach enables smaller models to outperform larger ones on specific tasks by prioritizing context over model size, with integrations for Claude Code, Cursor, Hermes Agent, and Open",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-07-07T04:11:01.000Z",
+  "dateModified": "2026-07-07T21:37:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 216
+    "userInteractionCount": 215
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,7 +112,7 @@
   <p class="project-desc">Shared memory for AI agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 216</span>
+    <span class="stars">★ 215</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer that allows AI agents to persist knowledge and preferences across different tools and sessions. It stores information as plain-text YAML &quot;engrams&quot; on the user's disk, utilizing a hybrid search approach of BM25 and embeddings for retrieval. The system automatically captures learnings from agent conversations and applies an activation model where frequently accessed facts strengthen while unused ones naturally decay. It integrates with various platforms including Hermes Agent, Claude Code, Cursor, and OpenClaw to provide a unified context layer.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer that allows AI agents to persist preferences, corrections, and conventions across different sessions and tools. It stores knowledge as plain-text YAML engrams on disk, utilizing a hybrid retrieval system with optional rerankers to inject relevant context into LLM calls. This approach enables smaller models to outperform larger ones on specific tasks by prioritizing context over model size, with integrations for Claude Code, Cursor, Hermes Agent, and OpenClaw.</p>
     <ul class="summary-highlights">
-      <li>Stores persistent memory as human-readable YAML engrams on local disk</li>
-      <li>Uses hybrid BM25 and vector search for zero-cost local retrieval</li>
-      <li>Integrates with Hermes Agent, Claude Code, Cursor, and OpenClaw</li>
+      <li>Open YAML engram format for readable, editable agent memory</li>
+      <li>Local-first, data-sovereign storage with zero-cost search</li>
+      <li>Cross-tool compatibility via MCP and dedicated Python/JS SDKs</li>
     </ul>
   </div>
 </section>
@@ -157,6 +157,7 @@
 <h3>Benchmarks</h3>
 <p>PLUR is memory, not just retrieval — so we measure it on more than one axis.</p>
 <p><strong>Retrieval recall</strong> — LongMemEval (R@5, chunk granularity):</p>
+<p><em>Shipping config (BGE-small embeddings, n=30 fixture):</em></p>
 <table>
 <thead>
 <tr>
@@ -166,9 +167,34 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>PLUR hybrid + reranker</strong></td>
-<td><strong>97.6%</strong></td>
-<td>fully local cross-encoder — no API</td>
+<td>PLUR default (hybrid, no reranker)</td>
+<td>76.7%</td>
+<td>out-of-the-box — no model downloads</td>
+</tr>
+<tr>
+<td><strong>+ ms-marco-minilm-l6 reranker</strong></td>
+<td><strong>83.3%</strong></td>
+<td>recommended opt-in — <code>PLUR_RERANKER=ms-marco-minilm-l6</code>, p50≈245ms</td>
+</tr>
+<tr>
+<td>+ bge-reranker-v2-m3 (max quality)</td>
+<td>90.0%</td>
+<td>fully local cross-encoder — p50≈5s on CPU</td>
+</tr>
+</tbody></table>
+<p><em>Full LongMemEval-S corpus (N=500, openai-3-large embeddings):</em></p>
+<table>
+<thead>
+<tr>
+<th>Stack</th>
+<th>R@5</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PLUR hybrid + bge-reranker-v2-m3</td>
+<td>97.6%</td>
+<td>max quality — not production-suitable on CPU</td>
 </tr>
 <tr>
 <td>PLUR hybrid (openai-3-large embeddings)</td>
@@ -198,7 +224,7 @@
 <p>One command sets up everything — storage, MCP config, and Claude Code hooks:</p>
 <pre><code class="language-bash">npx @plur-ai/mcp init
 </code></pre>
-<p>This creates <code>~/.plur/</code> for storage, adds PLUR to your <code>.mcp.json</code>, and installs Claude Code hooks for automatic engram injection. PLUR is installed <strong>globally</strong> — one MCP server, one store, available in every project. You only run init once.</p>
+<p>This creates <code>~/.plur/</code> for storage, adds PLUR to your <code>.mcp.json</code>, and installs Claude Code hooks for automatic engram injection. The hooks also <strong>auto-close the memory lifecycle</strong>: a <code>SessionEnd</code> hook captures a closing episode and cleans up session state when a conversation ends, so memory closes cleanly even if the agent forgets to call <code>plur_session_end</code>. PLUR is installed <strong>globally</strong> — one MCP server, one store, available in every project. You only run init once.</p>
 <p>For <strong>multi-project setups</strong>, use domain/scope to separate knowledge:</p>
 <pre><code class="language-bash">cd ~/projects/my-app
 npx @plur-ai/cli@0.10.1 init --domain myapp --scope project:my-app
@@ -303,6 +329,10 @@ plur.sync('git@github.com:you/plur-memory.git')
 <tbody><tr>
 <td><code>plur_learn</code></td>
 <td>Store a correction, preference, or convention</td>
+</tr>
+<tr>
+<td><code>plur_learn_batch</code></td>
+<td>Store many engrams in one call (batch dedup + per-item failure isolation)</td>
 </tr>
 <tr>
 <td><code>plur_recall_hybrid</code></td>
@@ -549,7 +579,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 211</div>
+        <div class="stars">★ 210</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -557,7 +587,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 25.3K</div>
+        <div class="stars">★ 25.4K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

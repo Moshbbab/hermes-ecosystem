@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nujovich/hermes-telemetry#software",
   "name": "hermes-telemetry",
-  "description": "hermes-telemetry is an observability and budget enforcement plugin for Hermes Agent that prevents runaway costs during autonomous runs. It integrates directly into the runtime to track tokens and costs in real time, blocking LLM calls before they exceed defined spending limits. The tool utilizes a SQLite database with WAL mode and automatically syncs pricing from OpenRouter. Users can monitor usage via a local web dashboard or through dedicated slash commands like /stats and /budget.",
+  "description": "hermes-telemetry is an observability and budget enforcement plugin for Hermes Agent that prevents runaway costs during autonomous runs. It integrates directly into the runtime to track tokens and costs in real time, allowing it to block LLM calls before they exceed defined spending limits. The tool provides cost analysis via a local web dashboard and slash commands, utilizing a SQLite database and automatic OpenRouter pricing synchronization.",
   "url": "https://hermesatlas.com/projects/nujovich/hermes-telemetry",
   "codeRepository": "https://github.com/nujovich/hermes-telemetry",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "nujovich",
     "url": "https://github.com/nujovich"
   },
-  "dateModified": "2026-07-07T04:13:10.000Z",
+  "dateModified": "2026-07-07T18:11:24.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-telemetry is an observability and budget enforcement plugin for Hermes Agent that prevents runaway costs during autonomous runs. It integrates directly into the runtime to track tokens and costs in real time, blocking LLM calls before they exceed defined spending limits. The tool utilizes a SQLite database with WAL mode and automatically syncs pricing from OpenRouter. Users can monitor usage via a local web dashboard or through dedicated slash commands like /stats and /budget.</p>
+    <p class="summary-text">hermes-telemetry is an observability and budget enforcement plugin for Hermes Agent that prevents runaway costs during autonomous runs. It integrates directly into the runtime to track tokens and costs in real time, allowing it to block LLM calls before they exceed defined spending limits. The tool provides cost analysis via a local web dashboard and slash commands, utilizing a SQLite database and automatic OpenRouter pricing synchronization.</p>
     <ul class="summary-highlights">
       <li>Blocks LLM calls mid-session to enforce hard budget limits</li>
-      <li>Automatic pricing synchronization for OpenRouter providers</li>
-      <li>Local HTML dashboard and slash commands for cost analysis</li>
+      <li>Real-time token and cost tracking via runtime hooks</li>
+      <li>Visual cost analysis through a local HTML dashboard</li>
     </ul>
   </div>
 </section>
@@ -229,6 +229,7 @@ explicit <code>pricing.yaml</code> entry overrides the automatic <code>$0</code>
 </ul>
 </li>
 <li><a href="#configuration">Configuration</a><ul>
+<li><a href="#shared-telemetry-home-hermes_telemetry_home">Shared telemetry home (HERMES_TELEMETRY_HOME)</a></li>
 <li><a href="#pricingyaml">pricing.yaml</a></li>
 <li><a href="#budgetyaml">budget.yaml</a></li>
 </ul>
@@ -438,7 +439,7 @@ ln -s ~/.hermes/plugins/hermes-telemetry/hermes-telemetry ~/.local/bin/hermes-te
 <li><code>sessions:top</code> — last run summary (cost · tokens · model).</li>
 <li><code>cron:top</code> — 7-day cron cost and failure badge.</li>
 <li><code>header-right</code> — 24h spend + global daily budget level (semáforo).</li>
-<li><code>analytics:bottom</code> — daily cost chart (Chart.js loaded from CDN).</li>
+<li><code>analytics:bottom</code> — daily cost chart (Chart.js served from a vendored local asset; CDN fallback only).</li>
 </ul>
 </li>
 </ul>
@@ -877,6 +878,15 @@ one).</p>
 └── budget.yaml       ← optional spend budgets
 </code></pre>
 <p>If these files don’t exist, the plugin still works — it just uses defaults (all models at $0.00, budgets disabled).</p>
+<h4>Shared telemetry home (<code>HERMES_TELEMETRY_HOME</code>)</h4>
+<p>By default the <code>telemetry/</code> directory above resolves from your Hermes home (<code>HERMES_HOME</code>; <code>~/.hermes/</code> for the default profile), so <strong>each Hermes profile keeps its own separate telemetry</strong>.</p>
+<p>If you run multiple profiles and want a single <strong>shared cost center</strong> — one <code>telemetry.db</code>, one <code>budget.yaml</code>, and one <code>pricing.yaml</code> that every profile reads and writes — set the opt-in <code>HERMES_TELEMETRY_HOME</code> to a common directory in each profile's environment:</p>
+<pre><code class="language-bash">export HERMES_TELEMETRY_HOME=~/.hermes-shared
+</code></pre>
+<p>Telemetry paths resolve with precedence <strong><code>HERMES_TELEMETRY_HOME</code> › <code>HERMES_HOME</code> › <code>~/.hermes</code></strong>. When unset, nothing changes — each profile keeps its own (profile-tagged) telemetry dir.</p>
+<blockquote>
+<p>This relocates <strong>telemetry files only</strong> (<code>telemetry.db</code>, <code>budget.yaml</code>, <code>pricing.yaml</code>). It never moves Hermes's own <code>state.db</code> or <code>cron/</code>, which stay on <code>HERMES_HOME</code>.</p>
+</blockquote>
 <h4><code>pricing.yaml</code></h4>
 <p>Override model prices in USD per 1 million tokens. Without overrides, unknown models log a one-time warning and record cost as <code>$0.00</code>.</p>
 <p><strong>Full format:</strong></p>
@@ -945,6 +955,12 @@ the provider's <strong>native model id</strong> so it stays distinct from a look
     overrides:
       premium_user_123:
         daily_usd: 5.00
+  per_profile:
+    default:
+      daily_usd: 2.00
+    overrides:
+      coder:
+        daily_usd: 10.00
 
 thresholds:
   soft_pct: 0.80    # warn at 80% of limit
@@ -972,6 +988,10 @@ on_estimated:
 <tr>
 <td><code>per_sender</code></td>
 <td>Sessions from a specific sender (multi-user gateways)</td>
+</tr>
+<tr>
+<td><code>per_profile</code></td>
+<td>Sessions tagged with a specific Hermes profile (<code>ctx.profile_name</code>)</td>
 </tr>
 </tbody></table>
 <p><strong>Window math:</strong> daily and monthly windows are computed in the user’s local timezone. A cron job that runs at 11:59 PM and another at 12:01 AM count against different daily windows.</p>
@@ -1218,45 +1238,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
 <hr>
 <h3>Proof of Concept</h3>
 <p>The following PoC was executed live to validate the plugin end-to-end.</p>
-<h4>Setup</h4>
-<ul>
-<li><strong>Hermes gateway</strong> running on Linux (WSL), model <code>openrouter/owl-alpha</code> (free tier)</li>
-<li><strong>Plugin:</strong> hermes-telemetry v0.2.0, loaded in gateway process</li>
-<li><strong>DB:</strong> <code>/home/nujovich/.hermes/telemetry/telemetry.db</code> (schema v3, WAL mode)</li>
-<li><strong>6 cron jobs</strong> configured, 2 used for this PoC</li>
-</ul>
-<h4>Pricing Capture</h4>
-<p>Added models to <code>~/.hermes/telemetry/pricing.yaml</code>:</p>
-<pre><code class="language-yaml">models:
-  "openrouter/owl-alpha":
-    input: 0.00
-    output: 0.00
-  "openrouter/anthropic/claude-sonnet-4-6":
-    input: 3.00
-    output: 15.00
-    cache_read: 0.30
-    cache_write: 3.75
-  "openrouter/anthropic/claude-opus-4-7":
-    input: 5.00
-    output: 25.00
-    cache_read: 0.50
-    cache_write: 6.25
-</code></pre>
-<p>Set <code>on_estimated.mode: enforce</code> for deterministic enforcement.</p>
-<h4>Budget Enforcement Test</h4>
-<p><strong>Step 1 — Trigger a hard breach:</strong></p>
-<ul>
-<li>Budget: <code>global.daily_usd: 0.001</code> ($0.001/day)</li>
-<li>Ran MCP Lead Gen job (model: <code>claude-sonnet-4-6</code>, ~$3/$15 per 1M)</li>
-<li>Result: job spent $0.1812 on first run → <strong>18,120% of daily limit</strong> → █ hard breach → <strong>job auto-paused</strong></li>
-</ul>
-<pre><code>█ global    $0.1812 / $0.00    18120%  [daily]
-                         ↑ (0.001 rounded to 0.00 in display)
-</code></pre>
-<p><strong>Step 2 — Raise budget and resume:</strong></p>
-<pre><code>/budget set global daily 2.00
-</code></pre>
-<p>Result after `/budget </p>
+<h4>Setu</h4>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nujovich/hermes-telemetry#readme">Continue reading on GitHub</a></em></p>
 
@@ -1271,7 +1253,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 326</div>
+        <div class="stars">★ 327</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
@@ -1295,7 +1277,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 355</div>
+        <div class="stars">★ 354</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

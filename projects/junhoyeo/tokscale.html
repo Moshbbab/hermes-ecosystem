@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a tool designed to help developers monitor and analyze token consumption and costs across various AI coding agents. It functions by parsing local data files and databases from multiple AI clients to provide\u003cpad>\u003cpad>汇总 usage statistics. The tool features a high-performance Rust-based TUI and a visualization dashboard for tracking consumption patterns. It supports a wide range of integrations including Claude Code, Hermes Agent, Cursor, and GitHub Copilot CLI.",
+  "description": "Tokscale is a high-performance CLI tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It works by scanning local database files and session logs from supported clients to aggregate usage metrics into a unified interface. Users can view daily summaries, model-specific statistics, and 3D contribution graphs through a native Rust TUI or a web-based frontend. The tool supports a wide range of integrations including Hermes Agent,",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-07-07T06:47:20.000Z",
+  "dateModified": "2026-07-07T18:10:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4172
+    "userInteractionCount": 4191
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a tool designed to help developers monitor and analyze token consumption and costs across various AI coding agents. It functions by parsing local data files and databases from multiple AI clients to provide&lt;pad&gt;&lt;pad&gt;汇总 usage statistics. The tool features a high-performance Rust-based TUI and a visualization dashboard for tracking consumption patterns. It supports a wide range of integrations including Claude Code, Hermes Agent, Cursor, and GitHub Copilot CLI.</p>
+    <p class="summary-text">Tokscale is a high-performance CLI tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It works by scanning local database files and session logs from supported clients to aggregate usage metrics into a unified interface. Users can view daily summaries, model-specific statistics, and 3D contribution graphs through a native Rust TUI or a web-based frontend. The tool supports a wide range of integrations including Hermes Agent, Claude Code, GitHub Copilot CLI, and Cursor.</p>
     <ul class="summary-highlights">
-      <li>High-performance Rust-based TUI and dashboard</li>
-      <li>Supports&lt;pad&gt;广泛 AI agents like Claude Code and Hermes</li>
-      <li>Tracks token usage and cost across multiple platforms</li>
+      <li>Tracks token usage and costs across multiple AI coding agents</li>
+      <li>Features a native Rust TUI and 3D visualization dashboard</li>
+      <li>Supports Hermes Agent, Claude Code, Gemini, and Cursor integrations</li>
     </ul>
   </div>
 </section>
@@ -548,7 +548,7 @@ I drop new open-source work every week. Don't miss the next one.</p>
 <li><strong>Interactive TUI Mode</strong> - Beautiful terminal UI powered by Ratatui (default mode)<ul>
 <li>6 interactive views: Overview, Models, Daily, Hourly, Stats, Agents (plus an optional Minutely view, opt-in via <code>minutelyTabEnabled</code>)</li>
 <li>Keyboard &amp; mouse navigation</li>
-<li>GitHub-style contribution graph with 9 color themes</li>
+<li>GitHub-style contribution graph with configurable color themes</li>
 <li>Real-time filtering and sorting</li>
 <li>Zero flicker rendering</li>
 </ul>
@@ -655,14 +655,14 @@ tokscale models --json &gt; report.json   # Save to file
 <li><code>h</code>: Toggle Daily/Hourly chart granularity (Overview tab)</li>
 <li><code>v</code>: Toggle Table/Profile view (Hourly tab)</li>
 <li><code>y</code>: Copy selected row to clipboard</li>
-<li><code>p</code>: Cycle through 9 color themes</li>
+<li><code>p</code>: Cycle through color themes</li>
 <li><code>r</code>: Refresh data; <code>Shift+R</code> toggles auto-refresh; <code>+</code>/<code>-</code> adjusts interval</li>
 <li><code>e</code>: Export to JSON</li>
 <li><code>q</code> or <code>Ctrl+C</code>: Quit</li>
 </ul>
 </li>
 <li><strong>Mouse Support</strong>: Click tabs, buttons, and filters</li>
-<li><strong>Themes</strong>: Green, Halloween, Teal, Blue, Pink, Purple, Orange, Monochrome, YlGnBu</li>
+<li><strong>Themes</strong>: Green, Halloween, Teal, Blue, Pink, Purple, Orange, Monochrome, YlGnBu, Graphite, Lagoon, Dusk</li>
 <li><strong>Settings Persistence</strong>: Preferences saved to <code>~/.config/tokscale/settings.json</code> (see <a href="#configuration">Configuration</a>)</li>
 </ul>
 <h4>Group-By Strategies</h4>
@@ -1347,7 +1347,7 @@ tokscale codex status --name personal --json
 <td><code>colorPalette</code></td>
 <td>string</td>
 <td><code>"blue"</code></td>
-<td>TUI color theme (green, halloween, teal, blue, pink, purple, orange, monochrome, ylgnbu)</td>
+<td>TUI color theme (green, halloween, teal, blue, pink, purple, orange, monochrome, ylgnbu, graphite, lagoon, dusk)</td>
 </tr>
 <tr>
 <td><code>includeUnusedModels</code></td>
@@ -1383,7 +1383,7 @@ tokscale codex status --name personal --json
 <td><code>light.writeCache</code></td>
 <td>boolean</td>
 <td><code>false</code></td>
-<td>When true, <code>tokscale --light</code> overwrites the TUI cache atomically after rendering. CLI flags <code>--write-cache</code> / <code>--no-write-cache</code> override</td>
+<td>When true, <code>tokscale --light</code> overwrites the TUI cache atomically after rendering.</td>
 </tr>
 </tbody></table>
 <hr>
@@ -1400,7 +1400,7 @@ tokscale codex status --name personal --json
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 58.2K</div>
+        <div class="stars">★ 58.3K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
@@ -1416,7 +1416,7 @@ tokscale codex status --name personal --json
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 514</div>
+        <div class="stars">★ 513</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
