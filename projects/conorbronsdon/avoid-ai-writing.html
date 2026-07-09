@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "This project is a portable writing skill designed to audit and rewrite text to eliminate detectable AI patterns and \"AI-isms.\" It utilizes a structured two-pass system that flags specific issues like chatbot openers, promotional language, and over-polished uniformity before applying fixes. The tool relies on a 109-entry word replacement table and 51 pattern categories to ensure prose sounds human and natural. It supports multiple modes including detect-only, edit-in-place, and custom voice profi",
+  "description": "Avoid-ai-writing is a portable skill for AI agents that audits and rewrites text to eliminate detectable machine-generated patterns. It uses a structured two-pass detection system and a 109-entry word replacement table to replace common \"AI-isms\" with plainer, human-like alternatives. The tool supports three distinct modes—Rewrite, Detect, and Edit—allowing users to either scan for patterns or perform targeted, in-place file modifications. It integrates with various agent frameworks including He",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-07-08T04:02:12.000Z",
+  "dateModified": "2026-07-08T19:59:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2213
+    "userInteractionCount": 2244
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This project is a portable writing skill designed to audit and rewrite text to eliminate detectable AI patterns and &quot;AI-isms.&quot; It utilizes a structured two-pass system that flags specific issues like chatbot openers, promotional language, and over-polished uniformity before applying fixes. The tool relies on a 109-entry word replacement table and 51 pattern categories to ensure prose sounds human and natural. It supports multiple modes including detect-only, edit-in-place, and custom voice profiles for professional or casual contexts.</p>
+    <p class="summary-text">Avoid-ai-writing is a portable skill for AI agents that audits and rewrites text to eliminate detectable machine-generated patterns. It uses a structured two-pass detection system and a 109-entry word replacement table to replace common &quot;AI-isms&quot; with plainer, human-like alternatives. The tool supports three distinct modes—Rewrite, Detect, and Edit—allowing users to either scan for patterns or perform targeted, in-place file modifications. It integrates with various agent frameworks including Hermes, Claude Code, and OpenClaw through a standardized SKILL.md format.</p>
     <ul class="summary-highlights">
-      <li>Identifies 51 pattern categories and 109 specific word replacements</li>
-      <li>Performs two-pass audits to catch lingering AI writing signatures</li>
-      <li>Supports rewrite, detect-only, and targeted edit-in-place modes</li>
+      <li>Identifies 53 pattern categories including structural tells and conversational registers</li>
+      <li>Three operational modes for auditing, rewriting, or targeted in-place editing</li>
+      <li>Tiered word replacement system for precise, non-vibes-based text refinement</li>
     </ul>
   </div>
 </section>
@@ -178,7 +178,7 @@
 <li><strong>Structured audit</strong> — returns identified issues with quoted text, the rewrite, a change summary, and a second-pass audit in four discrete sections. You see exactly what changed and why.</li>
 <li><strong>Two-pass detection</strong> — the second pass re-reads the rewrite and catches patterns that survive the first edit: recycled transitions, lingering inflation, copula swaps that snuck through.</li>
 <li><strong>109-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 words always flag, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
-<li><strong>51 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
+<li><strong>53 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
 <li><strong>Detect mode</strong> — flag patterns without rewriting. See which flags are real problems vs. judgment calls. Useful when patterns might be intentional or you're auditing content you don't want altered.</li>
 <li><strong>Works across platforms</strong> — one <code>SKILL.md</code> runs in Claude Code, Cowork (as a plugin), OpenClaw, and Cursor (as a ported rule). See the install paths below.</li>
 </ul>
@@ -678,6 +678,30 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 <td>Use a colon, not a period, on a list label: <code>- **Intros:** years of conferences and operator network.</code></td>
 </tr>
 </tbody></table>
+<h4>Conversational-register patterns (v3.15)</h4>
+<p>Added after a real-world exchange in which a maintainer called out an assisted-sounding GitHub issue reply with "I prefer to talk human to human." Both are judgment calls rather than regex-detectable (an ordinary human paragraph and an AI-generated one can look structurally identical; the tell is the register and the redundant context, not a fixed shape) — see the <code>detector/CATEGORIES.md</code> §C note for why a first attempt at a wall-of-text detector was reverted.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pattern</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>52</td>
+<td><strong>Wall-of-text replies</strong></td>
+<td>A 4+ sentence, sub-150-word reply delivered as one unbroken paragraph with no line breaks — the shape LLMs default to in issue/PR comments, chat, and DMs</td>
+<td>Break at thought boundaries. One idea per line-group, the way a person actually types a reply</td>
+</tr>
+<tr>
+<td>53</td>
+<td><strong>Recap-flattery opener</strong></td>
+<td>"Thanks for all the legwork here — the migration script and the rollback plan you worked through are what made this possible."</td>
+<td>Substance first. If thanks is warranted, one plain clause without the recap: "Thanks for the legwork — this looks right to me"</td>
+</tr>
+</tbody></table>
 <p>Two writer-side <strong>tests</strong> round out the catalog (judgment checks, not auto-detected): <strong>paragraph-reshuffle immunity</strong> (can you swap two body paragraphs without breaking the piece?) and the <strong>treadmill effect</strong> ("what's actually new in this paragraph?").</p>
 <h3>Full Example</h3>
 <p><strong>Before (AI-generated):</strong></p>
@@ -703,7 +727,7 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 <p>That's 35+ AI tells.</p>
 <h3>Run the detector</h3>
 <p>The skill ships a deterministic, zero-dependency detection engine in
-<a href="./detector/"><code>detector/</code></a> — the same 44-category engine the rules above
+<a href="./detector/"><code>detector/</code></a> — the same 45-category engine the rules above
 describe, as runnable code. It works in Node (<code>&gt;=18</code>) and the browser with no
 build step.</p>
 <p>It's also the single source of the numeric score: the skill itself (and <code>detect</code> mode) report <em>which</em> patterns are present and how severe (P0/P1/P2), and the engine is what turns those into one computed 0–100 <code>score</code>. There's deliberately no second, prose-estimated score in <code>SKILL.md</code> — one scorer, not two.</p>
@@ -749,7 +773,7 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 24.9K</div>
+        <div class="stars">★ 25.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/wondelai/skills">
@@ -757,7 +781,7 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 332</div>
+        <div class="stars">★ 333</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">

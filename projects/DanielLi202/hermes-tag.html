@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/DanielLi202/hermes-tag#software",
   "name": "hermes-tag",
-  "description": "Hermes Tag is a context-selection layer for Hermes that prevents the agent from processing entire chat histories or only the last message. It uses a ContextSelector to reconstruct bounded evidence—including original images, notes, and relevant replies—only when the agent is @-mentioned. This approach ensures per-chat memory isolation and provides a privacy-focused alternative to full-history RAG. It currently supports Feishu/Lark, Slack, and DingTalk, with the latter having reduced ambient conte",
+  "description": "Hermes Tag is a context-selection layer for Hermes Agent that enables Claude-Tag-style information retrieval on Feishu/Lark, Slack, and DingTalk. It uses a ContextSelector to reconstruct bounded evidence from images, notes, and relevant replies only when a user @-mentions the agent, rather than processing the entire chat history. The system maintains strict privacy through per-chat memory isolation and an auditable local storage boundary defined by an allowlist. It supports multimodal evidence a",
   "url": "https://hermesatlas.com/projects/DanielLi202/hermes-tag",
   "codeRepository": "https://github.com/DanielLi202/hermes-tag",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "DanielLi202",
     "url": "https://github.com/DanielLi202"
   },
-  "dateModified": "2026-06-30T05:53:04.000Z",
+  "dateModified": "2026-07-09T07:05:35.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -116,7 +116,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-30</span>
+    <span><span class="meta-label">updated</span>2026-07-09</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Tag is a context-selection layer for Hermes that prevents the agent from processing entire chat histories or only the last message. It uses a ContextSelector to reconstruct bounded evidence—including original images, notes, and relevant replies—only when the agent is @-mentioned. This approach ensures per-chat memory isolation and provides a privacy-focused alternative to full-history RAG. It currently supports Feishu/Lark, Slack, and DingTalk, with the latter having reduced ambient context capabilities.</p>
+    <p class="summary-text">Hermes Tag is a context-selection layer for Hermes Agent that enables Claude-Tag-style information retrieval on Feishu/Lark, Slack, and DingTalk. It uses a ContextSelector to reconstruct bounded evidence from images, notes, and relevant replies only when a user @-mentions the agent, rather than processing the entire chat history. The system maintains strict privacy through per-chat memory isolation and an auditable local storage boundary defined by an allowlist. It supports multimodal evidence and standing jobs while ensuring that unmentioned ambient messages are only used as short-term buffer context.</p>
     <ul class="summary-highlights">
-      <li>Retrieves bounded multimodal evidence instead of full chat transcripts.</li>
-      <li>Implements isolated per-chat memory to prevent cross-channel data leaks.</li>
-      <li>Supports Feishu/Lark, Slack, and DingTalk integrations.</li>
+      <li>Reconstructs bounded evidence from images and notes upon @-mention</li>
+      <li>Ensures per-chat memory isolation with no cross-channel data leakage</li>
+      <li>Provides auditable local storage with redacted event logging</li>
     </ul>
   </div>
 </section>
@@ -147,7 +147,7 @@
 <p><strong>Post the images, add your notes, let the thread run — then @ it. It already has everything that matters.</strong></p>
 <p>Use Hermes to bring Claude-Tag-style capability to your Feishu/Lark (and Slack). Drop a few images, add a note, let other people chime in — when you finally @-mention it, it pulls <em>those images (the originals), your note, and the relevant replies</em> — not just your last line, and never your whole history. Silent until mentioned; then it retrieves exactly the few messages that matter.</p>
 <p><a href="https://github.com/DanielLi202/hermes-tag/blob/main/README.md">English</a> · <a href="https://github.com/DanielLi202/hermes-tag/blob/main/README.zh-CN.md">中文</a></p>
-<p><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"> <img src="https://img.shields.io/badge/version-0.2.0-blue.svg" alt="Version: 0.2.0" loading="lazy" decoding="async"> <img src="https://img.shields.io/badge/hermes--agent-v2026.6.19-blue.svg" alt="hermes-agent: v2026.6.19" loading="lazy" decoding="async"> <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python: 3.11+" loading="lazy" decoding="async"></p>
+<p><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"> <img src="https://img.shields.io/badge/version-0.4.0-blue.svg" alt="Version: 0.4.0" loading="lazy" decoding="async"> <img src="https://img.shields.io/badge/hermes--agent-tested%20against%20v2026.6.19-blue.svg" alt="hermes-agent: tested against v2026.6.19" loading="lazy" decoding="async"> <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python: 3.11+" loading="lazy" decoding="async"></p>
 <p align="center"><img src="https://raw.githubusercontent.com/DanielLi202/hermes-tag/main/docs/demo.en.gif" alt="In a Feishu/Lark group you post three charts, add a few notes, drop an unrelated 'Lunch at 12?' line, then @ Hermes Tag last — it answers in-thread with numbered key takeaways drawn from the charts' originals, your notes, and the relevant discussion, and flags the unrelated line as not a conclusion." width="760"></p>
 
 <p align="center"><sub>Real screen recording · <a href="docs/demo.en.mp4">HD MP4</a></sub></p>
@@ -220,12 +220,15 @@ platforms:
         admins: [ou_xxx_admin_open_id]
         encryption_posture: plaintext-db-on-local-disk
 </code></pre>
-<p>Full onboarding + live verification: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/after-install.md">after-install.md</a>. Slack setup: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/slack-setup.md">docs/slack-setup.md</a>. DingTalk setup + capability limits: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/dingtalk.md">docs/dingtalk.md</a>.</p>
+<p><code>bot_open_id</code> and <code>admins</code> must be Feishu open_id values (<code>ou_...</code>). This plugin does not need <code>contact:user.employee_id:readonly</code>; it normalizes sender identity to open_id even when that scope is granted.</p>
+<p>On first use, Hermes Tag live-verifies <code>granted_scopes</code> against the Feishu app and DMs configured admins if the config claims <code>im:message.group_msg</code> but the app does not actually hold it. That catches the silent failure mode where non-@ group messages are never delivered, so Tier-0 group context stays @-only.</p>
+<p>Full onboarding + live verification: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/after-install.md">after-install.md</a>. Slack setup: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/slack-setup.md">docs/slack-setup.md</a>. DingTalk setup + capability limits: see <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/dingtalk.md">docs/dingtalk.md</a>. Hitting something that looks broken? Check <a href="https://github.com/DanielLi202/hermes-tag/blob/main/docs/known-limits.md">docs/known-limits.md</a> — it maps common symptoms to Feishu-platform / hermes-core limits this plugin can't fix.</p>
 <h3>Usage</h3>
 <p>In groups, <code>/tag</code> commands require @-mention.</p>
 <ul>
-<li><code>/tag status</code></li>
-<li><code>/tag admin count|clear|disable|audit</code></li>
+<li><code>/tag status</code> -&gt; admin-only; reports the adapter platform, capability flags (<code>tier0_full_ingest</code> / <code>l2_context</code> / <code>tier1_at_memory</code>), and current per-chat metrics.</li>
+<li><code>/tag admin count</code> -&gt; returns retained-state counts such as <code>tier0=... tier1=... standing_jobs=...</code>.</li>
+<li><code>/tag admin clear|disable|audit</code> -&gt; clears plugin data, disables plugin storage for the chat, or returns redacted audit events.</li>
 <li><code>/tag standing add &lt;schedule&gt; &lt;timezone&gt; &lt;description&gt;</code> then <code>/tag standing confirm</code></li>
 <li><code>/tag standing list|cancel &lt;id&gt;|pause &lt;id&gt;|enable &lt;id&gt;</code></li>
 </ul>
@@ -299,7 +302,7 @@ platforms:
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 377</div>
+        <div class="stars">★ 379</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -319,11 +322,11 @@ platforms:
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 671</div>
+        <div class="stars">★ 675</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 53</div>
+        <div class="stars">★ 55</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

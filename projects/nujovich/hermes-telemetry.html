@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nujovich/hermes-telemetry#software",
   "name": "hermes-telemetry",
-  "description": "hermes-telemetry is an observability and budget enforcement plugin for Hermes Agent that prevents runaway costs during autonomous runs. It integrates directly into the runtime to track tokens and costs in real time, allowing it to block LLM calls before they exceed defined spending limits. The tool provides cost analysis via a local web dashboard and slash commands, utilizing a SQLite database and automatic OpenRouter pricing synchronization.",
+  "description": "Hermes Telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime that prevents runaway costs during autonomous operations. It integrates directly into the agent's hook pipeline to track token usage and costs in real-time, allowing it to block LLM calls before a budget breach occurs. The tool features a local SQLite database for logging, a web-based dashboard for visual analysis, and slash commands for session analytics. It also includes automatic pricing synchroniz",
   "url": "https://hermesatlas.com/projects/nujovich/hermes-telemetry",
   "codeRepository": "https://github.com/nujovich/hermes-telemetry",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "nujovich",
     "url": "https://github.com/nujovich"
   },
-  "dateModified": "2026-07-08T04:11:24.000Z",
+  "dateModified": "2026-07-09T04:25:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 16
+    "userInteractionCount": 17
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">Budget enforcement + observability plugin for Hermes Agent. Stops runaway costs before they happen.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 16</span>
+    <span class="stars">★ 17</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-08</span>
+    <span><span class="meta-label">updated</span>2026-07-09</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-telemetry is an observability and budget enforcement plugin for Hermes Agent that prevents runaway costs during autonomous runs. It integrates directly into the runtime to track tokens and costs in real time, allowing it to block LLM calls before they exceed defined spending limits. The tool provides cost analysis via a local web dashboard and slash commands, utilizing a SQLite database and automatic OpenRouter pricing synchronization.</p>
+    <p class="summary-text">Hermes Telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime that prevents runaway costs during autonomous operations. It integrates directly into the agent's hook pipeline to track token usage and costs in real-time, allowing it to block LLM calls before a budget breach occurs. The tool features a local SQLite database for logging, a web-based dashboard for visual analysis, and slash commands for session analytics. It also includes automatic pricing synchronization for OpenRouter and supports custom budget caps for daily or global spending limits.</p>
     <ul class="summary-highlights">
-      <li>Blocks LLM calls mid-session to enforce hard budget limits</li>
-      <li>Real-time token and cost tracking via runtime hooks</li>
-      <li>Visual cost analysis through a local HTML dashboard</li>
+      <li>Enforces hard budget limits by blocking overspending before API calls.</li>
+      <li>Tracks real-time token usage and costs via runtime hook integration.</li>
+      <li>Provides a web dashboard and slash commands for detailed analytics.</li>
     </ul>
   </div>
 </section>
@@ -442,6 +442,7 @@ ln -s ~/.hermes/plugins/hermes-telemetry/hermes-telemetry ~/.local/bin/hermes-te
 <li><code>analytics:bottom</code> — daily cost chart (Chart.js served from a vendored local asset; CDN fallback only).</li>
 </ul>
 </li>
+<li><strong>Profile filter</strong> — when telemetry is consolidated via <code>HERMES_TELEMETRY_HOME</code>, a selector in the Telemetry tab filters every view (Summary / Runs / Requests / Providers / Cron) by Hermes profile. Hidden when no profile data is present.</li>
 </ul>
 <h4>How discovery works</h4>
 <p>When the Hermes dashboard process starts, it scans for <code>~/.hermes/plugins/&lt;name&gt;/dashboard/manifest.json</code> (verified against <a href="https://github.com/NousResearch/hermes-agent/blob/main/hermes_cli/web_server.py"><code>hermes_cli/web_server.py</code></a>). Because the standalone dashboard at <code>dashboard/serve.py</code> and the plugin manifest at <code>dashboard/manifest.json</code> live in the same directory, <strong>a single <code>git pull</code> brings both surfaces up to date</strong>.</p>
@@ -510,7 +511,26 @@ hermes gateway restart
 <td><code>/budget</code></td>
 <td>Global daily/monthly budget status.</td>
 </tr>
+<tr>
+<td>GET</td>
+<td><code>/efficiency?window_hours=24</code></td>
+<td>Per-session efficiency scores + average (Efficiency sub-tab).</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/smells?window_hours=24</code></td>
+<td>Detected anti-patterns (top-of-page alert widget).</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/forecast?window=monthly</code></td>
+<td>Global burn-rate projection (shown in the Budgets panel).</td>
+</tr>
 </tbody></table>
+<p>Both dashboards surface all three intelligence features. The standalone
+dashboard exposes the parallel routes <code>/api/efficiency</code>, <code>/api/smells</code>, and
+<code>/api/budget/forecast</code>, rendered as panels in the Breakdown, Error, and Home
+tabs respectively.</p>
 <h4>The two dashboards: when to use each</h4>
 <table>
 <thead>
@@ -557,13 +577,19 @@ hermes-telemetry stats cron-week
 hermes-telemetry stats providers
 hermes-telemetry stats models
 
+# Agent intelligence
+hermes-telemetry stats efficiency          # per-session efficiency scores (0-100)
+hermes-telemetry stats smells              # anti-pattern detection
+
 # Budget status
 hermes-telemetry budget
 hermes-telemetry budget cron
+hermes-telemetry budget forecast monthly   # burn-rate projection (defaults: monthly, global)
 
 # JSON output (for scripting)
 hermes-telemetry stats today --json | jq ‘.cost_usd’
 hermes-telemetry budget --json | jq ‘.global’
+hermes-telemetry budget forecast daily --json | jq ‘.status’
 </code></pre>
 <p>All subcommands read from the same SQLite database as the in-session <code>/stats</code> and
 <code>/budget</code> slash commands. The gateway does not need to be running.</p>
@@ -709,6 +735,10 @@ changes require a restart.</p>
 /stats providers week   → provider breakdown, last 7 days
 /stats models           → per-model breakdown within each provider (last 24h)
 /stats models week      → per-model breakdown, last 7 days
+/stats efficiency       → per-session efficiency scores (0-100, last 24h)
+/stats efficiency week  → efficiency scores, last 7 days
+/stats smells           → AI smell detection: anti-patterns in sessions (last 24h)
+/stats smells week      → AI smell detection, last 7 days
 /stats raw [N]          → last N raw run records (default 20, max 200)
 </code></pre>
 <p>Any subcommand also accepts <code>--from &lt;iso&gt;</code> and <code>--to &lt;iso&gt;</code> (inclusive /
@@ -779,13 +809,69 @@ for isolating "post-deploy" or "post-fix" data without waiting 24 h. Examples:</
 <li><strong><code>no price entry</code></strong> — there is no row for this model in <code>pricing.yaml</code>. The $0 means Hermes had nothing to multiply by; run <code>/setup pricing auto</code> to refresh, or add a manual entry.</li>
 </ul>
 <p>The footer reflects the same split: subscription rows are claimed as declared, no-entry rows keep the original <code>/setup pricing auto</code> hint, and a mixed window emits both lines.</p>
+<p><strong>Example output (<code>/stats efficiency</code>):</strong></p>
+<pre><code>hermes-telemetry -- efficiency score (last 24 h)
+========================================================================
+  Average efficiency: 71.4/100
+  Sessions scored: 12
+
+   Score Status        APICalls    Tok in   Tok out         Cost  Session
+  -------------------------------------------------------------------------------------
+    97.0 ok                   2       200       400    $0.002000  9f2c1a7b8e04
+    68.5 interrupted          1       100       100    $0.001000  1c0d44ab90f2
+    48.5 error                1       100       100    $0.001000  7a3e55cd21b8
+
+  Score ranges: 90+ Excellent, 70-89 Good, 50-69 Fair, &lt;50 Needs attention
+  Formula: base(40) + output_ratio(0-60) - error_penalty(0-30) - turn_penalty(0-30)
+</code></pre>
+<p>A per-session productivity score (0-100) computed from data already in the
+database — no new telemetry. Higher <code>tokens_out / tokens_in</code>, fewer API turns,
+and a clean (<code>ok</code>) finish score higher; an <code>error</code> finish costs 30 points and an
+<code>interrupted</code> finish costs 10. Scores are computed over the 100 most recent
+completed sessions in the window, then ranked best-first. See
+<a href="https://github.com/nujovich/hermes-telemetry/blob/main/ONBOARDING.md#agent-intelligence-efficiency--smells--forecast">ONBOARDING.md § Agent Intelligence</a>
+for the exact formula.</p>
+<p><strong>Example output (<code>/stats smells</code>):</strong></p>
+<pre><code>hermes-telemetry -- AI smell detection (last 24 h)
+========================================================================
+  Smells detected: 3
+
+  Context Rotation     : 1
+  High Error Rate      : 1
+  Tool Thrashing       : 1
+
+  Sev    Smell                Session                     Detail
+  ----------------------------------------------------------------------
+  HIGH   Context Rotation     9f2c1a7b8e04                12,400 tokens in vs 480 tokens out ...
+  HIGH   Tool Thrashing       1c0d44ab90f2                9/24 tool calls failed (37.5% failure rate)
+  WARN   High Error Rate      7a3e55cd21b8                Session ended with status 'error' ...
+
+  Smell types:
+    Context Rotation  — input tokens vastly outnumber output
+    Loop Trap         — single tool call dominates the session
+    Tool Thrashing    — many tool calls with high failure rate
+    High Error Rate   — elevated session failure rate
+    Massive Session   — extreme token/API call volumes
+  Severity: HIGH &gt; MED &gt; WARN
+</code></pre>
+<p>Flags anti-patterns in agent sessions using heuristics over existing telemetry.
+Each smell carries a severity (<code>HIGH</code>/<code>MED</code>/<code>WARN</code>) and a human-readable detail.
+Detection is best-effort: a broken detector is logged and skipped, never
+crashing the command. See
+<a href="https://github.com/nujovich/hermes-telemetry/blob/main/ONBOARDING.md#agent-intelligence-efficiency--smells--forecast">ONBOARDING.md § Agent Intelligence</a>
+for every threshold.</p>
 <h4><code>/budget</code></h4>
 <pre><code>/budget                             → status of every scope (spent / limit / %)
 /budget cron                        → per-cron-job budgets, with soft/hard flags
 /budget set global daily 5.00       → set or raise a limit (persists + hot-reloads)
 /budget set cron_job daily 1.00     → set default per-cron-job limit
 /budget set sender daily 2.00       → set default per-sender limit
+/budget forecast [daily|monthly] [scope] [id]  → project burn rate toward the limit
 </code></pre>
+<p><code>forecast</code> defaults to the <code>monthly</code> window and the <code>global</code> scope. It learns a
+recent daily spend rate (moving average over the last 14 days), projects spend
+to the end of the current window at that rate, and flags whether the scope is on
+track to breach. It is a read-only projection — it never mutates budget state.</p>
 <p><strong>Example output (<code>/budget</code>):</strong></p>
 <pre><code>hermes-telemetry — budget status
 ============================================================
@@ -818,6 +904,20 @@ for isolating "post-deploy" or "post-fix" data without waiting 24 h. Examples:</
 <td>Verdict based partly on estimated (usage=None) data</td>
 </tr>
 </tbody></table>
+<p><strong>Example output (<code>/budget forecast</code>):</strong></p>
+<pre><code>hermes-telemetry — burn-rate forecast
+============================================================
+  Scope:    global (monthly)
+  Limit:    $100.00
+  Spent:    $42.5000
+  Avg/day:  $3.1000 (last 14d)
+  Projected $85.30 (85%) by window end
+  At this rate: breach in ~18.5 days
+  ! Projected status: SOFT
+</code></pre>
+<p>The projected <code>status</code> uses the same thresholds as <code>/budget</code>: <code>ok</code> (&lt; 80%),
+<code>soft</code>/<code>!</code> (≥ 80%), <code>hard</code>/<code>X</code> (≥ 100%). A scope with no configured limit for the
+requested window is reported as not configured.</p>
 <hr>
 <h3>Dashboard (Web UI)</h3>
 <p>A standalone HTML dashboard for users who prefer a visual interface over slash commands. Zero dependencies — uses only Python stdlib.</p>
@@ -1165,80 +1265,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
 <p><strong><code>llm_calls</code></strong> — one row per individual API call:</p>
 <p>All of <code>runs</code> token/cost columns, plus <code>cache_read_tokens</code>, <code>cache_write_tokens</code>, <code>reasoning_tokens</code>, <code>estimated</code> (boolean).</p>
 <p><strong><code>tool_calls</code></strong> — one row per tool execution:</p>
-<p><code>session_id</code>, <code>ts</code>, <code>tool_name</code>, <code>ok</code> (boolean), <code>latency_ms</code>.</p>
-<p><strong><code>budget_alerts</code></strong> — anti-spam ledger:</p>
-<p><code>scope</code>, <code>scope_id</code>, <code>window</code>, <code>period_key</code>, <code>level</code>, <code>fired_at</code>, <code>spent_usd</code>, <code>limit_usd</code>. Unique constraint prevents duplicate alerts.</p>
-<p><strong><code>known_free_models</code></strong> — free→paid transition tracking (schema v5):</p>
-<p><code>model TEXT</code>, <code>provider TEXT</code>, <code>first_seen_at TEXT</code>. Primary key is <code>(model, provider)</code>. Every <code>(model, provider)</code> pair seen at explicit $0 is recorded here. A <code>provider=''</code> wildcard row is inserted at plugin load for all explicitly-$0 models in the pricing table, covering sessions started before a model was first seen live.</p>
-<h4>Concurrency Model</h4>
-<p>Cron jobs run in a <code>ThreadPoolExecutor</code> (Hermes <code>cron/scheduler.py</code>). Multiple jobs can write to the DB simultaneously from different threads.</p>
-<p><strong>Design:</strong> per-thread SQLite connections via <code>threading.local()</code>. Each thread opens its own connection to the same WAL-mode DB file. A serializable <code>_schema_lock</code> protects DDL migrations on first connect (WAL mode switch requires a brief lock that <code>busy_timeout</code> alone doesn’t handle).</p>
-<p><code>busy_timeout=5000</code> ensures write collisions retry for 5 seconds before raising. <code>synchronous=NORMAL</code> balances durability with write performance (safe for WAL mode).</p>
-<hr>
-<h3>Budget Enforcement</h3>
-<blockquote>
-<p>See the budget enforcement demo at the top of this README for an end-to-end walkthrough.</p>
-</blockquote>
-<h4>How It Works</h4>
-<p>Every time the agent is about to do work, the plugin checks:</p>
-<ol>
-<li><strong><code>pre_llm_call</code></strong> (fires once per turn): evaluates all applicable budget scopes. If any has a <code>soft</code> or <code>hard</code> verdict that hasn’t been alerted yet this window, injects a one-time notice into the conversation context (anti-spam via <code>budget_alerts</code> table). Also injects a one-shot warning when the current model was previously seen as free but is now incurring cost (free→paid transition). Captures <code>sender_id</code>.</li>
-<li><strong><code>pre_tool_call</code></strong> (fires before every tool): re-evaluates budgets. If any scope is in <code>hard</code> breach, returns <code>{"action":"block","message":...}</code> which aborts the tool call.</li>
-<li><strong>For cron jobs with <code>hard</code> breach:</strong> additionally calls <code>cron.jobs.pause_job</code> to pause future runs.</li>
-</ol>
-<h4>Enforcement Levels</h4>
-<p>Hermes does <strong>not</strong> expose a way to abort an in-flight model call from a plugin. <code>pre_llm_call</code> / <code>pre_api_request</code> returns can’t cancel a call. So enforcement is honest about its reach:</p>
-<table>
-<thead>
-<tr>
-<th>Level</th>
-<th>Trigger</th>
-<th>Effect</th>
-<th>Repeat?</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Soft</strong> (≥ <code>soft_pct</code>)</td>
-<td>Spend reaches 80% of limit (configurable)</td>
-<td>One-time notice injected into conversation</td>
-<td>Once per window per scope</td>
-</tr>
-<tr>
-<td><strong>Hard</strong> (≥ <code>hard_pct</code>)</td>
-<td>Spend reaches 100% of limit</td>
-<td>Every subsequent tool call is blocked</td>
-<td>Every tool call until window resets</td>
-</tr>
-<tr>
-<td><strong>Cron pause</strong></td>
-<td>Any hard <code>cron_job</code> verdict</td>
-<td>Job is paused for future runs</td>
-<td>Once per window per scope</td>
-</tr>
-</tbody></table>
-<p>The model response already in flight still completes and is billed. What’s prevented is <em>further</em> tool-driven work.</p>
-<h4>Estimated Data and Budget Degradation</h4>
-<p>When the provider returns <code>usage=None</code>, the plugin estimates tokens and flags the row as <code>estimated=1</code>. Since these estimates may be inaccurate, the budget engine offers a safety valve:</p>
-<p><strong><code>on_estimated.mode: warn_only</code> (default):</strong> If a hard verdict rests partly on estimated rows, it is <strong>degraded to soft</strong> — the user gets a warning but tools aren’t blocked. Rationale: a budget built on estimates shouldn’t hard-stop work.</p>
-<p><strong><code>on_estimated.mode: enforce</code>:</strong> Hard verdicts take effect regardless of estimate quality. Use this when you trust your provider’s usage data (Est% = 0) or when estimates are acceptable.</p>
-<p>The <code>/stats providers</code> command shows the <code>Est%</code> column so you can see at a glance whether your provider returns real usage data.</p>
-<p><strong>Estimated-price models:</strong> Some models (e.g. OpenRouter <code>auto</code> routing) have no fixed pricing. These are flagged with <code>_estimated_price: true</code> in <code>pricing.yaml</code> and normalized to <code>$0.00</code>. If &gt;0% of calls use these models, budget hard-verdicts are also degraded to soft under <code>warn_only</code> mode. See <a href="#pricing-auto-refresh">Pricing Auto-Refresh</a> for details.</p>
-<hr>
-<h3>Provider Probe: Verifying Your Provider Returns Real Usage</h3>
-<p>Run this <strong>once</strong> after enabling the plugin:</p>
-<ol>
-<li>Run one short session (any minimal task works)</li>
-<li>Execute <code>/stats providers</code></li>
-<li>Look at the <code>Est%</code> column for your provider:</li>
-</ol>
-<ul>
-<li><strong><code>0%</code></strong> → provider returns real usage data. Budget verdicts are based on real numbers. Set <code>on_estimated.mode: enforce</code> for strict enforcement. ✅</li>
-<li><strong><code>&gt; 0%</code></strong> → provider omits usage in some responses. Those calls are estimated and flagged. Budget hard-verdicts will be degraded to soft under <code>warn_only</code>. The <code>telemetry.log</code> will have a <strong>one-time WARNING</strong> per provider. ⚠️</li>
-</ul>
-<hr>
-<h3>Proof of Concept</h3>
-<p>The following PoC was executed live to validate the plugin end-to-end.</p>
-<h4>Setu</h4>
+<p><code>session_id</code>, <code>ts</code>, <code>tool_name</code>, <code>ok</code> (boolean), </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nujovich/hermes-telemetry#readme">Continue reading on GitHub</a></em></p>
 
@@ -1253,11 +1280,11 @@ pre_tool_call             Hard budget enforcement (tool-gate)
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 327</div>
+        <div class="stars">★ 330</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 264</div>
+        <div class="stars">★ 265</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -1265,7 +1292,7 @@ pre_tool_call             Hard budget enforcement (tool-gate)
         <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
-        <div class="stars">★ 11</div>
+        <div class="stars">★ 12</div>
         <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
       </a>
       <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
@@ -1273,11 +1300,11 @@ pre_tool_call             Hard budget enforcement (tool-gate)
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
-        <div class="stars">★ 36</div>
+        <div class="stars">★ 37</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 354</div>
+        <div class="stars">★ 355</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

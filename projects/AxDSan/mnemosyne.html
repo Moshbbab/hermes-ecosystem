@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/AxDSan/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a zero-dependency memory system designed to provide persistent context for Hermes and other AI agents. It utilizes a SQLite-backed architecture to manage working memory, long-term episodic storage, and temporal knowledge graphs without requiring external services. The system supports sub-millisecond retrieval and features episodic compression that reduces storage requirements by over nine times. It integrates natively with various platforms through the Model Context Protocol and a P",
+  "description": "Mnemosyne is a zero-dependency memory layer designed to provide persistent context for Hermes agents and other AI frameworks. It utilizes a SQLite-backed architecture to manage working memory, long-term episodic memory, and a temporal knowledge graph without requiring external cloud services. The system supports fact extraction, entity recognition, and importance-based retrieval to maintain relevant context over time. It integrates across various platforms through the Model Context Protocol (MCP",
   "url": "https://hermesatlas.com/projects/AxDSan/mnemosyne",
   "codeRepository": "https://github.com/AxDSan/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "AxDSan",
     "url": "https://github.com/AxDSan"
   },
-  "dateModified": "2026-07-06T19:47:26.000Z",
+  "dateModified": "2026-07-08T23:11:46.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1441
+    "userInteractionCount": 1456
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -112,11 +112,11 @@
   <p class="project-desc">The Zero-Dependency, Sub-Millisecond AI Memory System for Hermes Agents and Everyone Else!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 1.4K</span>
+    <span class="stars">★ 1.5K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-06</span>
+    <span><span class="meta-label">updated</span>2026-07-08</span>
   </div>
 
   <div class="actions">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a zero-dependency memory system designed to provide persistent context for Hermes and other AI agents. It utilizes a SQLite-backed architecture to manage working memory, long-term episodic storage, and temporal knowledge graphs without requiring external services. The system supports sub-millisecond retrieval and features episodic compression that reduces storage requirements by over nine times. It integrates natively with various platforms through the Model Context Protocol and a Python SDK, enabling consistent memory across tools like Cursor, Claude Code, and OpenWebUI.</p>
+    <p class="summary-text">Mnemosyne is a zero-dependency memory layer designed to provide persistent context for Hermes agents and other AI frameworks. It utilizes a SQLite-backed architecture to manage working memory, long-term episodic memory, and a temporal knowledge graph without requiring external cloud services. The system supports fact extraction, entity recognition, and importance-based retrieval to maintain relevant context over time. It integrates across various platforms through the Model Context Protocol (MCP), a Python SDK, or native plugins for tools like Cursor and OpenWebUI.</p>
     <ul class="summary-highlights">
-      <li>SQLite-backed storage with zero external cloud dependencies</li>
-      <li>Supports Model Context Protocol for integration with major agent frameworks</li>
-      <li>Features episodic compression and temporal knowledge graph capabilities</li>
+      <li>SQLite-backed storage with sub-millisecond retrieval and zero external dependencies.</li>
+      <li>Supports Model Context Protocol for integration with Cursor and Claude Code.</li>
+      <li>Features episodic memory compression and temporal knowledge graph triple stores.</li>
     </ul>
   </div>
 </section>
@@ -713,6 +713,11 @@ Mnemosyne Sync supports optional client-side encryption. When disabled, memory c
 <td><code>168</code></td>
 <td>Decay halflife in hours</td>
 </tr>
+<tr>
+<td><code>MNEMOSYNE_CONTEXT_INCLUDE_CONSOLIDATED</code></td>
+<td><em>(unset)</em></td>
+<td>Include consolidated working-memory rows in <code>get_context()</code> prompt injection. Default: excluded. Truthy values: <code>1</code>, <code>true</code>, <code>yes</code>, <code>on</code>. Does not affect <code>recall()</code>.</td>
+</tr>
 </tbody></table>
 <p>| <code>MNEMOSYNE_EMBEDDING_API_URL</code> | <code>${OPENROUTER_BASE_URL:-https://openrouter.ai/api/v1}</code> | Preferred name for custom embedding API endpoint (OpenAI-compatible). Falls back to <code>OPENROUTER_BASE_URL</code>. |
 | <code>MNEMOSYNE_EMBEDDING_API_KEY</code> | <code>${OPENROUTER_API_KEY:-${OPENAI_API_KEY:-}}</code> | Preferred name for embedding API key. Falls back to <code>OPENROUTER_API_KEY</code>, then <code>OPENAI_API_KEY</code>. |
@@ -773,7 +778,12 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 </tbody></table>
 <p><strong>Hardware guidance:</strong> Core alone runs on a Raspberry Pi 4 (4 GB) with ~300 MB free for LLM. <code>[embeddings]</code> needs at least 2 GB free RAM. <code>[all]</code> recommends 8 GB+.</p>
 <p><strong>Install (Hermes users):</strong></p>
-<pre><code class="language-bash">pip install mnemosyne-hermes
+<pre><code class="language-bash">source ~/.hermes/hermes-agent/venv/bin/activate
+python -m ensurepip --upgrade
+python -m pip install --upgrade pip
+python -m pip install mnemosyne-hermes
+mkdir -p ~/.hermes/plugins/mnemosyne
+ln -sfn "$(~/.hermes/hermes-agent/venv/bin/python -c 'import pathlib, mnemosyne_hermes; print(pathlib.Path(mnemosyne_hermes.__file__).resolve().parent)')"/* ~/.hermes/plugins/mnemosyne/
 hermes config set memory.provider mnemosyne
 hermes memory setup
 </code></pre>
@@ -880,11 +890,11 @@ mnemosyne sync status --remote https://my-vps:8765
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 60.4K</div>
+        <div class="stars">★ 60.5K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 18.1K</div>
+        <div class="stars">★ 18.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -892,15 +902,15 @@ mnemosyne sync status --remote https://my-vps:8765
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 337</div>
+        <div class="stars">★ 338</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 190</div>
+        <div class="stars">★ 191</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 210</div>
+        <div class="stars">★ 212</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
@@ -908,7 +918,7 @@ mnemosyne sync status --remote https://my-vps:8765
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 40</div>
+        <div class="stars">★ 41</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
     </div>
