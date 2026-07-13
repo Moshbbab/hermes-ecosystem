@@ -396,20 +396,20 @@ What's Included
 
 Text only
 
-`274878286912`
+`309237763136`
 
-View Channels, Send Messages, Read History, Embeds, Attachments, Threads, Reactions
+View Channels, Send Messages, Read History, Embeds, Attachments, Threads, Reactions, Create Public Threads
 
 Text + Voice
 
-`274881432640`
+`309240908864`
 
 All above + Connect, Speak
 
 **Re-invite the bot** with the updated permissions URL:
 
 ```
-https://discord.com/oauth2/authorize?client_id=YOUR_APP_ID&scope=bot+applications.commands&permissions=274881432640
+https://discord.com/oauth2/authorize?client_id=YOUR_APP_ID&scope=bot+applications.commands&permissions=309240908864
 ```
 
 Replace `YOUR_APP_ID` with your Application ID from the Developer Portal.

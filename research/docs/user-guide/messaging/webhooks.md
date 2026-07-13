@@ -86,6 +86,18 @@ No
 
 Template string with dot-notation payload access (e.g. `{pull_request.title}`). If omitted, the full JSON payload is dumped into the prompt. Payload fields are untrusted — see [Authenticated does not mean trusted](#authenticated-does-not-mean-trusted).
 
+`filters`
+
+No
+
+Declarative payload filters evaluated after auth/body/event filtering and before agent or direct delivery work. Non-matches return `{"status":"ignored","reason":"filter"}` with HTTP 200.
+
+`script`
+
+No
+
+Filter/transform script under `~/.hermes/scripts/`. The webhook payload is passed as JSON on stdin. JSON object stdout replaces the payload before templating; text stdout is exposed as `script_output`; empty stdout, `[SILENT]`, or a nonzero exit code ignores the webhook.
+
 `skills`
 
 No
@@ -140,8 +152,74 @@ platforms:
           events: ["push"]
           secret: "deploy-secret"
           prompt: "New push to {repository.full_name} branch {ref}: {head_commit.message}"
+          filters:
+            - field: "ref"
+              equals: "refs/heads/main"
           deliver: "telegram"
 ```
+
+### Payload Filters
+
+Use `filters` when a provider sends a broad event stream but only some payloads should wake the agent or trigger `deliver_only` delivery. Filters run after signature validation, body parsing, and `events`, but before prompt rendering, idempotency, agent dispatch, or direct delivery.
+
+```
+platforms:
+  webhook:
+    extra:
+      routes:
+        todoist:
+          events: ["item:updated"]
+          secret: "todoist-secret"
+          filters:
+            - field: "payload.labels"
+              contains: "hermes"
+            - any:
+                - field: "payload.priority"
+                  equals: 4
+                - field: "payload.project_id"
+                  in_file: "~/.hermes/data/todoist/watchlist.json"
+          prompt: "Todoist task changed: {payload.content}"
+```
+
+Supported operators:
+
+-   `exists: true|false`
+-   `missing: true`
+-   `equals` / `not_equals`
+-   `contains` for strings, lists, and dict keys
+-   `in` for inline lists
+-   `in_file` for JSON arrays, JSON objects (keys are used), or newline-delimited text files
+-   `regex`
+-   `all`, `any`, and `not` groups
+
+Field paths use dot notation. `payload.foo` reads from a top-level `payload` object when one exists, or from the root webhook body for flat payloads. `event` / `event_type` match the resolved event type, and `headers.<Name>` reads request headers.
+
+### Script Filters and Transforms
+
+Use `script` when declarative filters are not enough. Scripts must live under `~/.hermes/scripts/` for the active profile; relative paths resolve there, and path traversal outside that directory is blocked. `.sh` and `.bash` scripts run with bash, and all other extensions run with the current Python interpreter.
+
+The route payload is sent to stdin as JSON:
+
+```
+# ~/.hermes/scripts/todoist-hermes-label.py
+import json
+import sys
+
+payload = json.load(sys.stdin)
+labels = payload.get("payload", {}).get("labels", [])
+if "hermes" not in labels:
+    print("[SILENT]")
+    raise SystemExit(0)
+
+payload["body"] = payload["payload"]["content"]
+print(json.dumps(payload))
+```
+
+Script outcomes:
+
+-   JSON object stdout replaces the payload used by `prompt` and `deliver_extra`.
+-   Non-JSON text stdout is added to the payload as `script_output`.
+-   Empty stdout, exact `[SILENT]`, `{"__hermes_ignore__": true}`, timeout, missing script, or nonzero exit code returns HTTP 200 with `{"status":"ignored","reason":"script"}`.
 
 ### Prompt Templates
 

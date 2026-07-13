@@ -26,7 +26,7 @@ The approval system supports three modes, configured via `approvals.mode` in `~/
 
 ```
 approvals:
-  mode: manual                    # manual | smart | off
+  mode: smart                     # smart | manual | off
   timeout: 60                     # seconds to wait for user response (default: 60)
   cron_mode: deny                 # deny | approve — what cron jobs do when they hit a dangerous command
   mcp_reload_confirm: true        # /reload-mcp asks before invalidating the MCP tool cache
@@ -43,7 +43,7 @@ What it controls
 
 `mode`
 
-`manual`
+`smart`
 
 Approval policy for dangerous shell commands — see the table below.
 
@@ -75,13 +75,13 @@ Mode
 
 Behavior
 
-**manual** (default)
+**smart** (default)
 
-Always prompt the user for approval on dangerous commands
+Use an auxiliary LLM to assess risk. Low-risk commands (e.g., `python -c "print('hello')"`) are auto-approved for that command only. Genuinely dangerous commands are auto-denied. Uncertain cases escalate to a manual prompt.
 
-**smart**
+**manual**
 
-Use an auxiliary LLM to assess risk. Low-risk commands (e.g., `python -c "print('hello')"`) are auto-approved. Genuinely dangerous commands are auto-denied. Uncertain cases escalate to a manual prompt.
+Always prompt the user for approval on dangerous commands.
 
 **off**
 

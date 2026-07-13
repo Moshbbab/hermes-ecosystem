@@ -6,7 +6,7 @@ Web-search provider plugins register a backend that services `web_search`, `web_
 
 tip
 
-Web search is one of several **backend plugins** Hermes supports. The others (with their own ABCs) are [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin), [Video Generation Provider Plugins](/docs/developer-guide/video-gen-provider-plugin), [Memory Provider Plugins](/docs/developer-guide/memory-provider-plugin), [Context Engine Plugins](/docs/developer-guide/context-engine-plugin), and [Model Provider Plugins](/docs/developer-guide/model-provider-plugin). General tool/hook/CLI plugins live in [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin).
+Web search is one of several **backend plugins** Hermes supports. The others (with their own ABCs) are [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin), [Video Generation Provider Plugins](/docs/developer-guide/video-gen-provider-plugin), [Memory Provider Plugins](/docs/developer-guide/memory-provider-plugin), [Context Engine Plugins](/docs/developer-guide/context-engine-plugin), and [Model Provider Plugins](/docs/developer-guide/model-provider-plugin). General tool/hook/CLI plugins live in [Build a Hermes Plugin](/docs/developer-guide/plugins).
 
 ## How discovery works
 
@@ -165,7 +165,7 @@ List of provider `name`s this plugin registers — used by the loader to adverti
 
 `requires_env`
 
-Interactive credential prompt during `hermes plugins install` (see [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin#gate-on-environment-variables) for the rich format)
+Interactive credential prompt during `hermes plugins install` (see [Build a Hermes Plugin](/docs/developer-guide/plugins#gate-on-environment-variables) for the rich format)
 
 ## ABC reference
 
@@ -311,7 +311,7 @@ Errors surface as the tool result; the LLM decides how to explain them. If no pr
 
 ## Lazy-installing optional dependencies
 
-If your provider wraps a third-party SDK (like DDGS does with the `ddgs` package), don't `import` it at module top level. Use `tools.lazy_deps.ensure(...)` inside `is_available()` or `search()` — Hermes will install the package on first use, gated by `security.allow_lazy_installs`. See [Build a Hermes Plugin → Lazy-install](/docs/guides/build-a-hermes-plugin#lazy-install-optional-python-dependencies) for the security model.
+If your provider wraps a third-party SDK (like DDGS does with the `ddgs` package), don't `import` it at module top level. Use `tools.lazy_deps.ensure(...)` inside `is_available()` or `search()` — Hermes will install the package on first use, gated by `security.allow_lazy_installs`. See [Build a Hermes Plugin → Lazy-install](/docs/developer-guide/plugins#lazy-install-optional-python-dependencies) for the security model.
 
 ## Reference implementations
 
@@ -329,10 +329,10 @@ If your provider wraps a third-party SDK (like DDGS does with the `ddgs` package
 my-backend-web = "my_backend_web_package"
 ```
 
-`my_backend_web_package` must expose a top-level `register` function. See [Distribute via pip](/docs/guides/build-a-hermes-plugin#distribute-via-pip) in the general plugin guide for the full setup.
+`my_backend_web_package` must expose a top-level `register` function. See [Distribute via pip](/docs/developer-guide/plugins#distribute-via-pip) in the general plugin guide for the full setup.
 
 ## Related pages
 
 -   [Web Search](/docs/user-guide/features/web-search) — user-facing feature documentation and per-backend configuration
 -   [Plugins overview](/docs/user-guide/features/plugins) — all plugin types at a glance
--   [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin) — general tools/hooks/slash commands guide
+-   [Build a Hermes Plugin](/docs/developer-guide/plugins) — general tools/hooks/slash commands guide
