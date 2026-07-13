@@ -18,6 +18,10 @@ OpenRouter API key (recommended for flexibility)
 
 Override the OpenRouter-compatible base URL
 
+`FIREWORKS_API_KEY`
+
+Fireworks AI API key ([app.fireworks.ai](https://app.fireworks.ai/settings/users/api-keys)). Configure endpoint overrides with `model.base_url` in `config.yaml`.
+
 `HERMES_OPENROUTER_CACHE`
 
 Enable OpenRouter response caching (`1`/`true`/`yes`/`on`). Overrides `openrouter.response_cache` in config.yaml. See [Response Caching](https://openrouter.ai/docs/guides/features/response-caching).
@@ -2408,7 +2412,7 @@ Skip auto-injection of `AGENTS.md`, `SOUL.md`, `.cursorrules`, memory, and prelo
 
 `HERMES_SAFE_MODE`
 
-Troubleshooting mode: disable ALL customizations — skips plugin discovery and MCP server loading. Set automatically by `--safe-mode` (which also sets the two flags above).
+Troubleshooting mode: disable ALL customizations — skips plugin discovery, MCP server loading, and shell-hook registration. Set automatically by `--safe-mode` (which also sets the two flags above).
 
 `HERMES_MD_NAMES`
 
@@ -2465,6 +2469,10 @@ Stale stream detection timeout in seconds (default: `180`). Auto-disabled for lo
 `HERMES_STREAM_RETRIES`
 
 Number of mid-stream reconnect attempts on transient network errors (default: `3`).
+
+`HERMES_STREAM_STALE_GIVEUP`
+
+Cross-turn circuit breaker: after this many consecutive stale kills (streaming or non-streaming) with no completed response, abort each call immediately with an actionable error instead of re-waiting out the stale timeout (default: `5`, `0` disables). Resets on any completed response, `/model` switch, fallback activation, or turn-start primary restore.
 
 `HERMES_AGENT_TIMEOUT`
 

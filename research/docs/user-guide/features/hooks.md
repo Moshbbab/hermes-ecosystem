@@ -1249,7 +1249,7 @@ The messaging platform name.
 
 * * *
 
-See the **[Build a Plugin guide](/docs/guides/build-a-hermes-plugin)** for the full walkthrough including tool schemas, handlers, and advanced hook patterns.
+See the **[Build a Plugin guide](/docs/developer-guide/plugins)** for the full walkthrough including tool schemas, handlers, and advanced hook patterns.
 
 * * *
 

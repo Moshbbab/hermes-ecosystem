@@ -333,11 +333,11 @@ Bot token from the [Discord Developer Portal](https://discord.com/developers/app
 
 `DISCORD_ALLOWED_USERS`
 
-**Yes**
+Conditional
 
 —
 
-Comma-separated Discord user IDs allowed to interact with the bot. Without this **or** `DISCORD_ALLOWED_ROLES`, the gateway denies all users.
+Comma-separated Discord user IDs allowed to interact with the bot. Without this **or** `DISCORD_ALLOWED_ROLES`, the gateway denies all users unless `DISCORD_ALLOW_ALL_USERS=true`, `GATEWAY_ALLOW_ALL_USERS=true`, or `DISCORD_ALLOWED_CHANNELS` explicitly scopes guild access.
 
 `DISCORD_ALLOWED_ROLES`
 
@@ -346,6 +346,22 @@ No
 —
 
 Comma-separated Discord role IDs. Any member with one of these roles is authorized — OR semantics with `DISCORD_ALLOWED_USERS`. Auto-enables the **Server Members Intent** on connect. Useful when moderation teams churn: new mods get access as soon as the role is granted, no config push needed.
+
+`DISCORD_ALLOW_ALL_USERS`
+
+No
+
+`false`
+
+Explicit opt-in to allow every Discord user who can reach the bot. This restores the pre-0.18 open behavior for Discord only; use only for trusted/private guilds or development.
+
+`GATEWAY_ALLOW_ALL_USERS`
+
+No
+
+`false`
+
+Global allow-all opt-in for every gateway platform. Prefer the platform-specific `DISCORD_ALLOW_ALL_USERS` unless you intentionally want all connected platforms open.
 
 `DISCORD_HOME_CHANNEL`
 
@@ -823,26 +839,6 @@ gateway:
 
 Use `/whoami` to see the active scope, your tier (admin / user / unrestricted), and which slash commands you can run.
 
-### Restricting exec-approval buttons to admins
-
-By default, any user allowed to talk to the bot — including users paired via `hermes pairing approve` — can click the **Approve / Deny** buttons on a dangerous-command prompt. This mirrors plain-chat admission and is the historical behavior. To restrict _approving dangerous commands_ to admins only, set `require_admin_for_exec_approval` in the Discord platform's `extra` block:
-
-```
-gateway:
-  platforms:
-    discord:
-      extra:
-        require_admin_for_exec_approval: true   # default: false
-        allow_admin_from:
-          - "123456789012345678"   # only these users may click Approve/Deny
-```
-
-**Behavior:**
-
--   **Default off** — exec-approval buttons stay user-scope; any admitted user can approve. Existing installs are unaffected.
--   **When on** — the clicker must pass the normal admission check **and** be listed in `allow_admin_from` (the same key the slash-command split uses). The lower-stakes component views (model picker, clarify, update prompt) stay user-scope.
--   **Fails closed** — if the toggle is on but `allow_admin_from` is empty, _nobody_ can approve and a warning is logged, so the misconfiguration is visible rather than silently locking you out.
-
 ## Interactive Model Picker
 
 Send `/model` with no arguments in a Discord channel to open a dropdown-based model picker:
@@ -1023,9 +1019,36 @@ Refreshing the directory (`/channels refresh` on platforms that expose it, or a 
 
 ### Bot is online but not responding to messages
 
-**Cause**: Message Content Intent is disabled.
+**Cause**: Either Message Content Intent is disabled, or Discord auth is failing closed because no access policy is configured.
 
-**Fix**: Go to [Developer Portal](https://discord.com/developers/applications) → your app → Bot → Privileged Gateway Intents → enable **Message Content Intent** → Save Changes. Restart the gateway.
+**Fix**:
+
+1.  Go to [Developer Portal](https://discord.com/developers/applications) → your app → Bot → Privileged Gateway Intents → enable **Message Content Intent** → Save Changes.
+    
+2.  Verify that at least one Discord access policy is configured:
+    
+    ```
+    # recommended: allow specific users
+    DISCORD_ALLOWED_USERS=284102345871466496
+    
+    # or allow a trusted guild/dev bot to behave like pre-0.18 Discord
+    DISCORD_ALLOW_ALL_USERS=true
+    ```
+    
+3.  Restart the gateway:
+    
+    ```
+    hermes gateway restart
+    ```
+    
+
+If the gateway log says Discord is connected and REST API checks work, but every inbound message is silent, look for this warning in `~/.hermes/logs/gateway.log`:
+
+```
+No Discord access policy configured; inbound Discord messages will be denied by default.
+```
+
+Hermes 0.18 intentionally fails closed on externally reachable adapters. A Discord bot with no `DISCORD_ALLOWED_USERS`, no `DISCORD_ALLOWED_ROLES`, no `DISCORD_ALLOWED_CHANNELS`, and no explicit allow-all flag will connect successfully but deny inbound users before normal message handling.
 
 ### "Disallowed Intents" error on startup
 

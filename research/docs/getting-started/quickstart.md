@@ -155,6 +155,12 @@ Multi-provider routing across many models
 
 Enter your API key
 
+**Fireworks AI**
+
+Direct OpenAI-compatible model API
+
+Set `FIREWORKS_API_KEY`
+
 **Z.AI**
 
 GLM / Zhipu-hosted models

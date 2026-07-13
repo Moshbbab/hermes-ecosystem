@@ -36,6 +36,10 @@ Setup
 
 `OPENROUTER_API_KEY` in `~/.hermes/.env`
 
+**Fireworks AI**
+
+`FIREWORKS_API_KEY` in `~/.hermes/.env` (provider: `fireworks`; aliases: `fireworks-ai`, `fw`)
+
 **NovitaAI**
 
 `NOVITA_API_KEY` in `~/.hermes/.env` (provider: `novita`, 200+ models, Model API, Agent Sandbox, GPU Cloud)
@@ -362,6 +366,10 @@ Override ACP args (default: `--acp --stdio`)
 These providers have built-in support with dedicated provider IDs. Set the API key and use `--provider` to select:
 
 ```
+# Fireworks AI
+hermes chat --provider fireworks --model accounts/fireworks/models/kimi-k2p6
+# Requires: FIREWORKS_API_KEY in ~/.hermes/.env
+
 # NovitaAI Model API
 hermes chat --provider novita --model moonshotai/kimi-k2.5
 # Requires: NOVITA_API_KEY in ~/.hermes/.env
@@ -407,6 +415,8 @@ hermes chat --provider arcee --model trinity-large-thinking
 hermes chat --provider gmi --model zai-org/GLM-5.1-FP8
 # Requires: GMI_API_KEY in ~/.hermes/.env
 ```
+
+Fireworks uses its native slash-form catalog IDs, such as `accounts/fireworks/models/kimi-k2p6`. Run `hermes model`, choose **Fireworks AI**, and select from the live catalog or enter another Fireworks model ID. The default endpoint is `https://api.fireworks.ai/inference/v1`; configure a different endpoint through `model.base_url` in `config.yaml`, not `.env`.
 
 Or set the provider permanently in `config.yaml`:
 

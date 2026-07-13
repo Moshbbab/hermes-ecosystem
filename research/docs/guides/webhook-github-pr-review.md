@@ -197,13 +197,21 @@ note
 
 ## Filtering to specific actions
 
-GitHub sends `pull_request` events for many actions: `opened`, `synchronize`, `reopened`, `closed`, `labeled`, etc. The `events` list filters only by the `X-GitHub-Event` header value — it cannot filter by action sub-type at the routing level.
+GitHub sends `pull_request` events for many actions: `opened`, `synchronize`, `reopened`, `closed`, `labeled`, etc. The `events` list filters by the `X-GitHub-Event` header value, and route-level `filters` can narrow by payload fields such as `action`.
 
 The prompt in Step 1 already handles this by instructing the agent to stop early for `closed` and `labeled` events.
 
 The agent still runs and consumes tokens
 
-The "stop here" instruction prevents a meaningful review, but the agent still runs to completion for every `pull_request` event regardless of action. GitHub webhooks can only filter by event type (`pull_request`, `push`, `issues`, etc.) — not by action sub-type (`opened`, `closed`, `labeled`). There is no routing-level filter for sub-actions. For high-volume repos, accept this cost or filter upstream with a GitHub Actions workflow that calls your webhook URL conditionally.
+The "stop here" instruction prevents a meaningful review, but the agent still runs to completion for every `pull_request` event regardless of action. Prefer filtering before the agent wakes:
+
+```
+filters:
+  - field: "action"
+    in: ["opened", "synchronize", "reopened"]
+```
+
+For high-volume repositories, you can still filter upstream with a GitHub Actions workflow that calls your webhook URL conditionally.
 
 > There is no Jinja2 or conditional template syntax. `{field}` and `{nested.field}` are the only substitutions supported. Anything else is passed verbatim to the agent.
 
@@ -365,5 +373,5 @@ platforms:
 
 -   **[Cron-Based PR Reviews](/docs/guides/github-pr-review-agent)** — poll for PRs on a schedule, no public endpoint needed
 -   **[Webhook Reference](/docs/user-guide/messaging/webhooks)** — full config reference for the webhook platform
--   **[Build a Plugin](/docs/guides/build-a-hermes-plugin)** — package review logic into a shareable plugin
+-   **[Build a Plugin](/docs/developer-guide/plugins)** — package review logic into a shareable plugin
 -   **[Profiles](/docs/user-guide/profiles)** — run a dedicated reviewer profile with its own memory and config

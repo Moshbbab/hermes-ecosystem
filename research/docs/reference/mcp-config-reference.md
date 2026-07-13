@@ -144,6 +144,14 @@ both
 
 Allow tools from this server to run concurrently
 
+`skip_preflight`
+
+bool
+
+HTTP
+
+Bypass the fail-fast content-type probe for valid Streamable HTTP endpoints whose HEAD/GET answers a non-MCP content type (default: `false`)
+
 `tools`
 
 mapping

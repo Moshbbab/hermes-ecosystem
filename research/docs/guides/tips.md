@@ -171,7 +171,7 @@ Use `/verbose` to control how much tool activity you see. In messaging platforms
 
 tip
 
-On messaging platforms, sessions auto-reset after idle time (default: 24 hours) or daily at 4 AM. Adjust per-platform in `~/.hermes/config.yaml` if you need longer sessions.
+By default, messaging sessions never auto-reset — context lives until you `/reset` or compression kicks in. If you want sessions to reset automatically (after idle time or daily at a fixed hour), opt in via the `session_reset` section in `~/.hermes/config.yaml`.
 
 ## Security
 

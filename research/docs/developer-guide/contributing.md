@@ -18,7 +18,7 @@ We value contributions in this order:
 
 ## Common contribution paths
 
--   Building a custom/local tool without modifying Hermes core? Start with [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin)
+-   Building a custom/local tool without modifying Hermes core? Start with [Build a Hermes Plugin](/docs/developer-guide/plugins)
 -   Building a new built-in core tool for Hermes itself? Start with [Adding Tools](/docs/developer-guide/adding-tools)
 -   Building a new skill? Start with [Creating Skills](/docs/developer-guide/creating-skills)
 -   Building a new inference provider? Start with [Adding Providers](/docs/developer-guide/adding-providers)
@@ -35,7 +35,7 @@ Notes
 
 With the `git-lfs` extension installed
 
-**Python 3.11+**
+**Python 3.11–3.13**
 
 uv will install it if missing
 
@@ -67,6 +67,13 @@ After that, create branches and run tests from that checkout:
 ```
 git checkout -b fix/description
 scripts/run_tests.sh
+```
+
+You can also run a fully isolated Hermes instance (throwaway HERMES\_HOME, separate Electron userData, distinct Electron app name to avoid the single-instance lock):
+
+```
+scripts/dev-sandbox.sh python -m hermes_cli.main
+scripts/dev-sandbox.sh --persistent python -m hermes_cli.main desktop  # state survives restarts, but lives in the worktree :)
 ```
 
 ### Manual clone fallback

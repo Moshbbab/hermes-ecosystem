@@ -574,29 +574,32 @@ Sessions persist across messages until they reset. The agent remembers your conv
 
 ### Reset Policies
 
-Sessions reset based on configurable policies:
+**By default sessions never auto-reset** — context lives until you `/reset` manually or context compression kicks in. If you want automatic resets, opt in with the `session_reset` section in `~/.hermes/config.yaml`:
 
-Policy
+```
+session_reset:
+  mode: idle        # "idle", "daily", "both", or "none" (default)
+  idle_minutes: 1440  # for idle/both: minutes of inactivity before reset
+  at_hour: 4          # for daily/both: hour of day (0-23, local time)
+```
 
-Default
+Mode
 
 Description
 
-Daily
+`none`
 
-4:00 AM
+Never auto-reset (default)
+
+`daily`
 
 Reset at a specific hour each day
 
-Idle
-
-1440 min
+`idle`
 
 Reset after N minutes of inactivity
 
-Both
-
-(combined)
+`both`
 
 Whichever triggers first
 

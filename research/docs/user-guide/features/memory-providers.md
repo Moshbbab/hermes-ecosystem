@@ -468,7 +468,7 @@ echo "OPENVIKING_API_KEY=..." >> ~/.hermes/.env
 
 ### Mem0
 
-Server-side LLM fact extraction with semantic search, reranking, and automatic deduplication. Supports both Mem0 Platform (cloud) and OSS (self-hosted) modes.
+Server-side LLM fact extraction with semantic search, reranking, and automatic deduplication. Three connection modes: **Platform** (Mem0 Cloud), **self-hosted dashboard** (a Mem0 server you run via Docker), and **OSS** (Mem0 in-process with your own LLM + vector store).
 
 **Best for**
 
@@ -476,17 +476,17 @@ Hands-off memory management — Mem0 handles extraction automatically
 
 **Requires**
 
-`pip install mem0ai` + API key (platform) or LLM/vector store (OSS)
+`pip install mem0ai` + API key (platform), a running Mem0 server (self-hosted dashboard), or an LLM + vector store (OSS)
 
 **Data storage**
 
-Mem0 Cloud (platform) or self-hosted (OSS)
+Mem0 Cloud (platform), your own Mem0 server (self-hosted dashboard), or in-process (OSS)
 
 **Cost**
 
-Mem0 pricing (platform) / free (OSS)
+Mem0 pricing (platform) / free (self-hosted or OSS)
 
-**Tools (5):** `mem0_list` (list all memories, paginated), `mem0_search` (semantic search with reranking in platform mode), `mem0_add` (store verbatim facts), `mem0_update` (update by ID), `mem0_delete` (delete by ID)
+**Tools (4):** `mem0_search` (semantic search; optional reranking in platform mode, off by default), `mem0_add` (store verbatim facts), `mem0_update` (update by ID), `mem0_delete` (delete by ID)
 
 **Setup (Platform):**
 
@@ -511,6 +511,29 @@ Preview without writing files:
 hermes memory setup mem0 --mode oss --oss-llm-key sk-... --dry-run
 ```
 
+**Setup (Self-Hosted Dashboard):** connect to a Mem0 server you run via Docker (the dashboard's REST API):
+
+```
+hermes memory setup    # select "mem0" → "Self-hosted server"
+# Or via flags:
+hermes memory setup mem0 --mode selfhosted --host http://localhost:8888 --api-key your-admin-api-key
+```
+
+Or configure manually — either as env vars:
+
+```
+echo "MEM0_HOST=http://localhost:8888" >> ~/.hermes/.env
+echo "MEM0_API_KEY=your-admin-api-key" >> ~/.hermes/.env
+```
+
+or in `mem0.json`:
+
+```
+{ "host": "http://localhost:8888", "api_key": "your-admin-api-key" }
+```
+
+The plugin authenticates with `X-API-Key` and uses the server's `/search` / `/memories` routes. `api_key` is optional (omit only for `AUTH_DISABLED` servers). Don't set `mode: oss` — it takes precedence over `host`.
+
 **Config:** `$HERMES_HOME/mem0.json` (behavioral settings). Only the secret `MEM0_API_KEY` belongs in `~/.hermes/.env`.
 
 Key
@@ -523,7 +546,13 @@ Description
 
 `platform`
 
-`platform` (Mem0 Cloud) or `oss` (self-hosted)
+`platform` (Mem0 Cloud) or `oss` (self-managed, in-process)
+
+`host`
+
+—
+
+Self-hosted Mem0 server URL (Docker dashboard). Routes over HTTP with `X-API-Key`; don't combine with `mode: oss`
 
 `user_id`
 
@@ -539,7 +568,7 @@ Agent identifier
 
 `rerank`
 
-`true`
+`false`
 
 Rerank search results for relevance (platform mode only)
 
@@ -561,7 +590,7 @@ Vector Store
 
 qdrant (local/server), pgvector
 
-**Switching modes:** Re-run `hermes memory setup mem0 --mode <platform|oss>` or edit `mem0.json` directly.
+**Switching modes:** Re-run `hermes memory setup mem0 --mode <platform|selfhosted|oss>` or edit `mem0.json` directly.
 
 * * *
 
@@ -1018,11 +1047,11 @@ Cloud/Self-hosted
 
 Free/Paid
 
-5
+4
 
 `mem0ai`
 
-Server-side LLM extraction + OSS mode
+Server-side LLM extraction + self-hosted/OSS modes
 
 **Hindsight**
 

@@ -6,7 +6,7 @@ Hermes has a plugin system for adding custom tools, hooks, and integrations with
 
 If you want to create a custom tool for yourself, your team, or one project, this is usually the right path. The developer guide's [Adding Tools](/docs/developer-guide/adding-tools) page is for built-in Hermes core tools that live in `tools/` and `toolsets.py`.
 
-**→ [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin)** — step-by-step guide with a complete working example.
+**→ [Build a Hermes Plugin](/docs/developer-guide/plugins)** — step-by-step guide with a complete working example.
 
 ## Quick overview
 
@@ -420,19 +420,19 @@ A **tool** the LLM can call
 
 Python plugin — `ctx.register_tool()`
 
-[Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin) · [Adding Tools](/docs/developer-guide/adding-tools)
+[Build a Hermes Plugin](/docs/developer-guide/plugins) · [Adding Tools](/docs/developer-guide/adding-tools)
 
 A **lifecycle hook** (pre/post LLM, session start/end, tool filter)
 
 Python plugin — `ctx.register_hook()`
 
-[Hooks reference](/docs/user-guide/features/hooks) · [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin)
+[Hooks reference](/docs/user-guide/features/hooks) · [Build a Hermes Plugin](/docs/developer-guide/plugins)
 
 A **slash command** for the CLI / gateway
 
 Python plugin — `ctx.register_command()`
 
-[Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin) · [Extending the CLI](/docs/developer-guide/extending-the-cli)
+[Build a Hermes Plugin](/docs/developer-guide/plugins) · [Extending the CLI](/docs/developer-guide/extending-the-cli)
 
 A **subcommand** for `hermes <thing>`
 
@@ -648,4 +648,4 @@ note
 
 `inject_message` is only available in CLI mode. In gateway mode, there is no CLI reference and the method returns `False`.
 
-See the **[full guide](/docs/guides/build-a-hermes-plugin)** for handler contracts, schema format, hook behavior, error handling, and common mistakes.
+See the **[full guide](/docs/developer-guide/plugins)** for handler contracts, schema format, hook behavior, error handling, and common mistakes.

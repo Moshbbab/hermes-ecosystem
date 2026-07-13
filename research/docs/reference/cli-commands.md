@@ -362,7 +362,7 @@ Skip auto-injection of `AGENTS.md`, `SOUL.md`, `.cursorrules`, persistent memory
 
 `--safe-mode`
 
-Troubleshooting mode: disable ALL customizations — user config, rules/memory injection, plugins, and MCP servers (implies `--ignore-user-config` and `--ignore-rules`). Use to isolate whether a problem comes from your setup or from Hermes itself.
+Troubleshooting mode: disable ALL customizations — user config, rules/memory injection, plugins, shell hooks, and MCP servers (implies `--ignore-user-config` and `--ignore-rules`). Use to isolate whether a problem comes from your setup or from Hermes itself.
 
 `--source <tag>`
 
@@ -1314,6 +1314,10 @@ Custom HMAC secret. Auto-generated if omitted.
 
 Skip the agent — deliver the rendered `--prompt` as the literal message. Zero LLM cost, sub-second delivery. Requires `--deliver` to be a real target (not `log`).
 
+`--script`
+
+Filter/transform script under `~/.hermes/scripts/`. The webhook payload is passed as JSON on stdin; JSON stdout replaces the payload, and empty stdout, `[SILENT]`, or a nonzero exit code ignores the webhook. See [Script Filters and Transforms](/docs/user-guide/messaging/webhooks#script-filters-and-transforms).
+
 Subscriptions persist to `~/.hermes/webhook_subscriptions.json` and are hot-reloaded by the webhook adapter without a gateway restart.
 
 ## `hermes doctor`
@@ -1943,7 +1947,7 @@ hermes skills inspect official/security/1password
 hermes skills inspect skills-sh/vercel-labs/json-render/json-render-react
 hermes skills install official/migration/openclaw-migration
 hermes skills install skills-sh/anthropics/skills/pdf --force
-hermes skills install https://sharethis.chat/SKILL.md                     # Direct URL (single-file SKILL.md)
+hermes skills install https://sharethis.chat/SKILL.md                     # Direct URL (+ referenced support files)
 hermes skills install https://example.com/SKILL.md --name my-skill        # Override name when frontmatter has none
 hermes skills check
 hermes skills update
@@ -1962,7 +1966,7 @@ Notes:
 -   `--source skills-sh` searches the public `skills.sh` directory.
 -   `--source well-known` lets you point Hermes at a site exposing `/.well-known/skills/index.json`.
 -   `--source browse-sh` searches [browse.sh](https://browse.sh)'s catalog of 200+ site-specific browser-automation skills. Identifiers look like `browse-sh/airbnb.com/search-listings-ddgioa`.
--   Passing an `http(s)://…/*.md` URL installs a single-file SKILL.md directly. When frontmatter has no `name:` and the URL slug isn't a valid identifier, an interactive terminal prompts for a name; non-interactive surfaces (`/skills install` inside the TUI, gateway platforms) require `--name <x>` instead.
+-   Passing an `http(s)://…/*.md` URL installs `SKILL.md` plus explicitly referenced files under `references/`, `templates/`, `scripts/`, `assets/`, and `examples/`. When frontmatter has no `name:` and the URL slug isn't a valid identifier, an interactive terminal prompts for a name; non-interactive surfaces (`/skills install` inside the TUI, gateway platforms) require `--name <x>` instead.
 
 ## `hermes bundles`
 
@@ -2327,7 +2331,7 @@ Provider plugin selections are saved to `config.yaml`:
 
 General plugin disabled list is stored in `config.yaml` under `plugins.disabled`.
 
-See [Plugins](/docs/user-guide/features/plugins) and [Build a Hermes Plugin](/docs/guides/build-a-hermes-plugin).
+See [Plugins](/docs/user-guide/features/plugins) and [Build a Hermes Plugin](/docs/developer-guide/plugins).
 
 ## `hermes tools`
 
@@ -2449,7 +2453,11 @@ Delete one session.
 
 `prune`
 
-Delete old sessions.
+Delete sessions matching filters: time bounds `--older-than`/`--newer-than`/`--before`/`--after` (durations like `5h`/`2d`, bare days, or ISO timestamps); attributes `--source`, `--title`, `--model`, `--provider`, `--branch`, `--end-reason`, `--user`, `--chat-id`, `--chat-type`, `--cwd`; numeric bounds `--min/--max-messages`, `--min/--max-tokens`, `--min/--max-cost`, `--min/--max-tool-calls`; plus `--include-archived`, `--dry-run`, `--yes`. Default: older than 90 days.
+
+`archive`
+
+Bulk-archive (soft-hide, no deletion) sessions matching the same filters as `prune`. Requires at least one filter.
 
 `stats`
 

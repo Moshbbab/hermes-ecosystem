@@ -297,7 +297,19 @@ Tool call timeout
 
 number
 
-Initial connection timeout
+Initial connection timeout (also bounds the MCP `initialize` handshake)
+
+`idle_timeout_seconds`
+
+number
+
+Recycle a stdio server after this many seconds without a tool call (`0` = never, default). The server restarts transparently on the next tool call.
+
+`max_lifetime_seconds`
+
+number
+
+Recycle a stdio server after this total age (`0` = never, default). Restarts transparently on next use.
 
 `enabled`
 
@@ -324,6 +336,19 @@ mcp_servers:
   filesystem:
     command: "npx"
     args: ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+```
+
+### Recycling memory-heavy stdio servers
+
+Browser-based MCP servers (e.g. `@playwright/mcp`) keep a full Chromium resident after their first tool call — hundreds of MB that never get released. Opt in to automatic recycling and the server is torn down after the idle/lifetime limit, then restarted transparently the next time one of its tools is called (its tools stay registered the whole time):
+
+```
+mcp_servers:
+  playwright:
+    command: "npx"
+    args: ["-y", "@playwright/mcp@latest", "--headless"]
+    idle_timeout_seconds: 900     # recycle after 15 min without a tool call
+    max_lifetime_seconds: 86400   # and at least once a day regardless
 ```
 
 ### Minimal HTTP example

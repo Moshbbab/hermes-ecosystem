@@ -291,6 +291,7 @@ See [Skill Settings](/docs/user-guide/configuration#skill-settings) and [Creatin
 │   │   ├── references/            # Additional docs
 │   │   ├── templates/             # Output formats
 │   │   ├── scripts/               # Helper scripts callable from the skill
+│   │   ├── examples/              # Referenced example outputs
 │   │   └── assets/                # Supplementary files
 │   └── vllm/
 │       └── SKILL.md
@@ -304,6 +305,8 @@ See [Skill Settings](/docs/user-guide/configuration#skill-settings) and [Creatin
 │   └── audit.log
 └── .bundled_manifest              # Tracks seeded bundled skills
 ```
+
+Third-party URL and GitHub installs include `SKILL.md` plus the exact local files it references under `references/`, `templates/`, `scripts/`, `assets/`, and `examples/`. Unreferenced repository files are not copied. Hermes scans the complete quarantined bundle and records the source URL, exact content hash, scanner version, findings, timestamp, and fresh-or-cached status in `skills/.hub/lock.json`.
 
 ## External Skill Directories
 
@@ -535,7 +538,7 @@ hermes skills install openai/skills/k8s           # Install with security scan
 hermes skills install official/security/1password
 hermes skills install skills-sh/vercel-labs/json-render/json-render-react --force
 hermes skills install well-known:https://mintlify.com/docs/.well-known/skills/mintlify
-hermes skills install https://sharethis.chat/SKILL.md              # Direct URL (single-file SKILL.md)
+hermes skills install https://sharethis.chat/SKILL.md              # Direct URL (+ referenced support files)
 hermes skills install https://example.com/SKILL.md --name my-skill # Override name when frontmatter has none
 hermes skills list --source hub                   # List hub-installed skills
 hermes skills check                               # Check installed hub skills for upstream updates
@@ -579,7 +582,7 @@ Skills served directly from `/.well-known/skills/index.json` on a website. Searc
 
 `https://sharethis.chat/SKILL.md`
 
-Direct HTTP(S) URL to a single-file `SKILL.md`. Name resolution: frontmatter → URL slug → interactive prompt → `--name` flag.
+Direct HTTP(S) URL to `SKILL.md` plus explicitly referenced support files. Name resolution: frontmatter → URL slug → interactive prompt → `--name` flag.
 
 `github`
 
@@ -721,11 +724,11 @@ Identifiers use the form `browse-sh/<hostname>/<task-id>` and match the slug exp
 
 #### 9\. Direct URL (`url`)
 
-Install a single-file `SKILL.md` directly from any HTTP(S) URL — useful when an author hosts a skill on their own site (no hub listing, no GitHub path to type). Hermes fetches the URL, parses the YAML frontmatter, security-scans it, and installs.
+Install `SKILL.md` directly from any HTTP(S) URL — useful when an author hosts a skill on their own site (no hub listing, no GitHub path to type). Hermes also fetches explicitly referenced files under `references/`, `templates/`, `scripts/`, `assets/`, and `examples/`, then scans and installs the complete bundle.
 
 -   Hermes source id: `url`
 -   Identifier: the URL itself (no prefix needed)
--   Scope: **single-file `SKILL.md`** only. Multi-file skills with `references/` or `scripts/` need a manifest and should be published via one of the other sources above.
+-   Scope: `SKILL.md` plus exact referenced support files in the allowlisted directories. Hermes does not enumerate or copy unrelated files from the host.
 
 ```
 hermes skills install https://sharethis.chat/SKILL.md
