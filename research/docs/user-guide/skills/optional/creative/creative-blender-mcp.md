@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-blender-mcp
 
-Control Blender directly from Hermes via socket connection to the blender-mcp addon. Create 3D objects, materials, animations, and run arbitrary Blender Python (bpy) code. Use when user wants to create or modify anything in Blender.
+Drive Blender via the catalog blender MCP, with bpy recipes.
 
 ## Skill metadata
 
@@ -16,11 +16,11 @@ Path
 
 Version
 
-`1.0.0`
+`2.1.0`
 
 Author
 
-alireza78a
+alireza78a + kshitijk4poor + Hermes Agent
 
 Platforms
 
@@ -32,98 +32,114 @@ info
 
 The following is the complete skill definition that Hermes loads when this skill is triggered. This is what the agent sees as instructions when the skill is active.
 
-# Blender MCP
+# Blender MCP Skill
 
-Control a running Blender instance from Hermes via socket on TCP port 9876.
+Companion skill for the `blender` entry in the Hermes MCP catalog. The MCP server provides the connection to Blender; this skill teaches the bpy idioms and pitfalls for driving it well. It does not cover Blender UI workflows — everything here goes through the MCP tools against a live Blender session.
 
-## Setup (one-time)
+## When to Use
 
-### 1\. Install the Blender addon
+Use when the user wants to create or modify anything in a running Blender instance: meshes, materials, animations, lighting, renders. Requires the blender MCP server installed and a Blender desktop session with the addon connected.
 
-curl -sL [https://raw.githubusercontent.com/ahujasid/blender-mcp/main/addon.py](https://raw.githubusercontent.com/ahujasid/blender-mcp/main/addon.py) -o ~/Desktop/blender\_mcp\_addon.py
+## Prerequisites
 
-In Blender: Edit > Preferences > Add-ons > Install > select blender\_mcp\_addon.py Enable "Interface: Blender MCP"
+1.  Install the MCP server from the Nous catalog (one-time):
+    
+    hermes mcp install blender
+    
+    This configures the pinned `blender-mcp` stdio server with the curated tool set: `get_scene_info`, `get_object_info`, `get_viewport_screenshot`, `execute_blender_code`.
+    
+2.  Install the addon inside Blender (one-time — the catalog entry's post-install notes cover this too):
+    
+    -   Download [https://raw.githubusercontent.com/ahujasid/blender-mcp/main/addon.py](https://raw.githubusercontent.com/ahujasid/blender-mcp/main/addon.py)
+    -   Blender > Edit > Preferences > Add-ons > Install... > select addon.py, enable "Interface: Blender MCP".
+3.  Every session: start Blender FIRST, press N in the viewport, open the "BlenderMCP" tab, click "Connect to Claude" (starts the local bridge socket). Then start your Hermes session so the MCP tools are loaded.
+    
+    The addon refuses to start under `blender -b` (background mode). On a machine without a display, run Blender under a virtual one: `xvfb-run blender`. GPU rendering works fine under Xvfb.
+    
 
-### 2\. Start the socket server in Blender
+## Quick Reference
 
-Press N in Blender viewport to open sidebar. Find "BlenderMCP" tab and click "Start Server".
+MCP tool
 
-### 3\. Verify connection
+Use for
 
-nc -z -w2 localhost 9876 && echo "OPEN" || echo "CLOSED"
+`get_scene_info`
 
-## Protocol
+List objects before touching the scene
 
-Plain UTF-8 JSON over TCP -- no length prefix.
+`get_object_info`
 
-Send: {"type": "<command>", "params": {<kwargs>}} Receive: {"status": "success", "result": <value>} {"status": "error", "message": "<reason>"}
+Inspect one object (transform, materials)
 
-## Available Commands
+`get_viewport_screenshot`
 
-type
+Visual check of what you built
 
-params
+`execute_blender_code`
 
-description
+Everything else — arbitrary bpy Python
 
-execute\_code
+Deeper material lives in the reference files (load on demand):
 
-code (str)
+Reference
 
-Run arbitrary bpy Python code
+Contents
 
-get\_scene\_info
+`references/bpy-api.md`
 
-(none)
+Essential bpy operations: modeling, materials, modifiers, rendering
 
-List all objects in scene
+`references/recipes.md`
 
-get\_object\_info
+Complete working scenes: low-poly terrain, glass sphere, HDRI lighting, turntable animation
 
-object\_name (str)
+`references/pitfalls.md`
 
-Details on a specific object
+Hard-won lessons: empty code results in 5.x, ops-vs-data API, engine names by version
 
-get\_viewport\_screenshot
+Optional asset-service tools (PolyHaven, Sketchfab, Hyper3D, Hunyuan3D) are disabled by default. If the user has enabled a service in the addon panel, opt into its tools with `hermes mcp configure blender`.
 
-(none)
+## Procedure
 
-Screenshot of current viewport
+1.  Call `get_scene_info` first — never assume the scene is empty.
+2.  Build with `execute_blender_code`, in small focused calls (one logical step per call: add objects, then materials, then animation). Large monolithic scripts hit the bridge timeout.
+3.  Verify visually with `get_viewport_screenshot` between major steps.
+4.  Render to an absolute path and tell the user where the file is.
 
-## Python Helper
+### Common bpy Patterns
 
-Use this inside execute\_code tool calls:
-
-import socket, json
-
-def blender\_exec(code: str, host="localhost", port=9876, timeout=15): s = socket.socket(socket.AF\_INET, socket.SOCK\_STREAM) s.connect((host, port)) s.settimeout(timeout) payload = json.dumps({"type": "execute\_code", "params": {"code": code}}) s.sendall(payload.encode("utf-8")) buf = b"" while True: try: chunk = s.recv(4096) if not chunk: break buf += chunk try: json.loads(buf.decode("utf-8")) break except json.JSONDecodeError: continue except socket.timeout: break s.close() return json.loads(buf.decode("utf-8"))
-
-## Common bpy Patterns
-
-### Clear scene
+Clear scene:
 
 bpy.ops.object.select\_all(action='SELECT') bpy.ops.object.delete()
 
-### Add mesh objects
+Add mesh objects:
 
 bpy.ops.mesh.primitive\_uv\_sphere\_add(radius=1, location=(0, 0, 0)) bpy.ops.mesh.primitive\_cube\_add(size=2, location=(3, 0, 0)) bpy.ops.mesh.primitive\_cylinder\_add(radius=0.5, depth=2, location=(-3, 0, 0))
 
-### Create and assign material
+Create and assign material:
 
 mat = bpy.data.materials.new(name="MyMat") mat.use\_nodes = True bsdf = mat.node\_tree.nodes.get("Principled BSDF") bsdf.inputs\["Base Color"\].default\_value = (R, G, B, 1.0) bsdf.inputs\["Roughness"\].default\_value = 0.3 bsdf.inputs\["Metallic"\].default\_value = 0.0 obj.data.materials.append(mat)
 
-### Keyframe animation
+Keyframe animation:
 
 obj.location = (0, 0, 0) obj.keyframe\_insert(data\_path="location", frame=1) obj.location = (0, 0, 3) obj.keyframe\_insert(data\_path="location", frame=60)
 
-### Render to file
+Render to file:
 
 bpy.context.scene.render.filepath = "/tmp/render.png" bpy.context.scene.render.engine = 'CYCLES' bpy.ops.render.render(write\_still=True)
 
 ## Pitfalls
 
--   Must check socket is open before running (nc -z localhost 9876)
--   Addon server must be started inside Blender each session (N-panel > BlenderMCP > Connect)
--   Break complex scenes into multiple smaller execute\_code calls to avoid timeouts
--   Render output path must be absolute (/tmp/...) not relative
--   shade\_smooth() requires object to be selected and in object mode
+-   The blender MCP tools only exist if the server is installed and the session started after install. If they're missing, run `hermes mcp install blender` and start a new session.
+-   The addon bridge must be (re)connected inside Blender each Blender session (N-panel > BlenderMCP > Connect). "Connection refused" from the tools means Blender isn't running or the addon isn't connected — fix that, don't retry.
+-   Break complex scenes into multiple smaller `execute_blender_code` calls to avoid bridge timeouts.
+-   Render output paths must be absolute (`/tmp/render.png`), not relative — they resolve on the BLENDER host's filesystem, which matters if Hermes and Blender run on different machines.
+-   `shade_smooth()` requires the object to be selected and in object mode.
+-   `execute_blender_code` runs arbitrary Python inside Blender with no sandbox — same trust level as the `terminal` tool. Don't paste untrusted code into it.
+-   Do NOT hand-roll raw TCP JSON to port 9876 from `execute_code` — that was this skill's pre-MCP workaround. It bypasses the catalog's version pinning and tool curation. The MCP tools are the supported path.
+
+## Verification
+
+-   `get_scene_info` returns the expected object list after each build step.
+-   `get_viewport_screenshot` shows the scene you intended.
+-   After a render, confirm the output file exists and report its absolute path to the user.

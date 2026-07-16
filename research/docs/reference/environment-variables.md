@@ -166,6 +166,14 @@ Xiaomi MiMo API key ([platform.xiaomimimo.com](https://platform.xiaomimimo.com))
 
 Override Xiaomi MiMo base URL (default: `https://api.xiaomimimo.com/v1`)
 
+`UPSTAGE_API_KEY`
+
+Upstage API key for Solar models ([console.upstage.ai](https://console.upstage.ai/api-keys))
+
+`UPSTAGE_BASE_URL`
+
+Override Upstage base URL (default: `https://api.upstage.ai/v1`)
+
 `TOKENHUB_API_KEY`
 
 Tencent TokenHub API key ([tokenhub.tencentmaas.com](https://tokenhub.tencentmaas.com))
@@ -1188,7 +1196,7 @@ Webhook listener port for inbound SMS (default: `8080`)
 
 `SMS_WEBHOOK_HOST`
 
-Webhook bind address (default: `0.0.0.0`)
+Webhook bind address (default: `127.0.0.1`)
 
 `SMS_INSECURE_NO_SIGNATURE`
 
@@ -2414,10 +2422,6 @@ Skip auto-injection of `AGENTS.md`, `SOUL.md`, `.cursorrules`, memory, and prelo
 
 Troubleshooting mode: disable ALL customizations — skips plugin discovery, MCP server loading, and shell-hook registration. Set automatically by `--safe-mode` (which also sets the two flags above).
 
-`HERMES_MD_NAMES`
-
-Comma-separated list of rules-file names to auto-inject (default: `AGENTS.md,CLAUDE.md,.cursorrules,SOUL.md`).
-
 `HERMES_TOOL_PROGRESS`
 
 Deprecated compatibility variable for tool progress display. Prefer `display.tool_progress` in `config.yaml`.
@@ -2524,7 +2528,7 @@ Path to a JSON file of ephemeral prefill messages injected at API-call time.
 
 `HERMES_WRITE_SAFE_ROOT`
 
-Optional directory prefix that restricts `write_file`/`patch` writes; paths outside require approval. Supports multiple directories separated by `os.pathsep` (`:` on Unix, `;` on Windows).
+Optional directory prefix that **hard-blocks** `write_file`/`patch` writes outside the listed roots (no approval prompt). Supports multiple directories separated by `os.pathsep` (`:` on Unix, `;` on Windows). See [HERMES\_WRITE\_SAFE\_ROOT](#hermes_write_safe_root) below.
 
 `HERMES_DISABLE_LAZY_INSTALLS`
 
@@ -2533,10 +2537,6 @@ Internal bridge var set automatically in the official Docker image to prevent ru
 `HERMES_DISABLE_FILE_STATE_GUARD`
 
 Set to `1` to turn off the "file changed since you read it" guard on `patch`/`write_file`.
-
-`HERMES_CORE_TOOLS`
-
-Comma-separated override for the canonical core tool list (advanced; rarely needed).
 
 `HERMES_BUNDLED_SKILLS`
 
@@ -2577,6 +2577,22 @@ Override the ASCII banner logo at CLI startup.
 `DELEGATION_MAX_CONCURRENT_CHILDREN`
 
 Max parallel subagents per `delegate_task` batch (default: `3`, floor of 1, no ceiling). Also configurable via `delegation.max_concurrent_children` in `config.yaml` — the config value takes priority.
+
+### HERMES\_WRITE\_SAFE\_ROOT
+
+When this variable is set, `write_file` and `patch` may only target paths inside the listed directory prefix(es). Any path outside those roots is **rejected immediately** — the write does not go through the dangerous-command approval system and there is no prompt to override it.
+
+The official Docker image sets `HERMES_WRITE_SAFE_ROOT=/opt/data` alongside `HERMES_HOME=/opt/data` so the agent cannot escape the mounted data volume.
+
+**Do not add this to `~/.hermes/.env` unless you intend to sandbox writes.** A common mistake is pointing it at a project directory while expecting the agent to edit `~/.hermes/cron/jobs.json`, `~/.hermes/skills/`, or scripts under a profile — those paths are outside the sandbox and every `write_file`/`patch` to them fails with an `outside HERMES_WRITE_SAFE_ROOT` error.
+
+To allow both a workspace and Hermes state, list both prefixes (order does not matter):
+
+```
+export HERMES_WRITE_SAFE_ROOT=/path/to/project:/home/you/.hermes
+```
+
+Unset the variable or remove it from `.env` to restore normal writes (still subject to the credential-path denylist — see [File write safety](/docs/user-guide/security#file-write-safety)).
 
 ## Interface
 

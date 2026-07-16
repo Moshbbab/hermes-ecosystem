@@ -623,7 +623,7 @@ Manage a Discord server via the REST API: list guilds/channels/roles, create/edi
 
 ## `spotify` toolset
 
-Registered by the bundled `spotify` plugin. Requires an OAuth token — run `hermes spotify setup` once to authorize.
+Registered by the bundled `spotify` plugin. Requires an OAuth token — run `hermes auth spotify` once to authorize.
 
 Tool
 

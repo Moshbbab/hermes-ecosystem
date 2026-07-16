@@ -93,7 +93,7 @@ Paid
 
 **xAI (Grok)**
 
-`XAI_API_KEY` or `hermes auth login xai-oauth`
+`XAI_API_KEY` or `hermes auth add xai-oauth`
 
 ✔
 
@@ -389,7 +389,7 @@ XAI_API_KEY=sk-xai-your-key-here
 or for SuperGrok subscribers:
 
 ```
-hermes auth login xai-oauth
+hermes auth add xai-oauth
 ```
 
 Then select xAI as the search backend:

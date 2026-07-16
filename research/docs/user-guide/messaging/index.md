@@ -528,7 +528,7 @@ Resume a previously named session
 
 `/usage`
 
-Show token usage for this session
+Show token usage for this session (`/usage reset [--force]` redeems a banked Codex limit reset)
 
 `/insights [days]`
 

@@ -276,6 +276,20 @@ Clone/create/fork repos; manage remotes, releases.
 
 `github/github-repo-management`
 
+## hermes-desktop-plugins
+
+Skill
+
+Description
+
+Path
+
+[`hermes-desktop-plugins`](/docs/user-guide/skills/bundled/hermes-desktop-plugins/hermes-desktop-plugins-hermes-desktop-plugins)
+
+Write desktop app plugins that add UI panes and commands.
+
+`hermes-desktop-plugins`
+
 ## media
 
 Skill
