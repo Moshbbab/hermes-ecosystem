@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVRZ-da/agentiker-code-intel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
+<meta name="description" content="agentiker-code-intel is a Hermes plugin providing AST-aware code intelligence through tree-sitter, ast-grep, and LSP integration. It includes 70 tools for…">
+<link rel="canonical" href="https://hermesatlas.com/projects/IVRZ-da/agentiker-code-intel">
+<meta property="og:title" content="IVRZ-da/agentiker-code-intel — Hermes Atlas">
+<meta property="og:description" content="agentiker-code-intel is a Hermes plugin providing AST-aware code intelligence through tree-sitter, ast-grep, and LSP integration. It includes 70 tools for…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/IVRZ-da/agentiker-code-intel">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=agentiker-code-intel&amp;subtitle=70+AST-aware+code+intelligence+tools+for+Hermes+Agent+%E2%80%94+tree-sitter+%2B+ast-grep+%2B+LSP+bridge+for+Python%2C+TypeScript%2C+Go%2C+Rust%2C+and+5+more+languages&amp;kind=project+%C2%B7+plugins">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="IVRZ-da/agentiker-code-intel — Hermes Atlas">
+<meta name="twitter:description" content="agentiker-code-intel is a Hermes plugin providing AST-aware code intelligence through tree-sitter, ast-grep, and LSP integration. It includes 70 tools for…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=agentiker-code-intel&amp;subtitle=70+AST-aware+code+intelligence+tools+for+Hermes+Agent+%E2%80%94+tree-sitter+%2B+ast-grep+%2B+LSP+bridge+for+Python%2C+TypeScript%2C+Go%2C+Rust%2C+and+5+more+languages&amp;kind=project+%C2%B7+plugins">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "plugins &amp; extensions", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 3, "name": "agentiker-code-intel" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/IVRZ-da/agentiker-code-intel#software",
+  "name": "agentiker-code-intel",
+  "description": "agentiker-code-intel is a Hermes plugin providing AST-aware code intelligence through tree-sitter, ast-grep, and LSP integration. It includes 70 tools for tasks such as symbol extraction, structural search, and impact analysis.",
+  "url": "https://hermesatlas.com/projects/IVRZ-da/agentiker-code-intel",
+  "codeRepository": "https://github.com/IVRZ-da/agentiker-code-intel",
+  "applicationCategory": "BrowserApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "author": {
+    "@type": "Organization",
+    "name": "IVRZ-da",
+    "url": "https://github.com/IVRZ-da"
+  },
+  "dateModified": "2026-07-08T16:38:16.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 3
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script src="/assets/js/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span id="meta-count">199·repos</span>
+    <span id="meta-version">hermes·v0.18.2</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/lists/">lists</a>
+    <a href="/guide/">handbook</a>
+    <a href="/masterclass/">masterclass</a>
+    <a href="/dev/">dev</a>
+    <a href="/reports/">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-icon tt-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2.25M12 19.75V22M4.93 4.93l1.59 1.59M17.48 17.48l1.59 1.59M2 12h2.25M19.75 12H22M4.93 19.07l1.59-1.59M17.48 6.52l1.59-1.59"/></svg>
+    </span>
+    <span class="tt-icon tt-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M20.2 15.1A8.4 8.4 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+    </span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/">plugins &amp; extensions</a><span class="sep">/</span>agentiker-code-intel
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">IVRZ-da</span><span class="slash">/</span>agentiker-code-intel
+  </h1>
+  <p class="project-desc">70 AST-aware code intelligence tools for Hermes Agent — tree-sitter + ast-grep + LSP bridge for Python, TypeScript, Go, Rust, and 5 more languages</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 3</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    <span><span class="meta-label">license</span>MIT</span>
+    
+    <span><span class="meta-label">updated</span>2026-07-08</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/IVRZ-da/agentiker-code-intel" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://github.com/IVRZ-da/agentiker-code-intel" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">agentiker-code-intel is a Hermes plugin providing AST-aware code intelligence through tree-sitter, ast-grep, and LSP integration. It includes 70 tools for tasks such as symbol extraction, structural search, and impact analysis.</p>
+    <ul class="summary-highlights">
+      <li>Supports c, cpp, go, java, javascript, python, rust, tsx, and typescript</li>
+      <li>Includes 70 tools across core, search, edit, and LSP profiles</li>
+      <li>Uses SQLite for a persistent knowledge graph</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <h2>🧠 agentiker-code-intel — Hermes Plugin</h2>
+<blockquote>
+<p><strong>AST-aware code intelligence for Hermes Agent</strong> — tree-sitter + ast-grep + LSP
+70 tools that understand your code's <em>structure</em>, not just its text. 10–50× fewer tokens for code navigation.</p>
+</blockquote>
+<blockquote>
+<p><strong>Forked</strong> from <a href="https://github.com/rewasa/hermes-code-intel-plugin"><code>rewasa/hermes-code-intel-plugin</code></a> — extended for <a href="https://agentiker.de">agentiker.de</a> (70 Tools, 3125 Tests)</p>
+</blockquote>
+<h3>📋 Table of Contents</h3>
+<ul>
+<li><a href="#-why">✨ Why?</a></li>
+<li><a href="#-quick-start">🚀 Quick Start</a></li>
+<li><a href="#-tools">🛠 Tools</a></li>
+<li><a href="#-installation">📦 Installation</a></li>
+<li><a href="#-supported-languages">🌐 Supported Languages</a></li>
+<li><a href="#-architecture">🏗 Architecture</a></li>
+<li><a href="#-how-it-works">🔧 How It Works</a></li>
+<li><a href="#-development">🧪 Development</a></li>
+<li><a href="#-contributing">🤝 Contributing</a></li>
+<li><a href="#-credits">🙏 Credits</a></li>
+</ul>
+<hr>
+<h3>✨ Why?</h3>
+<p>Hermes ships with <code>search_files</code> (regex grep) and <code>read_file</code> (raw text). Those work, but they're <strong>blind to syntax</strong> — they match comments, strings, and formatting equally. This plugin adds:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Symbol extraction</strong></td>
+<td>Get all functions, classes, methods with signatures and line numbers without reading the whole file</td>
+</tr>
+<tr>
+<td><strong>Structural search</strong></td>
+<td>Find imports, decorators, function calls, try/catch blocks by <em>AST node type</em>, not regex</td>
+</tr>
+<tr>
+<td><strong>Safe refactoring</strong></td>
+<td>Rename patterns, wrap functions, add parameters across files — <strong>dry-run by default</strong></td>
+</tr>
+<tr>
+<td><strong>Go-to-definition</strong></td>
+<td>LSP-powered jump to symbol definition (falls back to AST)</td>
+</tr>
+<tr>
+<td><strong>Find references</strong></td>
+<td>LSP-powered cross-file usage search (falls back to AST)</td>
+</tr>
+<tr>
+<td><strong>Blast radius</strong></td>
+<td>What breaks if you change this symbol? Transitive callers + test coverage</td>
+</tr>
+<tr>
+<td><strong>PR impact</strong></td>
+<td>Git diff + call graph + test coverage + reviewer suggestions</td>
+</tr>
+<tr>
+<td><strong>Hot paths</strong></td>
+<td>Rank files by transitive import count via ImportGraph</td>
+</tr>
+<tr>
+<td><strong>Complexity</strong></td>
+<td>Per-function cyclomatic complexity with rank A-E</td>
+</tr>
+<tr>
+<td><strong>Cycle detection</strong></td>
+<td>Find circular imports via Tarjan's SCC algorithm</td>
+</tr>
+<tr>
+<td><strong>Knowledge graph</strong></td>
+<td>SQLite-persistent import graph — callers, callees, health metrics</td>
+</tr>
+</tbody></table>
+<p>The result: <strong>editor-grade code intelligence</strong> in the terminal — same approach as Neovim 0.5+, Zed, and Helix.</p>
+<hr>
+<h3>🚀 Quick Start</h3>
+<h4>Installation</h4>
+<pre><code class="language-bash">cd ~/.hermes/plugins
+git clone https://github.com/IVRZ-da/agentiker-code-intel.git
+cd agentiker-code-intel
+pip install -e .
+</code></pre>
+<h4>Usage</h4>
+<pre><code class="language-python"># Symbole einer Datei abrufen (ohne die ganze Datei zu lesen)
+code_symbols(path="src/service.py")
+
+# Strukturelle Suche — finde alle Imports
+code_search(path="src/", preset="imports")
+
+# Go-to-Definition
+code_definition(path="src/service.py", line=42)
+
+# Alle Referenzen eines Symbols finden
+code_references(path="src/service.py", line=42)
+
+# Code-Risiko-Analyse
+code_dependency_risk(path="src/")
+code_blast_radius(path="src/service.py", line=42)
+
+# Impact-Analyse vor Refactoring
+code_impact(path="src/service.py", line=42)
+</code></pre>
+<h4>Cross-Plugin: Feed Scout Bug-Hunt from code-intel</h4>
+<pre><code class="language-python"># code-intel finds dead code → scout scans automatically
+analysis_deadcode(path="src/")
+bug_hunt_scan(session_id="...", patterns=["analysis"])
+</code></pre>
+<hr>
+<h3>🛠 Tools</h3>
+
+
+<p><a href=""><img src="https://img.shields.io/badge/version-0.6.19-blue.svg" alt="Version" loading="lazy" decoding="async"></a> <a href=""><img src="https://img.shields.io/badge/tests-3140%20tests-green.svg" alt="Tests" loading="lazy" decoding="async"></a> <a href=""><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License" loading="lazy" decoding="async"></a> <a href=""><img src="https://img.shields.io/badge/languages-9-orange.svg" alt="Languages" loading="lazy" decoding="async"></a></p>
+<p><strong>Version:</strong> 0.6.19</p>
+<p><strong>Tests:</strong> 3140 tests</p>
+<p><strong>Tools (70):</strong></p>
+<p><strong>Profiles:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Tools</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>all</code></td>
+<td>70</td>
+<td>All 70 tools (default)</td>
+</tr>
+<tr>
+<td><code>core</code></td>
+<td>22</td>
+<td>AST core tools: symbols, search, definition, references</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>15</td>
+<td>Code search and analysis: search_by_error, duplicates, hot_paths</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td>10</td>
+<td>AST-based code editing: replace_body, safe_delete, insert</td>
+</tr>
+<tr>
+<td><code>lsp</code></td>
+<td>25</td>
+<td>LSP integration: definition, references, diagnostics, completion</td>
+</tr>
+</tbody></table>
+<p><strong>Supported Languages:</strong> c, cpp, go, java, javascript, python, rust, tsx, typescript</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>code_action</code></td>
+<td>LSP code actions: auto-fixes, refactoring suggestions, quick-fixes</td>
+</tr>
+<tr>
+<td><code>code_batch_refactor</code></td>
+<td>ast-grep bulk refactoring across multiple files (dry-run)</td>
+</tr>
+<tr>
+<td><code>code_blast_radius</code></td>
+<td>What breaks if you change this symbol? Callers + tests</td>
+</tr>
+<tr>
+<td><code>code_call_hierarchy</code></td>
+<td>LSP call hierarchy: incoming and outgoing calls</td>
+</tr>
+<tr>
+<td><code>code_callees</code></td>
+<td>Find all callees of a symbol (transitive)</td>
+</tr>
+<tr>
+<td><code>code_callers</code></td>
+<td>Find all callers of a symbol (transitive)</td>
+</tr>
+<tr>
+<td><code>code_capsule</code></td>
+<td>Compact symbol overview: signature, doc, references, imports</td>
+</tr>
+<tr>
+<td><code>code_code_lens</code></td>
+<td>LSP code lens: run/debug/test links above functions</td>
+</tr>
+<tr>
+<td><code>code_completion</code></td>
+<td>LSP completion: auto-completion at cursor position</td>
+</tr>
+<tr>
+<td><code>code_complexity</code></td>
+<td>Cyclomatic complexity per function with rank A-E</td>
+</tr>
+<tr>
+<td><code>code_cycle_detector</code></td>
+<td>Find circular import chains with Tarjan's SCC algorithm</td>
+</tr>
+<tr>
+<td><code>code_definition</code></td>
+<td>LSP-powered go-to-definition with AST fallback</td>
+</tr>
+<tr>
+<td><code>code_dependency_graph</code></td>
+<td>Visual dependency graph as Mermaid diagram</td>
+</tr>
+<tr>
+<td><code>code_dependency_risk</code></td>
+<td>Rate dependency risks (score 0-10)</td>
+</tr>
+<tr>
+<td><code>code_diagnostics</code></td>
+<td>LSP diagnostics: errors, warnings, hints for a file</td>
+</tr>
+<tr>
+<td><code>code_diagram_symbol</code></td>
+<td>Generate ASCII/Mermaid diagrams for functions and classes</td>
+</tr>
+<tr>
+<td><code>code_diff_analysis</code></td>
+<td>Compare two git refs: complexity delta + blast radius</td>
+</tr>
+<tr>
+<td><code>code_docstring_generate</code></td>
+<td>Generate docstring template from AST signature</td>
+</tr>
+<tr>
+<td><code>code_document_links</code></td>
+<td>LSP document links: clickable links in docs and comments</td>
+</tr>
+<tr>
+<td><code>code_document_symbols</code></td>
+<td>LSP document symbols: all symbols in the current file</td>
+</tr>
+<tr>
+<td><code>code_duplicates</code></td>
+<td>Find duplicate or similar code blocks via AST comparison</td>
+</tr>
+<tr>
+<td><code>code_explain</code></td>
+<td>Structured symbol explanation with complexity + callers</td>
+</tr>
+<tr>
+<td><code>code_export</code></td>
+<td>Export symbol index as JSON/Markdown for documentation</td>
+</tr>
+<tr>
+<td><code>code_folding_range</code></td>
+<td>LSP folding ranges: code fold regions for a file</td>
+</tr>
+<tr>
+<td><code>code_format</code></td>
+<td>LSP formatting: auto-format a file using language server</td>
+</tr>
+<tr>
+<td><code>code_generate_tests</code></td>
+<td>Generate test scaffold from a function signature</td>
+</tr>
+<tr>
+<td><code>code_git_blame</code></td>
+<td>Per-line git blame for a file</td>
+</tr>
+<tr>
+<td><code>code_git_diff_file</code></td>
+<td>Show uncommitted git diff for a file</td>
+</tr>
+<tr>
+<td><code>code_git_log_symbol</code></td>
+<td>Git log for a specific symbol (author, date, message)</td>
+</tr>
+<tr>
+<td><code>code_graph_query</code></td>
+<td>Query the Knowledge Graph: callers, callees, hot paths, cycles</td>
+</tr>
+<tr>
+<td><code>code_highlight</code></td>
+<td>LSP document highlight: all occurrences of a symbol in a file</td>
+</tr>
+<tr>
+<td><code>code_hot_paths</code></td>
+<td>Rank files by transitive import frequency</td>
+</tr>
+<tr>
+<td><code>code_hover</code></td>
+<td>LSP hover: type information and docstring at cursor</td>
+</tr>
+<tr>
+<td><code>code_impact</code></td>
+<td>Impact analysis before refactoring — blast radius + test coverage</td>
+</tr>
+<tr>
+<td><code>code_implementations</code></td>
+<td>LSP implementations: find all implementations of an interface</td>
+</tr>
+<tr>
+<td><code>code_index</code></td>
+<td>Build a persistent Knowledge Graph (SQLite) for a project</td>
+</tr>
+<tr>
+<td><code>code_inlay_hints</code></td>
+<td>LSP inlay hints: type hints inline (parameters, variables)</td>
+</tr>
+<tr>
+<td><code>code_inline_values</code></td>
+<td>LSP inline values: value display for variables at debug time</td>
+</tr>
+<tr>
+<td><code>code_insert_after</code></td>
+<td>Insert code AFTER a symbol definition (AST-based)</td>
+</tr>
+<tr>
+<td><code>code_insert_before</code></td>
+<td>Insert code BEFORE a symbol definition (AST-based)</td>
+</tr>
+<tr>
+<td><code>code_linked_editing</code></td>
+<td>LSP linked editing: coupled editing (JSX tags, CSS classes)</td>
+</tr>
+<tr>
+<td><code>code_merge_conflict_finder</code></td>
+<td>Find merge conflict markers (&lt;&lt;&lt;&lt;&lt;&lt;&lt;, =======)</td>
+</tr>
+<tr>
+<td><code>code_metrics</code></td>
+<td>Aggregated project metrics: LOC, files, comment ratio</td>
+</tr>
+<tr>
+<td><code>code_migration</code></td>
+<td>YAML-based bulk migrations across a project</td>
+</tr>
+<tr>
+<td><code>code_move</code></td>
+<td>Move a symbol between files via AST extraction</td>
+</tr>
+<tr>
+<td><code>code_overview</code></td>
+<td>Compact symbol overview of a file as tree view</td>
+</tr>
+<tr>
+<td><code>code_pr_impact</code></td>
+<td>PR impact analysis: diff + call graph + test coverage</td>
+</tr>
+<tr>
+<td><code>code_prepare_rename</code></td>
+<td>LSP prepare rename: check if a symbol can be renamed</td>
+</tr>
+<tr>
+<td><code>code_query</code></td>
+<td>Smart query router — auto-selects the best tool for your intent</td>
+</tr>
+<tr>
+<td><code>code_refactor</code></td>
+<td>Structural search-and-replace with ast-grep (dry-run by default)</td>
+</tr>
+<tr>
+<td><code>code_references</code></td>
+<td>LSP-powered cross-file reference search with AST fallback</td>
+</tr>
+<tr>
+<td><code>code_rename</code></td>
+<td>LSP-powered symbol rename across the entire project</td>
+</tr>
+<tr>
+<td><code>code_replace_body</code></td>
+<td>Replace the entire definition of a symbol (AST-based)</td>
+</tr>
+<tr>
+<td><code>code_review_assistant</code></td>
+<td>Automated code review between git refs (diff + security)</td>
+</tr>
+<tr>
+<td><code>code_safe_delete</code></td>
+<td>Delete a symbol ONLY if it has no external references</td>
+</tr>
+<tr>
+<td><code>code_search</code></td>
+<td>AST-based structural search — find imports, decorators, try/catch blocks</td>
+</tr>
+<tr>
+<td><code>code_search_by_error</code></td>
+<td>Find all places that handle a specific error type</td>
+</tr>
+<tr>
+<td><code>code_security_scan</code></td>
+<td>Security scan: hardcoded secrets, SQL injection, path traversal</td>
+</tr>
+<tr>
+<td><code>code_selection_range</code></td>
+<td>LSP selection ranges: hierarchical selection regions</td>
+</tr>
+<tr>
+<td><code>code_semantic_tokens</code></td>
+<td>LSP semantic tokens: colored syntax highlighting via LSP</td>
+</tr>
+<tr>
+<td><code>code_signatures</code></td>
+<td>LSP signature help: parameter info for function calls</td>
+</tr>
+<tr>
+<td><code>code_symbols</code></td>
+<td>Extract functions, classes, and methods via AST — no read_file needed</td>
+</tr>
+<tr>
+<td><code>code_tests_for_symbol</code></td>
+<td>Find tests that cover a specific symbol</td>
+</tr>
+<tr>
+<td><code>code_timeline</code></td>
+<td>Track symbol evolution across git history</td>
+</tr>
+<tr>
+<td><code>code_todo_finder</code></td>
+<td>Find TODO/FIXME/HACK/KNOWN-BUG comments in codebase</td>
+</tr>
+<tr>
+<td><code>code_type_definition</code></td>
+<td>LSP type definition: jump to type definition of a symbol</td>
+</tr>
+<tr>
+<td><code>code_type_hierarchy</code></td>
+<td>LSP type hierarchy: subtypes and supertypes of a type</td>
+</tr>
+<tr>
+<td><code>code_unused_finder</code></td>
+<td>Find unused imports and unused functions</td>
+</tr>
+<tr>
+<td><code>code_workspace_summary</code></td>
+<td>Compact monorepo overview: apps, packages, dependencies</td>
+</tr>
+<tr>
+<td><code>code_workspace_symbols</code></td>
+<td>LSP workspace symbol search across the entire project</td>
+</tr>
+</tbody></table>
+<h4>Recent Changelog</h4>
+<h3>[0.6.19] — 2026-07-04</h3>
+<h4>⚡ Performance / Token-Optimierung</h4>
+<ul>
+<li><strong>CODE_INTEL_STEERING um 55% gekürzt</strong> — Von ~2.000 auf ~900 Zeichen reduziert. Weniger wichtige Tools (code_callers, code_callees, code_hover, code_signatures, code_type_definition, code_action, workspace_summary) und redundante Workflow-Beschreibungen entfernt. Spart ~370 Tokens pro Subagenten-System-Prompt.</li>
+</ul>
+
+
+<h3>⚠️ Limitations</h3>
+<table>
+<thead>
+<tr>
+<th>Limitation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LSP Dependency</strong></td>
+<td>Tools like <code>code_rename</code>, <code>code_hover</code>, <code>code_diagnostics</code>, <code>code_signatures</code> require an LSP server. Without a server they fall back to AST/text analysis.</td>
+</tr>
+<tr>
+<td><strong>C/C++/Java</strong></td>
+<td>No LSP support (tree-sitter + ast-grep only for basic operations)</td>
+</tr>
+<tr>
+<td><strong>Cold Start</strong></td>
+<td>First LSP tool call <del>1.5s (server process needs to initialize). Subsequent calls are faster (</del>0.65s for cached LSP)</td>
+</tr>
+<tr>
+<td><strong>Batch Refactoring</strong></td>
+<td><code>code_batch_refactor</code> creates <code>.bak</code> backups — check disk space for 500+ files</td>
+</tr>
+<tr>
+<td><strong>Subagent Compatibility</strong></td>
+<td>See Subagent Integration section below</td>
+</tr>
+</tbody></table>
+<hr>
+<h4>Subagent Integration</h4>
+<p>All code_intel tools are automatically available in delegated subagents (<code>delegate_task</code>):</p>
+<pre><code class="language-python"># Subagent hat automatisch Zugriff auf alle 70 code_intel Tools
+delegate_task(goal="Refactoriere die User-Service Klasse",
+              context="...",
+              toolsets=["agentiker_code_intel", "terminal", "file"])
+</code></pre>
+<p><strong>Steering hint:</strong> Subagents are instructed to use <code>code_symbols</code> instead of <code>read_file</code> for code understanding — saves 10-50× tokens.</p>
+<hr>
+<h3>📦 Installation</h3>
+<h4>1. Plugin aktivieren</h4>
+<p>Enable in <code>~/.hermes/config.yaml</code>:</p>
+<pre><code class="language-yaml">plugins:
+  enabled:
+    - code_intel
+</code></pre>
+<p>Requires Hermes restart (<code>/new</code> or daemon restart).</p>
+<h4>2. Dependencies installieren</h4>
+<pre><code class="language-bash"># Ins Hermes-Venv installieren (vom Plugin-Ordner aus)
+cd ~/.hermes/plugins/agentiker-code-intel
+~/.hermes/hermes-agent/venv/bin/pip install -e .
+
+# Option B — Via Install-Script
+./scripts/install-deps.sh
+
+# Option C — Manuell (nur Dependencies)
+python3 -m pip install tree-sitter tree-sitter-languages ast-grep-py rich PyYAML
+</code></pre>
+<p><strong>Dependencies:</strong> <code>tree-sitter&gt;=0.24.0</code>, <code>ast-grep-py&gt;=0.37.0</code>, <code>rich&gt;=13.0</code>, <code>PyYAML&gt;=6.0</code></p>
+<h4>3. LSP Server (optional, for full semantic features)</h4>
+<p>LSP tools (<code>code_definition</code>, <code>code_references</code>) work without a server — they fall back to AST analysis. For full support:</p>
+<pre><code class="language-bash"># Python
+pip install pyright
+
+# TypeScript / JavaScript
+npm install -g typescript-language-server typescript
+
+# Rust
+rustup component add rust-analyzer
+
+# Go
+go install golang.org/x/tools/gopls@latest
+</code></pre>
+<p>Das Plugin erkennt Server automatisch via PATH, <code>node_modules/.bin</code> und <code>npx</code>-Fallback.</p>
+<h4>4. Monorepo Support</h4>
+<p>Automatic detection of <code>pnpm-workspace.yaml</code>, <code>nx.json</code>, <code>lerna.json</code> — workspace folders are sent to the LSP server for cross-workspace type resolution. No configuration needed.</p>
+<hr>
+<h3>🌐 Supported Languages</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Extensions</th>
+<th align="center">Tree-sitter</th>
+<th align="center">ast-grep</th>
+<th align="center">LSP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Python</td>
+<td><code>.py</code>, <code>.pyi</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅ (pyright/pylsp)</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td><code>.js</code>, <code>.jsx</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td><code>.ts</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅ (tsls)</td>
+</tr>
+<tr>
+<td>TSX</td>
+<td><code>.tsx</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅ (tsls)</td>
+</tr>
+<tr>
+<td>Rust</td>
+<td><code>.rs</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅ (rust-analyzer)</td>
+</tr>
+<tr>
+<td>Go</td>
+<td><code>.go</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅ (gopls)</td>
+</tr>
+<tr>
+<td>Java</td>
+<td><code>.java</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">—</td>
+</tr>
+<tr>
+<td>C</td>
+<td><code>.c</code>, <code>.h</code></td>
+<td align="center">✅</td>
+<td align="center">—</td>
+<td align="center">—</td>
+</tr>
+<tr>
+<td>C++</td>
+<td><code>.cpp</code></td>
+<td align="center">✅</td>
+<td align="center">—</td>
+<td align="center">—</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>🏗 Architecture</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    code_intel Plugin                         │
+├──────────────────────────┬──────────────────────────────────┤
+│   tree-sitter / AST      │   LSP Bridge                     │
+│   (schnell, offline)     │   (semantisch, online)            │
+│                          │                                  │
+│  ┌────────────────────┐ │ ┌──────────────────────────────┐  │
+│  │ code_symbols       │ │ │ code_definition              │  │
+│  │ code_search        │ │ │ code_references              │  │
+│  │ code_refactor      │ │ │ code_diagnostics             │  │
+│  │ code_capsule       │ │ │ code_hover                   │  │
+│  │ code_complexity    │ │ │ code_call_hierarchy          │  │
+│  │ code_duplicates    │ │ │ code_type_hierarchy          │  │
+│  │ code_unused_finder │ │ │ code_rename                  │  │
+│  │ ...                │ │ │ ...                          │  │
+│  └────────────────────┘ │ └──────────────────────────────┘  │
+├──────────────────────────┴──────────────────────────────────┤
+│                    Knowledge Graph                           │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ code_index → SQLite-persistenter ImportGraph          │   │
+│  │ code_graph_query: callers, callees, hot_paths,       │   │
+│  │   cycles, health, summary                            │   │
+│  └──────────────────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────┤
+│                    Subagent Integration                      │
+│  • Automatische Injektion in _SUBAGENT_TOOLSETS             │
+│  • Jeder delegate_task-Spawn hat code_intel Tools           │
+│  • Steering-Hint: "Nutze code_symbols statt read_file"      │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<hr>
+<h3>🔧 How It Works</h3>
+<h4>LSP Bridge Performance</h4>
+<table>
+<thead>
+<tr>
+<th>Fix</th>
+<th>Before</th>
+<th>After</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>stderr=subprocess.DEVNULL</code></td>
+<td>Pipe buffer (64KB) fills with warnings → Deadlock</td>
+<td>Silenced</td>
+<td>Cold starts never hang</td>
+</tr>
+<tr>
+<td><code>PYTHONWARNINGS=ignore</code></td>
+<td>pylsp schreibt ~200KB Deprecation-Warnings</td>
+<td>Suppressed</td>
+<td>2× faster Python LSP init</td>
+</tr>
+<tr>
+<td><code>_LSP_INIT_TIMEOUT=15s</code></td>
+<td>60s auf dead server → Agent blockt</td>
+<td>15s fast retry</td>
+<td>Agent reagiert sofort</td>
+</tr>
+<tr>
+<td><code>_LSP_REQUEST_TIMEOUT=15s</code></td>
+<td>30s auf hung request (tsserver parsing giant file)</td>
+<td>15s</td>
+<td>Quicker fallback to AST</td>
+</tr>
+</tbody></table>
+<p>LSP bridges are keyed by <code>(language_id, workspace_root)</code> with LRU pool (max 8 concurrent). Fallback chain: first available server wins.</p>
+<h4>Symbol Caching</h4>
+<p>AST results are cached in memory (<code>OrderedDict</code>, max 2000 entries, LRU). Auto-cleared at session end.</p>
+<h4>🩺 Health Check Script</h4>
+<p>Das Plugin shiped <code>scripts/health_check.py</code> — 10 Assertions: Tool-Registry, tree-sitter extraktion, AST search, ast-grep refactoring, LSP definition + references, Schema-Validierung.</p>
+<pre><code class="language-bash"># Manuell
+~/.hermes/hermes-agent/venv/bin/python3 \
+  ~/.hermes/plugins/code_intel/scripts/health_check.py
+
+# Als cron (empfohlen) — stumm bei Gesundheit:
+hermes cronjob create \
+  --name "code_intel_health" \
+  --schedule "every 60m" \
+  --script "scripts/health_check.py" \
+  --no-agent
+</code></pre>
+<h4>Bundled Skill</h4>
+<p>Das Plugin registriert automatisch den Skill <code>code_intel:native-code-intelligence</code>:</p>
+<pre><code>skill_view("code_intel:native-code-intelligence")
+</code></pre>
+<p>Contains: Mandatory Workflows, Tool Selection Rules, Quality Guardrails, IDE Feature Coverage Map.</p>
+<h4>Slash Command</h4>
+<p>Nach Aktivierung: <code>/code-intel status</code>, <code>/code-intel clear</code>, <code>/code-intel help</code></p>
+<h4>LSP Benchmarks (TypeScript, pnpm monorepo, 60 workspaces)</h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Scenario</th>
+<th>Time</th>
+<th>Output Tokens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>code_definition</code></td>
+<td>Import binding → typeDefinition fallback</td>
+<td>~1.5s (first)</td>
+<td>~272</td>
+</tr>
+<tr>
+<td><code>code_definition</code></td>
+<td>Cached request</td>
+<td>~0.65s</td>
+<td>~290</td>
+</tr>
+<tr>
+<td><code>code_references</code></td>
+<td>Small class (~3 refs)</td>
+<td>~0.67s</td>
+<td>~1,362</td>
+</tr>
+<tr>
+<td><code>code_references</code></td>
+<td>Medium class (~6 refs)</td>
+<td>~0.66s</td>
+<td>~2,610</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>🧪 Development</h3>
+<pre><code class="language-bash">cd ~/.hermes/plugins/agentiker-code-intel
+
+# Run tests
+PYTHONPATH=~/.hermes/plugins ~/.hermes/hermes-agent/venv/bin/python3 \
+  -m pytest -q --tb=short
+
+# Einzelner Test
+PYTHONPATH=~/.hermes/plugins ~/.hermes/hermes-agent/venv/bin/python3 \
+  -m pytest tests/test_code_intel.py::test_extract_symbols_python -v
+</code></pre>
+<p><strong>Pre-Commit Hook:</strong> Automatischer Syntax-Check + Tests vor jedem Commit.</p>
+<pre><code class="language-bash">git config core.hooksPath .githooks
+</code></pre>
+<h4>CHANGELOG</h4>
+<p>Jeder Release bekommt einen Eintrag in <code>CHANGELOG.md</code>:</p>
+<ul>
+<li><code>[added]</code> für neue Features</li>
+<li><code>[changed]</code> für Änderungen</li>
+<li><code>[fixed]</code> für Bugfixes</li>
+<li><code>[removed]</code> für Entfernungen</li>
+</ul>
+<hr>
+<h3>🤝 Contributing</h3>
+<ol>
+<li>Fork the repo</li>
+<li>Create a feature branch</li>
+<li>Add tests for your changes</li>
+<li>Run <code>PYTHONPATH=~/.hermes/plugins python3 -m pytest -q</code> — all tests green</li>
+<li>Open a PR</li>
+</ol>
+<hr>
+<h3>📄 License</h3>
+<p><a href="LICENSE">MIT</a> — use it however you like.</p>
+<hr>
+<h3>🙏 Credits</h3>
+<ul>
+<li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> — the plugin system this builds on</li>
+<li><a href="https://github.com/rewasa">rewasa</a> — original author of upstream <code>hermes-code-intel-plugin</code></li>
+<li><a href="https://tree-sitter.github.io/">tree-sitter</a> — incremental parsing system</li>
+<li><a href="https://ast-grep.github.io/">ast-grep</a> — pattern-based code search and replacement</li>
+<li><a href="https://github.com/microsoft/pyright">pyright</a> — Python LSP server (fallback)</li>
+<li><a href="https://github.com/typescript-language-server/typescript-language-server">typescript-language-server</a> — TypeScript/JavaScript LSP server</li>
+</ul>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in plugins &amp; extensions</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
+        <div class="stars">★ 339</div>
+        <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
+      </a>
+      <a class="related-row" href="/projects/42-evey/hermes-plugins">
+        <div class="stars">★ 276</div>
+        <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
+      </a>
+      <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
+        <div class="stars">★ 42</div>
+        <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
+      </a>
+      <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
+        <div class="stars">★ 12</div>
+        <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
+      </a>
+      <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
+        <div class="stars">★ 13</div>
+        <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
+      </a>
+      <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
+        <div class="stars">★ 40</div>
+        <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
+      </a>
+      <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
+        <div class="stars">★ 358</div>
+        <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
+      </a>
+      <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
+        <div class="stars">★ 298</div>
+        <div class="name"><span class="org">stainlu /</span> hermes-labyrinth</div>
+      </a>
+    </div>
+    
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
