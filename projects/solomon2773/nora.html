@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>solomon2773/nora — Hermes Agent Deployment &amp; Infra | Hermes Atlas</title>
+<meta name="description" content="Nora is a self-hosted platform for deploying, monitoring, and operating OpenClaw and Hermes AI agent fleets. It supports agent lifecycle management on Docker…">
+<link rel="canonical" href="https://hermesatlas.com/projects/solomon2773/nora">
+<meta property="og:title" content="solomon2773/nora — Hermes Atlas">
+<meta property="og:description" content="Nora is a self-hosted platform for deploying, monitoring, and operating OpenClaw and Hermes AI agent fleets. It supports agent lifecycle management on Docker…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/solomon2773/nora">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=nora&amp;subtitle=Open-source%2C+self-hosted+control+plane+for+OpenClaw+and+Hermes+AI-agent+fleets+on+Docker%2FKubernetes+%E2%80%94+REST%2C+CLI%2C+and+MCP.&amp;kind=project+%C2%B7+deployment">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="solomon2773/nora — Hermes Atlas">
+<meta name="twitter:description" content="Nora is a self-hosted platform for deploying, monitoring, and operating OpenClaw and Hermes AI agent fleets. It supports agent lifecycle management on Docker…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=nora&amp;subtitle=Open-source%2C+self-hosted+control+plane+for+OpenClaw+and+Hermes+AI-agent+fleets+on+Docker%2FKubernetes+%E2%80%94+REST%2C+CLI%2C+and+MCP.&amp;kind=project+%C2%B7+deployment">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "deployment &amp; infra", "item": "https://hermesatlas.com/lists/deployment-options" },
+    { "@type": "ListItem", "position": 3, "name": "nora" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/solomon2773/nora#software",
+  "name": "nora",
+  "description": "Nora is a self-hosted platform for deploying, monitoring, and operating OpenClaw and Hermes AI agent fleets. It supports agent lifecycle management on Docker or Kubernetes and provides tools for secrets management, monitoring, and scheduling.",
+  "url": "https://hermesatlas.com/projects/solomon2773/nora",
+  "codeRepository": "https://github.com/solomon2773/nora",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "TypeScript",
+  "license": "https://spdx.org/licenses/Apache-2.0.html",
+  "author": {
+    "@type": "Organization",
+    "name": "solomon2773",
+    "url": "https://github.com/solomon2773"
+  },
+  "dateModified": "2026-07-13T23:39:29.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 22
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script src="/assets/js/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span id="meta-count">189·repos</span>
+    <span id="meta-version">hermes·v0.18.0</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/lists/">lists</a>
+    <a href="/guide/">handbook</a>
+    <a href="/masterclass/">masterclass</a>
+    <a href="/dev/">dev</a>
+    <a href="/reports/">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-icon tt-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2.25M12 19.75V22M4.93 4.93l1.59 1.59M17.48 17.48l1.59 1.59M2 12h2.25M19.75 12H22M4.93 19.07l1.59-1.59M17.48 6.52l1.59-1.59"/></svg>
+    </span>
+    <span class="tt-icon tt-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M20.2 15.1A8.4 8.4 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+    </span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/lists/deployment-options">deployment &amp; infra</a><span class="sep">/</span>nora
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">solomon2773</span><span class="slash">/</span>nora
+  </h1>
+  <p class="project-desc">Open-source, self-hosted control plane for OpenClaw and Hermes AI-agent fleets on Docker/Kubernetes — REST, CLI, and MCP.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 22</span>
+    <span><span class="meta-label">lang</span>TypeScript</span>
+    <span><span class="meta-label">license</span>Apache-2.0</span>
+    
+    <span><span class="meta-label">updated</span>2026-07-13</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/solomon2773/nora" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://nora.solomontsao.com" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">Nora is a self-hosted platform for deploying, monitoring, and operating OpenClaw and Hermes AI agent fleets. It supports agent lifecycle management on Docker or Kubernetes and provides tools for secrets management, monitoring, and scheduling.</p>
+    <ul class="summary-highlights">
+      <li>Supports Docker and Kubernetes deployments</li>
+      <li>Provides per-agent metrics, costs, and LLM budget caps</li>
+      <li>Includes REST API, CLI, and MCP server</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <div align="center">
+  <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/nora-logo.png" alt="Nora" width="112" height="112">
+  <h1>Nora</h1>
+  <p><strong>Run OpenClaw and Hermes fleets on your own infrastructure — from one control plane.</strong></p>
+</div>
+
+<p align="center">
+  <strong>OpenClaw + Hermes</strong>&nbsp;&nbsp;·&nbsp;&nbsp;
+  <strong>Docker + Kubernetes GA</strong>&nbsp;&nbsp;·&nbsp;&nbsp;
+  <strong>69 provider connections</strong>&nbsp;&nbsp;·&nbsp;&nbsp;
+  <strong>Apache-2.0</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/solomon2773/nora"><img src="https://img.shields.io/badge/%E2%98%85-Star_Nora-f2d7a1?style=for-the-badge&amp;labelColor=071018" alt="Star Nora on GitHub"></a>
+  <a href="https://noradocs.solomontsao.com/quickstart"><img src="https://img.shields.io/badge/%E2%86%92-Quick_Start-8ae6ff?style=for-the-badge&amp;labelColor=071018" alt="Quick Start"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/solomon2773/nora/releases"><img src="https://img.shields.io/github/v/release/solomon2773/nora?color=6d28d9&amp;label=release" alt="Latest release"></a>
+  <a href="https://github.com/solomon2773/nora/actions/workflows/ci-quality.yml"><img src="https://img.shields.io/github/actions/workflow/status/solomon2773/nora/ci-quality.yml?branch=master&amp;label=CI" alt="CI status"></a>
+  <a href="https://www.npmjs.com/package/@noraai/cli"><img src="https://img.shields.io/npm/v/%40noraai%2Fcli?label=%40noraai%2Fcli&amp;color=cb3837" alt="@noraai/cli on npm"></a>
+  <a href="https://www.npmjs.com/package/@noraai/mcp-server"><img src="https://img.shields.io/npm/v/%40noraai%2Fmcp-server?label=%40noraai%2Fmcp-server&amp;color=cb3837" alt="@noraai/mcp-server on npm"></a>
+</p>
+
+<p align="center">
+  <a href="https://noradocs.solomontsao.com">📚 Documentation</a> ·
+  <a href="https://noradocs.solomontsao.com/self-hosting">Self-Hosting</a> ·
+  <a href="https://noradocs.solomontsao.com/concepts/architecture">Architecture</a> ·
+  <a href="https://noradocs.solomontsao.com/compare">How Nora Compares</a> ·
+  <a href=".github/press-kit/README.md">Press Kit</a> ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
+
+<hr>
+<p align="center">
+  <a href="https://nora.solomontsao.com/walkthrough.mp4">
+    <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/walkthrough.gif" alt="Watch the Nora walkthrough" width="900">
+  </a>
+</p>
+<p align="center">
+  <sub>▶ <b><a href="https://nora.solomontsao.com/walkthrough.mp4">Watch the walkthrough</a></b></sub>
+</p>
+
+<h3>What Is Nora?</h3>
+<p>Nora is the self-hosted AI agent ops platform for running autonomous agent fleets on infrastructure you control — whether you standardize on OpenClaw, Hermes, or keep both available in the same operator surface.</p>
+<p>Most teams running agents in production eventually rebuild the same layer around the runtime itself: deploy workflows, secrets, monitoring, logs, terminal, templates, and a separate admin surface. Nora exists so that layer doesn't have to be rewritten every time the runtime conversation changes. Operator workflows live under <code>/app</code>; platform-wide admin lives under <code>/admin</code>.</p>
+<p>→ <a href="https://noradocs.solomontsao.com/introduction#positioning-pillars">Why Nora</a> · <a href="https://noradocs.solomontsao.com/concepts/runtimes">Runtime model</a> · <a href="https://noradocs.solomontsao.com/concepts/architecture#deployment-topologies">Deployment footprint</a></p>
+<h3>Features</h3>
+<ul>
+<li><strong>Deploy &amp; operate runtimes</strong> — provision OpenClaw and Hermes agents to Docker or Kubernetes (both GA, official Helm chart) with full lifecycle controls: deploy, start/stop, restart, redeploy, and version history.</li>
+<li><strong>Migrate existing runtimes</strong> — recreate agents from uploaded bundles, with privileged local-Docker Live Pull available to self-hosted platform admins.</li>
+<li><strong>Live operator access</strong> — streaming logs, an interactive terminal into running containers, a file browser/editor, and the OpenClaw gateway &amp; Hermes dashboard embedded in the operator UI.</li>
+<li><strong>Monitoring &amp; alerting</strong> — per-agent metrics and cost, a fleet needs-attention roll-up (errored, stuck, over-budget, stalled telemetry), and user-defined alert rules delivered to your channels.</li>
+<li><strong>Budgets &amp; scheduled runs</strong> — per-agent LLM budget hard caps with auto-pause, plus recurring cron schedules for agent runs with queue retries and sweep guards.</li>
+<li><strong>Secrets that fail closed by default</strong> — provider keys are AES-256-GCM encrypted at rest and synced to running runtimes; production refuses to boot without a valid encryption key unless an operator deliberately enables the insecure plaintext override; SSH host-key pinning protects remote (BYOC) Docker hosts.</li>
+<li><strong>Network isolation</strong> — baseline Kubernetes NetworkPolicy ingress isolation with admin-managed CIDR allow rules, and an experimental NemoClaw hardened sandbox for untrusted code.</li>
+<li><strong>Agent Hub</strong> — installable, versioned starter templates to go from zero to a working agent fast.</li>
+<li><strong>Integrations</strong> — a 69-entry credential/connectivity catalog (source control, chat, cloud, observability, vector DBs, automation) plus 17+ LLM providers. Executable behavior comes from runtime skills or MCP adapters; supported per-agent MCP servers are enabled explicitly.</li>
+<li><strong>Experimental Proxmox LXC</strong> — deploy standard OpenClaw or a prepared Hermes image into unprivileged LXC with verified API TLS and pinned SSH. It is not VM-grade isolation and still requires the real-hardware smoke gate before production use.</li>
+<li><strong>Automate everything</strong> — a public REST API (OpenAPI 3.1), the <code>@noraai/cli</code>, and the <code>@noraai/mcp-server</code> for Claude Code, Gemini CLI, Claude Desktop, and Cursor.</li>
+<li><strong>Workspaces &amp; RBAC</strong> — multi-tenant workspaces with ranked roles, a platform admin surface, account event history, and encrypted managed backups.</li>
+</ul>
+<h3>Screenshots</h3>
+<table>
+  <tbody><tr>
+    <td align="center" width="50%">
+      <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/proof-operator-dashboard.png" alt="Operator dashboard"><br>
+      <sub><b>Operator dashboard</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/proof-operator-fleet.png" alt="Fleet monitoring"><br>
+      <sub><b>Fleet monitoring &amp; needs-attention triage</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/proof-operator-agent-detail.png" alt="Nora agent detail and operations view"><br>
+      <sub><b>Agent detail &amp; lifecycle operations</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/proof-operator-hermes-webui-tab.png" alt="Embedded Hermes WebUI"><br>
+      <sub><b>Hermes WebUI embedded in Nora</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="https://raw.githubusercontent.com/solomon2773/nora/main/.github/readme-assets/proof-operator-deploy-flow.png" alt="Agent deploy flow"><br>
+      <sub><b>Agent deploy flow</b></sub>
+    </td>
+  </tr>
+</tbody></table>
+
+<h3>Quick Start</h3>
+<blockquote>
+<p><strong>Requirements:</strong> macOS 12+, Linux, or Windows 10+ (WSL2), with Docker Engine + Compose v2. The installer checks for Docker, Git, and OpenSSL and installs anything missing.</p>
+</blockquote>
+<p><strong>macOS / Linux / WSL2:</strong></p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/solomon2773/nora/master/setup.sh | bash
+</code></pre>
+<details>
+<summary><strong>Prefer to inspect the installer first?</strong></summary>
+
+<pre><code class="language-bash">git clone https://github.com/solomon2773/nora.git
+cd nora
+less setup.sh
+bash setup.sh
+</code></pre>
+</details>
+
+<p><strong>Windows (PowerShell):</strong></p>
+<pre><code class="language-powershell">iwr -useb https://raw.githubusercontent.com/solomon2773/nora/master/setup.ps1 | iex
+</code></pre>
+<blockquote>
+<p><strong>Windows requires <a href="https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows">PowerShell 7+</a>.</strong> The default Windows PowerShell 5.1 is not supported — run the command above from a <code>pwsh</code> 7 session.</p>
+</blockquote>
+<p><strong>Kubernetes (Helm):</strong></p>
+<pre><code class="language-bash">helm show chart oci://ghcr.io/solomon2773/nora
+</code></pre>
+<p>The command resolves the latest published chart; pin the reported version for reproducible production installs. The public OCI chart installs the full Nora control plane. See the <a href="https://noradocs.solomontsao.com/self-hosting#kubernetes-helm">Helm instructions</a> for the required secrets and Ingress options.</p>
+<p>The installer verifies prerequisites, generates or preserves secrets, optionally creates a bootstrap admin, picks free local ports when the defaults are busy, and starts the stack. Once it finishes, open the URL printed by setup. Local mode defaults to <code>http://localhost:8080</code>, but setup may select another port such as <code>8081</code> on a busy workstation. Then follow the <a href="https://noradocs.solomontsao.com/quickstart">first-15-minutes walkthrough</a>.</p>
+<blockquote>
+<p><strong>No API key yet?</strong> On installations with the local Docker target enabled, choose <strong>Launch local Docker demo</strong> on the Getting Started page. Nora deploys a working agent against its built-in deterministic demo provider, so you can validate chat and the operator workflow with zero keys and zero model-usage cost. Kubernetes-only installations start by adding a model provider and deploying to an enabled cluster target.</p>
+</blockquote>
+<p>For manual setup, environment variables, public-domain mode, TLS, Remote Docker, Kubernetes, NemoClaw, and experimental Proxmox LXC configuration, see the docs:</p>
+<ul>
+<li><a href="https://noradocs.solomontsao.com/self-hosting">Self-hosting guide</a></li>
+<li><a href="https://noradocs.solomontsao.com/configuration/environment-variables">Environment variables reference</a></li>
+<li><a href="https://noradocs.solomontsao.com/configuration/provisioner-backends">Provisioner backends</a> (Docker and k3s/Kubernetes are GA; Remote Docker, NemoClaw, and Proxmox LXC are experimental)</li>
+<li><a href="https://noradocs.solomontsao.com/guides/remote-docker">Remote Docker BYOC setup</a> — SSH registration, private networking, validation, sharing, and recovery</li>
+<li><a href="https://noradocs.solomontsao.com/configuration/tls-domains">TLS and public domains</a></li>
+<li><a href="https://github.com/solomon2773/nora/blob/main/infra/cloudflare-launch.md">Fronting a launch with Cloudflare</a> — edge caching, rate limiting, and spike absorption for the single-host deploy</li>
+</ul>
+<h3>Documentation</h3>
+<p>Full docs live at <strong><a href="https://noradocs.solomontsao.com">noradocs.solomontsao.com</a></strong>. The MDX source is in <a href="./docs"><code>docs/</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>What's there</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://noradocs.solomontsao.com/quickstart">Quick Start</a></td>
+<td>Install and validate your first agent in 15 minutes</td>
+</tr>
+<tr>
+<td><a href="https://noradocs.solomontsao.com/concepts/architecture">Concepts</a></td>
+<td>Architecture, agents, runtimes, workspaces, LLM providers, Agent Hub</td>
+</tr>
+<tr>
+<td><a href="https://noradocs.solomontsao.com/configuration/platform-modes">Configuration</a></td>
+<td>Platform modes, env vars, provisioner backends, TLS / public domains</td>
+</tr>
+<tr>
+<td><a href="https://noradocs.solomontsao.com/guides/deploy-agent">Guides</a></td>
+<td>Deploy agent, providers, integrations, channels, monitoring, alert rules, backups, Agent Hub, NemoClaw</td>
+</tr>
+<tr>
+<td><a href="https://noradocs.solomontsao.com/api/overview">API Reference</a></td>
+<td>Auth, workspaces, agents, channels, integrations, providers, monitoring, alert rules</td>
+</tr>
+<tr>
+<td><a href="https://noradocs.solomontsao.com/support/faq">Support</a></td>
+<td>FAQ, troubleshooting</td>
+</tr>
+</tbody></table>
+<h3>Architecture</h3>
+<pre><code class="language-text">Nginx
+├── /           → frontend-marketing  (Next.js)
+├── /app/*      → frontend-dashboard  (Next.js)
+├── /admin/*    → admin-dashboard     (Next.js)
+└── /api/*      → backend-api         (Express.js)
+                       ├── PostgreSQL
+                       ├── Redis + BullMQ  (deployments, clawhub-jobs, backups, alert-deliveries)
+                       ├── worker-provisioner
+                       ├── worker-backup
+                       ├── deploy-target adapters  (Docker + k3s/k8s GA · Remote Docker + Proxmox experimental)
+                       └── sandbox profiles        (standard · NemoClaw experimental)
+</code></pre>
+<p>Full architecture write-up — system map, queue/worker boundaries, RBAC, migration contract, deployment topologies — is in <a href="https://noradocs.solomontsao.com/concepts/architecture">docs/concepts/architecture</a>.</p>
+<h3>Tech Stack</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reverse proxy</td>
+<td>Nginx</td>
+</tr>
+<tr>
+<td>Frontends</td>
+<td>Next.js 16, React 19, Tailwind CSS</td>
+</tr>
+<tr>
+<td>Backend API</td>
+<td>Express.js 5, Node.js 24 LTS</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>JWT, HttpOnly cookies, bcryptjs, provider OAuth bridge</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>PostgreSQL 15</td>
+</tr>
+<tr>
+<td>Queue</td>
+<td>BullMQ + Redis 7</td>
+</tr>
+<tr>
+<td>Runtime families</td>
+<td>OpenClaw, Hermes</td>
+</tr>
+<tr>
+<td>Deployment targets</td>
+<td>Docker and k3s/Kubernetes (GA); Remote Docker BYOC and Proxmox unprivileged LXC (experimental)</td>
+</tr>
+<tr>
+<td>Sandbox profiles</td>
+<td>Standard; NemoClaw (experimental, not available on Proxmox)</td>
+</tr>
+<tr>
+<td>Secrets at rest</td>
+<td>AES-256-GCM (provider keys, integrations, backups)</td>
+</tr>
+</tbody></table>
+<h3>Public REST API, CLI, and MCP</h3>
+<p>Workspace-scoped API keys (bearer-only, prefixed <code>nora_</code>, HMAC-hashed at rest, scope-based) drive a stable subset of the REST surface. Issue keys at <code>/app/workspaces/&lt;id&gt;/api-keys</code>.</p>
+<pre><code class="language-bash">export NORA_TOKEN="nora_..."
+curl -H "Authorization: Bearer $NORA_TOKEN" https://your-nora.example.com/api/agents
+</code></pre>
+<p>A small CLI lives in <a href="./cli"><code>cli/</code></a> (<code>@noraai/cli</code>): run <code>nora login</code> once to save your host and API token, then <code>nora workspaces</code>, <code>nora agents</code>, and <code>nora monitoring</code> wrap the same REST surface. <code>nora doctor</code> runs an admin-only control-plane health check, and <code>nora mcp</code> launches the MCP stdio server. See the <a href="https://noradocs.solomontsao.com/api/overview">API reference</a> for the supported endpoints and scopes.</p>
+<p><strong>Operate Nora from Claude Code, Gemini CLI, Claude Desktop, or Cursor:</strong> the <a href="./mcp-server"><code>mcp-server/</code></a> package (<code>@noraai/mcp-server</code>) exposes the same API as <a href="https://modelcontextprotocol.io">Model Context Protocol</a> tools — deploy agents, control their lifecycle, and read fleet metrics, events, and per-agent cost from any MCP client. Destructive deletion stays disabled unless explicitly opted in.</p>
+<pre><code class="language-bash">claude mcp add nora \
+  --env NORA_API_URL=https://your-nora.example.com \
+  --env NORA_API_KEY=nora_... \
+  -- npx -y @noraai/mcp-server
+</code></pre>
+<p>Gemini CLI users can install the repository extension directly. The installer prompts for the Nora API URL and stores the workspace API key as a sensitive extension setting:</p>
+<pre><code class="language-bash">gemini extensions install https://github.com/solomon2773/nora
+</code></pre>
+<p>See the <a href="https://noradocs.solomontsao.com/guides/mcp-server">MCP guide</a> for Gemini CLI, Claude Desktop, and Cursor configuration, the tool list, and security notes.</p>
+<h3>Standards &amp; isolation</h3>
+<ul>
+<li><strong>MCP — shipped.</strong> A control-plane <a href="https://modelcontextprotocol.io">MCP</a> server (<code>@noraai/mcp-server</code>, published to the official <a href="https://github.com/modelcontextprotocol/registry">MCP Registry</a>) plus per-agent MCP server management — operate the fleet from Claude Code, Gemini CLI, Claude Desktop, or Cursor, and wire MCP tools into individual agents.</li>
+<li><strong>OpenTelemetry GenAI — available.</strong> <a href="https://noradocs.solomontsao.com/guides/opentelemetry">OTLP + Prometheus export</a> of runtime telemetry under the <code>gen_ai.*</code> semantic conventions — per-exchange chat spans plus token/cost/resource metrics flow into the Grafana / Datadog / Langfuse stack you already run. (Per-tool-call sub-spans depend on runtime event streams and remain on the roadmap.)</li>
+<li><strong>A2A — on the roadmap.</strong> Agent Cards / Agent-to-Agent discovery for managed OpenClaw and Hermes agents.</li>
+<li><strong>Isolation, per deploy target.</strong> Standard Docker runs use container namespaces plus operator-set CPU and RAM limits; <code>disk_gb</code> is metadata and operators must monitor Docker storage. Kubernetes adds workload resource limits and provisioned storage requests. The experimental <strong>NemoClaw</strong> profile hardens untrusted code with a non-root user, all Linux capabilities dropped, <code>no-new-privileges</code>, Landlock + seccomp, and default-deny egress. Experimental Proxmox placement uses unprivileged LXC, which remains a shared-kernel boundary and is not presented as VM-grade isolation. See the <a href="https://noradocs.solomontsao.com/concepts/security#runtime-isolation">isolation model</a>.</li>
+</ul>
+<h3>Roadmap</h3>
+<ul>
+<li><strong>NemoClaw hardening</strong> <em>(high priority)</em> — mature the experimental secure-sandbox profile end to end: enablement, policy controls, approvals, telemetry, and validation.</li>
+<li><strong>Proxmox hardware qualification</strong> — run the protected OpenClaw and prepared-Hermes lifecycle matrix on the exact node, storage, bridge, templates, and network before considering any beta label; until then the target remains Experimental.</li>
+<li><strong>Hermes/OpenClaw parity</strong> — close runtime gaps across validation, logs, terminal access, monitoring, and failure reporting.</li>
+<li><strong>First-run operator UX</strong> — a tighter path from install to the first deployed, validated agent.</li>
+<li><strong>Account-scoped monitoring</strong> — account-level health roll-ups across workspaces, agents, cost, and alerts, with drill-downs.</li>
+<li><strong>Auth &amp; key-sync hardening</strong> — key rotation, audit trails, and recovery from partial sync failures.</li>
+<li><strong>Agent Hub ergonomics</strong> — better template discovery, install/configure flows, and post-install validation.</li>
+<li><strong>A2A support</strong> — Agent Cards / agent-to-agent discovery for managed runtimes.</li>
+</ul>
+<h3>Development</h3>
+<pre><code class="language-bash"># Docker (recommended)
+docker compose up -d
+docker compose logs -f backend-api
+
+# Tests
+cd backend-api &amp;&amp; npx jest --no-watchman
+cd e2e &amp;&amp; npm test
+</code></pre>
+<p>Start with <a href="https://github.com/solomon2773/nora/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> for contributor guidance. <a href="https://github.com/solomon2773/nora/blob/main/CLAUDE.md"><code>CLAUDE.md</code></a> documents the repo layout, development commands, and subtree ownership for humans and AI coding agents alike.</p>
+<h3>Contributing</h3>
+<p>New here? Browse <a href="https://github.com/solomon2773/nora/labels/good%20first%20issue"><strong>good first issues</strong></a> for small, self-contained starting points, then skim <a href="https://github.com/solomon2773/nora/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
+<p>Strong contribution areas: runtime adapter work · operator and admin UX · provisioning and lifecycle orchestration · integrations and channels · test and CI hardening · self-hosted deployment ergonomics.</p>
+<p>Typical workflow: fork → branch (<code>feature/...</code>) → commit → pull request.</p>
+<h3>Community</h3>
+<ul>
+<li><a href="https://github.com/solomon2773/nora/issues">Issues</a></li>
+<li><a href="https://github.com/solomon2773/nora/discussions">Discussions</a></li>
+<li><a href="https://github.com/NousResearch/Hermes-Agent">Hermes Agent</a></li>
+<li><a href="https://github.com/openclaw/openclaw">OpenClaw</a></li>
+</ul>
+<p>If Nora is useful to you, a ⭐ on the repo helps other self-hosters find it.</p>
+<h3>License</h3>
+<p>This project is open source under the <a href="./LICENSE">Apache License 2.0</a>.</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in deployment &amp; infra</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/AbuZar-Ansarii/Hermes-Agent-On-Android">
+        <div class="stars">★ 149</div>
+        <div class="name"><span class="org">AbuZar-Ansarii /</span> Hermes-Agent-On-Android</div>
+      </a>
+      <a class="related-row" href="/projects/ultraworkers/hermes-agent-helm-chart">
+        <div class="stars">★ 115</div>
+        <div class="name"><span class="org">ultraworkers /</span> hermes-agent-helm-chart</div>
+      </a>
+      <a class="related-row" href="/projects/marshallrichards/ClawPhone">
+        <div class="stars">★ 541</div>
+        <div class="name"><span class="org">marshallrichards /</span> ClawPhone</div>
+      </a>
+      <a class="related-row" href="/projects/numtide/llm-agents.nix">
+        <div class="stars">★ 1.6K</div>
+        <div class="name"><span class="org">numtide /</span> llm-agents.nix</div>
+      </a>
+      <a class="related-row" href="/projects/TheAiSingularity/hermesclaw">
+        <div class="stars">★ 57</div>
+        <div class="name"><span class="org">TheAiSingularity /</span> hermesclaw</div>
+      </a>
+      <a class="related-row" href="/projects/0xrsydn/nix-hermes-agent">
+        <div class="stars">★ 29</div>
+        <div class="name"><span class="org">0xrsydn /</span> nix-hermes-agent</div>
+      </a>
+      <a class="related-row" href="/projects/rookiemann/portable-hermes-agent">
+        <div class="stars">★ 190</div>
+        <div class="name"><span class="org">rookiemann /</span> portable-hermes-agent</div>
+      </a>
+      <a class="related-row" href="/projects/xmbshwll/hermes-agent-docker">
+        <div class="stars">★ 46</div>
+        <div class="name"><span class="org">xmbshwll /</span> hermes-agent-docker</div>
+      </a>
+    </div>
+    <p class="list-link"><a href="/lists/deployment-options">see all deployment &amp; infra →</a></p>
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
