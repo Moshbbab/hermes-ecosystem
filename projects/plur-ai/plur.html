@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR is a local-first shared memory layer designed to provide persistent context for multi-agent systems. It stores information as plain-text YAML engrams on…">
+<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR is a local-first shared memory layer designed to provide persistent context for multi-agent systems. It stores information as plain-text YAML engrams on…">
+<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR is a local-first shared memory layer designed to provide persistent context for multi-agent systems. It stores information as plain-text YAML engrams on…">
+<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer designed to provide persistent context for multi-agent systems. It stores information as plain-text YAML engrams on the user's disk, allowing preferences and corrections to persist across different tools and sessions. This approach enables cross-tool portability for agents using Claude Code, Cursor, OpenClaw, and Hermes Agent.",
+  "description": "PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools and sessions using a hierarchical scoping system.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-07-14T21:43:00.000Z",
+  "dateModified": "2026-07-16T16:44:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 225
+    "userInteractionCount": 226
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -118,11 +118,11 @@
   <p class="project-desc">Shared memory for AI agents</p>
 
   <div class="meta-row">
-    <span class="stars">★ 225</span>
+    <span class="stars">★ 226</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-07-14</span>
+    <span><span class="meta-label">updated</span>2026-07-16</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer designed to provide persistent context for multi-agent systems. It stores information as plain-text YAML engrams on the user's disk, allowing preferences and corrections to persist across different tools and sessions. This approach enables cross-tool portability for agents using Claude Code, Cursor, OpenClaw, and Hermes Agent.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools and sessions using a hierarchical scoping system.</p>
     <ul class="summary-highlights">
-      <li>Stores persistent knowledge as readable YAML engram files</li>
-      <li>Supports hierarchical scoping for global and project-specific memory</li>
-      <li>Integrates with MCP tools and Hermes Agent via plugins</li>
+      <li>Stores memory as plain-text YAML engrams on disk</li>
+      <li>Supports hierarchical scoping for global and project-specific knowledge</li>
+      <li>Integrates with Claude Code, Cursor, Windsurf, and OpenClaw</li>
     </ul>
   </div>
 </section>
@@ -198,11 +198,6 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>PLUR hybrid + bge-reranker-v2-m3</td>
-<td>97.6%</td>
-<td>max quality — not production-suitable on CPU</td>
-</tr>
-<tr>
 <td>PLUR hybrid (openai-3-large embeddings)</td>
 <td>97.0%</td>
 <td>optional cloud embedder</td>
@@ -266,6 +261,23 @@ context = plur.inject("write a streaming endpoint", limit=10)
 <p><code>plur-ai</code> bridges to the same on-disk store as Claude Code and OpenClaw — memory written from Python is immediately visible across all your tools. See <a href="packages/python/examples/"><code>packages/python/examples/</code></a> for LangChain and llama.cpp integration examples.</p>
 <h4>Verify it works</h4>
 <p>Ask your agent: <em>"What's my PLUR status?"</em> — it should call <code>plur_status</code> and return your engram count and storage path.</p>
+<h4>See it in action</h4>
+<p>Once it's running, teach your agent something once:</p>
+<blockquote>
+<p><em>"Always use <code>pnpm</code> in this project — <code>npm install</code> breaks the lockfile in CI."</em></p>
+</blockquote>
+<p>Start a new session the next day and ask:</p>
+<pre><code>You: How do I run the tests?
+
+&lt;plur-memory&gt; 1 engram · project:my-api &lt;/plur-memory&gt;
+
+Agent: Use pnpm — you mentioned npm breaks the lockfile in CI:
+
+  pnpm test                           # full suite
+  pnpm test -- src/auth.test.ts       # single file
+</code></pre>
+<p>New session. No reminder. The correction was there.</p>
+<p>That's the moment PLUR pays off — the agent remembers a project convention you mentioned once, without it being in any file it can read.</p>
 <h3>How it works</h3>
 <p>PLUR has two storage primitives:</p>
 <p><strong><a href="https://plur.ai/spec.html">Engrams</a></strong> — learned knowledge that persists across sessions. Each engram is a typed assertion ("always use blue-green deploys", "never force-push to main") with:</p>
@@ -565,27 +577,27 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 60.8K</div>
+        <div class="stars">★ 61.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 18.4K</div>
+        <div class="stars">★ 18.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
-        <div class="stars">★ 1.2K</div>
+        <div class="stars">★ 1.3K</div>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 342</div>
+        <div class="stars">★ 343</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 191</div>
+        <div class="stars">★ 192</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 214</div>
+        <div class="stars">★ 216</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
@@ -593,7 +605,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 26.2K</div>
+        <div class="stars">★ 26.4K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>
