@@ -420,7 +420,7 @@ Yes. Run `hermes model`, pick "custom OpenAI-compatible endpoint," and point at 
 hermes update
 ```
 
-Hermes self-updates. It tells you what changed, backs up your config, and applies the new version. Current release is v0.18.0 (as of 2026-07-01); the team ships roughly every two weeks.
+Hermes self-updates. It tells you what changed, backs up your config, and applies the new version. Current release is v0.18.2 (as of 2026-07-08); the team ships roughly every two weeks.
 
 ---
 
