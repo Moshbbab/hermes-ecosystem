@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nujovich/hermes-telemetry — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime designed to prevent runaway costs during autonomous operations.…">
+<meta name="description" content="hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime. It captures real-time usage data and blocks upcoming LLM calls…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nujovich/hermes-telemetry">
 <meta property="og:title" content="nujovich/hermes-telemetry — Hermes Atlas">
-<meta property="og:description" content="Hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime designed to prevent runaway costs during autonomous operations.…">
+<meta property="og:description" content="hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime. It captures real-time usage data and blocks upcoming LLM calls…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nujovich/hermes-telemetry">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nujovich/hermes-telemetry — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime designed to prevent runaway costs during autonomous operations.…">
+<meta name="twitter:description" content="hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime. It captures real-time usage data and blocks upcoming LLM calls…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-telemetry&amp;subtitle=Budget+enforcement+%2B+observability+plugin+for+Hermes+Agent.+Stops+runaway+costs+before+they+happen.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nujovich/hermes-telemetry#software",
   "name": "hermes-telemetry",
-  "description": "Hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime designed to prevent runaway costs during autonomous operations. It integrates directly into the agent's hook pipeline to monitor token usage and cost in real-time, allowing it to block LLM calls before a budget breach occurs. The plugin features a local SQLite database for logging, an HTML dashboard for visual analysis, and slash commands for session statistics. It automatically synchronizes pricing d",
+  "description": "hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime. It captures real-time usage data and blocks upcoming LLM calls if a user-defined daily global budget cap is exceeded.",
   "url": "https://hermesatlas.com/projects/nujovich/hermes-telemetry",
   "codeRepository": "https://github.com/nujovich/hermes-telemetry",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "nujovich",
     "url": "https://github.com/nujovich"
   },
-  "dateModified": "2026-07-16T09:45:01.000Z",
+  "dateModified": "2026-07-17T14:13:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 21
+    "userInteractionCount": 22
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -118,11 +118,11 @@
   <p class="project-desc">Budget enforcement + observability plugin for Hermes Agent. Stops runaway costs before they happen.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 21</span>
+    <span class="stars">★ 22</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-16</span>
+    <span><span class="meta-label">updated</span>2026-07-17</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime designed to prevent runaway costs during autonomous operations. It integrates directly into the agent's hook pipeline to monitor token usage and cost in real-time, allowing it to block LLM calls before a budget breach occurs. The plugin features a local SQLite database for logging, an HTML dashboard for visual analysis, and slash commands for session statistics. It automatically synchronizes pricing data from OpenRouter and supports custom budget configurations via YAML files.</p>
+    <p class="summary-text">hermes-telemetry is an observability and budget enforcement plugin for the Hermes Agent runtime. It captures real-time usage data and blocks upcoming LLM calls if a user-defined daily global budget cap is exceeded.</p>
     <ul class="summary-highlights">
-      <li>Enforces hard budget limits to stop overspending before it happens</li>
-      <li>Tracks real-time token usage and costs via runtime-integrated hooks</li>
-      <li>Provides a web-based dashboard and slash commands for detailed analytics</li>
+      <li>Enforces hard budget limits mid-session to stop overspending.</li>
+      <li>Logs token usage and costs to a SQLite database with WAL mode.</li>
+      <li>Provides a web dashboard and slash commands for cost analysis.</li>
     </ul>
   </div>
 </section>
@@ -663,6 +663,35 @@ so you don't have to leave the session to run the check:</p>
 <p>The <code>Notes</code> column (subscription/free-tier vs no price entry) and footer
 behaviour described in <a href="#stats"><code>/stats models</code></a> work the same way under a
 date filter — they're computed against whatever rows the filter selected.</p>
+<h4>Pricing snapshots (<code>pricing backfill</code> / <code>pricing drift</code>)</h4>
+<p>Every real LLM call captures a pricing snapshot from the core (ground truth). Two
+subcommands work with that snapshot history:</p>
+<pre><code class="language-bash"># Seed snapshots for historical models that never got one (dry-run first)
+hermes-telemetry pricing backfill
+hermes-telemetry pricing backfill --apply    # write the resolvable ones
+hermes-telemetry pricing backfill --json     # machine-readable output
+
+# Compare pricing.yaml against the core snapshots (dry-run first)
+hermes-telemetry pricing drift
+hermes-telemetry pricing drift --apply               # rewrite drifted entries
+hermes-telemetry pricing drift --threshold 5          # flag drift &gt; 5% (default: 1%)
+hermes-telemetry pricing drift --model deepseek/deepseek-v4-pro
+hermes-telemetry pricing drift --json
+</code></pre>
+<p><code>pricing backfill</code> seeds a current snapshot for every historical <code>(provider, model)</code>
+in <code>llm_calls</code> that has none yet — mainly dated model ids that never matched a live
+capture. It's a coverage seed, not historical reconstruction: the tariff written is
+whatever the core resolves <em>today</em>. Dry-run by default; <code>--apply</code> writes; idempotent
+and safe to re-run.</p>
+<p><code>pricing drift</code> diffs <code>pricing.yaml</code>'s input/output rates against the latest core
+snapshot per model (input/output only — cache/reasoning rates have no <code>pricing.yaml</code>
+analog). It skips <code>_subscription: true</code> entries (a declared $0 is intentional) and
+flags anything beyond <code>--threshold</code> percent (default <code>1.0</code>). If models in <code>llm_calls</code>
+still lack a snapshot, the report reminds you to run <code>pricing backfill</code> first so a
+clean drift run isn't a false all-clear. Dry-run by default; <code>--apply</code> merges the
+core rates back into <code>pricing.yaml</code> (never clobbers) and tags each repaired entry
+<code>_source: core-snapshot</code>.</p>
+<p>See <code>ONBOARDING.md § Core-sourced pricing snapshots</code> for the full design rationale.</p>
 <hr>
 <h3>Setup Wizard</h3>
 <p>hermes-telemetry includes a first-time setup wizard that runs automatically on first
@@ -1179,71 +1208,9 @@ on_estimated:
 <li>The budget engine detects when spend uses these models</li>
 </ul>
 <p><strong>Budget degradation logic:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Condition</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>on_estimated.mode: warn_only</code> (default)</td>
-<td>If &gt;0% of calls use estimated-price models, <strong>hard verdicts are degraded to soft</strong> — the user gets a warning but tools aren’t blocked</td>
-</tr>
-<tr>
-<td><code>on_estimated.mode: enforce</code></td>
-<td>Hard verdicts take effect regardless</td>
-</tr>
-</tbody></table>
-<h4>CLI Usage</h4>
-<pre><code># Dry run — see what would change
-python -m hermes_telemetry.pricing_refresh --check
-
-# Apply changes
-python -m hermes_telemetry.pricing_refresh
-
-# Verbose output
-python -m hermes_telemetry.pricing_refresh --verbose
-</code></pre>
-<p><strong>Example output:</strong></p>
-<pre><code>INFO OpenRouterSource: fetched 320 models
-Updated 3 model(s):
-
-  ~ stepfun/step-3.7-flash  (openrouter)
-      input: 0.9999 → 0.2000
-      output: 9.9999 → 1.1500
-
-  + anthropic/claude-opus-4.8  (openrouter)
-      input=5.0000 output=25.0000
-
-  ⚠  Model(s) with estimated pricing: openrouter/auto, openrouter/bodybuilder, openrouter/pareto-code
-</code></pre>
-<h4>Extending with New Sources</h4>
-<p>Add new pricing providers by subclassing <code>PricingSource</code>:</p>
-<pre><code class="language-python">from hermes_telemetry.pricing_refresh import PricingSource, register_source
-
-class AnthropicSource(PricingSource):
-    name = "anthropic"
-
-    def fetch(self) -&gt; dict[str, dict]:
-        # Fetch from Anthropic's pricing page or API
-        ...
-
-register_source(AnthropicSource)
-</code></pre>
-<p>Sources are registered in <code>pricing_refresh.py</code> and fetched in parallel on each refresh cycle.</p>
+<p>|Condition                               |Effect                                                                                                                         </p>
 <hr>
-<h3>Architecture</h3>
-<h4>Hook Plugin</h4>
-<p>The plugin registers 10 hooks (out of 16 available in Hermes) plus 2 slash commands:</p>
-<pre><code>Hook                      Purpose
-─────────────────────────────────────────────────────────────
-on_session_st
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/nujovich/hermes-telemetry#readme)*
-</code></pre>
+<p><em>README truncated. <a href="https://github.com/nujovich/hermes-telemetry#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>

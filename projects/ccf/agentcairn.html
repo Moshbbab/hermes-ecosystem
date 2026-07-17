@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ccf/agentcairn — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Agentcairn provides a durable Markdown-based memory system for coding agents. It uses a replaceable DuckDB index for retrieval while maintaining Markdown files…">
+<meta name="description" content="Agentcairn provides cross-project memory for AI coding agents by storing context as Markdown files in a local vault. It uses a disposable DuckDB cache for…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ccf/agentcairn">
 <meta property="og:title" content="ccf/agentcairn — Hermes Atlas">
-<meta property="og:description" content="Agentcairn provides a durable Markdown-based memory system for coding agents. It uses a replaceable DuckDB index for retrieval while maintaining Markdown files…">
+<meta property="og:description" content="Agentcairn provides cross-project memory for AI coding agents by storing context as Markdown files in a local vault. It uses a disposable DuckDB cache for…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ccf/agentcairn">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ccf/agentcairn — Hermes Atlas">
-<meta name="twitter:description" content="Agentcairn provides a durable Markdown-based memory system for coding agents. It uses a replaceable DuckDB index for retrieval while maintaining Markdown files…">
+<meta name="twitter:description" content="Agentcairn provides cross-project memory for AI coding agents by storing context as Markdown files in a local vault. It uses a disposable DuckDB cache for…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=agentcairn&amp;subtitle=Long-term%2C+cross-project+memory+for+AI+coding+agents.+Your+own+Obsidian+vault+as+the+source+of+truth.+Daemonless+and+without+opaque+databases%2C+your+memory+belongs+to+you.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ccf/agentcairn#software",
   "name": "agentcairn",
-  "description": "Agentcairn provides a durable Markdown-based memory system for coding agents. It uses a replaceable DuckDB index for retrieval while maintaining Markdown files as the canonical source of truth.",
+  "description": "Agentcairn provides cross-project memory for AI coding agents by storing context as Markdown files in a local vault. It uses a disposable DuckDB cache for retrieval and supports integrations with tools like Claude Code and Codex via MCP servers.",
   "url": "https://hermesatlas.com/projects/ccf/agentcairn",
   "codeRepository": "https://github.com/ccf/agentcairn",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "ccf",
     "url": "https://github.com/ccf"
   },
-  "dateModified": "2026-07-16T21:45:34.000Z",
+  "dateModified": "2026-07-17T18:42:32.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-07-16</span>
+    <span><span class="meta-label">updated</span>2026-07-17</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Agentcairn provides a durable Markdown-based memory system for coding agents. It uses a replaceable DuckDB index for retrieval while maintaining Markdown files as the canonical source of truth.</p>
+    <p class="summary-text">Agentcairn provides cross-project memory for AI coding agents by storing context as Markdown files in a local vault. It uses a disposable DuckDB cache for retrieval and supports integrations with tools like Claude Code and Codex via MCP servers.</p>
     <ul class="summary-highlights">
-      <li>Stores memory as inspectable Markdown files</li>
-      <li>Uses DuckDB as a replaceable retrieval cache</li>
-      <li>Supports Claude Code and Codex via plugins</li>
+      <li>Stores memory as canonical Markdown files with wikilink support.</li>
+      <li>Uses DuckDB as a replaceable cache for BM25 and semantic retrieval.</li>
+      <li>Operates locally without a required daemon or external database.</li>
     </ul>
   </div>
 </section>
@@ -197,6 +197,12 @@ claude plugin install agentcairn@agentcairn
 codex plugin add agentcairn@agentcairn
 </code></pre>
 <p>Codex gets the bundled MCP tools and memory skill, live-verified SessionStart recall, and SessionEnd capture with <code>cairn sweep</code> as the out-of-band backstop.</p>
+<h4>Agent-assisted setup</h4>
+<p>Already use <a href="https://skills.sh/">skills.sh</a> or a <code>find-skills</code> workflow? Install the public setup assistant:</p>
+<pre><code class="language-bash">npx skills add ccf/agentcairn --skill agentcairn-setup -g
+</code></pre>
+<p>Then ask your agent: <code>Use $agentcairn-setup to preview, install, and verify AgentCairn for this coding agent.</code></p>
+<p>This installs setup guidance only—not the AgentCairn runtime, MCP server, plugin, or hooks. The assistant delegates those changes to AgentCairn's preview-first native installer and verifies the resulting integration. The Claude Code and Codex plugin commands above remain the shortest path.</p>
 <p>The default vault is <code>~/agentcairn</code> and is created on first use. A new empty vault has nothing useful to recall yet, so prove the whole loop explicitly:</p>
 <pre><code class="language-text">You   → Remember this durable fact: staging deploys use blue-green.
 Agent → written and indexed
@@ -323,7 +329,7 @@ Agent → staging deploys use blue-green.  ↳ &lt;memory permalink&gt;
 </tbody></table>
 <p>Codex SessionStart was verified live end-to-end with agentcairn 0.24.2 / plugin 0.1.2. The installed SessionEnd command dispatch and detached sweep pass exact handler probes; <code>cairn sweep</code> remains the out-of-band capture backstop. See the <a href="integrations/opencode/">OpenCode integration</a> and <a href="integrations/hermes/">Hermes integration</a> for their native lifecycle details.</p>
 <h3>Using it directly</h3>
-<p>The plugin is the easiest route, but agentcairn is also a standalone CLI and on-demand MCP server. Standalone installs require Python 3.12+.</p>
+<p>The plugin is the easiest route, but agentcairn is also a standalone CLI and on-demand MCP server. Standalone installs require Python 3.11+.</p>
 <pre><code class="language-bash">uv tool install agentcairn
 
 cairn init ~/agentcairn
@@ -438,7 +444,7 @@ auto_recall_scope = "project"  # use "all" only as an explicit cross-project opt
 <ul>
 <li><strong>The vault is plaintext by design, not encrypted storage.</strong> AgentCairn redacts recognized credential patterns before its automated body/title/tag writes; unknown patterns and hand edits remain your responsibility.</li>
 <li><strong>Cloud features are explicit egress.</strong> The default stays local. Opting into a cloud embedder or LLM judge sends the remaining redacted text to that provider.</li>
-<li><strong>The project is beta.</strong> Standalone use requires Python 3.12+, and the first local model load can take time. The published retrieval evidence is strongest for conversational memory, not a universal code-search claim.</li>
+<li><strong>The project is beta.</strong> Standalone use requires Python 3.11+, and the first local model load can take time. The published retrieval evidence is strongest for conversational memory, not a universal code-search claim.</li>
 <li><strong>Ambient behavior varies by host.</strong> The matrix above is intentional: Cursor and Antigravity rely on sweep capture; generic MCP hosts may expose tools without lifecycle hooks.</li>
 <li><strong>Automation is platform-specific.</strong> Managed scheduling targets macOS launchd and Linux user crontab; use your own scheduler elsewhere.</li>
 </ul>
@@ -469,7 +475,7 @@ uv run pre-commit run --all-files
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 61.0K</div>
+        <div class="stars">★ 61.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
