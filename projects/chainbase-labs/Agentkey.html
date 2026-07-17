@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>chainbase-labs/Agentkey — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
-<meta name="description" content="AgentKey is a unified integration layer that provides AI agents with access to external data sources including social media, web scraping, and on-chain crypto…">
+<meta name="description" content="AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain…">
 <link rel="canonical" href="https://hermesatlas.com/projects/chainbase-labs/Agentkey">
 <meta property="og:title" content="chainbase-labs/Agentkey — Hermes Atlas">
-<meta property="og:description" content="AgentKey is a unified integration layer that provides AI agents with access to external data sources including social media, web scraping, and on-chain crypto…">
+<meta property="og:description" content="AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/chainbase-labs/Agentkey">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="chainbase-labs/Agentkey — Hermes Atlas">
-<meta name="twitter:description" content="AgentKey is a unified integration layer that provides AI agents with access to external data sources including social media, web scraping, and on-chain crypto…">
+<meta name="twitter:description" content="AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Agentkey&amp;subtitle=Connect+your+AI+agent+to+the+world+%E2%80%94+Web+search%2C+Social+media%2C+Crypto+%26+On-chain+data.+One+plugin%2C+zero+extra+config.&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/chainbase-labs/Agentkey#software",
   "name": "Agentkey",
-  "description": "AgentKey is a unified integration layer that provides AI agents with access to external data sources including social media, web scraping, and on-chain crypto data. It uses a single subscription model to replace the need for multiple individual API keys and provider registrations.",
+  "description": "AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain data, finance, and e-commerce platforms without requiring individual API keys for each provider.",
   "url": "https://hermesatlas.com/projects/chainbase-labs/Agentkey",
   "codeRepository": "https://github.com/chainbase-labs/Agentkey",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "chainbase-labs",
     "url": "https://github.com/chainbase-labs"
   },
-  "dateModified": "2026-07-14T07:30:03.000Z",
+  "dateModified": "2026-07-17T05:39:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Shell</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-07-14</span>
+    <span><span class="meta-label">updated</span>2026-07-17</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">AgentKey is a unified integration layer that provides AI agents with access to external data sources including social media, web scraping, and on-chain crypto data. It uses a single subscription model to replace the need for multiple individual API keys and provider registrations.</p>
+    <p class="summary-text">AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain data, finance, and e-commerce platforms without requiring individual API keys for each provider.</p>
     <ul class="summary-highlights">
-      <li>One-command installation for over 40 supported AI agents.</li>
-      <li>Provides access to Twitter, LinkedIn, Reddit, and blockchain transaction data.</li>
-      <li>Routes requests through cloud-side integrations without local credential management.</li>
+      <li>Supports web scraping and real-time web search</li>
+      <li>Provides access to social media and on-chain data</li>
+      <li>Automates configuration for multiple AI agents</li>
     </ul>
   </div>
 </section>
@@ -505,10 +505,21 @@ claude plugin marketplace add /absolute/path/to/agentkey
 claude plugin install agentkey@agentkey
 </code></pre>
 <p>On enable, Claude Code prompts for <code>AGENTKEY_API_KEY</code> (stored in your OS keychain) and injects it into the plugin's <code>.mcp.json</code> via <code>${user_config.AGENTKEY_API_KEY}</code>. Reload a local checkout with <code>claude plugin update agentkey</code> after edits. Day-to-day skill iteration is still fastest via the skills-CLI path; the plugin path is the one-step option for Claude Code users.</p>
+<p><strong>Codex plugin mode</strong> — install from the marketplace bundled in this repo. Auth is OAuth (browser sign-in on install), so there's <strong>no API key to paste and no second <code>@agentkey/cli</code> step</strong>:</p>
+<pre><code class="language-bash"># Public install
+codex plugin marketplace add chainbase-labs/agentkey
+# then run /plugins inside Codex and install AgentKey,
+# or: codex plugin install agentkey@agentkey
+</code></pre>
+<p>The plugin manifest lives in <code>.codex-plugin/plugin.json</code>; it bundles the same skill plus a remote-HTTP MCP entry (<code>.codex-plugin/mcp.json</code>) that authenticates against <code>https://api.agentkey.app/v1/mcp</code> via MCP OAuth (RFC 9728 discovery). Sign in with your AgentKey account when Codex prompts you.</p>
 <p><strong>Repo layout:</strong></p>
 <pre><code>agentkey/
 ├── .claude-plugin/plugin.json   # Claude Code plugin manifest
-├── .mcp.json                    # Used when installed as a plugin
+├── .codex-plugin/
+│   ├── plugin.json              # Codex plugin manifest
+│   └── mcp.json                 # Codex MCP entry (OAuth, no user_config)
+├── .agents/plugins/marketplace.json  # Codex marketplace (this repo is its own marketplace)
+├── .mcp.json                    # Used when installed as a Claude Code plugin
 ├── skills/agentkey/
 │   ├── SKILL.md                 # Decision tree + routing rules
 │   ├── scripts/                 # check-update helper
@@ -553,7 +564,7 @@ claude plugin install agentkey@agentkey
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 407</div>
+        <div class="stars">★ 409</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -577,7 +588,7 @@ claude plugin install agentkey@agentkey
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 63</div>
+        <div class="stars">★ 66</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">
