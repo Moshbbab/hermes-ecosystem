@@ -1816,6 +1816,14 @@ Set to `1` to make Desktop ignore an existing `hermes` on `PATH` during backend 
 
 Initial project directory for Desktop chat sessions. Set by `hermes desktop --cwd`.
 
+`HERMES_DESKTOP_PYTHON`
+
+Absolute path to a Python interpreter for the backend, checked before Electron auto-resolves one for the source checkout. Used by worktree dev helpers (see [TUI & Desktop from Worktrees](/docs/developer-guide/worktree-ui-dev)) to reuse a shared venv.
+
+`HERMES_DESKTOP_DEV_SERVER`
+
+Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g. `http://127.0.0.1:5174`). Set automatically by `npm run dev`; only relevant when hacking on the app.
+
 ### Microsoft Graph (Teams Meetings)
 
 App-only credentials for the Microsoft Graph REST client used by the upcoming Teams meeting summary pipeline. See [Register a Microsoft Graph application](/docs/guides/microsoft-graph-app-registration) for the Azure portal walkthrough and the exact API permissions required.

@@ -119,6 +119,10 @@ Generate real meme images by picking a template and overlaying text with Pillow.
 
 Pixel art w/ era palettes (NES, Game Boy, PICO-8).
 
+[**unreal-mcp**](/docs/user-guide/skills/optional/creative/creative-unreal-mcp)
+
+Use when the user wants to do anything in Unreal Engine through Epic's official editor-embedded MCP server (catalog entry: unreal-engine) — build/light/populate scenes, place and transform actors, author Blueprints, animate with Sequence...
+
 ## devops
 
 Skill
