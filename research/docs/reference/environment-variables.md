@@ -2286,11 +2286,11 @@ Delay between split chunks when a Discord message exceeds the length limit (defa
 
 `HERMES_DISCORD_LIVENESS_INTERVAL_SECONDS`
 
-Internal bridge for `discord.liveness_interval_seconds` (config.yaml). Interval for the Discord REST liveness probe that detects zombie clients behind dead proxies/NATs (default: `60`; set to `0` to disable). Prefer setting `discord.liveness_interval_seconds` in `config.yaml`.
+Compatibility/manual override for `discord.websocket_liveness_interval_seconds`. Interval for sampling the active Discord Gateway WebSocket (default: `15`; set to `0` to disable). Prefer the `config.yaml` key.
 
 `HERMES_DISCORD_LIVENESS_FAILURE_THRESHOLD`
 
-Internal bridge for `discord.liveness_failure_threshold` (config.yaml). Consecutive probe failures before forcing a Discord reconnect (default: `3`). Prefer setting `discord.liveness_failure_threshold` in `config.yaml`.
+Compatibility/manual override for `discord.websocket_liveness_failure_threshold`. Consecutive unhealthy WebSocket samples before forcing a reconnect (default: `2`). Prefer the `config.yaml` key.
 
 `HERMES_MATRIX_TEXT_BATCH_DELAY_SECONDS` / `_SPLIT_DELAY_SECONDS`
 
@@ -2478,6 +2478,10 @@ Streaming socket read timeout in seconds (default: `120`). Auto-increased to `HE
 
 Stale stream detection timeout in seconds (default: `180`). Auto-disabled for local providers. Triggers connection kill if no chunks arrive within this window.
 
+`HERMES_LOCAL_STREAM_STALE_TIMEOUT`
+
+Stale stream ceiling for local providers (Ollama, oMLX, llama-cpp) in seconds (default: `900`). When the base stale timeout is at its default and a local endpoint is detected, this finite ceiling replaces the former infinite disable so a wedged local server eventually trips the detector instead of hanging forever. Also configurable via `agent.local_stream_stale_timeout` in `config.yaml`.
+
 `HERMES_STREAM_RETRIES`
 
 Number of mid-stream reconnect attempts on transient network errors (default: `3`).
@@ -2489,6 +2493,14 @@ Cross-turn circuit breaker: after this many consecutive stale kills (streaming o
 `HERMES_AGENT_TIMEOUT`
 
 Gateway inactivity timeout for a running agent in seconds (default: `1800`, 30 minutes). Resets on every tool call and streamed token. Set to `0` to disable.
+
+`HERMES_GATEWAY_MAX_STARTS`
+
+Respawn-storm circuit breaker: maximum gateway (re)starts allowed within the window before an exponential backoff is slept to break the storm (default: `5`, `0` disables). Also configurable via `gateway.respawn_storm.max_starts` in `config.yaml`.
+
+`HERMES_GATEWAY_START_WINDOW_S`
+
+Respawn-storm breaker window in seconds (default: `120`). Also configurable via `gateway.respawn_storm.window_seconds` in `config.yaml`.
 
 `HERMES_AGENT_TIMEOUT_WARNING`
 
