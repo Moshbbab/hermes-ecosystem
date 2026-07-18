@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, intent…">
+<meta name="description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, intent…">
+<meta property="og:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, intent…">
+<meta name="twitter:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+Hermes+and+OpenClaw.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, intent classification, and automated decision capture from session transcripts.",
+  "description": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, intent classification, and automated decision capture without cloud dependencies.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-07-18T05:55:34.000Z",
+  "dateModified": "2026-07-18T10:15:32.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, intent classification, and automated decision capture from session transcripts.</p>
+    <p class="summary-text">ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, intent classification, and automated decision capture without cloud dependencies.</p>
     <ul class="summary-highlights">
-      <li>Integrates with Claude Code, OpenClaw, and Hermes agents</li>
-      <li>Uses hybrid retrieval including BM25 and vector search</li>
-      <li>Operates locally with no cloud dependencies or API keys</li>
+      <li>Uses hybrid retrieval with BM25 and vector search</li>
+      <li>Integrates via MCP, Claude Code hooks, and plugins</li>
+      <li>Captures decisions using a local GGUF observer model</li>
     </ul>
   </div>
 </section>
@@ -164,7 +164,7 @@
 <li><strong>Surfaces relevant context</strong> on every prompt (context-surfacing hook)</li>
 <li><strong>Bootstraps sessions</strong> with your profile, latest handoff, recent decisions, and stale notes</li>
 <li><strong>Captures decisions, preferences, milestones, and problems</strong> from session transcripts using a local GGUF observer model</li>
-<li><strong>Imports conversation exports</strong> from Claude Code, ChatGPT, Claude.ai, Slack, and plain text via <code>clawmem mine</code>, with optional post-import LLM fact extraction (<code>--synthesize</code>) that pulls structured decisions / preferences / milestones / problems and cross-fact links out of otherwise full-text conversation dumps (v0.7.2)</li>
+<li><strong>Imports conversation exports</strong> from Claude Code, ChatGPT, Claude.ai, Slack, and plain text via <code>clawmem mine</code>, with optional post-import LLM fact extraction (<code>--synthesize</code>) that pulls structured decisions / preferences / milestones / problems and cross-fact links out of otherwise full-text conversation dumps (v0.7.2). Imports preserve <strong>authorship time</strong> (v0.27.0): ranking recency and temporal queries run on when content was actually written, so historical conversations mined today don't rank as fresh — with a metadata-only <code>--backfill-dates</code> lane for vaults mined earlier</li>
 <li><strong>Generates handoffs</strong> at session end so the next session can pick up where you left off</li>
 <li><strong>Learns what matters</strong> via a feedback loop that boosts referenced notes and decays unused ones</li>
 <li><strong>Guards against prompt injection</strong> in surfaced content</li>
@@ -722,7 +722,8 @@ clawmem collection list                         List collections
 clawmem collection remove &lt;name&gt;                Remove a collection
 
 clawmem update [--pull] [--embed]               Incremental re-scan
-clawmem mine &lt;dir&gt; [-c name] [--embed] [--synthesize]  Import conversation exports (--synthesize runs post-import LLM fact extraction, v0.7.2)
+clawmem mine &lt;dir&gt; [-c name] [--embed] [--synthesize]  Import conversation exports (--synthesize runs post-import LLM fact extraction, v0.7.2; preserves per-exchange authored_at, v0.27.0)
+clawmem mine &lt;dir&gt; -c name --backfill-dates [--apply]  Derive authored_at for already-mined docs (metadata-only; dry-run without --apply)
 clawmem embed [-f]                              Generate fragment embeddings
 clawmem reindex [--force]                       Full re-index
 clawmem watch                                   File watcher daemon
@@ -1151,9 +1152,7 @@ clawmem status                                  Quick index status
 </tr>
 </tbody></table>
 <p>Content types are inferred from frontmatter or file path patterns. Half-lives extend up to 3× for frequently-accessed memories (access reinforcement, decays over 90 days). Non-durable types (handoff, progress, conversation, note, project) lose 5% confidence per week without access (attention decay). Decision/deductive/preference/hub/research/antipattern are exempt.</p>
-<p><strong>Quality scoring:</strong> Each document gets a <code>quality_score</code> (0.0–1.0) computed during indexing based on length, structure (headings, lists), decision/correction keywords, and frontmatter richness. Applied as <code>qualityMultiplier = 0.7 + 0.6 × qualityScore</code> (range: 0.7× penalty to 1.3× boost).</p>
-<p><strong>Length normalization:</strong> <code>1/(1 + 0.5 × log2(max(bodyLength/500, 1)))</code> — penalizes verbose entries that dominate via keyword density. Floor at 30% of original score.</p>
-<p><strong>Frequency boost:</strong> Documents with higher revision counts or duplicate counts get a durability signal: <code>freqSignal = (revisions - 1) × 2 + (duplicates - 1)</code>, <code>freqBoost = min(0.10, log1p(freqSignal) × 0.03)</code>. Revision count (cont</p>
+<p><strong>Quality scoring:</strong> Each document gets a <code>quality_score</code> (0.0–1.0) computed during indexing based on length, structure (headings, lists), decision/correction keywords, and frontmatter richness. Applied as `qualityMultiplier = 0.7 + 0.6 × qualit</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/yoloshii/ClawMem#readme">Continue reading on GitHub</a></em></p>
 

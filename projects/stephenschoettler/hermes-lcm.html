@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summary nodes to allow agents to search and expand compacted material.",
+  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summaries to allow agents to search and expand compacted material.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-07-18T02:43:00.000Z",
+  "dateModified": "2026-07-18T15:55:48.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -137,10 +137,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summary nodes to allow agents to search and expand compacted material.</p>
+    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summaries to allow agents to search and expand compacted material.</p>
     <ul class="summary-highlights">
-      <li>Uses a SQLite message store with FTS metadata</li>
-      <li>Builds depth-aware summary nodes in a DAG</li>
+      <li>Uses a SQLite-backed message store with FTS metadata</li>
+      <li>Builds depth-aware summary nodes in a hierarchical DAG</li>
       <li>Provides agent tools for session recall and expansion</li>
     </ul>
   </div>
@@ -944,6 +944,11 @@ summaries, and tool payloads may contain sensitive user data</li>
 <p>This is a local archive migration path. It does not make LCM a general memory
 provider, and it does not change the current-session retrieval contract for
 agent tools.</p>
+<p>For databases that already contain large historical tool rows,
+<code>scripts/backfill_externalized_tool_outputs.py</code> can pre-create native recovery
+sidecars without rewriting SQLite. It is dry-run by default, writes a scrubbed
+digest/count manifest, is idempotent on repeat apply, and supports guarded
+manifest-based rollback. See the <a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/operator-guide.md#historical-tool-output-sidecars">operator guide</a>.</p>
 <h3>Troubleshooting</h3>
 <h4><code>hermes plugins</code> shows <code>lcm (not found)</code> but LCM tools exist</h4>
 <p>If <code>plugins.enabled</code> contains <code>hermes-lcm</code>, <code>context.engine: lcm</code> is set, and
