@@ -362,7 +362,7 @@ Link tasks with a parent → child dependency edge.
 
 `kanban_unblock`
 
-Return a blocked task to `ready`. Orchestrator-only; hidden from dispatcher-spawned task workers.
+Move a blocked task to `ready` when all parents are done, or `todo` while any parent remains open. Orchestrator-only; hidden from dispatcher-spawned task workers.
 
 profile with `kanban` toolset
 
