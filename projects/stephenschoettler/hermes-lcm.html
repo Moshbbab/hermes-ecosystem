@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stephenschoettler/hermes-lcm — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression…">
+<meta name="description" content="hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression…">
+<meta property="og:description" content="hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression…">
+<meta name="twitter:description" content="hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-lcm&amp;subtitle=Lossless+Context+Management+plugin+for+Hermes+Agent+%E2%80%94+DAG-based+context+engine+that+never+loses+a+message&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression with a system that persists raw messages and condenses summaries into depth-aware nodes.",
+  "description": "hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover specific details through specialized recall tools.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-07-16T23:42:11.000Z",
+  "dateModified": "2026-07-17T23:20:22.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 867
+    "userInteractionCount": 868
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -118,11 +118,11 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 867</span>
+    <span class="stars">★ 868</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-16</span>
+    <span><span class="meta-label">updated</span>2026-07-17</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression with a system that persists raw messages and condenses summaries into depth-aware nodes.</p>
+    <p class="summary-text">hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover specific details through specialized recall tools.</p>
     <ul class="summary-highlights">
-      <li>Uses a SQLite message store with FTS metadata</li>
-      <li>Provides agent tools for searching and expanding compacted material</li>
-      <li>Supports optional redaction of sensitive patterns</li>
+      <li>Uses a SQLite-backed DAG for depth-aware summary nodes.</li>
+      <li>Provides agent tools for searching and expanding compacted material.</li>
+      <li>Supports optional redaction of sensitive patterns like API keys.</li>
     </ul>
   </div>
 </section>
@@ -535,6 +535,16 @@ known-good rolling backup.</p>
 <td>Externalization threshold for normalized payload text</td>
 </tr>
 <tr>
+<td><code>LCM_LARGE_OUTPUT_ACTIVE_REPLAY_STUBBING_ENABLED</code></td>
+<td><code>false</code></td>
+<td>Replace token-heavy textual tool results with recoverable externalized refs in active replay; current-turn ingest is immediate and historical assembly respects the protected fresh tail; requires large-output externalization</td>
+</tr>
+<tr>
+<td><code>LCM_LARGE_OUTPUT_ACTIVE_REPLAY_STUB_THRESHOLD_TOKENS</code></td>
+<td><code>25000</code></td>
+<td>Token-aware threshold for active-replay tool-result stubbing</td>
+</tr>
+<tr>
 <td><code>LCM_LARGE_OUTPUT_TRANSCRIPT_GC_ENABLED</code></td>
 <td><code>false</code></td>
 <td>Rewrite already-externalized summarized tool rows to compact placeholders</td>
@@ -793,6 +803,20 @@ session to <code>lcm.db</code>.</p>
 oversized tool results are written to plugin-managed JSON files and referenced
 from summaries. They remain inspectable through
 <code>lcm_describe(externalized_ref=...)</code> and <code>lcm_expand(externalized_ref=...)</code>.</p>
+<p>Active-replay stubbing is a second, independently opt-in replay policy. When
+both externalization and active-replay stubbing are enabled, newly ingested
+textual tool results above the token threshold are durably externalized and
+replaced immediately in provider-visible replay, including results in the
+protected fresh tail. This lets a stub-only replay change converge even when no
+leaf is eligible for compaction. A historical assembly pass applies the same
+policy to older tool results before budgeting, while respecting the protected
+fresh tail. Tool-call ids and compatible structured text block types/keys are
+retained; raw SQLite rows and DAG lineage are not rewritten by the historical
+pass. Structured image/media results remain inline, preserving the provider
+replay contract established by Hermes-LCM PR #226. If durable externalization
+cannot be confirmed, replay keeps the original payload inline. Results from
+<code>lcm_describe</code> and <code>lcm_expand</code> also remain inline so recovery does not
+recursively produce another ref.</p>
 <p>The storage-boundary payload guard is separate from that opt-in. LCM always
 scans messages at the store boundary before writing <code>messages.content</code> or
 <code>messages.tool_calls</code> to SQLite. Inline <code>data:*;base64,...</code> payloads and
@@ -1020,11 +1044,11 @@ for changelogs.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 216</div>
+        <div class="stars">★ 217</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 226</div>
+        <div class="stars">★ 225</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
