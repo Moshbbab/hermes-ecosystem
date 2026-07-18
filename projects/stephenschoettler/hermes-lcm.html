@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stephenschoettler/hermes-lcm — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta property="og:description" content="hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta name="twitter:description" content="hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-lcm&amp;subtitle=Lossless+Context+Management+plugin+for+Hermes+Agent+%E2%80%94+DAG-based+context+engine+that+never+loses+a+message&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover specific details through specialized recall tools.",
+  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summary nodes to allow agents to search and expand compacted material.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-07-17T23:20:22.000Z",
+  "dateModified": "2026-07-18T02:43:00.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 868
+    "userInteractionCount": 870
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -118,11 +118,11 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 868</span>
+    <span class="stars">★ 870</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-17</span>
+    <span><span class="meta-label">updated</span>2026-07-18</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover specific details through specialized recall tools.</p>
+    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summary nodes to allow agents to search and expand compacted material.</p>
     <ul class="summary-highlights">
-      <li>Uses a SQLite-backed DAG for depth-aware summary nodes.</li>
-      <li>Provides agent tools for searching and expanding compacted material.</li>
-      <li>Supports optional redaction of sensitive patterns like API keys.</li>
+      <li>Uses a SQLite message store with FTS metadata</li>
+      <li>Builds depth-aware summary nodes in a DAG</li>
+      <li>Provides agent tools for session recall and expansion</li>
     </ul>
   </div>
 </section>
@@ -450,6 +450,11 @@ known-good rolling backup.</p>
 <td>Recent messages protected from compaction</td>
 </tr>
 <tr>
+<td><code>LCM_FRESH_TAIL_MAX_TOKENS</code></td>
+<td><code>0</code></td>
+<td>Optional token cap for the protected fresh tail (<code>0</code> disables it); always retains the newest message and complete assistant/tool-result groups</td>
+</tr>
+<tr>
 <td><code>LCM_INCREMENTAL_MAX_DEPTH</code></td>
 <td><code>3</code></td>
 <td>Max DAG condensation depth (<code>-1</code> = unlimited, <code>0</code> = leaf only); enables hierarchical summarization</td>
@@ -490,6 +495,10 @@ known-good rolling backup.</p>
 <td>Enable the optional <code>/lcm</code> operator command surface</td>
 </tr>
 </tbody></table>
+<p>When <code>LCM_FRESH_TAIL_MAX_TOKENS</code> is enabled, the protected suffix must satisfy
+both the message-count and token bounds. The newest message is never dropped,
+and a boundary that would begin inside an assistant tool-call/result group is
+moved back to that assistant even when doing so exceeds a configured bound.</p>
 <h4>Filtering and storage settings</h4>
 <table>
 <thead>

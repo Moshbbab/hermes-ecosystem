@@ -431,32 +431,30 @@
     "auditedAt": "2026-07-13T09:02:08.398Z"
   },
   "yoloshii/ClawMem": {
-    "summary": "ClawMem is an on-device memory engine designed to provide persistent, local-first context for AI agents. It utilizes a hybrid retrieval architecture combining BM25, vector search, and multi-graph traversal to manage semantic, temporal, and causal relationships. The system automatically extracts decisions and preferences from session transcripts and synchronizes them across different agent runtimes. It integrates seamlessly with Claude Code, OpenClaw, and Hermes via MCP or native plugins using a shared SQLite vault.",
+    "summary": "ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, intent classification, and automated decision capture from session transcripts.",
     "highlights": [
-      "Local-first memory with no cloud dependencies or API keys",
-      "Hybrid retrieval using vector search and multi-graph traversal",
-      "Cross-runtime synchronization via a shared SQLite vault"
+      "Integrates with Claude Code, OpenClaw, and Hermes agents",
+      "Uses hybrid retrieval including BM25 and vector search",
+      "Operates locally with no cloud dependencies or API keys"
     ],
-    "readmeHash": "c91d4500365c61ea5fe5722c2aed9ea695c532b0f2c2b242dc90d10db85466b0",
-    "generatedAt": "2026-07-14T20:12:41.514Z",
+    "readmeHash": "d956643b996ae3bf05949cfe2c646731ba2bb048289943813128711f71c71175",
+    "generatedAt": "2026-07-18T07:02:17.481Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-07-14T21:27:48.310Z"
+    "audit": "pass"
   },
   "plur-ai/plur": {
-    "summary": "PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools and sessions using a hierarchical scoping system.",
+    "summary": "PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent memory across different tools and sessions using a hierarchical scoping system.",
     "highlights": [
-      "Stores memory as plain-text YAML engrams on disk",
+      "Stores memory as plain-text YAML engrams on local disk",
       "Supports hierarchical scoping for global and project-specific knowledge",
-      "Integrates with Claude Code, Cursor, Windsurf, and OpenClaw"
+      "Compatible with Claude Code, Cursor, Windsurf, and OpenClaw"
     ],
-    "readmeHash": "f2085b3052bc32ed688b89d17be539a7e5e857952afe8a5960fdca708e606ae2",
-    "generatedAt": "2026-07-16T18:43:15.128Z",
+    "readmeHash": "f6d41978c02c5817215db3729315af9c6bc4b655b66f61a4df068ae5e02aa1e4",
+    "generatedAt": "2026-07-18T07:02:26.165Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-07-16T21:18:38.735Z"
+    "audit": "pass"
   },
   "amanning3390/flowstate-qmd": {
     "summary": "FlowState-QMD is a local-first memory layer designed to provide coding agents with immediate project context from markdown documentation. It utilizes a SQLite-based vector store and an anticipatory cache that prefetches relevant documents by monitoring active agent session logs. This approach allows agents to access design docs, ADRs, and changelogs before initiating a reactive search loop. The system integrates via an MCP server and supports local execution using GGUF models and node-llama-cpp.",
@@ -850,18 +848,17 @@
     "auditedAt": "2026-07-13T09:04:55.412Z"
   },
   "roli-lpci/lintlang": {
-    "summary": "lintlang is a static linter designed to identify language-level failures in AI agent configurations, system prompts, and tool descriptions. It uses regex and structural heuristics to detect common failure modes without making any LLM calls. This approach ensures deterministic results and fast execution times, making it suitable for integration into CI pipelines. It specifically targets issues like ambiguous tool descriptions and missing termination conditions that often lead to agent loops or incorrect tool selection.",
+    "summary": "lintlang is a deterministic static linter for AI agent configurations, tool descriptions, and system prompts. It uses seven structural detectors and six HERM v1.1 scoring dimensions to identify patterns without model or network calls.",
     "highlights": [
-      "Zero LLM calls for deterministic, fast, and free scanning",
-      "Seven structural detectors (H1-H7) for common agent failure modes",
-      "Supports JSON, YAML, plain text, and .prompt file formats"
+      "Runs without LLM calls or API keys",
+      "Uses regex and AST for detection",
+      "Supports JSON, YAML, Markdown, and.prompt files"
     ],
-    "readmeHash": "a92f5693fb473458f98e79854a50f9bf93e6c50ea26d5d502157d8de014e51de",
-    "generatedAt": "2026-06-23T07:50:03.247Z",
+    "readmeHash": "86a44c4e4ab330d66f0fdc46cbb0b6aa0d7a2d459444cf0e61b8294f6cb756a4",
+    "generatedAt": "2026-07-18T07:02:28.976Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-07-13T09:04:58.272Z"
+    "audit": "pass"
   },
   "0xNyk/openclaw-to-hermes": {
     "summary": "openclaw-to-hermes is a Python-based migration tool designed to transfer agents, workspaces, and configurations from OpenClaw to Hermes Agent. It maps model settings, credentials, and markdown-based memories while creating backups and supporting dry-run previews.",
@@ -1252,14 +1249,14 @@
     "auditedAt": "2026-07-13T09:06:24.357Z"
   },
   "stephenschoettler/hermes-lcm": {
-    "summary": "hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover specific details through specialized recall tools.",
+    "summary": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summary nodes to allow agents to search and expand compacted material.",
     "highlights": [
-      "Uses a SQLite-backed DAG for depth-aware summary nodes.",
-      "Provides agent tools for searching and expanding compacted material.",
-      "Supports optional redaction of sensitive patterns like API keys."
+      "Uses a SQLite message store with FTS metadata",
+      "Builds depth-aware summary nodes in a DAG",
+      "Provides agent tools for session recall and expansion"
     ],
-    "readmeHash": "62b1207a392dd9403b250929e7280863297dade4d99ae31612357bab8d3b7f63",
-    "generatedAt": "2026-07-18T00:54:11.864Z",
+    "readmeHash": "5b11bf36810baf344d65e9bdc8052ab3a09686d348ff0eaf7682845e9cc26cc7",
+    "generatedAt": "2026-07-18T07:02:52.672Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -2054,18 +2051,17 @@
     "audit": "pass"
   },
   "nexu-io/open-design": {
-    "summary": "Open Design is a local-first, open-source design and prototyping system available as a native desktop application for macOS and Windows. It generates various artifacts including web, desktop, and mobile prototypes, motion graphics, decks, and images using design systems and plugins.",
+    "summary": "Open Design is a local-first, open-source design and prototyping system available as a native desktop application for macOS and Windows. It generates web, desktop, and mobile prototypes, as well as decks, images, video, and motion graphics using design systems and plugins.",
     "highlights": [
       "Supports HTML, PDF, PPTX, and MP4 exports",
       "Compatible with various coding agents and OpenAI-compatible endpoints",
-      "Includes automation and design system management features"
+      "Includes a cloud service for multiple flagship models"
     ],
-    "readmeHash": "823372182f5eab810a1ae179fcda404f8a4347f638fb300107d325110301f8d3",
-    "generatedAt": "2026-07-14T21:38:49.722Z",
+    "readmeHash": "41608bd306e107d6002d138a9eb208f9ca19744ecf5ae94c8f8ae631b231274c",
+    "generatedAt": "2026-07-18T07:02:33.286Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-07-14T21:42:41.961Z"
+    "audit": "pass"
   },
   "farion1231/cc-switch": {
     "summary": "CC Switch is a cross-platform manager built with Tauri 2 for Windows, macOS, and Linux. It provides a unified interface for managing Claude Code, Claude Desktop, Codex, Gemini CLI, Grok Build, OpenCode, OpenClaw, and Hermes Agent.",
@@ -2678,14 +2674,14 @@
     "auditedAt": "2026-07-16T21:19:24.448Z"
   },
   "Perseus-Computing-LLC/perseus": {
-    "summary": "Perseus is a memory and context layer designed for AI agents to load specific context from a workspace. It can scaffold context files and render them for use by assistants.",
+    "summary": "Perseus is a memory and context layer for AI agents that resolves live workspace state into facts before the context window opens. It implements the Model Context Protocol (MCP) to provide tools for context management and pairs with Perseus Vault for durable memory.",
     "highlights": [
-      "Scaffolds.perseus/context.md and configuration files",
-      "Supports rendering context for files like AGENTS.md or CLAUDE.md",
-      "Provides a quickstart command for project scaffolding"
+      "Implements Model Context Protocol (MCP) via stdio or SSE",
+      "Resolves live workspace state at tool invocation time",
+      "Provides a quickstart for scaffolding context files"
     ],
-    "readmeHash": "b368426f694a83e7f04539083158b3f3d4149b605144507af1ba4ec9cff9ed1f",
-    "generatedAt": "2026-07-16T21:21:48.720Z",
+    "readmeHash": "45977ae6af65a001415046477ba2360e0f36fbf798459392d02d3171989386bc",
+    "generatedAt": "2026-07-18T07:02:52.664Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools…">
+<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent memory across different tools…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools…">
+<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent memory across different tools…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools…">
+<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent memory across different tools…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools and sessions using a hierarchical scoping system.",
+  "description": "PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent memory across different tools and sessions using a hierarchical scoping system.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-07-17T23:50:04.000Z",
+  "dateModified": "2026-07-18T06:00:24.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-07-17</span>
+    <span><span class="meta-label">updated</span>2026-07-18</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent context across different tools and sessions using a hierarchical scoping system.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores knowledge as plain-text YAML engrams. It enables persistent memory across different tools and sessions using a hierarchical scoping system.</p>
     <ul class="summary-highlights">
-      <li>Stores memory as plain-text YAML engrams on disk</li>
+      <li>Stores memory as plain-text YAML engrams on local disk</li>
       <li>Supports hierarchical scoping for global and project-specific knowledge</li>
-      <li>Integrates with Claude Code, Cursor, Windsurf, and OpenClaw</li>
+      <li>Compatible with Claude Code, Cursor, Windsurf, and OpenClaw</li>
     </ul>
   </div>
 </section>
@@ -228,7 +228,7 @@
 <p>This creates <code>~/.plur/</code> for storage, adds PLUR to your <code>.mcp.json</code>, and installs Claude Code hooks for automatic engram injection. The hooks also <strong>auto-close the memory lifecycle</strong>: a <code>SessionEnd</code> hook captures a closing episode and cleans up session state when a conversation ends, so memory closes cleanly even if the agent forgets to call <code>plur_session_end</code>. PLUR is installed <strong>globally</strong> — one MCP server, one store, available in every project. You only run init once.</p>
 <p>For <strong>multi-project setups</strong>, use domain/scope to separate knowledge:</p>
 <pre><code class="language-bash">cd ~/projects/my-app
-npx @plur-ai/cli@0.10.1 init --domain myapp --scope project:my-app
+npx @plur-ai/cli init --domain myapp --scope project:my-app
 </code></pre>
 <p>This creates a <code>.plur.yaml</code> in the project with defaults that hooks apply automatically. Engrams learned in that project are tagged; recall filters by scope but always includes global knowledge.</p>
 <p><strong>Set scope per engram, by content.</strong> Scope is not a once-per-session setting — every <code>plur_learn</code> call takes its own <code>scope</code>, chosen from what the engram is about. Team/shared knowledge goes to a team scope (e.g. <code>group:&lt;org&gt;/&lt;team&gt;</code>, used by PLUR Enterprise); project details to <code>project:&lt;name&gt;</code>; personal preferences stay local. Don't let team-relevant knowledge fall back to <code>global</code> by omitting scope — <code>global</code> leaks into every project and (with a team store configured) never reaches the team. <code>plur_session_start</code> lists the remote scopes a token can write to.</p>
@@ -243,13 +243,13 @@ openclaw config set plur.enabled true
 <p>That's it. PLUR works in the background from here. No workflow changes needed — just use your tools as usual. Corrections accumulate automatically.</p>
 <h4>Hermes Agent</h4>
 <pre><code class="language-bash">pip install plur-hermes
-npm install -g @plur-ai/cli@0.10.1
+npm install -g @plur-ai/cli
 </code></pre>
-<p>The plugin registers automatically via Hermes' plugin system. It injects relevant memories before each LLM call, extracts learnings from agent responses, and exposes all PLUR tools to the agent. Hermes shells out to the PLUR CLI; current verified pairing is <code>plur-hermes==0.10.0</code> with <code>@plur-ai/cli@0.10.1</code>.</p>
+<p>The plugin registers automatically via Hermes' plugin system. It injects relevant memories before each LLM call, extracts learnings from agent responses, and exposes all PLUR tools to the agent. Hermes shells out to the PLUR CLI.</p>
 <h4>Python SDK (LangChain, llama.cpp, scripts)</h4>
 <p>For Python environments that aren't Hermes:</p>
 <pre><code class="language-bash">pip install plur-ai
-npm install -g @plur-ai/cli@0.10.1   # bridge (required)
+npm install -g @plur-ai/cli   # bridge (required)
 </code></pre>
 <pre><code class="language-python">from plur_ai import Plur
 
@@ -506,12 +506,20 @@ plur.sync('git@github.com:you/plur-memory.git')
 <td>OpenClaw ContextEngine plugin</td>
 </tr>
 <tr>
+<td><a href="packages/cli"><code>@plur-ai/cli</code></a></td>
+<td>CLI — plur learn / recall / inject / status</td>
+</tr>
+<tr>
 <td><a href="packages/hermes"><code>plur-hermes</code></a></td>
 <td>Hermes Agent plugin (Python, via CLI bridge)</td>
 </tr>
 <tr>
 <td><a href="packages/python"><code>plur-ai</code></a></td>
 <td>Python SDK — learn/recall/inject for LangChain, llama.cpp, scripts</td>
+</tr>
+<tr>
+<td><a href="packages/langchain"><code>plur-langchain</code></a></td>
+<td>LangChain BaseMemory + BaseChatMessageHistory adapter</td>
 </tr>
 </tbody></table>
 <h3>Architecture</h3>
@@ -553,7 +561,7 @@ plur-ai                Python SDK — direct learn/recall/inject for scripts and
 cd plur
 pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
 </code></pre>
-<p>~340 tests across 27 files. <code>pnpm test:watch</code> for development.</p>
+<p>~3500 tests across ~200 files. <code>pnpm test:watch</code> for development.</p>
 <h3>Contributing</h3>
 <ul>
 <li><strong>Bug reports</strong> — issue with reproduction steps</li>
