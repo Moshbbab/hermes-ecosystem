@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stephenschoettler/hermes-lcm — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-lcm&amp;subtitle=Lossless+Context+Management+plugin+for+Hermes+Agent+%E2%80%94+DAG-based+context+engine+that+never+loses+a+message&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summaries to allow agents to search and expand compacted material.",
+  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in a local store and uses hierarchical summaries to allow agents to search and expand compacted material.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 874
+    "userInteractionCount": 875
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -118,7 +118,7 @@
   <p class="project-desc">Lossless Context Management plugin for Hermes Agent — DAG-based context engine that never loses a message</p>
 
   <div class="meta-row">
-    <span class="stars">★ 874</span>
+    <span class="stars">★ 875</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summaries to allow agents to search and expand compacted material.</p>
+    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in a local store and uses hierarchical summaries to allow agents to search and expand compacted material.</p>
     <ul class="summary-highlights">
       <li>Uses a SQLite-backed message store with FTS metadata</li>
-      <li>Builds depth-aware summary nodes in a hierarchical DAG</li>
-      <li>Provides agent tools for session recall and expansion</li>
+      <li>Builds a depth-aware summary DAG for compacted history</li>
+      <li>Provides agent tools for searching and expanding context</li>
     </ul>
   </div>
 </section>
@@ -222,9 +222,9 @@ stable refs for later expansion.</p>
 <li><strong>Summary DAG</strong> - builds depth-aware summary nodes over compacted history</li>
 <li><strong>Bounded recovery</strong> - pages raw messages, child summaries, and externalized
 payloads instead of dumping everything into the prompt</li>
-<li><strong>Agent tools</strong> - <code>lcm_grep</code>, <code>lcm_load_session</code>, <code>lcm_describe</code>,
-<code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, <code>lcm_inspect</code>, and
-<code>lcm_doctor</code></li>
+<li><strong>Agent tools</strong> - <code>lcm_grep</code>, <code>lcm_recall</code>, <code>lcm_recent</code>, <code>lcm_load_session</code>,
+<code>lcm_describe</code>, <code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, <code>lcm_inspect</code>,
+and <code>lcm_doctor</code></li>
 <li><strong>Source-aware retrieval</strong> - filters raw rows and summaries by descendant
 source lineage</li>
 <li><strong>Session controls</strong> - ignore noisy sessions or keep sessions read-only with
@@ -236,6 +236,16 @@ tokens, passwords, and private keys before LCM stores or summarizes them</li>
 <li><strong>Diagnostics</strong> - runtime health, database checks, optional <code>/lcm</code> slash
 commands, backup-first repair/rotate paths</li>
 </ul>
+<p>Beyond the core loop, three opt-in (default-off) feature families extend LCM
+from a compression layer into a memory system: <strong>large-output externalization
+and context-budget controls</strong> (giant tool results move to recoverable refs
+instead of crowding the prompt), <strong>temporal memory</strong> (day/week/month rollups
+plus natural-time recall through <code>lcm_recent</code>), and <strong>semantic retrieval</strong>
+(embedding-backed <code>lcm_grep</code> semantic/hybrid modes with free-tier cloud or
+fully-local providers). See the
+<a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/features-overview.md">Feature overview</a> for what each family does and
+why, and <a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/agent-config-profiles.md">Agent configuration profiles</a> for
+copy-paste setups per agent type.</p>
 <h3>LCM vs built-in compression</h3>
 <p>Hermes core may persist original conversation history in <code>state.db</code> before
 built-in compression rewrites the active prompt. Built-in compression can still
@@ -344,7 +354,15 @@ outside the LCM database.</p>
 </thead>
 <tbody><tr>
 <td><code>lcm_grep</code></td>
-<td>Search current-session raw messages and summaries. Opt into <code>session_scope='all'</code> or <code>session_scope='session'</code> for bounded archive recovery over rows already present in <code>lcm.db</code>; broader scopes return raw-message hits only.</td>
+<td>Search current-session raw messages and summaries. Opt into `content_scope='externalized'</td>
+</tr>
+<tr>
+<td><code>lcm_recall</code></td>
+<td>Search the entire memory across ALL conversations and all time by meaning. Fuses full-text, summary-vector, and chunk-vector arms with RRF, then applies a soft current-conversation (<code>scope_bias</code>) and recency prior. Returns bounded summary and verbatim-excerpt hits with <code>lcm_expand</code> handles; works FTS-only when embeddings are disabled.</td>
+</tr>
+<tr>
+<td><code>lcm_recent</code></td>
+<td>Retrieve recent summaries by natural UTC period, preferring ready rollups and transparently falling back to time-bounded leaf summaries.</td>
 </tr>
 <tr>
 <td><code>lcm_load_session</code></td>
@@ -473,6 +491,16 @@ known-good rolling backup.</p>
 <td><code>LCM_DYNAMIC_LEAF_CHUNK_MAX</code></td>
 <td><code>40000</code></td>
 <td>Upper bound for dynamic leaf chunk targets</td>
+</tr>
+<tr>
+<td><code>LCM_THRESHOLD_FULL_SWEEP_ENABLED</code></td>
+<td><code>false</code></td>
+<td>At threshold, opt into one synchronous bounded sweep that drains chunked raw history before publishing one new active context</td>
+</tr>
+<tr>
+<td><code>LCM_SUMMARY_PREFIX_TARGET_TOKENS</code></td>
+<td><code>0</code></td>
+<td>Sweep-only summary-frontier target; <code>0</code> derives one <code>LCM_LEAF_CHUNK_TOKENS</code> budget</td>
 </tr>
 <tr>
 <td><code>LCM_NEW_SESSION_RETAIN_DEPTH</code></td>
@@ -748,6 +776,15 @@ advertised window.</p>
 <p>Start with <code>LCM_CONTEXT_THRESHOLD</code>, <code>LCM_FRESH_TAIL_COUNT</code>, and large output
 externalization. Only tune leaf chunking after checking <code>lcm_status</code> and
 understanding whether your workload is dominated by huge raw backlog passes.</p>
+<p><code>LCM_THRESHOLD_FULL_SWEEP_ENABLED=true</code> is an opt-in cache-shape policy. Once
+threshold pressure triggers compaction, the invocation keeps summarizing the
+oldest raw chunks outside the protected fresh tail even after pressure falls
+below the trigger. It then condenses the provider-visible summary frontier only
+when that frontier exceeds <code>LCM_SUMMARY_PREFIX_TARGET_TOKENS</code> (or one leaf
+budget when the target is <code>0</code>). One invocation is bounded to 12 total leaf plus
+condensation calls and 120 seconds between calls, persists each completed DAG
+pass, and publishes one newly assembled active context at the end. It is
+synchronous and independent of deferred/background maintenance.</p>
 <h4>Cache policy boundary</h4>
 <p>LCM is <strong>cache-friendly</strong>, not fully cache-aware. It may avoid some follow-on
 condensation churn, but current cache usage counters are retrospective status
@@ -980,6 +1017,15 @@ from expanded context</li>
 </ol>
 <h3>Documentation</h3>
 <ul>
+<li><a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/features-overview.md">Feature overview</a> — every feature family, what
+it does, why it exists, and the switch that enables it</li>
+<li><a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/agent-config-profiles.md">Agent configuration profiles</a> — copy-paste
+env profiles: coding agent, long-horizon assistant, fully-local, cost-guarded</li>
+<li><a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/operator-guide.md">Operator guide</a> — install, activation, full
+configuration reference, diagnostics</li>
+<li><a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/retrieval-tools.md">Retrieval tools reference</a> — exact tool contracts</li>
+<li><a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/embeddings-setup.md">Embeddings setup</a> — free-tier and local embedding
+providers, warmup, backfill</li>
 <li><a href="https://papers.voltropy.com/LCM">LCM paper</a></li>
 <li><a href="docs/architecture.png">Architecture diagram</a></li>
 <li><a href="docs/standard_compression.png">Standard compression diagram</a></li>
@@ -1050,7 +1096,7 @@ for changelogs.</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 344</div>
+        <div class="stars">★ 345</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -1058,7 +1104,7 @@ for changelogs.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 217</div>
+        <div class="stars">★ 218</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
