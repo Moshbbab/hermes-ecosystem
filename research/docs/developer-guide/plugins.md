@@ -16,6 +16,14 @@ Custom tools, hooks, slash commands, skills, or CLI subcommands
 
 **This guide** (the general plugin surface)
 
+A **native desktop app** extension (panes, pages, status bar, palette, themes)
+
+[Desktop Plugin SDK](/docs/developer-guide/desktop-plugin-sdk)
+
+A **web dashboard** extension (tabs, shell slots, themes)
+
+[Extending the Dashboard](/docs/user-guide/features/extending-the-dashboard)
+
 An **LLM / inference backend** (new provider)
 
 [Model Provider Plugins](/docs/developer-guide/model-provider-plugin)
