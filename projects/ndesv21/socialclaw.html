@@ -149,7 +149,228 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/ndesv21/socialclaw" target="_blank">Visit GitHub</a> for more details.</div>
+    <p align="center">
+  <img src="https://raw.githubusercontent.com/ndesv21/socialclaw/main/.github/readme/logo.png" alt="SocialClaw logo" width="112">
+</p>
+
+<h1 align="center">SocialClaw</h1>
+
+<p align="center">
+  Social media scheduling CLI and OpenClaw skill for AI agents posting to X, LinkedIn, Instagram, Facebook Pages, TikTok, Discord, Telegram, YouTube, Reddit, WordPress, and Pinterest.
+</p>
+
+<p align="center">
+  <a href="https://getsocialclaw.com"><strong>Official Website: getsocialclaw.com</strong></a> ·
+  <a href="https://getsocialclaw.com/dashboard">Dashboard</a> ·
+  <a href="https://www.npmjs.com/package/socialclaw">npm</a> ·
+  <a href="https://github.com/ndesv21/socialclaw/tree/main/skill">Skill Bundle</a>
+</p>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/ndesv21/socialclaw/main/.github/readme/workflow-dark.png">
+    <img src="https://raw.githubusercontent.com/ndesv21/socialclaw/main/.github/readme/workflow-light.png" alt="SocialClaw turns prompts, workflows, and AI agents into scheduled publishing, retries, inspection, and analytics across social channels." width="100%">
+  </picture>
+</p>
+
+<p><strong><a href="https://getsocialclaw.com">getsocialclaw.com</a> is the official SocialClaw website</strong> — the hosted dashboard, API, and account sign-up all live there.</p>
+<p>This repo is the public home for:</p>
+<ul>
+<li>the <code>socialclaw</code> npm CLI</li>
+<li>the OpenClaw and ClawHub skill bundle</li>
+<li>the Claude Code plugin and <code>/socialclaw</code> command asset</li>
+<li>public usage docs, provider notes, and schedule examples</li>
+</ul>
+<h3>Install</h3>
+<pre><code class="language-bash">npm install -g socialclaw
+socialclaw login
+socialclaw accounts list --json
+</code></pre>
+<p><strong>Install as an AI agent skill</strong> (Claude Code, Cursor, Cline, Codex, and more):</p>
+<pre><code class="language-bash">npx skills add ndesv21/socialclaw
+</code></pre>
+<h3>What the CLI covers</h3>
+<ul>
+<li>workspace API key login and hosted dashboard bootstrap</li>
+<li>browser OAuth connect plus manual Discord and Telegram connect</li>
+<li>hosted asset upload and deletion</li>
+<li>schedule validation, campaign preview, apply, inspect, clone, and draft publishing</li>
+<li>post, run, attempt, analytics, job, usage, and health inspection</li>
+<li>provider-side deletion for supported published posts</li>
+<li>Claude Code command installation through <code>socialclaw install --claude</code></li>
+</ul>
+<h3>CLI at a glance</h3>
+<pre><code class="language-bash">socialclaw login
+socialclaw accounts list --json
+socialclaw assets upload --file ./image.png --json
+socialclaw validate -f schedule.json --json
+socialclaw apply -f schedule.json --json
+socialclaw posts delete --post-id &lt;post-id&gt; --json
+</code></pre>
+<details>
+<summary>Current help surface</summary>
+
+<pre><code class="language-text">____             _       _      ____ _
+/ ___|  ___   ___(_) __ _| |    / ___| | __ ___      __
+\___ \ / _ \ / __| |/ _` | |   | |   | |/ _` \ \ /\ / /
+ ___) | (_) | (__| | (_| | |   | |___| | (_| |\ V  V /
+|____/ \___/ \___|_|\__,_|_|    \____|_|\__,_| \_/\_/
+
+socialclaw login
+socialclaw accounts list --json
+socialclaw assets upload --file &lt;path&gt; --json
+socialclaw campaigns preview -f &lt;schedule.(yaml|yml|json)&gt; --json
+socialclaw validate -f &lt;schedule.(yaml|yml|json)&gt; --json
+socialclaw apply -f &lt;schedule.(yaml|yml|json)&gt; --json
+socialclaw posts get --post-id &lt;id&gt; --json
+socialclaw posts delete --post-id &lt;id&gt; --json
+socialclaw status --run-id &lt;id&gt; --json
+socialclaw analytics post --post-id &lt;id&gt; --json
+</code></pre>
+</details>
+
+<h3>Watch the Demo</h3>
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Biy8saQqf44">
+    <img src="https://raw.githubusercontent.com/ndesv21/socialclaw/main/.github/readme/socialclaw-demo-poster.png" alt="Watch the SocialClaw demo video" width="820">
+  </a>
+</p>
+
+<p align="center">
+  <sub>Click the image to open the demo video.</sub>
+</p>
+
+<h3>Built for Agent-Driven Publishing</h3>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ndesv21/socialclaw/main/.github/readme/agent-social-banner.jpg" alt="SocialClaw connects AI agents to social publishing across major channels." width="100%">
+</p>
+
+<h3>Authentication and access</h3>
+<p>Running <code>socialclaw login</code> without an API key opens the hosted dashboard so the user can:</p>
+<ul>
+<li>sign in with Google</li>
+<li>connect social accounts</li>
+<li>create or copy a workspace API key</li>
+<li>activate a trial or paid plan for CLI and API access</li>
+</ul>
+<p>Important:</p>
+<ul>
+<li>the CLI works against a deployed SocialClaw workspace via API key auth</li>
+<li>an API key alone is not enough for agent execution; the workspace must also have an active trial or paid plan</li>
+<li>if a command returns <code>plan_required</code> or <code>subscription_*</code>, go to <code>https://getsocialclaw.com/pricing</code> or <code>https://getsocialclaw.com/dashboard</code></li>
+</ul>
+<h3>Quick start</h3>
+<pre><code class="language-bash">socialclaw login
+socialclaw login --api-key &lt;workspace-key&gt; --base-url https://getsocialclaw.com
+socialclaw accounts list --json
+socialclaw accounts capabilities --provider pinterest --json
+socialclaw accounts connect --provider pinterest --open
+socialclaw accounts connect --provider discord --webhook-url &lt;webhook-url&gt; --json
+socialclaw accounts connect --provider telegram --bot-token &lt;bot-token&gt; --chat-id @yourchannel --json
+socialclaw assets upload --file ./image.png --json
+socialclaw campaigns preview -f schedule.json --json
+socialclaw validate -f schedule.json --json
+socialclaw apply -f schedule.json --json
+socialclaw posts delete --post-id &lt;post-id&gt; --json
+socialclaw workspace health --json
+socialclaw usage --json
+</code></pre>
+<h3>Agent integrations</h3>
+<h4>MCP server</h4>
+<p>The package ships a Model Context Protocol server. Any MCP client (Claude Code, Claude Desktop, Cursor, and others) gets 17 validation-first publishing tools over your connected workspace accounts: list accounts and capabilities, upload media, validate and preview schedules, apply with idempotency keys, publish drafts, and inspect posts, attempts, runs, analytics, usage, and health.</p>
+<p>Claude Code:</p>
+<pre><code class="language-bash">claude mcp add socialclaw \
+  --env SOCIALCLAW_API_KEY=sc_live_your_key \
+  -- npx -y socialclaw mcp
+</code></pre>
+<p>Claude Desktop, Cursor, and other JSON-configured clients:</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "socialclaw": {
+      "command": "npx",
+      "args": ["-y", "socialclaw", "mcp"],
+      "env": {
+        "SOCIALCLAW_API_KEY": "sc_live_your_key"
+      }
+    }
+  }
+}
+</code></pre>
+<p>If you have already run <code>socialclaw login --api-key &lt;key&gt;</code>, the server reuses the saved credentials and the <code>env</code> block is unnecessary. See <a href="https://getsocialclaw.com/mcp">getsocialclaw.com/mcp</a> for the full tool list.</p>
+<h4>Claude Code plugin</h4>
+<p>Install the packaged Claude Code plugin from inside Claude Code:</p>
+<pre><code class="language-shell">/plugin marketplace add ndesv21/socialclaw
+/plugin install socialclaw@socialclaw
+</code></pre>
+<p>This installs the marketplace plugin from <a href="./skills/socialclaw"><code>skills/socialclaw/</code></a> with metadata from <a href="./.claude-plugin"><code>.claude-plugin/</code></a>. It is the cleanest option if you want Claude to auto-invoke SocialClaw when a user asks to connect accounts, upload media, schedule posts, inspect delivery, or check analytics.</p>
+<h4>Claude slash command and skill file</h4>
+<p>If you want the explicit <code>/socialclaw</code> command instead of the full plugin flow:</p>
+<pre><code class="language-bash">socialclaw install --claude
+</code></pre>
+<p>That installs the bundled command file from <a href="https://github.com/ndesv21/socialclaw/blob/main/skill/claude/socialclaw.md"><code>skill/claude/socialclaw.md</code></a> into <code>~/.claude/commands/socialclaw.md</code>.</p>
+<p>Use this path when you want a lightweight Claude Code setup that:</p>
+<ul>
+<li>exposes one clear SocialClaw command</li>
+<li>keeps the workspace API key flow explicit</li>
+<li>still lets Claude use the same hosted SocialClaw API and CLI workflow</li>
+</ul>
+<h4>OpenClaw and ClawHub</h4>
+<p>The OpenClaw-compatible skill bundle lives in <a href="./skill"><code>skill/</code></a>.</p>
+<p>It is designed for OpenClaw and other compatible agent runtimes that can load a <code>SKILL.md</code>, work from a workspace API key, and call either:</p>
+<ul>
+<li>the SocialClaw HTTP API directly</li>
+<li>the <code>socialclaw</code> CLI as a client for the hosted service</li>
+</ul>
+<p>This is the bundle to publish to ClawHub for OpenClaw discovery.</p>
+<h4>Other agents</h4>
+<p>SocialClaw is not limited to one agent framework. The repo also includes an agent manifest in <a href="https://github.com/ndesv21/socialclaw/blob/main/skill/agents/openai.yaml"><code>skill/agents/openai.yaml</code></a>, and the CLI works well for any runtime that can execute shell commands or make HTTP requests.</p>
+<p>That makes SocialClaw a good fit for:</p>
+<ul>
+<li>Codex and terminal-native agent workflows</li>
+<li>Claude Code via plugin or command file</li>
+<li>OpenClaw and ClawHub skills</li>
+<li>custom internal agents that need one stable publishing surface for social channels</li>
+</ul>
+<p>In practice, all of these share the same model:</p>
+<ul>
+<li>connect customer accounts inside SocialClaw</li>
+<li>create a workspace API key</li>
+<li>upload media, validate, apply, inspect, analyze, and optionally delete supported posts through the hosted service</li>
+</ul>
+<h3>Supported providers</h3>
+<ul>
+<li>X</li>
+<li>Facebook Pages</li>
+<li>Instagram Business</li>
+<li>Instagram standalone professional accounts</li>
+<li>LinkedIn profile</li>
+<li>LinkedIn page</li>
+<li>Pinterest</li>
+<li>TikTok</li>
+<li>Discord</li>
+<li>Telegram</li>
+<li>YouTube</li>
+<li>Reddit</li>
+<li>WordPress</li>
+</ul>
+<p>Pinterest is exposed as the <code>pinterest</code> provider in the public CLI and skill bundle. Its main publish target is board-centric, with support for standard pins, video pins, multi-image pins, board creation and section or catalog discovery, plus pin and account analytics. Product, collection, and idea surfaces should be treated as capability-gated or beta rather than assumed for every workspace.</p>
+<p>TikTok supports one video or one photo gallery per post. Photo galleries can include up to 35 images and expose <code>autoAddMusic</code> plus <code>photoCoverIndex</code>; selecting a specific TikTok song or sound is not available through TikTok's Content Posting API. For photo galleries, normalize images before upload, preferably to 1080x1920 JPEGs for vertical slides or another standard TikTok-compatible aspect/size. Oversized or unusual image dimensions may pass SocialClaw validation and initial TikTok acceptance, then fail later with <code>picture_size_check_failed</code>; reconcile photo posts after publish to confirm TikTok reports <code>PUBLISH_COMPLETE</code>.</p>
+<h3>Publishing</h3>
+<p>Bump the version with <code>npm version</code>:</p>
+<pre><code class="language-bash">npm version patch
+git push &amp;&amp; git push --tags
+npm publish --access public
+</code></pre>
+<p>To sync reference files manually after editing <code>skill/references/</code>:</p>
+<pre><code class="language-bash">npm run sync:references
+</code></pre>
+<h3>Notes</h3>
+<ul>
+<li>Users connect accounts inside the hosted SocialClaw dashboard.</li>
+<li>The dashboard and API live at <code>https://getsocialclaw.com</code>.</li>
+<li>The npm package ships the CLI, skill docs, Claude Code plugin, and command asset.</li>
+</ul>
+
   </section>
 </details>
 
@@ -161,7 +382,7 @@
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 413</div>
+        <div class="stars">★ 414</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -169,7 +390,7 @@
         <div class="name"><span class="org">teknium1 /</span> hermes-miniverse</div>
       </a>
       <a class="related-row" href="/projects/Ridwannurudeen/hermes-council">
-        <div class="stars">★ 45</div>
+        <div class="stars">★ 46</div>
         <div class="name"><span class="org">Ridwannurudeen /</span> hermes-council</div>
       </a>
       <a class="related-row" href="/projects/gizdusum/hermes-blockchain-oracle">

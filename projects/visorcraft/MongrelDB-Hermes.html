@@ -149,7 +149,368 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/visorcraft/MongrelDB-Hermes" target="_blank">Visit GitHub</a> for more details.</div>
+    <p align="center">
+  <img src="https://raw.githubusercontent.com/visorcraft/MongrelDB-Hermes/main/assets/mongrel.png" alt="MongrelDB logo" width="250">
+</p>
+
+<h1 align="center">MongrelDB plugin for Hermes</h1>
+
+<p align="center">
+  <b>MongrelDB-backed memory for Hermes Agent - hybrid long-term memory with dense ANN, sparse retrieval, exact text, bitmaps, learned ranges, and MinHash dedup in one engine.</b>
+</p>
+
+<p align="center">
+  <a href="https://github.com/visorcraft/MongrelDB"><img src="https://img.shields.io/badge/engine-MongrelDB-blue.svg" alt="MongrelDB"></a>
+  <a href="#license"><img src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg" alt="License"></a>
+</p>
+
+<h3>Quick Start</h3>
+<ol>
+<li>Install the memory provider:</li>
+</ol>
+<pre><code class="language-bash">hermes plugins install visorcraft/MongrelDB-Hermes --no-enable
+</code></pre>
+<p><code>--no-enable</code> should skip the enable prompt. If Hermes still asks <code>Enable 'mongreldb_hermes' now? [y/N]:</code>, press <code>Enter</code> or answer <code>n</code>.</p>
+<ol start="2">
+<li>Ignore these generic Hermes instructions:</li>
+</ol>
+<pre><code class="language-text">Plugin installed but not enabled. Run `hermes plugins enable mongreldb_hermes` to activate.
+Restart the gateway for the plugin to take effect:
+  hermes gateway restart
+</code></pre>
+<p>Do not run either command. <code>mongreldb_hermes</code> is an exclusive memory provider, not a general plugin.</p>
+<ol start="3">
+<li>After the installer returns to the shell, run:</li>
+</ol>
+<pre><code class="language-bash">hermes memory setup
+</code></pre>
+<p>Select <code>mongreldb_hermes</code>, listed as <code>local</code>. No API key is required. Choose <code>dense</code> (default) for semantic ANN with <code>all-MiniLM-L6-v2</code>, or <code>sparse</code> for model-free retrieval. Dense setup installs <code>sentence-transformers</code> and downloads the model automatically. Memory setup also downloads both MongrelDB runtimes and activates the provider.</p>
+<p>Keep <code>heuristic</code> enrichment (default) for local, fast, private operation. <code>llm</code> enrichment is slower, requires an OpenAI-compatible API key, and sends memory text to that configured provider.</p>
+<h3>Why MongrelDB for Hermes?</h3>
+<p>Hermes memory needs more than a plain vector store. Useful long-term memory for an agent must:</p>
+<ul>
+<li>Recall facts the user explicitly mentions, including exact wording.</li>
+<li>Catch vague or paraphrased references to older conversations.</li>
+<li>Filter by memory type, project, entity, state, and time.</li>
+<li>Detect near-duplicate memories so the store does not grow forever.</li>
+<li>Return results fast enough that the agent still feels responsive.</li>
+<li>Keep agent memories <strong>encrypted at rest</strong> when the host disk or backups are not fully trusted.</li>
+</ul>
+<p>MongrelDB is built around multiple AI-native indexes in one engine, so a single query can combine all of these signals. Most alternatives only provide dense vector search; frameworks like Mem0 compose several separate databases to approximate the same thing.</p>
+<p><strong>Encryption at rest is on by default:</strong> the plugin creates a random passphrase in <code>~/.hermes/mongreldb_hermes.key</code> with mode <code>0600</code>, then uses MongrelDB's <strong>AES-256-GCM</strong> encrypted create path for new data directories in both native and daemon modes. Existing directories are opened by on-disk layout (<code>_meta/keys</code> means encrypted); a passphrase is required only when the directory is already encrypted. Set <code>encryption: disabled</code> only when plaintext storage is intentional.</p>
+<h3>What It Provides</h3>
+<p>A hybrid memory store with multiple index types:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>MongrelDB index</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Semantic meaning</td>
+<td><strong>HNSW ANN</strong> on dense embeddings</td>
+<td>Vague or paraphrased recall</td>
+</tr>
+<tr>
+<td>Exact keywords</td>
+<td><strong>Sparse</strong> index</td>
+<td>Specific terms, topics, tags</td>
+</tr>
+<tr>
+<td>Exact substrings</td>
+<td><strong>FM-index</strong></td>
+<td>Quoted phrases, error fragments</td>
+</tr>
+<tr>
+<td>Metadata filtering</td>
+<td><strong>Bitmap</strong> indexes</td>
+<td><code>memory_type</code>, <code>state</code>, <code>project</code>, <code>user</code></td>
+</tr>
+<tr>
+<td>Time / importance / score</td>
+<td><strong>PGM learned range</strong></td>
+<td>Recency, importance, confidence, reinforcement</td>
+</tr>
+<tr>
+<td>Duplicate detection</td>
+<td><strong>MinHash</strong></td>
+<td>Near-duplicate consolidation at ingestion</td>
+</tr>
+<tr>
+<td>Confidentiality on disk</td>
+<td><strong>AES-256-GCM encryption at rest</strong></td>
+<td>On by default; a passphrase is generated when none is supplied; plaintext is the opt-out</td>
+</tr>
+<tr>
+<td>Logical access control</td>
+<td><strong>Username/password credentials</strong></td>
+<td>Orthogonal to encryption - who may open the DB handle; can stack with encryption</td>
+</tr>
+</tbody></table>
+<p>Two execution modes (configure <code>mode: native</code> or <code>mode: daemon</code>):</p>
+<ul>
+<li><strong>Native Rust FFI</strong> (default): Hermes loads <code>libmongreldb.so</code> and opens the data directory <strong>in-process</strong> - lowest latency; that process owns the exclusive storage open for <code>db_dir</code>.</li>
+<li><strong>HTTP daemon</strong>: Hermes is an HTTP client of <code>mongreldb-server</code>. The <strong>daemon</strong> owns the exclusive open; many processes can share the warm cache over HTTP. Do not also open the same data directory with native FFI while the daemon is running.</li>
+</ul>
+<p><strong>Dense ANN is enabled by default</strong> with <code>all-MiniLM-L6-v2</code> at 384 dimensions. Select <code>sparse</code> during setup, or set <code>embedding_model: ""</code>, for model-free sparse + lexical retrieval. MongrelDB core keeps embedding generation as a pluggable layer: applications may supply vectors, Kit/server may register providers, and ANN indexes operate only on stored vectors plus model metadata.</p>
+<p><strong>Locking (0.60.x):</strong> only one process may exclusively open a given MongrelDB data directory. In-process multi-handle/thread sharing is fine. Multi-process sharing goes through the daemon, not multiple native opens of the same path.</p>
+<h3>Requirements</h3>
+<ul>
+<li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> with standalone plugin support</li>
+<li>Python 3.10+ for the plugin runtime</li>
+<li>Linux x64 glibc/musl, Linux arm64 glibc, or macOS x64/arm64</li>
+<li><code>sentence-transformers</code> when dense ANN is enabled; Hermes installs it automatically during memory setup</li>
+</ul>
+<p>Plugin 1.0.5 targets MongrelDB 0.60.3 and <a href="https://crates.io/crates/mongreldb-kit/0.60.3">MongrelDB Kit 0.60.3</a>. When memory settings are saved, or on first provider start if setup was skipped, it downloads the matching native archive and daemon binary from the <a href="https://github.com/visorcraft/MongrelDB/releases/tag/v0.60.3">MongrelDB 0.60.3 release</a>. It verifies both SHA-256 digests, keeps only the shared library and <code>mongreldb-server</code>, and deletes the downloads. The plugin uses Kit through the daemon HTTP API, so no separate Kit library is installed.</p>
+<p>Dense setup automatically installs <code>sentence-transformers</code> into the Hermes environment and downloads <code>all-MiniLM-L6-v2</code>. Sparse setup skips both.</p>
+<h3>Manual Configuration</h3>
+<p>Run <code>hermes memory setup</code>, select <code>mongreldb_hermes</code>, then choose native or daemon mode. For
+manual or advanced configuration, edit <code>/home/user/.hermes/config.yaml</code>:</p>
+<pre><code class="language-yaml">memory:
+  provider: mongreldb_hermes
+  mongreldb_hermes:
+    mode: native                       # native | daemon
+    db_dir: /home/user/.hermes/mongreldb_hermes_data
+    encryption: enabled                # enabled by default; disabled = plaintext
+    retrieval_mode: dense              # dense (default) | sparse
+    embedding_model: "all-MiniLM-L6-v2"
+    dim: 384
+    enrichment_mode: heuristic         # heuristic (default) | llm
+
+    # llm enrichment only; any OpenAI-compatible provider
+    llm_base_url: https://api.openai.com/v1
+    llm_model: gpt-4.1-mini
+
+    # Blank/missing passphrase uses ~/.hermes/mongreldb_hermes.key (mode 0600)
+    # Prefer MONGRELDB_PASSPHRASE when supplying your own passphrase.
+
+    # Optional logical auth ON TOP OF encryption (storage-layer credentials)
+    # username: admin
+    # password: "${MONGRELDB_DB_PASSWORD}"
+
+    # daemon-only settings
+    daemon_url: http://127.0.0.1:8453
+    daemon_data_dir: /home/user/.hermes/mongreldb_hermes_data
+    daemon_pidfile: /tmp/mongreldb-hermes.pid
+    daemon_log: /tmp/mongreldb-hermes.log
+    daemon_binary: /home/user/.hermes/plugins/mongreldb_hermes/vendor/0.60.3/mongreldb-server
+</code></pre>
+<p>The bundled daemon is the default. Set <code>MONGRELDB_DAEMON_BINARY</code> to use another binary.</p>
+<p>For optional LLM enrichment, set <code>MONGRELDB_LLM_API_KEY</code> (or <code>OPENAI_API_KEY</code>). Override <code>MONGRELDB_LLM_BASE_URL</code> and <code>MONGRELDB_LLM_MODEL</code> for another OpenAI-compatible provider.</p>
+<p>Opt out of dense ANN in manual config:</p>
+<pre><code class="language-yaml">    retrieval_mode: sparse
+    embedding_model: ""
+    dim: 384
+</code></pre>
+<h4>Encryption key and credentials</h4>
+<p>Encryption at rest and username/password credentials are <strong>orthogonal</strong>. With encryption enabled, a missing passphrase creates and reuses <code>~/.hermes/mongreldb_hermes.key</code> in both modes for new creates. Back up this file with the database. Losing it makes an encrypted database unreadable.</p>
+<p><strong>Open rules for an existing data directory:</strong></p>
+<ul>
+<li>If <code>_meta/keys</code> is present, the root is encrypted: a passphrase is required (config, <code>MONGRELDB_PASSPHRASE</code>, or the key file).</li>
+<li>If <code>_meta/keys</code> is absent, the root is plaintext: open without encryption even when a passphrase is configured for future creates.</li>
+<li>This avoids failing when config has <code>encryption: enabled</code> but the directory was created without encryption.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it protects</th>
+<th>How you set it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Encryption passphrase / key</strong></td>
+<td>Bytes on disk (pages, WAL, caches) - AES-256-GCM</td>
+<td>Generated key file by default, or <code>MONGRELDB_PASSPHRASE</code> / <code>passphrase</code></td>
+</tr>
+<tr>
+<td><strong>Username + password credentials</strong></td>
+<td>Who may open/use the DB handle (logical access)</td>
+<td>Storage-layer credentials; can be combined with encryption</td>
+</tr>
+</tbody></table>
+<p>You can (and usually should) use <strong>both</strong>: losing the passphrase means the on-disk bytes are unreadable; losing the credentials means the process cannot open an auth-enforced database even with the passphrase.</p>
+<h5>Daemon mode (<code>mongreldb-server</code>)</h5>
+<p>Start the server with a passphrase so the data directory is encrypted, and optionally with DB credentials:</p>
+<pre><code class="language-bash">export MONGRELDB_PASSPHRASE='choose-a-long-random-passphrase'
+export MONGRELDB_DB_USERNAME='admin'
+export MONGRELDB_DB_PASSWORD='choose-a-strong-password'
+
+/home/user/.hermes/plugins/mongreldb_hermes/vendor/0.60.3/mongreldb-server \
+  /home/user/.hermes/mongreldb_hermes_data \
+  --port 8453 \
+  --passphrase "$MONGRELDB_PASSPHRASE" \
+  --daemon \
+  --pidfile /tmp/mongreldb-hermes.pid
+</code></pre>
+<ul>
+<li><strong><code>--passphrase</code></strong> (or equivalent env) selects encryption key material for new creates and for opening encrypted roots.</li>
+<li><strong><code>MONGRELDB_DB_USERNAME</code> / <code>MONGRELDB_DB_PASSWORD</code></strong> (when set together) create/open a <strong>credentialed</strong> database - auth on top of encryption when the root is encrypted.</li>
+<li>HTTP-facing daemon auth is separate again: e.g. <strong><code>--auth-token</code></strong> (Bearer) or <strong><code>--auth-users</code></strong> (Basic) for the Kit/SQL HTTP surface. Prefer not exposing the daemon off loopback without a reverse proxy + TLS.</li>
+<li>Set <code>MONGRELDB_DAEMON_AUTH_TOKEN</code> when the daemon uses <code>--auth-token</code>.</li>
+</ul>
+<p>See the engine docs: <a href="https://github.com/visorcraft/MongrelDB/blob/v0.60.3/docs/07-encryption.md">Encryption</a> and <a href="https://github.com/visorcraft/MongrelDB/blob/v0.60.3/docs/15-credential-enforcement.md">Credential enforcement</a>.</p>
+<h5>Native mode (<code>libmongreldb.so</code>)</h5>
+<p>Native mode generates or loads the passphrase when encryption is enabled, then creates new roots with the encrypted C ABI. Existing roots follow the open rules above (encrypted only when <code>_meta/keys</code> is present). A missing secret never silently creates a <em>new</em> plaintext root under <code>encryption: enabled</code>. Set <code>encryption: disabled</code> or <code>MONGRELDB_ENCRYPTION=disabled</code> to opt out explicitly. Prefer environment variables (<code>MONGRELDB_PASSPHRASE</code>, <code>MONGRELDB_DB_USERNAME</code>, <code>MONGRELDB_DB_PASSWORD</code>) over committing secrets in <code>config.yaml</code>.</p>
+<h4>Restart Hermes</h4>
+<p>The plugin creates the database and table on first use.</p>
+<h3>Documentation</h3>
+<ul>
+<li><a href="https://github.com/visorcraft/MongrelDB-Hermes/blob/main/MongrelDB_setup.md">MongrelDB setup</a> - install and configure</li>
+<li><a href="https://github.com/visorcraft/MongrelDB-Hermes/blob/main/MongrelDB_modes.md">Modes</a> - native FFI vs HTTP daemon</li>
+<li><a href="https://github.com/visorcraft/MongrelDB-Hermes/blob/main/MongrelDB_dense.md">Dense ANN</a> - default <code>all-MiniLM-L6-v2</code> setup and model policy</li>
+<li><a href="https://github.com/visorcraft/MongrelDB-Hermes/blob/main/MongrelDB_standalone.md">Standalone Rust</a> - using MongrelDB directly outside Hermes</li>
+<li><a href="https://github.com/visorcraft/MongrelDB/blob/v0.60.3/docs/22-embeddings-and-retrieval.md">Engine embeddings &amp; retrieval</a> - pluggable <code>EmbeddingSource</code> / provider registry</li>
+</ul>
+<h3>Modes</h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>How it works</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Native</strong></td>
+<td>Loads <code>libmongreldb.so</code> in-process</td>
+<td>Lowest latency; single Hermes process owns the DB</td>
+</tr>
+<tr>
+<td><strong>Daemon</strong></td>
+<td>Talks to <code>mongreldb-server</code> over HTTP</td>
+<td>Warm cache; DB shared across processes / restarts</td>
+</tr>
+</tbody></table>
+<p>See <a href="https://github.com/visorcraft/MongrelDB-Hermes/blob/main/MongrelDB_modes.md">MongrelDB_modes.md</a>. Helper scripts: <code>start_daemon.sh</code>, <code>stop_daemon.sh</code>.</p>
+<h3>Comparison with Alternatives</h3>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>MongrelDB</th>
+<th>Mem0</th>
+<th>ChromaDB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dense ANN</td>
+<td>Native HNSW</td>
+<td>Via configured vector store</td>
+<td>Native HNSW</td>
+</tr>
+<tr>
+<td>Sparse retrieval</td>
+<td>Native</td>
+<td>Framework-level or store-dependent</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Exact substring (FM)</td>
+<td>Native</td>
+<td>Not native</td>
+<td>Not native</td>
+</tr>
+<tr>
+<td>Bitmap metadata filtering</td>
+<td>Native</td>
+<td>Depends on store</td>
+<td>Basic <code>where</code></td>
+</tr>
+<tr>
+<td>Learned range (time/score)</td>
+<td>Native</td>
+<td>Depends on store</td>
+<td>Not native</td>
+</tr>
+<tr>
+<td>MinHash deduplication</td>
+<td>Native</td>
+<td>Not native</td>
+<td>Not native</td>
+</tr>
+<tr>
+<td>Unified query planner</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Mem0</strong> is a memory framework, not a database. Hybrid sparse + exact text + MinHash are not engine-native.</li>
+<li><strong>ChromaDB</strong> is primarily a vector database; metadata and exact text are secondary; no native sparse / MinHash / learned-range stack.</li>
+<li>MongrelDB combines the signals Hermes needs in one engine and one query planner.</li>
+</ul>
+<h3>Layout</h3>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>plugin.yaml</code></td>
+<td>Hermes provider manifest</td>
+</tr>
+<tr>
+<td><code>after-install.md</code></td>
+<td>Memory-provider activation instructions shown by Hermes</td>
+</tr>
+<tr>
+<td><code>__init__.py</code></td>
+<td>Provider implementation and registration</td>
+</tr>
+<tr>
+<td><code>_ffi.py</code></td>
+<td>ctypes wrapper for <code>libmongreldb.so</code></td>
+</tr>
+<tr>
+<td><code>install_mongreldb.py</code></td>
+<td>Verified platform binary installer</td>
+</tr>
+<tr>
+<td><code>MongrelDB_setup.md</code></td>
+<td>Install and configure</td>
+</tr>
+<tr>
+<td><code>MongrelDB_modes.md</code></td>
+<td>Native vs daemon</td>
+</tr>
+<tr>
+<td><code>MongrelDB_dense.md</code></td>
+<td>Dense ANN</td>
+</tr>
+<tr>
+<td><code>MongrelDB_standalone.md</code></td>
+<td>Direct Rust usage notes</td>
+</tr>
+<tr>
+<td><code>start_daemon.sh</code> / <code>stop_daemon.sh</code></td>
+<td>Daemon lifecycle helpers</td>
+</tr>
+<tr>
+<td><code>assets/mongrel.png</code></td>
+<td>Logo</td>
+</tr>
+</tbody></table>
+<h3>Current State</h3>
+<ul>
+<li><strong>Native FFI</strong> path is the primary, tested mode (model-free and dense ANN with MiniLM).</li>
+<li><strong>Daemon mode</strong> uses the server's typed <code>/kit/*</code> HTTP API for schema creation, writes, hybrid search, filtering, and deletion. The bundled daemon starts automatically when needed.</li>
+<li>Native mode requires MongrelDB 0.60.3. Daemon mode requires <code>mongreldb-server</code> 0.60.3 and is compatible with MongrelDB Kit 0.60.3.</li>
+</ul>
+<h3>Development Notes</h3>
+<ul>
+<li>Set <code>MONGRELDB_LIB</code> only to override the bundled shared library.</li>
+<li>A MongrelDB path is a <strong>data directory</strong>, not a single file.</li>
+<li>Do not invent weak hashed dense vectors to "fake" ANN; prefer sparse retrieval when no real model is available.</li>
+</ul>
+<h3>License</h3>
+<p>MIT OR Apache-2.0</p>
+
   </section>
 </details>
 
@@ -161,7 +522,7 @@
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 61.2K</div>
+        <div class="stars">★ 61.3K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -189,7 +550,7 @@
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 42</div>
+        <div class="stars">★ 43</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
     </div>

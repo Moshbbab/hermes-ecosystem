@@ -149,7 +149,110 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/MnrGreg/hermes-venice-web" target="_blank">Visit GitHub</a> for more details.</div>
+    <h2>Hermes Venice Web Plugin</h2>
+<p><strong>Full replacement for Hermes Agent's built-in <code>web_search</code> / <code>web_extract</code> tools using Venice AI's official privacy-first API.</strong></p>
+<p>This plugin adds two high-quality tools:</p>
+<ul>
+<li><code>venice_web_search</code> → powered by Venice <code>/augment/search</code></li>
+<li><code>venice_web_scrape</code> → powered by Venice <code>/augment/scrape</code></li>
+</ul>
+<hr>
+<h3>✨ Benefits of Venice API</h3>
+<ul>
+<li><strong>Zero Data Retention (ZDR)</strong> with Brave backend — queries are never stored or logged.</li>
+<li><strong>Fully anonymized Google</strong> fallback — Venice never links your identity to requests.</li>
+<li><strong>Strong privacy</strong>: No data storage, no training use, no logs.</li>
+<li><strong>Very low cost</strong>: Only <strong>$0.01 per request</strong> for both search and scrape.</li>
+<li><strong>Clean, LLM-friendly output</strong> — structured results and Markdown content.</li>
+<li><strong>Fast and reliable</strong> performance.</li>
+<li><strong>Provider-independent</strong> — uses Venice's standalone <code>/augment</code> endpoints, so you can pair Venice web tools with <em>any</em> AI provider (OpenAI, Anthropic, local models, etc.), not just Venice inference.</li>
+</ul>
+<p>Unlike Venice's built-in "always-on" web integrations via <a href="https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix#to-enable-web-search-with-full-page-scraping">model feature suffixes</a> (e.g. <code>default:enable_web_search=on&amp;enable_web_scraping=true</code>) or <a href="https://docs.venice.ai/api-reference/endpoint/chat/completions#body-venice-parameters-enable-web-scraping"><code>venice_parameters</code></a> in the request body, this plugin gives the <strong>agent full explicit control</strong> — it only calls the tools when it actually needs them.</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>How it works</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>This plugin</strong> (recommended)</td>
+<td>Agent decides per-turn whether to search/scrape</td>
+<td>Agentic workflows where the model should judge when web data is needed; works with any LLM provider</td>
+</tr>
+<tr>
+<td><a href="https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix">Model feature suffix</a></td>
+<td>Append flags to the model ID (e.g. <code>default:enable_web_search=on</code>)</td>
+<td>Clients that don't allow modifying the request body; always-on search with Venice inference</td>
+</tr>
+<tr>
+<td><a href="https://docs.venice.ai/api-reference/endpoint/chat/completions#body-venice-parameters-enable-web-scraping"><code>venice_parameters</code></a></td>
+<td>Set <code>enable_web_search</code> / <code>enable_web_scraping</code> in the request body</td>
+<td>Direct Venice API calls where you want every request to include web context</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Installation</h3>
+<h4>One-command (recommended)</h4>
+<pre><code class="language-bash">hermes plugins install mnrGreg/hermes-venice-web --enable
+</code></pre>
+<h4>Manual</h4>
+<pre><code class="language-bash">mkdir -p ~/.hermes/plugins/venice-web
+cd ~/.hermes/plugins/venice-web
+# Copy the files below into this folder
+hermes plugins reload
+</code></pre>
+<h4>Setup</h4>
+<ul>
+<li>Get your Venice API key → <a href="https://venice.ai">https://venice.ai</a></li>
+<li>Add it to Hermes:</li>
+</ul>
+<pre><code class="language-bash">echo 'VENICE_API_KEY=vk-XXXXXXXXXXXXXXXX' &gt;&gt; ~/.hermes/.env
+</code></pre>
+<h4>Remove Default Hermes Web Tools (Important!)</h4>
+<p>Edit ~/.hermes/config.yaml:</p>
+<pre><code class="language-yaml">toolsets:
+  - venice_web        # ← Keep this
+  # - web             # ← Comment out or remove
+  # - browse          # ← Comment out or remove
+</code></pre>
+<p>Then restart Hermes or run <code>hermes plugins reload</code>.</p>
+<hr>
+<h4>Pricing</h4>
+<p>Per the <a href="https://docs.venice.ai/overview/pricing#additional-features">Venice API pricing</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Config</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Web Search</td>
+<td><code>enable_web_search: true</code></td>
+<td>$10.00 per 1K requests ($0.01/request)</td>
+</tr>
+<tr>
+<td>Web Scraping</td>
+<td><code>enable_web_scraping: true</code></td>
+<td>$10.00 per 1K URLs ($0.01/URL)</td>
+</tr>
+</tbody></table>
+<p>These charges apply in addition to standard model token pricing. See <a href="https://docs.venice.ai/overview/pricing">full pricing details</a> for text, image, audio, and video models.</p>
+<hr>
+<h4>API References</h4>
+<ul>
+<li>Search: <a href="https://docs.venice.ai/api-reference/endpoint/augment/search">https://docs.venice.ai/api-reference/endpoint/augment/search</a></li>
+<li>Scrape: <a href="https://docs.venice.ai/api-reference/endpoint/augment/scrape">https://docs.venice.ai/api-reference/endpoint/augment/scrape</a></li>
+<li>Pricing: <a href="https://docs.venice.ai/overview/pricing#additional-features">https://docs.venice.ai/overview/pricing#additional-features</a></li>
+<li>Model Feature Suffix: <a href="https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix">https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix</a></li>
+<li>Chat Completions (<code>venice_parameters</code>): <a href="https://docs.venice.ai/api-reference/endpoint/chat/completions">https://docs.venice.ai/api-reference/endpoint/chat/completions</a></li>
+</ul>
+<p>Made for the Hermes community by mnrGreg
+Star this repo if it helps you!</p>
+
   </section>
 </details>
 

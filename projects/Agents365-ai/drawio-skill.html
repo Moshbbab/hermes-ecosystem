@@ -53,7 +53,7 @@
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 6061
+    "userInteractionCount": 6123
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -149,7 +149,689 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/Agents365-ai/drawio-skill" target="_blank">Visit GitHub</a> for more details.</div>
+    <h2>drawio-skill — From Text to Professional Diagrams</h2>
+<p><a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Agents365-ai/drawio-skill/stargazers"><img src="https://img.shields.io/github/stars/Agents365-ai/drawio-skill?style=flat&amp;logo=github" alt="GitHub stars" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Agents365-ai/drawio-skill/network/members"><img src="https://img.shields.io/github/forks/Agents365-ai/drawio-skill?style=flat&amp;logo=github" alt="GitHub forks" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Agents365-ai/drawio-skill/releases/latest"><img src="https://img.shields.io/github/v/release/Agents365-ai/drawio-skill?logo=github" alt="Latest Release" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Agents365-ai/drawio-skill/commits/main"><img src="https://img.shields.io/github/last-commit/Agents365-ai/drawio-skill?logo=github" alt="Last Commit" loading="lazy" decoding="async"></a></p>
+<p><a href="https://skillsmp.com/skills/agents365-ai-drawio-skill-skills-drawio-skill-skill-md"><img src="https://img.shields.io/badge/SkillsMP-listed-1f6feb" alt="SkillsMP" loading="lazy" decoding="async"></a>
+<a href="https://clawhub.ai/agents365-ai/drawio-pro-skill"><img src="https://img.shields.io/badge/ClawHub-listed-ff6b35" alt="ClawHub" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Agents365-ai/365-skills"><img src="https://img.shields.io/badge/Claude%20Code-plugin-8a2be2" alt="Claude Code Plugin" loading="lazy" decoding="async"></a>
+<a href="https://agentskills.io"><img src="https://img.shields.io/badge/Agent%20Skills-compatible-2ea44f" alt="Agent Skills" loading="lazy" decoding="async"></a></p>
+<p><strong>English</strong> · <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/README_CN.md">中文</a> · <a href="https://agents365-ai.github.io/drawio-skill/">📖 Online Docs</a></p>
+<p>A skill that turns natural-language descriptions into <code>.drawio</code> XML and exports them to PNG / SVG / PDF / JPG via the native draw.io desktop CLI. It can also turn an <strong>existing codebase</strong> (Python / JS-TS / Go / Rust), <strong>Terraform / Kubernetes / docker-compose infrastructure</strong>, or a <strong>SQL schema</strong> into an auto-laid-out diagram. Works with <strong>Claude Code, Cursor, Copilot, OpenClaw, Codex, Autohand Code, Hermes</strong>, and any agent compatible with the <a href="https://agentskills.io">Agent Skills</a> format.</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/microservices-example.png" width="900" alt="Microservices Architecture — generated from a single natural-language prompt">
+</p>
+
+<h3>✨ Highlights</h3>
+<ul>
+<li><strong>11 diagram type presets</strong> — ERD, UML Class, Sequence, C4, Architecture, ML/Deep Learning, Flowchart, SysML (BDD / IBD / Requirement / Parametric), BPMN, Network Topology, Cross-Functional Swimlane</li>
+<li><strong>Mermaid → native .drawio</strong> (draw.io ≥ 30) — author 28 standard types as Mermaid text (<strong>mindmap, gantt, timeline, journey, pie, sankey, kanban</strong>…) and the CLI converts them into a laid-out, editable <code>.drawio</code> — structure in, layout free</li>
+<li><strong>Visualize a codebase</strong> — extract and auto-lay-out the structure of a Python / JS-TS / Go / Rust project (import graphs) or a Python class hierarchy — Graphviz placement, transitive reduction, nested module containers</li>
+<li><strong>IaC → architecture diagram</strong> — turn <strong>Terraform</strong> configs, <strong>Kubernetes</strong> manifests, or <strong>docker-compose</strong> files into an architecture diagram where every resource renders as its <strong>official AWS / Azure / GCP / K8s icon</strong>, edges derived from actual references (role ARNs, selectors, volume mounts)</li>
+<li><strong>SQL DDL → ER diagram</strong> — parse <code>CREATE TABLE</code> statements into per-table nodes with PK/FK markers and crow's-foot foreign-key edges</li>
+<li><strong>Deterministic sequence diagrams</strong> — describe participants + messages as JSON; lifelines, auto-tracked activation bars, and arrows are computed, never hand-placed</li>
+<li><strong>C4 model with drill-down</strong> — one command generates the multi-page System Context → Container → Component set with official C4 shapes; parent elements <strong>click through</strong> to their child page</li>
+<li><strong>Search 10,000+ official shapes</strong> — resolve the exact AWS / Azure / GCP / Cisco / Kubernetes / UML / BPMN icon style instead of guessing (no more blank-box <code>shape=mxgraph.*</code> typos)</li>
+<li><strong>AI / LLM brand logos</strong> — 321 logos (OpenAI, Claude, Gemini, Mistral, Llama, Ollama, LangChain…) that draw.io has none of, plus <strong>18 data-store brands</strong> (Redis, Postgres, Qdrant, Milvus…) for LLM/RAG architecture diagrams</li>
+<li><strong>Self-check + auto-fix</strong> — reads its own PNG output and auto-fixes overlaps, clipped labels, stacked edges, and more (up to 2 rounds)</li>
+<li><strong>Iterative feedback loop</strong> — up to 5 rounds of targeted refinement</li>
+<li><strong>Style presets</strong> — capture your visual style from a <code>.drawio</code> file or image, reuse on demand</li>
+<li><strong>Clean layout</strong> — grid-aligned, spacing scales with diagram size, connectors routed clear of nodes</li>
+<li><strong>Multi-agent, zero-config</strong> — runs from a single SKILL.md; no MCP server, no background daemon (the optional <code>npx</code> installer needs Node, the skill itself does not)</li>
+</ul>
+<h3>🗺️ Feature Map</h3>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/mindmap.png" width="900" alt="drawio-skill feature map — one mind map covering every capability, itself drawn with the skill">
+</div>
+
+<p>A bird's-eye view of everything the skill does — diagram types, import sources, layout engines, styling, export formats, and repurposing — in one map. Fittingly, this map was itself drawn with drawio-skill.</p>
+<h3>🖼️ Examples</h3>
+<blockquote>
+<p>[!TIP]
+<strong>The hero image above was generated from this single prompt:</strong></p>
+</blockquote>
+<pre><code>Create a microservices e-commerce architecture with Mobile/Web/Admin clients,
+API Gateway (auth + rate limiting + routing), Auth/User/Order/Product/Payment
+services, Kafka message queue, Notification service, and User DB / Order DB /
+Product DB / Redis Cache / Stripe API
+</code></pre>
+<p>The skill is designed to route edges cleanly across different topologies, avoiding lines that cross through shapes:</p>
+<table>
+  <tbody><tr>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/demo-star.png" alt="Star topology" width="100%"><br>
+      <b>Star</b> · 7 nodes<br>
+      <sub>Central message broker with 6 microservices radiating outward, no edge crossings on this example.</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/demo-layered.png" alt="Layered flow" width="100%"><br>
+      <b>Layered</b> · 10 nodes / 4 tiers<br>
+      <sub>E-commerce stack with horizontal and diagonal cross-connections routed via corridors.</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/demo-ring.png" alt="Ring cycle" width="100%"><br>
+      <b>Ring</b> · 8 nodes<br>
+      <sub>CI/CD pipeline with a closed loop and 2 spur branches flowing along the perimeter.</sub>
+    </td>
+  </tr>
+</tbody></table>
+
+<p>It also speaks <strong>Mermaid</strong> — standard types (flowchart, mindmap, <strong>kanban</strong>, gitGraph, timeline…) convert straight to native, editable <code>.drawio</code>. Here's a Kanban board (this project's own roadmap) generated from a few lines of Mermaid:</p>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/kanban.png" width="620" alt="Kanban board generated by drawio-skill from Mermaid — this project's roadmap across Backlog / Todo / In Progress / Done">
+</div>
+
+<p><strong>Tube-Map Mode</strong> restyles a pipeline or journey as a London-Underground-style metro map — coloured lines, octilinear (H/V/45°) routing, and white interchange circles. Here's the skill's own flow (this map is <code>assets/tubemap.json</code>, ~20 lines):</p>
+<div align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/tubemap.png" width="720" alt="drawio-skill's pipeline drawn as a metro map — Author / Import / Repurpose / Analyze lines meeting at the Auto-layout and .drawio interchange stations">
+</div>
+
+<p>Full walkthrough in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/docs/USAGE.md">docs/USAGE.md</a>.</p>
+<h3>🚀 Installation</h3>
+<h4>1. Install the draw.io desktop CLI</h4>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>macOS</strong></td>
+<td><code>brew install --cask drawio</code></td>
+</tr>
+<tr>
+<td><strong>Windows</strong></td>
+<td><a href="https://github.com/jgraph/drawio-desktop/releases">Download installer</a></td>
+</tr>
+<tr>
+<td><strong>Linux</strong></td>
+<td><code>.deb</code>/<code>.rpm</code> from <a href="https://github.com/jgraph/drawio-desktop/releases">releases</a>; <code>sudo apt install xvfb</code> for headless</td>
+</tr>
+</tbody></table>
+<p>Verify with <code>drawio --version</code>. <strong>Version ≥ 30 recommended</strong> — it unlocks Mermaid → <code>.drawio</code> conversion and the ELK <code>--layout</code> pass (both unavailable on ≤ 29). On <strong>WSL2</strong> the CLI is the Windows desktop exe reached via <code>/mnt/c</code> — the skill detects this automatically (see <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/skills/drawio-skill/references/troubleshooting.md">troubleshooting</a>). Full recipes in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/docs/INSTALL_CLI.md">docs/INSTALL_CLI.md</a>.</p>
+<h4>2. Install the skill</h4>
+<pre><code class="language-bash"># Any agent (Claude Code, Cursor, Copilot, ...)
+npx skills add Agents365-ai/365-skills -g
+</code></pre>
+<pre><code class="language-text"># Claude Code plugin marketplace
+&gt; /plugin marketplace add Agents365-ai/365-skills
+&gt; /plugin install drawio
+</code></pre>
+<pre><code class="language-bash"># Manual install
+git clone https://github.com/Agents365-ai/drawio-skill.git \
+  ~/.claude/skills/drawio-skill
+
+# Autohand Code global install
+git clone https://github.com/Agents365-ai/drawio-skill.git \
+  ~/.autohand/skills/drawio-skill
+
+# Autohand Code project-level install
+git clone https://github.com/Agents365-ai/drawio-skill.git \
+  .autohand/skills/drawio-skill
+</code></pre>
+<p>Autohand Code also supports <code>autohand --skill-install</code> for cataloged skills, with <code>--project</code> for workspace-level installs. Until this skill is listed there, use the direct clone path above.</p>
+<p>Also indexed on <a href="https://skillsmp.com/skills/agents365-ai-drawio-skill-skills-drawio-skill-skill-md">SkillsMP</a> and <a href="https://clawhub.ai/agents365-ai/drawio-pro-skill">ClawHub</a>.</p>
+<p><strong>Updating:</strong> <code>/plugin update drawio</code> (Claude Code), <code>skills update drawio-skill</code> (SkillsMP), <code>clawhub update drawio-pro-skill</code> (OpenClaw), or <code>git pull</code> for manual installs — see <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/docs/INSTALL_SKILL.md#updates">docs/INSTALL_SKILL.md#updates</a>. Release history in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/CHANGELOG.md">CHANGELOG.md</a>.</p>
+<h3>⚡ Quick Start</h3>
+<p>After installation, just describe what you want. For example, an ML model:</p>
+<pre><code>Draw a Transformer encoder-decoder for machine translation: 6-layer encoder
+with self-attention, 6-layer decoder with cross-attention, input embeddings
+(batch × 512 × 768), positional encoding, and a final output projection.
+Annotate tensor shapes between layers and color-code by layer type.
+</code></pre>
+<p>The skill plans the layout, generates the <code>.drawio</code> XML, exports to your chosen format, self-checks the result, and lets you iterate.</p>
+<h3>🗺️ Visualize Code &amp; Infrastructure</h3>
+<p>Beyond hand-authored diagrams, the skill turns <strong>existing code, infrastructure, and schemas into diagrams</strong> — no manual coordinates. Just ask:</p>
+<blockquote>
+<p><em>"Visualize the module structure of this Python project"</em> · <em>"Draw the class hierarchy of <code>mypackage</code>"</em></p>
+</blockquote>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/code-structure-example.png" width="900" alt="Auto-generated class hierarchy of Python's logging package — modules boxed, inheritance arrows resolved">
+</p>
+
+<p><sub>↑ Python's <code>logging</code> package as a class hierarchy — one command, modules auto-boxed, every inheritance edge resolved.</sub></p>
+<p>Under the hood it runs a bundled extractor → auto-layout → validate pipeline:</p>
+<pre><code class="language-bash"># Import graph — Python / JS-TS / Go / Rust
+python3 scripts/pyimports.py   myproject --group -o graph.json
+python3 scripts/jsimports.py   ./src     --group -o graph.json
+python3 scripts/goimports.py   ./module  --group -o graph.json
+python3 scripts/rustimports.py ./crate   --group -o graph.json
+
+# Python class-inheritance hierarchy
+python3 scripts/pyclasses.py   mypackage --group -o graph.json
+
+# Infrastructure as Code — official cloud icons resolved automatically
+python3 scripts/tfimports.py   ./infra      -o graph.json   # Terraform → AWS/Azure/GCP icons
+python3 scripts/k8simports.py  ./manifests  -o graph.json   # K8s YAML/JSON → kind icons
+python3 scripts/composeimports.py compose.yml -o graph.json # services + named volumes
+
+# Live infrastructure — draw what's ACTUALLY running / deployed
+terraform show -json          | python3 scripts/tfstate.py -      -o graph.json  # deployed cloud
+docker inspect $(docker ps -q)| python3 scripts/dockerimports.py -  -o graph.json  # running containers
+kubectl get all,ing,cm,secret,pvc -o json | python3 scripts/k8simports.py - -o graph.json  # live cluster
+
+# Data &amp; interactions
+python3 scripts/sqlerd.py      schema.sql   -o graph.json   # SQL DDL → ER diagram
+python3 scripts/ciimports.py . -o graph.json              # GitHub Actions + GitLab CI -&gt; pipeline DAG
+python3 scripts/openapiimports.py openapi.yaml -o graph.json # OpenAPI/Swagger → API diagram (by method)
+python3 scripts/seqlayout.py   seq.json  -o sequence.drawio # sequence diagram, direct to .drawio
+python3 scripts/c4.py          c4.json   -o c4.drawio       # C4 model, multi-page + drill-down
+
+# Diff two diagrams / snapshots → colour-coded "what changed"
+python3 scripts/drawiodiff.py old.drawio new.drawio -o graph.json # +added -removed ~changed
+
+# Architecture time-lapse → self-contained HTML player of how a codebase grew
+python3 scripts/timelapse.py src --importer pyimports # → architecture-evolution.html
+
+# Reverse: describe an existing .drawio as structured Markdown (README / PR summary)
+python3 scripts/explain.py    architecture.drawio -o architecture.md
+
+# Diagram → PowerPoint deck (one page per slide; C4 model → presentation)
+python3 scripts/drawio2pptx.py c4.drawio -o c4.pptx   # needs: pip install python-pptx
+
+# Interactive HTML viewer — pan/zoom/search/tabs + working drill-down links, one file
+python3 scripts/drawiohtml.py c4.drawio -o c4.html
+
+# Animated data-flow SVG — edges "flow" (marching ants); renders on GitHub
+python3 scripts/svgflow.py    architecture.drawio -o flow.svg
+
+# Reverse: .drawio → Mermaid flowchart (diagrams-as-code GitHub renders)
+python3 scripts/drawio2mermaid.py architecture.drawio --fenced -o arch.md
+
+# Language variant: extract labels → translate values → apply (layout untouched)
+python3 scripts/relabel.py architecture.drawio --extract -o labels.json
+python3 scripts/relabel.py architecture.drawio --map labels.json -o architecture_cn.drawio
+
+# Re-theme an existing .drawio with a style preset (e.g. dark mode)
+python3 scripts/restyle.py architecture.drawio --preset dark
+
+# Colour an existing .drawio by data → cost / latency / traffic heat map
+python3 scripts/heatmap.py    architecture.drawio -m latency.csv --size -o hot.drawio
+
+# any extractor → auto-layout → editable .drawio
+python3 scripts/autolayout.py  graph.json -o diagram.drawio
+
+# Image → editable .drawio — your vision extracts the graph JSON, this rebuilds it
+python3 scripts/raster2drawio.py whiteboard-graph.json -o out.drawio
+
+# Watch a diagram build itself, node by node → HTML player (+ optional GIF)
+python3 scripts/buildup.py architecture.drawio --gif build.gif  # → buildup.html
+
+# Big diagram → boardroom exec summary (clustered) + click-to-drill-down to full
+python3 scripts/compress.py  big.drawio -o exec.drawio
+
+# Decision-tree flowchart → click-through HTML triage runbook (no draw.io CLI needed)
+python3 scripts/runbook.py   triage.drawio -o triage.html
+
+# CI: render base/head/diff PNGs + Markdown report for every .drawio a PR changed
+python3 scripts/prdiff.py --base origin/main --head HEAD -o drawio-pr/report.md
+
+# Tube-Map Mode — restyle a pipeline / journey as a metro / subway map
+python3 scripts/tubemap.py metro.json -o metro.drawio
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Piece</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>13 extractors</strong></td>
+<td>import graphs for <strong>Python · JS/TS · Go · Rust</strong>, <strong>Python class inheritance</strong>, <strong>Terraform / Kubernetes / docker-compose</strong> resource graphs (official cloud icons), <strong>SQL DDL → ERD</strong>, <strong>OpenAPI / Swagger → API diagram</strong> (operations coloured by HTTP method + schemas), <strong>CI pipelines → DAG</strong> (GitHub Actions <code>needs:</code> graphs + GitLab stages, with triggers, matrix sizes, reusable-workflow calls), and <strong>live</strong> infra from <code>terraform show -json</code> / <code>docker inspect</code> / <code>kubectl get -o json</code> (draw what's actually deployed)</td>
+</tr>
+<tr>
+<td><strong>Diagram diff</strong></td>
+<td><code>drawiodiff.py</code> compares two <code>.drawio</code> (or two live snapshots) into one colour-coded graph — added=green, removed=red, changed=orange — so you can see architecture / infra <strong>drift</strong> at a glance</td>
+</tr>
+<tr>
+<td><strong>Language variants</strong></td>
+<td><code>relabel.py</code> swaps every label via a JSON map with layout/styles/ids untouched — <code>--extract</code> dumps all labels, translate the values, <code>--map</code> applies them. One diagram → EN + CN twins for bilingual docs</td>
+</tr>
+<tr>
+<td><strong>Re-theme</strong></td>
+<td><code>restyle.py</code> applies a style preset (built-in <code>dark</code>/<code>corporate</code>/… or your own) to an <em>existing</em> <code>.drawio</code> — palette remapped by hue so same-colored nodes stay grouped; layout and edge routing untouched</td>
+</tr>
+<tr>
+<td><strong>Metric heat map</strong></td>
+<td><code>heatmap.py</code> recolours an existing <code>.drawio</code> from a CSV/JSON of per-node values — cost / latency / traffic / error-rate shaded low→high on a gradient (optional size-by-value + legend), matched by cell id or label</td>
+</tr>
+<tr>
+<td><strong>Architecture time-lapse</strong></td>
+<td><code>timelapse.py</code> re-runs an importer across a repo's git history and assembles a self-contained HTML player — watch modules &amp; edges appear over time (▶ play / ‹ › step)</td>
+</tr>
+<tr>
+<td><strong>Diagram → Markdown</strong></td>
+<td><code>explain.py</code> reverses a <code>.drawio</code> into a structured description — components by tier, relations, per-page for C4 — for dropping an architecture summary into a README or PR</td>
+</tr>
+<tr>
+<td><strong>Interactive viewer</strong></td>
+<td><code>drawiohtml.py</code> publishes a <code>.drawio</code> as one self-contained HTML — page tabs, drag-pan, wheel-zoom, node search, and a C4 model's drill-down links keep working. Share the file; no draw.io, no server</td>
+</tr>
+<tr>
+<td><strong>Diagram → PowerPoint</strong></td>
+<td><code>drawio2pptx.py</code> turns a multi-page diagram into a 16:9 deck (one page per slide, page name as title) — a C4 model becomes a ready-to-present slideshow</td>
+</tr>
+<tr>
+<td><strong>Animated data-flow</strong></td>
+<td><code>svgflow.py</code> makes a diagram's edges <em>flow</em> (marching-ants animation along each arrow) — a self-contained looping SVG that renders on GitHub, in docs, or as a slide background</td>
+</tr>
+<tr>
+<td><strong>Diagram → Mermaid</strong></td>
+<td><code>drawio2mermaid.py</code> converts a <code>.drawio</code> into a Mermaid <code>flowchart</code> (containers → subgraphs, edge labels kept) — paste it into Markdown as diagrams-as-code that GitHub renders natively</td>
+</tr>
+<tr>
+<td><strong>Sequence engine</strong></td>
+<td><code>seqlayout.py</code> computes lifeline / activation-bar / arrow geometry from a message list — no Graphviz, no hand placement</td>
+</tr>
+<tr>
+<td><strong>Auto-layout</strong></td>
+<td>Graphviz places nodes and routes orthogonal edges <em>around</em> them — removes the manual-coordinate ceiling for large graphs. <code>--tune</code> tries both directions and keeps the more readable one</td>
+</tr>
+<tr>
+<td><strong>Transitive reduction</strong></td>
+<td>drops edges implied by a longer path, turning a dense hairball into a traceable graph (asyncio: 149 → 46 edges)</td>
+</tr>
+<tr>
+<td><strong>Nested containers</strong></td>
+<td><code>--group</code> boxes modules by sub-package, nested for deep package trees</td>
+</tr>
+<tr>
+<td><strong>Deterministic validator</strong></td>
+<td><code>validate.py</code> lints the <code>.drawio</code> (dangling edges, duplicate ids, overlaps) before the visual self-check</td>
+</tr>
+</tbody></table>
+<p>Layout needs Graphviz (<code>brew install graphviz</code> / <code>apt install graphviz</code>) — optional; everything else works without it. Full format + flag reference in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/skills/drawio-skill/references/autolayout.md">references/autolayout.md</a>. Regenerate, validate (<code>--strict</code> gate) and render headlessly in CI: <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/docs/CI.md">docs/CI.md</a>.</p>
+<h3>🧩 Supported Diagram Types</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Examples</th>
+<th>Notable features</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Architecture</td>
+<td>microservices, cloud (AWS/GCP/Azure), network topology, deployment</td>
+<td>Tier-based swimlanes, hub-center strategy</td>
+</tr>
+<tr>
+<td>C4 model</td>
+<td>system context, containers, components</td>
+<td>Multi-page <code>.drawio</code>, click-to-drill-down links</td>
+</tr>
+<tr>
+<td>ML / Deep Learning</td>
+<td>Transformer, CNN, LSTM, GRU</td>
+<td>Tensor shape annotations, layer-type color coding</td>
+</tr>
+<tr>
+<td>Flowcharts</td>
+<td>business processes, workflows, decision trees, state machines</td>
+<td>Semantic shapes (parallelogram I/O, diamond decisions)</td>
+</tr>
+<tr>
+<td>UML</td>
+<td>class diagrams, sequence diagrams</td>
+<td>Inheritance / composition / aggregation arrows; lifelines + activation boxes</td>
+</tr>
+<tr>
+<td>SysML / MBSE</td>
+<td>block definition (bdd), internal block (ibd), requirement (req), parametric (par)</td>
+<td>«block» / «requirement» compartments, satisfy/derive/verify edges, native <code>mxgraph.sysml.*</code> ports &amp; flows</td>
+</tr>
+<tr>
+<td>BPMN</td>
+<td>business processes, pools &amp; lanes</td>
+<td>Native <code>mxgraph.bpmn.*</code> events/tasks/gateways, sequence vs message flows</td>
+</tr>
+<tr>
+<td>Network topology</td>
+<td>LAN/WAN, subnets, DMZ</td>
+<td><code>mxgraph.networks.*</code> device shapes, zone containers, link labels; Cisco/rack via shape search</td>
+</tr>
+<tr>
+<td>Cross-functional swimlane</td>
+<td>who-does-what processes, handoffs</td>
+<td>Pool + role lanes, flowchart vocabulary, orthogonal handoff edges</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>ER diagrams, data flow diagrams (DFD)</td>
+<td>Table containers, PK/FK notation</td>
+</tr>
+<tr>
+<td>Mermaid-authored</td>
+<td>mind maps, gantt, timeline, journey, pie, sankey, kanban + 20 more</td>
+<td>Native CLI conversion (≥ v30) — structure only, layout free</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>org charts, wireframes</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>🔍 Shape Search</h3>
+<p>Need a real AWS / Azure / GCP / Cisco / Kubernetes / UML / BPMN icon? The skill searches <strong>10,000+ official draw.io shapes</strong> for the exact style string — so vendor icons render correctly instead of falling back to a blank box from a guessed <code>shape=mxgraph.*</code> name.</p>
+<blockquote>
+<p><em>"Add an AWS Lambda wired to an S3 bucket"</em> · <em>"Use the real Kubernetes pod icon"</em></p>
+</blockquote>
+<pre><code class="language-bash">python3 scripts/shapesearch.py "aws lambda" --limit 5
+# → Lambda (77x93)
+#   outlineConnect=0;...;shape=mxgraph.aws3.lambda;fillColor=#F58534;...
+</code></pre>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/shape-search-example.png" width="900" alt="Serverless AWS architecture built from official draw.io icons resolved by shapesearch.py">
+</p>
+
+<p><sub>↑ A serverless AWS architecture — every icon is the real official draw.io shape resolved by <code>shapesearch.py</code>, not a hand-guessed <code>shape=</code> string.</sub></p>
+<p>Covers AWS / Azure / GCP / Cisco / Kubernetes / UML / BPMN / ER / electrical / P&amp;ID and the general shape sets. Hand-writable style cheatsheet + search usage in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/skills/drawio-skill/references/shapes.md">references/shapes.md</a>.</p>
+<h3>🤖 AI / LLM Brand Logos</h3>
+<p>draw.io ships <strong>no</strong> modern AI/LLM logos, so an LLM-app diagram renders as generic boxes. <code>aiicons.py</code> resolves a brand name to a draw.io image style for any of <strong>321 logos</strong> (OpenAI, Claude, Gemini, Mistral, Llama, Cohere, DeepSeek, Qwen, Ollama, LangChain, HuggingFace…) from <a href="https://github.com/lobehub/lobe-icons">lobe-icons</a> (MIT), plus <strong>18 data-store brands</strong> (Redis, Postgres, MongoDB, Qdrant, Milvus, Supabase…) via <a href="https://simpleicons.org">simple-icons</a> (CC0) for RAG stacks.</p>
+<pre><code class="language-bash">python3 scripts/aiicons.py "claude" --json      # CDN-referenced (default)
+python3 scripts/aiicons.py "openai" --embed     # self-contained data URI
+</code></pre>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/ai-logos-example.png" width="900" alt="Multi-provider LLM app diagram with real AI brand logos resolved by aiicons.py">
+</p>
+
+<p><sub>↑ A multi-provider LLM app — every brand logo resolved by <code>aiicons.py</code>. Icons are referenced from the unpkg CDN by default (network needed at render time); <code>--embed</code> inlines them for offline use. Logos are trademarks of their owners, used for identification only.</sub></p>
+<h3>🎨 Style Presets</h3>
+<p>Capture a visual style once, reuse it everywhere. Five presets are built in — <code>default</code>, <code>corporate</code>, <code>handdrawn</code>, <code>colorblind-safe</code> (Okabe-Ito palette), <code>dark</code> — and you can teach the skill your own style from a <code>.drawio</code> file or a flat image:</p>
+<pre><code>Draw a microservices architecture using my "corporate" style
+</code></pre>
+<pre><code>Learn my style from ~/diagrams/brand.drawio as "mybrand"
+</code></pre>
+<p>The skill extracts colors, shapes, fonts, and edge style, renders a preview, and only saves the preset after you approve. Full preset-management commands in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/docs/STYLE_PRESETS.md">docs/STYLE_PRESETS.md</a>.</p>
+<h3>🔄 How it works</h3>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Agents365-ai/drawio-skill/main/assets/workflow.png" width="700" alt="Internal workflow">
+</p>
+
+<p>Behind the scenes: <strong>check dependencies → plan layout → generate <code>.drawio</code> XML → export draft PNG → self-check + auto-fix</strong> (up to 2 rounds) → <strong>show to user → 5-round feedback loop</strong> until approved → <strong>final export</strong>.</p>
+<h3>🆚 Comparison</h3>
+<h4>vs Native Agent (no skill)</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Native agent</th>
+<th>drawio-skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Self-check after export</td>
+<td>❌</td>
+<td>✅ reads PNG, auto-fixes 6 issue types</td>
+</tr>
+<tr>
+<td>Iterative review loop</td>
+<td>❌ manual re-prompt</td>
+<td>✅ targeted edits, 5-round safety valve</td>
+</tr>
+<tr>
+<td>Diagram type presets</td>
+<td>❌</td>
+<td>✅ 7 presets (ERD, UML, Seq, C4, Arch, ML, Flow)</td>
+</tr>
+<tr>
+<td>Mermaid → editable .drawio</td>
+<td>❌</td>
+<td>✅ 28 types via native CLI conversion (≥ v30)</td>
+</tr>
+<tr>
+<td>Visualize a codebase</td>
+<td>❌</td>
+<td>✅ import graphs (Py/JS/Go/Rust) + class diagrams</td>
+</tr>
+<tr>
+<td>IaC → architecture diagram</td>
+<td>❌</td>
+<td>✅ Terraform / K8s / compose → official cloud icons</td>
+</tr>
+<tr>
+<td>SQL DDL → ER diagram</td>
+<td>❌</td>
+<td>✅ <code>CREATE TABLE</code> → PK/FK tables, crow's-foot edges</td>
+</tr>
+<tr>
+<td>Sequence diagrams</td>
+<td>❌ hand-placed coordinates</td>
+<td>✅ deterministic geometry engine (<code>seqlayout.py</code>)</td>
+</tr>
+<tr>
+<td>C4 model</td>
+<td>❌</td>
+<td>✅ multi-page Context→Container→Component with click-to-drill-down</td>
+</tr>
+<tr>
+<td>Auto-layout for large graphs</td>
+<td>❌ hand-places, overlaps</td>
+<td>✅ Graphviz placement, ortho routing, nested containers</td>
+</tr>
+<tr>
+<td>Structural validation</td>
+<td>❌</td>
+<td>✅ deterministic <code>.drawio</code> linter</td>
+</tr>
+<tr>
+<td>Official shape search</td>
+<td>❌ guesses, blank boxes</td>
+<td>✅ exact style for 10k+ AWS/Azure/GCP/UML shapes</td>
+</tr>
+<tr>
+<td>AI/LLM brand logos</td>
+<td>❌ none</td>
+<td>✅ 321 AI + 18 data-store logos via aiicons.py</td>
+</tr>
+<tr>
+<td>Grid-aligned layout</td>
+<td>❌</td>
+<td>✅ 10px snap, routing corridors</td>
+</tr>
+<tr>
+<td>Color palette</td>
+<td>random / inconsistent</td>
+<td>✅ 7-color semantic system</td>
+</tr>
+<tr>
+<td>Style presets</td>
+<td>❌</td>
+<td>✅ learn from <code>.drawio</code> file or image</td>
+</tr>
+</tbody></table>
+<h4>vs Other draw.io Skills &amp; Tools</h4>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>drawio-skill</th>
+<th><a href="https://github.com/jgraph/drawio-mcp">jgraph/drawio-mcp</a> (official)<br><img src="https://img.shields.io/github/stars/jgraph/drawio-mcp?style=flat-square&amp;logo=github&amp;v=2" alt="stars" loading="lazy" decoding="async"></th>
+<th><a href="https://github.com/bahayonghang/drawio-skills">bahayonghang/drawio-skills</a><br><img src="https://img.shields.io/github/stars/bahayonghang/drawio-skills?style=flat-square&amp;logo=github" alt="stars" loading="lazy" decoding="async"></th>
+<th><a href="https://github.com/GBSOSS/ai-drawio">GBSOSS/ai-drawio</a><br><img src="https://img.shields.io/github/stars/GBSOSS/ai-drawio?style=flat-square&amp;logo=github" alt="stars" loading="lazy" decoding="async"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Approach</strong></td>
+<td>Pure SKILL.md</td>
+<td>MCP servers / Claude Code plugin / Project</td>
+<td>YAML DSL + CLI (MCP optional)</td>
+<td>Claude Code plugin</td>
+</tr>
+<tr>
+<td><strong>Dependencies</strong></td>
+<td>draw.io desktop only</td>
+<td>draw.io desktop</td>
+<td>draw.io desktop (MCP optional)</td>
+<td>draw.io plugin + browser</td>
+</tr>
+<tr>
+<td><strong>Multi-agent</strong></td>
+<td>✅ 6 platforms</td>
+<td>⚠️ MCP hosts (Claude, Cursor, VS Code)</td>
+<td>✅ Claude / Gemini / Codex</td>
+<td>❌ Claude Code only</td>
+</tr>
+<tr>
+<td><strong>Self-check + auto-fix</strong></td>
+<td>✅ 2-round (reads PNG)</td>
+<td>❌</td>
+<td>✅ validation + strict mode</td>
+<td>❌ screenshot only</td>
+</tr>
+<tr>
+<td><strong>Iterative review</strong></td>
+<td>✅ 5-round loop</td>
+<td>❌ generate once</td>
+<td>✅ 3 workflows</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Diagram presets</strong></td>
+<td>✅ 7 types</td>
+<td>❌</td>
+<td>✅ paper-mode classifier</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Mermaid authoring</strong></td>
+<td>✅ 28 types (CLI ≥ 30)</td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>ML/DL diagrams</strong></td>
+<td>✅ tensor shapes, layer colors</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Color system</strong></td>
+<td>✅ 7-color semantic</td>
+<td>❌</td>
+<td>✅ 6 themes</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Official shape search</strong></td>
+<td>✅ 10k+ shapes (local)</td>
+<td>✅ 10k+ shapes (MCP)</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>AI/LLM brand logos</strong></td>
+<td>✅ 321 + 18 data-store</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><strong>Browser fallback</strong></td>
+<td>✅ diagrams.net URL (viewer + editable)</td>
+<td>✅ diagrams.net URL (plugin) + inline preview</td>
+<td>✅ via optional MCP</td>
+<td>✅ diagrams.net viewer (primary)</td>
+</tr>
+<tr>
+<td><strong>Zero-config</strong></td>
+<td>✅ copy <code>skills/drawio-skill/</code></td>
+<td>✅</td>
+<td>✅ desktop-only mode</td>
+<td>❌ needs plugin install</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Using the official jgraph plugin?</strong> <a href="https://github.com/jgraph/drawio-mcp">jgraph/drawio-mcp</a> now ships an official Claude Code plugin (<code>/plugin install drawio@drawio</code>) that also generates <code>.drawio</code> and exports via the desktop CLI. drawio-skill is complementary — reach for it when you want the code / IaC / SQL / OpenAPI importers, AI-brand logos, deterministic sequence &amp; C4 generators, self-check + review loop, and the interactive HTML viewer, all from a single SKILL.md with no MCP server.</p>
+</blockquote>
+<p>Full comparison + key-advantages summary in <a href="https://github.com/Agents365-ai/drawio-skill/blob/main/docs/COMPARISON.md">docs/COMPARISON.md</a> (with audit timestamp).</p>
+<h3>🎯 When to use (and when not to)</h3>
+<p><strong>Good fit:</strong></p>
+<ul>
+<li>Polished, precise diagrams — stakeholder decks, architecture, network topology, strict UML, ER diagrams</li>
+<li>Solid opaque fills, 10,000+ official shapes, branded icons (AWS / Azure / GCP / Cisco / Kubernetes + AI/LLM logos), swimlanes, and custom geometry</li>
+<li>Anything you'll export to PNG / SVG / PDF and keep editable</li>
+</ul>
+<p><strong>Reach for a sibling skill instead when you need:</strong></p>
+<ul>
+<li><strong>A casual, hand-drawn / whiteboard look</strong> → <a href="https://github.com/Agents365-ai/excalidraw-skill">excalidraw-skill</a> or <a href="https://github.com/Agents365-ai/tldraw-skill">tldraw-skill</a></li>
+<li><strong>Diagrams-as-code that live in git and render in Markdown</strong> → <a href="https://github.com/Agents365-ai/mermaid-skill">mermaid-skill</a> (general) or <a href="https://github.com/Agents365-ai/plantuml-skill">plantuml-skill</a> (UML)</li>
+<li><strong>Freeform infinite-canvas sketching / freehand strokes</strong> → <a href="https://github.com/Agents365-ai/tldraw-skill">tldraw-skill</a></li>
+</ul>
+<h3>🔗 Related Skills</h3>
+<p>Part of the <a href="https://github.com/Agents365-ai">Agents365-ai diagram-skill family</a> — pick the right tool for the job:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Style</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/Agents365-ai/excalidraw-skill">excalidraw-skill</a></td>
+<td>Hand-drawn / sketchy</td>
+<td>Whiteboard mockups, informal diagrams</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Agents365-ai/mermaid-skill">mermaid-skill</a></td>
+<td>Text-based, auto-layout</td>
+<td>README-embeddable, version-control friendly</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Agents365-ai/plantuml-skill">plantuml-skill</a></td>
+<td>UML-focused</td>
+<td>Class / sequence diagrams in CI pipelines</td>
+</tr>
+<tr>
+<td><a href="https://github.com/Agents365-ai/tldraw-skill">tldraw-skill</a></td>
+<td>Whiteboard collaboration</td>
+<td>Casual sketches, FigJam-style boards</td>
+</tr>
+</tbody></table>
+<h3>❤️ Support</h3>
+<p>If this skill helps you, consider supporting the author:</p>
+<table>
+  <tbody><tr>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/images_payment/main/qrcode/wechat-pay.png" width="180" alt="WeChat Pay">
+      <br>
+      <b>WeChat Pay</b>
+    </td>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/images_payment/main/qrcode/alipay.png" width="180" alt="Alipay">
+      <br>
+      <b>Alipay</b>
+    </td>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/images_payment/main/qrcode/buymeacoffee.png" width="180" alt="Buy Me a Coffee">
+      <br>
+      <b>Buy Me a Coffee</b>
+    </td>
+    <td align="center">
+      <img src="https://raw.githubusercontent.com/Agents365-ai/images_payment/main/awarding/award.gif" width="180" alt="Give a Reward">
+      <br>
+      <b>Give a Reward</b>
+    </td>
+  </tr>
+</tbody></table>
+
+<h3>👤 Author</h3>
+<p><strong>Agents365-ai</strong></p>
+<ul>
+<li>GitHub: <a href="https://github.com/Agents365-ai">https://github.com/Agents365-ai</a></li>
+<li>Bilibili: <a href="https://space.bilibili.com/441831884">https://space.bilibili.com/441831884</a></li>
+</ul>
+<h3>📄 License</h3>
+<p><a href="LICENSE">MIT</a></p>
+
   </section>
 </details>
 

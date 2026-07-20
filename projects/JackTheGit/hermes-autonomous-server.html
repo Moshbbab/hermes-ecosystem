@@ -147,7 +147,227 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/JackTheGit/hermes-autonomous-server" target="_blank">Visit GitHub</a> for more details.</div>
+    <h2>🚀 Hermes Agent – Autonomous Linux Server Setup</h2>
+<p align="center">
+  A clean, reboot-safe, headless deployment guide for Hermes Agent.
+</p>
+
+<p align="center">
+
+</p><p><img src="https://img.shields.io/badge/Linux-Tested-success?style=for-the-badge&amp;logo=linux" alt="Linux" loading="lazy" decoding="async">
+<img src="https://img.shields.io/badge/Systemd-Service-blue?style=for-the-badge" alt="Systemd" loading="lazy" decoding="async">
+<img src="https://img.shields.io/badge/Headless-No%20Terminal-green?style=for-the-badge" alt="Headless" loading="lazy" decoding="async">
+<img src="https://img.shields.io/badge/Native-Cron%20Scheduler-purple?style=for-the-badge" alt="Cron" loading="lazy" decoding="async">
+<img src="https://img.shields.io/badge/Nous%20Portal-Subscription-orange?style=for-the-badge" alt="Nous Portal Required" loading="lazy" decoding="async"></p>
+<p></p>
+
+<p>Run <strong>Hermes Agent</strong> autonomously on your own dedicated Linux server using the native Hermes scheduler and systemd gateway service.</p>
+<p>No shell loops.<br>No fragile TTY hacks.<br>No third-party hosting required.</p>
+<p>Clean, production-ready architecture.</p>
+<hr>
+<h2>📌 Overview</h2>
+<p>This guide shows how to:</p>
+<ul>
+<li>Install Hermes Agent</li>
+<li>Authenticate with Nous Portal</li>
+<li>Create recurring AI cron jobs</li>
+<li>Run Hermes Gateway as a system service</li>
+<li>Ensure full headless operation</li>
+<li>Survive reboots automatically</li>
+</ul>
+<p>Once configured, Hermes runs fully autonomous.</p>
+<hr>
+<h2>🧩 What This Is Not</h2>
+<ul>
+<li>Not an official Hermes project</li>
+<li>Not affiliated with Nous Research</li>
+<li>Not a hosted service</li>
+</ul>
+<p>This is a deployment guide for running Hermes autonomously on your own infrastructure.</p>
+<hr>
+<h2>🔑 Requirements</h2>
+<p>You need an active <strong>Nous Portal subscription</strong>:</p>
+<p>👉 <a href="https://portal.nousresearch.com/billing">https://portal.nousresearch.com/billing</a></p>
+<p>Hermes uses Nous Portal for model access.</p>
+<p>Without an active subscription or API credits:</p>
+<ul>
+<li>Cron jobs will not execute</li>
+<li>Gateway will run but no tasks will fire</li>
+</ul>
+<blockquote>
+<p>💡 At the time of writing, the basic subscription may be activated using the promotional code <code>HERMESAGENT</code> (availability subject to change).<br>Check the billing page for current eligibility.</p>
+</blockquote>
+<hr>
+<h2>🖥 Supported Environment</h2>
+<ul>
+<li>Ubuntu / Debian (tested)</li>
+<li>Dedicated server or VPS</li>
+<li>systemd available</li>
+<li>Non-root user recommended</li>
+</ul>
+<hr>
+<h2>📦 Installation</h2>
+<h3>1️⃣ Create a Dedicated User</h3>
+<pre><code class="language-bash">sudo adduser hermes
+sudo usermod -aG sudo hermes
+su - hermes
+</code></pre>
+<hr>
+<h3>2️⃣ Install Hermes Agent</h3>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+</code></pre>
+<p>Verify installation:</p>
+<pre><code class="language-bash">which hermes
+</code></pre>
+<p>Expected:</p>
+<pre><code>/home/hermes/.local/bin/hermes
+</code></pre>
+<hr>
+<h3>3️⃣ Authenticate with Nous Portal</h3>
+<pre><code class="language-bash">hermes login
+</code></pre>
+<p>Complete browser authentication.</p>
+<p>Verify:</p>
+<pre><code class="language-bash">hermes status
+</code></pre>
+<p>You should see:</p>
+<pre><code>Nous Portal ✓ logged in
+</code></pre>
+<hr>
+<h2>⏰ Create Autonomous Cron Job</h2>
+<p>Start Hermes:</p>
+<pre><code class="language-bash">hermes chat
+</code></pre>
+<p>Inside the interactive shell:</p>
+<pre><code>Create a cronjob that runs every 10 minutes.
+The task should:
+Write a short reflective paragraph about technology trends.
+Limit response to 180 words.
+</code></pre>
+<p>Hermes will return a job ID.</p>
+<p>Exit Hermes:</p>
+<pre><code>Ctrl + C
+</code></pre>
+<hr>
+<h2>⚙ Enable Hermes Gateway (System-Level Service)</h2>
+<p>Some VPS environments do not support <code>systemctl --user</code>.
+Use a system-level service instead.</p>
+<p>Create service file:</p>
+<pre><code class="language-bash">sudo nano /etc/systemd/system/hermes-gateway.service
+</code></pre>
+<p>Paste:</p>
+<pre><code class="language-ini">[Unit]
+Description=Hermes Gateway Service
+After=network.target
+
+[Service]
+User=hermes
+WorkingDirectory=/home/hermes
+ExecStart=/home/hermes/.local/bin/hermes gateway
+Restart=always
+RestartSec=10
+Environment=PATH=/home/hermes/.local/bin:/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Enable and start:</p>
+<pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl enable hermes-gateway
+sudo systemctl start hermes-gateway
+</code></pre>
+<hr>
+<h2>✅ Verify Everything</h2>
+<p>Check gateway:</p>
+<pre><code class="language-bash">sudo systemctl status hermes-gateway
+</code></pre>
+<p>Check scheduler:</p>
+<pre><code class="language-bash">hermes cron status
+</code></pre>
+<p>Expected:</p>
+<pre><code>✓ Gateway is running — cron jobs will fire automatically
+</code></pre>
+<hr>
+<h2>🏗 Architecture</h2>
+<pre><code>Systemd (system service)
+        ↓
+Hermes Gateway
+        ↓
+Hermes Cron Scheduler
+        ↓
+Claude Model (Nous Portal)
+        ↓
+Local Output Files
+</code></pre>
+<hr>
+<h2>💰 Cost Considerations</h2>
+<p>Example configuration:</p>
+<ul>
+<li>10-minute interval</li>
+<li>~180-word responses</li>
+</ul>
+<p>Estimated usage:</p>
+<p>~4,320 runs/month
+Typically ~$8–12/month depending on model and output size.</p>
+<p>To adjust frequency:</p>
+<pre><code>Update cronjob &lt;job_id&gt; to run every 15 minutes.
+</code></pre>
+<hr>
+<h2>📊 Monitoring</h2>
+<p>Gateway logs:</p>
+<pre><code class="language-bash">journalctl -u hermes-gateway -f
+</code></pre>
+<p>Cron jobs:</p>
+<pre><code class="language-bash">hermes cron list
+</code></pre>
+<p>Gateway status:</p>
+<pre><code class="language-bash">hermes cron status
+</code></pre>
+<hr>
+<h2>🔄 Reboot Safety</h2>
+<p>This setup:</p>
+<ul>
+<li>Auto-starts on reboot</li>
+<li>Does not require open SSH session</li>
+<li>Runs fully headless</li>
+<li>Automatically restarts if gateway crashes</li>
+</ul>
+<hr>
+<h2>🧼 Uninstall</h2>
+<pre><code class="language-bash">sudo systemctl stop hermes-gateway
+sudo systemctl disable hermes-gateway
+hermes uninstall
+</code></pre>
+<hr>
+<h2>🎯 Why This Approach?</h2>
+<p>✔ Uses native Hermes scheduler
+✔ Avoids shell-based infinite loops
+✔ Avoids TTY emulation hacks
+✔ Clean systemd integration
+✔ Minimal operational complexity
+✔ Fully self-hosted</p>
+<hr>
+<h2>⚠ Important Notes</h2>
+<ul>
+<li>Nous Portal subscription required:
+<a href="https://portal.nousresearch.com/billing">https://portal.nousresearch.com/billing</a></li>
+<li>Cron jobs require the gateway to be running</li>
+<li>API credits are consumed per execution</li>
+<li>Monitor billing regularly</li>
+</ul>
+<hr>
+<h2>🔒 Security Considerations</h2>
+<ul>
+<li>Do not expose your server publicly without firewall rules.</li>
+<li>Avoid running Hermes as root.</li>
+<li>Monitor API usage regularly.</li>
+<li>Keep your server updated.</li>
+</ul>
+<p>This guide assumes a trusted VPS or dedicated environment.</p>
+<hr>
+<h3>Disclaimer</h3>
+<p>This repository is an independent deployment guide and is not affiliated with or endorsed by Nous Research.</p>
+
   </section>
 </details>
 
@@ -163,7 +383,7 @@
         <div class="name"><span class="org">AbuZar-Ansarii /</span> Hermes-Agent-On-Android</div>
       </a>
       <a class="related-row" href="/projects/ultraworkers/hermes-agent-helm-chart">
-        <div class="stars">★ 117</div>
+        <div class="stars">★ 118</div>
         <div class="name"><span class="org">ultraworkers /</span> hermes-agent-helm-chart</div>
       </a>
       <a class="related-row" href="/projects/marshallrichards/ClawPhone">

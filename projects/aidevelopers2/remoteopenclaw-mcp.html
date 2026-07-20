@@ -149,7 +149,59 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/aidevelopers2/remoteopenclaw-mcp" target="_blank">Visit GitHub</a> for more details.</div>
+    <h2>Remote OpenClaw MCP Server</h2>
+<p>An MCP server that lets any AI agent — <strong>Claude Code, OpenClaw, Hermes, Codex, Cursor</strong> — search <a href="https://www.remoteopenclaw.com">Remote OpenClaw</a> directly from your editor: a directory of <strong>13,870+ MCP servers, 4,384+ agent skills, and plugins</strong>.</p>
+<p>Instead of opening a browser to find a tool, your agent can just search the directory for you and hand back install commands.</p>
+<h3>Tools</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>search_mcp_servers</code></td>
+<td>Find an MCP server for a task (databases, scraping, GitHub…)</td>
+</tr>
+<tr>
+<td><code>search_skills</code></td>
+<td>Find a reusable agent skill, with its install command</td>
+</tr>
+<tr>
+<td><code>search_plugins</code></td>
+<td>Find a plugin / marketplace package</td>
+</tr>
+</tbody></table>
+<p>Each returns names, descriptions, links, and popularity, ranked by stars or installs.</p>
+<h3>Install</h3>
+<p>Add it to your MCP client config (no API key needed):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "remoteopenclaw": {
+      "command": "npx",
+      "args": ["-y", "remoteopenclaw"]
+    }
+  }
+}
+</code></pre>
+<ul>
+<li><strong>Claude Code:</strong> add the block above to <code>~/.claude.json</code> (or run <code>claude mcp add remoteopenclaw -- npx -y remoteopenclaw</code>)</li>
+<li><strong>Cursor / Windsurf / other MCP clients:</strong> add the same block to your MCP settings</li>
+</ul>
+<h3>Usage</h3>
+<p>Ask your agent things like:</p>
+<ul>
+<li><em>"Find me an MCP server for Postgres."</em></li>
+<li><em>"Search Remote OpenClaw for a PDF skill."</em></li>
+<li><em>"What plugins are there for testing?"</em></li>
+</ul>
+<p>Your agent calls the matching tool, searches the directory, and returns the top results with links and install commands.</p>
+<h3>How it works</h3>
+<p>A thin wrapper over the public Remote OpenClaw search API (<code>https://www.remoteopenclaw.com/api/search</code>), so results are always live and the package stays tiny. Built with the <a href="https://modelcontextprotocol.io">Model Context Protocol</a> TypeScript SDK.</p>
+<h3>License</h3>
+<p>MIT</p>
+
   </section>
 </details>
 

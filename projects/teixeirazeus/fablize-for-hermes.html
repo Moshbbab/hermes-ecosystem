@@ -149,7 +149,194 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/teixeirazeus/fablize-for-hermes" target="_blank">Visit GitHub</a> for more details.</div>
+    <p align="center">
+  <a href="README.md"><strong>English</strong></a> ·
+  <a href="README.zh.md">简体中文</a> ·
+  <a href="README.pt.md">Português (BR)</a>
+</p>
+
+<h2>fablize-for-hermes — run like Fable, on Hermes Agent</h2>
+<p><img src="https://raw.githubusercontent.com/teixeirazeus/fablize-for-hermes/main/banner.png" alt="Banner" loading="lazy" decoding="async">
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" loading="lazy" decoding="async"></a></p>
+<p>A port of <a href="https://github.com/fivetaku/fablize">fablize</a> for the <a href="https://hermes-agent.nousresearch.com/">Hermes Agent</a>
+ecosystem. This project adapts fablize's verified procedures — verification grounding,
+multi-story evidence gating, investigation protocol, and early-stop prevention — from
+Claude Code's plugin system to Hermes Agent's skill system.</p>
+<p><strong>fablize</strong> makes any agent <strong>see a task through to the end — with evidence and
+verification — as procedure, not as luck.</strong></p>
+<h3>The origin</h3>
+<p><a href="https://github.com/fivetaku/fablize">fablize</a> was born from a controlled comparison
+of Claude Opus and "Fable 5" (19 A/B runs + 26 real sessions, ~1,500 tool calls).
+The finding: on closed, answer-bearing work (code, logic, builds) the two models
+were effectively tied. The gap was in <em>depth</em> — following an implication one step
+further — and that turned out to be <strong>model capability</strong>, not injectable.</p>
+<p>But the <strong>procedure</strong> of good work — actually running what you build, decomposing
+multi-step tasks with evidence checkpoints, investigating bugs systematically —
+<em>does transfer</em>. fablize ships only the procedures whose effect was verified.</p>
+<h3>What transfers and what doesn't</h3>
+<table>
+<thead>
+<tr>
+<th>Trait</th>
+<th>Transferable?</th>
+<th>How fablize-for-hermes does it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Verification grounding (run &amp; observe the artifact)</td>
+<td>✅</td>
+<td>Skill section 3 — run in real renderer, observe output, fix, re-run</td>
+</tr>
+<tr>
+<td>Multi-story completion + evidence gate</td>
+<td>✅</td>
+<td><code>scripts/goals.py</code> — decompose, checkpoint, refuse completion without proof</td>
+</tr>
+<tr>
+<td>Systematic investigation (reproduce → hypotheses → causal chain)</td>
+<td>✅</td>
+<td>Skill section 2 + <code>packs/investigation-protocol.txt</code></td>
+</tr>
+<tr>
+<td>Early-stop prevention</td>
+<td>✅</td>
+<td>Skill foundation rule: no promises without tool calls</td>
+</tr>
+<tr>
+<td>Out-of-spec defect discovery</td>
+<td>❌ not possible</td>
+<td>Capability — the model finds it, or it doesn't</td>
+</tr>
+<tr>
+<td>Open-ended creative detail</td>
+<td>❌ not possible</td>
+<td>Capability — shows only where there is no fixed answer</td>
+</tr>
+<tr>
+<td>Self-driven propagation depth</td>
+<td>❌ not possible</td>
+<td>Capability — directed propagation transfers; self-started depth does not</td>
+</tr>
+</tbody></table>
+<h3>What's included</h3>
+<h4>1. Hermes Agent skill (<code>skills/fablize/SKILL.md</code>)</h4>
+<p>The core behavioral ruleset, structured as a Hermes Agent skill (YAML frontmatter +
+markdown). Covers:</p>
+<ul>
+<li><strong>Foundation rules</strong> — always-on: lead with outcome, ground claims in tool results,
+no early stops, confirm destructive actions</li>
+<li><strong>Multi-story loop</strong> — decompose 2+ story tasks → complete with evidence →
+verification gate on the final story</li>
+<li><strong>Deep investigation</strong> — reproduce → 3+ competing hypotheses → trace causal chain →
+verify before/after → report rejected hypotheses</li>
+<li><strong>Verification grounding</strong> — run render/executable artifacts, observe, fix, re-run
+before declaring done</li>
+<li><strong>Capability ceiling</strong> — escalate honestly when the model's ceiling is the blocker</li>
+</ul>
+<h4>2. Goal engine (<code>scripts/goals.py</code>)</h4>
+<p>A self-contained, stdlib-only Python script for multi-story decomposition with a
+verification gate. State persists in <code>~/.hermes/fablize/</code> and survives session death.</p>
+<pre><code class="language-bash">goals.py create --brief "Build a dashboard" \
+  --goal "design::Create the HTML layout" \
+  --goal "implement::Add chart visualizations" \
+  --goal "verify::Run and verify the dashboard renders correctly"
+goals.py next
+# ... work this story ...
+goals.py checkpoint --id G001 --status complete --evidence "Layout created with sidebar and main panel"
+goals.py status
+</code></pre>
+<h4>3. Packs — contextual discipline files</h4>
+<ul>
+<li><strong><code>packs/verification-grounding-pack.txt</code></strong> — The grounding loop: run, observe,
+fix, re-run. For HTML, SVG, games, UI, charts, animations.</li>
+<li><strong><code>packs/investigation-protocol.txt</code></strong> — The systematic debugging protocol:
+reproduce, competing hypotheses, causal chain, verify before/after.</li>
+</ul>
+<h4>4. Setup scripts (<code>setup/</code>)</h4>
+<ul>
+<li><code>setup.sh [--skill-only|--local|--global]</code> — Install the skill into Hermes and
+optionally inject the operating block into <code>AGENTS.md</code> or <code>CLAUDE.md</code></li>
+<li><code>uninstall.sh [--skill-only|--local|--global|--all]</code> — Reverse the setup</li>
+</ul>
+<h3>Differences from original fablize</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>fablize (original)</th>
+<th>fablize-for-hermes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Platform</td>
+<td>Claude Code plugin</td>
+<td>Hermes Agent skill</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td><code>UserPromptSubmit</code> hook via <code>hooks.json</code></td>
+<td>Skill content — agent loads and applies matching discipline</td>
+</tr>
+<tr>
+<td>Early-stop</td>
+<td><code>finish-the-work.sh</code> Stop hook (JSON transcript)</td>
+<td>Foundation rule in skill — agent self-enforces</td>
+</tr>
+<tr>
+<td>State dir</td>
+<td><code>./.fablize/</code> (per-project)</td>
+<td><code>~/.hermes/fablize/</code> (Hermes-wide, survives sessions)</td>
+</tr>
+<tr>
+<td>Scripts</td>
+<td>In <code>scripts/</code> — run from repo root</td>
+<td>Same scripts, adapted for Hermes paths</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Injects into <code>CLAUDE.md</code></td>
+<td>Installs as Hermes skill + optionally injects block</td>
+</tr>
+</tbody></table>
+<h3>Install</h3>
+<h4>Quick install (skill only)</h4>
+<pre><code class="language-bash">git clone https://github.com/teixeirazeus/fablize-for-hermes.git
+cd fablize-for-hermes
+bash setup/setup.sh --skill-only
+</code></pre>
+<p>Then load the skill in your Hermes session:</p>
+<pre><code>skill_view(name='fablize')
+</code></pre>
+<h4>Full install (skill + always-on block)</h4>
+<pre><code class="language-bash">bash setup/setup.sh --local    # injects block into ./AGENTS.md
+bash setup/setup.sh --global   # injects block into ~/.claude/CLAUDE.md
+</code></pre>
+<h4>Uninstall</h4>
+<pre><code class="language-bash">bash setup/uninstall.sh --all
+</code></pre>
+<h3>How it behaves</h3>
+<ul>
+<li><strong>Trigger:</strong> load the <code>fablize</code> skill, or trigger inline when the agent detects
+2+ stories, debugging, or render artifacts</li>
+<li><strong>2+ stories</strong> → decompose + verification gate via <code>goals.py</code></li>
+<li><strong>Debugging</strong> → investigation protocol (reproduce → hypotheses → causal chain)</li>
+<li><strong>Render artifact</strong> → verification grounding (run → observe → fix → re-run)</li>
+<li><strong>Hard task</strong> → adaptive thinking + escalate to stronger model if stuck</li>
+<li><strong>Capability ceiling</strong> → escalate honestly (the harness does not fake capability)</li>
+</ul>
+<h3>Honest limits</h3>
+<ul>
+<li>It cannot raise model capability. Open-ended creative quality and self-driven
+discovery are out of reach — that is a model-choice decision, not a harness one.</li>
+<li>The effect numbers come from the original fablize small-family self-measurement.
+The direction is solid; the decimals are not asserted.</li>
+<li>The early-stop rule relies on agent self-enforcement, not a deterministic hook.
+It is a guideline, not a guard.</li>
+</ul>
+<h3>License</h3>
+<p>MIT — same as the original fablize. The upstream fablize by fivetaku is MIT licensed.
+This port adapts the design and procedures to the Hermes Agent ecosystem.</p>
+
   </section>
 </details>
 

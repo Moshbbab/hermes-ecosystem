@@ -148,7 +148,68 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/tlehman/litprog-skill" target="_blank">Visit GitHub</a> for more details.</div>
+    <h2>Literate Programming Skill for Claude Code</h2>
+<p>A Claude Code skill that transforms codebases into literate programs. These are documents written for human comprehension that also generate the original source code.</p>
+<h3>What is Literate Programming?</h3>
+<p>Literate programming was invented by <strong>Donald Knuth</strong> in 1984. Knuth is the author of <em>The Art of Computer Programming</em>, creator of TeX, and winner of the 1974 Turing Award. He introduced literate programming as a paradigm where programs are written as essays for human readers, with code embedded in a narrative.</p>
+<p>A literate program produces two outputs:</p>
+<ul>
+<li><strong>Weave</strong>: Produce a readable document (PDF, HTML) with prose, diagrams, and syntax-highlighted code.</li>
+<li><strong>Tangle</strong>: Extract runnable source files from the document.</li>
+</ul>
+<p>The key insight: present code in <em>psychological order</em>. That is, the order that makes it easiest to understand, not the order the compiler needs.</p>
+<h3>What This Skill Does</h3>
+<ul>
+<li>Installs as a Claude Code skill (via <code>SKILL.md</code>)</li>
+<li>Gives Claude the ability to analyze a codebase and produce a <code>.lit.md</code> file</li>
+<li>The <code>.lit.md</code> file weaves prose, Mermaid diagrams, LaTeX math, and syntax-highlighted code into a narrative</li>
+<li>Includes a tangler (<code>scripts/tangle.ts</code>) that extracts source files back from the <code>.lit.md</code></li>
+<li>Includes a reverse-sync engine (<code>scripts/untangle.ts</code>) that updates the <code>.lit.md</code> when source files are edited directly</li>
+<li>Includes a PostToolUse hook (<code>scripts/hook-reverse-sync.ts</code>) for automatic reverse-sync in Claude Code</li>
+<li>Running <code>/literate-programming</code> on an existing <code>.lit.md</code> just weaves + tangles (idempotent)</li>
+<li>Supports PDF generation via Pandoc</li>
+</ul>
+<h3>Installation</h3>
+<p>Copy <code>SKILL.md</code> into your project's <code>.claude/skills/</code> directory:</p>
+<pre><code class="language-bash">git clone https://github.com/tlehman/litprog-skill.git
+mkdir -p your-project/.claude/skills/
+cp litprog-skill/SKILL.md your-project/.claude/skills/literate-programming.md
+</code></pre>
+<p>Claude Code automatically discovers skills from <code>.claude/skills/</code> in your project root. After copying, the <code>/literate-programming</code> slash command will be available in any Claude Code session within that project.</p>
+<h3>Usage</h3>
+<h4>Create a literate program</h4>
+<p>Ask Claude to create a literate program from your codebase:</p>
+<blockquote>
+<p>/literate-programming</p>
+</blockquote>
+<p>Claude will analyze your code, determine the best narrative order, and produce a <code>.lit.md</code> file with prose, diagrams, and named code chunks.</p>
+<p>If a <code>.lit.md</code> already exists, running <code>/literate-programming</code> will just tangle and weave the existing file without recreating it.</p>
+<h4>Reverse-sync (automatic)</h4>
+<p>After creation, a PostToolUse hook is configured so that when you edit a source file directly, the changes are automatically synced back into the <code>.lit.md</code> and re-tangled. This keeps the <code>.lit.md</code> as the single source of truth.</p>
+<p>The hook does NOT regenerate the PDF on every edit. To regenerate the PDF, run <code>/literate-programming</code> again.</p>
+<h4>Tangle (extract source code)</h4>
+<pre><code class="language-bash">bun run scripts/tangle.ts project.lit.md --output-dir ./src/
+</code></pre>
+<p>This expands all root chunks and writes the source files. Verify by diffing against the original source.</p>
+<h4>Weave (generate PDF)</h4>
+<pre><code class="language-bash">pandoc project.lit.md \
+  -o project.pdf \
+  --pdf-engine=xelatex \
+  --filter mermaid-filter \
+  --toc \
+  --number-sections
+</code></pre>
+<p><strong>Prerequisites for weave:</strong> pandoc, xelatex, mermaid-filter</p>
+<p>For setup instructions, see <code>references/pandoc-setup.md</code>.</p>
+<h3>Why Use This?</h3>
+<ul>
+<li><strong>Optimized for reading</strong>: Code is read far more often than it is written. Literate programs optimize for reading.</li>
+<li><strong>Explains the why</strong>: Forces the author to explain <em>why</em>, not just <em>what</em>. Every code block is preceded by prose that motivates its existence.</li>
+<li><strong>Beautiful PDFs</strong>: Produces documents with diagrams and math alongside code.</li>
+<li><strong>Architectural clarity</strong>: Reveals architectural decisions that comments and READMEs miss. The narrative structure shows how pieces fit together.</li>
+<li><strong>Knowledge transfer</strong>: Useful for onboarding, code reviews, and preserving institutional knowledge. A new team member can read the literate program start to finish and understand the system.</li>
+</ul>
+
   </section>
 </details>
 
