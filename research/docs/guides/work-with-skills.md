@@ -159,7 +159,7 @@ Manage skill config from the CLI:
 hermes skills config gif-search
 
 # View all skill config
-hermes config show | grep '^skills\.config'
+hermes config get skills.config --json
 ```
 
 * * *

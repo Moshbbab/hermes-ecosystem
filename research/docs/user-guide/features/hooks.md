@@ -521,13 +521,13 @@ Gateway received a user message, before auth + dispatch
 
 [`pre_approval_request`](#pre_approval_request)
 
-Dangerous command needs user approval, before the prompt/notification is sent
+An approval decision is requested, including smart-mode auto decisions
 
 ignored
 
 [`post_approval_response`](#post_approval_response)
 
-User responded to an approval prompt (or it timed out)
+An approval decision is made (or a prompt times out)
 
 ignored
 
@@ -1530,7 +1530,7 @@ def register(ctx):
 
 ### `pre_approval_request`
 
-Fires **immediately before** an approval request is shown to the user — covers every surface: interactive CLI, the Ink TUI, gateway platforms (Telegram, Discord, Slack, WhatsApp, Matrix, etc.), and ACP clients (VS Code, Zed, JetBrains).
+Fires before an approval decision is requested. It covers prompted surfaces—interactive CLI, Ink TUI, gateway platforms, and ACP clients—and `approvals.mode=smart` decisions made without a human prompt (`surface="smart"`). In smart mode, the hook runs before the auxiliary LLM is called.
 
 This is the right place to wire a custom notifier — for example, a macOS menu-bar app that pops an allow/deny notification, or an audit log that records every approval request with context.
 
@@ -1558,7 +1558,7 @@ Description
 
 `str`
 
-The shell command awaiting approval
+Terminal command or `execute_code` script being assessed. Smart and gateway payloads are redacted before observer dispatch. Smart observer redaction is mandatory even when `security.redact_secrets` is disabled; if redaction fails, smart hooks are skipped.
 
 `description`
 
@@ -1588,7 +1588,7 @@ Session identifier, useful for scoping notifications per-chat
 
 `str`
 
-`"cli"` for interactive CLI/TUI prompts, `"gateway"` for async platform approvals
+`"cli"` for interactive CLI/TUI prompts, `"gateway"` for async platform approvals, or `"smart"` for auxiliary-LLM auto approve/deny decisions
 
 **Return value:** ignored. Hooks here are observer-only; they cannot veto or pre-answer the approval. Use [`pre_tool_call`](#pre_tool_call) to block a tool before it reaches the approval system.
 
@@ -1615,7 +1615,7 @@ def register(ctx):
 
 ### `post_approval_response`
 
-Fires **after** the user responds to an approval prompt (or the prompt times out).
+Fires after a prompted or smart approval decision (or after a prompt times out).
 
 **Callback signature:**
 
@@ -1644,7 +1644,13 @@ Description
 
 `str`
 
-One of `"once"`, `"session"`, `"always"`, `"deny"`, or `"timeout"`
+Prompted surfaces use `"once"`, `"session"`, `"always"`, `"deny"`, or `"timeout"`; smart decisions use `"smart_approve"` or `"smart_deny"`
+
+`decided_by`
+
+`str`
+
+`"aux_llm"` for smart decisions; absent on prompted surfaces
 
 **Return value:** ignored.
 

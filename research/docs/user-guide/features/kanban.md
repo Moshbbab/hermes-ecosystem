@@ -96,7 +96,7 @@ They coexist: a kanban worker may call `delegate_task` internally during its run
 -   **Link** — `task_links` row recording a parent → child dependency. The dispatcher promotes `todo → ready` when all parents are `done`.
 -   **Comment** — the inter-agent protocol. Agents and humans append comments; when a worker is (re-)spawned it reads the full comment thread as part of its context.
 -   **Workspace** — the directory a worker operates in. Three kinds:
-    -   `scratch` (default) — fresh tmp dir under `~/.hermes/kanban/workspaces/<id>/` (or `~/.hermes/kanban/boards/<slug>/workspaces/<id>/` on non-default boards). **Deleted when the task completes** — scratch is ephemeral by design, so the dir is wiped the moment the worker (or `hermes kanban complete <id>`) marks the task done. If you want to keep the worker's output, use `worktree:` or `dir:<path>` instead. The first time a scratch workspace is created on an install, the dispatcher logs a warning and emits a `tip_scratch_workspace` event on the task (visible via `hermes kanban show <id>`).
+    -   `scratch` (default) — fresh tmp dir under `~/.hermes/kanban/workspaces/<id>/` (or `~/.hermes/kanban/boards/<slug>/workspaces/<id>/` on non-default boards). **Deleted when the task completes** — scratch is ephemeral by design. Files explicitly declared through `kanban_complete(artifacts=[...])` are copied into durable per-task attachment storage before cleanup; existing deliverable paths in legacy completion summaries receive the same treatment. Other scratch files are removed. A missing declared scratch artifact keeps the task in-flight so the worker can correct the path and retry. Use `worktree:` or `dir:<path>` when the whole workspace should remain available. The first time a scratch workspace is created on an install, the dispatcher logs a warning and emits a `tip_scratch_workspace` event on the task (visible via `hermes kanban show <id>`).
     -   `dir:<path>` — an existing shared directory (Obsidian vault, mail ops dir, per-account folder). **Must be an absolute path.** Relative paths like `dir:../tenants/foo/` are rejected at dispatch because they'd resolve against whatever CWD the dispatcher happens to be in, which is ambiguous and a confused-deputy escape vector. The path is otherwise trusted — it's your box, your filesystem, the worker runs with your uid. This is the trusted-local-user threat model; kanban is single-host by design. **Preserved on completion.**
     -   `worktree` — a git worktree under `.worktrees/<id>/` for coding tasks. Use `worktree:<path>` to pin the exact target path. Worker-side `git worktree add` creates it, using `--branch` when provided. **Preserved on completion.**
 -   **Dispatcher** — a long-lived loop that, every N seconds (default 60): reclaims stale claims, reclaims crashed workers (PID gone but TTL not yet expired), promotes ready tasks, atomically claims, spawns assigned profiles. Runs **inside the gateway** by default (`kanban.dispatch_in_gateway: true`). One dispatcher sweeps all boards per tick; workers are spawned with `HERMES_KANBAN_BOARD` pinned so they can't see other boards. After `kanban.failure_limit` consecutive spawn failures on the same task (default: 2) the dispatcher auto-blocks it with the last error as the reason — prevents thrashing on tasks whose profile doesn't exist, workspace can't mount, etc.
@@ -160,6 +160,7 @@ Slugs are validated: lowercase alphanumerics + hyphens + underscores, 1-64 chars
 
 -   **Board dropdown** — pick the active board. Your selection is saved to the browser's `localStorage` so it persists across reloads without shifting the CLI's `current` pointer out from under a terminal you left open.
 -   **\+ New board** — opens a modal asking for slug, display name, description, and icon. Option to auto-switch to the new board.
+-   **Settings** — opens a modal for editing the current board's display name, description, and **project directory** (`default_workdir`). The project directory is the board-level workspace default every new task inherits (git repo → preserved worktree, plain dir → preserved directory); each task can still override it at creation time. Clearing the field reverts new tasks to disposable scratch workspaces.
 -   **Archive** — only shown on non-`default` boards. Confirms, then moves the board dir to `boards/_archived/`.
 
 All dashboard API endpoints accept `?board=<slug>` for board scoping. The events WebSocket is pinned to a board at connection time; switching in the UI opens a fresh WS against the new board.
@@ -238,6 +239,12 @@ hermes kanban unblock  t_abc t_def
 hermes kanban block    t_abc "need input" --ids t_def t_hij
 ```
 
+Where an unblocked task lands
+
+`unblock` itself only ever moves a task to **`ready`** (all parents `done`) or **`todo`** (a parent is still open — the task is dependency-gated and the dispatcher auto-promotes it once the parent finishes). It never routes to `triage`.
+
+If you unblock a task and it later shows up in **`triage`**, the unblock is not what put it there. A subsequent _re-block for the same reason_ did: after a task is blocked → unblocked → re-blocked for the same cause `BLOCK_RECURRENCE_LIMIT` times (default `2`), the unblock-loop breaker stops sending it back to `blocked` — where a cron would just keep unblocking it — and routes it to `triage` for a human decision. This is a deterministic DB guard, not an LLM judgment call, and a task's body text cannot opt out of it: the recurrence counter deliberately survives each unblock (it resets only on a successful `complete`). To keep an unblocked task in the work pool, resolve _why it keeps re-blocking_ (unfinished parent, missing input, unmet capability) before unblocking, or raise `BLOCK_RECURRENCE_LIMIT` if the loop is expected.
+
 ## How workers interact with the board
 
 **Workers do not shell out to `hermes kanban`.** When the dispatcher spawns a worker it sets `HERMES_KANBAN_TASK=t_abcd` in the child's env, and that env var flips on a dedicated **kanban toolset** in the model's schema. The same toolset is also available to orchestrator profiles that enable `kanban` in their toolsets config. These tools read and mutate the board directly via the Python `kanban_db` layer, same as the CLI does. A running worker calls these like any other tool; it never sees or needs the `hermes kanban` CLI.
@@ -298,7 +305,7 @@ Append a durable note to the task thread.
 
 `kanban_unblock`
 
-(Orchestrators) move a blocked task back to `ready`.
+(Orchestrators) move a blocked task to `ready` when all parents are done, or `todo` while any parent remains open.
 
 `task_id`
 
@@ -386,7 +393,11 @@ Every profile that works kanban tasks automatically gets the worker lifecycle �
 3.  Call `kanban_heartbeat(note="...")` every few minutes during long operations. **If your work may run longer than 1 hour, call `kanban_heartbeat` at least once an hour** — the dispatcher reclaims tasks that have been running past `kanban.dispatch_stale_timeout_seconds` (default 4 h) with no heartbeat in the last hour, on the assumption the worker crashed without cleanup. A reclaim is benign (the task goes back to `ready` for re-dispatch without a failure-counter tick) but you lose your current run's progress.
 4.  Complete with `kanban_complete(summary="...", metadata={...})`, or `kanban_block(reason="...")` if stuck.
 
-That final `kanban_complete` / `kanban_block` call is part of the worker protocol. If the worker process exits with status 0 while the task is still `running`, the dispatcher treats that as a protocol violation, emits a `protocol_violation` event, and auto-blocks the task on the next tick instead of respawning it into the same loop. This usually means the model wrote a plain-text answer and exited without using the Kanban tool surface.
+That final `kanban_complete` / `kanban_block` call is part of the worker protocol. If the worker process exits with status 0 while the task is still `running`, the dispatcher treats that as a protocol violation and emits a `protocol_violation` event.
+
+**Agent-side prevention:** Before the worker exits, Hermes injects up to two synthetic nudges when it detects the model is about to stop without a terminal board tool call. This catches the common case where the model narrates the next step ("Let me write the report") and stops with `finish_reason=stop`. The nudge reminds the model to call `kanban_complete` or `kanban_block` immediately. This guard is active only for dispatcher-spawned workers (`HERMES_KANBAN_TASK` is set) and can be disabled with `HERMES_KANBAN_STOP_NUDGE=0`.
+
+**Dispatcher-side recovery:** If the nudges are exhausted or the worker crashes before reaching the nudge, the dispatcher gives the violation a **bounded retry** (up to `_PROTOCOL_VIOLATION_FAILURE_LIMIT` consecutive violations, default 3) before auto-blocking the task instead of respawning it into the same loop. The budget counts only _consecutive_ clean-exit protocol violations — interleaved rate-limited requeues are neutral, and any other failure kind resets the streak — and a per-task `max_retries` overrides the bound. This usually means the model wrote a plain-text answer and exited without using the Kanban tool surface.
 
 The lifecycle plus the load-bearing reference details (workspace kinds, deliverable `artifacts`, claiming created cards) ship in that system-prompt block, so every worker has them regardless of which profile it runs under — no per-profile skill setup required.
 
@@ -423,7 +434,7 @@ hermes kanban create "audit auth flow" \
     --skill github-code-review
 ```
 
-**From the dashboard**, type the skills comma-separated into the **skills** field of the inline create form.
+**From the dashboard**, type the skills comma-separated into the **skills** field of the create-task dialog.
 
 The dispatcher emits one `--skills <name>` flag per skill listed, so the worker spawns with all of them loaded on top of the auto-injected kanban guidance. The skill names must match skills that are actually installed on the assignee's profile (run `hermes skills list` to see what's available); there's no runtime install.
 
@@ -487,7 +498,7 @@ hermes dashboard        # "Kanban" tab appears in the nav, after "Skills"
 -   **Per-profile lanes inside Running** — toolbar checkbox toggles sub-grouping of the Running column by assignee.
 -   **Live updates via WebSocket** — the plugin tails the append-only `task_events` table on a short poll interval; the board reflects changes the instant any profile (CLI, gateway, or another dashboard tab) acts. Reloads are debounced so a burst of events triggers a single refetch.
 -   **Drag-drop** cards between columns to change status. The drop sends `PATCH /api/plugins/kanban/tasks/:id` which routes through the same `kanban_db` code the CLI uses — the three surfaces can never drift. Moves into destructive statuses (`done`, `archived`, `blocked`) prompt for confirmation. Touch devices use a pointer-based fallback so the board is usable from a tablet.
--   **Inline create** — click `+` on any column header to type a title, assignee, priority, and (optionally) a parent task from a dropdown over every existing task. Press Enter to create the task, Shift+Enter to insert a newline in the title field, or Escape to cancel. Creating from the Triage column automatically parks the new task in triage.
+-   **Create-task dialog** — click `+` on any column header to open a modal with labeled fields: title, assignee, priority, skills, workspace kind/path (seeded from the board's project directory; per-task override), goal mode, and (optionally) a parent task from a dropdown over every existing task. Press Enter to create the task, Shift+Enter to insert a newline in the title field, or Escape to cancel. Creating from the Triage column automatically parks the new task in triage.
 -   **Multi-select with bulk actions** — shift/ctrl-click a card or tick its checkbox to add it to the selection. A bulk action bar appears at the top with batch status transitions, archive, and reassign (by profile dropdown, or "(unassign)"). Destructive batches confirm first. Per-id partial failures are reported without aborting the rest.
 -   **Click a card** (without shift/ctrl) to open a side drawer (Escape or click-outside closes) with:
     -   **Editable title** — click the heading to rename.
@@ -1267,9 +1278,9 @@ One spawn attempt failed (missing PATH, workspace unmountable, …). Counter inc
 
 `protocol_violation`
 
-`{pid, claimer, exit_code}`
+`{pid, claimer, exit_code, protocol_violation}`
 
-Worker exited successfully while the task was still `running`, usually because it answered without calling `kanban_complete` or `kanban_block`. The dispatcher also emits `gave_up` and auto-blocks immediately instead of retrying.
+Worker exited successfully while the task was still `running`, usually because it answered without calling `kanban_complete` or `kanban_block`. Emitted on every violation (the payload's `protocol_violation: true` marker is copied into the run metadata and feeds the violation-only retry budget). Below the budget — up to `_PROTOCOL_VIOLATION_FAILURE_LIMIT` (default 3) _consecutive_ violations, per-task `max_retries` overriding — the task simply returns to `ready` for another attempt; when the streak reaches the bound the dispatcher also emits `gave_up` and auto-blocks.
 
 `gave_up`
 

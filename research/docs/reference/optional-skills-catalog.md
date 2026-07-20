@@ -93,7 +93,7 @@ Knowledge comics (知识漫画): educational, biography, tutorial.
 
 [**blender-mcp**](/docs/user-guide/skills/optional/creative/creative-blender-mcp)
 
-Control Blender directly from Hermes via socket connection to the blender-mcp addon. Create 3D objects, materials, animations, and run arbitrary Blender Python (bpy) code. Use when user wants to create or modify anything in Blender.
+Drive Blender via the catalog blender MCP, with bpy recipes.
 
 [**concept-diagrams**](/docs/user-guide/skills/optional/creative/creative-concept-diagrams)
 
@@ -118,6 +118,10 @@ Generate real meme images by picking a template and overlaying text with Pillow.
 [**pixel-art**](/docs/user-guide/skills/optional/creative/creative-pixel-art)
 
 Pixel art w/ era palettes (NES, Game Boy, PICO-8).
+
+[**unreal-mcp**](/docs/user-guide/skills/optional/creative/creative-unreal-mcp)
+
+Use when the user wants to do anything in Unreal Engine through Epic's official editor-embedded MCP server (catalog entry: unreal-engine) — build/light/populate scenes, place and transform actors, author Blueprints, animate with Sequence...
 
 ## devops
 
@@ -240,6 +244,10 @@ Description
 [**fastmcp**](/docs/user-guide/skills/optional/mcp/mcp-fastmcp)
 
 Build, test, inspect, install, and deploy MCP servers with FastMCP in Python. Use when creating a new MCP server, wrapping an API or database as MCP tools, exposing resources or prompts, or preparing a FastMCP server for Claude Code, Cur...
+
+[**mcp-oauth-remote-gateway**](/docs/user-guide/skills/optional/mcp/mcp-mcp-oauth-remote-gateway)
+
+Manual OAuth for remote MCP servers on headless gateways.
 
 [**mcporter**](/docs/user-guide/skills/optional/mcp/mcp-mcporter)
 

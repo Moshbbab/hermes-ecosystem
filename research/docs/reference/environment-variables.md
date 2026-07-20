@@ -166,6 +166,14 @@ Xiaomi MiMo API key ([platform.xiaomimimo.com](https://platform.xiaomimimo.com))
 
 Override Xiaomi MiMo base URL (default: `https://api.xiaomimimo.com/v1`)
 
+`UPSTAGE_API_KEY`
+
+Upstage API key for Solar models ([console.upstage.ai](https://console.upstage.ai/api-keys))
+
+`UPSTAGE_BASE_URL`
+
+Override Upstage base URL (default: `https://api.upstage.ai/v1`)
+
 `TOKENHUB_API_KEY`
 
 Tencent TokenHub API key ([tokenhub.tencentmaas.com](https://tokenhub.tencentmaas.com))
@@ -1188,7 +1196,7 @@ Webhook listener port for inbound SMS (default: `8080`)
 
 `SMS_WEBHOOK_HOST`
 
-Webhook bind address (default: `0.0.0.0`)
+Webhook bind address (default: `127.0.0.1`)
 
 `SMS_INSECURE_NO_SIGNATURE`
 
@@ -1808,6 +1816,14 @@ Set to `1` to make Desktop ignore an existing `hermes` on `PATH` during backend 
 
 Initial project directory for Desktop chat sessions. Set by `hermes desktop --cwd`.
 
+`HERMES_DESKTOP_PYTHON`
+
+Absolute path to a Python interpreter for the backend, checked before Electron auto-resolves one for the source checkout. Used by worktree dev helpers (see [TUI & Desktop from Worktrees](/docs/developer-guide/worktree-ui-dev)) to reuse a shared venv.
+
+`HERMES_DESKTOP_DEV_SERVER`
+
+Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g. `http://127.0.0.1:5174`). Set automatically by `npm run dev`; only relevant when hacking on the app.
+
 ### Microsoft Graph (Teams Meetings)
 
 App-only credentials for the Microsoft Graph REST client used by the upcoming Teams meeting summary pipeline. See [Register a Microsoft Graph application](/docs/guides/microsoft-graph-app-registration) for the Azure portal walkthrough and the exact API permissions required.
@@ -2270,11 +2286,11 @@ Delay between split chunks when a Discord message exceeds the length limit (defa
 
 `HERMES_DISCORD_LIVENESS_INTERVAL_SECONDS`
 
-Internal bridge for `discord.liveness_interval_seconds` (config.yaml). Interval for the Discord REST liveness probe that detects zombie clients behind dead proxies/NATs (default: `60`; set to `0` to disable). Prefer setting `discord.liveness_interval_seconds` in `config.yaml`.
+Compatibility/manual override for `discord.websocket_liveness_interval_seconds`. Interval for sampling the active Discord Gateway WebSocket (default: `15`; set to `0` to disable). Prefer the `config.yaml` key.
 
 `HERMES_DISCORD_LIVENESS_FAILURE_THRESHOLD`
 
-Internal bridge for `discord.liveness_failure_threshold` (config.yaml). Consecutive probe failures before forcing a Discord reconnect (default: `3`). Prefer setting `discord.liveness_failure_threshold` in `config.yaml`.
+Compatibility/manual override for `discord.websocket_liveness_failure_threshold`. Consecutive unhealthy WebSocket samples before forcing a reconnect (default: `2`). Prefer the `config.yaml` key.
 
 `HERMES_MATRIX_TEXT_BATCH_DELAY_SECONDS` / `_SPLIT_DELAY_SECONDS`
 
@@ -2414,10 +2430,6 @@ Skip auto-injection of `AGENTS.md`, `SOUL.md`, `.cursorrules`, memory, and prelo
 
 Troubleshooting mode: disable ALL customizations — skips plugin discovery, MCP server loading, and shell-hook registration. Set automatically by `--safe-mode` (which also sets the two flags above).
 
-`HERMES_MD_NAMES`
-
-Comma-separated list of rules-file names to auto-inject (default: `AGENTS.md,CLAUDE.md,.cursorrules,SOUL.md`).
-
 `HERMES_TOOL_PROGRESS`
 
 Deprecated compatibility variable for tool progress display. Prefer `display.tool_progress` in `config.yaml`.
@@ -2466,6 +2478,10 @@ Streaming socket read timeout in seconds (default: `120`). Auto-increased to `HE
 
 Stale stream detection timeout in seconds (default: `180`). Auto-disabled for local providers. Triggers connection kill if no chunks arrive within this window.
 
+`HERMES_LOCAL_STREAM_STALE_TIMEOUT`
+
+Stale stream ceiling for local providers (Ollama, oMLX, llama-cpp) in seconds (default: `900`). When the base stale timeout is at its default and a local endpoint is detected, this finite ceiling replaces the former infinite disable so a wedged local server eventually trips the detector instead of hanging forever. Also configurable via `agent.local_stream_stale_timeout` in `config.yaml`.
+
 `HERMES_STREAM_RETRIES`
 
 Number of mid-stream reconnect attempts on transient network errors (default: `3`).
@@ -2477,6 +2493,14 @@ Cross-turn circuit breaker: after this many consecutive stale kills (streaming o
 `HERMES_AGENT_TIMEOUT`
 
 Gateway inactivity timeout for a running agent in seconds (default: `1800`, 30 minutes). Resets on every tool call and streamed token. Set to `0` to disable.
+
+`HERMES_GATEWAY_MAX_STARTS`
+
+Respawn-storm circuit breaker: maximum gateway (re)starts allowed within the window before an exponential backoff is slept to break the storm (default: `5`, `0` disables). Also configurable via `gateway.respawn_storm.max_starts` in `config.yaml`.
+
+`HERMES_GATEWAY_START_WINDOW_S`
+
+Respawn-storm breaker window in seconds (default: `120`). Also configurable via `gateway.respawn_storm.window_seconds` in `config.yaml`.
 
 `HERMES_AGENT_TIMEOUT_WARNING`
 
@@ -2524,7 +2548,7 @@ Path to a JSON file of ephemeral prefill messages injected at API-call time.
 
 `HERMES_WRITE_SAFE_ROOT`
 
-Optional directory prefix that restricts `write_file`/`patch` writes; paths outside require approval. Supports multiple directories separated by `os.pathsep` (`:` on Unix, `;` on Windows).
+Optional directory prefix that **hard-blocks** `write_file`/`patch` writes outside the listed roots (no approval prompt). Supports multiple directories separated by `os.pathsep` (`:` on Unix, `;` on Windows). See [HERMES\_WRITE\_SAFE\_ROOT](#hermes_write_safe_root) below.
 
 `HERMES_DISABLE_LAZY_INSTALLS`
 
@@ -2533,10 +2557,6 @@ Internal bridge var set automatically in the official Docker image to prevent ru
 `HERMES_DISABLE_FILE_STATE_GUARD`
 
 Set to `1` to turn off the "file changed since you read it" guard on `patch`/`write_file`.
-
-`HERMES_CORE_TOOLS`
-
-Comma-separated override for the canonical core tool list (advanced; rarely needed).
 
 `HERMES_BUNDLED_SKILLS`
 
@@ -2577,6 +2597,22 @@ Override the ASCII banner logo at CLI startup.
 `DELEGATION_MAX_CONCURRENT_CHILDREN`
 
 Max parallel subagents per `delegate_task` batch (default: `3`, floor of 1, no ceiling). Also configurable via `delegation.max_concurrent_children` in `config.yaml` — the config value takes priority.
+
+### HERMES\_WRITE\_SAFE\_ROOT
+
+When this variable is set, `write_file` and `patch` may only target paths inside the listed directory prefix(es). Any path outside those roots is **rejected immediately** — the write does not go through the dangerous-command approval system and there is no prompt to override it.
+
+The official Docker image sets `HERMES_WRITE_SAFE_ROOT=/opt/data` alongside `HERMES_HOME=/opt/data` so the agent cannot escape the mounted data volume.
+
+**Do not add this to `~/.hermes/.env` unless you intend to sandbox writes.** A common mistake is pointing it at a project directory while expecting the agent to edit `~/.hermes/cron/jobs.json`, `~/.hermes/skills/`, or scripts under a profile — those paths are outside the sandbox and every `write_file`/`patch` to them fails with an `outside HERMES_WRITE_SAFE_ROOT` error.
+
+To allow both a workspace and Hermes state, list both prefixes (order does not matter):
+
+```
+export HERMES_WRITE_SAFE_ROOT=/path/to/project:/home/you/.hermes
+```
+
+Unset the variable or remove it from `.env` to restore normal writes (still subject to the credential-path denylist — see [File write safety](/docs/user-guide/security#file-write-safety)).
 
 ## Interface
 

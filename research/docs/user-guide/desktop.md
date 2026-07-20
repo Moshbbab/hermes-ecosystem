@@ -241,6 +241,12 @@ The remote gateway host is configured per [profile](/docs/user-guide/profiles), 
 
 For the same setup from the web-dashboard angle, see [Web Dashboard → Connecting Hermes Desktop to a remote backend](/docs/user-guide/features/web-dashboard#connecting-hermes-desktop-to-a-remote-backend); the env vars are catalogued under [Environment Variables → Web Dashboard & Hermes Desktop](/docs/reference/environment-variables#web-dashboard--hermes-desktop).
 
+## Extending the desktop app
+
+The desktop app is contribution-driven — panes, pages, sidebar nav, status-bar items, palette commands, keybinds, and themes all register through one SDK, and you can add your own. A plugin is a single ESM file dropped in `$HERMES_HOME/desktop-plugins/<id>/plugin.js`; the app loads it within seconds and hot-reloads every save. Manage installed plugins live in **Settings → Plugins**.
+
+See [Desktop Plugin SDK](/docs/developer-guide/desktop-plugin-sdk) for the full reference. (This is separate from the [web dashboard plugin system](/docs/user-guide/features/extending-the-dashboard).)
+
 ## Troubleshooting
 
 Boot logs land in `HERMES_HOME/logs/desktop.log` (it includes backend output and recent Python tracebacks) — check it first if the app reports a boot failure. You can also tail it from the CLI:
