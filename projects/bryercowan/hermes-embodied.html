@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">203·repos</span>
+    <span id="meta-count">204·repos</span>
     <span id="meta-version">hermes·v0.18.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -148,168 +148,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>Hermes Embodied: Self-Improving Robotics via Hermes Agent</h2>
-<blockquote>
-<p>"Any robot owner can fine-tune a state-of-the-art VLA by talking to their agent. No ML expertise needed."</p>
-</blockquote>
-<h3>What Is This?</h3>
-<p>Hermes Embodied turns <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> into a <strong>self-improving robotics trainer</strong>. It adds three Hermes skills that close the loop between robot execution, training data collection, and model improvement — all orchestrated through natural language.</p>
-<p>The same self-improvement loop that Hermes uses to get better at coding tasks (via Tinker-Atropos RL) now extends to <strong>physical robot control</strong> via Vision-Language-Action models.</p>
-<h3>Architecture</h3>
-<pre><code>┌─────────────────────────────────────────────────────┐
-│                   HERMES AGENT                       │
-│  (Reasoning Layer — plans, monitors, orchestrates)   │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│  ┌──────────┐  ┌──────────────┐  ┌───────────────┐  │
-│  │ vast-gpu  │  │  vla-trainer │  │  robot-loop   │  │
-│  │  (skill)  │  │   (skill)    │  │   (skill)     │  │
-│  │           │  │              │  │               │  │
-│  │ Provision │  │ SmolVLA /    │  │ Deploy model  │  │
-│  │ &amp; manage  │  │ GR00T fine-  │  │ Collect traj  │  │
-│  │ cloud GPU │  │ tuning on    │  │ Auto-retrain  │  │
-│  │ instances │  │ LeRobot data │  │ when improved │  │
-│  └──────────┘  └──────────────┘  └───────────────┘  │
-│                                                      │
-├─────────────────────────────────────────────────────┤
-│              SIMULATION / HARDWARE                   │
-│                                                      │
-│  MuJoCo + LeRobot gym_hil    OR    SO-ARM101 + USB  │
-│  (Franka Panda sim tasks)          (Physical arm)    │
-└─────────────────────────────────────────────────────┘
-</code></pre>
-<h3>The Self-Improvement Loop</h3>
-<ol>
-<li><strong>Deploy</strong> — Hermes loads a VLA checkpoint and runs it in sim (or on hardware)</li>
-<li><strong>Collect</strong> — Every rollout is recorded as a LeRobot trajectory (state, action, camera, reward)</li>
-<li><strong>Curate</strong> — Hermes filters successful trajectories (reward &gt; threshold)</li>
-<li><strong>Train</strong> — Provisions a GPU on Vast.ai and fine-tunes SmolVLA on the new data</li>
-<li><strong>Evaluate</strong> — Runs open-loop eval comparing new checkpoint vs. old</li>
-<li><strong>Promote</strong> — If new model is better, it becomes the active policy</li>
-<li><strong>Repeat</strong> — Scheduled via Hermes cron, runs autonomously</li>
-</ol>
-<h3>Skills</h3>
-<h4><code>vast-gpu</code> — Cloud GPU Infrastructure</h4>
-<p>Provision, monitor, and teardown GPU instances on Vast.ai through natural language.</p>
-<ul>
-<li>"Spin up an A100 for training" → finds cheapest A100, creates instance, returns SSH access</li>
-<li>"How's my training instance?" → checks status, GPU utilization, cost so far</li>
-<li>"Tear down the GPU" → destroys instance, confirms billing stopped</li>
-</ul>
-<h4><code>vla-trainer</code> — VLA Fine-Tuning Pipeline</h4>
-<p>End-to-end fine-tuning of Vision-Language-Action models.</p>
-<ul>
-<li>Supports SmolVLA (450M, fast) and GR00T N1.5 (3B, powerful)</li>
-<li>Handles data prep, LeRobot format conversion, stats validation</li>
-<li>Runs training on Vast.ai with WandB monitoring</li>
-<li>Open-loop evaluation with trajectory visualization</li>
-</ul>
-<h4><code>robot-loop</code> — Continuous Improvement</h4>
-<p>The autonomous improvement cycle.</p>
-<ul>
-<li>Runs VLA inference in MuJoCo simulation</li>
-<li>Collects and scores trajectories</li>
-<li>Triggers retraining when enough new data accumulates</li>
-<li>A/B tests new checkpoints against current best</li>
-<li>Promotes winners, logs everything</li>
-</ul>
-<h3>Quick Start</h3>
-<pre><code class="language-bash"># Tell Hermes what you want
-"Set up a simulation environment for pick-and-place tasks"
-
-# Hermes installs MuJoCo, LeRobot, configures the Franka Panda env
-
-"Train SmolVLA on the pick-and-place demo dataset"
-
-# Hermes provisions a Vast.ai GPU, downloads data, runs fine-tuning
-
-"Deploy the trained model and start the improvement loop"
-
-# Hermes runs inference in sim, collects trajectories, schedules retraining
-</code></pre>
-<h3>Hardware Support (Optional)</h3>
-<p>For physical deployment on SO-ARM101:</p>
-<ul>
-<li>Leader arm (teleoperation/demo recording)</li>
-<li>Follower arm (autonomous execution)  </li>
-<li>USB cameras (wrist + global view)</li>
-<li>Any Linux machine with USB ports</li>
-</ul>
-<h3>Models Supported</h3>
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th>Params</th>
-<th>Train Time (A100)</th>
-<th>VRAM</th>
-<th>Best For</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SmolVLA</td>
-<td>450M</td>
-<td>~4h / 20k steps</td>
-<td>22GB</td>
-<td>Fast iteration, prototyping</td>
-</tr>
-<tr>
-<td>GR00T N1.5</td>
-<td>3B</td>
-<td>~4h / 10k steps</td>
-<td>25GB</td>
-<td>Production, complex tasks</td>
-</tr>
-<tr>
-<td>GR00T N1.6</td>
-<td>3B</td>
-<td>~4h / 10k steps</td>
-<td>25GB</td>
-<td>Latest, best performance</td>
-</tr>
-</tbody></table>
-<h3>Cost Estimate</h3>
-<ul>
-<li>Vast.ai A100 80GB: ~$1/hr → ~$4 per training run</li>
-<li>Vast.ai A6000 48GB: ~$0.50/hr → ~$2 per training run</li>
-<li>Simulation: Free (local CPU/GPU)</li>
-<li>Physical arm (optional): ~$200-$440</li>
-</ul>
-<h3>Project Structure</h3>
-<pre><code>hermes-embodied/
-├── README.md
-├── skills/
-│   ├── vast-gpu/
-│   │   └── SKILL.md
-│   ├── vla-trainer/
-│   │   └── SKILL.md
-│   └── robot-loop/
-│       └── SKILL.md
-├── scripts/
-│   ├── setup_sim.py          # MuJoCo + LeRobot environment setup
-│   ├── collect_trajectories.py # Run VLA in sim, save rollouts
-│   ├── train_smolvla.py      # Fine-tuning wrapper
-│   ├── evaluate.py           # Open-loop eval + metrics
-│   └── improvement_loop.py   # Full autonomous loop
-├── configs/
-│   ├── sim_env.json          # Simulation environment config
-│   ├── training.yaml         # Training hyperparameters
-│   └── vast_instance.yaml    # GPU instance specs
-└── docs/
-    └── ARCHITECTURE.md
-</code></pre>
-<h3>Built With</h3>
-<ul>
-<li><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> — AI agent framework with skills, memory, and RL training</li>
-<li><a href="https://github.com/huggingface/lerobot">LeRobot</a> — Open-source robotics framework by Hugging Face</li>
-<li><a href="https://huggingface.co/lerobot/smolvla_base">SmolVLA</a> — 450M parameter Vision-Language-Action model</li>
-<li><a href="https://vast.ai">Vast.ai</a> — Affordable cloud GPU rental</li>
-<li><a href="https://mujoco.org/">MuJoCo</a> — Physics simulation for robotics</li>
-<li><a href="https://wandb.ai">WandB</a> — Experiment tracking</li>
-</ul>
-<h3>License</h3>
-<p>MIT</p>
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/bryercowan/hermes-embodied" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
@@ -325,11 +164,11 @@
         <div class="name"><span class="org">ucsandman /</span> DashClaw</div>
       </a>
       <a class="related-row" href="/projects/Lethe044/hermes-incident-commander">
-        <div class="stars">★ 60</div>
+        <div class="stars">★ 61</div>
         <div class="name"><span class="org">Lethe044 /</span> hermes-incident-commander</div>
       </a>
       <a class="related-row" href="/projects/Christabel337/job-scout-agent">
-        <div class="stars">★ 52</div>
+        <div class="stars">★ 53</div>
         <div class="name"><span class="org">Christabel337 /</span> job-scout-agent</div>
       </a>
       <a class="related-row" href="/projects/rodmarkun/anihermes">

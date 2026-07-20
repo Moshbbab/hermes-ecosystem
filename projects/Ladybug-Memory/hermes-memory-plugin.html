@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">203·repos</span>
+    <span id="meta-count">204·repos</span>
     <span id="meta-version">hermes·v0.18.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -149,117 +149,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>Hermes Ladybug Memory</h2>
-<p>Ladybug Memory as a standalone Hermes memory-provider plugin.</p>
-<p>It gives Hermes a fully local, file-based memory store backed by <a href="https://github.com/Ladybug-Memory/ladybug-memory/">LadybugMemory</a> — a columnar embedded graph database (<code>.lbdb</code>). No API keys, no cloud, no sync service. Everything stays on disk in <code>HERMES_HOME</code>.</p>
-<h3>Why Ladybug Memory</h3>
-<p>Ladybug Memory is a local-first memory backend for Hermes that keeps all data in a single <code>.lbdb</code> file on your machine. It supports BM25 keyword search, importance-weighted recall, typed memory entries, named graph edges between entries, and optional GLiNER2 entity extraction — all without any external service.</p>
-<h4>Where It Fits</h4>
-<ul>
-<li>Best fit if you want local, inspectable memory with structured recall and graph relationships, and no SaaS dependency.</li>
-<li>Compared with Honcho, Mem0, and RetainDB, this is fully local with no hosted component.</li>
-<li>Compared with Observational Memory and Holographic, this is less about shared cross-agent markdown stores and more about a typed, searchable, graph-linked memory store owned entirely by Hermes.</li>
-<li>Compared with OpenViking and ByteRover, this is simpler and more direct — no hierarchical browser or knowledge-graph UI, just a fast embedded database with the tools the agent needs.</li>
-</ul>
-<h3>Install</h3>
-<p>Install the plugin and its Python dependency:</p>
-<pre><code class="language-bash">hermes plugins install Ladybug-Memory/hermes-memory-plugin
-pip install ladybug-memory
-</code></pre>
-<p>Then link the plugin into the memory provider directory so <code>hermes memory setup</code> can discover it:</p>
-<pre><code class="language-bash">ln -s ~/.hermes/plugins/ladybug \
-      ~/.hermes/hermes-agent/plugins/memory/ladybug
-</code></pre>
-<blockquote>
-<p><strong>Why the symlink?</strong> Hermes's memory provider system currently only discovers providers bundled in <code>plugins/memory/</code> inside the hermes-agent source tree. User-installed plugins (<code>~/.hermes/plugins/</code>) are not scanned by the memory discovery system yet. This symlink bridges the gap. See <a href="https://github.com/NousResearch/hermes-agent/issues/4956">NousResearch/hermes-agent#4956</a> for the upstream feature request.</p>
-</blockquote>
-<p>Finally, configure it:</p>
-<pre><code class="language-bash">hermes memory setup    # select "ladybug"
-</code></pre>
-<h3>Requirements</h3>
-<ul>
-<li>Hermes with the memory-provider plugin system</li>
-<li><code>ladybug-memory</code> &gt;= 0.1.4</li>
-</ul>
-<p>Install into the Hermes runtime environment if you do not already have it:</p>
-<pre><code class="language-bash">pip install ladybug-memory
-</code></pre>
-<p>For GLiNER2 entity extraction (optional):</p>
-<pre><code class="language-bash">pip install ladybug-memory[extract]
-</code></pre>
-<h3>Manual Install</h3>
-<p>If you prefer cloning manually:</p>
-<pre><code class="language-bash">git clone https://github.com/Ladybug-Memory/hermes-memory-plugin.git \
-  ~/.hermes/plugins/ladybug
-ln -s ~/.hermes/plugins/ladybug \
-      ~/.hermes/hermes-agent/plugins/memory/ladybug
-pip install ladybug-memory
-hermes memory setup
-</code></pre>
-<h3>What It Adds</h3>
-<p><strong>Tools:</strong></p>
-<ul>
-<li><code>ladybug_store</code>: persist a new memory entry with type and importance score</li>
-<li><code>ladybug_search</code>: BM25 keyword search across stored memories</li>
-<li><code>ladybug_recall</code>: retrieve recent or high-importance memories</li>
-<li><code>ladybug_update</code>: correct or update a memory by ID</li>
-<li><code>ladybug_delete</code>: delete a memory by ID</li>
-<li><code>ladybug_link</code>: create a named relationship between two memories</li>
-<li><code>ladybug_related</code>: traverse the memory graph by relationship</li>
-<li><code>ladybug_entity</code>: entity-level KG queries via GLiNER2 (optional)</li>
-</ul>
-<p><strong>Memory integration:</strong></p>
-<ul>
-<li>background prefetch before every turn (importance-weighted recall + query search)</li>
-<li>mirrors built-in <code>MEMORY.md</code> / <code>USER.md</code> writes into Ladybug automatically</li>
-<li>surfaces high-importance memories during context compression</li>
-</ul>
-<h3>Config</h3>
-<p>All keys go under <code>memory.ladybug</code> in <code>~/.hermes/config.yaml</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>db_path</code></td>
-<td><code>$HERMES_HOME/ladybug.lbdb</code></td>
-<td>Path to the Ladybug database file</td>
-</tr>
-<tr>
-<td><code>prefetch_limit</code></td>
-<td><code>6</code></td>
-<td>Memories surfaced before each turn</td>
-</tr>
-<tr>
-<td><code>min_importance</code></td>
-<td><code>3</code></td>
-<td>Minimum importance score for prefetch recall</td>
-</tr>
-<tr>
-<td><code>auto_link</code></td>
-<td><code>false</code></td>
-<td>Auto-link mirrored built-in memory writes</td>
-</tr>
-</tbody></table>
-<h3>Memory Types</h3>
-<p><code>general</code> · <code>preference</code> · <code>fact</code> · <code>project</code> · <code>person</code> · <code>event</code> · <code>task</code></p>
-<h3>Importance Scores</h3>
-<p>1–10 scale. Higher scores surface more often in prefetch recall. Built-in <code>MEMORY.md</code> / <code>USER.md</code> mirrors use importance <strong>6</strong> (explicit user signal). Tune with <code>ladybug_update</code> over time.</p>
-<h3>Validation</h3>
-<p>This repository ships standalone tests for the provider behavior. Run them with:</p>
-<pre><code class="language-bash">uv run --with pytest pytest tests -q
-</code></pre>
-<h3>Notes</h3>
-<ul>
-<li>This repository is laid out as a Hermes directory plugin, so the repo root is the plugin root.</li>
-<li>The installed plugin name is <code>ladybug</code>, matching the GitHub repo's directory name.</li>
-<li>Hermes currently clones directory plugins from Git but does not install their Python dependencies automatically, so the <code>pip install ladybug-memory</code> step is still required.</li>
-</ul>
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/Ladybug-Memory/hermes-memory-plugin" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
@@ -283,7 +173,7 @@ hermes memory setup
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 345</div>
+        <div class="stars">★ 346</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">

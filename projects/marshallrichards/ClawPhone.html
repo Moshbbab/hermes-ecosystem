@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">203·repos</span>
+    <span id="meta-count">204·repos</span>
     <span id="meta-version">hermes·v0.18.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -148,54 +148,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>ClawPhone | AgentPhone</h2>
-<p>Scripts, tweaks, and notes for running agent CLIs on Android phones through Termux.</p>
-<p>The goal is to keep things as native to Termux as possible, only using <code>proot</code> or heavier compatibility layers when Android's userspace makes that unavoidable.</p>
-<h3>Antigravity CLI on Termux</h3>
-<p>The first packaged script is an installer for Google's Antigravity CLI (<code>agy</code>) on ARM64 Android/Termux. It installs/checks dependencies, installs the official Linux ARM64 binary, patches the TCMalloc VA assumptions for common Android devices, creates a glibc wrapper, adds shell shortcuts, and supports uninstall.</p>
-<p>Shoutout to <a href="https://github.com/Brajesh2022">Brajesh</a> for figuring out and sharing the <a href="https://gist.github.com/Brajesh2022/e42160d29b55417db6c18c52dd1d6d37">original working Termux setup</a> this is based on. This repo turns those steps into one script so it is easier for people to install, update, and uninstall.</p>
-<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/marshallrichards/ClawPhone/main/scripts/install-antigravity-termux.sh | bash
-source ~/.bashrc
-agy --version
-</code></pre>
-<p>Details: <a href="https://github.com/marshallrichards/ClawPhone/blob/main/docs/antigravity-termux.md"><code>docs/antigravity-termux.md</code></a></p>
-<h3>OpenClaw Notes</h3>
-<p>I started running OpenClaw on a cheap Android smartphone as an isolated sandbox for OpenClaw agents with access to phone hardware. It runs in the background inside Termux in a <code>tmux</code> session, and I can interact with it over Discord like a normal OpenClaw agent.</p>
-<p>You can use a cheap prepaid Android phone or any old Android 8+ phone you have lying around.</p>
-<p>Things to note:</p>
-<ol>
-<li>Install Termux. I recommend <code>tmux</code>, a text editor like <code>nvim</code>, <code>nodejs-lts</code>, and <code>python</code>. Also install Termux:API and Termux:GUI if you want hardware and UI access.</li>
-<li>Install OpenClaw with <code>npm install -g openclaw@latest</code>, not the bash installer, since the bash installer can fail on Android.</li>
-<li>If dependencies fail during install, install the missing packages with <code>pkg</code> and rerun the OpenClaw install.</li>
-<li><code>llama.cpp</code> may compile from source because Termux lacks normal desktop glibc behavior. This can take 15-30 minutes.</li>
-<li>Errors about missing <code>systemd</code> are expected. Run the OpenClaw Gateway in the foreground or inside <code>tmux</code>.</li>
-<li>OpenClaw expects <code>/tmp/openclaw</code>, but raw Termux should use <code>$PREFIX/tmp</code>. Add this to <code>~/.bashrc</code>:</li>
-</ol>
-<pre><code class="language-bash">export TMPDIR="$PREFIX/tmp"
-export TMP="$TMPDIR"
-export TEMP="$TMPDIR"
-</code></pre>
-<ol start="7">
-<li>Add Termux-friendly logging to <code>openclaw.json</code>:</li>
-</ol>
-<pre><code class="language-json">"logging": {
-  "level": "info",
-  "file": "/data/data/com.termux/files/usr/tmp/openclaw/openclaw-YYYY-MM-DD.log"
-}
-</code></pre>
-<ol start="8">
-<li>Create the temp directory:</li>
-</ol>
-<pre><code class="language-bash">mkdir -p /data/data/com.termux/files/usr/tmp/openclaw
-</code></pre>
-<ol start="9">
-<li>Run <code>source ~/.bashrc</code>, then <code>openclaw gateway</code>.</li>
-<li>Run <code>openclaw onboard</code> and add your model token.</li>
-<li>Set <code>gateway.bind</code> to <code>lan</code> so the dashboard listens on <code>0.0.0.0</code> and can be reached from the phone's LAN IP.</li>
-<li>Tell OpenClaw it is running inside Termux on Android, and that Termux:API and Termux:GUI are installed if you want it to use phone hardware.</li>
-</ol>
-<p>You can also let OpenClaw write overlays on the screen. Install the Termux:GUI app, run <code>pkg install termux-gui</code>, start <code>overlay_daemon.py</code> in another <code>tmux</code> pane/window, and tell OpenClaw it can use that daemon when it needs to display something to the user.</p>
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/marshallrichards/ClawPhone" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
