@@ -302,7 +302,7 @@ Show your Nous credit balance and a top-up handoff link.
 
 `/billing`
 
-CLI terminal-billing flow for Nous — view balance, buy credits, and manage auto-reload / monthly limits.
+CLI Remote Spending flow for Nous — view balance, buy credits, and manage auto-reload / monthly limits.
 
 `/insights`
 
