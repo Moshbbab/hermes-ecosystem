@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>robbyczgw-cla/hermes-web-search-plus — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Web Search Plus is a source-only web layer plugin for the Hermes Agent that provides search and extraction tools. It utilizes a provider mesh with conservative…">
+<meta name="description" content="Web Search Plus is a Hermes plugin that provides web search and URL extraction tools through a provider mesh. It focuses on returning raw sources and execution…">
 <link rel="canonical" href="https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus">
 <meta property="og:title" content="robbyczgw-cla/hermes-web-search-plus — Hermes Atlas">
-<meta property="og:description" content="Web Search Plus is a source-only web layer plugin for the Hermes Agent that provides search and extraction tools. It utilizes a provider mesh with conservative…">
+<meta property="og:description" content="Web Search Plus is a Hermes plugin that provides web search and URL extraction tools through a provider mesh. It focuses on returning raw sources and execution…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="robbyczgw-cla/hermes-web-search-plus — Hermes Atlas">
-<meta name="twitter:description" content="Web Search Plus is a source-only web layer plugin for the Hermes Agent that provides search and extraction tools. It utilizes a provider mesh with conservative…">
+<meta name="twitter:description" content="Web Search Plus is a Hermes plugin that provides web search and URL extraction tools through a provider mesh. It focuses on returning raw sources and execution…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-web-search-plus&amp;subtitle=Source-only+multi-provider+web+search+and+URL+extraction+for+Hermes+Agent.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "Web Search Plus is a source-only web layer plugin for the Hermes Agent that provides search and extraction tools. It utilizes a provider mesh with conservative routing to gather and structure sources without performing answer synthesis or truth verification.",
+  "description": "Web Search Plus is a Hermes plugin that provides web search and URL extraction tools through a provider mesh. It focuses on returning raw sources and execution metadata rather than synthesized answers.",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-07-20T15:47:57.000Z",
+  "dateModified": "2026-07-20T19:24:20.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 343
+    "userInteractionCount": 344
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -118,7 +118,7 @@
   <p class="project-desc">Source-only multi-provider web search and URL extraction for Hermes Agent.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 343</span>
+    <span class="stars">★ 344</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Web Search Plus is a source-only web layer plugin for the Hermes Agent that provides search and extraction tools. It utilizes a provider mesh with conservative routing to gather and structure sources without performing answer synthesis or truth verification.</p>
+    <p class="summary-text">Web Search Plus is a Hermes plugin that provides web search and URL extraction tools through a provider mesh. It focuses on returning raw sources and execution metadata rather than synthesized answers.</p>
     <ul class="summary-highlights">
       <li>Provides web_search_plus and web_extract_plus tools</li>
-      <li>Supports self-hosted profiles using SearXNG and Keenable</li>
-      <li>Includes a read-only Operator Console for local visibility</li>
+      <li>Supports 12 search and 8 extraction providers</li>
+      <li>Includes opt-in budget preflight checks</li>
     </ul>
   </div>
 </section>
@@ -169,39 +169,28 @@
 <blockquote>
 <p>Ported from <a href="https://github.com/robbyczgw-cla/web-search-plus-plugin">web-search-plus-plugin</a> for the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> plugin API.</p>
 </blockquote>
+<p>Current release: <strong>v3.1.1</strong> — see the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/CHANGELOG.md">Changelog</a> and <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V31.md">3.1 Release Notes</a>.</p>
 <hr>
-<h3>What 3.0 improves</h3>
-<p>3.0 keeps the same two public tools and call style, but makes the evidence underneath them far more transparent and robust.</p>
+<h3>Why 3.x</h3>
+<p>The same two tools since 2.x — what changed underneath is how much you can trust and inspect the results:</p>
 <ul>
-<li><strong>Source-only by construction.</strong> Search and extraction stay separate from answer synthesis, claim generation, and truth verification. Provider endpoints without a verified source-only mode are rejected rather than quietly reshaped.</li>
-<li><strong>Traceable provenance.</strong> Results point back to source observations, with typed records of providers tried, retried, skipped, failed, or served from cache.</li>
-<li><strong>Bounded extraction context.</strong> Long pages return a useful preview while keeping the full cleaned text available on demand instead of flooding the agent context.</li>
-<li><strong>Conservative, explainable routing.</strong> Classic Routing v2 remains authoritative, tie-breaking stays deterministic, and Brave joins the default auto-pool for independent-index diversity.</li>
-<li><strong>Honest failures.</strong> Typed errors and response metadata expose missing credentials, rate limits, timeouts, empty results, and filters a provider could not apply.</li>
-<li><strong>Reversible upgrades.</strong> State migration starts with a dry run, creates verified backups before writing, and supports rollback.</li>
-<li><strong>Local operational visibility.</strong> The read-only Operator Console shows routing receipts, provider readiness, cache state, and applied bounds without calling providers or changing configuration.</li>
+<li><strong>Sources, not answers.</strong> Every result is a real source with typed provenance; the engine never composes an answer for you.</li>
+<li><strong>Honest execution.</strong> Receipts show which providers ran, failed, fell back, or served from cache — nothing fails silently.</li>
+<li><strong>Long pages without context floods.</strong> Extraction returns a bounded preview and keeps the full cleaned text available on demand.</li>
+<li><strong>A second routing opinion, safely.</strong> An opt-in shadow policy records what it <em>would</em> have chosen — it never changes what runs.</li>
+<li><strong>Spend control before spending.</strong> Opt-in budget preflight checks call caps, daily quota, and context budgets before the first provider call.</li>
+<li><strong>Quality you can measure.</strong> Reports score domain, URL, and content diversity, so ten copies of the same SEO page stop counting as ten sources.</li>
+<li><strong>Runs with zero paid keys</strong> if you want: an opt-in self-hosted profile uses SearXNG plus Keenable's public tier.</li>
 </ul>
-<p>Read the full <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V3.md">3.0 Release Notes</a> for compatibility details and deliberate 3.1 deferrals.</p>
-<h3>What 3.1 adds</h3>
-<p>3.1 ships everything 3.0 deferred, plus the quality and budget layers around it. Defaults stay bit-identical to 3.0.2 — every feature is opt-in.</p>
-<ul>
-<li><strong>Full Shadow Observer.</strong> A deterministic shadow routing policy runs beside Classic, persists its would-be decisions (never query text), and reports agreement and divergences in the Console — without ever affecting execution.</li>
-<li><strong>Budget Preflight.</strong> Call caps, daily quota, timeout and context budgets are checked before the first provider call; violations degrade deterministically or abort with a typed error instead of spending money first.</li>
-<li><strong>Diversity Score.</strong> Quality reports measure domain, URL, and content diversity, so ten variants of the same SEO page stop looking like ten sources. Research reranking stays opt-in.</li>
-<li><strong>Extraction cache identity.</strong> Request-exact, versioned cache identity with per-field provenance and fail-closed miss semantics — no wrong hits after endpoint, budget, or config changes.</li>
-<li><strong>Self-hosted profile.</strong> <code>profile: self_hosted</code> runs automatic routing on SearXNG and keyless Keenable only — no commercial API keys required.</li>
-<li><strong>Semantic spans.</strong> Opt-in query-conditioned passages on extraction with a mechanical offset contract (NFC, codepoints, half-open ranges).</li>
-<li><strong>Public Provider SDK.</strong> New providers are one self-contained <code>providers.d</code> module — zero core-file edits — with scaffolding and a conformance suite.</li>
-</ul>
-<p>Read the full <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V31.md">3.1 Release Notes</a> and <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/V31_MIGRATION.md">3.1 Migration</a> for details.</p>
+<p>Everything new since 3.0 is opt-in; defaults stay stable across upgrades. Full details: <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V31.md">3.1 Release Notes</a> · <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V3.md">3.0 Release Notes</a>.</p>
 <hr>
 <h3>Quick Start</h3>
 <pre><code class="language-bash"># 1) Install and enable the plugin
 hermes plugins install robbyczgw-cla/hermes-web-search-plus --enable
 
 # 2) Inspect provider readiness and configure the providers you use
-python ~/.hermes/plugins/web-search-plus/setup.py status
-python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter
+python3 ~/.hermes/plugins/web-search-plus/setup.py status
+python3 ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter
 
 # 3) Reload Hermes so the tools are registered
 # CLI: exit and start `hermes` again, or use /reset in-session
@@ -211,13 +200,22 @@ python ~/.hermes/plugins/web-search-plus/setup.py setup --preset starter
 cd ~/.hermes/plugins/web-search-plus
 python3 search.py --query "Hermes Agent latest release" --provider auto --quality-report
 </code></pre>
-<p>Add at least one search-capable provider for <code>web_search_plus</code>; add an extraction-capable provider for <code>web_extract_plus</code>. The setup helper stores keys in the active Hermes environment file — never commit them to the repository.</p>
+<p>Web Search Plus supports 12 search and 8 extraction providers — you do <strong>not</strong> need them all. One search-capable key enables <code>web_search_plus</code>; one extraction-capable key enables <code>web_extract_plus</code>; more keys just make routing smarter. The setup helper stores keys in the active Hermes environment file — never commit them to the repository.</p>
+<h4>Upgrading from 2.x? Relax.</h4>
+<p>Your setup keeps working: the public tools, their names, and your provider keys are unchanged, and updating the plugin is enough — searches and extractions run immediately.</p>
+<pre><code class="language-bash">hermes plugins update web-search-plus
+</code></pre>
+<p>Two honest notes:</p>
+<ul>
+<li><strong>One breaking change (since 3.0):</strong> the Perplexity and Kilo answer endpoints are no longer registered — Web Search Plus is source-only by design. Existing keys are ignored, not deleted.</li>
+<li><strong>Optional, not required:</strong> <code>python3 search.py state-migrate</code> imports your old 2.x routing telemetry (provider health/stats) so adaptive routing keeps its memory. It is dry-run by default, creates a verified backup before <code>--apply</code>, and supports rollback. Skipping it loses nothing except that routing re-learns from scratch. Details: <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/V3_MIGRATION.md">3.0 Migration</a>, then <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/V31_MIGRATION.md">3.1 Migration</a> for the opt-in feature matrix.</li>
+</ul>
 <h4>Self-hosted / no-paid-key profile</h4>
 <p>For a privacy- and budget-oriented setup with no commercial API key, use the self-hosted wizard preset:</p>
-<pre><code class="language-bash">python ~/.hermes/plugins/web-search-plus/setup.py setup --preset self-hosted
-python ~/.hermes/plugins/web-search-plus/setup.py status
+<pre><code class="language-bash">python3 ~/.hermes/plugins/web-search-plus/setup.py setup --preset self-hosted
+python3 ~/.hermes/plugins/web-search-plus/setup.py status
 </code></pre>
-<p>It selects the derived <code>self_hosted</code> profile: automatic search uses only your SearXNG instance and keyless Keenable, while automatic extraction uses the keyless-capable path. Configure SearXNG with <code>searxng.base_url</code> (the older <code>instance_url</code> still works); the preset enables Keenable's existing public tier without writing a key. See the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md#self-hosted-profile">Self-hosted profile guide</a> for prerequisites and explicit-provider behavior.</p>
+<p>It selects the derived <code>self_hosted</code> profile: automatic search uses only your SearXNG instance and keyless Keenable, while automatic extraction runs through Keenable's public fetch tier (SearXNG does not extract; the public tier is rate-limited and has no SLA). Configure SearXNG with <code>searxng.base_url</code> (the older <code>instance_url</code> still works); the preset enables Keenable's existing public tier without writing a key. See the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md#self-hosted-profile">Self-hosted profile guide</a> for prerequisites and explicit-provider behavior.</p>
 <p>Update later with:</p>
 <pre><code class="language-bash">hermes plugins update web-search-plus
 </code></pre>
@@ -237,6 +235,15 @@ web_extract_plus(urls=["https://docs.example.com"], provider="linkup", render_js
 <p>Full parameters, freshness and locale behavior, provider selection, extraction controls, and cache management live in the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a>.</p>
 <hr>
 <h3>Documentation</h3>
+<p><strong>Where to go next:</strong></p>
+<ul>
+<li><strong>Installing or configuring providers</strong> → <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a></li>
+<li><strong>Upgrading from 2.x</strong> → <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/V3_MIGRATION.md">3.0 Migration</a>, then <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/V31_MIGRATION.md">3.1 Migration</a></li>
+<li><strong>What changed</strong> → <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/CHANGELOG.md">Changelog</a> · <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V31.md">3.1 Release Notes</a></li>
+<li><strong>Troubleshooting</strong> → <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/FAQ.md">FAQ</a> · <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/V3_OPERATOR_CONSOLE.md">Operator Console</a></li>
+<li><strong>Building a provider</strong> → <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/PROVIDER_SDK.md">Provider SDK</a> · <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/ARCHITECTURE.md">Architecture</a></li>
+</ul>
+<p>The full reference, including the normative v3 contracts for implementers and reviewers:</p>
 <h4>Start &amp; upgrade</h4>
 <ul>
 <li><a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/USER_GUIDE.md">User Guide</a> — installation, first-run checks, tool usage, and troubleshooting</li>
@@ -289,7 +296,7 @@ python3 -m compileall -q __init__.py search.py setup.py scripts tests
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 278</div>
+        <div class="stars">★ 279</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
