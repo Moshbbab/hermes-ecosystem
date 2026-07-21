@@ -28,7 +28,7 @@ The approval system supports three modes, configured via `approvals.mode` in `~/
 ```
 approvals:
   mode: smart                     # smart | manual | off
-  timeout: 60                     # seconds to wait for user response (default: 60)
+  timeout: 300                    # seconds to wait for user response (default: 300)
   cron_mode: deny                 # deny | approve — what cron jobs do when they hit a dangerous command
   mcp_reload_confirm: true        # /reload-mcp asks before invalidating the MCP tool cache
   destructive_slash_confirm: true # /clear, /new, /reset, /undo prompt before discarding state
@@ -50,7 +50,7 @@ Approval policy for dangerous shell commands — see the table below.
 
 `timeout`
 
-`60`
+`300`
 
 Seconds Hermes waits for an approval reply before timing out.
 
@@ -198,7 +198,7 @@ Configure the timeout in `~/.hermes/config.yaml`:
 
 ```
 approvals:
-  timeout: 60  # seconds (default: 60)
+  timeout: 300  # seconds (default: 300)
 ```
 
 ### What Triggers Approval
