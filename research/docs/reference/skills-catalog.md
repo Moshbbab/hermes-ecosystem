@@ -400,6 +400,12 @@ Airtable REST API via curl. Records CRUD, filters, upserts.
 
 `productivity/airtable`
 
+[`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx)
+
+Create, read, edit Word .docx documents and templates.
+
+`productivity/docx`
+
 [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace)
 
 Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.
@@ -430,6 +436,12 @@ Extract text from PDFs/scans (pymupdf, marker-pdf).
 
 `productivity/ocr-and-documents`
 
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
+
+Create, merge, split, fill, and secure PDF files.
+
+`productivity/pdf`
+
 [`petdex`](/docs/user-guide/skills/bundled/productivity/productivity-petdex)
 
 Install and select animated petdex mascots for Hermes.
@@ -447,6 +459,12 @@ Create, read, edit .pptx decks, slides, notes, templates.
 Operate the Teams meeting summary pipeline via Hermes CLI — summarize meetings, inspect pipeline status, replay jobs, manage Microsoft Graph subscriptions.
 
 `productivity/teams-meeting-pipeline`
+
+[`xlsx`](/docs/user-guide/skills/bundled/productivity/productivity-xlsx)
+
+Create, read, edit Excel .xlsx spreadsheets and CSVs.
+
+`productivity/xlsx`
 
 ## research
 

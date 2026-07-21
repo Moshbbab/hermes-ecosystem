@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx), [`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
 
 ## Reference: full SKILL.md
 
@@ -46,7 +46,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # PDF & Document Extraction
 
-For DOCX: use `python-docx` (parses actual document structure, far better than OCR). For PPTX: see the `powerpoint` skill (uses `python-pptx` with full slide/notes support). This skill covers **PDFs and scanned documents**.
+For DOCX: see the `docx` skill (create/edit) or use `python-docx` for structured reads. For PPTX: see the `powerpoint` skill (full create/read/edit support). For PDF manipulation (merge, split, forms, watermarks, creation): see the `pdf` skill. This skill covers **text extraction from PDFs and scanned documents**.
 
 ## Step 1: Remote URL Available?
 
