@@ -290,6 +290,20 @@ Write desktop app plugins that add UI panes and commands.
 
 `hermes-desktop-plugins`
 
+## hermes-themes
+
+Skill
+
+Description
+
+Path
+
+[`hermes-themes`](/docs/user-guide/skills/bundled/hermes-themes/hermes-themes-hermes-themes)
+
+Author a Hermes color theme that skins every surface.
+
+`hermes-themes`
+
 ## media
 
 Skill
@@ -459,6 +473,12 @@ Create, read, edit .pptx decks, slides, notes, templates.
 Operate the Teams meeting summary pipeline via Hermes CLI — summarize meetings, inspect pipeline status, replay jobs, manage Microsoft Graph subscriptions.
 
 `productivity/teams-meeting-pipeline`
+
+[`tui-widgets`](/docs/user-guide/skills/bundled/productivity/productivity-tui-widgets)
+
+Author live widget apps for the Hermes TUI dock.
+
+`productivity/tui-widgets`
 
 [`xlsx`](/docs/user-guide/skills/bundled/productivity/productivity-xlsx)
 
