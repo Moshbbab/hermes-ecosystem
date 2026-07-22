@@ -829,7 +829,7 @@ Interactive wizard: install the pinned `bws` binary, store an access token, and 
 
 `status`
 
-Show current config, binary path/version, and last fetch info.
+Show current config, binary path/version, and token validation status.
 
 `token`
 

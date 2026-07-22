@@ -77,7 +77,7 @@ Interactive wizard (install binary, prompt for token, pick project, test fetch)
 
 `hermes secrets bitwarden status`
 
-Show config + binary version + token presence
+Show config + binary version + token presence/validation
 
 `hermes secrets bitwarden token`
 
@@ -129,6 +129,9 @@ secrets:
     project_id: ""
     server_url: ""
     cache_ttl_seconds: 300
+    encrypted_cache:
+      enabled: false
+      max_stale_seconds: 0
     override_existing: true
     auto_install: true
 ```
@@ -167,7 +170,19 @@ Bitwarden region or self-hosted endpoint. Empty = `bws` default (US Cloud, `http
 
 `300`
 
-How long an in-process fetch result is reused. Set to `0` to disable caching. Cache is per-process; new `hermes` invocations start fresh.
+How long an in-process or disk fetch result is reused. Set to `0` to disable fresh-cache reuse.
+
+`encrypted_cache.enabled`
+
+`false`
+
+Store the last successful fetch in an AES-GCM encrypted cache at `~/.hermes/cache/bws_cache.enc.json`.
+
+`encrypted_cache.max_stale_seconds`
+
+`0`
+
+When encrypted caching is enabled, allow that cache to be used only after network/timeout failures, up to this age. Authentication failures never use stale secrets. A successful encrypted write removes the legacy plaintext `cache/bws_cache.json`.
 
 `override_existing`
 
