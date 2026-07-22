@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>greyhaven-ai/autocontext — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Autocontext is a recursive self-improving harness designed to assist agents in completing complex tasks. It runs tasks against evaluations and preserves useful…">
+<meta name="description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It executes tasks against evaluation, retains useful lessons, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta property="og:description" content="Autocontext is a recursive self-improving harness designed to assist agents in completing complex tasks. It runs tasks against evaluations and preserves useful…">
+<meta property="og:description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It executes tasks against evaluation, retains useful lessons, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta name="twitter:description" content="Autocontext is a recursive self-improving harness designed to assist agents in completing complex tasks. It runs tasks against evaluations and preserves useful…">
+<meta name="twitter:description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It executes tasks against evaluation, retains useful lessons, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=autocontext&amp;subtitle=a+recursive+self-improving+harness+designed+to+help+your+agents+%28and+future+iterations+of+those+agents%29+succeed+on+any+task&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "Autocontext is a recursive self-improving harness designed to assist agents in completing complex tasks. It runs tasks against evaluations and preserves useful lessons, reports, datasets, and optional local-model training artifacts.",
+  "description": "Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It executes tasks against evaluation, retains useful lessons, and generates traces, reports, playbooks, datasets, and optional local-model training artifacts.",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-07-21T18:37:33.000Z",
+  "dateModified": "2026-07-22T02:03:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-07-21</span>
+    <span><span class="meta-label">updated</span>2026-07-22</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Autocontext is a recursive self-improving harness designed to assist agents in completing complex tasks. It runs tasks against evaluations and preserves useful lessons, reports, datasets, and optional local-model training artifacts.</p>
+    <p class="summary-text">Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It executes tasks against evaluation, retains useful lessons, and generates traces, reports, playbooks, datasets, and optional local-model training artifacts.</p>
     <ul class="summary-highlights">
-      <li>Supports Python and TypeScript/Node environments</li>
-      <li>Provides CLI tools for solving, simulating, and investigating tasks</li>
-      <li>Generates traces, reports, playbooks, and datasets</li>
+      <li>Provides filesystem-first traces, reports, and datasets</li>
+      <li>Supports multiple agent providers including Pi and MCP clients</li>
+      <li>Includes CLI tools for solving, simulating, and investigating tasks</li>
     </ul>
   </div>
 </section>
@@ -181,15 +181,15 @@
 </thead>
 <tbody><tr>
 <td>Python CLI</td>
-<td><code>uv tool install autocontext==0.13.0</code></td>
+<td><code>uv tool install autocontext==0.14.0</code></td>
 </tr>
 <tr>
 <td>Python library/dev</td>
-<td><code>uv pip install autocontext==0.13.0</code></td>
+<td><code>uv pip install autocontext==0.14.0</code></td>
 </tr>
 <tr>
 <td>TypeScript/Node CLI</td>
-<td><code>bun add -g autoctx@0.13.0</code></td>
+<td><code>bun add -g autoctx@0.14.0</code></td>
 </tr>
 <tr>
 <td>Pi extension</td>
@@ -271,10 +271,10 @@ knowledge/&lt;scenario&gt;/
 </tbody></table>
 <p>Python owns the full control-plane package; TypeScript owns several operator-facing surfaces, the TUI, and Node runtime adapters. Start with <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/README.md">autocontext/README.md</a> or <a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a>.</p>
 
-<h3>What's New in 0.13.0</h3>
+<h3>What's New in 0.14.0</h3>
 <ul>
-<li><strong>Python safe active-run stopping</strong> brings <code>safe_run_stop_v1</code> to the Python interactive server: stop a running or paused run at a cooperative generation boundary, preserve completed generations and best score, and receive one correlated terminal receipt (first terminal outcome wins).</li>
-<li><strong>Leaner TypeScript install:</strong> the OpenAI and Anthropic SDKs are now optional peer dependencies, so installing <code>autoctx</code> no longer pulls them in transitively. Install the provider SDK you use, for example <code>npm install autoctx @anthropic-ai/sdk</code>.</li>
+<li><strong>Live TypeScript task plans:</strong> interactive runs now advertise <code>agent_task_plan_v1</code> and emit semantic <code>task_plan_updated</code> snapshots for initial planning, meaningful progress, replanning, completion, failure, and safe stop.</li>
+<li><strong>Durable, privacy-safe replay:</strong> task-plan snapshots use stable identity and monotonic revisions, redact credential-shaped values, reject malformed or oversized frames atomically, and restore exactly across reconnects and server restarts. Python producer parity remains explicitly deferred.</li>
 </ul>
 
 
@@ -347,7 +347,7 @@ knowledge/&lt;scenario&gt;/
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 193</div>
+        <div class="stars">★ 194</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">

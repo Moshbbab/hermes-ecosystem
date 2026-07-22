@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>supermemoryai/supermemory — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Supermemory is a memory and context engine for AI that extracts facts from conversations to build user profiles and manage knowledge. It provides a single API…">
+<meta name="description" content="Supermemory is a memory and context engine designed to provide persistent memory for AI agents and applications. It features automated fact extraction, user…">
 <link rel="canonical" href="https://hermesatlas.com/projects/supermemoryai/supermemory">
 <meta property="og:title" content="supermemoryai/supermemory — Hermes Atlas">
-<meta property="og:description" content="Supermemory is a memory and context engine for AI that extracts facts from conversations to build user profiles and manage knowledge. It provides a single API…">
+<meta property="og:description" content="Supermemory is a memory and context engine designed to provide persistent memory for AI agents and applications. It features automated fact extraction, user…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/supermemoryai/supermemory">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="supermemoryai/supermemory — Hermes Atlas">
-<meta name="twitter:description" content="Supermemory is a memory and context engine for AI that extracts facts from conversations to build user profiles and manage knowledge. It provides a single API…">
+<meta name="twitter:description" content="Supermemory is a memory and context engine designed to provide persistent memory for AI agents and applications. It features automated fact extraction, user…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=supermemory&amp;subtitle=Memory+and+context+engine+%2B+app+that+is+extremely+fast%2C+scalable%2C+and+can+be+run+fully+locally.+The+Memory+API+for+the+AI+era.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/supermemoryai/supermemory#software",
   "name": "supermemory",
-  "description": "Supermemory is a memory and context engine for AI that extracts facts from conversations to build user profiles and manage knowledge. It provides a single API for memory, RAG, connectors, and file processing to assist AI agents and applications.",
+  "description": "Supermemory is a memory and context engine designed to provide persistent memory for AI agents and applications. It features automated fact extraction, user profile maintenance, and hybrid search capabilities across various data sources.",
   "url": "https://hermesatlas.com/projects/supermemoryai/supermemory",
   "codeRepository": "https://github.com/supermemoryai/supermemory",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "supermemoryai",
     "url": "https://github.com/supermemoryai"
   },
-  "dateModified": "2026-07-21T16:35:04.000Z",
+  "dateModified": "2026-07-22T03:46:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 28524
+    "userInteractionCount": 28526
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-21</span>
+    <span><span class="meta-label">updated</span>2026-07-22</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Supermemory is a memory and context engine for AI that extracts facts from conversations to build user profiles and manage knowledge. It provides a single API for memory, RAG, connectors, and file processing to assist AI agents and applications.</p>
+    <p class="summary-text">Supermemory is a memory and context engine designed to provide persistent memory for AI agents and applications. It features automated fact extraction, user profile maintenance, and hybrid search capabilities across various data sources.</p>
     <ul class="summary-highlights">
-      <li>Automated fact extraction and user profile maintenance</li>
-      <li>Supports Google Drive, Gmail, Notion, OneDrive, and GitHub</li>
-      <li>Provides multi-modal extractors for PDFs, images, videos, and code</li>
+      <li>Provides memory, RAG, and user profiles via a single API.</li>
+      <li>Supports connectors for Google Drive, Gmail, Notion, OneDrive, and GitHub.</li>
+      <li>Offers multi-modal extraction for PDFs, images, videos, and code.</li>
     </ul>
   </div>
 </section>
@@ -277,10 +277,18 @@
 <li>OpenCode plugin: <a href="https://github.com/supermemoryai/opencode-supermemory">https://github.com/supermemoryai/opencode-supermemory</a></li>
 <li>Hermes agent (Supermemory memory provider): <a href="https://github.com/NousResearch/hermes-agent">https://github.com/NousResearch/hermes-agent</a></li>
 </ul>
-<h4>MCP - Quick install</h4>
-<pre><code class="language-bash">npx -y install-mcp@latest https://mcp.supermemory.ai/mcp --client claude --oauth=yes
+<h4>MCP</h4>
+<p>Server URL:</p>
+<pre><code class="language-text">https://mcp.supermemory.ai/mcp
 </code></pre>
-<p>Replace <code>claude</code> with your client: <code>cursor</code>, <code>windsurf</code>, <code>vscode</code>, etc.</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "supermemory": {
+      "url": "https://mcp.supermemory.ai/mcp"
+    }
+  }
+}
+</code></pre>
 <p>Read more about our MCP here - <a href="https://supermemory.ai/docs/supermemory-mcp/mcp">https://supermemory.ai/docs/supermemory-mcp/mcp</a></p>
 <h4>What your AI gets</h4>
 <table>
@@ -391,7 +399,7 @@ const agent = new Agent(withSupermemory(config, "user-123", { mode: "full" }));
 <p><strong>Vercel AI SDK</strong> · <strong>LangChain</strong> · <strong>LangGraph</strong> · <strong>OpenAI Agents SDK</strong> · <strong>Mastra</strong> · <strong>Agno</strong> · <strong>Claude Memory Tool</strong> · <strong>n8n</strong></p>
 <h4>Search modes</h4>
 <pre><code class="language-typescript">// Hybrid (default) — RAG + Memory in one query
-const results = await client.search.memories({
+const results = await client.search({
   q: "how do I deploy?",
   containerTag: "user_123",
   searchMode: "hybrid",
@@ -399,7 +407,7 @@ const results = await client.search.memories({
 // Returns deployment docs (RAG) + user's deploy preferences (Memory)
 
 // Memories only
-const results = await client.search.memories({
+const results = await client.search({
   q: "user preferences",
   containerTag: "user_123",
   searchMode: "memories",
@@ -434,12 +442,12 @@ const results = await client.search.memories({
 <td>User profile + optional search in one call</td>
 </tr>
 <tr>
-<td><code>client.search.memories()</code></td>
-<td>Hybrid search across memories and documents</td>
+<td><code>client.search()</code></td>
+<td>Hybrid search across memories and documents (<code>searchMode</code>)</td>
 </tr>
 <tr>
 <td><code>client.search.documents()</code></td>
-<td>Document search with metadata filters</td>
+<td>Document search with metadata filters (legacy v3 response shape)</td>
 </tr>
 <tr>
 <td><code>client.documents.uploadFile()</code></td>
@@ -573,7 +581,7 @@ npx supermemory local
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 193</div>
+        <div class="stars">★ 194</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
