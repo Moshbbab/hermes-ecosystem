@@ -26,7 +26,7 @@
   // ── Report banner dismiss ──
   const reportBanner = document.getElementById('report-banner');
   const reportBannerClose = document.getElementById('report-banner-close');
-  const BANNER_DISMISSED_KEY = 'hermes-banner-dismissed-state-of-hermes-may-2026';
+  const BANNER_DISMISSED_KEY = 'hermes-banner-dismissed-state-of-hermes-july-2026';
 
   if (reportBanner) {
     try {
