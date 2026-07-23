@@ -998,6 +998,10 @@ Comma-separated Slack user IDs
 
 Allow any Slack user to trigger the bot (dev only).
 
+`SLACK_ALLOW_BOTS`
+
+Accept messages from other Slack bots: `none` (default), `mentions`, or `all`. The bot always ignores its own messages.
+
 `SLACK_HOME_CHANNEL`
 
 Default Slack channel for cron delivery
