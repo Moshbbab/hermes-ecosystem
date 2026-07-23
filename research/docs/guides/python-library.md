@@ -8,23 +8,15 @@ Hermes isn't just a CLI tool. You can import `AIAgent` directly and use it progr
 
 ## Installation
 
-Install Hermes directly from the repository:
+Clone Hermes and create its supported editable development environment:
 
 ```
-pip install git+https://github.com/NousResearch/hermes-agent.git
+git clone https://github.com/NousResearch/hermes-agent.git
+cd hermes-agent
+uv sync
 ```
 
-Or with [uv](https://docs.astral.sh/uv/):
-
-```
-uv pip install git+https://github.com/NousResearch/hermes-agent.git
-```
-
-You can also pin it in your `requirements.txt`:
-
-```
-hermes-agent @ git+https://github.com/NousResearch/hermes-agent.git
-```
+Run your application with `uv run python your_app.py` from that checkout. Hermes does not publish a supported wheel or source distribution for `requirements.txt` installs.
 
 tip
 
