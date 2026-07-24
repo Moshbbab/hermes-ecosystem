@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`ascii-art`](/docs/user-guide/skills/bundled/creative/creative-ascii-art), `generative-widgets`
+[`ascii-art`](/docs/user-guide/skills/bundled/creative/creative-ascii-art)
 
 ## Reference: full SKILL.md
 

@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`hermes-agent`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent), `hermes-agent-dev`
+[`hermes-agent`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent)
 
 ## Reference: full SKILL.md
 

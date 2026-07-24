@@ -28,7 +28,7 @@ Tags
 
 Related skills
 
-[`audiocraft-audio-generation`](/docs/user-guide/skills/optional/creative/creative-audiocraft), [`songwriting-and-ai-music`](/docs/user-guide/skills/bundled/creative/creative-songwriting-and-ai-music)
+[`audiocraft-audio-generation`](/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation), [`songwriting-and-ai-music`](/docs/user-guide/skills/bundled/creative/creative-songwriting-and-ai-music)
 
 ## Reference: full SKILL.md
 

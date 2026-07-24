@@ -16,7 +16,7 @@ Path
 
 Version
 
-`1.0.0`
+`1.0.1`
 
 Author
 
@@ -48,19 +48,12 @@ The following is the complete skill definition that Hermes loads when this skill
 
 Delegate coding tasks to [Blackbox AI](https://www.blackbox.ai/) via the Hermes terminal. Blackbox is a multi-model coding agent CLI that dispatches tasks to multiple LLMs (Claude, Codex, Gemini, Blackbox Pro) and uses a judge to select the best implementation.
 
-The CLI is [open-source](https://github.com/blackboxaicode/cli) (GPL-3.0, TypeScript, forked from Gemini CLI) and supports interactive sessions, non-interactive one-shots, checkpointing, MCP, and vision model switching.
+The CLI (npm `@blackbox_ai/blackbox-cli`, binary `blackbox`) is a TypeScript coding agent (forked from Gemini CLI) and supports interactive sessions, non-interactive one-shots, checkpointing, MCP, and vision model switching.
 
 ## Prerequisites
 
 -   Node.js 20+ installed
--   Blackbox CLI installed: `npm install -g @blackboxai/cli`
--   Or install from source:
-    
-    ```
-    git clone https://github.com/blackboxaicode/cli.git
-    cd cli && npm install && npm install -g .
-    ```
-    
+-   Blackbox CLI installed: `npm install -g @blackbox_ai/blackbox-cli` (binary: `blackbox`)
 -   API key from [app.blackbox.ai/dashboard](https://app.blackbox.ai/dashboard)
 -   Configured: run `blackbox configure` and enter your API key
 -   Use `pty=true` in terminal calls — Blackbox CLI is an interactive terminal app
@@ -161,7 +154,7 @@ Flag
 
 Effect
 
-`--prompt "task"`
+`--prompt "task"` (`-p`)
 
 Non-interactive one-shot execution
 
@@ -169,21 +162,37 @@ Non-interactive one-shot execution
 
 Resume from a saved checkpoint
 
-`--yolo`
+`--yolo` (`-y`)
 
 Auto-approve all actions and model switches
 
-`blackbox session`
+`--vlm-switch-mode <mode>`
 
-Start interactive chat session
+Image-handling: `once`, `session`, or `persist`
+
+`-c, --checkpointing`
+
+Enable checkpointing of file edits
 
 `blackbox configure`
 
 Change settings, providers, models
 
-`blackbox info`
+`blackbox update`
 
-Display system information
+Update the CLI to the latest version
+
+`blackbox mcp`
+
+Manage MCP servers
+
+`blackbox extensions`
+
+Manage CLI extensions
+
+`blackbox voice <action>` / `blackbox shortcut`
+
+Configure voice input / the `b` shortcut
 
 ## Vision Support
 

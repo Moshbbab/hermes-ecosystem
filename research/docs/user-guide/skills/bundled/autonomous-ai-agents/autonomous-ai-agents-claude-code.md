@@ -16,7 +16,7 @@ Path
 
 Version
 
-`2.2.0`
+`2.2.1`
 
 Author
 
@@ -441,7 +441,7 @@ Model selection: `sonnet`, `opus`, `haiku`, or full name like `claude-sonnet-4-6
 
 `--effort <level>`
 
-Reasoning depth: `low`, `medium`, `high`, `max`, `auto`
+Reasoning depth: `low`, `medium`, `high`, `xhigh`, `max`
 
 `--max-turns <n>`
 
@@ -735,7 +735,7 @@ Switch models mid-session (use arrow keys to adjust effort)
 
 `/effort [level]`
 
-Set reasoning effort: `low`, `medium`, `high`, `max`, or `auto`
+Set reasoning effort: `low`, `medium`, `high`, `xhigh`, or `max`
 
 `/init`
 

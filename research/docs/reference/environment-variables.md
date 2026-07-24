@@ -816,6 +816,48 @@ Enable persistent shell for local backend (default: `false`)
 
 Override persistent shell for SSH backend (default: follows `TERMINAL_PERSISTENT_SHELL`)
 
+## Egress proxy (sandbox-injected)
+
+These env vars are NOT set on the host — they're injected into Docker sandboxes by the [Egress proxy](/docs/user-guide/egress/iron-proxy) integration when `proxy.enabled: true`. Docker is the only wired backend in this release.
+
+Variable
+
+Description
+
+`HERMES_EGRESS_PROXY`
+
+Set to `1` inside a sandbox when the egress proxy is active. Agent code can check this to know it's running behind a TLS-intercepting proxy.
+
+Provider env vars (`OPENROUTER_API_KEY`, `OPENAI_API_KEY`, …)
+
+Set to opaque proxy tokens, not real upstream secrets, so existing SDKs keep reading the standard env names. iron-proxy swaps those tokens for the real upstream secret at the network boundary.
+
+`HERMES_PROXY_TOKEN_<ENV_NAME>`
+
+Diagnostic alias for each minted provider mapping. E.g. `HERMES_PROXY_TOKEN_OPENROUTER_API_KEY=hermes-proxy-openrouter-…`. Same token value as the standard provider env var.
+
+`HTTPS_PROXY` / `HTTP_PROXY`
+
+`HTTPS_PROXY` points at `http://host.docker.internal:<tunnel_port>` for CONNECT/MITM. `HTTP_PROXY` points at `<tunnel_port + 1>` for plain-HTTP forwarding.
+
+`NO_PROXY`
+
+`127.0.0.1,localhost,::1` so loopback dev servers inside the sandbox bypass the proxy.
+
+`REQUESTS_CA_BUNDLE` / `SSL_CERT_FILE` / `CURL_CA_BUNDLE` / `NODE_EXTRA_CA_CERTS`
+
+Path to the mounted Hermes egress CA cert inside the sandbox (`/etc/ssl/certs/hermes-egress-ca.crt`). Lets the language runtimes trust iron-proxy's MITM-minted leaf certs.
+
+`NODE_OPTIONS`
+
+Appended with `--use-openssl-ca` (your existing flags are preserved) so Node.js routes through the OpenSSL store the other CA-bundle vars control. Narrows the [Node.js asymmetric CA caveat](/docs/user-guide/egress/iron-proxy#nodejs-asymmetric-ca-caveat).
+
+`HERMES_IRON_PROXY_NONCE`
+
+Set on the iron-proxy daemon process itself (NOT inside the sandbox). Used by `_pid_alive` to confirm a candidate PID still refers to _our_ managed binary across PID recycling.
+
+These are set automatically by the Docker terminal backend when `proxy.enabled: true` AND the daemon is running. You don't set them yourself; the relevant operator-facing knobs are in `~/.hermes/config.yaml` under the `proxy:` section — see [Egress proxy → Configuration](/docs/user-guide/egress/iron-proxy#configuration).
+
 ## Messaging
 
 Variable

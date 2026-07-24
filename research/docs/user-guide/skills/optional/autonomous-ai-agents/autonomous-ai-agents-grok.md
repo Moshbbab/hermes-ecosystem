@@ -16,7 +16,7 @@ Path
 
 Version
 
-`0.1.0`
+`0.1.1`
 
 Author
 
@@ -127,17 +127,25 @@ Send one prompt, run headless, exit
 
 Choose a model
 
-`-s, --session-id <ID>`
+`-s, --session-id <UUID>`
 
-Create or resume a named headless session
+Assign a **NEW** valid UUID to a fresh conversation (must not already exist). Does **not** resume — use `--resume`/`--continue` for that. Only valid with `--resume`/`--continue` when paired with `--fork-session`
 
-`-r, --resume <ID>`
+`-r, --resume [<UUID>]`
 
-Resume an existing session
+Resume an existing session by its UUID (or the most recent if omitted)
 
 `-c, --continue`
 
 Continue the most recent session in the current directory
+
+`--fork-session`
+
+When resuming, create a new session ID instead of reusing the original
+
+`--max-turns <N>`
+
+Cap the maximum number of agent turns
 
 `--cwd <PATH>`
 
@@ -157,7 +165,7 @@ Run inline, no fullscreen TUI takeover
 
 `--no-auto-update`
 
-Skip background update checks (use in all automation)
+Skip background update checks (use in all automation; hidden from `--help` but still works)
 
 ### Output Formats
 
@@ -192,14 +200,17 @@ For an interactive (TUI) background session, use `pty=true` + tmux and monitor w
 
 ### Session Continuation
 
+Sessions are keyed by **UUID**, not by name. `--session-id` assigns a _new_ UUID to a fresh run (it does **not** resume); `--resume` takes an existing session's UUID (or omit the value to resume the most recent).
+
 ```
-# Start a named session
-terminal(command="grok --no-auto-update -s refactor-db -p 'Start refactoring the database layer' --always-approve", workdir="/project", timeout=240)
+# Start a session with a self-assigned UUID (must be a valid, unused UUID)
+SID=$(uuidgen)
+terminal(command="grok --no-auto-update -s $SID -p 'Start refactoring the database layer' --always-approve", workdir="/project", timeout=240)
 
-# Resume it later
-terminal(command="grok --no-auto-update -r refactor-db -p 'Now add connection pooling' --always-approve", workdir="/project", timeout=180)
+# Resume that exact session later by its UUID
+terminal(command="grok --no-auto-update -r $SID -p 'Now add connection pooling' --always-approve", workdir="/project", timeout=180)
 
-# Or continue the most recent session in this directory
+# Or just continue the most recent session in this directory (no UUID needed)
 terminal(command="grok --no-auto-update -c -p 'What did you change last time?'", workdir="/project", timeout=60)
 ```
 

@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`stable-diffusion-image-generation`](/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion), `image_gen`
+[`stable-diffusion-image-generation`](/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion)
 
 ## Reference: full SKILL.md
 

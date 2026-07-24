@@ -26,10 +26,6 @@ Tags
 
 `computer-use`, `desktop`, `automation`, `gui`, `cross-platform`
 
-Related skills
-
-`browser`
-
 ## Reference: full SKILL.md
 
 info

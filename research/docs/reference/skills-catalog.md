@@ -274,6 +274,12 @@ Description
 
 Path
 
+[`evaluating-llms-harness`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-evaluating-llms-harness)
+
+lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
+
+`mlops/evaluation/evaluating-llms-harness`
+
 [`huggingface-hub`](/docs/user-guide/skills/bundled/mlops/mlops-huggingface-hub)
 
 HuggingFace hf CLI: search/download/upload models, datasets.
@@ -286,17 +292,11 @@ llama.cpp local GGUF inference + HF Hub model discovery.
 
 `mlops/inference/llama-cpp`
 
-[`evaluating-llms-harness`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-lm-evaluation-harness)
-
-lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
-
-`mlops/evaluation/lm-evaluation-harness`
-
-[`serving-llms-vllm`](/docs/user-guide/skills/bundled/mlops/mlops-inference-vllm)
+[`serving-llms-vllm`](/docs/user-guide/skills/bundled/mlops/mlops-inference-serving-llms-vllm)
 
 vLLM: high-throughput LLM serving, OpenAI API, quantization.
 
-`mlops/inference/vllm`
+`mlops/inference/serving-llms-vllm`
 
 [`weights-and-biases`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-weights-and-biases)
 

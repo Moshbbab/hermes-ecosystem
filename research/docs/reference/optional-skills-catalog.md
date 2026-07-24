@@ -83,7 +83,7 @@ Skill
 
 Description
 
-[**audiocraft-audio-generation**](/docs/user-guide/skills/optional/creative/creative-audiocraft)
+[**audiocraft-audio-generation**](/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation)
 
 AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.
 
@@ -379,7 +379,7 @@ Vector search engine for production RAG systems.
 
 Train sparse autoencoders to interpret model features.
 
-[**segment-anything-model**](/docs/user-guide/skills/optional/mlops/mlops-models-segment-anything)
+[**segment-anything-model**](/docs/user-guide/skills/optional/mlops/mlops-models-segment-anything-model)
 
 SAM: zero-shot image segmentation via points, boxes, masks.
 
@@ -405,7 +405,7 @@ Pretrain LLMs at scale with PyTorch 4D parallelism.
 
 [**fine-tuning-with-trl**](/docs/user-guide/skills/optional/mlops/mlops-training-trl-fine-tuning)
 
-TRL: SFT, DPO, PPO, GRPO, reward modeling for LLM RLHF.
+TRL: SFT, DPO, GRPO, RLOO reward modeling for LLM RLHF.
 
 [**unsloth**](/docs/user-guide/skills/optional/mlops/mlops-training-unsloth)
 
