@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>sourcevault-ai/sourcevault-code-tools — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="This Hermes Agent plugin provides semantic code search, file reading, and grounded Q&amp;A for local codebases. It functions as a client that requires a separate…">
+<meta name="description" content="This Hermes Agent plugin provides local, private memory for codebases through semantic search, file reading, and grounded Q&amp;A. It functions as a client that…">
 <link rel="canonical" href="https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools">
 <meta property="og:title" content="sourcevault-ai/sourcevault-code-tools — Hermes Atlas">
-<meta property="og:description" content="This Hermes Agent plugin provides semantic code search, file reading, and grounded Q&amp;A for local codebases. It functions as a client that requires a separate…">
+<meta property="og:description" content="This Hermes Agent plugin provides local, private memory for codebases through semantic search, file reading, and grounded Q&amp;A. It functions as a client that…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="sourcevault-ai/sourcevault-code-tools — Hermes Atlas">
-<meta name="twitter:description" content="This Hermes Agent plugin provides semantic code search, file reading, and grounded Q&amp;A for local codebases. It functions as a client that requires a separate…">
+<meta name="twitter:description" content="This Hermes Agent plugin provides local, private memory for codebases through semantic search, file reading, and grounded Q&amp;A. It functions as a client that…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=sourcevault-code-tools&amp;subtitle=Hermes+Agent+plugin+%E2%80%94+private+local+code+memory+for+your+repos+%28semantic+search%2C+file+reads%2C+grounded+Q%26A%29&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools#software",
   "name": "sourcevault-code-tools",
-  "description": "This Hermes Agent plugin provides semantic code search, file reading, and grounded Q&A for local codebases. It functions as a client that requires a separate SourceVault backend for indexing and retrieval.",
+  "description": "This Hermes Agent plugin provides local, private memory for codebases through semantic search, file reading, and grounded Q&A. It functions as a client that requires a separate SourceVault backend to perform indexing and retrieval.",
   "url": "https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools",
   "codeRepository": "https://github.com/sourcevault-ai/sourcevault-code-tools",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "sourcevault-ai",
     "url": "https://github.com/sourcevault-ai"
   },
-  "dateModified": "2026-07-03T15:48:50.000Z",
+  "dateModified": "2026-07-24T02:10:06.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-03</span>
+    <span><span class="meta-label">updated</span>2026-07-24</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This Hermes Agent plugin provides semantic code search, file reading, and grounded Q&amp;A for local codebases. It functions as a client that requires a separate SourceVault backend for indexing and retrieval.</p>
+    <p class="summary-text">This Hermes Agent plugin provides local, private memory for codebases through semantic search, file reading, and grounded Q&amp;A. It functions as a client that requires a separate SourceVault backend to perform indexing and retrieval.</p>
     <ul class="summary-highlights">
-      <li>Supports Hermes CLI, Telegram, and Desktop</li>
-      <li>Provides slash commands for repo management and search</li>
-      <li>Requires a local SourceVault server for functionality</li>
+      <li>Provides semantic and literal code search</li>
+      <li>Supports grounded Q&amp;A with file-and-line citations</li>
+      <li>Runs locally over localhost</li>
     </ul>
   </div>
 </section>
@@ -203,6 +203,10 @@ Everything runs on your machine over localhost; no source code leaves it.</p>
 <td><code>/code-ask &lt;repo&gt; "question"</code></td>
 <td>Retrieve + answer with citations (add an optional <code>"query"</code> before the question to steer retrieval)</td>
 </tr>
+<tr>
+<td><code>/code-history &lt;repo&gt; "question"</code></td>
+<td>Search indexed git commit history (SourceVault v1.8+; index every commit via the dashboard's Full git history setting)</td>
+</tr>
 </tbody></table>
 <p>Telegram uses underscore forms (<code>/code_ask</code>, …).</p>
 <blockquote>
@@ -212,8 +216,9 @@ then <code>/code-read my-repo …</code> fails and <code>/code-read My-Repo …<
 <code>/code-repos</code> to see the exact names.</p>
 </blockquote>
 <p><strong>LLM-callable tools</strong> (for models that handle structured tool use):
-<code>code_search</code>, <code>code_read_file</code>, plus <code>sourcevault_search</code> / <code>sourcevault_read</code>
-aliases for Hermes Tool Search discoverability.</p>
+<code>code_search</code>, <code>code_read_file</code>, and <code>code_history</code>, plus <code>sourcevault_search</code> /
+<code>sourcevault_read</code> / <code>sourcevault_history</code> aliases for Hermes Tool Search
+discoverability.</p>
 <h3>Requires a SourceVault backend</h3>
 <p>This plugin is the Hermes-side client. Indexing, embeddings (Ollama +
 nomic-embed-text), the vector store (ChromaDB), and the signed API are
@@ -252,6 +257,7 @@ platform_toolsets:
 (<code>~/.config/systemd/user/hermes-gateway.env</code> or equivalent):</p>
 <pre><code class="language-env">CODE_SEARCH_URL=http://127.0.0.1:9000/api/search-codebase
 CODE_READ_FILE_URL=http://127.0.0.1:9000/api/read-file
+CODE_HISTORY_URL=http://127.0.0.1:9000/api/history-search
 CODE_SEARCH_HMAC_SECRET=&lt;same value as the SourceVault server&gt;
 </code></pre>
 <p>Restart Hermes (<code>systemctl --user restart hermes-gateway</code> or relaunch the
@@ -308,6 +314,11 @@ again, or results will cite stale code.</li>
 <td><code>CODE_READ_FILE_URL</code></td>
 <td><code>http://127.0.0.1:9000/api/read-file</code></td>
 <td>SourceVault file-read endpoint</td>
+</tr>
+<tr>
+<td><code>CODE_HISTORY_URL</code></td>
+<td><code>http://127.0.0.1:9000/api/history-search</code></td>
+<td>SourceVault history-search endpoint (v1.8+)</td>
 </tr>
 <tr>
 <td><code>CODE_SEARCH_HMAC_SECRET</code></td>

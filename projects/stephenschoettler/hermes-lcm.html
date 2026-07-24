@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stephenschoettler/hermes-lcm — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in…">
+<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in…">
+<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in…">
+<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-lcm&amp;subtitle=Lossless+Context+Management+plugin+for+Hermes+Agent+%E2%80%94+DAG-based+context+engine+that+never+loses+a+message&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in a local store and uses hierarchical summaries to allow agents to search and expand compacted material.",
+  "description": "Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression with a system that persists raw messages and uses hierarchical summaries to allow agents to recall detailed information.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-07-22T02:22:52.000Z",
+  "dateModified": "2026-07-24T03:55:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-22</span>
+    <span><span class="meta-label">updated</span>2026-07-24</span>
   </div>
 
   <div class="actions">
@@ -137,10 +137,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages in a local store and uses hierarchical summaries to allow agents to search and expand compacted material.</p>
+    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that uses a SQLite-backed, DAG-based context engine to manage conversation history. It replaces one-shot compression with a system that persists raw messages and uses hierarchical summaries to allow agents to recall detailed information.</p>
     <ul class="summary-highlights">
-      <li>Uses a SQLite-backed message store with FTS metadata</li>
-      <li>Builds a depth-aware summary DAG for compacted history</li>
+      <li>Uses a SQLite message store with FTS metadata</li>
+      <li>Builds depth-aware summary nodes in a DAG</li>
       <li>Provides agent tools for searching and expanding context</li>
     </ul>
   </div>
@@ -309,13 +309,13 @@ context:
 <ul>
 <li>plugin list includes <code>hermes-lcm</code></li>
 <li>selected context engine is <code>lcm</code></li>
-<li>tool list includes <code>lcm_grep</code>, <code>lcm_load_session</code>, <code>lcm_describe</code>,
-<code>lcm_expand</code>, <code>lcm_expand_query</code>, <code>lcm_status</code>, <code>lcm_inspect</code>, and
-<code>lcm_doctor</code></li>
+<li>tool list includes <code>lcm_grep</code>, <code>lcm_recall</code>, <code>lcm_recent</code>,
+<code>lcm_load_session</code>, <code>lcm_describe</code>, <code>lcm_expand</code>, <code>lcm_expand_query</code>,
+<code>lcm_status</code>, <code>lcm_inspect</code>, and <code>lcm_doctor</code></li>
 </ul>
 <p>Typical output:</p>
 <pre><code class="language-text">Plugins (1):
-  ✓ hermes-lcm v0.19.0 (8 tools)
+  ✓ hermes-lcm v0.20.0 (10 tools)
 
 Provider Plugins:
   Context Engine: lcm
@@ -326,7 +326,7 @@ best-effort git identity:
 <code>plugin_git_commit</code>, <code>plugin_git_branch</code>, and <code>plugin_git_dirty</code>.</p>
 <p>If startup logs say LCM tools are available through <code>context-engine schemas</code> or
 mention the <code>Path B fallback</code>, that is expected on older Hermes hosts such as
-Hermes Agent v0.16. The seven <code>lcm_*</code> tools remain available through the
+Hermes Agent v0.16. The ten <code>lcm_*</code> tools remain available through the
 context-engine path; standalone plugin-registry registration is not required
 there.</p>
 <h4>Update it</h4>
