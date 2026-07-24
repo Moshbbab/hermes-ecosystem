@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-scrapling
 
-Web scraping with Scrapling - HTTP fetching, stealth browser automation, Cloudflare bypass, and spider crawling via CLI and Python.
+Scrape sites with stealth browsing and Cloudflare bypass.
 
 ## Skill metadata
 

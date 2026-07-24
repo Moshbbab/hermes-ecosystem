@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-sherlock
 
-OSINT username search across 400+ social networks. Hunt down social media accounts by username.
+Find accounts for a username across 400+ platforms.
 
 ## Skill metadata
 

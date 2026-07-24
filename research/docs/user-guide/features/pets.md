@@ -236,4 +236,4 @@ Common gotchas:
 
 ## See also
 
--   The [`petdex` skill](/docs/user-guide/skills/bundled/productivity/productivity-petdex) lets the agent install and switch pets for you on request.
+-   The [`hermes-agent` skill](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent) lets the agent install and switch pets for you on request (see its `references/petdex.md`).

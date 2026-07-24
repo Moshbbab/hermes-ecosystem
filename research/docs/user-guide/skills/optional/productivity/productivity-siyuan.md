@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-siyuan
 
-SiYuan Note API for searching, reading, creating, and managing blocks and documents in a self-hosted knowledge base via curl.
+Query and edit a SiYuan knowledge base via its API.
 
 ## Skill metadata
 

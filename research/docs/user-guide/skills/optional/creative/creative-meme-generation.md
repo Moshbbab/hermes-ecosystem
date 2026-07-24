@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-meme-generation
 
-Generate real meme images by picking a template and overlaying text with Pillow. Produces actual .png meme files.
+Create meme PNGs from templates with Pillow text overlay.
 
 ## Skill metadata
 

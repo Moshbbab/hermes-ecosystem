@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/research/research-gitnexus-explorer
 
-Index a codebase with GitNexus and serve an interactive knowledge graph via web UI + Cloudflare tunnel.
+Serve an interactive codebase knowledge graph web UI.
 
 ## Skill metadata
 

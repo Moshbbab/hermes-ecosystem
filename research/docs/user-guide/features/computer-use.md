@@ -119,7 +119,7 @@ Tune the cursor with `cua-driver`'s CLI flags or the runtime `set_agent_cursor_s
 
 ## Going deeper — the cua-driver skill pack
 
-Hermes intentionally keeps its skill (`skills/computer-use/SKILL.md`) focused on the Hermes-side `computer_use` action vocabulary — the single source of truth the agent loads. For the deeper material — platform-specific deep dives, recording semantics, browser page interaction — point your agent harness at the cua-driver skill pack the cua-driver team ships and maintains directly:
+Hermes intentionally keeps its skill (`skills/autonomous-ai-agents/computer-use/SKILL.md`) focused on the Hermes-side `computer_use` action vocabulary — the single source of truth the agent loads. For the deeper material — platform-specific deep dives, recording semantics, browser page interaction — point your agent harness at the cua-driver skill pack the cua-driver team ships and maintains directly:
 
 ```
 cua-driver skills install
@@ -376,7 +376,7 @@ Specific failure modes the doctor doesn't catch:
 
 ## See also
 
--   **Hermes-side skill** — `skills/computer-use/SKILL.md` — teaches the Hermes `computer_use` action vocabulary; this is what the agent loads.
+-   **Hermes-side skill** — `skills/autonomous-ai-agents/computer-use/SKILL.md` — teaches the Hermes `computer_use` action vocabulary; this is what the agent loads.
 -   **cua-driver skill pack** — for platform-specific deep dives (macOS no-foreground contract, Windows UIA + Session 0, Linux AT-SPI
     -   X11/Wayland, recording, browser pages), run `cua-driver skills install` and read `MACOS.md` / `WINDOWS.md` / `LINUX.md` / `RECORDING.md` / `WEB_APPS.md`. Once `cua-driver skills install` autodetects Hermes (planned follow-up), this happens automatically on install.
 -   **cua.ai/docs** — the cua-driver project's documentation:

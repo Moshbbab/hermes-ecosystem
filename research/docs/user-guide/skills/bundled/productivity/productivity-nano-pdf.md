@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf
 
-Edit PDF text/typos/titles via nano-pdf CLI (NL prompts).
+Edit text in existing PDFs via natural-language prompts.
 
 ## Skill metadata
 

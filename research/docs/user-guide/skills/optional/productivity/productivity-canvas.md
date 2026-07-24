@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-canvas
 
-Canvas LMS integration — fetch enrolled courses and assignments using API token authentication.
+Fetch Canvas LMS courses and assignments via API token.
 
 ## Skill metadata
 
