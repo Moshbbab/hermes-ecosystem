@@ -2508,6 +2508,10 @@ When [Codex app-server runtime](/docs/user-guide/features/codex-app-server-runti
 
 Set by the kanban dispatcher when spawning a worker (task UUID). Workers and the spawned `hermes-tools` MCP subprocess inherit it so kanban tools gate correctly. Don't set manually.
 
+`HERMES_ACP_SKIP_CONFIGURED_MCP`
+
+Set by an [ACP host](/docs/user-guide/features/acp#host-integration) on the Hermes subprocess it spawns. `1` skips starting the globally configured `config.yaml` MCP servers before the ACP JSON-RPC loop, for hosts that pass the session's MCP servers through `session/new` themselves. Servers supplied by the ACP session are still registered; any other value keeps the default. Don't set manually.
+
 `HERMES_API_TIMEOUT`
 
 LLM API call timeout in seconds (default: `1800`)
