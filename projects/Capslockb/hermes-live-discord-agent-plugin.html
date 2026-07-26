@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Capslockb/hermes-live-discord-agent-plugin — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs in-process within a Hermes…">
+<meta name="description" content="This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs as a self-hosted bridge within…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Capslockb/hermes-live-discord-agent-plugin">
 <meta property="og:title" content="Capslockb/hermes-live-discord-agent-plugin — Hermes Atlas">
-<meta property="og:description" content="This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs in-process within a Hermes…">
+<meta property="og:description" content="This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs as a self-hosted bridge within…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Capslockb/hermes-live-discord-agent-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Capslockb/hermes-live-discord-agent-plugin — Hermes Atlas">
-<meta name="twitter:description" content="This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs in-process within a Hermes…">
+<meta name="twitter:description" content="This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs as a self-hosted bridge within…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-live-discord-agent-plugin&amp;subtitle=Hermes+Live+Discord+Agent+Plugin+%E2%80%94+full-duplex+Discord+voice+%E2%86%94+Google+Gemini+Multimodal+Live+API%2C+with+function+calling%2C+idle+hangup%2C+transcripts%2C+and+a+3-min+oneshot+installer.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Capslockb/hermes-live-discord-agent-plugin#software",
   "name": "hermes-live-discord-agent-plugin",
-  "description": "This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs in-process within a Hermes gateway and supports function calling, multi-CLI delegation, and automated transcripts.",
+  "description": "This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs as a self-hosted bridge within an existing Hermes gateway and supports function calling, multi-CLI delegation, and post-call transcripts.",
   "url": "https://hermesatlas.com/projects/Capslockb/hermes-live-discord-agent-plugin",
   "codeRepository": "https://github.com/Capslockb/hermes-live-discord-agent-plugin",
   "applicationCategory": "BrowserApplication",
@@ -46,7 +46,7 @@
     "name": "Capslockb",
     "url": "https://github.com/Capslockb"
   },
-  "dateModified": "2026-07-26T00:30:08.000Z",
+  "dateModified": "2026-07-26T06:22:48.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -136,11 +136,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs in-process within a Hermes gateway and supports function calling, multi-CLI delegation, and automated transcripts.</p>
+    <p class="summary-text">This plugin enables full-duplex voice interaction in Discord voice channels using the Google Gemini Multimodal Live API. It runs as a self-hosted bridge within an existing Hermes gateway and supports function calling, multi-CLI delegation, and post-call transcripts.</p>
     <ul class="summary-highlights">
-      <li>Supports full-duplex audio with sub-second latency</li>
-      <li>Includes 30+ voice tools and multi-CLI delegation</li>
-      <li>Provides JSONL transcripts and scheduled email digests</li>
+      <li>Full-duplex audio with sub-second latency</li>
+      <li>Supports 30+ voice tools including GitHub and Spotify</li>
+      <li>Provides scheduled Gmail digests and JSONL transcripts</li>
     </ul>
   </div>
 </section>
@@ -188,7 +188,7 @@ systemctl --user restart hermes-gateway
 /voice-live-leave    # leave
 </code></pre>
 <p>After cloning, use <code>--from-local</code>. Plain <code>./install.sh</code> ignores the current checkout and uses the installer's configured remote clone target; correction of that executable path is under review in <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/pull/7">PR #7</a>. To remove the installation later, run <code>./install.sh --uninstall</code> from the checkout.</p>
-<p>The installer handles the Hermes venv, plugin symlink, env prompts, and SFX directory creation. See <code>install.sh</code> for details.</p>
+<p>The installer handles the Hermes venv, dependency installation, environment prompts, and SFX directory creation. <code>--from-local</code> links the current checkout into Hermes; remote mode clones into the plugin directory instead. The <code>DISCORD_VOICE_LIVE_USER_ID</code> prompt can currently be skipped and <code>VOICE_OWNER_DISCORD_ID</code> is not prompted at all, so configure both explicitly for a normal single-owner setup; see <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/18">Issue #18</a>.</p>
 <hr>
 <h3>What's in the box — the feature set that ships today</h3>
 <table>
@@ -216,7 +216,7 @@ systemctl --user restart hermes-gateway
 </tr>
 <tr>
 <td>📣 <strong>Proactive notifications</strong></td>
-<td>Voice, DM, channel, webhook, or auto — fires on long-task completion, AFK pings, scheduled alerts</td>
+<td>Six modes: voice, DM, channel, webhook, <code>auto</code>, and <code>all</code>. Delivery is best-effort; scheduled persistence/retry and the internal <code>/notify</code> fallback remain blocked by <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/13">Issues #13</a>, <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/14">#14</a>, and <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/17">#17</a>.</td>
 </tr>
 <tr>
 <td>📧 <strong>Email brief</strong></td>
@@ -240,7 +240,7 @@ systemctl --user restart hermes-gateway
 </tr>
 <tr>
 <td>🩺 <strong>Health + control API</strong></td>
-<td>Local HTTP on <code>127.0.0.1:18943</code> — <code>/health</code>, <code>/frame</code>, <code>/say</code>, <code>/leave</code></td>
+<td>Local HTTP on <code>127.0.0.1:18943</code> — <code>/health</code>, <code>/notes</code>, <code>/frame</code>, <code>/say</code>, <code>/stop</code>, and <code>/notify</code>; mutating routes require <code>X-API-Secret</code>.</td>
 </tr>
 </tbody></table>
 <hr>
@@ -342,15 +342,19 @@ systemctl --user restart hermes-gateway
 <p><strong>Built in one session. One developer. Shipped.</strong></p>
 <hr>
 <h3>Environment variables</h3>
-<p>The minimum required:</p>
+<p>Minimum for normal single-user operation:</p>
 <pre><code class="language-bash">DISCORD_BOT_TOKEN=***
 GEMINI_API_KEY=***
-DISCORD_VOICE_LIVE_USER_ID=1474100257762578597   # your Discord snowflake
+DISCORD_VOICE_LIVE_USER_ID=&lt;your-discord-snowflake&gt;
 </code></pre>
-<p>Full list of every <code>DISCORD_VOICE_LIVE_*</code> env var: <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/blob/main/docs/env-vars.md"><code>docs/env-vars.md</code></a>.</p>
+<p>For owner-only profile tools, also configure:</p>
+<pre><code class="language-bash">VOICE_OWNER_DISCORD_ID=&lt;your-discord-snowflake&gt;
+</code></pre>
+<p>Set both identity values explicitly. Current executable fallbacks can otherwise infer, authorize, or route to a repository-embedded account; removal and migration are tracked in <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/18">Issue #18</a>.</p>
+<p>Full list of every environment variable: <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/blob/main/docs/env-vars.md"><code>docs/env-vars.md</code></a>.</p>
 <hr>
 <h3>Sidecar HTTP control API</h3>
-<p>Runs on <code>127.0.0.1:18943</code>:</p>
+<p>Runs on <code>127.0.0.1:18943</code>. Keep this port loopback-only. <code>/health</code> and <code>/notes</code> are anonymous read-only routes; <code>/notes</code> can return stored transcript content. <code>/frame</code>, <code>/stop</code>, <code>/say</code>, and <code>/notify</code> are mutating routes and require <code>X-API-Secret</code>. Current secret-file safety and lifecycle are unresolved in <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/17">Issue #17</a>, and the built-in <code>/notify</code> fallback cannot yet authenticate under <a href="https://github.com/Capslockb/hermes-live-discord-agent-plugin/issues/14">Issue #14</a>.</p>
 <table>
 <thead>
 <tr>
@@ -362,32 +366,32 @@ DISCORD_VOICE_LIVE_USER_ID=1474100257762578597   # your Discord snowflake
 <tbody><tr>
 <td><code>/health</code></td>
 <td>GET</td>
-<td>Bridge health JSON</td>
+<td>Anonymous bridge health JSON on loopback</td>
 </tr>
 <tr>
 <td><code>/frame</code></td>
 <td>POST</td>
-<td>Send a JPEG/PNG frame (<code>?force=true</code> bypasses audio-gate); bundled clients are currently blocked by Issue #9</td>
+<td>Authenticated JPEG/PNG frame input (<code>?force=true</code> bypasses the audio gate); bundled clients are currently blocked by Issue #9</td>
 </tr>
 <tr>
 <td><code>/stop</code></td>
 <td>GET</td>
-<td>Stop the bridge</td>
+<td>Authenticated bridge stop</td>
 </tr>
 <tr>
 <td><code>/say</code></td>
 <td>GET</td>
-<td>Inject text into Gemini (<code>?text=...</code>)</td>
+<td>Authenticated text injection into Gemini (<code>?text=...</code>)</td>
 </tr>
 <tr>
 <td><code>/notes</code></td>
 <td>GET</td>
-<td>Recent transcript events (<code>?limit=50</code>)</td>
+<td>Anonymous recent transcript events (<code>?limit=50</code>) on loopback</td>
 </tr>
 <tr>
 <td><code>/notify</code></td>
 <td>GET/POST</td>
-<td>Proactive notification breakout</td>
+<td>Authenticated proactive notification breakout; built-in fallback blocked by Issues #14 and #17</td>
 </tr>
 </tbody></table>
 <hr>
