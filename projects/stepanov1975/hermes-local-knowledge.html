@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP…">
+<meta name="description" content="Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP…">
+<meta property="og:description" content="Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Reusable+Hermes+Agent+plugin+for+local+capability+indexing+and+routing&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a reusable Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers. It indexes whole artifacts rather than RAG chunks to determine which local resource an agent should inspect first.",
+  "description": "Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers. It indexes whole artifacts rather than RAG chunks to determine which local artifact an agent should inspect first.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-07-26T07:05:22.000Z",
+  "dateModified": "2026-07-26T16:36:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a reusable Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers. It indexes whole artifacts rather than RAG chunks to determine which local resource an agent should inspect first.</p>
+    <p class="summary-text">Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to specific artifacts such as scripts, runbooks, cron jobs, and MCP servers. It indexes whole artifacts rather than RAG chunks to determine which local artifact an agent should inspect first.</p>
     <ul class="summary-highlights">
-      <li>Provides tools for searching, fetching, and traversing indexed local artifacts.</li>
-      <li>Includes lifecycle hooks for generating tool OKFs from tool usage.</li>
-      <li>Supports proactive routing via an installable Hermes skill.</li>
+      <li>Provides tools for searching, fetching, and traversing local artifact graphs.</li>
+      <li>Includes automatic generation of tool-routing knowledge via OKFs.</li>
+      <li>Supports proactive routing through an installable Hermes skill.</li>
     </ul>
   </div>
 </section>
@@ -185,7 +185,7 @@
 <td>Summarize usage, zero-result queries, errors, and feedback.</td>
 </tr>
 </tbody></table>
-<p>The plugin also has lifecycle hooks for <strong>tool OKFs</strong>: compact, generated routing notes for Hermes tools that have actually been used locally. The post-tool hook queues safe structural candidates, and the session-finalize hook can generate a bounded batch through Hermes' host-owned <code>ctx.llm</code> interface. Automatic OKF generation is a vital part of the plugin's intended functionality: without it, search still works, but the plugin cannot automatically create the tool-routing knowledge that lets coverage improve from real usage. Completing an OKF marks the index stale so the next normal lookup rebuilds it and makes the new <code>tool_okf</code> searchable.</p>
+<p>The plugin also has lifecycle hooks for <strong>tool OKFs</strong>: compact, generated routing notes for Hermes tools that have actually been used locally. The post-tool hook queues safe structural candidates, and the session-finalize hook launches a bounded detached worker. That worker uses its own fresh Hermes plugin context and host-owned <code>ctx.llm</code> interface, so <code>/new</code>, <code>/reset</code>, session expiry, and CLI exit do not wait for model generation. Automatic OKF generation is a vital part of the plugin's intended functionality: without it, search still works, but the plugin cannot automatically create the tool-routing knowledge that lets coverage improve from real usage. Completing an OKF marks the index stale so the next normal lookup rebuilds it and makes the new <code>tool_okf</code> searchable.</p>
 <h3>Install</h3>
 <p>From the public git repo:</p>
 <pre><code class="language-bash">hermes plugins install https://github.com/stepanov1975/hermes-local-knowledge.git --enable
@@ -198,7 +198,7 @@
 <ol>
 <li><p>Explain that functionality is degraded while <code>local_knowledge.okf.auto_generate</code> is disabled: lookup of existing artifacts still works, but the plugin will not automatically turn real tool usage into new tool-routing OKFs.</p>
 </li>
-<li><p>Explain that enabling it makes one bounded model call at session finalization, processes at most the configured candidate limit, and may extend finalization by up to <code>max_generation_seconds</code>.</p>
+<li><p>Explain that enabling it launches a detached worker at session finalization. The worker processes at most the configured candidate limit and passes <code>max_generation_seconds</code> as each provider-request timeout; Hermes retry/fallback policy can extend the worker's total lifetime, but session closure does not wait for it.</p>
 </li>
 <li><p>Ask the user explicitly: <strong>"Enable automatic OKF generation now? (Recommended; uses additional model tokens.)"</strong></p>
 </li>
@@ -280,7 +280,7 @@ hermes gateway restart
 </code></pre>
 <p><code>source_root</code> is the high-signal directory being indexed. <code>state_dir</code> is generated local state and should not be committed. <code>exclude_dir_names</code> adds extra directory names to the built-in skip list (<code>.archive</code>, <code>worktrees</code>, <code>.worktrees</code>, <code>.git</code>, <code>__pycache__</code>, <code>node_modules</code>, <code>venv</code>, <code>.venv</code>, <code>.mypy_cache</code>, <code>.pytest_cache</code>, <code>htmlcov</code>, <code>logs</code>). Use YAML lists in <code>config.yaml</code>; when using <code>hermes config set</code> from the shell, comma-separated strings or bracket-list strings are accepted and normalized by the plugin.</p>
 <p><code>local_knowledge.okf.enabled</code> controls whether the plugin records safe, structural tool-use candidates. Full functionality requires <code>local_knowledge.okf.auto_generate: true</code> in Hermes config. With it disabled, lookup of existing artifacts still works, but the plugin is degraded because it cannot automatically create new tool-routing OKFs from real usage. The runtime default remains intentionally <code>false</code> so installation does not silently consume model tokens. The installer must follow the explicit disclosure-and-consent conversation in the Install section before changing it. If the user declines, leave <code>auto_generate</code> disabled and report that the installation is operating in degraded/manual-OKF mode.</p>
-<p>When enabled, <code>on_session_finalize</code> claims at most <code>max_candidates_per_session</code> candidates and makes one bounded <code>ctx.llm.complete_structured</code> call with <code>max_generation_seconds</code> as its timeout. The plugin renders and validates the files itself; the model never receives terminal or file tools. The post-tool hook uses Hermes' canonical outcome fields and does not persist raw session transcripts, raw tool outputs, argument values, emails, OCR text, or private documents.</p>
+<p>When enabled, <code>on_session_finalize</code> performs only a read-only, tightly timeout-bounded queue check and detached-process launch. The child runs <code>hermes local-knowledge okf-worker</code> in a fresh plugin context, acquires the durable generation lease stored in <code>okf_queue.sqlite</code>, claims at most <code>max_candidates_per_session</code> candidates, and makes one <code>ctx.llm.complete_structured</code> call with <code>max_generation_seconds</code> passed as each provider-request timeout. Hermes may retry or fall back to another provider, so the worker renews its singleton lease while the host-owned call is running. The child renders and prevalidates each artifact in a worker-unique temporary file, then uses a short SQLite write transaction to revalidate its lease and claim while replacing, validating again, and completing the canonical artifact. If a hard process death leaves a prevalidated canonical file with a stale claim, recovery completes that valid file before applying the retry cap. The model never receives terminal or file tools. The post-tool hook uses Hermes' canonical outcome fields and does not persist raw session transcripts, raw tool outputs, argument values, emails, OCR text, or private documents.</p>
 <p>For compatibility with v0.3.0 configuration, <code>max_worker_seconds</code> is still accepted as a fallback when <code>max_generation_seconds</code> is not set.</p>
 <p>Environment variables are supported for development and tests:</p>
 <table>
@@ -379,7 +379,7 @@ should usually use <code>~/.hermes/local_knowledge</code> for <code>state_dir</c
 &lt;state_dir&gt;/usage.sqlite
 &lt;state_dir&gt;/okf_queue.sqlite
 &lt;state_dir&gt;/okfs/tools/*.md
-&lt;state_dir&gt;/okf_generation.lock
+&lt;state_dir&gt;/okf_worker.log
 &lt;state_dir&gt;/index_build.lock
 &lt;state_dir&gt;/okf_index_dirty/ (possibly empty)
 </code></pre>
@@ -415,7 +415,7 @@ python -m hermes_local_knowledge.cli okf complete --from-hermes-config \
 <li>feedback and zero-result telemetry stays local and is summarized by <code>knowledge_usage_report</code> before changing ranking or source coverage;</li>
 <li><code>knowledge_usage_report</code> separates live-root, pytest/probe, and other telemetry, suppresses resolved zero-result/negative-feedback candidates, and buckets legacy feedback ratings;</li>
 <li>both native tools and standalone CLI lookups write local usage events with plugin version, config source, index age/mtime, artifact counts by type, and build duration when a build occurs.</li>
-<li>OKF hooks record safe structural tool-use candidates and generate a bounded batch through <code>ctx.llm</code> at session finalization when the explicitly consented <code>local_knowledge.okf.auto_generate</code> setting is enabled.</li>
+<li>OKF hooks record safe structural tool-use candidates and launch a bounded detached plugin-CLI worker at session finalization when the explicitly consented <code>local_knowledge.okf.auto_generate</code> setting is enabled; session closure does not wait for the worker's host-owned <code>ctx.llm</code> call.</li>
 </ul>
 <h3>CLI use</h3>
 <p>You can build/query without loading Hermes:</p>
@@ -524,7 +524,7 @@ python -m mutmut results
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 61.7K</div>
+        <div class="stars">★ 61.8K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -536,7 +536,7 @@ python -m mutmut results
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 350</div>
+        <div class="stars">★ 351</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -544,7 +544,7 @@ python -m mutmut results
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 220</div>
+        <div class="stars">★ 221</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
