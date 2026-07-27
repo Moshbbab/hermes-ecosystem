@@ -1383,7 +1383,7 @@ Fires **once per child agent** after `delegate_task` finishes. Whether you deleg
 ```
 def my_callback(parent_session_id: str, child_role: str | None,
                 child_summary: str | None, child_status: str,
-                duration_ms: int, **kwargs):
+                tool_call_history: list[dict], duration_ms: int, **kwargs):
 ```
 
 Parameter
@@ -1415,6 +1415,12 @@ The final response the child returned to the parent
 `str`
 
 `"completed"`, `"failed"`, `"interrupted"`, or `"error"`
+
+`tool_call_history`
+
+`list[dict]`
+
+Ordered metadata-only tool calls: `tool_name`, bounded `tool_input`, `input_bytes`, `output_bytes`, and `status`; raw inputs and outputs are excluded
 
 `duration_ms`
 
