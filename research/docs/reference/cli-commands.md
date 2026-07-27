@@ -264,6 +264,10 @@ Show token/cost/activity analytics.
 
 OpenClaw migration helpers.
 
+`hermes import-agent`
+
+Import a Claude Code (`~/.claude`) or Codex CLI (`~/.codex`) setup.
+
 `hermes dashboard`
 
 Launch the web dashboard for managing config, API keys, and sessions.
@@ -374,7 +378,7 @@ Session source tag for filtering (default: `cli`). Use `tool` for third-party in
 
 `--max-turns <N>`
 
-Maximum tool-calling iterations per conversation turn (default: 90, or `agent.max_turns` in config).
+Maximum tool-calling iterations per conversation turn (default: 500, or `agent.max_turns` in config).
 
 Examples:
 
@@ -2651,6 +2655,40 @@ hermes claw migrate --preset user-data --overwrite
 # Migrate from a custom OpenClaw path
 hermes claw migrate --source /home/user/old-openclaw
 ```
+
+## `hermes import-agent`
+
+```
+hermes import-agent [claude-code|codex] [options]
+```
+
+Import a **Claude Code** (`~/.claude`) or **OpenAI Codex CLI** (`~/.codex`) setup into Hermes. Maps `CLAUDE.md`/`AGENTS.md` instructions to memory entries, `Bash(...)` permission allow/deny rules to `command_allowlist`/`approvals.deny`, MCP servers to `mcp_servers` in `config.yaml`, and skill directories into `~/.hermes/skills/`. Always previews before applying; API keys and credentials are never imported.
+
+Option
+
+Description
+
+`agent`
+
+`claude-code` or `codex` (default: auto-detect).
+
+`--source <path>`
+
+Custom source directory (default: `~/.claude` or `~/.codex`).
+
+`--dry-run`
+
+Preview only — write nothing.
+
+`--overwrite`
+
+Replace conflicting MCP servers / skills (default: skip).
+
+`--yes`, `-y`
+
+Skip confirmation prompts.
+
+See the **[import guide](/docs/user-guide/import-from-other-agents)** for the full mapping tables.
 
 ## `hermes serve`
 

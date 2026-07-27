@@ -2450,7 +2450,7 @@ Description
 
 `HERMES_MAX_ITERATIONS`
 
-Max tool-calling iterations per conversation (default: 90)
+Max tool-calling iterations per conversation (default: 500)
 
 `HERMES_INFERENCE_MODEL`
 
