@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MnrGreg/hermes-venice-web — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="This plugin serves as a privacy-focused replacement for the built-in web search and extraction tools in Hermes Agent. It integrates Venice AI's /augment/search…">
+<meta name="description" content="This plugin registers Venice AI's /augment endpoints as native web_search and web_extract backends within Hermes. It allows agents to use Venice for web…">
 <link rel="canonical" href="https://hermesatlas.com/projects/MnrGreg/hermes-venice-web">
 <meta property="og:title" content="MnrGreg/hermes-venice-web — Hermes Atlas">
-<meta property="og:description" content="This plugin serves as a privacy-focused replacement for the built-in web search and extraction tools in Hermes Agent. It integrates Venice AI's /augment/search…">
+<meta property="og:description" content="This plugin registers Venice AI's /augment endpoints as native web_search and web_extract backends within Hermes. It allows agents to use Venice for web…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/MnrGreg/hermes-venice-web">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MnrGreg/hermes-venice-web — Hermes Atlas">
-<meta name="twitter:description" content="This plugin serves as a privacy-focused replacement for the built-in web search and extraction tools in Hermes Agent. It integrates Venice AI's /augment/search…">
+<meta name="twitter:description" content="This plugin registers Venice AI's /augment endpoints as native web_search and web_extract backends within Hermes. It allows agents to use Venice for web…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-venice-web&amp;subtitle=Hermes+plugin+that+uses+Venice.AI+web_search+and+web_scrape+tools&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/MnrGreg/hermes-venice-web#software",
   "name": "hermes-venice-web",
-  "description": "This plugin serves as a privacy-focused replacement for the built-in web search and extraction tools in Hermes Agent. It integrates Venice AI's /augment/search and /augment/scrape endpoints to provide the agent with explicit control over when to fetch web data. Because it uses standalone endpoints, these tools can be paired with any AI provider, including local models or other cloud APIs. The implementation ensures zero data retention and provides structured, LLM-friendly output.",
+  "description": "This plugin registers Venice AI's /augment endpoints as native web_search and web_extract backends within Hermes. It allows agents to use Venice for web searching and scraping through standard Hermes web tool infrastructure.",
   "url": "https://hermesatlas.com/projects/MnrGreg/hermes-venice-web",
   "codeRepository": "https://github.com/MnrGreg/hermes-venice-web",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "MnrGreg",
     "url": "https://github.com/MnrGreg"
   },
-  "dateModified": "2026-04-26T21:03:39.000Z",
+  "dateModified": "2026-07-26T22:51:21.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-04-26</span>
+    <span><span class="meta-label">updated</span>2026-07-26</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This plugin serves as a privacy-focused replacement for the built-in web search and extraction tools in Hermes Agent. It integrates Venice AI's /augment/search and /augment/scrape endpoints to provide the agent with explicit control over when to fetch web data. Because it uses standalone endpoints, these tools can be paired with any AI provider, including local models or other cloud APIs. The implementation ensures zero data retention and provides structured, LLM-friendly output.</p>
+    <p class="summary-text">This plugin registers Venice AI's /augment endpoints as native web_search and web_extract backends within Hermes. It allows agents to use Venice for web searching and scraping through standard Hermes web tool infrastructure.</p>
     <ul class="summary-highlights">
-      <li>Privacy-first search and scraping with zero data retention</li>
-      <li>Compatible with any LLM provider via standalone endpoints</li>
-      <li>Low-cost pricing at $0.01 per request</li>
+      <li>Integrates Venice AI /augment/search and /augment/scrape endpoints</li>
+      <li>Supports Brave or Google as search providers</li>
+      <li>Compatible with any LLM provider</li>
     </ul>
   </div>
 </section>
@@ -149,25 +149,80 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>Hermes Venice Web Plugin</h2>
-<p><strong>Full replacement for Hermes Agent's built-in <code>web_search</code> / <code>web_extract</code> tools using Venice AI's official privacy-first API.</strong></p>
-<p>This plugin adds two high-quality tools:</p>
+    <h2>Hermes Venice Web Provider</h2>
+<p><strong>Native Hermes web backend powered by Venice AI's privacy-first <code>/augment</code> endpoints.</strong></p>
+<p>This plugin registers Venice as a standard <code>web_search</code> / <code>web_extract</code> backend — the same architecture used by Firecrawl, Brave, Tavily, and all other built-in providers. No toolset juggling required.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Endpoint</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>web_search</code></td>
+<td><code>POST /augment/search</code></td>
+<td>$0.01/request</td>
+</tr>
+<tr>
+<td><code>web_extract</code></td>
+<td><code>POST /augment/scrape</code></td>
+<td>$0.01/URL</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Why Venice</h3>
 <ul>
-<li><code>venice_web_search</code> → powered by Venice <code>/augment/search</code></li>
-<li><code>venice_web_scrape</code> → powered by Venice <code>/augment/scrape</code></li>
+<li><strong>Zero Data Retention</strong> — Brave backend never stores or logs queries.</li>
+<li><strong>Anonymized Google</strong> fallback — Venice never links identity to requests.</li>
+<li><strong>Provider-independent</strong> — uses standalone <code>/augment</code> endpoints, works with any LLM provider (OpenAI, Anthropic, local models, etc.).</li>
+<li><strong>Clean LLM-friendly output</strong> — structured search results and Markdown extraction.</li>
 </ul>
 <hr>
-<h3>✨ Benefits of Venice API</h3>
-<ul>
-<li><strong>Zero Data Retention (ZDR)</strong> with Brave backend — queries are never stored or logged.</li>
-<li><strong>Fully anonymized Google</strong> fallback — Venice never links your identity to requests.</li>
-<li><strong>Strong privacy</strong>: No data storage, no training use, no logs.</li>
-<li><strong>Very low cost</strong>: Only <strong>$0.01 per request</strong> for both search and scrape.</li>
-<li><strong>Clean, LLM-friendly output</strong> — structured results and Markdown content.</li>
-<li><strong>Fast and reliable</strong> performance.</li>
-<li><strong>Provider-independent</strong> — uses Venice's standalone <code>/augment</code> endpoints, so you can pair Venice web tools with <em>any</em> AI provider (OpenAI, Anthropic, local models, etc.), not just Venice inference.</li>
-</ul>
-<p>Unlike Venice's built-in "always-on" web integrations via <a href="https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix#to-enable-web-search-with-full-page-scraping">model feature suffixes</a> (e.g. <code>default:enable_web_search=on&amp;enable_web_scraping=true</code>) or <a href="https://docs.venice.ai/api-reference/endpoint/chat/completions#body-venice-parameters-enable-web-scraping"><code>venice_parameters</code></a> in the request body, this plugin gives the <strong>agent full explicit control</strong> — it only calls the tools when it actually needs them.</p>
+<h3>Installation</h3>
+<h4>One-command (recommended)</h4>
+<pre><code class="language-bash">hermes plugins install mnrGreg/hermes-venice-web --enable
+</code></pre>
+<h4>Manual</h4>
+<pre><code class="language-bash">mkdir -p ~/.hermes/plugins/web/venice
+cd ~/.hermes/plugins/web/venice
+# Copy plugin files into this folder
+hermes plugins reload
+</code></pre>
+<h4>API key</h4>
+<p>Get your Venice API key at <a href="https://venice.ai">https://venice.ai</a>, then:</p>
+<pre><code class="language-bash">echo 'VENICE_API_KEY=vk-XXXXXXXXXXXXXXXX' &gt;&gt; ~/.hermes/.env
+</code></pre>
+<hr>
+<h3>Configuration</h3>
+<p>Select Venice via <code>hermes tools</code> or set it directly in <code>~/.hermes/config.yaml</code>:</p>
+<pre><code class="language-yaml">web:
+  backend: venice
+</code></pre>
+<p>Or use per-capability keys to mix providers:</p>
+<pre><code class="language-yaml">web:
+  search_backend: venice       # Venice for search
+  extract_backend: firecrawl   # Firecrawl for extract
+</code></pre>
+<p>Keep the default <code>web</code> toolset enabled — Venice powers the standard <code>web_search</code> and <code>web_extract</code> tools directly.</p>
+<h4>Search provider</h4>
+<p>Venice routes searches through Brave (default, zero data retention) or Google. Set via environment variable:</p>
+<pre><code class="language-bash">echo 'VENICE_SEARCH_PROVIDER=brave' &gt;&gt; ~/.hermes/.env   # or "google"
+</code></pre>
+<hr>
+<h3>How it works</h3>
+<pre><code>LLM tool call → web_search / web_extract
+                    ↓
+            web_search_registry
+                    ↓
+         VeniceWebSearchProvider
+                    ↓
+        Venice /augment/search or /scrape
+</code></pre>
+<p>Unlike the legacy tool-plugin approach (which registered separate <code>venice_web_search</code> / <code>venice_web_scrape</code> tools and required disabling the default <code>web</code> toolset), this backend provider integrates natively with Hermes's web tools infrastructure.</p>
+<hr>
+<h3>Venice web integration approaches</h3>
 <table>
 <thead>
 <tr>
@@ -178,80 +233,30 @@
 </thead>
 <tbody><tr>
 <td><strong>This plugin</strong> (recommended)</td>
-<td>Agent decides per-turn whether to search/scrape</td>
-<td>Agentic workflows where the model should judge when web data is needed; works with any LLM provider</td>
+<td>Agent decides per-turn via standard <code>web_search</code>/<code>web_extract</code></td>
+<td>Agentic workflows; works with any LLM provider</td>
 </tr>
 <tr>
 <td><a href="https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix">Model feature suffix</a></td>
-<td>Append flags to the model ID (e.g. <code>default:enable_web_search=on</code>)</td>
-<td>Clients that don't allow modifying the request body; always-on search with Venice inference</td>
+<td>Append flags to model ID (e.g. <code>default:enable_web_search=on</code>)</td>
+<td>Always-on search with Venice inference</td>
 </tr>
 <tr>
 <td><a href="https://docs.venice.ai/api-reference/endpoint/chat/completions#body-venice-parameters-enable-web-scraping"><code>venice_parameters</code></a></td>
-<td>Set <code>enable_web_search</code> / <code>enable_web_scraping</code> in the request body</td>
-<td>Direct Venice API calls where you want every request to include web context</td>
+<td>Set <code>enable_web_search</code> / <code>enable_web_scraping</code> in request body</td>
+<td>Direct Venice API calls</td>
 </tr>
 </tbody></table>
 <hr>
-<h3>Installation</h3>
-<h4>One-command (recommended)</h4>
-<pre><code class="language-bash">hermes plugins install mnrGreg/hermes-venice-web --enable
-</code></pre>
-<h4>Manual</h4>
-<pre><code class="language-bash">mkdir -p ~/.hermes/plugins/venice-web
-cd ~/.hermes/plugins/venice-web
-# Copy the files below into this folder
-hermes plugins reload
-</code></pre>
-<h4>Setup</h4>
-<ul>
-<li>Get your Venice API key → <a href="https://venice.ai">https://venice.ai</a></li>
-<li>Add it to Hermes:</li>
-</ul>
-<pre><code class="language-bash">echo 'VENICE_API_KEY=vk-XXXXXXXXXXXXXXXX' &gt;&gt; ~/.hermes/.env
-</code></pre>
-<h4>Remove Default Hermes Web Tools (Important!)</h4>
-<p>Edit ~/.hermes/config.yaml:</p>
-<pre><code class="language-yaml">toolsets:
-  - venice_web        # ← Keep this
-  # - web             # ← Comment out or remove
-  # - browse          # ← Comment out or remove
-</code></pre>
-<p>Then restart Hermes or run <code>hermes plugins reload</code>.</p>
-<hr>
-<h4>Pricing</h4>
-<p>Per the <a href="https://docs.venice.ai/overview/pricing#additional-features">Venice API pricing</a>:</p>
-<table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>Config</th>
-<th>Price</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Web Search</td>
-<td><code>enable_web_search: true</code></td>
-<td>$10.00 per 1K requests ($0.01/request)</td>
-</tr>
-<tr>
-<td>Web Scraping</td>
-<td><code>enable_web_scraping: true</code></td>
-<td>$10.00 per 1K URLs ($0.01/URL)</td>
-</tr>
-</tbody></table>
-<p>These charges apply in addition to standard model token pricing. See <a href="https://docs.venice.ai/overview/pricing">full pricing details</a> for text, image, audio, and video models.</p>
-<hr>
-<h4>API References</h4>
+<h3>API References</h3>
 <ul>
 <li>Search: <a href="https://docs.venice.ai/api-reference/endpoint/augment/search">https://docs.venice.ai/api-reference/endpoint/augment/search</a></li>
 <li>Scrape: <a href="https://docs.venice.ai/api-reference/endpoint/augment/scrape">https://docs.venice.ai/api-reference/endpoint/augment/scrape</a></li>
 <li>Pricing: <a href="https://docs.venice.ai/overview/pricing#additional-features">https://docs.venice.ai/overview/pricing#additional-features</a></li>
-<li>Model Feature Suffix: <a href="https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix">https://docs.venice.ai/api-reference/endpoint/chat/model_feature_suffix</a></li>
-<li>Chat Completions (<code>venice_parameters</code>): <a href="https://docs.venice.ai/api-reference/endpoint/chat/completions">https://docs.venice.ai/api-reference/endpoint/chat/completions</a></li>
+<li>Hermes web provider docs: <a href="https://hermes-agent.nousresearch.com/docs/developer-guide/web-search-provider-plugin">https://hermes-agent.nousresearch.com/docs/developer-guide/web-search-provider-plugin</a></li>
 </ul>
-<p>Made for the Hermes community by mnrGreg
-Star this repo if it helps you!</p>
+<hr>
+<p>Made for the Hermes community by mnrGreg</p>
 
   </section>
 </details>
@@ -268,7 +273,7 @@ Star this repo if it helps you!</p>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 293</div>
+        <div class="stars">★ 294</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
