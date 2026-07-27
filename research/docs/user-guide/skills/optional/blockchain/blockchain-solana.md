@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/blockchain/blockchain-solana
 
-Query Solana blockchain data with USD pricing — wallet balances, token portfolios with values, transaction details, NFTs, whale detection, and live network stats. Uses Solana RPC + CoinGecko. No API key required.
+Query Solana wallets, tokens, txs, and NFTs in USD.
 
 ## Skill metadata
 

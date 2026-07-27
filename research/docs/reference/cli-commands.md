@@ -96,6 +96,10 @@ Run or manage the messaging gateway service.
 
 Local OpenAI-compatible proxy that attaches OAuth provider credentials. See [Subscription Proxy](/docs/user-guide/features/subscription-proxy).
 
+`hermes egress`
+
+Outbound credential-injection firewall for remote terminal sandboxes (iron-proxy). Disabled by default. See [Egress proxy](/docs/user-guide/egress/iron-proxy).
+
 `hermes lsp`
 
 Manage Language Server Protocol integration (semantic diagnostics for write\_file/patch).
@@ -260,6 +264,10 @@ Show token/cost/activity analytics.
 
 OpenClaw migration helpers.
 
+`hermes import-agent`
+
+Import a Claude Code (`~/.claude`) or Codex CLI (`~/.codex`) setup.
+
 `hermes dashboard`
 
 Launch the web dashboard for managing config, API keys, and sessions.
@@ -370,7 +378,7 @@ Session source tag for filtering (default: `cli`). Use `tool` for third-party in
 
 `--max-turns <N>`
 
-Maximum tool-calling iterations per conversation turn (default: 90, or `agent.max_turns` in config).
+Maximum tool-calling iterations per conversation turn (default: 500, or `agent.max_turns` in config).
 
 Examples:
 
@@ -464,7 +472,7 @@ Switch between already-configured models without leaving a session:
 /model openrouter:anthropic/claude-sonnet-4  # Switch back to cloud
 ```
 
-By default, `/model` changes apply **to the current session only**. Add `--global` to persist the change to `config.yaml`:
+By default, `/model` changes apply **to the current session only**. Add `--global` to persist the change to `config.yaml` (or set `model.persist_switch_by_default: true` to make every switch persist):
 
 ```
 /model claude-sonnet-4 --global     # Switch and save as new default
@@ -474,7 +482,7 @@ What if I only see OpenRouter models?
 
 If you've only configured OpenRouter, `/model` will only show OpenRouter models. To add another provider (Anthropic, DeepSeek, Copilot, etc.), exit your session and run `hermes model` from the terminal.
 
-Provider and base URL changes are persisted to `config.yaml` automatically. When switching away from a custom endpoint, the stale base URL is cleared to prevent it leaking into other providers.
+On a `--global` switch, provider and base URL changes are persisted to `config.yaml` alongside the model. When switching away from a custom endpoint, the stale base URL is cleared to prevent it leaking into other providers.
 
 ## `hermes gateway`
 
@@ -701,6 +709,7 @@ Runs the WhatsApp pairing/setup flow, including mode selection and QR-code pairi
 ```
 hermes slack manifest              # print manifest to stdout
 hermes slack manifest --write      # write to ~/.hermes/slack-manifest.json
+hermes slack manifest --long-description-file AGENTS.md --write
 hermes slack manifest --slashes-only  # just the features.slash_commands array
 ```
 
@@ -729,6 +738,18 @@ Bot display name in Slack.
 default blurb
 
 Bot description shown in the Slack app directory.
+
+`--long-description TEXT`
+
+unset
+
+Set `display_information.long_description` inline (175–4,000 characters). Incompatible with `--slashes-only`.
+
+`--long-description-file PATH`
+
+unset
+
+Read the long description from a UTF-8 text file, preserving its contents exactly. Mutually exclusive with `--long-description` and incompatible with `--slashes-only`.
 
 `--slashes-only`
 
@@ -829,7 +850,11 @@ Interactive wizard: install the pinned `bws` binary, store an access token, and 
 
 `status`
 
-Show current config, binary path/version, and last fetch info.
+Show current config, binary path/version, and token validation status.
+
+`token`
+
+Rotate the access token: validates the new token against Bitwarden before storing it in `.env` (a rejected token changes nothing). Accepts `--access-token` for non-interactive use and `--no-verify` to skip the probe.
 
 `sync`
 
@@ -1193,6 +1218,67 @@ Board resolution order (highest precedence first): `--board <slug>` flag → `HE
 All actions are also available as a slash command in the gateway (`/kanban …`), with the same argument surface — including `boards` subcommands and the `--board` flag.
 
 For the full design — comparison with Cline Kanban / Paperclip / NanoClaw / Gemini Enterprise, eight collaboration patterns, four user stories, concurrency correctness proof — see `docs/hermes-kanban-v1-spec.pdf` in the repository or the [Kanban user guide](/docs/user-guide/features/kanban).
+
+## `hermes egress`
+
+Outbound credential-injection firewall for remote terminal sandboxes. Wraps the [iron-proxy](https://github.com/ironsh/iron-proxy) daemon — a TLS-intercepting proxy that swaps opaque proxy tokens for real upstream API credentials at the network boundary, so sandboxes never hold real keys. Disabled by default; see the full [Egress proxy](/docs/user-guide/egress/iron-proxy) page for setup + architecture.
+
+```
+hermes egress install                  # download the pinned iron-proxy binary
+hermes egress install --force          # re-download even if already installed
+
+hermes egress setup                    # interactive wizard: CA, mappings, config
+hermes egress setup --tunnel-port N    # override the tunnel listener port (default 9090)
+hermes egress setup --from-bitwarden   # use Bitwarden Secrets Manager as credential source
+hermes egress setup --no-bitwarden     # explicitly switch back to env-based credentials
+hermes egress setup --rotate-tokens    # mint fresh proxy tokens (default preserves existing)
+
+hermes egress start                    # spawn the managed proxy daemon
+hermes egress stop                     # SIGTERM (then SIGKILL after 5s grace)
+hermes egress restart                  # stop (if running) then start — needed for secret changes
+hermes egress reload                   # hot-reload the ruleset in-place (no restart, no dropped
+                                       #   connections) via the loopback management API
+
+hermes egress status                   # binary + config + pid + listening + mappings
+hermes egress status --show-tokens     # print proxy tokens in full (default: redacted)
+
+hermes egress disable                  # flip proxy.enabled = false (does not stop a running proxy)
+hermes egress config                   # print the path to proxy.yaml for inspection
+```
+
+### Common flows
+
+```
+# First-time setup
+export OPENROUTER_API_KEY=…
+hermes egress setup && hermes egress start
+hermes config set terminal.backend docker   # if not already
+
+# Switching credential source after the fact
+hermes egress setup --from-bitwarden       # env → bitwarden
+hermes egress setup --no-bitwarden         # bitwarden → env
+# (just `setup` without either flag preserves the existing mode)
+
+# Rotating all tokens (e.g. after a suspected token leak)
+hermes egress setup --rotate-tokens    # setup offers to restart the running daemon for you
+# (running sandboxes still hold old tokens; restart them too)
+
+# Adding a new upstream
+# Edit ~/.hermes/config.yaml proxy.extra_allowed_hosts: [api.example.com]
+hermes egress setup
+hermes egress restart                  # one-command apply (stop + start)
+```
+
+### Diagnostic shortcuts
+
+```
+hermes egress status                     # current state in one view
+cat ~/.hermes/proxy/proxy.yaml           # the rendered iron-proxy config
+tail -20 ~/.hermes/proxy/iron-proxy.log  # daemon-level diagnostics
+tail -f ~/.hermes/proxy/iron-proxy.log | jq  # daemon + per-request log (line-delimited JSON; v0.39 combines both streams)
+```
+
+Common failure modes + recovery are covered in [Egress proxy → Troubleshooting](/docs/user-guide/egress/iron-proxy#troubleshooting).
 
 ## `hermes project`
 
@@ -2570,6 +2656,40 @@ hermes claw migrate --preset user-data --overwrite
 hermes claw migrate --source /home/user/old-openclaw
 ```
 
+## `hermes import-agent`
+
+```
+hermes import-agent [claude-code|codex] [options]
+```
+
+Import a **Claude Code** (`~/.claude`) or **OpenAI Codex CLI** (`~/.codex`) setup into Hermes. Maps `CLAUDE.md`/`AGENTS.md` instructions to memory entries, `Bash(...)` permission allow/deny rules to `command_allowlist`/`approvals.deny`, MCP servers to `mcp_servers` in `config.yaml`, and skill directories into `~/.hermes/skills/`. Always previews before applying; API keys and credentials are never imported.
+
+Option
+
+Description
+
+`agent`
+
+`claude-code` or `codex` (default: auto-detect).
+
+`--source <path>`
+
+Custom source directory (default: `~/.claude` or `~/.codex`).
+
+`--dry-run`
+
+Preview only — write nothing.
+
+`--overwrite`
+
+Replace conflicting MCP servers / skills (default: skip).
+
+`--yes`, `-y`
+
+Skip confirmation prompts.
+
+See the **[import guide](/docs/user-guide/import-from-other-agents)** for the full mapping tables.
+
 ## `hermes serve`
 
 ```
@@ -2824,13 +2944,7 @@ Print version information.
 
 Pull latest changes and reinstall dependencies.
 
-`hermes postinstall`
-
-Internal bootstrap. Runs once after the install script provisions Hermes (or after `hermes update`) to install non-Python dependencies that pip cannot provide — Node.js runtime, headless browser, ripgrep, ffmpeg — and then trigger `hermes setup` if the profile has not been configured yet. Safe to re-run idempotently.
-
-`hermes uninstall [--full] [--gui] [--yes]`
-
-Remove Hermes, optionally deleting all config/data. `--gui` removes only the desktop Chat GUI, leaving the agent intact; `--full` also deletes config/data; `--yes` skips prompts.
+| `hermes uninstall [--full] [--gui] [--yes]` | Remove Hermes, optionally deleting all config/data. `--gui` removes only the desktop Chat GUI, leaving the agent intact; `--full` also deletes config/data; `--yes` skips prompts. |
 
 ## See also
 

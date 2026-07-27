@@ -8,23 +8,15 @@ Hermes isn't just a CLI tool. You can import `AIAgent` directly and use it progr
 
 ## Installation
 
-Install Hermes directly from the repository:
+Clone Hermes and create its supported editable development environment:
 
 ```
-pip install git+https://github.com/NousResearch/hermes-agent.git
+git clone https://github.com/NousResearch/hermes-agent.git
+cd hermes-agent
+uv sync
 ```
 
-Or with [uv](https://docs.astral.sh/uv/):
-
-```
-uv pip install git+https://github.com/NousResearch/hermes-agent.git
-```
-
-You can also pin it in your `requirements.txt`:
-
-```
-hermes-agent @ git+https://github.com/NousResearch/hermes-agent.git
-```
+Run your application with `uv run python your_app.py` from that checkout. Hermes does not publish a supported wheel or source distribution for `requirements.txt` installs.
 
 tip
 
@@ -366,7 +358,7 @@ Custom system prompt (not saved to trajectories)
 
 `int`
 
-`90`
+`500`
 
 Max tool-calling iterations per conversation
 
@@ -424,4 +416,4 @@ warning
 
 -   **Thread safety**: Create one `AIAgent` per thread or task. Never share an instance across concurrent calls.
 -   **Resource cleanup**: The agent automatically cleans up resources (terminal sessions, browser instances) when a conversation ends. If you're running in a long-lived process, ensure each conversation completes normally.
--   **Iteration limits**: The default `max_iterations=90` is generous. For simple Q&A use cases, consider lowering it (e.g., `max_iterations=10`) to prevent runaway tool-calling loops and control costs.
+-   **Iteration limits**: The default `max_iterations=500` is generous. For simple Q&A use cases, consider lowering it (e.g., `max_iterations=10`) to prevent runaway tool-calling loops and control costs.

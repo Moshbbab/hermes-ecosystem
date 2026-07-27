@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-`native-mcp`, [`mcporter`](/docs/user-guide/skills/optional/mcp/mcp-mcporter), [`fastmcp`](/docs/user-guide/skills/optional/mcp/mcp-fastmcp)
+[`hermes-agent`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent), [`mcporter`](/docs/user-guide/skills/optional/mcp/mcp-mcporter), [`fastmcp`](/docs/user-guide/skills/optional/mcp/mcp-fastmcp)
 
 ## Reference: full SKILL.md
 

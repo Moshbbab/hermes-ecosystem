@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-here-now
 
-Publish static sites to {slug}.here.now and store private files in cloud Drives for agent-to-agent handoff.
+Publish sites to {slug}.here.now and store files in Drives.
 
 ## Skill metadata
 

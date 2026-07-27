@@ -76,6 +76,8 @@ hermes memory setup        # select "honcho" — runs the Honcho-specific post-s
 
 The legacy `hermes honcho setup` command still works (it now redirects to `hermes memory setup`), but is only registered after Honcho is selected as the active memory provider.
 
+**Headless / remote machines:** for cloud auth on a box without a browser (SSH, remote VM), pick **device** at the wizard's auth-method prompt. The CLI prints a short code and a verification link; open the link in a browser on any other machine, approve, and setup completes — no API key copy-paste. The wizard defaults to this option automatically when it detects no usable local browser.
+
 **Config:** `$HERMES_HOME/honcho.json` (profile-local) or `~/.honcho/config.json` (global). Resolution order: `$HERMES_HOME/honcho.json` > `~/.hermes/honcho.json` > `~/.honcho/config.json`. See the [config reference](https://github.com/NousResearch/hermes-agent/blob/main/plugins/memory/honcho/README.md) and the [Honcho integration guide](https://docs.honcho.dev/v3/guides/integrations/hermes).
 
 Full config reference
@@ -428,7 +430,7 @@ Self-hosted knowledge management with structured browsing
 
 **Requires**
 
-`pip install openviking` + running server
+OpenViking initialized, validated, and running
 
 **Data storage**
 
@@ -443,18 +445,28 @@ Free (open-source, AGPL-3.0)
 **Setup:**
 
 ```
-# Start the OpenViking server first
-pip install openviking
+# Prepare OpenViking first
+openviking-server init
+openviking-server doctor
 openviking-server
 
 # Then configure Hermes
 hermes memory setup    # select "openviking"
 # Or manually:
 hermes config set memory.provider openviking
-echo "OPENVIKING_ENDPOINT=http://localhost:1933" >> ~/.hermes/.env
-# Authenticated servers should use a user/admin API key:
-echo "OPENVIKING_API_KEY=..." >> ~/.hermes/.env
 ```
+
+`hermes memory setup` can reuse or copy connection values from `~/.openviking/ovcli.conf`. Manual setup uses the active profile's `.env` file; for the default profile that is `~/.hermes/.env`, and for named profiles use `~/.hermes/profiles/<profile>/.env`.
+
+```
+OPENVIKING_ENDPOINT=http://127.0.0.1:1933
+# OPENVIKING_API_KEY=...
+# OPENVIKING_ACCOUNT=default
+# OPENVIKING_USER=default
+# OPENVIKING_AGENT=hermes
+```
+
+OpenViking server settings live in `ov.conf` (`--config`, `OPENVIKING_CONFIG_FILE`, or `~/.openviking/ov.conf`). Client connection values live in `ovcli.conf` (`OPENVIKING_CLI_CONFIG_FILE` or `~/.openviking/ovcli.conf`).
 
 **Key features:**
 
@@ -869,15 +881,15 @@ Semantic recall with user profiling and session-level graph building
 
 **Requires**
 
-`pip install supermemory` + [API key](http://app.supermemory.ai/integrations?connect=hermes)
+`pip install supermemory` + [cloud API key](http://app.supermemory.ai/integrations?connect=hermes), or a [self-hosted server](https://supermemory.ai/docs/self-hosting/overview)
 
 **Data storage**
 
-Supermemory Cloud
+Supermemory Cloud or self-hosted
 
 **Cost**
 
-Supermemory pricing
+Supermemory pricing (cloud) / free (self-hosted)
 
 **Tools:** `supermemory_store` (save explicit memories), `supermemory_search` (semantic similarity search), `supermemory_forget` (forget by ID or best-match query), `supermemory_profile` (persistent profile + recent context)
 
@@ -890,6 +902,22 @@ hermes config set memory.provider supermemory
 echo 'SUPERMEMORY_API_KEY=***' >> ~/.hermes/.env
 ```
 
+Self-hosted setup:
+
+```
+npx supermemory local
+```
+
+Before running `hermes memory setup`, set `base_url` in `$HERMES_HOME/supermemory.json`:
+
+```
+{
+  "base_url": "http://localhost:6767"
+}
+```
+
+Then run `hermes memory setup` and enter the API key printed by the local server. Configuring the endpoint first ensures the setup connection probe also stays local.
+
 **Config:** `$HERMES_HOME/supermemory.json`
 
 Key
@@ -897,6 +925,12 @@ Key
 Default
 
 Description
+
+`base_url`
+
+`https://api.supermemory.ai`
+
+API endpoint for hosted or self-hosted Supermemory. Takes priority over `SUPERMEMORY_BASE_URL`.
 
 `container_tag`
 
@@ -946,13 +980,16 @@ Search mode: `hybrid`, `memories`, or `documents`
 
 Timeout for SDK and ingest requests
 
-**Environment variables:** `SUPERMEMORY_API_KEY` (required), `SUPERMEMORY_CONTAINER_TAG` (overrides config).
+**Environment variables:** `SUPERMEMORY_API_KEY` (required), `SUPERMEMORY_BASE_URL` (compatibility fallback when `base_url` is not configured), `SUPERMEMORY_CONTAINER_TAG` (overrides config).
+
+Base URL precedence is `supermemory.json` → `SUPERMEMORY_BASE_URL` → `https://api.supermemory.ai`. SDK operations, setup/status probes, and conversation ingest all use the resolved endpoint.
 
 **Key features:**
 
 -   Automatic context fencing — strips recalled memories from captured turns to prevent recursive memory pollution
 -   Full-session ingest — the entire conversation is sent once at session boundaries
 -   Session-end conversation ingest (to `/v4/conversations`) for richer profile + graph building in Supermemory
+-   End-to-end self-hosted routing — SDK, probe, and conversation-ingest requests use the same configured endpoint
 -   Profile facts injected on first turn and at configurable intervals
 -   **Profile-scoped containers** — use `{identity}` in `container_tag` (e.g. `hermes-{identity}` → `hermes-coder`) to isolate memories per Hermes profile
 -   **Multi-container mode** — enable `enable_custom_container_tags` with a `custom_containers` list to let the agent read/write across named containers. Automatic operations stay on the primary container.
@@ -1103,9 +1140,9 @@ Pre-compression extraction
 
 **Supermemory**
 
-Cloud
+Cloud/Self-hosted
 
-Paid
+Free/Paid
 
 4
 

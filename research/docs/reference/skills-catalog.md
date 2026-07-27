@@ -60,9 +60,15 @@ Delegate coding to OpenAI Codex CLI (features, PRs).
 
 `autonomous-ai-agents/codex`
 
+[`computer-use`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use)
+
+Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable...
+
+`autonomous-ai-agents/computer-use`
+
 [`hermes-agent`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent)
 
-Configure, extend, or contribute to Hermes Agent.
+Use, configure, theme, extend, and orchestrate Hermes Agent.
 
 `autonomous-ai-agents/hermes-agent`
 
@@ -71,20 +77,6 @@ Configure, extend, or contribute to Hermes Agent.
 Delegate coding to OpenCode CLI (features, PR review).
 
 `autonomous-ai-agents/opencode`
-
-## computer-use
-
-Skill
-
-Description
-
-Path
-
-[`computer-use`](/docs/user-guide/skills/bundled/computer-use/computer-use-computer-use)
-
-Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable...
-
-`computer-use`
 
 ## creative
 
@@ -126,7 +118,7 @@ Design one-off HTML artifacts (landing, deck, prototype).
 
 [`comfyui`](/docs/user-guide/skills/bundled/creative/creative-comfyui)
 
-Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows with parameter injection. Uses the official comfy-cli for lifecycle and direct REST/WebSocket API for execution.
+Generate images, video, and audio via diffusion workflows.
 
 `creative/comfyui`
 
@@ -168,7 +160,7 @@ p5.js sketches: gen art, shaders, interactive, 3D.
 
 [`pretext`](/docs/user-guide/skills/bundled/creative/creative-pretext)
 
-Use when building creative browser demos with @chenglou/pretext — DOM-free text layout for ASCII art, typographic flow around obstacles, text-as-geometry games, kinetic typography, and text-powered generative art. Produces single-file HT...
+Build creative browser demos with DOM-free text layout.
 
 `creative/pretext`
 
@@ -186,37 +178,9 @@ Songwriting craft and Suno AI music prompts.
 
 [`touchdesigner-mcp`](/docs/user-guide/skills/bundled/creative/creative-touchdesigner-mcp)
 
-Control a running TouchDesigner instance via twozero MCP — create operators, set parameters, wire connections, execute Python, build real-time visuals. 36 native tools.
+Control TouchDesigner via twozero MCP.
 
 `creative/touchdesigner-mcp`
-
-## data-science
-
-Skill
-
-Description
-
-Path
-
-[`jupyter-live-kernel`](/docs/user-guide/skills/bundled/data-science/data-science-jupyter-live-kernel)
-
-Iterative Python via live Jupyter kernel (hamelnb).
-
-`data-science/jupyter-live-kernel`
-
-## dogfood
-
-Skill
-
-Description
-
-Path
-
-[`dogfood`](/docs/user-guide/skills/bundled/dogfood/dogfood-dogfood)
-
-Exploratory QA of web apps: find bugs, evidence, reports.
-
-`dogfood`
 
 ## email
 
@@ -276,20 +240,6 @@ Clone/create/fork repos; manage remotes, releases.
 
 `github/github-repo-management`
 
-## hermes-desktop-plugins
-
-Skill
-
-Description
-
-Path
-
-[`hermes-desktop-plugins`](/docs/user-guide/skills/bundled/hermes-desktop-plugins/hermes-desktop-plugins-hermes-desktop-plugins)
-
-Write desktop app plugins that add UI panes and commands.
-
-`hermes-desktop-plugins`
-
 ## media
 
 Skill
@@ -303,12 +253,6 @@ Path
 Search/download GIFs from Tenor via curl + jq.
 
 `media/gif-search`
-
-[`heartmula`](/docs/user-guide/skills/bundled/media/media-heartmula)
-
-HeartMuLa: Suno-like song generation from lyrics + tags.
-
-`media/heartmula`
 
 [`songsee`](/docs/user-guide/skills/bundled/media/media-songsee)
 
@@ -330,11 +274,11 @@ Description
 
 Path
 
-[`audiocraft-audio-generation`](/docs/user-guide/skills/bundled/mlops/mlops-models-audiocraft)
+[`evaluating-llms-harness`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-evaluating-llms-harness)
 
-AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.
+lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
 
-`mlops/models/audiocraft`
+`mlops/evaluation/evaluating-llms-harness`
 
 [`huggingface-hub`](/docs/user-guide/skills/bundled/mlops/mlops-huggingface-hub)
 
@@ -348,23 +292,11 @@ llama.cpp local GGUF inference + HF Hub model discovery.
 
 `mlops/inference/llama-cpp`
 
-[`evaluating-llms-harness`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-lm-evaluation-harness)
-
-lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
-
-`mlops/evaluation/lm-evaluation-harness`
-
-[`segment-anything-model`](/docs/user-guide/skills/bundled/mlops/mlops-models-segment-anything)
-
-SAM: zero-shot image segmentation via points, boxes, masks.
-
-`mlops/models/segment-anything`
-
-[`serving-llms-vllm`](/docs/user-guide/skills/bundled/mlops/mlops-inference-vllm)
+[`serving-llms-vllm`](/docs/user-guide/skills/bundled/mlops/mlops-inference-serving-llms-vllm)
 
 vLLM: high-throughput LLM serving, OpenAI API, quantization.
 
-`mlops/inference/vllm`
+`mlops/inference/serving-llms-vllm`
 
 [`weights-and-biases`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-weights-and-biases)
 
@@ -400,6 +332,12 @@ Airtable REST API via curl. Records CRUD, filters, upserts.
 
 `productivity/airtable`
 
+[`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx)
+
+Create, read, edit Word .docx documents and templates.
+
+`productivity/docx`
+
 [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace)
 
 Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.
@@ -414,7 +352,7 @@ Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.
 
 [`nano-pdf`](/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf)
 
-Edit PDF text/typos/titles via nano-pdf CLI (NL prompts).
+Edit text in existing PDFs via natural-language prompts.
 
 `productivity/nano-pdf`
 
@@ -430,11 +368,11 @@ Extract text from PDFs/scans (pymupdf, marker-pdf).
 
 `productivity/ocr-and-documents`
 
-[`petdex`](/docs/user-guide/skills/bundled/productivity/productivity-petdex)
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
-Install and select animated petdex mascots for Hermes.
+Create, merge, split, fill, and secure PDF files.
 
-`productivity/petdex`
+`productivity/pdf`
 
 [`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
 
@@ -444,9 +382,15 @@ Create, read, edit .pptx decks, slides, notes, templates.
 
 [`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline)
 
-Operate the Teams meeting summary pipeline via Hermes CLI — summarize meetings, inspect pipeline status, replay jobs, manage Microsoft Graph subscriptions.
+Teams meeting summaries, job replay, Graph subscriptions.
 
 `productivity/teams-meeting-pipeline`
+
+[`xlsx`](/docs/user-guide/skills/bundled/productivity/productivity-xlsx)
+
+Create, read, edit Excel .xlsx spreadsheets and CSVs.
+
+`productivity/xlsx`
 
 ## research
 
@@ -510,7 +454,7 @@ Path
 
 [`xurl`](/docs/user-guide/skills/bundled/social-media/social-media-xurl)
 
-X/Twitter via xurl CLI: post, search, DM, media, v2 API.
+X/Twitter via xurl CLI: raw post search, posting, DM, media.
 
 `social-media/xurl`
 
@@ -522,9 +466,15 @@ Description
 
 Path
 
+[`dogfood`](/docs/user-guide/skills/bundled/software-development/software-development-dogfood)
+
+Exploratory QA of web apps: find bugs, evidence, reports.
+
+`software-development/dogfood`
+
 [`hermes-agent-skill-authoring`](/docs/user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring)
 
-Author in-repo SKILL.md: frontmatter, validator, structure, and writing-quality principles.
+Author in-repo SKILL.md files: frontmatter and structure.
 
 `software-development/hermes-agent-skill-authoring`
 
@@ -536,7 +486,7 @@ Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
 
 [`plan`](/docs/user-guide/skills/bundled/software-development/software-development-plan)
 
-Plan mode: write an actionable markdown plan to .hermes/plans/, no execution. Bite-sized tasks, exact paths, complete code.
+Write a markdown plan to .hermes/plans/; no execution.
 
 `software-development/plan`
 
@@ -554,7 +504,7 @@ Pre-commit review: security scan, quality gates, auto-fix.
 
 [`simplify-code`](/docs/user-guide/skills/bundled/software-development/software-development-simplify-code)
 
-Parallel 3-agent cleanup of recent code changes.
+Parallel 4-agent cleanup of recent code changes.
 
 `software-development/simplify-code`
 
@@ -575,17 +525,3 @@ Throwaway experiments to validate an idea before build.
 TDD: enforce RED-GREEN-REFACTOR, tests before code.
 
 `software-development/test-driven-development`
-
-## yuanbao
-
-Skill
-
-Description
-
-Path
-
-[`yuanbao`](/docs/user-guide/skills/bundled/yuanbao/yuanbao-yuanbao)
-
-Yuanbao (元宝) groups: @mention users, query info/members.
-
-`yuanbao`

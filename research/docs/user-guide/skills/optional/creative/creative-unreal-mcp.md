@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/creative/creative-unreal-mcp
 
-Use when the user wants to do anything in Unreal Engine through Epic's official editor-embedded MCP server (catalog entry: unreal-engine) — build/light/populate scenes, place and transform actors, author Blueprints, animate with Sequencer, create material instances, frame cameras, take screenshots, render, import assets, run PIE test sessions and automation tests, or automate the editor end-to-end from plain-English prompts with no Unreal knowledge required. Covers the tool-search discovery walk (list\_toolsets/describe\_toolset/call\_tool), serial game-thread call discipline, ProgrammaticToolset batching, the Blueprint graph DSL loop, scene-craft numbers (physical light units, exposure, scale conventions), complete build recipes, save/undo hygiene, and extending the tool surface with custom Python toolsets.
+Automate Unreal Engine editor scenes, actors, and renders.
 
 ## Skill metadata
 

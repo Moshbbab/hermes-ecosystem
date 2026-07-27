@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/productivity/productivity-shopify
 
-Shopify Admin & Storefront GraphQL APIs via curl. Products, orders, customers, inventory, metafields.
+Query Shopify Admin/Storefront GraphQL APIs via curl.
 
 ## Skill metadata
 

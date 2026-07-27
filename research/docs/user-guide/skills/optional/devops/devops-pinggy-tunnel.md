@@ -34,10 +34,6 @@ Tags
 
 `Pinggy`, `Tunnel`, `Networking`, `SSH`, `Webhook`, `Localhost`
 
-Related skills
-
-`cloudflared-quick-tunnel`, `webhook-subscriptions`
-
 ## Reference: full SKILL.md
 
 info

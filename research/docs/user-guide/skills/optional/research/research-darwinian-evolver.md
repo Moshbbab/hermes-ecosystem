@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`arxiv`](/docs/user-guide/skills/bundled/research/research-arxiv), [`jupyter-live-kernel`](/docs/user-guide/skills/bundled/data-science/data-science-jupyter-live-kernel)
+[`arxiv`](/docs/user-guide/skills/bundled/research/research-arxiv), [`jupyter-notebook`](/docs/user-guide/skills/optional/data-science/data-science-jupyter-notebook)
 
 ## Reference: full SKILL.md
 

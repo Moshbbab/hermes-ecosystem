@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/dogfood/dogfood-adversarial-ux-test
 
-Roleplay the most difficult, tech-resistant user for your product. Browse the app as that persona, find every UX pain point, then filter complaints through a pragmatism layer to separate real problems from noise. Creates actionable tickets from genuine issues only.
+Roleplay a hostile user to find and triage UX pain points.
 
 ## Skill metadata
 
@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`dogfood`](/docs/user-guide/skills/bundled/dogfood/dogfood-dogfood)
+[`dogfood`](/docs/user-guide/skills/bundled/software-development/software-development-dogfood)
 
 ## Reference: full SKILL.md
 

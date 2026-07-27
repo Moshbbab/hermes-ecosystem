@@ -104,6 +104,10 @@ Verify `op`, set account / token env var, enable
 
 Show config, binary, auth, and configured references
 
+`hermes secrets onepassword token`
+
+Rotate the service-account token: validate with `op whoami`, then store it in `.env`
+
 `hermes secrets onepassword set ENV_VAR "op://…"`
 
 Map an env var to a reference (stored stripped + validated)
@@ -212,7 +216,7 @@ Install the CLI, or set `secrets.onepassword.binary_path`
 
 Locked session, expired token, or no vault access
 
-`op signin`, refresh the token, or grant the service account access
+`op signin`, run `hermes secrets onepassword token` to rotate the service-account token, or grant the service account access
 
 `op read returned an empty value for 'op://…'`
 
@@ -231,6 +235,8 @@ Re-set it with the correct `op://vault/item/field` form
 Network blocked or 1Password slow
 
 Check connectivity / the desktop app integration
+
+Startup warnings now include a `→` remediation line telling you exactly which command fixes the failure.
 
 ## Caching
 

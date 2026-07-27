@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/devops/devops-docker-management
 
-Manage Docker containers, images, volumes, networks, and Compose stacks — lifecycle ops, debugging, cleanup, and Dockerfile optimization.
+Manage Docker containers, images, volumes, and Compose.
 
 ## Skill metadata
 

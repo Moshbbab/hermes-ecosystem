@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf
 
-Edit PDF text/typos/titles via nano-pdf CLI (NL prompts).
+Edit text in existing PDFs via natural-language prompts.
 
 ## Skill metadata
 
@@ -34,6 +34,10 @@ Tags
 
 `PDF`, `Documents`, `Editing`, `NLP`, `Productivity`
 
+Related skills
+
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`ocr-and-documents`](/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents)
+
 ## Reference: full SKILL.md
 
 info
@@ -42,7 +46,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # nano-pdf
 
-Edit PDFs using natural-language instructions. Point it at a page and describe what to change.
+Edit PDFs using natural-language instructions. Point it at a page and describe what to change. For structural PDF work (merge, split, forms, watermarks, creation), see the `pdf` skill; for text extraction from scans, see `ocr-and-documents`.
 
 ## Prerequisites
 
