@@ -372,7 +372,7 @@ Optional local speech-to-text command template. Supports `{input_path}`, `{outpu
 
 `HERMES_LOCAL_STT_LANGUAGE`
 
-Default language passed to `HERMES_LOCAL_STT_COMMAND` or auto-detected local `whisper` CLI fallback (default: `en`)
+Default language hint for STT. Used by the `local` (faster-whisper) provider, `HERMES_LOCAL_STT_COMMAND`, the local `whisper` CLI fallback (default: `en`), Groq, and xAI when no per-provider `language` is set in `config.yaml`
 
 `HERMES_HOME`
 
