@@ -1870,6 +1870,10 @@ Absolute path to a Python interpreter for the backend, checked before Electron a
 
 Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g. `http://127.0.0.1:5174`). Set automatically by `npm run dev`; only relevant when hacking on the app.
 
+`HERMES_DESKTOP_CDP_PORT`
+
+Overrides the Chrome DevTools Protocol port the renderer exposes on `127.0.0.1` for DOM/CSS inspection tooling (default `9222`). Dev-server runs (`npm run dev`, `hgui`) open it automatically; a packaged app never does, and no value here changes that. Set to `off` to disable it on a dev run. Anything that can reach the port can execute code in the renderer.
+
 ### Microsoft Graph (Teams Meetings)
 
 App-only credentials for the Microsoft Graph REST client used by the upcoming Teams meeting summary pipeline. See [Register a Microsoft Graph application](/docs/guides/microsoft-graph-app-registration) for the Azure portal walkthrough and the exact API permissions required.
