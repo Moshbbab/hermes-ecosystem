@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-07-28T11:54:32.000Z",
+  "dateModified": "2026-07-28T18:53:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -139,8 +139,8 @@
   <div>
     <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections, preferences, and conventions across different sessions, tools, and machines.</p>
     <ul class="summary-highlights">
-      <li>Stores memory as editable plain-text YAML files</li>
-      <li>Supports Claude Code, Cursor, OpenClaw, and Hermes</li>
+      <li>Uses an open YAML format for engrams</li>
+      <li>Supports MCP tools like Claude Code and Cursor</li>
       <li>Provides local-first, zero-cost search</li>
     </ul>
   </div>
@@ -154,6 +154,7 @@
 </p>
 
 <h2>PLUR — Your agents share the same memory</h2>
+<p><a href="https://mcptoplist.com/server/io.github.plur-ai%2Fplur"><img src="https://mcptoplist.com/badge/io.github.plur-ai%2Fplur.svg" alt="MCP Toplist" loading="lazy" decoding="async"></a></p>
 <p><a href="https://www.npmjs.com/package/@plur-ai/core"><img src="https://img.shields.io/npm/v/@plur-ai/core?logo=npm&amp;color=cb3837" alt="npm version" loading="lazy" decoding="async"></a>
 <a href="https://github.com/plur-ai/plur/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/plur-ai/plur/ci.yml?branch=main&amp;logo=github&amp;label=CI" alt="CI" loading="lazy" decoding="async"></a>
 <a href="LICENSE"><img src="https://img.shields.io/github/license/plur-ai/plur?color=blue" alt="License: Apache-2.0" loading="lazy" decoding="async"></a>
@@ -350,8 +351,8 @@ await plur.sync('git@github.com:you/plur-memory.git')
 <td>Store many engrams in one call (batch dedup + per-item failure isolation)</td>
 </tr>
 <tr>
-<td><code>plur_recall_hybrid</code></td>
-<td>Retrieve relevant memories (BM25 + embeddings)</td>
+<td><code>plur_recall</code></td>
+<td>Retrieve relevant memories — hybrid (BM25 + embeddings) by default; <code>mode:"keyword"</code> for BM25-only</td>
 </tr>
 <tr>
 <td><code>plur_inject_hybrid</code></td>
@@ -592,7 +593,37 @@ plur-ai                Python SDK — direct learn/recall/inject for scripts and
 └── engrams.db       # optional SQLite read index (auto-generated)
 </code></pre>
 <p><code>PLUR_PATH</code> overrides the default location.</p>
-<p>For large stores (&gt;1k engrams), enable the SQLite read index for faster filtered queries. Add <code>index: true</code> to <code>config.yaml</code>. The YAML file stays the source of truth — the <code>.db</code> is a cache that rebuilds automatically. Delete it anytime.</p>
+<p>Indexing is on by default (<code>index: true</code>) and the backend is chosen from the
+size of your store, so there is normally nothing to configure:</p>
+<table>
+<thead>
+<tr>
+<th>Store size</th>
+<th>Backend</th>
+<th>What answers a query</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>under 5,000 engrams</td>
+<td><code>yaml</code></td>
+<td>in-memory BM25 + exact cosine</td>
+</tr>
+<tr>
+<td>5,000 and up</td>
+<td><code>pglite</code></td>
+<td>embedded Postgres + pgvector</td>
+</tr>
+<tr>
+<td>50,000 and up</td>
+<td><code>postgres</code></td>
+<td>a Postgres server you point it at</td>
+</tr>
+</tbody></table>
+<p>YAML stays the source of truth in every tier except <code>postgres</code> (ADR-0001,
+ADR-0005) — the index is a cache that rebuilds automatically, and you can delete
+it anytime. Set <code>backend:</code> in <code>config.yaml</code> to pin a tier explicitly.</p>
+<p><code>sqlite</code> (<code>engrams.db</code>, via <code>better-sqlite3</code>) is the legacy index and is no
+longer selected automatically.</p>
 <h3>Requirements</h3>
 <ul>
 <li><strong>Node.js 18+</strong></li>
@@ -639,7 +670,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 349</div>
+        <div class="stars">★ 351</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -647,7 +678,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 226</div>
+        <div class="stars">★ 227</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
