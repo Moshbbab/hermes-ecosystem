@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>junhoyeo/tokscale — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Tokscale is a CLI tool and visualization dashboard designed to track token usage and costs across multiple AI coding agents. It supports monitoring consumption…">
+<meta name="description" content="Tokscale is a cross-platform CLI tool and visualization dashboard for tracking token consumption and costs across various AI coding agents. It features a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard designed to track token usage and costs across multiple AI coding agents. It supports monitoring consumption…">
+<meta property="og:description" content="Tokscale is a cross-platform CLI tool and visualization dashboard for tracking token consumption and costs across various AI coding agents. It features a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard designed to track token usage and costs across multiple AI coding agents. It supports monitoring consumption…">
+<meta name="twitter:description" content="Tokscale is a cross-platform CLI tool and visualization dashboard for tracking token consumption and costs across various AI coding agents. It features a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=tokscale&amp;subtitle=%F0%9F%9B%B0%EF%B8%8F+Track+token+usage+across+AI+coding+agents+from+your+terminal.+%F0%9F%8F%85+Global+leaderboard+with+quadrillions+of+tokens+tracked.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard designed to track token usage and costs across multiple AI coding agents. It supports monitoring consumption from various clients by accessing local data files and databases.",
+  "description": "Tokscale is a cross-platform CLI tool and visualization dashboard for tracking token consumption and costs across various AI coding agents. It features a native Rust terminal user interface and provides a 3D contributions graph for usage data analysis.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-07-27T09:47:19.000Z",
+  "dateModified": "2026-07-28T03:10:16.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4652
+    "userInteractionCount": 4673
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-27</span>
+    <span><span class="meta-label">updated</span>2026-07-28</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to track token usage and costs across multiple AI coding agents. It supports monitoring consumption from various clients by accessing local data files and databases.</p>
+    <p class="summary-text">Tokscale is a cross-platform CLI tool and visualization dashboard for tracking token consumption and costs across various AI coding agents. It features a native Rust terminal user interface and provides a 3D contributions graph for usage data analysis.</p>
     <ul class="summary-highlights">
-      <li>Provides a native Rust TUI</li>
-      <li>Supports cross-platform usage</li>
-      <li>Monitors multiple AI coding agents</li>
+      <li>Tracks token usage across multiple AI clients and coding agents</li>
+      <li>Includes a native Rust TUI and visualization dashboard</li>
+      <li>Supports cross-platform monitoring of local agent session data</li>
     </ul>
   </div>
 </section>
@@ -286,7 +286,7 @@ I drop new open-source work every week. Don't miss the next one.</p>
 <tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-cursor.jpg" alt="Cursor"></td>
 <td><a href="https://cursor.com/">Cursor IDE</a></td>
-<td>Cursor API export cached at <code>~/.config/tokscale/cursor-cache/usage*.csv</code> (not <code>~/.cursor</code>)</td>
+<td>Cursor API export cached at <code>~/.config/tokscale/cursor-cache/usage*.csv</code> (desktop auto-login or cookie paste; not <code>~/.cursor</code>)</td>
 </tr>
 <tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-amp.png" alt="Amp"></td>
@@ -977,8 +977,16 @@ tokscale autosubmit disable
 </code></pre>
 <p>Scheduled runs are non-interactive: they never prompt for GitHub auth or star confirmation. Run <code>tokscale login --token tt_xxx</code> once, or set <code>TOKSCALE_API_TOKEN</code> in the scheduler environment. Tokscale records scheduler state in <code>settings.json</code>, writes logs under <code>~/.config/tokscale/autosubmit/</code>, and uses a lock file so overlapping scheduler ticks do not submit twice.</p>
 <h4>Cursor IDE Commands</h4>
-<p>Cursor IDE support uses Cursor's web API export, cached by Tokscale at <code>~/.config/tokscale/cursor-cache/usage*.csv</code>. Tokscale does not parse local Cursor Agent CLI state under <code>~/.cursor</code>.</p>
-<p>Setup:</p>
+<p>Cursor IDE support uses Cursor's web API export, cached by Tokscale at <code>~/.config/tokscale/cursor-cache/usage*.csv</code>. Tokscale does not parse local Cursor Agent CLI state under <code>~/.cursor</code>, and it does not treat the desktop SQLite DB as a usage ledger.</p>
+<p>When the Cursor desktop app is installed and signed in, <code>tokscale cursor login</code> prefers the local <code>cursorAuth/accessToken</code> from Cursor's <code>state.vscdb</code> and builds the session cookie automatically. <code>tokscale cursor sync</code> also refreshes that token when available. Usage rows still come only from Cursor's usage-export API.</p>
+<p>Setup (desktop auto-login):</p>
+<ol>
+<li>Sign in to the Cursor desktop app.</li>
+<li>Run <code>tokscale cursor login --name work</code> (auto-detects the local desktop session when available).</li>
+<li>Run <code>tokscale cursor sync --json</code> to populate <code>~/.config/tokscale/cursor-cache/usage.csv</code>.</li>
+<li>Run <code>tokscale --client cursor</code> or any report command.</li>
+</ol>
+<p>Fallback (manual browser cookie), if desktop login is unavailable:</p>
 <ol>
 <li>Open <a href="https://www.cursor.com/settings">https://www.cursor.com/settings</a> in your browser and sign in.</li>
 <li>Copy the <code>WorkosCursorSessionToken</code> cookie value:<ul>
@@ -986,12 +994,11 @@ tokscale autosubmit disable
 <li>Application tab: open Cookies -&gt; <code>https://www.cursor.com</code>, then copy the <code>WorkosCursorSessionToken</code> value.</li>
 </ul>
 </li>
-<li>Run <code>tokscale cursor login --name work</code> and paste the token.</li>
-<li>Run <code>tokscale cursor sync --json</code> to populate <code>~/.config/tokscale/cursor-cache/usage.csv</code>.</li>
-<li>Run <code>tokscale --client cursor</code> or any report command.</li>
+<li>Run <code>tokscale cursor login --name work</code> and paste the token when prompted.</li>
+<li>Continue with <code>tokscale cursor sync --json</code> as above.</li>
 </ol>
 <p>Treat the session token like a password. It is stored locally in <code>~/.config/tokscale/cursor-credentials.json</code>.</p>
-<pre><code class="language-bash"># Login to Cursor (requires session token from browser)
+<pre><code class="language-bash"># Login to Cursor (auto-detects Cursor desktop login; falls back to browser cookie paste)
 # --name is optional; it just helps you identify accounts later
 tokscale cursor login --name work
 
@@ -1306,48 +1313,12 @@ tokscale codex activity --json
   "defaultClients": ["opencode", "claude"],
   "scanner": {
     "extraScanPaths": {
-      "codex": [
-        "/Users/me/workspace/project-a/.codex/sessions",
-        "/Users/me/workspace/project-b/.codex/archived_sessions"
-      ],
-      "hermes": [
-        "/Users/me/.hermes/profiles/director_planning",
-        "/Users/me/.hermes/profiles/research/state.db"
-      ]
-    }
-  }
-}
+      "
+
+---
+
+*README truncated. [Continue reading on GitHub](https://github.com/junhoyeo/tokscale#readme)*
 </code></pre>
-<table>
-<thead>
-<tr>
-<th>Setting</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>colorPalette</code></td>
-<td>string</td>
-<td><code>"blue"</code></td>
-<td>TUI color theme (green, halloween, teal, blue, pink, purple, orange, monochrome, ylgnbu, graphite, lagoon, dusk, tokyo-night, catppuccin, solarized, gruvbox, gruvbox-material, one-dark)</td>
-</tr>
-<tr>
-<td><code>includeUnusedModels</code></td>
-<td>boolean</td>
-<td><code>false</code></td>
-<td>Show models with zero tokens in reports</td>
-</tr>
-<tr>
-<td><code>autoRefreshEnabled</code></td>
-<td>boolean</td>
-<td><code>false</code></td>
-<td>Enable auto-</td>
-</tr>
-</tbody></table>
-<hr>
-<p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1360,11 +1331,11 @@ tokscale codex activity --json
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 62.8K</div>
+        <div class="stars">★ 62.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 716</div>
+        <div class="stars">★ 721</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1376,7 +1347,7 @@ tokscale codex activity --json
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 528</div>
+        <div class="stars">★ 530</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">

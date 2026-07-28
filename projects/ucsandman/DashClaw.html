@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ucsandman/DashClaw — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote approval capabilities and maintains a…">
+<meta name="description" content="DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta property="og:description" content="DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote approval capabilities and maintains a…">
+<meta property="og:description" content="DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta name="twitter:description" content="DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote approval capabilities and maintains a…">
+<meta name="twitter:description" content="DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=DashClaw&amp;subtitle=%F0%9F%9B%A1%EF%B8%8FThe+governance+runtime+for+AI+agents.+Intercept+actions%2C+enforce+guard+policies%2C+require+approvals%2C+and+produce+audit-ready+decision+trails.&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote approval capabilities and maintains a tamper-evident audit trail of decisions.",
+  "description": "DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple platforms and maintains a tamper-evident audit ledger.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-07-27T02:52:12.000Z",
+  "dateModified": "2026-07-28T04:56:29.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-27</span>
+    <span><span class="meta-label">updated</span>2026-07-28</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote approval capabilities and maintains a tamper-evident audit trail of decisions.</p>
+    <p class="summary-text">DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple platforms and maintains a tamper-evident audit ledger.</p>
     <ul class="summary-highlights">
-      <li>Provides fail-closed interception for blocked tool calls.</li>
-      <li>Supports remote approval via CLI, PWA, Telegram, or Discord.</li>
-      <li>Offers SDKs for Node, Python, and plain REST.</li>
+      <li>Provides fail-closed interception for blocked tool calls</li>
+      <li>Supports remote approval via CLI, PWA, Telegram, or Discord</li>
+      <li>Includes prompt-injection scanning and tamper-evident audit trails</li>
     </ul>
   </div>
 </section>
@@ -244,14 +244,17 @@ catch (err) { await claw.reportActionFailure(action.action_id, err.message); }
     A[Agent decides&lt;br/&gt;to call a tool] --&gt; B{Guard scores&lt;br/&gt;the act vs&lt;br/&gt;your policies}
     B --&gt;|allow / warn| C[Tool runs]
     B --&gt;|block| D[Hard stop&lt;br/&gt;fail-closed, hook exit 2]
+    B --&gt;|allow_contained| F[Staged in a worktree&lt;br/&gt;diff awaits promote/discard]
     B --&gt;|require_approval| E[Action frozen]
     E --&gt;|approve, from anywhere| C
     E --&gt;|deny| D
+    F --&gt;|promote| C
+    F --&gt;|discard| D
     C --&gt; L[(Signed, replayable&lt;br/&gt;audit row)]
     D --&gt; L
     L -.-&gt; P[Liveness probe re-drives&lt;br/&gt;the seam and verdicts by&lt;br/&gt;execution, never the ledger]
 </code></pre>
-<p>The decision lattice is <code>allow &lt; warn &lt; require_approval &lt; block</code>. Join is <code>max</code>; a <code>block</code> is absolute and cannot be downgraded in the ledger.</p>
+<p>The decision lattice is <code>allow &lt; warn &lt; allow_contained &lt; require_approval &lt; block</code>. Join is <code>max</code>; a <code>block</code> is absolute and cannot be downgraded in the ledger. <code>allow_contained</code> only ever reaches a caller that advertised <code>client_capabilities: ['allow_contained']</code>; an older client sees <code>require_approval</code> instead (version skew only tightens).</p>
 <blockquote>
 <p>[!IMPORTANT]
 <strong>Enforcement is mechanically real only where DashClaw sits in the seam between decide and execute:</strong> the Claude Code, Codex, and Hermes PreToolUse hooks (fail-closed, exit-2 on block), the OpenClaw gateway, and <code>dashclaw_invoke</code>. Everywhere else (bare SDK, API, and MCP callers, desktop chat) governance is <strong>cooperative</strong>: the caller consults guard and honors the decision, every call is still recorded, and a block is never downgraded in the ledger. DashClaw does not claim universal hard enforcement, and this README never will. Per-surface table: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/enforcement-boundary.md"><code>docs/architecture/enforcement-boundary.md</code></a>.</p>
@@ -381,8 +384,8 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
   "env": { "DASHCLAW_URL": "https://your-dashclaw.vercel.app", "DASHCLAW_API_KEY": "oc_live_xxx" } } } }
 </code></pre>
 <p>Every instance also serves Streamable HTTP MCP at <code>/api/mcp</code>. For Claude Desktop, add that URL as a custom connector (Settings, Connectors); OAuth auto-discovers, no key in the UI.</p>
-<p><strong>SDKs.</strong> <code>npm install dashclaw</code> (Node 18+) or <code>pip install dashclaw</code> (Python 3.7+). The <strong>37-method canonical Node surface</strong> covers guard, record, assumptions, approvals, durable-execution finality, security scanning, sessions and the action graph, pairing, risk signals, policy simulation, plan authorization, delegation constraints, and team tasks. The <strong>Python SDK exposes 57 methods</strong>, plus CrewAI and AutoGen integrations.</p>
-<p><strong>REST.</strong> Every primitive is HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>122 routes</strong>: 38 stable, 17 beta, 67 experimental) is in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhooks: <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, configurable per org.</p>
+<p><strong>SDKs.</strong> <code>npm install dashclaw</code> (Node 18+) or <code>pip install dashclaw</code> (Python 3.7+). The <strong>39-method canonical Node surface</strong> covers guard, record, assumptions, approvals, durable-execution finality, security scanning, sessions and the action graph, pairing, risk signals, policy simulation, plan authorization, delegation constraints, containment verdicts, and team tasks. The <strong>Python SDK exposes 59 methods</strong>, plus CrewAI and AutoGen integrations.</p>
+<p><strong>REST.</strong> Every primitive is HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>123 routes</strong>: 39 stable, 17 beta, 67 experimental) is in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhooks: <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, configurable per org.</p>
 </details>
 
 <h3>The governance model</h3>
@@ -497,7 +500,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
 <h3>Project status</h3>
 <p>Stated plainly, because a security tool that oversells itself is a liability:</p>
 <ul>
-<li><strong>Young and fast-moving.</strong> First commit February 2026; releases land near-daily. The API surface is tiered for exactly this reason: 38 stable routes pinned in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json">OpenAPI contract</a>, 17 beta, 67 experimental. Build against stable; experimental can change without notice.</li>
+<li><strong>Young and fast-moving.</strong> First commit February 2026; releases land near-daily. The API surface is tiered for exactly this reason: 39 stable routes pinned in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json">OpenAPI contract</a>, 17 beta, 67 experimental. Build against stable; experimental can change without notice.</li>
 <li><strong>Proven by dogfood, not by scale.</strong> The core loop runs continuously against the maintainer's own agent fleet and a CI policy-smoke harness that live-proves the public claims on every push. External production deployments are early. Treat this as young infrastructure that takes correctness seriously, not a battle-tested incumbent.</li>
 <li><strong>AI-maintained, human-governed, in public.</strong> Day-to-day maintenance is done by an AI agent under the human-held charter in <a href="https://github.com/ucsandman/DashClaw/blob/main/MAINTAINER.md">MAINTAINER.md</a>, whose five invariants (above) the maintainer cannot change. Every decision is on the record in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/maintainer-log.md">maintainer log</a>.</li>
 </ul>
@@ -524,7 +527,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
         <div class="name"><span class="org">Lethe044 /</span> hermes-incident-commander</div>
       </a>
       <a class="related-row" href="/projects/Christabel337/job-scout-agent">
-        <div class="stars">★ 55</div>
+        <div class="stars">★ 54</div>
         <div class="name"><span class="org">Christabel337 /</span> job-scout-agent</div>
       </a>
       <a class="related-row" href="/projects/rodmarkun/anihermes">
@@ -536,7 +539,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
         <div class="name"><span class="org">JackTheGit /</span> hermes-ai-infrastructure-monitoring-toolkit</div>
       </a>
       <a class="related-row" href="/projects/bigph00t/hermescraft">
-        <div class="stars">★ 56</div>
+        <div class="stars">★ 55</div>
         <div class="name"><span class="org">bigph00t /</span> hermescraft</div>
       </a>
       <a class="related-row" href="/projects/hxsteric/mercury">
@@ -544,7 +547,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
         <div class="name"><span class="org">hxsteric /</span> mercury</div>
       </a>
       <a class="related-row" href="/projects/bryercowan/hermes-embodied">
-        <div class="stars">★ 12</div>
+        <div class="stars">★ 11</div>
         <div class="name"><span class="org">bryercowan /</span> hermes-embodied</div>
       </a>
       <a class="related-row" href="/projects/Sahil-SS9/MrHermagi-tutorbot">
