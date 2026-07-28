@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections,…">
+<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections,…">
+<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
-<meta property="og:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+layer+with+open+engram+YAML+format+for+multi-agent+systems&amp;kind=project+%C2%B7+memory">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections,…">
-<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+layer+with+open+engram+YAML+format+for+multi-agent+systems&amp;kind=project+%C2%B7+memory">
+<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -35,16 +35,19 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections, preferences, and conventions across different sessions, tools, and machines.",
+  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared across different MCP tools and sessions.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Cross-platform",
+  "programmingLanguage": "TypeScript",
+  "license": "https://spdx.org/licenses/Apache-2.0.html",
   "author": {
     "@type": "Organization",
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
+  "dateModified": "2026-07-28T20:00:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -112,19 +115,19 @@
   <h1 class="project-name">
     <span class="org">plur-ai</span><span class="slash">/</span>plur
   </h1>
-  <p class="project-desc">Shared memory layer with open engram YAML format for multi-agent systems</p>
+  <p class="project-desc">Shared memory for AI agents</p>
 
   <div class="meta-row">
     <span class="stars">★ 230</span>
+    <span><span class="meta-label">lang</span>TypeScript</span>
+    <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    
-    
-    
+    <span><span class="meta-label">updated</span>2026-07-28</span>
   </div>
 
   <div class="actions">
     <a href="https://github.com/plur-ai/plur" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
-    
+    <a href="https://plur.ai" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
   </div>
 </section>
 
@@ -134,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections, preferences, and conventions across different sessions, tools, and machines.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared across different MCP tools and sessions.</p>
     <ul class="summary-highlights">
-      <li>Uses an open YAML format for engrams</li>
+      <li>Stores memory as plain-text YAML engrams</li>
       <li>Supports MCP tools like Claude Code and Cursor</li>
-      <li>Provides local-first, zero-cost search</li>
+      <li>Offers local-first, zero-cost search</li>
     </ul>
   </div>
 </section>
@@ -613,12 +616,19 @@ size of your store, so there is normally nothing to configure:</p>
 <tr>
 <td>50,000 and up</td>
 <td><code>postgres</code></td>
-<td>a Postgres server you point it at</td>
+<td>a Postgres server you point it at — BM25 in SQL; semantic recall scores in memory (see below)</td>
 </tr>
 </tbody></table>
 <p>YAML stays the source of truth in every tier except <code>postgres</code> (ADR-0001,
 ADR-0005) — the index is a cache that rebuilds automatically, and you can delete
 it anytime. Set <code>backend:</code> in <code>config.yaml</code> to pin a tier explicitly.</p>
+<p>One caveat on the <code>postgres</code> tier, stated here because it is this table's
+headline row: <strong>core does not write embeddings to a Postgres primary store</strong>
+(ADR-0005 amendment). Keyword/BM25 recall runs in SQL, but <code>engram_embeddings</code>
+stays empty unless your deployment populates it, so semantic and hybrid recall
+fall back to loading engrams and scoring in memory — correct results, at the
+O(N) cost this tier otherwise avoids. The adapter says so once at schema init;
+<code>vectorIndex: 'exact'</code> acknowledges and silences it.</p>
 <p><code>sqlite</code> (<code>engrams.db</code>, via <code>better-sqlite3</code>) is the legacy index and is no
 longer selected automatically.</p>
 <h3>Requirements</h3>
@@ -643,6 +653,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
 <p>Conventions: TypeScript, Zod validation, Vitest, no external APIs in core, YAML storage, zero-cost search by default.</p>
 <h3>License</h3>
 <p>Apache-2.0</p>
+
   </section>
 </details>
 
