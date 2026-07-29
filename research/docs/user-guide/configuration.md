@@ -1897,7 +1897,7 @@ display:
     enabled: false
     fields: ["model", "context_pct", "cwd"]
   file_mutation_verifier: true    # Append an advisory footer when write_file/patch calls failed this turn
-  credits_notices: true   # Nous credits status-bar notices (usage bands, depleted). false = silence them; /usage still works
+  credits_notices: true   # Nous credits status-bar notices (usage bands, grant-spent, depleted). false = silence them; /usage still works
   language: en            # UI language for static messages (approval prompts, some gateway replies). en | zh | zh-hant | ja | de | es | fr | tr | uk | af | ko | it | ga | pt | ru | hu
 ```
 
@@ -2139,6 +2139,7 @@ voice:
   max_recording_seconds: 120    # Hard stop for long recordings
   auto_tts: false               # Enable spoken replies automatically when /voice on
   beep_enabled: true            # Play record start/stop beeps in CLI voice mode
+  beep_volume: 0.3              # Beep amplitude (0.0-1.0); raise it on quiet systems / headphones
   silence_threshold: 200        # RMS threshold for speech detection
   silence_duration: 3.0         # Seconds of silence before auto-stop
 ```
