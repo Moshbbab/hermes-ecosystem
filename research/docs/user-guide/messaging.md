@@ -412,6 +412,22 @@ IRC
 
 —
 
+Buzz
+
+—
+
+✅
+
+—
+
+✅
+
+—
+
+—
+
+—
+
 **Voice** = TTS audio replies and/or voice message transcription. **Images** = send/receive images. **Files** = send/receive file attachments. **Threads** = threaded conversations. **Reactions** = emoji reactions on messages. **Typing** = typing indicator while processing. **Streaming** = progressive message updates via editing.
 
 ## Architecture
@@ -1235,4 +1251,5 @@ Defaults to `false`. Only platforms whose adapter implements `delete_message` ho
 -   [Open WebUI + API Server](/docs/user-guide/messaging/open-webui)
 -   [Raft Setup](/docs/user-guide/messaging/raft)
 -   [IRC Setup](/docs/user-guide/messaging/irc)
+-   [Buzz Setup](/docs/user-guide/messaging/buzz)
 -   [Webhooks](/docs/user-guide/messaging/webhooks)

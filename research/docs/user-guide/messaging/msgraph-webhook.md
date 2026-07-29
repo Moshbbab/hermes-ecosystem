@@ -63,7 +63,7 @@ Description
 
 `host`
 
-`0.0.0.0`
+unset (dual-stack: all interfaces, IPv4+IPv6)
 
 Bind address for the HTTP listener. Non-loopback binds require `allowed_source_cidrs`; loopback (`127.0.0.1` / `::1`) is the easiest dev-tunnel / reverse-proxy setup.
 

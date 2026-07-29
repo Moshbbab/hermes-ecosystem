@@ -544,6 +544,10 @@ Groq Whisper STT API key ([groq.com](https://groq.com/))
 
 ElevenLabs premium TTS voices ([elevenlabs.io](https://elevenlabs.io/))
 
+`PORCUPINE_ACCESS_KEY`
+
+Picovoice Porcupine wake-word engine ([console.picovoice.ai](https://console.picovoice.ai/)) — only for `wake_word.provider: porcupine`; the default openWakeWord and sherpa engines need no key
+
 `STT_GROQ_MODEL`
 
 Override the Groq STT model (default: `whisper-large-v3-turbo`)

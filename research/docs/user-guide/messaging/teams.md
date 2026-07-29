@@ -123,7 +123,7 @@ docker logs -f hermes
 Look for:
 
 ```
-[teams] Webhook server listening on 0.0.0.0:3978/api/messages
+[teams] Webhook server listening on * (all interfaces, IPv4+IPv6):3978/api/messages
 ```
 
 * * *
