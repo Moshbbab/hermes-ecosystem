@@ -440,7 +440,7 @@ Self-hosted (local or cloud)
 
 Free (open-source, AGPL-3.0)
 
-**Tools:** `viking_search` (semantic search), `viking_read` (tiered: abstract/overview/full), `viking_browse` (filesystem navigation), `viking_remember` (store facts), `viking_add_resource` (ingest URLs/docs)
+**Tools (6):** `viking_search` (semantic search), `viking_read` (tiered: abstract/overview/full), `viking_browse` (filesystem navigation), `viking_remember` (store facts), `viking_forget` (delete a memory file by exact `viking://` URI), `viking_add_resource` (ingest URLs/docs)
 
 **Setup:**
 
@@ -816,7 +816,7 @@ RetainDB Cloud
 
 $20/month
 
-**Tools:** `retaindb_profile` (user profile), `retaindb_search` (semantic search), `retaindb_context` (task-relevant context), `retaindb_remember` (store with type + importance), `retaindb_forget` (delete memories)
+**Tools (10):** `retaindb_profile` (user profile), `retaindb_search` (semantic search), `retaindb_context` (task-relevant context), `retaindb_remember` (store with type + importance), `retaindb_forget` (delete memories), plus file tools: `retaindb_upload_file`, `retaindb_list_files`, `retaindb_read_file`, `retaindb_ingest_file`, `retaindb_delete_file`
 
 **Setup:**
 
@@ -1072,7 +1072,7 @@ Self-hosted
 
 Free
 
-5
+6
 
 `openviking` + server
 
@@ -1120,7 +1120,7 @@ Cloud
 
 $20/mo
 
-5
+10
 
 `requests`
 

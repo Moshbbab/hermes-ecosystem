@@ -150,13 +150,13 @@ Text-to-image generation via FAL.ai (with opt-in OpenAI / xAI backends).
 
 `video_gen`
 
-`video_generate`
+`video_generate`, `xai_video_edit`, `xai_video_extend`
 
-Text-to-video and image-to-video via plugin-registered backends (xAI Grok-Imagine, FAL.ai Veo 3.1 / Pixverse v6 / Kling O3). Pass `image_url` to animate an image; omit it for text-to-video.
+Text-to-video and image-to-video via plugin-registered backends (xAI Grok-Imagine, FAL.ai Veo 3.1 / Pixverse v6 / Kling O3). Pass `image_url` to animate an image; omit it for text-to-video. `xai_video_edit` / `xai_video_extend` are provider-specific edit/extend tools, gated on xAI Imagine credentials.
 
 `kanban`
 
-`kanban_block`, `kanban_comment`, `kanban_complete`, `kanban_create`, `kanban_heartbeat`, `kanban_link`, `kanban_list`, `kanban_show`, `kanban_unblock`
+`kanban_attach`, `kanban_attach_url`, `kanban_attachments`, `kanban_block`, `kanban_comment`, `kanban_complete`, `kanban_create`, `kanban_heartbeat`, `kanban_link`, `kanban_list`, `kanban_show`, `kanban_unblock`
 
 Multi-agent coordination tools. Registered for dispatcher-spawned task workers (`HERMES_KANBAN_TASK`) and for profiles that explicitly list the `kanban` toolset by name (the `all`/`*` wildcard does **not** enable it). Workers mark tasks done, block, heartbeat, comment, and create/link follow-up tasks; orchestrator profiles additionally get board-routing tools like list/unblock. `delegate_task` children are not Kanban run owners: their schema strips/disables this toolset and runtime guards reject direct board mutations, even if parent `HERMES_KANBAN_*` env vars are present.
 
@@ -204,9 +204,9 @@ Native Spotify control (playback, queue, search, playlists, albums, library). Re
 
 `terminal`
 
-`process`, `terminal`
+`close_terminal`, `focus_pane`, `open_preview`, `process`, `read_terminal`, `terminal`
 
-Shell command execution and background process management.
+Shell command execution and background process management. `read_terminal`, `close_terminal`, `open_preview`, and `focus_pane` drive the desktop GUI's embedded panes and are check\_fn-gated — they only register in desktop-app sessions.
 
 `todo`
 
@@ -260,15 +260,15 @@ Differences from `hermes-cli`
 
 `hermes-cli`
 
-Full toolset — the default for interactive CLI sessions. Includes file, terminal, web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, and clarify, plus the `safe` (read-only) bundle.
+Full toolset — the default for interactive CLI sessions. Includes file, terminal (plus the desktop-GUI pane tools `read_terminal`, `close_terminal`, `open_preview`, `focus_pane`), web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, clarify, computer\_use, Home Assistant, and the kanban tools (all check\_fn-gated at runtime).
 
 `hermes-acp`
 
-Drops `clarify`, `cronjob`, `image_generate`, `text_to_speech`, and all four Home Assistant tools. Focused on coding tasks in IDE context.
+Drops `clarify`, `cronjob`, `image_generate`, `text_to_speech`, `computer_use`, all four Home Assistant tools, the kanban tools, and the desktop-GUI pane tools. Focused on coding tasks in IDE context.
 
 `hermes-api-server`
 
-Drops `clarify` and `text_to_speech`. Keeps everything else — suitable for programmatic access where user interaction isn't possible.
+Drops `clarify`, `text_to_speech`, `computer_use`, the kanban tools, and the desktop-GUI pane tools. Keeps everything else — suitable for programmatic access where user interaction isn't possible.
 
 `hermes-cron`
 
@@ -348,7 +348,7 @@ Same as `hermes-cli` (the Home Assistant tools are already present by default an
 
 `hermes-webhook`
 
-Same as `hermes-cli`.
+Restricted safe subset — only `web_search`, `web_extract`, `vision_analyze`, and `clarify`. Webhook-triggered runs get no terminal, file, or browser access.
 
 `hermes-gateway`
 

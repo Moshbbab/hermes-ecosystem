@@ -181,7 +181,7 @@ Custom providers
 
 `models.providers.*`
 
-`config.yaml` → `custom_providers`
+`config.yaml` → `custom_providers` (auto-migrated to the canonical `providers:` dict on the next `hermes update` config migration)
 
 Maps `baseUrl`, `apiType`/`api` — handles both short ("openai", "anthropic") and hyphenated ("openai-completions", "anthropic-messages", "google-generative-ai") values
 

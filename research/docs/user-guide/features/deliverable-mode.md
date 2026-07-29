@@ -33,37 +33,43 @@ Inline embed
 
 Video
 
-`.mp4 .mov .avi .mkv .webm`
+`.mp4 .mov .avi .mkv .webm .3gp`
 
 Inline embed (where supported)
 
 Audio
 
-`.mp3 .wav .ogg .m4a .flac`
+`.mp3 .m2a .wav .ogg .opus .m4a .flac`
 
 Voice / audio attachment
 
 Documents
 
-`.pdf .docx .doc .odt .rtf .txt .md`
+`.pdf .docx .doc .odt .rtf .txt .md .epub`
 
 File upload
 
 Data
 
-`.xlsx .xls .csv .tsv .json .xml .yaml .yml`
+`.xlsx .xls .ods .csv .tsv .json .xml .yaml .yml`
+
+File upload
+
+Geospatial
+
+`.kmz .kml .geojson .gpx`
 
 File upload
 
 Presentations
 
-`.pptx .ppt .odp`
+`.pptx .ppt .odp .key`
 
 File upload
 
 Archives
 
-`.zip .tar .gz .tgz .bz2 .7z`
+`.zip .tar .gz .tgz .bz2 .xz .7z .rar .apk .ipa`
 
 File upload
 

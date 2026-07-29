@@ -768,12 +768,12 @@ Layered (see above)
 
 Delegation
 
-Provider override only (no automatic fallback)
+Inherits the parent's `fallback_providers` chain; optional provider/model override
 
 `delegation.provider` / `delegation.model`
 
 Cron jobs
 
-Per-job provider override only (no automatic fallback)
+Inherit the configured `fallback_providers` chain; optional per-job provider override
 
 Per-job `provider` / `model`

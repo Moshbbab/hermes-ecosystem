@@ -125,11 +125,17 @@ User ran `/new` or `/reset`
 
 `platform`, `user_id`, `session_key`
 
+`session:compress`
+
+Context compression completed for a session
+
+`platform`, `session_id`, `old_session_id` (empty when compacted in place), `in_place` (bool — `true` = transcript compacted on the same id, `false` = rotated from `old_session_id`), `compression_count`
+
 `agent:start`
 
 Agent begins processing a message
 
-`platform`, `user_id`, `session_id`, `message`
+`platform`, `user_id`, `chat_id`, `thread_id` (forum-topic / thread root id; empty when not in a thread), `chat_type` (`"dm"` | `"group"` | `"forum"`; empty if unknown), `session_id`, `message` (truncated to 500 chars)
 
 `agent:step`
 
@@ -141,7 +147,7 @@ Each iteration of the tool-calling loop
 
 Agent finishes processing
 
-`platform`, `user_id`, `session_id`, `message`, `response`
+same keys as `agent:start`, plus `response` (truncated to 500 chars)
 
 `reaction:added`
 
@@ -164,6 +170,10 @@ Any slash command executed
 #### Wildcard Matching
 
 Handlers registered for `command:*` fire for any `command:` event (`command:model`, `command:reset`, etc.). Monitor all slash commands with a single subscription.
+
+Threaded replies
+
+A handler posting a follow-up message into the same Telegram forum topic should include `message_thread_id=int(thread_id)` when `chat_type == "forum"` and `thread_id` is non-empty.
 
 ### Examples
 
@@ -442,6 +452,10 @@ def register(ctx):
     ctx.register_hook("post_llm_call", my_sync_callback)
     ctx.register_hook("on_session_start", my_init_callback)
     ctx.register_hook("on_session_end", my_cleanup_callback)
+    # Kanban board lifecycle (fire after the board DB change commits):
+    ctx.register_hook("kanban_task_claimed", my_claim_callback)     # dispatcher process
+    ctx.register_hook("kanban_task_completed", my_done_callback)    # worker process
+    ctx.register_hook("kanban_task_blocked", my_blocked_callback)   # worker process
 ```
 
 **General rules for all hooks:**
@@ -1886,7 +1900,7 @@ The hook is guarded on a non-empty, non-interrupted response — it will not fir
 
 ## Shell Hooks
 
-Declare shell-script hooks in your `cli-config.yaml` and Hermes will run them as subprocesses whenever the corresponding plugin-hook event fires — in both CLI and gateway sessions. No Python plugin authoring required.
+Declare shell-script hooks in your `~/.hermes/config.yaml` and Hermes will run them as subprocesses whenever the corresponding plugin-hook event fires — in both CLI and gateway sessions. No Python plugin authoring required.
 
 Use shell hooks when you want a drop-in, single-file script (Bash, Python, anything with a shebang) to:
 
@@ -2122,7 +2136,7 @@ Three escape hatches bypass the interactive prompt — any one is sufficient:
 
 1.  `--accept-hooks` flag on the CLI (e.g. `hermes --accept-hooks chat`)
 2.  `HERMES_ACCEPT_HOOKS=1` environment variable
-3.  `hooks_auto_accept: true` in `cli-config.yaml`
+3.  `hooks_auto_accept: true` in `~/.hermes/config.yaml`
 
 Non-TTY runs (gateway, cron, CI) need one of these three — otherwise any newly-added hook silently stays un-registered and logs a warning.
 

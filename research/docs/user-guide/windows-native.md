@@ -4,7 +4,7 @@
 
 Hermes runs natively on Windows 10 and Windows 11 — no WSL, no Cygwin, no Docker. This page is the deep dive: what works natively, what's WSL-only, what the installer actually does, and the Windows-specific knobs you might need to touch.
 
-If you just want to install, the one-liner on the [landing page](/docs/) or [Installation page](/docs/getting-started/installation#windows-native-powershell) is all you need. Come back here when something surprises you.
+If you just want to install, the one-liner on the [landing page](/docs/) or [Installation page](/docs/getting-started/installation#windows-native) is all you need. Come back here when something surprises you.
 
 Want WSL instead?
 

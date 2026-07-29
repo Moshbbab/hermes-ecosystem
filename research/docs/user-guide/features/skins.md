@@ -158,7 +158,7 @@ General UI accent color (highlights, active elements)
 
 UI labels and tags
 
-`#4dd0e1` (teal)
+`#DAA520` (goldenrod)
 
 `ui_ok`
 
@@ -224,7 +224,7 @@ Background color for the voice-mode status badge
 
 Background color for the TUI mouse-selection highlighter. Falls back to `completion_menu_current_bg` when unset.
 
-`#333355`
+`#3a3a55`
 
 `completion_menu_bg`
 

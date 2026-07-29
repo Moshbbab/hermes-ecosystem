@@ -172,6 +172,10 @@ Diagnose config and dependency issues.
 
 On-demand supply-chain audit (OSV.dev) for the venv, plugin requirements, and pinned MCP servers.
 
+`hermes approvals`
+
+Approval-prompt tools — mine approval history into allowlist proposals.
+
 `hermes dump`
 
 Copy-pasteable setup summary for support/debugging.
@@ -204,6 +208,14 @@ View, tail, and filter agent/gateway/error log files.
 
 Show, edit, migrate, and query configuration files.
 
+`hermes skin`
+
+List, switch, and tweak display skins.
+
+`hermes console`
+
+Open the safe Hermes command console.
+
 `hermes pairing`
 
 Approve or revoke messaging pairing codes.
@@ -219,6 +231,10 @@ Group several skills under a single `/<name>` slash command. See [Skill Bundles]
 `hermes curator`
 
 Background skill maintenance — status, run, pause, pin. See [Curator](/docs/user-guide/features/curator).
+
+`hermes journey` (aliases `learning`, `memory-graph`)
+
+Timeline of learned skills + memories over time.
 
 `hermes memory`
 
@@ -246,7 +262,7 @@ Configure enabled tools per platform.
 
 `hermes computer-use`
 
-Install or check the cua-driver backend (macOS Computer Use).
+Install or check the Computer Use (cua-driver) backend (macOS/Windows/Linux).
 
 `hermes pets`
 
@@ -271,6 +287,10 @@ Import a Claude Code (`~/.claude`) or Codex CLI (`~/.codex`) setup.
 `hermes dashboard`
 
 Launch the web dashboard for managing config, API keys, and sessions.
+
+`hermes serve`
+
+Start the Hermes backend server (headless; powers the desktop app and remote backends).
 
 `hermes desktop` (alias `gui`)
 
@@ -425,6 +445,12 @@ _(none)_
 
 Override the provider for this run
 
+`--usage-file <path>`
+
+_(none)_
+
+Write a JSON usage report after the run (see below)
+
 ```
 hermes -z "…" --provider openrouter --model openai/gpt-5.5
 # or:
@@ -432,6 +458,15 @@ HERMES_INFERENCE_MODEL=anthropic/claude-sonnet-4.6 hermes -z "…"
 ```
 
 Same agent, same tools, same skills — just strips every interactive / cosmetic layer. If you need tool output in the transcript too, use `hermes chat -q` instead; `-z` is explicitly for "I only want the final answer".
+
+#### `--usage-file` — JSON usage report for pipelines
+
+`hermes -z "…" --usage-file /path/report.json` writes a machine-readable usage report after the run: `estimated_cost_usd`, `input_tokens` / `output_tokens` / `cache_read_tokens` / `cache_write_tokens` / `reasoning_tokens` / `total_tokens`, `api_calls`, `model`, `provider`, `session_id`, `service_tier`, and `completed` / `failed` flags. The report is written **even when the run fails**, so batch pipelines can always account for spend. It has no effect outside `-z`/`--oneshot`, and a broken usage write never masks the run's own outcome.
+
+```
+hermes -z "summarize this repo" --usage-file /tmp/usage.json
+jq .estimated_cost_usd /tmp/usage.json
+```
 
 ## `hermes model`
 
@@ -538,7 +573,7 @@ Remove legacy `hermes.service` units left over from pre-rename installs. Profile
 
 `enroll`
 
-Experimental: enroll this gateway with a relay connector and save relay credentials for connector-backed platforms.
+Experimental: enroll this gateway with a relay connector and save relay credentials for connector-backed platforms. See [Hermes Relay](/docs/user-guide/messaging/relay).
 
 Options:
 
@@ -1906,9 +1941,17 @@ Show current config values.
 
 Open `config.yaml` in your editor.
 
+`get <key> [--json]`
+
+Print a single config value by dotted key (e.g. `hermes config get model.default`). `--json` emits machine-readable output.
+
 `set <key> <value>`
 
 Set a config value.
+
+`unset <key>`
+
+Remove a config key, reverting it to the built-in default.
 
 `path`
 
@@ -2944,7 +2987,7 @@ Print version information.
 
 Pull latest changes and reinstall dependencies.
 
-| `hermes uninstall [--full] [--gui] [--yes]` | Remove Hermes, optionally deleting all config/data. `--gui` removes only the desktop Chat GUI, leaving the agent intact; `--full` also deletes config/data; `--yes` skips prompts. |
+| `hermes uninstall [--full] [--gui] [--dry-run] [--yes]` | Remove Hermes, optionally deleting all config/data. `--gui` removes only the desktop Chat GUI, leaving the agent intact; `--full` also deletes config/data; `--dry-run` prints what would be removed without changing anything; `--yes` skips prompts. |
 
 ## See also
 
