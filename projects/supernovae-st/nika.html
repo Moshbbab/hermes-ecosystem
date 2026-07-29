@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>supernovae-st/nika — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Nika is a workflow language for AI that uses a single file to define a graph of model calls, tools, and processes. It provides a Rust-based reference engine…">
+<meta name="description" content="Nika is a workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to define graphs of model calls, tools, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/supernovae-st/nika">
 <meta property="og:title" content="supernovae-st/nika — Hermes Atlas">
-<meta property="og:description" content="Nika is a workflow language for AI that uses a single file to define a graph of model calls, tools, and processes. It provides a Rust-based reference engine…">
+<meta property="og:description" content="Nika is a workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to define graphs of model calls, tools, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/supernovae-st/nika">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="supernovae-st/nika — Hermes Atlas">
-<meta name="twitter:description" content="Nika is a workflow language for AI that uses a single file to define a graph of model calls, tools, and processes. It provides a Rust-based reference engine…">
+<meta name="twitter:description" content="Nika is a workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to define graphs of model calls, tools, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=nika&amp;subtitle=Intent+as+Code+%7C+the+workflow+language+for+AI.+One+file%2C+4+verbs%2C+one+Rust+binary.+Local-first%2C+any+model%2C+AGPL-3.0.+%F0%9F%A6%8B&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/supernovae-st/nika#software",
   "name": "nika",
-  "description": "Nika is a workflow language for AI that uses a single file to define a graph of model calls, tools, and processes. It provides a Rust-based reference engine that audits workflows for cost, permissions, and types before execution.",
+  "description": "Nika is a workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to define graphs of model calls, tools, and processes in a single file that can be audited for costs, permissions, and types before execution.",
   "url": "https://hermesatlas.com/projects/supernovae-st/nika",
   "codeRepository": "https://github.com/supernovae-st/nika",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "supernovae-st",
     "url": "https://github.com/supernovae-st"
   },
-  "dateModified": "2026-07-29T05:33:42.000Z",
+  "dateModified": "2026-07-29T12:51:54.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 37
+    "userInteractionCount": 36
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,7 +119,7 @@
   <p class="project-desc">Intent as Code | the workflow language for AI. One file, 4 verbs, one Rust binary. Local-first, any model, AGPL-3.0. 🦋</p>
 
   <div class="meta-row">
-    <span class="stars">★ 37</span>
+    <span class="stars">★ 36</span>
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>AGPL-3.0</span>
     
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Nika is a workflow language for AI that uses a single file to define a graph of model calls, tools, and processes. It provides a Rust-based reference engine that audits workflows for cost, permissions, and types before execution.</p>
+    <p class="summary-text">Nika is a workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to define graphs of model calls, tools, and processes in a single file that can be audited for costs, permissions, and types before execution.</p>
     <ul class="summary-highlights">
-      <li>Single Rust binary under AGPL-3.0 license</li>
-      <li>Static auditing via nika check command</li>
-      <li>Hash-chained, tamper-evident execution receipts</li>
+      <li>Executes workflows locally using a single Rust binary.</li>
+      <li>Audits costs, secrets, and types before spending any tokens.</li>
+      <li>Generates hash-chained, verifiable receipts for every workflow run.</li>
     </ul>
   </div>
 </section>
@@ -196,20 +196,30 @@ nika examples run 01-hello --model ollama/llama3.2:3b   # got Ollama? the same r
 <p><img src="https://raw.githubusercontent.com/supernovae-st/nika/main/media/nika-hero.gif" alt="nika check audits the workflow (plan, cost, secrets, types), then nika run executes it locally" loading="lazy" decoding="async"></p>
 <p>Nika audits a workflow <strong>before a single token is spent</strong> (plan, cost
 ceiling, secret flows, types, tool args), then runs it:</p>
+<p>Every line says what it looked at. A rung that covers less than its
+name suggests narrows itself rather than borrowing your trust — <code>TYPES</code>
+names the shapes it could not see, <code>PERMITS</code> names what defers to the
+run, <code>COST</code> names the half of the bill it prices.</p>
 <pre><code class="language-text">$ nika check brief.nika.yaml
- ✔ PLAN     2 wave(s) · 2 task(s) · max parallelism 1
-      wave 1 fetch_notes (exec · sh -c)
+ ✔ PLAN     2 waves · 2 tasks · max parallelism 1
+      wave 1 fetch_notes (invoke · nika:read)
       wave 2 brief (infer · ollama/llama3.2:3b)
- ✔ SECRETS  no information-flow escapes
+ ✔ MODELS   1 model resolves in this binary
+ ⚠  COST     bounded portion $0.0000 no total ceiling · 1 uncapped task · prompts, exec + mcp unpriced · prices 2026-07-28
+   brief  ollama/llama3.2:3b  UNBOUNDED — no catalog price (local/unknown model)
+ ✔ SECRETS  no declared secret reaches an effect · model echo untracked
  ✔ TYPES    deep references fit the shapes tasks declare · builtin output has none
- ✔ TOOLS    every nika: tool names a canonical builtin
- ✔ ARGS     every invoke arg key is declared + every required arg is present
- ✔ SCHEMA   every authored schema: is satisfiable
- ✔ audited · 2 task(s) · 2 wave(s) · permits none · est ≥$0.0000
+ ✔ TOOLS    every named nika: tool is canonical · globs + mcp: not checked
+ ✔ ARGS     every builtin invoke arg key is declared + required args present
+ ✔ SCHEMA   no known-unsatisfiable form in an authored schema: · $ref opaque
+ ✔ GATES    no task proven dead · status literals in vocabulary
+ ✔ PERMITS  literal + const: args fit the boundary · computed + symlinks at run
+ ✔ TRIFECTA no lethal trifecta over the declared permits: without a human gate
+ ✔ audited · 2 tasks · 2 waves · permits declared · est unbounded · 1 uncapped task · 0 hints
 
 $ nika run brief.nika.yaml
   🦋 nika · daily-brief · 2 tasks
-  ✔  fetch_notes  exec · cat
+  ✔  fetch_notes  invoke · nika:read
   ✔  brief        infer · ollama/llama3.2:3b
   ── 2/2 done · $0.000 · elapsed 16.2s ───────────────────────────
 </code></pre>
@@ -740,7 +750,7 @@ butterfly on the SuperNovae flag. <em>Prompt once. Run forever.</em></p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 26.8K</div>
+        <div class="stars">★ 26.9K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -752,7 +762,7 @@ butterfly on the SuperNovae flag. <em>Prompt once. Run forever.</em></p>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 350</div>
+        <div class="stars">★ 351</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
