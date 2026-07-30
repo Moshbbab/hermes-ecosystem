@@ -2620,11 +2620,11 @@ Troubleshooting mode: disable ALL customizations — skips plugin discovery, MCP
 
 `HERMES_TOOL_PROGRESS`
 
-Deprecated compatibility variable for tool progress display. Prefer `display.tool_progress` in `config.yaml`.
+Unsupported since the config-v12 support floor — the variable is ignored. Use `display.tool_progress` in `config.yaml`.
 
 `HERMES_TOOL_PROGRESS_MODE`
 
-Deprecated compatibility variable for tool progress mode. Prefer `display.tool_progress` in `config.yaml`.
+Deprecated compatibility variable for tool progress mode (still read by the gateway as a fallback). Prefer `display.tool_progress` in `config.yaml`.
 
 `HERMES_HUMAN_DELAY_MODE`
 

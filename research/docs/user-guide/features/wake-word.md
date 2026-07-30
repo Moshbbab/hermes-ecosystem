@@ -8,7 +8,7 @@ Detection runs **entirely on-device**. The always-on listener only watches for t
 
 ## How it works
 
-1.  With `wake_word.enabled: true` (or after `/wake on`), a lightweight hotword detector listens on your default microphone.
+1.  With `wake_word.enabled: true` (or after `/wake on`), a lightweight hotword detector listens on your configured input device, or the process default microphone when `wake_word.input_device` is unset.
 2.  When it hears the wake phrase it pauses itself (freeing the mic), starts a new session, and records one utterance with voice mode's silence detection.
 3.  Your speech is transcribed and sent to the agent. After it replies, the listener resumes automatically and waits for the next wake word.
 
@@ -82,6 +82,7 @@ wake_word:
 wake_word:
   enabled: false
   surface: auto               # eligible surface: "auto" | "cli" | "tui" | "gui"
+  input_device: null           # PortAudio input index or device-name substring; null = process default
   provider: openwakeword      # "openwakeword" (free, local) | "sherpa" (free, any phrase) | "porcupine"
   phrase: "hey hermes"        # cosmetic label only — detection is keyed by the model/keyword below
   sensitivity: 0.6            # 0.0-1.0 — higher = stricter (fewer false triggers), consistent across all engines
@@ -95,6 +96,8 @@ wake_word:
 ```
 
 `sensitivity`, `phrase`, and `start_new_session` apply to both engines. The `openwakeword` and `porcupine` blocks select the actual detection model.
+
+`input_device` is passed directly to the wake listener's PortAudio (`sounddevice`) stream. Use either a numeric device index or an unambiguous device-name substring. This setting only changes wake-word capture; desktop push-to-talk still uses the desktop application's microphone path.
 
 ### Reducing false triggers on ambient speech
 
@@ -215,6 +218,22 @@ PORCUPINE_ACCESS_KEY=your-key-here
 ### "Listening" but never wakes (macOS)
 
 macOS grants microphone access per **process**. STT working in the desktop app proves the _renderer_ has mic access — the wake listener runs in the Python _backend_, which needs its own grant. Without it, CoreAudio hands the backend a "working" stream that only ever delivers silence, so the ear shows listening but the phrase never fires. Hermes detects this (`/wake status` shows "mic delivers only silence"; the desktop ear tooltip carries the same hint). Fix: System Settings → Privacy & Security → Microphone → enable the Hermes backend (it may appear as your terminal, `python`, or Hermes), then toggle the wake word off and on.
+
+### "Listening" but receives silence (Windows)
+
+Desktop push-to-talk and wake-word capture use different microphone paths. Push-to-talk uses the desktop application's browser capture, while the wake-word listener opens a PortAudio stream in the Python backend. One can work while the other selects a silent or unusable Windows input.
+
+`/wake status` reports the selected input device and Windows audio host API. When it reports silence, set `wake_word.input_device` to the numeric index or an unambiguous name of the working PortAudio input, then toggle the wake word:
+
+```
+hermes config set wake_word.input_device "Microphone Array"
+```
+
+Use `null` to return to the process default:
+
+```
+hermes config set wake_word.input_device null
+```
 
 ## Notes & limits
 
