@@ -38,6 +38,14 @@ Override Nous Portal base URL (rarely needed; development/testing only)
 
 Override Nous inference endpoint directly
 
+`AI_GATEWAY_API_KEY`
+
+Vercel AI Gateway API key ([ai-gateway.vercel.sh](https://ai-gateway.vercel.sh))
+
+`AI_GATEWAY_BASE_URL`
+
+Override AI Gateway base URL (default: `https://ai-gateway.vercel.sh/v1`)
+
 `OPENAI_API_KEY`
 
 API key for custom OpenAI-compatible endpoints (used with `OPENAI_BASE_URL`)
@@ -652,6 +660,22 @@ Semantic long-term memory with profile recall and session ingest ([supermemory.a
 
 Daytona cloud sandboxes ([daytona.io](https://daytona.io/))
 
+`VERCEL_TOKEN`
+
+Vercel Sandbox access token ([vercel.com](https://vercel.com/))
+
+`VERCEL_PROJECT_ID`
+
+Vercel project ID (required with `VERCEL_TOKEN`)
+
+`VERCEL_TEAM_ID`
+
+Vercel team ID (required with `VERCEL_TOKEN`)
+
+`VERCEL_OIDC_TOKEN`
+
+Vercel short-lived OIDC token (development-only alternative)
+
 ### Skill API Keys
 
 Secrets consumed by specific bundled / optional skills. Each is only needed if you use the corresponding skill.
@@ -762,7 +786,7 @@ Description
 
 `TERMINAL_ENV`
 
-Backend: `local`, `docker`, `ssh`, `singularity`, `modal`, `daytona`
+Backend: `local`, `docker`, `ssh`, `singularity`, `modal`, `daytona`, `vercel_sandbox`
 
 `HERMES_DOCKER_BINARY`
 
@@ -803,6 +827,10 @@ Modal container image
 `TERMINAL_DAYTONA_IMAGE`
 
 Daytona sandbox image
+
+`TERMINAL_VERCEL_RUNTIME`
+
+Vercel Sandbox runtime (`node24`, `node22`, `python3.13`)
 
 `TERMINAL_TIMEOUT`
 

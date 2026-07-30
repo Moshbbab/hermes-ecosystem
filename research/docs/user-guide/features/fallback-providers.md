@@ -46,6 +46,12 @@ Value
 
 Requirements
 
+AI Gateway
+
+`ai-gateway`
+
+`AI_GATEWAY_API_KEY`
+
 OpenRouter
 
 `openrouter`
