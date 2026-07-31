@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports multiple operating…">
+<meta name="description" content="This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports three operational…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports multiple operating…">
+<meta property="og:description" content="This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports three operational…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports multiple operating…">
+<meta name="twitter:description" content="This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports three operational…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports multiple operating modes including rewrite, detect-only, and in-place editing, with optional voice profiles for different tones.",
+  "description": "This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports three operational modes: Rewrite, Detect, and Edit, and includes optional voice profiles for different prose styles.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-07-31T00:46:47.000Z",
+  "dateModified": "2026-07-31T05:53:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2704
+    "userInteractionCount": 2710
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports multiple operating modes including rewrite, detect-only, and in-place editing, with optional voice profiles for different tones.</p>
+    <p class="summary-text">This project provides a portable writing skill designed to audit and rewrite content to remove detectable AI writing patterns. It supports three operational modes: Rewrite, Detect, and Edit, and includes optional voice profiles for different prose styles.</p>
     <ul class="summary-highlights">
-      <li>Supports three operational modes: Rewrite, Detect, and Edit.</li>
-      <li>Includes an optional voice profile for casual, professional, technical, warm, or blunt tones.</li>
-      <li>Compatible with Claude Code, OpenClaw, Hermes, and Cursor.</li>
+      <li>Supports Claude Code, OpenClaw, Hermes, and Cursor.</li>
+      <li>Features a two-pass detection system for identifying patterns.</li>
+      <li>Includes a 112-entry word replacement table.</li>
     </ul>
   </div>
 </section>
@@ -184,7 +184,7 @@
 <ul>
 <li><strong>Structured audit</strong> — returns identified issues with quoted text, the rewrite, a change summary, and a second-pass audit in four discrete sections. You see exactly what changed and why.</li>
 <li><strong>Two-pass detection</strong> — the second pass re-reads the rewrite and catches patterns that survive the first edit: recycled transitions, lingering inflation, copula swaps that snuck through.</li>
-<li><strong>112-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 words always flag, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
+<li><strong>112-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 words always flag, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 1 itself splits into <strong>1A frequency markers</strong> (<code>delve</code>, <code>tapestry</code>) and <strong>1B clarity edits</strong> (<code>in order to</code>, <code>utilize</code>) — same fix, but only 1A is evidence about how a passage was produced, and 1B is weighted lower so a wordiness fix cannot push a document toward an AI classification. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
 <li><strong>61 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
 <li><strong>Detect mode</strong> — flag patterns without rewriting. See which flags are real problems vs. judgment calls. Useful when patterns might be intentional or you're auditing content you don't want altered.</li>
 <li><strong>Works across platforms</strong> — one <code>SKILL.md</code> runs in Claude Code, Cowork (as a plugin), OpenClaw, and Cursor (as a ported rule). See the install paths below.</li>
@@ -780,6 +780,17 @@ const { score, label, issues } = AIDetector.analyzeText("Your text here…");
 <p>See <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/README.md"><code>detector/README.md</code></a> for the full <code>analyzeText</code> API
 and <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/CATEGORIES.md"><code>detector/CATEGORIES.md</code></a> for the rule ↔ category
 map that keeps <code>SKILL.md</code> and the engine in sync.</p>
+<p>The engine also ships a preservation validator. <code>detector/validate.js</code> compares
+a rewrite against its original and fails when the edit touched something it
+shouldn't have: a code block, YAML frontmatter, a blockquote, a table cell,
+inline code, a URL, a file path, the heading structure, or when the rewrite ends
+with more flagged patterns than it started with.</p>
+<pre><code class="language-bash">node detector/validate.js before.md after.md   # exits 1 on a preservation error
+</code></pre>
+<p><strong>Does it pass its own pass?</strong> <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/PROOF.md"><code>PROOF.md</code></a> scores this repo's
+documentation with this repo's detector and publishes the result, including two
+defects the scan found in our own work. <code>npm run self-scan</code> reproduces it, and
+CI fails when a document drifts past its budget.</p>
 <h3>Credits</h3>
 <p>Pattern research informed by:</p>
 <ul>
@@ -822,7 +833,7 @@ map that keeps <code>SKILL.md</code> and the engine in sync.</p>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 351</div>
+        <div class="stars">★ 352</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
