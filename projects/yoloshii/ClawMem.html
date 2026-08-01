@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
+<meta name="description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
+<meta property="og:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
+<meta name="twitter:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+Hermes+and+OpenClaw.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, intent classification, and automated decision capture without cloud dependencies.",
+  "description": "ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, session handoffs, and automated decision capture using a local GGUF observer model.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-07-19T15:51:47.000Z",
+  "dateModified": "2026-08-01T13:32:29.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-19</span>
+    <span><span class="meta-label">updated</span>2026-08-01</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, intent classification, and automated decision capture without cloud dependencies.</p>
+    <p class="summary-text">ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, session handoffs, and automated decision capture using a local GGUF observer model.</p>
     <ul class="summary-highlights">
+      <li>Supports Claude Code, OpenClaw, and Hermes agents</li>
       <li>Uses hybrid retrieval with BM25 and vector search</li>
-      <li>Integrates via MCP, Claude Code hooks, and plugins</li>
-      <li>Captures decisions using a local GGUF observer model</li>
+      <li>Operates fully locally without API keys or cloud dependencies</li>
     </ul>
   </div>
 </section>
@@ -173,7 +173,7 @@
 <li><strong>Traverses multi-graphs</strong> (semantic, temporal, causal) via adaptive beam search</li>
 <li><strong>Evolves memory metadata</strong> as new documents create or refine connections</li>
 <li><strong>Infers causal relationships</strong> between facts extracted from session observations</li>
-<li><strong>Detects contradictions</strong> between new and prior decisions, auto-decaying superseded ones (with an additional merge-time contradiction gate in the consolidation worker that blocks cross-observation contradictions before they land, v0.7.1)</li>
+<li><strong>Detects contradictions</strong> between new and prior decisions, auto-decaying superseded ones — when a contradiction <strong>judge</strong> is configured (<code>CLAWMEM_JUDGE_*</code>, v0.29.0; disabled otherwise) (with an additional merge-time contradiction gate in the consolidation worker that blocks cross-observation contradictions before they land, v0.7.1)</li>
 <li><strong>Guards against cross-entity merges</strong> during consolidation — name-aware dual-threshold merge safety compares entity anchors before merging similar observations, preventing "Alice decided X" from merging into "Bob decided X" (v0.7.1)</li>
 <li><strong>Prevents context bleed in derived insights</strong> — the Phase 3 deductive synthesis pipeline validates every draft against an anti-contamination wrapper (deterministic entity contamination check + LLM validator + dedupe) before writing cross-session deductive observations (v0.7.1)</li>
 <li><strong>Frames surfaced facts as background knowledge</strong> — <code>context-surfacing</code> wraps injected content in <code>&lt;instruction&gt;</code> + <code>&lt;facts&gt;</code> + <code>&lt;relationships&gt;</code> blocks, telling the model to treat facts as already-known and exposing memory-graph edges between surfaced docs directly in-prompt (v0.7.1)</li>
@@ -993,7 +993,7 @@ clawmem status                                  Quick index status
 <tr>
 <td><code>decision-extractor</code></td>
 <td>Stop</td>
-<td>GGUF observer extracts structured observations (decisions, preferences, milestones, problems, bugfixes, features, refactors, discoveries), infers causal links, detects contradictions with prior decisions</td>
+<td>GGUF observer extracts structured observations (decisions, preferences, milestones, problems, bugfixes, features, refactors, discoveries), infers causal links, detects contradictions with prior decisions (judge-gated — requires <code>CLAWMEM_JUDGE_*</code>, v0.29.0)</td>
 </tr>
 <tr>
 <td><code>handoff-generator</code></td>
@@ -1061,7 +1061,7 @@ clawmem status                                  Quick index status
 <li><strong>Temporal</strong> — chronological document ordering</li>
 <li><strong>Causal</strong> — LLM-inferred cause→effect from Observer facts + Beads <code>blocks</code>/<code>waits-for</code> deps</li>
 <li><strong>Supporting</strong> — LLM-analyzed document relationships + Beads <code>discovered-from</code> deps</li>
-<li><strong>Contradicts</strong> — LLM-analyzed document relationships. Additional <code>contradicts</code> edges are inserted by the consolidation worker's merge-time contradiction gate (v0.7.1) when it blocks a Phase 2 merge under the <code>link</code> policy, and by Phase 3 deductive synthesis when a new draft contradicts a prior deductive observation.</li>
+<li><strong>Contradicts</strong> — LLM-analyzed document relationships. Additional <code>contradicts</code> edges are inserted by Phase 3 deductive synthesis when a new draft contradicts a prior deductive observation. <em>(Phase 2's merge-time gate does not insert edges — a blocked merge under <code>link</code> sets the old consolidated row's <code>invalidated_by</code> backlink instead.)</em></li>
 </ul>
 <h4>Content Type Scoring</h4>
 <table>
@@ -1153,7 +1153,7 @@ clawmem status                                  Quick index status
 </tr>
 </tbody></table>
 <p>Content types are inferred from frontmatter or file path patterns. Half-lives extend up to 3× for frequently-accessed memories (access reinforcement, decays over 90 days). Non-durable types (handoff, progress, conversation, note, project) lose 5% confidence per week without access (attention decay). Decision/deductive/preference/hub/research/antipattern are exempt.</p>
-<p><strong>Quality scoring:</strong> Each document gets a <code>quality_score</code> (0.0–1.0) computed during indexing based on length, structure (headings, lists), decision/correction keywords, and frontmatter richness. Applied as `qualityMultiplier = 0.7 + 0.6 × qualit</p>
+<p><strong>Quality scoring:</strong> Each document gets a <code>quality_score</code> (0.0–1.0) computed</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/yoloshii/ClawMem#readme">Continue reading on GitHub</a></em></p>
 
@@ -1168,7 +1168,7 @@ clawmem status                                  Quick index status
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 62.2K</div>
+        <div class="stars">★ 62.3K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -1180,7 +1180,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 353</div>
+        <div class="stars">★ 354</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">

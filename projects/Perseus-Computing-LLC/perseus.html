@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Perseus-Computing-LLC/perseus — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Perseus is a memory and context layer for AI agents that resolves workspace state into verified facts before the context window opens. It uses the Model…">
+<meta name="description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders context files like AGENTS.md or.cursorrules from a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta property="og:description" content="Perseus is a memory and context layer for AI agents that resolves workspace state into verified facts before the context window opens. It uses the Model…">
+<meta property="og:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders context files like AGENTS.md or.cursorrules from a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta name="twitter:description" content="Perseus is a memory and context layer for AI agents that resolves workspace state into verified facts before the context window opens. It uses the Model…">
+<meta name="twitter:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders context files like AGENTS.md or.cursorrules from a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=perseus&amp;subtitle=Live+context+engine+for+AI+agents%3A+resolve+verified+workspace+state+before+the+context+window+opens.+Pairs+with+Perseus+Vault+for+persistent+encrypted+memory.+Local-first%2C+MIT.+pip&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus#software",
   "name": "perseus",
-  "description": "Perseus is a memory and context layer for AI agents that resolves workspace state into verified facts before the context window opens. It uses the Model Context Protocol to provide live context to assistants and pairs with Perseus Vault for persistent, encrypted memory using SQLite and FTS5.",
+  "description": "Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders context files like AGENTS.md or.cursorrules from a single.perseus/context.md source and supports MCP via stdio or SSE.",
   "url": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus",
   "codeRepository": "https://github.com/Perseus-Computing-LLC/perseus",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "Perseus-Computing-LLC",
     "url": "https://github.com/Perseus-Computing-LLC"
   },
-  "dateModified": "2026-08-01T03:37:11.000Z",
+  "dateModified": "2026-08-01T18:08:33.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Perseus is a memory and context layer for AI agents that resolves workspace state into verified facts before the context window opens. It uses the Model Context Protocol to provide live context to assistants and pairs with Perseus Vault for persistent, encrypted memory using SQLite and FTS5.</p>
+    <p class="summary-text">Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders context files like AGENTS.md or.cursorrules from a single.perseus/context.md source and supports MCP via stdio or SSE.</p>
     <ul class="summary-highlights">
-      <li>Resolves live workspace state into context for AI agents.</li>
-      <li>Implements Model Context Protocol for tool-based workspace interaction.</li>
-      <li>Supports local-first, encrypted persistent memory via Perseus Vault.</li>
+      <li>Renders context for various assistant profiles</li>
+      <li>Local-first with no account or hosted service required</li>
+      <li>Supports MCP-native exposure via stdio or SSE</li>
     </ul>
   </div>
 </section>
@@ -166,16 +166,31 @@ perseus render .perseus/context.md -o AGENTS.md   # 3. write live context your a
 and verifies a render. Step 3 writes the file your assistant loads at session
 start (<code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.cursorrules</code>, ...). Keep it live with
 <code>perseus watch</code> (or cron/systemd/launchd). Full walkthrough:
-<a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/QUICKSTART.md">QUICKSTART.md</a>.</p>
+<a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/quickstart.md">Quickstart</a>.</p>
+<h4>What you get</h4>
+<ul>
+<li><strong>Live context before the first turn</strong> — render verified workspace facts instead of making an assistant rediscover them.</li>
+<li><strong>One source, any assistant</strong> — write <code>.perseus/context.md</code> once and render to <code>.hermes.md</code>, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.cursorrules</code>, or another assistant context file.</li>
+<li><strong>Local-first by default</strong> — the core renderer reads your workspace locally; no account or hosted service is required.</li>
+<li><strong>MCP-native when you need it</strong> — expose the same live context as a stdio or SSE MCP server, with shell-executing tools opt-in.</li>
+</ul>
+<h4>Fastest path</h4>
+<pre><code class="language-bash">pip install perseus-ctx
+cd your-project
+perseus quickstart
+</code></pre>
+<p>That creates <code>.perseus/context.md</code> and a project config, detects common stacks,
+and verifies the first render. See the <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/quickstart.md">5-minute quickstart</a>
+for assistant profiles, refresh options, and security settings.</p>
 <p><img src="https://raw.githubusercontent.com/Perseus-Computing-LLC/perseus/main/demo.gif" alt="Perseus demo — before/after cold-start" loading="lazy" decoding="async"></p>
 <p><a href="https://github.com/Perseus-Computing-LLC/perseus/actions/workflows/test.yml"><img src="https://github.com/Perseus-Computing-LLC/perseus/actions/workflows/test.yml/badge.svg" alt="CI" loading="lazy" decoding="async"></a>
 <a href="https://pypi.org/project/perseus-ctx/"><img src="https://img.shields.io/pypi/v/perseus-ctx" alt="PyPI" loading="lazy" decoding="async"></a>
 <a href="https://registry.modelcontextprotocol.io/"><img src="https://img.shields.io/badge/MCP-Registry-blue" alt="MCP Registry" loading="lazy" decoding="async"></a>
-<a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"></a>
-<a href="./docs/ip/README.md"><img src="https://img.shields.io/badge/status-patent_pending-blue" alt="Status: Patent Pending" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"></a>
+<a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/ip/README.md"><img src="https://img.shields.io/badge/status-patent_pending-blue" alt="Status: Patent Pending" loading="lazy" decoding="async"></a>
 <a href="https://perseus.observer"><strong>perseus.observer →</strong></a></p>
 <p><strong>Perseus: the memory &amp; context layer for AI agents. Load only the context they actually need.</strong></p>
-<p>Your agents re-read their whole notebook from page one on every call, and you're billed per word. Perseus hands them just the page they need: it resolves live workspace state into verified facts before the context window opens, and pairs with <a href="https://github.com/Perseus-Computing-LLC/perseus-vault">Perseus Vault</a> for durable, encrypted memory. The result: <strong>73.8% on LongMemEval</strong> (official harness), a <strong>67% smaller tool schema</strong>, and <strong>611× warmer renders</strong>. On LOCOMO (run on <a href="https://github.com/Perseus-Computing-LLC/memory-benchmarks">Mem0's own harness</a>): Perseus Vault <strong>87.9%</strong> vs Mem0 Platform 82.2% vs Zep Cloud 33.8%. Local-first, air-gap ready, MIT.</p>
+<p>Your agents re-read their whole notebook from page one on every call, and you're billed per word. Perseus hands them just the page they need: it resolves live workspace state into verified facts before the context window opens, and pairs with <a href="https://github.com/Perseus-Computing-LLC/perseus-vault">Perseus Vault</a> for durable, encrypted memory. The result: <strong>79.0% on LongMemEval</strong> with the official CoT answer prompt, a <strong>67% smaller tool schema</strong>, and <strong>611× warmer renders</strong>. The separately labeled plain-prompt LongMemEval result is <strong>73.8%</strong>. On LOCOMO (run on <a href="https://github.com/Perseus-Computing-LLC/memory-benchmarks">Mem0's own harness</a>), the same local evaluation reports Perseus Vault <strong>87.9%</strong>, Mem0 Platform 82.2%, and Zep Cloud 33.8%. Local-first, air-gap ready, MIT.</p>
 
 
 <hr>
@@ -192,43 +207,43 @@ start (<code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.cursorrules</code>
 <tbody><tr>
 <td><strong>Perseus Vault</strong></td>
 <td>Persistent, encrypted memory for AI agents — FTS5, entities, layers, confidence decay. New integrations use <code>perseus_vault_*</code>; legacy aliases remain compatible.</td>
-<td><a href="https://perseus.observer/perseus-vault/">/perseus-vault/</a></td>
+<td><a href="https://perseus.observer/perseus-vault/">perseus.observer/perseus-vault</a></td>
 </tr>
 <tr>
 <td><strong>MCTS</strong></td>
 <td>31 security analyzers for MCP servers — tool poisoning, prompt injection, credential leaks</td>
-<td><a href="https://perseus.observer/mcts/">/mcts/</a></td>
+<td><a href="https://perseus.observer/mcts/">perseus.observer/mcts</a></td>
 </tr>
 <tr>
 <td><strong>PR Pilot</strong></td>
 <td>5-agent autonomous PR review pipeline — graduated autonomy L1→L3</td>
-<td><a href="https://perseus.observer/pr-pilot/">/pr-pilot/</a></td>
+<td><a href="https://perseus.observer/pr-pilot/">perseus.observer/pr-pilot</a></td>
 </tr>
 <tr>
 <td><strong>Blast Radius</strong></td>
 <td>GitLab-native dependency impact analysis — 1 mention, instant risk report</td>
-<td><a href="https://perseus.observer/blast-radius/">/blast-radius/</a></td>
+<td><a href="https://perseus.observer/blast-radius/">perseus.observer/blast-radius</a></td>
 </tr>
 <tr>
 <td><strong>Rapid Agent</strong></td>
 <td>Dual-backend memory agent (Elastic ↔ Engram-rs) — Google Cloud Hackathon</td>
-<td><a href="https://perseus.observer/rapid-agent/">/rapid-agent/</a></td>
+<td><a href="https://perseus.observer/rapid-agent/">perseus.observer/rapid-agent</a></td>
 </tr>
 <tr>
 <td><strong>Qwen Memory</strong></td>
 <td>Agent that gets smarter every session — Qwen Cloud Hackathon</td>
-<td><a href="https://perseus.observer/qwen-memory/">/qwen-memory/</a></td>
+<td><a href="https://perseus.observer/qwen-memory/">perseus.observer/qwen-memory</a></td>
 </tr>
 <tr>
 <td><strong>CrewAI Memory</strong></td>
 <td>Persistent cross-session memory backend for CrewAI (54K stars) — community PR #6208</td>
-<td><a href="https://perseus.observer/crewai/">/crewai/</a></td>
+<td><a href="https://perseus.observer/crewai/">perseus.observer/crewai</a></td>
 </tr>
 </tbody></table>
 <hr>
 <h4>Perseus Vault — Persistent Memory (MCP)</h4>
-<p><a href="https://github.com/Perseus-Computing-LLC/perseus-vault">Perseus Vault</a> is the persistent memory backend for Perseus — a lightweight Rust MCP server with SQLite + FTS5. Zero network calls, no API keys. Offline dense/hybrid embeddings are <strong>bundled by default</strong> (the model is compiled into the binary), so semantic recall works zero-config with no external model download. Perseus Vault exposes <strong>55+ MCP tools</strong> under canonical <code>perseus_vault_*</code> names across structured entities, hybrid vector search, RAG, connectors, confidence decay, journal events, and state management: <code>perseus_vault_remember</code>, <code>perseus_vault_recall</code>, <code>perseus_vault_context</code>, <code>perseus_vault_traverse</code>, <code>perseus_vault_decay</code>, <code>perseus_vault_stats</code>, <code>perseus_vault_health</code>, and more.</p>
-<p>📄 <a href="https://perseus.observer/perseus-vault/">Product page →</a> | ⭐ <a href="https://github.com/Perseus-Computing-LLC/perseus-vault">GitHub →</a></p>
+<p><a href="https://github.com/Perseus-Computing-LLC/perseus-vault">Perseus Vault</a> is the persistent memory backend for Perseus — a lightweight Rust MCP server with SQLite + FTS5. Zero network calls, no API keys. Offline dense/hybrid embeddings are <strong>bundled by default</strong> (the model is compiled into the binary), so semantic recall works zero-config with no external model download. Perseus Vault exposes a broad canonical MCP surface under <code>perseus_vault_*</code> names across structured entities, hybrid vector search, RAG, connectors, confidence decay, journal events, and state management. Legacy <code>mimir_*</code> and <code>mneme_*</code> aliases remain callable for compatibility but are not counted as separate capabilities: <code>perseus_vault_remember</code>, <code>perseus_vault_recall</code>, <code>perseus_vault_context</code>, <code>perseus_vault_traverse</code>, <code>perseus_vault_decay</code>, <code>perseus_vault_stats</code>, <code>perseus_vault_health</code>, and more.</p>
+<p>📄 <a href="https://perseus.observer/perseus-vault/">Product page →</a> | ⭐ <a href="https://github.com/Perseus-Computing-LLC/perseus-vault">Vault on GitHub →</a></p>
 <p><strong>Install</strong> (prebuilt binary — Linux / macOS):</p>
 <pre><code class="language-bash">curl -sSf https://raw.githubusercontent.com/Perseus-Computing-LLC/perseus-vault/main/scripts/install.sh | sh
 </code></pre>
@@ -356,7 +371,7 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 <h4>MCP Tools</h4>
 
 
-<p>33 MCP tools resolve live state at invocation time (including the legacy aliases <code>perseus_get_context</code>/<code>perseus_get_health</code>). Two additional sensitive tools — <code>perseus_query</code> (run a shell command) and <code>perseus_agent</code> (execute a local agent subprocess) — are <strong>not</strong> part of this default set: they require explicit <code>mcp.tool_allowlist</code> opt-in because they execute commands in the user's local shell (<strong>not sandboxed, full user permissions apply</strong>).</p>
+<p>MCP tools resolve live state at invocation time (including the legacy aliases <code>perseus_get_context</code>/<code>perseus_get_health</code>). Two additional sensitive tools — <code>perseus_query</code> (run a shell command) and <code>perseus_agent</code> (execute a local agent subprocess) — are <strong>not</strong> part of this default set: they require explicit <code>mcp.tool_allowlist</code> opt-in because they execute commands in the user's local shell (<strong>not sandboxed, full user permissions apply</strong>).</p>
 <table>
 <thead>
 <tr>
@@ -588,7 +603,7 @@ perseus launchd .perseus/context.md --output AGENTS.md
 # Cron (any POSIX host)
 perseus cron .perseus/context.md --output AGENTS.md --every 5 --install
 </code></pre>
-<p>See the <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/HERMES_INTEGRATION.md">Integration Guide</a> for Hermes-specific auto-refresh setups and <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/spec/integration.md">spec/integration.md</a> for full adapter patterns.</p>
+<p>See the <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/HERMES_INTEGRATION.md">Integration Guide</a> for Hermes-specific auto-refresh setups and <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/spec/integration.md">adapter patterns</a> for full integration details.</p>
 <hr>
 <h3>Why Perseus? (Proof, Hardening, and Enterprise Value)</h3>
 <p>Perseus delivers verified, up-to-date context, eliminating the need for AI assistants to spend turns orienting themselves. Here's how it stands up:</p>
@@ -1203,7 +1218,7 @@ a patent grant; patent rights are reserved separately.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 62.2K</div>
+        <div class="stars">★ 62.3K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -1215,7 +1230,7 @@ a patent grant; patent rights are reserved separately.</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 353</div>
+        <div class="stars">★ 354</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
