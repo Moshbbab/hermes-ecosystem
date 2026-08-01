@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a shared or personal…">
+<meta name="description" content="GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a daemon that ingests,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a shared or personal…">
+<meta property="og:description" content="GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a daemon that ingests,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a shared or personal…">
+<meta name="twitter:description" content="GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a daemon that ingests,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a shared or personal institutional memory by ingesting data and creating a self-wiring knowledge graph.",
+  "description": "GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a daemon that ingests, enriches, and consolidates data into a self-wiring knowledge graph using PGLite.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-07-30T22:36:52.000Z",
+  "dateModified": "2026-08-01T05:23:46.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 27467
+    "userInteractionCount": 27507
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">218·repos</span>
+    <span id="meta-count">219·repos</span>
     <span id="meta-version">hermes·v0.19.1</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-30</span>
+    <span><span class="meta-label">updated</span>2026-08-01</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a shared or personal institutional memory by ingesting data and creating a self-wiring knowledge graph.</p>
+    <p class="summary-text">GBrain is a knowledge management layer designed to provide synthesis, graph traversal, and gap analysis for AI agents. It functions as a daemon that ingests, enriches, and consolidates data into a self-wiring knowledge graph using PGLite.</p>
     <ul class="summary-highlights">
       <li>Provides synthesized answers with citations and gap analysis.</li>
-      <li>Creates typed edges for a self-wiring knowledge graph.</li>
-      <li>Supports local deployment using PGLite.</li>
+      <li>Creates typed edges without LLM calls.</li>
+      <li>Supports multi-user scoping for team institutional memory.</li>
     </ul>
   </div>
 </section>
@@ -201,6 +201,17 @@ catch up before assuming any of this is still current.
 <p>Every claim has a source page behind it. The "heads up" at the end tells you what the brain doesn't know yet, so you can ask Alice about it directly instead of being surprised. The brain just did your meeting prep.</p>
 <p>This is the difference between a search engine and a brain. Search finds the pages. The brain reads them for you and writes the answer.</p>
 <h3>Install</h3>
+<blockquote>
+<p>[!WARNING]
+<strong>GBrain is NOT distributed on npm.</strong> The npm package named <code>gbrain</code> is an unrelated
+package with no connection to this project. Do not run <code>npm install -g gbrain</code> or
+<code>bun add -g gbrain</code> — you'll get something else, and it can shadow the real binary on
+your PATH. Install and upgrade ONLY via the documented paths below
+(<code>bun install -g github:garrytan/gbrain</code>, or <code>git clone</code> + <code>bun install &amp;&amp; bun link</code>).
+If you already ran the npm install by mistake: <code>npm uninstall -g gbrain</code> /
+<code>bun remove -g gbrain</code>, then reinstall from GitHub. <code>gbrain doctor</code> detects a
+shadowing npm install and prints the fix.</p>
+</blockquote>
 <p>GBrain is designed to be installed and operated by an AI agent. The fastest path is to have your agent do it for you. The CLI and MCP paths below are for people who want to wire it up themselves.</p>
 <h4>Have your agent install it (recommended)</h4>
 <p>If you don't already have an AI agent platform running, start with one of these. Both are designed to read GBrain's install protocol and execute it:</p>
@@ -294,7 +305,7 @@ voice, OCR) against the versioned <code>IngestionSource</code> contract at
 <p><strong>gbrain doesn't have a fixed layout.</strong> It ships with bundled schema packs and lets you author your own when none fit:</p>
 <ul>
 <li><strong><code>gbrain-base-v2</code></strong> (default as of v0.41.22) — 15-type DRY/MECE canonical taxonomy (14 canonical + <code>note</code> catch-all): <code>person</code>, <code>company</code>, <code>media</code>, <code>tweet</code>, <code>social-digest</code>, <code>analysis</code>, <code>atom</code>, <code>concept</code>, <code>source</code>, <code>deal</code>, <code>email</code>, <code>slack</code>, <code>writing</code>, <code>project</code>, <code>note</code>. Subtypes/format/origin pushed to frontmatter. The taxonomy that responds to issue #1479.</li>
-<li><strong><code>gbrain-base</code></strong> (legacy, v0.41 and earlier brains) — the original 24-type layout. Stays bundled for back-compat; brains on it can upgrade via <code>gbrain onboard --check --explain</code> → <code>gbrain jobs submit unify-types --allow-protected --params '{"target_pack":"gbrain-base-v2"}'</code>.</li>
+<li><strong><code>gbrain-base</code></strong> (legacy, v0.41 and earlier brains) — the original 24-type layout. Stays bundled for back-compat; brains on it can upgrade via <code>gbrain onboard --check --explain</code> → <code>gbrain jobs submit unify-types --allow-protected --params '{"target_pack":"gbrain-base-v2","apply":true}'</code> (omit <code>"apply":true</code> for a dry-run preview — that is the default).</li>
 <li><strong><code>gbrain-recommended</code></strong> — extends <code>gbrain-base</code> with the 13 additional directories from <code>docs/GBRAIN_RECOMMENDED_SCHEMA.md</code> (source, place, trip, conversation, personal, civic, project, etc.). Activate with <code>gbrain schema use gbrain-recommended</code>.</li>
 <li><strong>Your own pack</strong> — <code>gbrain schema detect</code> clusters your actual filesystem into proposed types, <code>gbrain schema suggest</code> runs an LLM pass over them, and <code>gbrain schema review-candidates --apply</code> promotes the ones you like. Three commands and the brain knows your shape. Authoring a successor pack (declares <code>migration_from:</code> so existing brains can opt in): see <a href="https://github.com/garrytan/gbrain/blob/main/docs/architecture/pack-upgrade-mechanism.md"><code>docs/architecture/pack-upgrade-mechanism.md</code></a>.</li>
 </ul>
