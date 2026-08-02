@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>unmodeled-tyler/vessel-browser — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Vessel is an AI-native Chromium-based browser designed to facilitate supervised autonomous web browsing. It provides a visible interface where users can…">
+<meta name="description" content="Vessel is a Chromium-based web browser featuring a built-in AI assistant for tasks such as research, navigation, and form filling. It provides a visible…">
 <link rel="canonical" href="https://hermesatlas.com/projects/unmodeled-tyler/vessel-browser">
 <meta property="og:title" content="unmodeled-tyler/vessel-browser — Hermes Atlas">
-<meta property="og:description" content="Vessel is an AI-native Chromium-based browser designed to facilitate supervised autonomous web browsing. It provides a visible interface where users can…">
+<meta property="og:description" content="Vessel is a Chromium-based web browser featuring a built-in AI assistant for tasks such as research, navigation, and form filling. It provides a visible…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/unmodeled-tyler/vessel-browser">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="unmodeled-tyler/vessel-browser — Hermes Atlas">
-<meta name="twitter:description" content="Vessel is an AI-native Chromium-based browser designed to facilitate supervised autonomous web browsing. It provides a visible interface where users can…">
+<meta name="twitter:description" content="Vessel is a Chromium-based web browser featuring a built-in AI assistant for tasks such as research, navigation, and form filling. It provides a visible…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=vessel-browser&amp;subtitle=Built+from+the+ground-up+for+agents%2C+Vessel+Browser+is+an+open+source+AI+browser+for+Linux%2FMac%2FWindows+that+provides+a+durable+state%2C+MCP+control%2C+and+BYOK+with+full+autonomous+bro&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/unmodeled-tyler/vessel-browser#software",
   "name": "vessel-browser",
-  "description": "Vessel is an AI-native Chromium-based browser designed to facilitate supervised autonomous web browsing. It provides a visible interface where users can monitor, pause, or redirect AI agents as they perform tasks like research, form filling, and navigation. The platform supports multiple AI providers via OpenAI-compatible endpoints and includes specialized tools for managing long-running browsing sessions. It is built to bridge the gap between invisible automation and manual browsing through hum",
+  "description": "Vessel is a Chromium-based web browser featuring a built-in AI assistant for tasks such as research, navigation, and form filling. It provides a visible interface for AI activity, allowing users to supervise, approve, or undo agent actions in real time.",
   "url": "https://hermesatlas.com/projects/unmodeled-tyler/vessel-browser",
   "codeRepository": "https://github.com/unmodeled-tyler/vessel-browser",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "unmodeled-tyler",
     "url": "https://github.com/unmodeled-tyler"
   },
-  "dateModified": "2026-07-27T16:39:28.000Z",
+  "dateModified": "2026-08-02T18:34:05.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-27</span>
+    <span><span class="meta-label">updated</span>2026-08-02</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Vessel is an AI-native Chromium-based browser designed to facilitate supervised autonomous web browsing. It provides a visible interface where users can monitor, pause, or redirect AI agents as they perform tasks like research, form filling, and navigation. The platform supports multiple AI providers via OpenAI-compatible endpoints and includes specialized tools for managing long-running browsing sessions. It is built to bridge the gap between invisible automation and manual browsing through human-in-the-loop controls.</p>
+    <p class="summary-text">Vessel is a Chromium-based web browser featuring a built-in AI assistant for tasks such as research, navigation, and form filling. It provides a visible interface for AI activity, allowing users to supervise, approve, or undo agent actions in real time.</p>
     <ul class="summary-highlights">
-      <li>Visible browser UI for real-time AI supervision</li>
       <li>Supports MCP clients and external agent tools</li>
-      <li>Integrated research desk and session management</li>
+      <li>Includes a supervisor sidebar for session management</li>
+      <li>Offers structured bookmark metadata for agent use</li>
     </ul>
   </div>
 </section>
@@ -395,6 +395,7 @@ npm run dist:mac:signed
 <p>Notes:</p>
 <ul>
 <li>Vessel exposes browser control to external agents through its local MCP server</li>
+<li>The MCP endpoint supports both legacy clients and the modern <code>2026-07-28</code> protocol revision, including <code>server/discover</code></li>
 <li>The default MCP port is <code>3100</code></li>
 <li>Hermes Agent and OpenClaw should treat Vessel as the persistent, human-visible browser rather than launching their own separate browser session</li>
 <li>Vessel supports a built-in Chat tab with configurable AI provider; open Settings (<code>Ctrl+,</code>) and enable Chat Assistant to set a provider and model</li>
@@ -525,7 +526,7 @@ npm run dist:mac:signed
   }
 }
 </code></pre>
-<p>The stdio proxy reads the bearer token from <code>~/.config/vessel/mcp-auth.json</code> at connection time, so no manual token management is needed.
+<p>The stdio proxy reads the bearer token from <code>~/.config/vessel/mcp-auth.json</code> at connection time and preserves both legacy and <code>2026-07-28</code> protocol negotiation, so no manual token management is needed.
 Vessel must already be running when your MCP client connects, and <code>~/.config/vessel/mcp-auth.json</code> must exist from install or first launch.</p>
 <p>Generic HTTP MCP config (requires copying the token manually):</p>
 <pre><code class="language-json">{
@@ -738,11 +739,11 @@ vessel-browser-launch --dry-run
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 64.0K</div>
+        <div class="stars">★ 64.1K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 795</div>
+        <div class="stars">★ 801</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -754,7 +755,7 @@ vessel-browser-launch --dry-run
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/junhoyeo/tokscale">
-        <div class="stars">★ 4.7K</div>
+        <div class="stars">★ 4.8K</div>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">

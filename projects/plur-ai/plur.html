@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared…">
+<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared…">
+<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared…">
+<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared across different MCP tools and sessions.",
+  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and preferences across different tools and sessions using an open format.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-08-01T19:10:23.000Z",
+  "dateModified": "2026-08-02T18:43:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-01</span>
+    <span><span class="meta-label">updated</span>2026-08-02</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It provides persistent memory that can be shared across different MCP tools and sessions.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and preferences across different tools and sessions using an open format.</p>
     <ul class="summary-highlights">
       <li>Stores memory as plain-text YAML engrams</li>
-      <li>Supports MCP tools like Claude Code and Cursor</li>
-      <li>Offers local-first, zero-cost search</li>
+      <li>Supports Claude Code, Cursor, OpenClaw, and Hermes</li>
+      <li>Provides local-first, zero-cost search</li>
     </ul>
   </div>
 </section>
@@ -226,7 +226,7 @@ plur-mcp init
 <p>Run init from your project root — it sets up Cursor's <code>.cursor/mcp.json</code> (plus Cursor hooks and a context rule):</p>
 <pre><code class="language-bash">npx @plur-ai/mcp init
 </code></pre>
-<p>PLUR runs under a <strong>lean tool profile</strong> in Cursor (<code>PLUR_TOOL_PROFILE=cursor</code>) — Cursor caps the tools a workspace can expose, so PLUR surfaces a curated core set (learn / recall / inject / status) instead of all 40, with the rest reachable through <code>plur_admin</code>. Cursor support shipped in v0.13.</p>
+<p>PLUR runs under a <strong>lean tool profile</strong> in Cursor (<code>PLUR_TOOL_PROFILE=cursor</code>) — Cursor caps the tools a workspace can expose, so PLUR surfaces a curated core set (learn / recall / inject / status) instead of all 42, with the rest reachable through <code>plur_admin</code>. Cursor support shipped in v0.13.</p>
 <h4>OpenClaw</h4>
 <pre><code class="language-bash">openclaw plugins install @plur-ai/claw
 openclaw config set plur.enabled true
@@ -423,7 +423,7 @@ await plur.sync('git@github.com:you/plur-memory.git')
 <p><code>plur.sync(remote)</code> is git underneath: it commits your engram store and pushes it to the remote you give it. What gets pushed depends on the remote's declared type (<code>sync.remote_type</code> in <code>config.yaml</code>, or the <code>remote_type</code> argument):</p>
 <ul>
 <li><strong><code>personal</code></strong> (default) — your own backup/mirror across your machines. The remote receives everything that is pushed, <strong>including <code>visibility: private</code> engrams</strong>: private visibility means "don't share this in a pack", not "don't mirror it to my own devices", so private engrams intentionally follow you from machine to machine. Because of that, <strong>always use a private git remote</strong> (a private GitHub/GitLab repo, or your own server). PLUR surfaces a <code>warning</code> in the sync result whenever private engrams are present. Never point a personal sync at a public repository.</li>
-<li><strong><code>shared</code></strong> — a team-visible remote. Only engrams with a <strong>shared-family scope</strong> (<code>group:</code>/<code>project:</code>/<code>space:</code>/<code>team:</code>/<code>org:</code>/<code>public</code>) <strong>and a non-private visibility</strong> are pushed; personal-family engrams (<code>local</code>, <code>global</code>, <code>user:*</code>, <code>agent:*</code>) and private-visibility engrams never reach the remote, by construction. Note the default visibility is <code>private</code>, so a shared remote receives only engrams whose visibility was set deliberately — teammates get what you chose to share, nothing else. <strong>Current limit (#686):</strong> the filter applies to <code>engrams.yaml</code>; the sibling store files (<code>episodes.yaml</code>, <code>candidates.yaml</code>, <code>tensions.yaml</code>) still sync verbatim and can embed statement text derived from private engrams. Until the sibling-file strip lands, treat a shared remote as team-visible for those files too.</li>
+<li><strong><code>shared</code></strong> — a team-visible remote. Only engrams with a <strong>shared-family scope</strong> (<code>group:</code>/<code>project:</code>/<code>space:</code>/<code>team:</code>/<code>org:</code>/<code>public</code>) <strong>and a non-private visibility</strong> are pushed; personal-family engrams (<code>local</code>, <code>global</code>, <code>user:*</code>, <code>agent:*</code>) and private-visibility engrams never reach the remote, by construction. Note the default visibility is <code>private</code>, so a shared remote receives only engrams whose visibility was set deliberately — teammates get what you chose to share, nothing else. The same guarantee covers the sibling store files (#686): an episode, candidate, or tension record is pushed only when every engram it references is itself in the push set — records derived from personal or private engrams (a tension's statement snapshots, a failure-report episode) stay local, as does any record referencing an engram the filter cannot resolve.</li>
 </ul>
 <p>In both modes <strong><code>scope: local</code> engrams</strong> are machine-specific by design (paths, local ports, per-host quirks), so they are stripped from every commit and never reach any remote. Stripping happens on the <em>staged blob</em>: your local working copy always keeps every engram.</p>
 <h3>Benchmark details</h3>
