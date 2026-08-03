@@ -412,6 +412,12 @@ Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.
 
 `research/blogwatcher`
 
+[`grounded-citations`](/docs/user-guide/skills/bundled/research/research-grounded-citations)
+
+Ground answers and documents in cited, verifiable sources.
+
+`research/grounded-citations`
+
 [`llm-wiki`](/docs/user-guide/skills/bundled/research/research-llm-wiki)
 
 Karpathy's LLM Wiki: build/query interlinked markdown KB.
