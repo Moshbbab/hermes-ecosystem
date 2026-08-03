@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search,…">
+<meta name="description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search,…">
+<meta property="og:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search,…">
+<meta name="twitter:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+Hermes+and+OpenClaw.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, session handoffs, and automated decision capture using a local GGUF observer model.",
+  "description": "ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides retrieval-augmented search, intent classification, and session handoffs without requiring API keys or cloud dependencies.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-08-01T13:32:29.000Z",
+  "dateModified": "2026-08-03T14:47:58.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">219·repos</span>
+    <span id="meta-count">220·repos</span>
     <span id="meta-version">hermes·v0.19.1</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-01</span>
+    <span><span class="meta-label">updated</span>2026-08-03</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store and retrieve context. It provides retrieval-augmented search, session handoffs, and automated decision capture using a local GGUF observer model.</p>
+    <p class="summary-text">ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides retrieval-augmented search, intent classification, and session handoffs without requiring API keys or cloud dependencies.</p>
     <ul class="summary-highlights">
-      <li>Supports Claude Code, OpenClaw, and Hermes agents</li>
-      <li>Uses hybrid retrieval with BM25 and vector search</li>
-      <li>Operates fully locally without API keys or cloud dependencies</li>
+      <li>Integrates via Claude Code hooks, MCP, OpenClaw, or Hermes plugins.</li>
+      <li>Uses hybrid retrieval including BM25, vector search, and graph traversal.</li>
+      <li>Automates decision capture using a local GGUF observer model.</li>
     </ul>
   </div>
 </section>
@@ -951,13 +951,14 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>lifecycle_sweep</code></td>
-<td>Run lifecycle policies: archive stale docs past retention threshold, optionally purge old archives. Defaults to dry_run (preview only)</td>
+<td>Run lifecycle policies: archive stale docs past retention threshold. Archives only — never deletes. Defaults to dry_run (preview only)</td>
 </tr>
 <tr>
 <td><code>lifecycle_restore</code></td>
 <td>Restore documents that were auto-archived by lifecycle policies. Filter by query, collection, or restore all</td>
 </tr>
 </tbody></table>
+<p><strong>ClawMem never physically deletes a document row (v0.30.0).</strong> Forget and archive deactivate; <code>lifecycle_restore</code> reverses archival; <code>purge_after_days</code> is inert. Through v0.29.0 a configured retention window permanently deleted archived rows from a non-dry-run sweep and from the SessionStart hook, without reporting it — see <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/upgrading.md#v0300-clawmem-no-longer-deletes-document-rows">upgrading</a>.</p>
 <h4>Compact Mode</h4>
 <p><code>search</code>, <code>vsearch</code>, and <code>query</code> accept <code>compact: true</code> to return <code>{ id, path, title, score, snippet, content_type, fragment }</code> instead of full content. Saves ~5x tokens for initial filtering.</p>
 <h3>Hooks (Claude Code Integration)</h3>
@@ -1152,8 +1153,7 @@ clawmem status                                  Quick index status
 <td>Default</td>
 </tr>
 </tbody></table>
-<p>Content types are inferred from frontmatter or file path patterns. Half-lives extend up to 3× for frequently-accessed memories (access reinforcement, decays over 90 days). Non-durable types (handoff, progress, conversation, note, project) lose 5% confidence per week without access (attention decay). Decision/deductive/preference/hub/research/antipattern are exempt.</p>
-<p><strong>Quality scoring:</strong> Each document gets a <code>quality_score</code> (0.0–1.0) computed</p>
+<p>Content types are inferred from f</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/yoloshii/ClawMem#readme">Continue reading on GitHub</a></em></p>
 

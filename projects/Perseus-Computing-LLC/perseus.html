@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Perseus-Computing-LLC/perseus — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders content from a.perseus/context.md file into…">
+<meta name="description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders content from a.perseus/context.md file into…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta property="og:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders content from a.perseus/context.md file into…">
+<meta property="og:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders content from a.perseus/context.md file into…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta name="twitter:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders content from a.perseus/context.md file into…">
+<meta name="twitter:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders content from a.perseus/context.md file into…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=perseus&amp;subtitle=Live+context+engine+for+AI+agents%3A+resolve+verified+workspace+state+before+the+context+window+opens.+Pairs+with+Perseus+Vault+for+persistent+encrypted+memory.+Local-first%2C+MIT.+pip&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus#software",
   "name": "perseus",
-  "description": "Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders content from a.perseus/context.md file into formats like AGENTS.md or.cursorrules and can be exposed as an MCP server.",
+  "description": "Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders content from a.perseus/context.md file into formats like AGENTS.md or.cursorrules and can be used as an MCP server.",
   "url": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus",
   "codeRepository": "https://github.com/Perseus-Computing-LLC/perseus",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "Perseus-Computing-LLC",
     "url": "https://github.com/Perseus-Computing-LLC"
   },
-  "dateModified": "2026-08-03T13:12:41.000Z",
+  "dateModified": "2026-08-03T17:28:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">219·repos</span>
+    <span id="meta-count">220·repos</span>
     <span id="meta-version">hermes·v0.19.1</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Perseus is a live context engine that resolves workspace state into verified facts for AI agents. It renders content from a.perseus/context.md file into formats like AGENTS.md or.cursorrules and can be exposed as an MCP server.</p>
+    <p class="summary-text">Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders content from a.perseus/context.md file into formats like AGENTS.md or.cursorrules and can be used as an MCP server.</p>
     <ul class="summary-highlights">
       <li>Renders context for various assistant profiles</li>
-      <li>Supports MCP via stdio or SSE</li>
-      <li>Local-first with no account required</li>
+      <li>Supports local-first operation without hosted services</li>
+      <li>Exposes context via stdio or SSE MCP servers</li>
     </ul>
   </div>
 </section>
@@ -173,6 +173,14 @@ start (<code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.cursorrules</code>
 <li><strong>One source, any assistant</strong> — write <code>.perseus/context.md</code> once and render to <code>.hermes.md</code>, <code>AGENTS.md</code>, <code>CLAUDE.md</code>, <code>.cursorrules</code>, or another assistant context file.</li>
 <li><strong>Local-first by default</strong> — the core renderer reads your workspace locally; no account or hosted service is required.</li>
 <li><strong>MCP-native when you need it</strong> — expose the same live context as a stdio or SSE MCP server, with shell-executing tools opt-in.</li>
+</ul>
+<h4>Context, memory, and session terms</h4>
+<p>Perseus resolves and shapes the active working context; Perseus Vault owns durable-memory persistence and recall.</p>
+<ul>
+<li><strong>Active working context</strong> is the current, task-relevant workspace state — files, services, tasks, and other facts that can change. Perseus resolves and shapes it at render time before the assistant sees it.</li>
+<li><strong>Durable memory</strong> is information intended to survive session boundaries. Perseus Vault owns its persistence and recall.</li>
+<li><strong>Recalled memory</strong> is the subset of durable memory returned for a query and shaped into the rendered context. The public <code>@memory</code> directive remains the compatibility API name for Vault-backed recall; existing MCP compatibility names remain unchanged.</li>
+<li><strong>Session history</strong> is Perseus's recent checkpoint and session-digest record. <code>@waypoint</code> and <code>@session</code> expose it; it is distinct from durable memory. An explicit capture may persist a checkpoint in Perseus Vault as durable memory.</li>
 </ul>
 <h4>Fastest path</h4>
 <pre><code class="language-bash">pip install perseus-ctx
@@ -290,30 +298,33 @@ with live backend swap from Elastic Cloud to Engram-rs (self-hosted).</p>
 <h3>Wire Perseus to Your Assistant (MCP)</h3>
 <p>Perseus implements the <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> (MCP), exposing tools over stdio or SSE transport. Every tool resolves live workspace state at invocation time — no stale cache, no pre-computed snapshots.</p>
 <blockquote>
+<p><strong>Stable launcher for MCP and schedulers:</strong> Use <code>~/.local/bin/perseus</code> in MCP configurations and scheduled jobs. This install-managed launcher stays stable across package upgrades instead of baking a version-specific Python or Library path into background configuration. Interactive shell commands may still use <code>perseus</code>; verify the resolved entry point with <code>command -v perseus</code> when diagnosing an installation.</p>
+</blockquote>
+<blockquote>
 <p><strong>⚠️ Security Gate:</strong> Shell-executing directives (<code>@query</code>, <code>@agent</code>, <code>@services command:</code>) require <code>export PERSEUS_ALLOW_DANGEROUS=1</code>. Without it, shell directives are silently skipped.</p>
 </blockquote>
 <h4>Quick Start (MCP Server)</h4>
 <pre><code class="language-bash">pip install perseus-ctx
-perseus mcp serve                          # stdio (Claude Desktop, Claude Code, Cursor, Codex)
-perseus mcp serve --transport sse --port 8420  # SSE (remote agents, multi-machine)
+~/.local/bin/perseus mcp serve                          # stdio (Claude Desktop, Claude Code, Cursor, Codex)
+~/.local/bin/perseus mcp serve --transport sse --port 8420  # SSE (remote agents, multi-machine)
 </code></pre>
 <h4>Assistant-Specific Wiring</h4>
 <p>Pick your assistant and add the config block shown:</p>
 <p><strong>Hermes Agent</strong> (<code>~/.hermes/config.yaml</code>):</p>
 <pre><code class="language-yaml">mcp_servers:
   perseus:
-    command: perseus
+    command: ~/.local/bin/perseus
     args: ["mcp", "serve", "--workspace", "/path/to/workspace"]
 </code></pre>
 <p>Then verify with <code>hermes mcp test perseus</code>. Tools appear as <code>mcp_perseus_*</code> in your session.</p>
 <blockquote>
-<p>Use an absolute path for <code>--workspace</code>. Perseus's non-interactive shell context has a limited PATH — a bare <code>perseus</code> command works in the Hermes MCP config because Hermes resolves it from the user's environment, but the workspace path must be absolute.</p>
+<p>Use an absolute path for <code>--workspace</code>. Perseus's non-interactive shell context has a limited PATH, so the stable launcher above avoids relying on interactive-shell lookup.</p>
 </blockquote>
 <p><strong>Claude Desktop</strong> (<code>claude_desktop_config.json</code>):</p>
 <pre><code class="language-json">{
   "mcpServers": {
     "perseus": {
-      "command": "perseus",
+      "command": "~/.local/bin/perseus",
       "args": ["mcp", "serve", "--workspace", "/path/to/workspace"]
     }
   }
@@ -323,7 +334,7 @@ perseus mcp serve --transport sse --port 8420  # SSE (remote agents, multi-machi
 <pre><code class="language-json">{
   "mcpServers": {
     "perseus": {
-      "command": "perseus",
+      "command": "~/.local/bin/perseus",
       "args": ["mcp", "serve"]
     }
   }
@@ -333,7 +344,7 @@ perseus mcp serve --transport sse --port 8420  # SSE (remote agents, multi-machi
 <pre><code class="language-json">{
   "mcpServers": {
     "perseus": {
-      "command": "perseus",
+      "command": "~/.local/bin/perseus",
       "args": ["mcp", "serve"]
     }
   }
@@ -343,7 +354,7 @@ perseus mcp serve --transport sse --port 8420  # SSE (remote agents, multi-machi
 <pre><code class="language-json">{
   "mcpServers": {
     "perseus": {
-      "command": "perseus",
+      "command": "~/.local/bin/perseus",
       "args": ["mcp", "serve"]
     }
   }
@@ -353,7 +364,7 @@ perseus mcp serve --transport sse --port 8420  # SSE (remote agents, multi-machi
 <pre><code class="language-json">{
   "mcpServers": {
     "perseus": {
-      "command": "perseus",
+      "command": "~/.local/bin/perseus",
       "args": ["mcp", "serve"]
     }
   }
@@ -591,13 +602,13 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 </blockquote>
 <p>Keep it fresh with cron, launchd, systemd, or <code>perseus watch</code>:</p>
 <pre><code class="language-bash"># Linux systemd (auto-refresh every 5 minutes)
-perseus systemd .perseus/context.md --output AGENTS.md --interval 5m --install --enable
+~/.local/bin/perseus systemd .perseus/context.md --output AGENTS.md --interval 5m --install --enable
 
 # macOS launchd
-perseus launchd .perseus/context.md --output AGENTS.md
+~/.local/bin/perseus launchd .perseus/context.md --output AGENTS.md
 
 # Cron (any POSIX host)
-perseus cron .perseus/context.md --output AGENTS.md --every 5 --install
+~/.local/bin/perseus cron .perseus/context.md --output AGENTS.md --every 5 --install
 </code></pre>
 <p>See the <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/HERMES_INTEGRATION.md">Integration Guide</a> for Hermes-specific auto-refresh setups and <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/spec/integration.md">adapter patterns</a> for full integration details.</p>
 <hr>
@@ -643,6 +654,32 @@ perseus cron .perseus/context.md --output AGENTS.md --every 5 --install
 <p>Perseus reads from a live filesystem — there is no snapshot isolation unless you enable <code>integrity_check</code>. Files can change between directive resolutions. The render output reflects whatever was on disk at the moment each directive resolved, <strong>not</strong> a single atomic point-in-time. This is the right tradeoff for a zero-dependency pre-processor (zero overhead by default, check when it matters), but it is not a database transaction.</p>
 <p>The <code>O_CREAT | O_EXCL</code> checkpoint locking is atomic on local POSIX filesystems. Network filesystems (<strong>NFS</strong> &lt; v4, <strong>SMB</strong>, cloud mounts) may not honor these semantics — if you run a multi-agent relay across machines, use a local disk or a filesystem with verified atomic-create support.</p>
 <p><code>perseus.py</code> is a compiled build artifact produced by <code>scripts/build.py</code> from the modular <code>src/perseus/</code> tree. It is not hand-maintained as a single file. The source modules are the canonical form.</p>
+<hr>
+<h3>📚 Research Basis</h3>
+<p>Perseus's design — resolve and validate context <em>before</em> the model sees it — is supported
+by a growing body of independent research:</p>
+<ul>
+<li><strong>Protocol-Driven Development</strong> (<a href="https://arxiv.org/abs/2605.12981">arXiv:2605.12981</a>) —
+the durable artifact should be a machine-enforceable protocol of structural, behavioral,
+and operational invariants, not prose. Perseus's <code>schema=</code> validation, <code>@constraint</code>
+rules, and bounded/freshness directives implement exactly this framing for context
+documents. See <a href="https://github.com/Perseus-Computing-LLC/perseus/blob/main/docs/PROTOCOL_CONTRACTS.md">Protocol-Style Context Contracts</a>.</li>
+<li><strong>ContextNest</strong> (<a href="https://arxiv.org/abs/2607.02116">arXiv:2607.02116</a>) — governed context
+selection (deterministic selector grammar, hash-chained version histories, consumption
+audit) Pareto-dominates BM25 at 97% vs 93–90% answer-quality pass at <strong>~1/3 the
+input-token cost</strong>: the empirical case for governed, validated context over ungoverned
+retrieval.</li>
+<li><strong>HiSkill</strong> (<a href="https://arxiv.org/abs/2607.25853">arXiv:2607.25853</a>) — compact, structured,
+relation-aware context reached <strong>+17.33% success at −78.75% inference tokens</strong> vs the
+strongest baseline: the token-efficiency case for bounded, structured rendering (see the
+52.63% measured prompt-token reduction above).</li>
+<li><strong>Breaking the Protocol</strong> (<a href="https://arxiv.org/abs/2601.17549">arXiv:2601.17549</a>) — MCP's
+architectural weaknesses include missing capability attestation and unauthenticated
+bidirectional sampling; Perseus documents capability attestation for its MCP surfaces as
+an operational invariant.</li>
+</ul>
+<p>These are research <em>evidence</em> for the architecture, not guarantees; every quantitative
+claim in this README still traces to a committed artifact via <code>claims.json</code>.</p>
 <hr>
 <h3>How Perseus Works</h3>
 <p>You write this:</p>
@@ -988,65 +1025,7 @@ documented shape — a future <code>@bandit</code> ledger integration can consum
 value signal.</p>
 <hr>
 <h3>Context Profiles &amp; Recall-First Memory (<code>@profile</code>)</h3>
-<p><strong>A context engine should retrieve, not pre-load.</strong> As of v1.0.14, Perseus is <strong>recall-first by default</strong>: the automatic long-term-memory dump that used to be stapled into every rendered context is replaced by a short, static retrieval pointer plus the recall tools. On a 200k-context model, a fixed memory blob on every turn is a permanent token tax that poisons prefix-cache stability the moment any fact changes — Perseus already has the retrieval layer (<code>@memory</code>, <code>@vault</code>, <code>perseus_vault</code>), so the default context now spends the budget on the task.</p>
-<p>Per-model <strong>context profiles</strong> make the posture first-class and model-aware:</p>
-<pre><code class="language-yaml"># ~/.perseus/config.yaml
-profiles:
-  default:            { context_target: 200000,  memory: on_demand }
-  claude-sonnet-4-6:  { context_target: 200000,  memory: on_demand }
-  claude-opus-4-8:    { context_target: 1000000, memory: on_demand }   # big window is not an excuse to bloat
-  legacy-dump:        { context_target: 200000,  memory: always, inject_limit: 5 }
-</code></pre>
-<p>Select a profile per document with the <code>@profile</code> directive (unknown names fall back to <code>default</code> deterministically):</p>
-<pre><code class="language-markdown">@profile claude-sonnet-4-6
-</code></pre>
-<p>Three memory postures:</p>
-<table>
-<thead>
-<tr>
-<th>Posture</th>
-<th>Behavior</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>on_demand</code> (<strong>default</strong>)</td>
-<td>Inject a static retrieval pointer + tools. <strong>No pre-materialized memory dump.</strong> The fixed prompt prefix stays byte-stable across vault writes (prefix-cache friendly).</td>
-</tr>
-<tr>
-<td><code>relevant</code></td>
-<td>Inject only entities whose <code>recall_when</code> triggers match the current render context (via the vault's trigger matching). No match → no dump.</td>
-</tr>
-<tr>
-<td><code>always</code></td>
-<td><strong>Legacy opt-in.</strong> The pre-v1.0.14 unconditional dump on every render. Kept for back-compat; documented as an anti-pattern. <code>always_inject: true</code> is accepted as an alias.</td>
-</tr>
-</tbody></table>
-<p>Injection hygiene (all postures that inject content):</p>
-<ul>
-<li><strong>De-duplicated</strong> — if the rendered document already contains a memory section (an explicit <code>@memory</code> directive, a template section, or a previous injection pass), the automatic block is skipped. The same memory content can never appear twice in one context.</li>
-<li><strong>Workspace-scoped</strong> — recall calls that support it receive the active workspace hash, so personal and project memories don't share one undifferentiated pool at the render layer.</li>
-<li><strong>Budgeted per profile</strong> — a 200k-class profile admits at most a handful of entities (<code>inject_limit</code>, default 5; 10 for larger windows).</li>
-<li><strong>Advisory framing</strong> — injected memory carries a note that it may be stale or tangential and that live workspace state wins on conflict, instead of asserting authority.</li>
-</ul>
-<p>To suppress the automatic section entirely (pointer included) set <code>Perseus Vault.auto_inject: false</code>; to restore the old behavior globally set <code>profiles.default.memory: always</code>.</p>
-<hr>
-<h3>Project Memory (Perseus Vault)</h3>
-<p>Perseus Vault (Μνήμη) is Perseus's narrative project memory. It distills checkpoints and Pythia recommendations into a per-workspace narrative — so your assistant knows not just what's running, but <em>how you got here</em>.</p>
-<pre><code class="language-bash"># Update the narrative from latest checkpoints
-perseus memory update
-
-# Query the narrative
-perseus memory query "what was the auth decision?"
-
-# Render it inline
-perseus render .perseus/context.md --output CLAUDE.md
-</code></pre>
-<p>In your context file:</p>
-<pre><code class="language-markdown">@memory                    # full narrative
-@memory focus="decisions"  # decisions section only
-@memory focus="recent"     # recent activity
-</code></pre>
-<p>Perseus Vault distills deterministically and zero-dependency — Perseus runs no inference of its own (observe model); the host agent reads and reasons over the narrative with whatever model it already us</p>
+<p><strong>A context engine should retrieve, not pre-load.</strong> As of v1.0.14, Perseus is <strong>recall-first by default</strong>: the automatic long-term-memory dump that used to be stapled into every rendered context is replaced by a short, static retrieval pointer plus the recall tools. On a 200k-context model, a fixed memory blob on every turn is a permanent token tax that poisons prefix-cache stability the moment any fact changes — Perseus already </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/Perseus-Computing-LLC/perseus#readme">Continue reading on GitHub</a></em></p>
 
