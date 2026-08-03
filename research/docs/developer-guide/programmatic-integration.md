@@ -50,7 +50,8 @@ Full lifecycle, event bridge, and approval flow: [ACP Internals](/docs/developer
 
 ```
 hermes acp                  # serve ACP on stdio
-hermes acp --bootstrap      # print install snippet for an ACP-capable IDE
+hermes acp --check          # verify ACP dependencies and adapter imports
+hermes acp --setup          # interactive provider/model setup for ACP terminal auth
 ```
 
 * * *

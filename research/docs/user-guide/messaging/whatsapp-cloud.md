@@ -332,7 +332,7 @@ Optional, for future analytics integration.
 
 `WHATSAPP_CLOUD_WEBHOOK_HOST`
 
-`0.0.0.0`
+unset (dual-stack: all interfaces, IPv4+IPv6)
 
 Interface the webhook server binds to.
 

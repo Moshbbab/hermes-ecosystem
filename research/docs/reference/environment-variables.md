@@ -38,6 +38,14 @@ Override Nous Portal base URL (rarely needed; development/testing only)
 
 Override Nous inference endpoint directly
 
+`AI_GATEWAY_API_KEY`
+
+Vercel AI Gateway API key ([ai-gateway.vercel.sh](https://ai-gateway.vercel.sh))
+
+`AI_GATEWAY_BASE_URL`
+
+Override AI Gateway base URL (default: `https://ai-gateway.vercel.sh/v1`)
+
 `OPENAI_API_KEY`
 
 API key for custom OpenAI-compatible endpoints (used with `OPENAI_BASE_URL`)
@@ -242,6 +250,10 @@ Alias for `GOOGLE_API_KEY`
 
 Override Google AI Studio base URL
 
+`VERTEX_CREDENTIALS_PATH`
+
+Path to a Google Cloud service account JSON for Vertex AI (Gemini). Vertex uses OAuth2, not a static API key. Falls back to `GOOGLE_APPLICATION_CREDENTIALS`, then to ADC (`gcloud auth application-default login`). Set project/region under `vertex:` in `config.yaml`
+
 `ANTHROPIC_API_KEY`
 
 Anthropic Console API key ([console.anthropic.com](https://console.anthropic.com/))
@@ -277,6 +289,14 @@ DeepSeek API key for direct DeepSeek access ([platform.deepseek.com](https://pla
 `DEEPSEEK_BASE_URL`
 
 Custom DeepSeek API base URL
+
+`DEEPINFRA_API_KEY`
+
+DeepInfra API key ([deepinfra.com](https://deepinfra.com/dash/api_keys))
+
+`DEEPINFRA_BASE_URL`
+
+DeepInfra base URL override
 
 `NOVITA_API_KEY`
 
@@ -372,7 +392,7 @@ Optional local speech-to-text command template. Supports `{input_path}`, `{outpu
 
 `HERMES_LOCAL_STT_LANGUAGE`
 
-Default language passed to `HERMES_LOCAL_STT_COMMAND` or auto-detected local `whisper` CLI fallback (default: `en`)
+Default language hint for STT. Used by the `local` (faster-whisper) provider, `HERMES_LOCAL_STT_COMMAND`, the local `whisper` CLI fallback (default: `en`), Groq, and xAI when no per-provider `language` is set in `config.yaml`
 
 `HERMES_HOME`
 
@@ -504,6 +524,10 @@ Chrome DevTools Protocol URL for local browser (set via `/browser connect`, e.g.
 
 Camofox local anti-detection browser URL (default: `http://localhost:9377`)
 
+`CAMOFOX_API_KEY`
+
+Optional bearer token sent as Authorization header to a remote/authenticated Camofox server
+
 `CAMOFOX_USER_ID`
 
 Optional externally managed Camofox user ID for shared visible sessions
@@ -544,6 +568,10 @@ Groq Whisper STT API key ([groq.com](https://groq.com/))
 
 ElevenLabs premium TTS voices ([elevenlabs.io](https://elevenlabs.io/))
 
+`PORCUPINE_ACCESS_KEY`
+
+Picovoice Porcupine wake-word engine ([console.picovoice.ai](https://console.picovoice.ai/)) — only for `wake_word.provider: porcupine`; the default openWakeWord and sherpa engines need no key
+
 `STT_GROQ_MODEL`
 
 Override the Groq STT model (default: `whisper-large-v3-turbo`)
@@ -572,9 +600,57 @@ Cross-session user modeling ([honcho.dev](https://honcho.dev/))
 
 Base URL for self-hosted Honcho instances (default: Honcho cloud). No API key required for local instances
 
+`HINDSIGHT_API_KEY`
+
+Hindsight API key for graph-aware persistent memory ([hindsight.vectorize.io](https://hindsight.vectorize.io))
+
+`HINDSIGHT_API_URL`
+
+Base URL for the Hindsight API (default: `https://api.hindsight.vectorize.io`)
+
 `HINDSIGHT_TIMEOUT`
 
 Timeout in seconds for Hindsight memory-provider API calls (default: `60`). Bump this if your Hindsight instance is slow to respond during `/sync` or `on_session_switch` and you're seeing timeouts in `errors.log`.
+
+`MEM0_API_KEY`
+
+Mem0 Platform API key for semantic persistent memory ([app.mem0.ai](https://app.mem0.ai))
+
+`MEM0_MODE`
+
+Mem0 backend mode: `platform` (default) or `oss` — see [Memory Providers](/docs/user-guide/features/memory-providers)
+
+`MEM0_HOST`
+
+Base URL of a self-hosted Mem0 server (switches the plugin off the Platform API)
+
+`MEM0_USER_ID`
+
+Override the user id Mem0 memories are stored under
+
+`MEM0_AGENT_ID`
+
+Override the agent id Mem0 memories are tagged with
+
+`RETAINDB_API_KEY`
+
+RetainDB API key for persistent memory ([retaindb.com](https://retaindb.com))
+
+`RETAINDB_BASE_URL`
+
+Base URL for self-hosted RetainDB instances (default: `https://api.retaindb.com`)
+
+`OPENVIKING_API_KEY`
+
+OpenViking API key (leave blank for local dev mode)
+
+`OPENVIKING_ENDPOINT`
+
+OpenViking server URL (default: `http://127.0.0.1:1933`)
+
+`BRV_API_KEY`
+
+ByteRover API key (optional, for cloud sync — local-first by default) ([app.byterover.dev](https://app.byterover.dev))
 
 `SUPERMEMORY_API_KEY`
 
@@ -583,6 +659,22 @@ Semantic long-term memory with profile recall and session ingest ([supermemory.a
 `DAYTONA_API_KEY`
 
 Daytona cloud sandboxes ([daytona.io](https://daytona.io/))
+
+`VERCEL_TOKEN`
+
+Vercel Sandbox access token ([vercel.com](https://vercel.com/))
+
+`VERCEL_PROJECT_ID`
+
+Vercel project ID (required with `VERCEL_TOKEN`)
+
+`VERCEL_TEAM_ID`
+
+Vercel team ID (required with `VERCEL_TOKEN`)
+
+`VERCEL_OIDC_TOKEN`
+
+Vercel short-lived OIDC token (development-only alternative)
 
 ### Skill API Keys
 
@@ -694,7 +786,7 @@ Description
 
 `TERMINAL_ENV`
 
-Backend: `local`, `docker`, `ssh`, `singularity`, `modal`, `daytona`
+Backend: `local`, `docker`, `ssh`, `singularity`, `modal`, `daytona`, `vercel_sandbox`
 
 `HERMES_DOCKER_BINARY`
 
@@ -712,6 +804,14 @@ JSON array of env var names to explicitly forward into Docker terminal sessions.
 
 Additional Docker volume mounts (comma-separated `host:container` pairs)
 
+`TERMINAL_DOCKER_ENV`
+
+JSON object of extra env vars to set inside Docker terminal sessions (e.g. `{"FOO":"bar"}`)
+
+`TERMINAL_DOCKER_EXTRA_ARGS`
+
+JSON array of extra `docker run` arguments (e.g. `["--memory","4g"]`)
+
 `TERMINAL_DOCKER_MOUNT_CWD_TO_WORKSPACE`
 
 Advanced opt-in: mount the launch cwd into Docker `/workspace` (`true`/`false`, default: `false`)
@@ -727,6 +827,10 @@ Modal container image
 `TERMINAL_DAYTONA_IMAGE`
 
 Daytona sandbox image
+
+`TERMINAL_VERCEL_RUNTIME`
+
+Vercel Sandbox runtime (`node24`, `node22`, `python3.13`)
 
 `TERMINAL_TIMEOUT`
 
@@ -1044,6 +1148,10 @@ Allow any Slack user to trigger the bot (dev only).
 
 Accept messages from other Slack bots: `none` (default), `mentions`, or `all`. The bot always ignores its own messages.
 
+`SLACK_THREAD_REQUIRE_MENTION`
+
+Require an explicit @mention for Slack thread replies while preserving top-level free-response channels
+
 `SLACK_HOME_CHANNEL`
 
 Default Slack channel for cron delivery
@@ -1095,6 +1203,18 @@ Comma-separated extra space IDs to probe at startup when resolving the bot's own
 `GOOGLE_CHAT_DEBUG_RAW`
 
 Set to any value to log redacted Pub/Sub envelopes at DEBUG level (debugging only)
+
+`GOOGLE_CHAT_HTTP_EVENTS_URL`
+
+Authenticated HTTP endpoint for Chat message events (alternative to Pub/Sub)
+
+`GOOGLE_CHAT_HTTP_EVENTS_AUDIENCE`
+
+Expected audience for Google-signed HTTP event bearer tokens (defaults to `GOOGLE_CHAT_HTTP_EVENTS_URL`)
+
+`GOOGLE_CHAT_HTTP_EVENTS_SERVICE_ACCOUNT_EMAIL`
+
+Expected Google service account email for HTTP event bearer tokens
 
 `WHATSAPP_ENABLED`
 
@@ -1668,14 +1788,6 @@ Process inbound Matrix `m.notice` events (default: `false`)
 
 Matrix session scope for project rooms: `auto`, `room`, or `thread` (default: `auto`)
 
-`MATRIX_TOOLS_ALLOW_CROSS_ROOM`
-
-Allow Matrix tools to target explicit rooms other than the current room (default: `false`)
-
-`MATRIX_TOOLS_ALLOW_CROSS_ROOM_DESTRUCTIVE`
-
-Allow cross-room Matrix redaction/invite-like tools; requires `MATRIX_TOOLS_ALLOW_CROSS_ROOM=true` (default: `false`)
-
 `MATRIX_TOOLS_ALLOW_REDACTION`
 
 Allow Matrix message redaction tool execution (default: `false`)
@@ -1869,6 +1981,10 @@ Absolute path to a Python interpreter for the backend, checked before Electron a
 `HERMES_DESKTOP_DEV_SERVER`
 
 Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g. `http://127.0.0.1:5174`). Set automatically by `npm run dev`; only relevant when hacking on the app.
+
+`HERMES_DESKTOP_CDP_PORT`
+
+Overrides the Chrome DevTools Protocol port the renderer exposes on `127.0.0.1` for DOM/CSS inspection tooling (default `9222`). Dev-server runs (`npm run dev`, `hgui`) open it automatically; a packaged app never does, and no value here changes that. Set to `off` to disable it on a dev run. Anything that can reach the port can execute code in the renderer.
 
 ### Microsoft Graph (Teams Meetings)
 
@@ -2228,6 +2344,56 @@ Photon Dashboard API host (default `https://app.photon.codes`).
 
 Photon Spectrum API host (default `https://spectrum.photon.codes`).
 
+### Buzz (Nostr communities)
+
+Variable
+
+Description
+
+`BUZZ_RELAY_URL`
+
+Base URL of the Buzz community relay (e.g. `https://mycommunity.communities.buzz.xyz`)
+
+`BUZZ_PRIVATE_KEY`
+
+Nostr private key for the agent's Buzz identity (nsec or hex) — the only Buzz secret
+
+`BUZZ_CREDENTIALS_FILE`
+
+JSON credentials file holding the nsec (fallback when `BUZZ_PRIVATE_KEY` is unset)
+
+`BUZZ_CHANNELS`
+
+Comma-separated channel UUIDs to watch (default: all joined channels)
+
+`BUZZ_HOME_CHANNEL`
+
+Channel UUID for cron / notification delivery (defaults to the first watched channel)
+
+`BUZZ_ALLOWED_USERS`
+
+Comma-separated npubs or hex pubkeys allowed to talk to the agent
+
+`BUZZ_ALLOW_ALL_USERS`
+
+Allow any community member to talk to the agent (`true`/`false`)
+
+`BUZZ_TRANSPORT`
+
+Inbound transport: `auto` (WebSocket w/ poll fallback, default), `websocket`, or `poll`
+
+`BUZZ_POLL_INTERVAL`
+
+Seconds between inbound poll sweeps (default: `4`)
+
+`BUZZ_AUTH_TAG`
+
+Optional NIP-OA owner-attestation auth tag JSON for NIP-42 WebSocket auth
+
+`BUZZ_CLI_PATH`
+
+Path to the buzz CLI binary (default: `buzz` on PATH, then `~/bin/buzz`)
+
 ### Microsoft Teams (adapter)
 
 The Microsoft Teams platform adapter (Bot Framework / Azure AD), distinct from the [Microsoft Graph (Teams Meetings)](#microsoft-graph-teams-meetings) integration above. See [the Teams messaging guide](/docs/user-guide/messaging/teams).
@@ -2247,6 +2413,10 @@ Azure AD application client secret.
 `TEAMS_TENANT_ID`
 
 Azure AD tenant ID hosting the bot application.
+
+`TEAMS_HOST`
+
+Webhook bind host (default: unset → dual-stack, all interfaces IPv4+IPv6).
 
 `TEAMS_PORT`
 
@@ -2478,11 +2648,11 @@ Troubleshooting mode: disable ALL customizations — skips plugin discovery, MCP
 
 `HERMES_TOOL_PROGRESS`
 
-Deprecated compatibility variable for tool progress display. Prefer `display.tool_progress` in `config.yaml`.
+Unsupported since the config-v12 support floor — the variable is ignored. Use `display.tool_progress` in `config.yaml`.
 
 `HERMES_TOOL_PROGRESS_MODE`
 
-Deprecated compatibility variable for tool progress mode. Prefer `display.tool_progress` in `config.yaml`.
+Deprecated compatibility variable for tool progress mode (still read by the gateway as a fallback). Prefer `display.tool_progress` in `config.yaml`.
 
 `HERMES_HUMAN_DELAY_MODE`
 
@@ -2631,10 +2801,6 @@ Dump API request payloads to stdout instead of log files.
 `HERMES_OAUTH_TRACE`
 
 Set to `1` to log OAuth token exchange and refresh attempts. Includes redacted timing info.
-
-`HERMES_OAUTH_FILE`
-
-Override the path used for OAuth credential storage (default: `~/.hermes/auth.json`).
 
 `HERMES_AGENT_HELP_GUIDANCE`
 

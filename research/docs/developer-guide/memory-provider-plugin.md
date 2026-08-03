@@ -127,13 +127,13 @@ Before each API call
 
 Return recalled context
 
-`queue_prefetch(query)`
+`queue_prefetch(query, *, session_id="")`
 
 After each turn
 
 Pre-warm for next turn
 
-`sync_turn(user, assistant, *, session_id="")`
+`sync_turn(user, assistant, *, session_id="", messages=None)`
 
 After each completed turn
 

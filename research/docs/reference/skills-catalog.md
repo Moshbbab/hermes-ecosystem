@@ -412,6 +412,12 @@ Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.
 
 `research/blogwatcher`
 
+[`grounded-citations`](/docs/user-guide/skills/bundled/research/research-grounded-citations)
+
+Ground answers and documents in cited, verifiable sources.
+
+`research/grounded-citations`
+
 [`llm-wiki`](/docs/user-guide/skills/bundled/research/research-llm-wiki)
 
 Karpathy's LLM Wiki: build/query interlinked markdown KB.
@@ -477,6 +483,12 @@ Exploratory QA of web apps: find bugs, evidence, reports.
 Author in-repo SKILL.md files: frontmatter and structure.
 
 `software-development/hermes-agent-skill-authoring`
+
+[`inspecting-hermes-desktop-dom`](/docs/user-guide/skills/bundled/software-development/software-development-inspecting-hermes-desktop-dom)
+
+Read the live Hermes desktop DOM/CSS over CDP.
+
+`software-development/inspecting-hermes-desktop-dom`
 
 [`node-inspect-debugger`](/docs/user-guide/skills/bundled/software-development/software-development-node-inspect-debugger)
 

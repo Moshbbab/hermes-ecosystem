@@ -70,7 +70,7 @@ A **TTS backend** (any CLI — Piper, VoxCPM, Kokoro, voice cloning, …)
 
 An **STT backend** (custom whisper / ASR CLI)
 
-[Voice Message Transcription](/docs/user-guide/features/tts#voice-message-transcription-stt) — set `HERMES_LOCAL_STT_COMMAND` to a shell template
+[Voice Message Transcription](/docs/user-guide/features/tts#voice-message-transcription-stt) — set `HERMES_LOCAL_STT_COMMAND` to an argv-tokenized template
 
 **External tools via MCP** (filesystem, GitHub, Linear, any MCP server)
 
@@ -664,7 +664,7 @@ def register(ctx):
     )
 ```
 
-Without `override=True`, the registry rejects any registration that would shadow an existing tool from a different toolset — this prevents accidental overwrites. The override is logged at INFO level so it's auditable in `~/.hermes/logs/agent.log`. Plugins load after built-in tools, so the registration order is correct: your handler replaces the built-in one.
+Without `override=True`, the registry rejects any registration that would shadow an existing tool from a different toolset — this prevents accidental overwrites. Overriding a **built-in** tool additionally requires the operator to opt in via `plugins.entries.<plugin_id>.allow_tool_override: true` in `config.yaml`; without that gate, `register_tool(override=True)` raises `PluginToolOverrideError`. The override is logged so it's auditable in `~/.hermes/logs/agent.log`. Plugins load after built-in tools, so the registration order is correct: your handler replaces the built-in one.
 
 ### Register multiple hooks
 
@@ -695,7 +695,7 @@ Before any tool executes
 
 `tool_name: str, args: dict, task_id: str`
 
-ignored
+optional directive: `{"action": "block", "message": ...}` vetoes the call; `{"action": "approve", "message": ...}` escalates to the human-approval gate
 
 [`post_tool_call`](/docs/user-guide/features/hooks#post_tool_call)
 
@@ -777,7 +777,7 @@ A kanban task is blocked (worker process)
 
 ignored
 
-Most hooks are fire-and-forget observers — their return values are ignored. The exception is `pre_llm_call`, which can inject context into the conversation.
+Most hooks are fire-and-forget observers — their return values are ignored. The exceptions are `pre_llm_call`, which can inject context into the conversation, and `pre_tool_call`, which can return a block/approve directive.
 
 All callbacks should accept `**kwargs` for forward compatibility. If a hook callback crashes, it's logged and skipped. Other hooks and the agent continue normally.
 
@@ -1299,7 +1299,8 @@ class MyContextEngine(ContextEngine):
 
     def update_from_response(self, usage) -> None: ...
     def should_compress(self, prompt_tokens: int = None) -> bool: ...
-    def compress(self, messages, current_tokens=None, focus_topic=None) -> list: ...
+    def compress(self, messages, current_tokens=None, focus_topic=None,
+                 force=False, memory_context="") -> list: ...
 
 def register(ctx):
     ctx.register_context_engine(MyContextEngine())
@@ -1435,7 +1436,7 @@ tts:
       voice_compatible: true
 ```
 
-For STT, point `HERMES_LOCAL_STT_COMMAND` at a shell template. Supported placeholders: `{input_path}`, `{output_path}`, `{format}`, `{voice}`, `{model}`, `{speed}` (TTS); `{input_path}`, `{output_dir}`, `{language}`, `{model}` (STT). Any path-interacting CLI is automatically a plugin.
+For STT, point `HERMES_LOCAL_STT_COMMAND` at an argv-tokenized template. It runs without implicit shell interpretation; wrap it in `sh -c`, `cmd /c`, or PowerShell explicitly if the trusted local command requires shell syntax. Supported placeholders: `{input_path}`, `{output_path}`, `{format}`, `{voice}`, `{model}`, `{speed}` (TTS); `{input_path}`, `{output_dir}`, `{language}`, `{model}` (STT). Any path-interacting CLI is automatically a plugin.
 
 **Full guides:** [TTS custom command providers](/docs/user-guide/features/tts#custom-command-providers) · [STT](/docs/user-guide/features/tts#voice-message-transcription-stt).
 

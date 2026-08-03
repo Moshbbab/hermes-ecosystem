@@ -335,6 +335,12 @@ Copilot ACP agent backend (spawns local `copilot` CLI)
 
 `hermes model` (requires `copilot` CLI + `copilot login`)
 
+**Vercel AI Gateway**
+
+Vercel AI Gateway routing
+
+Set `AI_GATEWAY_API_KEY`
+
 **Custom Endpoint**
 
 VLLM, SGLang, Ollama, or any OpenAI-compatible API
@@ -494,7 +500,7 @@ For Docker sandboxes, you can also enable the **egress credential-injection prox
 # From the Hermes install directory (the curl installer placed it at
 # ~/.hermes/hermes-agent on Linux/macOS or %LOCALAPPDATA%\hermes\hermes-agent on Windows):
 cd ~/.hermes/hermes-agent
-uv pip install -e ".[voice]"
+uv pip install --python ./venv/bin/python -e ".[voice]"
 # Includes faster-whisper for free local speech-to-text
 ```
 

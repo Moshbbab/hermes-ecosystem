@@ -43,7 +43,7 @@ uv will install it if missing
 
 Fast Python package manager ([install](https://docs.astral.sh/uv/))
 
-**Node.js 20+**
+**Node.js 26+**
 
 Optional — needed for browser tools and WhatsApp bridge (matches root `package.json` engines)
 

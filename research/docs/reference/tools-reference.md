@@ -4,11 +4,11 @@
 
 This page documents Hermes' built-in tools, grouped by toolset. Availability varies by platform, credentials, and enabled toolsets.
 
-**Quick counts (current registry):** ~73 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 3 terminal tools (`terminal`, `process`, `read_terminal`), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 9 kanban tools (registered when the kanban dispatcher spawns the agent), 3 project tools (desktop/GUI sessions), 2 Discord tools, and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `video_generate`, `vision_analyze`, `video_analyze`, `todo`, `computer_use`).
+**Quick counts (current registry):** ~81 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 6 terminal tools (`terminal`, `process`, plus desktop-GUI-gated `read_terminal`, `close_terminal`, `open_preview`, `focus_pane`), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 12 kanban tools (registered when the kanban dispatcher spawns the agent), 3 project tools (desktop/GUI sessions), 2 Discord tools, 3 video tools (`video_generate`, `xai_video_edit`, `xai_video_extend`), and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `vision_analyze`, `video_analyze`, `todo`, `computer_use`, `x_search`).
 
 MCP Tools
 
-In addition to built-in tools, Hermes can load tools dynamically from MCP servers. MCP tools appear with the prefix `mcp_<server>_` (e.g., `mcp_github_create_issue` for the `github` MCP server). See [MCP Integration](/docs/user-guide/features/mcp) for configuration.
+In addition to built-in tools, Hermes can load tools dynamically from MCP servers. MCP tools appear with the prefix `mcp__<server>__` (e.g., `mcp__github__create_issue` for the `github` MCP server). See [MCP Integration](/docs/user-guide/features/mcp) for configuration.
 
 ## `browser` toolset
 
@@ -74,7 +74,7 @@ Type text into an input field identified by its ref ID. Clears the field first, 
 
 `browser_vision`
 
-Take a screenshot of the current page and analyze it with vision AI. Use this when you need to visually understand what's on the page - especially useful for CAPTCHAs, visual verification challenges, complex layouts, or when the text snaps…
+Take a screenshot of the current page so you can inspect it visually. Use this when you need to understand what the page looks like — especially for CAPTCHAs, visual verification challenges, complex layouts, or cases where the text snapshot misses important visual information. On native-vision models the screenshot is attached directly; otherwise falls back to an auxiliary vision mo…
 
 —
 
@@ -110,7 +110,7 @@ Requires environment
 
 `clarify`
 
-Ask the user a question when you need clarification, feedback, or a decision before proceeding. Supports two modes: 1. **Multiple choice** — provide up to 4 choices. The user picks one or types their own answer via a 5th 'Other' option. 2.…
+Ask the user a question when you need clarification, feedback, or a decision before proceeding. Supports three modes: 1. **Single-select multiple choice** — up to 4 choices; the user picks one or types their own answer via a 5th 'Other' option. 2. **Multi-select multiple choice** — `multi_select=true` renders checkboxes and returns a list of selected choices. 3. **Open-ended** — no choices; the user types a free-form response. On the classic CLI multi-select uses Space-to-toggle checkboxes; on messaging platforms without native checkbox UIs the user replies with comma/space-separated numbers (e.g. "1, 3") or the option text.
 
 —
 
@@ -222,7 +222,7 @@ Targeted find-and-replace edits in files. Use this instead of sed/awk in termina
 
 `read_file`
 
-Read a text file with line numbers and pagination. Use this instead of cat/head/tail in terminal. Output format: 'LINE\_NUM|CONTENT'. Suggests similar filenames if not found. Use offset and limit for large files. NOTE: Cannot read images o…
+Read a text file with line numbers and pagination. Use this instead of cat/head/tail in terminal. Output format: 'LINE\_NUM|CONTENT'. Suggests similar filenames if not found. Use offset and limit for large files. Reads exceeding ~100K characters are truncated on a line boundary and return a next\_offset. Jupyter notebooks (.ipynb), Word documents (.docx), and Excel workbooks (.xlsx) a…
 
 —
 
@@ -234,7 +234,7 @@ Search file contents or find files by name. Use this instead of grep/rg/find/ls 
 
 `write_file`
 
-Write content to a file, completely replacing existing content. Use this instead of echo/cat heredoc in terminal. Creates parent directories automatically. OVERWRITES the entire file — use 'patch' for targeted edits.
+Write content to a file, completely replacing existing content. Use this instead of echo/cat heredoc in terminal. Creates parent directories automatically. OVERWRITES the entire file — use 'patch' for targeted edits. Auto-runs syntax checks on .py/.json/.yaml/.toml and other linted languages; only NEW errors introduced by the write are surfaced.
 
 —
 
@@ -366,6 +366,24 @@ Move a blocked task to `ready` when all parents are done, or `todo` while any pa
 
 profile with `kanban` toolset
 
+`kanban_attach`
+
+Attach a file to a task by passing its bytes inline (base64). Stored as a real attachment under the task's attachments dir, capped at 25 MB.
+
+`HERMES_KANBAN_TASK` or `kanban` toolset
+
+`kanban_attach_url`
+
+Attach a file to a task by URL — Hermes downloads it server-side and stores it as a real attachment (capped at 25 MB). Only http/https URLs.
+
+`HERMES_KANBAN_TASK` or `kanban` toolset
+
+`kanban_attachments`
+
+List the files attached to a task: id, filename, content\_type, size, uploader, and the absolute on-disk path.
+
+`HERMES_KANBAN_TASK` or `kanban` toolset
+
 ## `project` toolset
 
 Tools for driving desktop [Projects](/docs/user-guide/cli) — named, multi-folder workspaces. Registered when the `project` toolset is enabled (primarily the desktop app / dashboard surfaces).
@@ -418,7 +436,7 @@ Requires environment
 
 `session_search`
 
-Search past sessions stored in the local session DB, or scroll inside one. FTS5-backed retrieval; returns actual messages from the DB (no LLM calls). Three shapes: discovery (pass `query`), scroll (pass `session_id` + `around_message_id`), browse (no args).
+Search past sessions stored in the local session DB, or scroll inside one. FTS5-backed retrieval; returns actual messages from the DB (no LLM calls). Four shapes: discovery (pass `query`), scroll (pass `session_id` + `around_message_id`), read (pass `session_id` only), browse (no args).
 
 —
 
@@ -471,6 +489,24 @@ Execute shell commands on a Linux environment. Filesystem persists between calls
 `read_terminal`
 
 Read what's currently shown in the in-app terminal pane of the Hermes desktop GUI (the embedded shell beside this chat). Desktop-app only.
+
+—
+
+`close_terminal`
+
+Close the read-only terminal tab for a background process in the Hermes desktop GUI. Does NOT kill the process — only drops the tab/view; use process(action='kill') to stop it. Desktop-app only.
+
+—
+
+`open_preview`
+
+Open a web URL, localhost dev-server URL, or file path in the preview pane beside the chat in the Hermes desktop app. Desktop-app only.
+
+—
+
+`focus_pane`
+
+Reveal and focus a pane in the Hermes desktop app (chat, files, terminal, review, sessions). Desktop-app only.
 
 —
 
@@ -541,6 +577,18 @@ Generate a video from a text prompt (text-to-video) or animate a still image (im
 
 Active `video_gen` plugin + its credential (e.g. `XAI_API_KEY`, `FAL_KEY`)
 
+`xai_video_edit`
+
+Edit an existing video with xAI Imagine. Provider-specific (separate from `video_generate`). `video_url` must be the public HTTPS MP4 URL from a prior Imagine result.
+
+xAI Imagine credentials (SuperGrok OAuth or `XAI_API_KEY`)
+
+`xai_video_extend`
+
+Extend an existing video with xAI Imagine. Provider-specific (separate from `video_generate`). `video_url` must be the public HTTPS MP4 URL from a prior Imagine result.
+
+xAI Imagine credentials (SuperGrok OAuth or `XAI_API_KEY`)
+
 ## `web` toolset
 
 Tool
@@ -557,7 +605,7 @@ EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY
 
 `web_extract`
 
-Extract content from web page URLs. Returns page content in markdown format. Also works with PDF URLs — pass the PDF link directly and it converts to markdown text. Pages under 5000 chars return full markdown; larger pages are LLM-summarized.
+Extract content from web page URLs. Returns clean page content in markdown/text (no LLM summarization — fast). Also works with PDF URLs (arxiv papers, documents) — pass the PDF link directly. Pages within the char budget (default 15000) return whole; larger pages return a head+tail window with a footer pointing at the full text saved on disk. Max 5 URLs per call.
 
 EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY
 
