@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yantrikos/yantrikdb-hermes-plugin — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="This is a standalone plugin that serves as a memory provider for the Hermes Agent. It provides features such as contradiction tracking, recency ranking, and…">
+<meta name="description" content="This plugin provides a self-maintaining memory layer for Hermes Agent, featuring canonicalization of duplicates and tracking of contradictions. It operates as…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta property="og:description" content="This is a standalone plugin that serves as a memory provider for the Hermes Agent. It provides features such as contradiction tracking, recency ranking, and…">
+<meta property="og:description" content="This plugin provides a self-maintaining memory layer for Hermes Agent, featuring canonicalization of duplicates and tracking of contradictions. It operates as…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta name="twitter:description" content="This is a standalone plugin that serves as a memory provider for the Hermes Agent. It provides features such as contradiction tracking, recency ranking, and…">
+<meta name="twitter:description" content="This plugin provides a self-maintaining memory layer for Hermes Agent, featuring canonicalization of duplicates and tracking of contradictions. It operates as…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=yantrikdb-hermes-plugin&amp;subtitle=YantrikDB+memory+provider+for+NousResearch%2Fhermes-agent+%E2%80%94+self-maintaining+memory+with+benchmarked+recall%2C+self-tuning+ranking%2C+contradiction+tracking%2C+proactive+hygiene%2C+and+expla&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin#software",
   "name": "yantrikdb-hermes-plugin",
-  "description": "This is a standalone plugin that serves as a memory provider for the Hermes Agent. It provides features such as contradiction tracking, recency ranking, and explainable recall with scoring reasons.",
+  "description": "This plugin provides a self-maintaining memory layer for Hermes Agent, featuring canonicalization of duplicates and tracking of contradictions. It operates as an in-process embedded backend by default and includes a self-directing loop that identifies knowledge gaps to queue tasks for the agent.",
   "url": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin",
   "codeRepository": "https://github.com/yantrikos/yantrikdb-hermes-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yantrikos",
     "url": "https://github.com/yantrikos"
   },
-  "dateModified": "2026-08-02T07:23:58.000Z",
+  "dateModified": "2026-08-03T19:00:45.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">220·repos</span>
-    <span id="meta-version">hermes·v0.19.1</span>
+    <span id="meta-version">hermes·v0.20.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-02</span>
+    <span><span class="meta-label">updated</span>2026-08-03</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This is a standalone plugin that serves as a memory provider for the Hermes Agent. It provides features such as contradiction tracking, recency ranking, and explainable recall with scoring reasons.</p>
+    <p class="summary-text">This plugin provides a self-maintaining memory layer for Hermes Agent, featuring canonicalization of duplicates and tracking of contradictions. It operates as an in-process embedded backend by default and includes a self-directing loop that identifies knowledge gaps to queue tasks for the agent.</p>
     <ul class="summary-highlights">
-      <li>Supports in-process embedded mode by default</li>
-      <li>Includes automated memory hygiene and consolidation</li>
-      <li>Provides self-directing memory loops for knowledge gaps</li>
+      <li>Provides explainable recall with why_retrieved tags for every result</li>
+      <li>Supports temporal context graphs with recency-aware ranking and lifecycle management</li>
+      <li>Includes knowledge packs for mounting and unmounting signed expertise files</li>
     </ul>
   </div>
 </section>
@@ -261,6 +261,13 @@
 <h3>The self-directing substrate (v0.8)</h3>
 <p><img src="https://raw.githubusercontent.com/yantrikos/yantrikdb-hermes-plugin/main/assets/demos/self-directing/demo.gif" alt="Self-directing memory loop: gap → task → agenda → learn → close" loading="lazy" decoding="async"></p>
 <p>The loop no other Hermes memory provider can do — the memory <strong>notices what it doesn't know, queues the work, hands the agent its own agenda, and closes the loop</strong> when the gap is answered. <strong>On by default since v0.10.0</strong> (it was opt-in through v0.9.x, which meant most installs never saw it); bounded to <code>gap_task_max</code> new tasks per session and <code>agenda_max_items</code> prompt lines, and gated on <em>recurring</em> poorly-answered queries so one weak recall can't mint a task. Disable with <code>YANTRIKDB_AUTO_GAP_TASKS=false</code> / <code>YANTRIKDB_SURFACE_AGENDA=false</code>. Runnable via <code>python demos/self_directing_memory.py</code>. Details: <strong><a href="./assets/demos/self-directing/">assets/demos/self-directing/</a></strong>.</p>
+<h4>Running an agent 24/7</h4>
+<p>Hermes fires <code>on_session_end</code> only at real session boundaries — CLI exit, <code>/reset</code>, gateway session expiry. An always-on deployment (a Pi, a Telegram or Discord gateway) can go a long time without one, so since <strong>v0.12.0</strong> consolidation and the self-directing gap-to-task loop also run on a cadence: every <code>YANTRIKDB_MAINTENANCE_CADENCE_TURNS</code> turns (default 40) once <code>YANTRIKDB_MAINTENANCE_MIN_INTERVAL_SECONDS</code> (default 1800) have passed. Both conditions must hold, it runs in the background, and never two at once. Set the cadence to <code>0</code> for session-end only.</p>
+<h4>More than one person talking to the agent?</h4>
+<p>If several people share one agent — a group chat, a family or team bot, a shared gateway — turn on owner scoping so each person gets their own memory namespace and the agent stops attributing one user's facts to another:</p>
+<pre><code class="language-bash">echo "YANTRIKDB_OWNER_SCOPING=true" &gt;&gt; ~/.hermes/.env
+</code></pre>
+<p>Off by default because it changes where new memories are written; existing ones stay readable (<code>YANTRIKDB_INCLUDE_BASE_NAMESPACE_RECALL</code>, default on).</p>
 <h4>Attachable expertise — knowledge packs (v0.11.0)</h4>
 <p>A <strong>pack</strong> is a sealed, signed knowledge file. Mount it to gain its knowledge and rules for a task; unmount to give them back, leaving your own memory byte-for-byte unchanged. No other Hermes memory provider can do this.</p>
 <pre><code class="language-bash">echo "YANTRIKDB_PACKS_ENABLED=true" &gt;&gt; ~/.hermes/.env
@@ -814,7 +821,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 19.0K</div>
+        <div class="stars">★ 19.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
