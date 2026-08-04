@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>freehul/progressive-skill — Hermes Agent Guides &amp; Docs | Hermes Atlas</title>
-<meta name="description" content="Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token overhead through progressive disclosure. It uses toolset mapping,…">
+<meta name="description" content="Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token usage through progressive disclosure. It uses toolset mapping,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/freehul/progressive-skill">
 <meta property="og:title" content="freehul/progressive-skill — Hermes Atlas">
-<meta property="og:description" content="Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token overhead through progressive disclosure. It uses toolset mapping,…">
+<meta property="og:description" content="Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token usage through progressive disclosure. It uses toolset mapping,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/freehul/progressive-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="freehul/progressive-skill — Hermes Atlas">
-<meta name="twitter:description" content="Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token overhead through progressive disclosure. It uses toolset mapping,…">
+<meta name="twitter:description" content="Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token usage through progressive disclosure. It uses toolset mapping,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=progressive-skill&amp;subtitle=Smart+skill+index+compaction+for+Hermes+Agent+%E2%80%94+progressive+disclosure+with+budget+control+and+usage-frequency+learning.+Cuts+skills+index+%7E70%25+tokens+%28issue+%2322620%29.&amp;kind=project+%C2%B7+guides">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/freehul/progressive-skill#software",
   "name": "progressive-skill",
-  "description": "Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token overhead through progressive disclosure. It uses toolset mapping, usage-frequency learning, and a configurable token budget to determine which skill categories to demote or keep fully visible.",
+  "description": "Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token usage through progressive disclosure. It uses toolset mapping, usage-frequency learning, and a configurable token budget to determine which skill categories remain fully visible.",
   "url": "https://hermesatlas.com/projects/freehul/progressive-skill",
   "codeRepository": "https://github.com/freehul/progressive-skill",
   "applicationCategory": "ReferenceApplication",
@@ -47,7 +47,14 @@
     "name": "freehul",
     "url": "https://github.com/freehul"
   },
-  "dateModified": "2026-08-03T19:36:09.000Z",
+  "dateModified": "2026-08-03T21:45:24.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 1
+  },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
   }
@@ -112,7 +119,7 @@
   <p class="project-desc">Smart skill index compaction for Hermes Agent — progressive disclosure with budget control and usage-frequency learning. Cuts skills index ~70% tokens (issue #22620).</p>
 
   <div class="meta-row">
-    <span class="stars">★ 0</span>
+    <span class="stars">★ 1</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -131,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token overhead through progressive disclosure. It uses toolset mapping, usage-frequency learning, and a configurable token budget to determine which skill categories to demote or keep fully visible.</p>
+    <p class="summary-text">Progressive Skill is a Python-based Hermes Agent plugin designed to reduce skill index token usage through progressive disclosure. It uses toolset mapping, usage-frequency learning, and a configurable token budget to determine which skill categories remain fully visible.</p>
     <ul class="summary-highlights">
-      <li>Reduces skill index tokens by approximately 70% in specific scenarios.</li>
-      <li>Uses usage-frequency learning with recency decay to promote skills.</li>
-      <li>Decides category demotion without modifying Hermes source code.</li>
+      <li>Reduces skill index tokens by approximately 70%.</li>
+      <li>Uses usage-frequency learning with recency decay.</li>
+      <li>Implements a hard token budget via character limits.</li>
     </ul>
   </div>
 </section>
@@ -210,36 +217,50 @@ hermes plugins enable progressive-skill
 <p>On Windows: <code>%LOCALAPPDATA%\hermes\plugins\progressive-skill</code></p>
 <p>Requires Hermes CLI or desktop app (any version with <code>agent.prompt_builder.build_skills_system_prompt</code> and the <code>compact_categories</code> kwarg).</p>
 <h3>Configuration</h3>
-<p>All tunables are module-level constants in <code>__init__.py</code>:</p>
+<p>All tunables live in <code>plugin.yaml</code> under the <code>config:</code> section (v2.1+). Defaults:</p>
 <table>
 <thead>
 <tr>
-<th>Constant</th>
+<th>Key</th>
 <th>Default</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>_LIST_BUDGET_CHARS</code></td>
+<td><code>list_budget_chars</code></td>
 <td>4600</td>
 <td>Hard budget for full-category skill descriptions (~1,150 tok)</td>
 </tr>
 <tr>
-<td><code>_PROMOTE_SCORE</code></td>
+<td><code>promote_score</code></td>
 <td>2.0</td>
 <td>Decayed usage score needed to promote a category</td>
 </tr>
 <tr>
-<td><code>_DECAY_DAYS</code></td>
+<td><code>decay_days</code></td>
 <td>30.0</td>
 <td>Recency decay half-life for usage scores</td>
 </tr>
 <tr>
-<td><code>_ALWAYS_RELEVANT</code></td>
-<td>hermes, software-development</td>
+<td><code>always_relevant</code></td>
+<td>["hermes", "software-development"]</td>
 <td>Categories never demoted</td>
 </tr>
+<tr>
+<td><code>phase3_health_check</code></td>
+<td>true</td>
+<td>Warn when budget transforms match nothing (upstream format drift)</td>
+</tr>
 </tbody></table>
+<p>Changes take effect next session.</p>
+<h3>What's new in v2.1</h3>
+<ul>
+<li><strong>UsageTracker class</strong> — module globals replaced by an encapsulated, thread-safe store (no <code>global</code>, testable in isolation)</li>
+<li><strong>Atomic usage.json writes</strong> — temp file + fsync + <code>os.replace</code>; a crash mid-write can never corrupt the stats file</li>
+<li><strong>Category data cache</strong> — the skills snapshot is read once per mtime change instead of twice per prompt build</li>
+<li><strong>Cross-platform paths</strong> — uses <code>hermes_constants.get_hermes_home()</code> instead of a hard-coded Windows path</li>
+<li><strong>Phase 3 health check</strong> — if Hermes changes the index format, the plugin logs a warning instead of silently no-oping</li>
+</ul>
 <h3>Design principles</h3>
 <ul>
 <li><strong>Decision/render separation</strong> — the plugin decides <em>which</em> categories to demote; Hermes renders. No regex over rendered output → robust to upstream formatting changes.</li>
@@ -249,8 +270,8 @@ hermes plugins enable progressive-skill
 </ul>
 <h3>Files</h3>
 <pre><code>progressive-skill/
-├── __init__.py     # the whole plugin (~650 lines)
-├── plugin.yaml     # plugin manifest
+├── __init__.py     # the whole plugin (~770 lines)
+├── plugin.yaml     # plugin manifest + config section
 └── usage.json      # created at runtime: skill usage stats
 </code></pre>
 <h3>Related</h3>
@@ -295,7 +316,7 @@ hermes plugins enable progressive-skill
         <div class="name"><span class="org">alchaincyf /</span> hermes-agent-orange-book</div>
       </a>
       <a class="related-row" href="/projects/OnlyTerp/hermes-optimization-guide">
-        <div class="stars">★ 564</div>
+        <div class="stars">★ 565</div>
         <div class="name"><span class="org">OnlyTerp /</span> hermes-optimization-guide</div>
       </a>
       <a class="related-row" href="/projects/metantonio/hermes-wsl-ubuntu">
