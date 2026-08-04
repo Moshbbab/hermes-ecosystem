@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files and directories.",
+  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-08-03T19:34:57.000Z",
+  "dateModified": "2026-08-04T18:58:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4776
+    "userInteractionCount": 4785
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-03</span>
+    <span><span class="meta-label">updated</span>2026-08-04</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files and directories.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files.</p>
     <ul class="summary-highlights">
       <li>Provides a CLI tool and visualization dashboard</li>
       <li>Tracks token usage and costs across multiple AI coding agents</li>
-      <li>Supports monitoring for clients including Claude Code, OpenClaw, and Gemini</li>
+      <li>Supports data from clients including Claude Code, Cursor, and GitHub Copilot</li>
     </ul>
   </div>
 </section>
@@ -314,6 +314,16 @@
 <td><code>~/.senpi/agent/sessions/</code> (override via <code>SENPI_CODING_AGENT_DIR</code>)</td>
 </tr>
 <tr>
+<td><img width="48px" src="https://github.com/getkimchi.png" alt="Kimchi"></td>
+<td><a href="https://kimchi.dev/">Kimchi Coding</a></td>
+<td><code>~/.config/kimchi/harness/sessions/</code> (override via <code>KIMCHI_CODING_AGENT_DIR</code>)</td>
+</tr>
+<tr>
+<td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-synthetic.png" alt="Reasonix"></td>
+<td><a href="https://github.com/esengine/DeepSeek-Reasonix">Reasonix</a></td>
+<td><code>~/.reasonix/stats/*.jsonl</code> (override via <code>REASONIX_STATE_HOME</code> or <code>REASONIX_HOME</code>)</td>
+</tr>
+<tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-kimi.png" alt="Kimi"></td>
 <td><a href="https://github.com/MoonshotAI/kimi-cli">Kimi CLI</a> / <a href="https://github.com/MoonshotAI/kimi-code">Kimi Code</a></td>
 <td>kimi-cli: <code>~/.kimi/sessions/</code> kimi-code: <code>~/.kimi-code/sessions/</code> (override via <code>KIMI_CODE_HOME</code>)</td>
@@ -391,7 +401,7 @@
 <tr>
 <td><img width="48px" src="https://github.com/cline.png" alt="Cline"></td>
 <td><a href="https://github.com/cline/cline">Cline</a></td>
-<td>VS Code globalStorage tasks (Linux: <code>~/.config/Code/...</code>; macOS: <code>~/Library/Application Support/Code/...</code>; Windows: <code>%APPDATA%\Code\...</code>; server: <code>~/.vscode-server/data/User/globalStorage/saoudrizwan.claude-dev/tasks/</code>)</td>
+<td>VS Code globalStorage tasks (Linux: <code>~/.config/Code/...</code>; macOS: <code>~/Library/Application Support/Code/...</code>; Windows: <code>%APPDATA%\Code\...</code>; server: <code>~/.vscode-server/data/User/globalStorage/saoudrizwan.claude-dev/tasks/</code>) + Cline CLI sessions (first available root, in order: <code>$CLINE_SESSION_DATA_DIR</code>, <code>$CLINE_DATA_DIR/sessions/</code>, <code>$CLINE_DIR/data/sessions/</code>, fallback <code>~/.cline/data/sessions/</code>; blank/whitespace-only environment values are ignored)</td>
 </tr>
 <tr>
 <td><img width="48px" src="https://github.com/user-attachments/assets/7246e920-f3f8-4b6e-847e-030ae04e86c2" alt="Gajae-Code"></td>
@@ -516,6 +526,7 @@
 <li><a href="#development">Development</a><ul>
 <li><a href="#prerequisites-1">Prerequisites</a></li>
 <li><a href="#how-to-run">How to Run</a></li>
+<li><a href="#container-setup">Container Setup</a></li>
 </ul>
 </li>
 <li><a href="#supported-platforms">Supported Platforms</a><ul>
@@ -543,7 +554,7 @@
 <li>Zero flicker rendering</li>
 </ul>
 </li>
-<li><strong>Multi-platform support</strong> - Track usage across OpenCode, Claude Code, Codex CLI, Copilot CLI, Cursor IDE, Gemini CLI, Amp, Codebuff, Droid, OpenClaw, Hermes Agent, Pi, Kimi CLI, Qwen CLI, Roo Code, Kilo, Mux, Kilo CLI, Crush, Goose, Antigravity, Antigravity CLI, Zed, Kiro, Trae, Warp/Oz, Cline, Gajae-Code, Grok Build, Jcode, MiMo Code, Command Code, Junie, ZCode, OpenCodeReview, CodeBuddy, WorkBuddy, Devin CLI, Devin Desktop, Augment Code, and Synthetic</li>
+<li><strong>Multi-platform support</strong> - Track usage across OpenCode, Claude Code, Codex CLI, Copilot CLI, Cursor IDE, Gemini CLI, Amp, Codebuff, Droid, OpenClaw, Hermes Agent, Pi, Kimchi Coding, Reasonix, Kimi CLI, Qwen CLI, Roo Code, Kilo, Mux, Kilo CLI, Crush, Goose, Antigravity, Antigravity CLI, Zed, Kiro, Trae, Warp/Oz, Cline, Gajae-Code, Grok Build, Jcode, MiMo Code, Command Code, Junie, ZCode, OpenCodeReview, CodeBuddy, WorkBuddy, Devin CLI, Devin Desktop, Augment Code, and Synthetic</li>
 <li><strong>Real-time pricing</strong> - Fetches current pricing from LiteLLM with 1-hour disk cache; automatic OpenRouter fallback and Cursor model pricing for newly released models</li>
 <li><strong>Detailed breakdowns</strong> - Input, output, cache read/write, and reasoning token tracking</li>
 <li><strong>Native Rust core</strong> - All parsing and aggregation done in Rust for 10x faster processing</li>
@@ -819,7 +830,7 @@ tokscale --client synthetic
 # Combine with other filters
 tokscale --client opencode,claude --week --json
 </code></pre>
-<p>Possible values: <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>copilot</code>, <code>gemini</code>, <code>cursor</code>, <code>amp</code>, <code>codebuff</code>, <code>droid</code>, <code>openclaw</code>, <code>hermes</code>, <code>pi</code>, <code>kimi</code>, <code>qwen</code>, <code>roocode</code>, <code>kilocode</code>, <code>kilo</code>, <code>mux</code>, <code>crush</code>, <code>goose</code>, <code>antigravity</code>, <code>antigravity-cli</code>, <code>zed</code>, <code>kiro</code>, <code>trae</code>, <code>warp</code>, <code>cline</code>, <code>gjc</code>, <code>grok</code>, <code>jcode</code>, <code>micode</code>, <code>commandcode</code>, <code>junie</code>, <code>zcode</code>, <code>opencodereview</code>, <code>codebuddy</code>, <code>augment</code>, <code>synthetic</code>.</p>
+<p>Possible values: <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>copilot</code>, <code>gemini</code>, <code>cursor</code>, <code>amp</code>, <code>codebuff</code>, <code>droid</code>, <code>openclaw</code>, <code>hermes</code>, <code>pi</code>, <code>kimchi</code>, <code>kimi</code>, <code>qwen</code>, <code>roocode</code>, <code>kilocode</code>, <code>kilo</code>, <code>mux</code>, <code>crush</code>, <code>goose</code>, <code>antigravity</code>, <code>antigravity-cli</code>, <code>zed</code>, <code>kiro</code>, <code>trae</code>, <code>warp</code>, <code>cline</code>, <code>gjc</code>, <code>grok</code>, <code>jcode</code>, <code>micode</code>, <code>commandcode</code>, <code>junie</code>, <code>zcode</code>, <code>opencodereview</code>, <code>codebuddy</code>, <code>augment</code>, <code>synthetic</code>.</p>
 <blockquote>
 <p><strong>Breaking change (v4.0.0):</strong> The per-client boolean flags (<code>--opencode</code>, <code>--claude</code>, <code>--codex</code>, etc.) have been removed and now error. Use the canonical <code>--client</code>/<code>-c</code> flag instead — e.g. <code>tokscale --client opencode,claude</code>.</p>
 </blockquote>
@@ -1079,6 +1090,8 @@ tokscale trae logout --variant solo
 </code></pre>
 <p><strong>Cache location</strong>: <code>~/.config/tokscale/trae-cache/</code></p>
 <p><strong>How it works</strong>: tokscale either decrypts the desktop client's <code>iCubeAuthInfo://*</code> blob (<code>globalStorage/storage.json</code>) to recover a JWT, or accepts one pasted via <code>--manual</code>. It then calls <code>POST /trae/api/v1/pay/query_user_usage_group_by_session</code> paginated and stores the raw JSON. Run sync before reports if you want the freshest Trae data.</p>
+<h5>Sync-lock recovery during upgrades</h5>
+<p>Antigravity and Trae syncs use a legacy-compatible <code>sync.lock</code> file to avoid overlapping an older tokscale binary during a rolling upgrade. After a crash or forced stop, that file can remain. Tokscale intentionally fails closed instead of replacing it, because an older binary may still be creating or updating the same path. Confirm that no <code>tokscale antigravity sync</code> or <code>tokscale trae sync</code> process is active, remove the exact quoted <code>sync.lock</code> path printed by the command, then retry. Do not remove the lock while a sync may still be running.</p>
 <blockquote>
 <p><strong>Note on pricing</strong>: Trae cost figures are <strong>vendor-reported</strong> — tokscale surfaces the <code>dollar_float</code> value returned by Trae's own API rather than recomputing cost from token counts through tokscale's pricing engine. Numbers will match what you see on <code>trae.ai/account-setting#usage</code>, not what tokscale would otherwise calculate for the same usage.</p>
 </blockquote>
@@ -1295,23 +1308,7 @@ tokscale codex status
 tokscale codex status --name personal --json
 
 # Fetch the active Codex app-server account activity separately from local totals
-tokscale codex activity
-tokscale codex activity --json
-</code></pre>
-<p>When saved Codex accounts exist, <code>tokscale usage --json</code> includes structured account metadata for each Codex entry and the TUI displays those entries under one Codex group. Without saved accounts, Tokscale falls back to the current Codex auth discovery path (<code>CODEX_HOME/auth.json</code>, <code>~/.config/codex/auth.json</code>, <code>~/.codex/auth.json</code>, then macOS Keychain).</p>
-<p><code>tokscale codex activity</code> uses only the installed Codex app-server's active authentication to fetch a timestamped, account-level snapshot. It is supplemental data: it is never included in local totals, reports, exports, submissions, or leaderboards.</p>
-<h5>Example Output</h5>
-<pre><code>╭──────────────────────────────────────────────────────────╮
-│ Session    85% left  [=========---] resets in 2h 15m     │
-│ Weekly     72% left  [========----] resets Fri 3pm       │
-│ Plan     Max 20x                                         │
-╰──────────────────────────────────────────────────────────╯
-╭──────────────────────────────────────────────────────────╮
-│ Session    40% left  [=====-------] resets in 4h 30m     │
-│ Weekly     90% left  [==========--] resets Mon 12am      │
-│ Account  user@example.com                                │
-│ Plan     Pro                                             │
-╰─────────────────────────────
+tokscale codex 
 
 ---
 
@@ -1329,11 +1326,11 @@ tokscale codex activity --json
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 64.4K</div>
+        <div class="stars">★ 64.5K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 813</div>
+        <div class="stars">★ 815</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1345,7 +1342,7 @@ tokscale codex activity --json
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 534</div>
+        <div class="stars">★ 536</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
