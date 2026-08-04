@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>hermes-labs-ai/lintlang — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="LintLang is a static analyzer for natural-language instructions used to control AI agents. It identifies patterns such as ambiguous tool descriptions, missing…">
+<meta name="description" content="LintLang is a static analyzer for natural-language instructions used by AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop…">
 <link rel="canonical" href="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta property="og:description" content="LintLang is a static analyzer for natural-language instructions used to control AI agents. It identifies patterns such as ambiguous tool descriptions, missing…">
+<meta property="og:description" content="LintLang is a static analyzer for natural-language instructions used by AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta name="twitter:description" content="LintLang is a static analyzer for natural-language instructions used to control AI agents. It identifies patterns such as ambiguous tool descriptions, missing…">
+<meta name="twitter:description" content="LintLang is a static analyzer for natural-language instructions used by AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=lintlang&amp;subtitle=lintlang+is+a+static+linter+for+AI+agent+configs%2C+tool+descriptions%2C+and+system+prompts+that+runs+zero-LLM+quality+gating+in+CI.+Catches+language-level+failures+%28vague+tool+descrip&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analyzer for natural-language instructions used to control AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or LLM calls.",
+  "description": "LintLang is a static analyzer for natural-language instructions used by AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or API calls.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-08-03T23:04:59.000Z",
+  "dateModified": "2026-08-04T07:03:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-03</span>
+    <span><span class="meta-label">updated</span>2026-08-04</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analyzer for natural-language instructions used to control AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or LLM calls.</p>
+    <p class="summary-text">LintLang is a static analyzer for natural-language instructions used by AI agents. It identifies patterns such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or API calls.</p>
     <ul class="summary-highlights">
       <li>Analyzes JSON, YAML, Markdown, and Python files.</li>
-      <li>Detects issues like unbounded retries and vague instructions.</li>
-      <li>Provides deterministic, local static checks.</li>
+      <li>Provides deterministic and local static checks.</li>
+      <li>Supports CI integration via GitHub Actions and pre-commit.</li>
     </ul>
   </div>
 </section>
@@ -170,7 +170,17 @@ before runtime.</strong></p>
 <p>LintLang's default static checks are deterministic and local. They make no LLM,
 API, telemetry, or network calls.</p>
 <h3>Quick start</h3>
-<p>Install from PyPI:</p>
+<p>Run once without installing, using <a href="https://docs.astral.sh/uv/">uv</a>:</p>
+<pre><code class="language-bash">uvx lintlang scan AGENTS.md
+</code></pre>
+<p>For a persistent command in an isolated environment, use
+<a href="https://pipx.pypa.io/stable/">pipx</a>:</p>
+<pre><code class="language-bash">pipx install lintlang
+lintlang scan AGENTS.md
+</code></pre>
+<p>If pipx's app directory is not on <code>PATH</code>, run <code>pipx ensurepath</code>, open a new
+shell, and retry the scan.</p>
+<p>Or install from PyPI into the current Python environment:</p>
 <pre><code class="language-bash">python -m pip install lintlang
 </code></pre>
 <p>Requires Python 3.10+.</p>
@@ -263,18 +273,37 @@ the highest-severity findings.</p>
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-
-      - name: Install LintLang
-        run: python -m pip install "lintlang==0.3.1"
-
       - name: Inspect agent instructions
-        run: lintlang scan AGENTS.md --fail-on fail
+        uses: hermes-labs-ai/lintlang@v0.3.2
+        with:
+          path: AGENTS.md
 </code></pre>
-<p>Pinning LintLang keeps the reviewed rule version fixed. Upgrade that pin
-deliberately and inspect newly introduced findings before making them blocking.</p>
+<p>The release tag pins both the action and the LintLang source it installs.
+Upgrade that pin deliberately and inspect newly introduced findings before
+making them blocking.</p>
+<h3>Add it to pre-commit</h3>
+<p>Add the hook to <code>.pre-commit-config.yaml</code> with the explicit instruction paths
+to scan:</p>
+<pre><code class="language-yaml">repos:
+  - repo: https://github.com/hermes-labs-ai/lintlang
+    rev: v0.3.2
+    hooks:
+      - id: lintlang
+        args: [AGENTS.md]
+</code></pre>
+<p>Activate it and test the configured paths:</p>
+<pre><code class="language-bash">pre-commit install
+pre-commit run lintlang
+</code></pre>
+<p>Replace or extend <code>args</code> with the prompt, tool-definition, agent-configuration,
+or supported directory paths your repository owns. The hook scans only those
+configured paths and reports findings without blocking on a verdict by default.
+After reviewing the repository's baseline, opt into blocking <code>FAIL</code> findings:</p>
+<pre><code class="language-yaml">hooks:
+  - id: lintlang
+    args: [AGENTS.md, --fail-on, fail]
+</code></pre>
+<p>Missing, unreadable, or malformed configured inputs still return nonzero.</p>
 <p>For machine-readable output:</p>
 <pre><code class="language-bash">lintlang scan AGENTS.md --format json --fail-on fail
 </code></pre>
@@ -361,11 +390,11 @@ inspects one present instruction plus explicit context.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 64.3K</div>
+        <div class="stars">★ 64.4K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 812</div>
+        <div class="stars">★ 813</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">

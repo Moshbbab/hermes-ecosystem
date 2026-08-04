@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summaries to allow agents to recover details without flooding the active prompt.",
+  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover detailed information without flooding the active prompt.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-08-03T23:30:15.000Z",
+  "dateModified": "2026-08-04T07:09:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-03</span>
+    <span><span class="meta-label">updated</span>2026-08-04</span>
   </div>
 
   <div class="actions">
@@ -138,10 +138,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses hierarchical summaries to allow agents to recover details without flooding the active prompt.</p>
+    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover detailed information without flooding the active prompt.</p>
     <ul class="summary-highlights">
       <li>Uses a SQLite-backed message store with FTS metadata</li>
-      <li>Builds depth-aware summary nodes in a hierarchical DAG</li>
+      <li>Builds a depth-aware summary DAG for compacted history</li>
       <li>Provides agent tools for searching and expanding compacted material</li>
     </ul>
   </div>
@@ -323,7 +323,7 @@ also resolve the explicit plugin-qualified skill <code>hermes-lcm:hermes-lcm</co
 </ul>
 <p>Typical output:</p>
 <pre><code class="language-text">Plugins (1):
-  ✓ hermes-lcm v0.20.0 (15 tools)
+  ✓ hermes-lcm v0.21.0-rc1 (15 tools)
 
 Provider Plugins:
   Context Engine: lcm
@@ -334,7 +334,7 @@ best-effort git identity:
 <code>plugin_git_commit</code>, <code>plugin_git_branch</code>, and <code>plugin_git_dirty</code>.</p>
 <p>If startup logs say LCM tools are available through <code>context-engine schemas</code> or
 mention the <code>Path B fallback</code>, that is expected on older Hermes hosts such as
-Hermes Agent v0.16. The ten <code>lcm_*</code> tools remain available through the
+Hermes Agent v0.16. All 15 <code>lcm_*</code> tools remain available through the
 context-engine path; standalone plugin-registry registration is not required
 there.</p>
 <h4>Update it</h4>
@@ -348,6 +348,16 @@ there.</p>
 <pre><code class="language-bash">./scripts/update.sh
 </code></pre>
 <p>Restart Hermes after updating.</p>
+<p>For the <code>v0.21.0-rc1</code> line, take a normal backup of <code>lcm.db</code> before updating,
+then update the checkout and restart Hermes. No manual core migration or
+backfill is required: the core schema remains version 5. New assertion,
+query-view, and adaptive-retrieval state is additive, created only after the
+corresponding opt-in is enabled, and stored in the same profile database under
+named feature markers. The five new query/evidence tool schemas are visible in
+the tool list on stock installs, but automatic extraction, pre-answer evidence,
+assertion storage, query-view storage, and adaptive retrieval remain off. See
+<a href="https://github.com/stephenschoettler/hermes-lcm/blob/main/docs/operator-guide.md#upgrade-from-v0200-to-v0210-rc1">the operator upgrade and opt-in notes</a>
+before enabling them.</p>
 <h3>Commands and tools</h3>
 <h4>Agent tools</h4>
 <p>Use these tools for current-session recall after compaction. Use Hermes
@@ -1134,7 +1144,7 @@ for changelogs.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 62.4K</div>
+        <div class="stars">★ 62.5K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -1154,7 +1164,7 @@ for changelogs.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 229</div>
+        <div class="stars">★ 230</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
