@@ -567,7 +567,7 @@ Show or change the model (supports `provider:model` syntax)
 
 `/personality [name]`
 
-Set a personality
+Set a personality (`none` to reset)
 
 `/retry`
 

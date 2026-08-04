@@ -174,7 +174,7 @@ Toggle the optional [Codex app-server runtime](/docs/user-guide/features/codex-a
 
 `/personality`
 
-Set a predefined personality
+Set a predefined personality. `/personality none` (or `default` / `neutral`) clears the overlay and returns to base behavior.
 
 `/verbose`
 
@@ -507,7 +507,7 @@ Toggle the optional [Codex app-server runtime](/docs/user-guide/features/codex-a
 
 `/personality [name]`
 
-Set a personality overlay for the session.
+Set a personality overlay for the session. `/personality none` (or `default` / `neutral`) clears it.
 
 `/fast [normal|fast|status]`
 
