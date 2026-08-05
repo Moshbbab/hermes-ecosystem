@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of project files. It uses an MCP server to provide context to various…">
+<meta name="description" content="CodeGraph is a local, pre-indexed code knowledge graph designed for use with various coding agents. It provides semantic code intelligence through a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of project files. It uses an MCP server to provide context to various…">
+<meta property="og:description" content="CodeGraph is a local, pre-indexed code knowledge graph designed for use with various coding agents. It provides semantic code intelligence through a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of project files. It uses an MCP server to provide context to various…">
+<meta name="twitter:description" content="CodeGraph is a local, pre-indexed code knowledge graph designed for use with various coding agents. It provides semantic code intelligence through a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+tool+calls&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local semantic code intelligence tool that builds a structural graph of project files. It uses an MCP server to provide context to various coding agents and automatically updates the index when files change.",
+  "description": "CodeGraph is a local, pre-indexed code knowledge graph designed for use with various coding agents. It provides semantic code intelligence through a Rust-powered kernel and automatically updates the index upon file changes.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-08-05T05:16:09.000Z",
+  "dateModified": "2026-08-05T19:30:36.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 64724
+    "userInteractionCount": 64771
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,7 +119,7 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 64.7K</span>
+    <span class="stars">★ 64.8K</span>
     <span><span class="meta-label">lang</span>C</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a structural graph of project files. It uses an MCP server to provide context to various coding agents and automatically updates the index when files change.</p>
+    <p class="summary-text">CodeGraph is a local, pre-indexed code knowledge graph designed for use with various coding agents. It provides semantic code intelligence through a Rust-powered kernel and automatically updates the index upon file changes.</p>
     <ul class="summary-highlights">
-      <li>Kernel powered by Rust</li>
-      <li>Supports Windows, macOS, and Linux</li>
-      <li>Provides automatic project synchronization</li>
+      <li>Provides an MCP server for multiple coding agents</li>
+      <li>Automated auto-syncing for real-time graph updates</li>
+      <li>Supports multiple languages including TypeScript, Python, and Rust</li>
     </ul>
   </div>
 </section>
@@ -299,6 +299,9 @@ codegraph init
 
 <blockquote>
 <p><strong>A note on cost:</strong> CodeGraph's win on <em>every</em> codebase is precision — the agent stops crawling files and answers from the graph. On current models that precision is also a large direct saving: the 2026-07 re-validation measured <strong>60% lower cost and 69% fewer tokens on average</strong> across the seven benchmark repos, because a strong model <em>without</em> the graph burns millions of tokens re-deriving structure. The savings scale with repo size and tangle — dramatic on VS-Code-class trees, modest on a 100-file project — and compound across a team's daily agent usage.</p>
+</blockquote>
+<blockquote>
+<p><strong>A note on context:</strong> the numbers above measure <em>throughput</em> — tokens processed, tools called, dollars spent to reach one answer. They don't measure what is still sitting in your context window afterward, and on that axis CodeGraph costs <strong>more</strong>, not less. Across the same seven repos in multi-turn sessions, CodeGraph's responses leave about <strong>80% more retrieval context resident</strong> at the end of a session than a file-reading agent's do — on VS Code, 67k tokens against 18k. The mechanism is the same one that makes it fast: CodeGraph returns one dense, verbatim payload that answers the question and then stays in the window, where a grep-and-read agent churns through many small results that get evicted. Fewer tokens <em>processed</em> and a larger persistent <em>footprint</em> are both real at once. If you run long sessions in a small window, budget for it. Measured per-repo: <a href="https://github.com/colbymchenry/codegraph/blob/main/docs/benchmarks/residual-context-occupancy.md"><code>docs/benchmarks/residual-context-occupancy.md</code></a>.</p>
 </blockquote>
 <h4>Benchmark Results</h4>
 <p>Tested across <strong>7 real-world open-source codebases</strong> spanning 7 languages, comparing an agent (Claude Code, headless) answering one architecture question <strong>with</strong> and <strong>without</strong> CodeGraph, at the <strong>median of 4 runs per arm</strong>. <em>Re-validated 2026-07-21 on <strong>Claude Opus 4.8</strong> against the current build — the Rust kernel plus this cycle's resolution overhaul.</em></p>
@@ -1147,60 +1150,8 @@ is written):</p>
 <li><strong>Kiro</strong></li>
 </ul>
 <h3>Supported Languages</h3>
-<table>
-<thead>
-<tr>
-<th>Language</th>
-<th>Extension</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>TypeScript</td>
-<td><code>.ts</code>, <code>.tsx</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>JavaScript</td>
-<td><code>.js</code>, <code>.jsx</code>, <code>.mjs</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>ArkTS (HarmonyOS)</td>
-<td><code>.ets</code></td>
-<td>Full support (everything TypeScript has, plus <code>@Component</code>/<code>@ComponentV2</code> structs with their ArkUI decorators (<code>@State</code>/<code>@Prop</code>/<code>@Link</code>/<code>@Local</code>/<code>@Builder</code>/…), <code>build()</code> view trees — parent→child component edges, chained-attribute links to <code>@Extend</code>/<code>@Styles</code> functions, <code>.onClick(this.handler)</code> event bindings — dynamic-dispatch bridges for state→<code>build()</code> re-renders, <code>@ohos.events.emitter</code> emit→subscriber pairs (static event keys only), and <code>router.pushUrl</code> literal urls → the target page struct; ohpm workspace modules resolve bare <code>import { X } from "data"</code> through <code>oh-package.json5</code> <code>file:</code> dependencies, honoring each module's <code>main</code> entry)</td>
-</tr>
-<tr>
-<td>Python</td>
-<td><code>.py</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>Go</td>
-<td><code>.go</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>Rust</td>
-<td><code>.rs</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>Java</td>
-<td><code>.java</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>C#</td>
-<td><code>.cs</code></td>
-<td>Full support</td>
-</tr>
-<tr>
-<td>PHP</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
+<p>| Language | Extension | Status |
+|--------</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 
@@ -1215,7 +1166,7 @@ is written):</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 818</div>
+        <div class="stars">★ 822</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1239,7 +1190,7 @@ is written):</p>
         <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
       </a>
       <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
-        <div class="stars">★ 120</div>
+        <div class="stars">★ 121</div>
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">
