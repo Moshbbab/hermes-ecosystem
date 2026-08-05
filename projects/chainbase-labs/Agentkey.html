@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>chainbase-labs/Agentkey — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
-<meta name="description" content="AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain…">
+<meta name="description" content="AgentKey provides a single subscription to grant AI agents access to external data including social media, web content, on-chain data, and e-commerce. It uses…">
 <link rel="canonical" href="https://hermesatlas.com/projects/chainbase-labs/Agentkey">
 <meta property="og:title" content="chainbase-labs/Agentkey — Hermes Atlas">
-<meta property="og:description" content="AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain…">
+<meta property="og:description" content="AgentKey provides a single subscription to grant AI agents access to external data including social media, web content, on-chain data, and e-commerce. It uses…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/chainbase-labs/Agentkey">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="chainbase-labs/Agentkey — Hermes Atlas">
-<meta name="twitter:description" content="AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain…">
+<meta name="twitter:description" content="AgentKey provides a single subscription to grant AI agents access to external data including social media, web content, on-chain data, and e-commerce. It uses…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Agentkey&amp;subtitle=Connect+your+AI+agent+to+the+world+%E2%80%94+Web+search%2C+Social+media%2C+Crypto+%26+On-chain+data.+One+plugin%2C+zero+extra+config.&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/chainbase-labs/Agentkey#software",
   "name": "Agentkey",
-  "description": "AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain data, finance, and e-commerce platforms without requiring individual API keys for each provider.",
+  "description": "AgentKey provides a single subscription to grant AI agents access to external data including social media, web content, on-chain data, and e-commerce. It uses an MCP server to integrate with various AI clients without requiring individual API keys for each provider.",
   "url": "https://hermesatlas.com/projects/chainbase-labs/Agentkey",
   "codeRepository": "https://github.com/chainbase-labs/Agentkey",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "chainbase-labs",
     "url": "https://github.com/chainbase-labs"
   },
-  "dateModified": "2026-08-04T09:10:23.000Z",
+  "dateModified": "2026-08-05T08:25:40.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Shell</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-04</span>
+    <span><span class="meta-label">updated</span>2026-08-05</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">AgentKey provides external data access for AI agents through a single subscription. It enables agents to interact with social media, web content, on-chain data, finance, and e-commerce platforms without requiring individual API keys for each provider.</p>
+    <p class="summary-text">AgentKey provides a single subscription to grant AI agents access to external data including social media, web content, on-chain data, and e-commerce. It uses an MCP server to integrate with various AI clients without requiring individual API keys for each provider.</p>
     <ul class="summary-highlights">
-      <li>Supports web scraping and real-time web search</li>
-      <li>Provides access to social media and on-chain data</li>
-      <li>Automates configuration for multiple AI agents</li>
+      <li>Supports web scraping, social media, and on-chain data</li>
+      <li>Integrates with agents like Claude Code and Cursor CLI</li>
+      <li>Uses a subscription-based credit model</li>
     </ul>
   </div>
 </section>
@@ -513,12 +513,24 @@ codex plugin marketplace add chainbase-labs/agentkey
 # or: codex plugin install agentkey@agentkey
 </code></pre>
 <p>The plugin manifest lives in <code>.codex-plugin/plugin.json</code>; it bundles the same skill plus a remote-HTTP MCP entry (<code>.codex-plugin/mcp.json</code>) that authenticates against <code>https://api.agentkey.app/v1/mcp</code> via MCP OAuth (RFC 9728 discovery). Sign in with your AgentKey account when Codex prompts you.</p>
+<p><strong>Kimi Code plugin mode</strong> — install the repo directly from Kimi Code. The manifest bundles the skill and an inline remote-HTTP MCP entry, so there is <strong>no API key to paste and no second <code>@agentkey/cli</code> step</strong>:</p>
+<pre><code class="language-text"># Public install
+/plugins install https://github.com/chainbase-labs/agentkey
+
+# Or install a local checkout for development
+/plugins install /absolute/path/to/agentkey
+</code></pre>
+<p>Kimi shows <code>Run /new or /reload to apply plugin changes.</code> after installation. Run <code>/reload</code>; when Kimi reports that the plugin MCP server needs OAuth, run <code>/mcp-config login plugin-agentkey:agentkey</code> and approve the browser authorization. You can then ask your original AgentKey question.</p>
+<p>Kimi copies local plugins into its managed plugin directory. Re-run <code>/plugins install /absolute/path/to/agentkey</code> after editing the checkout, then run <code>/reload</code> again.</p>
+<p>If you previously worked around an older AgentKey plugin by adding a user-global <code>agentkey</code> entry through <code>/mcp-config</code>, remove that old entry once with <code>/mcp-config remove agentkey</code> before reloading. The plugin now owns its namespaced MCP entry; keeping both would create duplicate tools and authentication attempts.</p>
 <p><strong>Repo layout:</strong></p>
 <pre><code>agentkey/
 ├── .claude-plugin/plugin.json   # Claude Code plugin manifest
 ├── .codex-plugin/
 │   ├── plugin.json              # Codex plugin manifest
 │   └── mcp.json                 # Codex MCP entry (OAuth, no user_config)
+├── .kimi-plugin/
+│   └── plugin.json              # Kimi manifest with inline MCP OAuth entry
 ├── .agents/plugins/marketplace.json  # Codex marketplace (this repo is its own marketplace)
 ├── .mcp.json                    # Used when installed as a Claude Code plugin
 ├── skills/agentkey/
@@ -531,7 +543,7 @@ codex plugin marketplace add chainbase-labs/agentkey
     ├── uninstall.sh             # One-command uninstaller (mac/linux)
     └── uninstall.ps1            # Windows PowerShell uninstaller
 </code></pre>
-<p><strong>Release a new version (maintainers):</strong> releases are cut automatically by <a href="https://github.com/googleapis/release-please">release-please</a>. Merging a PR with a <code>feat:</code> or <code>fix:</code> title opens a Release PR that bumps <code>skills/agentkey/version.txt</code>, <code>plugin.json</code>, and <code>CHANGELOG.md</code>. Merging the Release PR creates the tag + GitHub Release + uploads the <code>agentkey.skill</code> asset.</p>
+<p><strong>Release a new version (maintainers):</strong> releases are cut automatically by <a href="https://github.com/googleapis/release-please">release-please</a>. Merging a PR with a <code>feat:</code> or <code>fix:</code> title opens a Release PR that bumps <code>skills/agentkey/version.txt</code>, all three plugin manifests, and <code>CHANGELOG.md</code>. Merging the Release PR creates the tag + GitHub Release + uploads the <code>agentkey.skill</code> asset.</p>
 </details>
 
 <details>
