@@ -204,9 +204,9 @@ Native Spotify control (playback, queue, search, playlists, albums, library). Re
 
 `terminal`
 
-`close_terminal`, `focus_pane`, `open_preview`, `process`, `read_terminal`, `terminal`
+`close_terminal`, `focus_pane`, `open_preview`, `process`, `read_preview`, `read_terminal`, `terminal`
 
-Shell command execution and background process management. `read_terminal`, `close_terminal`, `open_preview`, and `focus_pane` drive the desktop GUI's embedded panes and are check\_fn-gated — they only register in desktop-app sessions.
+Shell command execution and background process management. `read_terminal`, `close_terminal`, `open_preview`, `read_preview`, and `focus_pane` drive the desktop GUI's embedded panes and are check\_fn-gated — they only register in desktop-app sessions.
 
 `todo`
 
@@ -260,7 +260,7 @@ Differences from `hermes-cli`
 
 `hermes-cli`
 
-Full toolset — the default for interactive CLI sessions. Includes file, terminal (plus the desktop-GUI pane tools `read_terminal`, `close_terminal`, `open_preview`, `focus_pane`), web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, clarify, computer\_use, Home Assistant, and the kanban tools (all check\_fn-gated at runtime).
+Full toolset — the default for interactive CLI sessions. Includes file, terminal (plus the desktop-GUI pane tools `read_terminal`, `close_terminal`, `open_preview`, `read_preview`, `focus_pane`), web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, clarify, computer\_use, Home Assistant, and the kanban tools (all check\_fn-gated at runtime).
 
 `hermes-acp`
 

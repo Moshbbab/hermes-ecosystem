@@ -667,3 +667,4 @@ Resume last session
 -   **[AI Providers](/docs/integrations/providers)** — Full provider list and setup details
 -   **[Skills System](/docs/user-guide/features/skills)** — Reusable workflows and knowledge
 -   **[Tips & Best Practices](/docs/guides/tips)** — Power user tips
+-   **[Moving to another machine](/docs/reference/faq#exporting-hermes-to-another-machine)** — `hermes backup` migrates your whole setup (or [a single profile](/docs/reference/faq#moving-a-single-profile-to-another-machine)); no need to rebuild from scratch

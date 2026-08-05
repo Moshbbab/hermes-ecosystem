@@ -4,7 +4,7 @@
 
 This page documents Hermes' built-in tools, grouped by toolset. Availability varies by platform, credentials, and enabled toolsets.
 
-**Quick counts (current registry):** ~81 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 6 terminal tools (`terminal`, `process`, plus desktop-GUI-gated `read_terminal`, `close_terminal`, `open_preview`, `focus_pane`), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 12 kanban tools (registered when the kanban dispatcher spawns the agent), 3 project tools (desktop/GUI sessions), 2 Discord tools, 3 video tools (`video_generate`, `xai_video_edit`, `xai_video_extend`), and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `vision_analyze`, `video_analyze`, `todo`, `computer_use`, `x_search`).
+**Quick counts (current registry):** ~82 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 7 terminal tools (`terminal`, `process`, plus desktop-GUI-gated `read_terminal`, `close_terminal`, `open_preview`, `read_preview`, `focus_pane`), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 12 kanban tools (registered when the kanban dispatcher spawns the agent), 3 project tools (desktop/GUI sessions), 2 Discord tools, 3 video tools (`video_generate`, `xai_video_edit`, `xai_video_extend`), and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `vision_analyze`, `video_analyze`, `todo`, `computer_use`, `x_search`).
 
 MCP Tools
 
@@ -501,6 +501,12 @@ Close the read-only terminal tab for a background process in the Hermes desktop 
 `open_preview`
 
 Open a web URL, localhost dev-server URL, or file path in the preview pane beside the chat in the Hermes desktop app. Desktop-app only.
+
+—
+
+`read_preview`
+
+Read what's currently shown in the preview pane of the Hermes desktop GUI — the in-app Browser's page text (URL + title + rendered text, pageable with `start`/`count`), or a file/artifact tab's identity. Desktop-app only.
 
 —
 
