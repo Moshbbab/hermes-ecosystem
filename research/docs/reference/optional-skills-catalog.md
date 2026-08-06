@@ -151,6 +151,10 @@ Skill
 
 Description
 
+[**actual-setup**](/docs/user-guide/skills/optional/devops/devops-actual-setup)
+
+Set up Actual Computer (actual.inc) inference in Hermes.
+
 [**inference-sh-cli**](/docs/user-guide/skills/optional/devops/devops-cli)
 
 Run 150+ AI apps (image, video, LLM) via inference.sh CLI.

@@ -191,6 +191,12 @@ Multi-model direct API
 
 Set `GMI_API_KEY`
 
+**Actual Computer**
+
+Your own hardware as a private inference cluster — hosted relay or local daemon
+
+Set `ACTUAL_API_KEY` (relay) or `ACTUAL_BASE_URL=http://127.0.0.1:8080` (local, no key)
+
 **MiniMax (OAuth)**
 
 MiniMax frontier model via browser OAuth — no API key needed (model name in `hermes_cli/models.py` may change between releases)
