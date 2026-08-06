@@ -102,6 +102,14 @@ Set a standing goal Hermes works toward across turns — our take on the Ralph l
 
 Append a user-supplied criterion to the active goal mid-loop. The continuation prompt surfaces all subgoals to the agent verbatim, and the judge factors them into its DONE/CONTINUE verdict — so the goal isn't marked done until the original goal **and** every subgoal are met. Subcommands: `/subgoal` (list), `/subgoal remove <N>`, `/subgoal clear`. Requires an active `/goal`.
 
+`/heartbeat every <interval> <prompt>` (alias: `/hb`)
+
+Set a recurring prompt that re-enters **this session** as a normal user turn whenever it's idle and the interval has elapsed (min 60s; missed ticks coalesce). Subcommands: `/heartbeat status`, `/heartbeat pause`, `/heartbeat resume`, `/heartbeat clear`. Session-scoped and in-process — use `hermes cron` for durable isolated schedules. See [Session Heartbeats](/docs/user-guide/features/heartbeat).
+
+`/refine [focus]`
+
+Run the background memory/skill self-improvement review **now** instead of waiting for the automatic post-turn trigger. Optional focus text steers the review (e.g. `/refine save the deploy workflow as a skill`). Runs in a background fork against a conversation snapshot — the live session and prompt cache are untouched; results are reported when done.
+
 `/moa <prompt>`
 
 Run a single prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore your current model. One-shot — does not change your session model.
@@ -596,6 +604,14 @@ Set a standing goal Hermes works toward across turns — our take on the Ralph l
 `/subgoal <text>`
 
 Append criteria to the active `/goal` mid-loop (`/subgoal`, `/subgoal remove <N>`, `/subgoal clear`).
+
+`/heartbeat every <interval> <prompt>` (alias: `/hb`)
+
+Set a recurring prompt that re-enters this session when idle. Subcommands: `status`, `pause`, `resume`, `clear`. On Slack use `/hermes heartbeat …`.
+
+`/refine [focus]`
+
+Run the memory/skill self-improvement review now, optionally with focus instructions. On Slack use `/hermes refine …`.
 
 `/moa <prompt>`
 
