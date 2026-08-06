@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sahil-SS9/hermes-memlock — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="MemLock is a Hermes Agent plugin designed to prevent instruction decay by re-asserting standing instructions after context compaction events. It monitors the…">
+<meta name="description" content="MemLock is a plugin that detects Hermes context compactions and audits pinned instructions to ensure they remain in the active conversation region. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock">
 <meta property="og:title" content="Sahil-SS9/hermes-memlock — Hermes Atlas">
-<meta property="og:description" content="MemLock is a Hermes Agent plugin designed to prevent instruction decay by re-asserting standing instructions after context compaction events. It monitors the…">
+<meta property="og:description" content="MemLock is a plugin that detects Hermes context compactions and audits pinned instructions to ensure they remain in the active conversation region. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sahil-SS9/hermes-memlock — Hermes Atlas">
-<meta name="twitter:description" content="MemLock is a Hermes Agent plugin designed to prevent instruction decay by re-asserting standing instructions after context compaction events. It monitors the…">
+<meta name="twitter:description" content="MemLock is a plugin that detects Hermes context compactions and audits pinned instructions to ensure they remain in the active conversation region. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-memlock&amp;subtitle=Re-assert+standing+instructions+after+context+compaction.+Pin+anchors%2C+detect+drift%2C+rehydrate+before+the+model+forgets&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock#software",
   "name": "hermes-memlock",
-  "description": "MemLock is a Hermes Agent plugin designed to prevent instruction decay by re-asserting standing instructions after context compaction events. It monitors the conversation for compaction markers and audits whether pinned instructions, known as anchors, still exist in the active, non-summary region of the context window. When an anchor is detected as drifted or lost, the plugin rehydrates it by appending a reminder block to the current user turn. This ensures the model continues to follow specific",
+  "description": "MemLock is a plugin that detects Hermes context compactions and audits pinned instructions to ensure they remain in the active conversation region. It rehydrates instructions that have drifted out of the model's working memory by appending a reminder block to the user turn.",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/hermes-memlock",
   "codeRepository": "https://github.com/Sahil-SS9/hermes-memlock",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Sahil-SS9",
     "url": "https://github.com/Sahil-SS9"
   },
-  "dateModified": "2026-06-17T20:26:12.000Z",
+  "dateModified": "2026-08-06T06:03:32.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-06-17</span>
+    <span><span class="meta-label">updated</span>2026-08-06</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">MemLock is a Hermes Agent plugin designed to prevent instruction decay by re-asserting standing instructions after context compaction events. It monitors the conversation for compaction markers and audits whether pinned instructions, known as anchors, still exist in the active, non-summary region of the context window. When an anchor is detected as drifted or lost, the plugin rehydrates it by appending a reminder block to the current user turn. This ensures the model continues to follow specific output formats or behavioral rules even during long-running dialogues.</p>
+    <p class="summary-text">MemLock is a plugin that detects Hermes context compactions and audits pinned instructions to ensure they remain in the active conversation region. It rehydrates instructions that have drifted out of the model's working memory by appending a reminder block to the user turn.</p>
     <ul class="summary-highlights">
-      <li>Detects context compaction and audits active memory for instruction drift</li>
-      <li>Rehydrates lost instructions via keyword probes or semantic embedding similarity</li>
-      <li>Provides a guard_pin tool for managing persistent behavioral instructions</li>
+      <li>Detects compaction via SUMMARY_PREFIX marker</li>
+      <li>Supports keyword or semantic audit modes</li>
+      <li>Rehydrates drifted anchors as reminder blocks</li>
     </ul>
   </div>
 </section>
@@ -378,12 +378,30 @@ probes. Note the model downloads lazily on first semantic audit.</p>
 <td>Sentence-transformer for semantic mode</td>
 </tr>
 <tr>
+<td><code>reverse_audit</code></td>
+<td><code>false</code></td>
+<td>Query stored preferences after compaction (needs host adapter)</td>
+</tr>
+<tr>
+<td><code>reverse_preference_query</code></td>
+<td><code>applicable user preferences</code></td>
+<td>Query string passed to the preference provider</td>
+</tr>
+<tr>
+<td><code>reverse_limit</code></td>
+<td><code>50</code></td>
+<td>Max preference rows retrieved per audit</td>
+</tr>
+<tr>
 <td><code>anchors</code></td>
 <td><code>[]</code></td>
 <td>Static anchors seeded from config</td>
 </tr>
 </tbody></table>
 <hr>
+<p>See <code>docs/REVERSE_AUDIT.md</code> for the reverse-audit developer guide: usage,
+report interpretation, Mnemosyne failure behaviour, and the forward-vs-reverse
+distinction.</p>
 <h3>Slash Commands</h3>
 <table>
 <thead>
@@ -482,7 +500,7 @@ downloads the embedding model on first use.</li>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 363</div>
+        <div class="stars">★ 362</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
@@ -506,7 +524,7 @@ downloads the embedding model on first use.</li>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 367</div>
+        <div class="stars">★ 368</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

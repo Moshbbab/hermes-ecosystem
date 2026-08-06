@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yantrikos/yantrikdb-hermes-plugin — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates,…">
+<meta name="description" content="This plugin serves as a memory provider for the Hermes Agent, providing features such as canonicalization, contradiction tracking, and explainable recall. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta property="og:description" content="This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates,…">
+<meta property="og:description" content="This plugin serves as a memory provider for the Hermes Agent, providing features such as canonicalization, contradiction tracking, and explainable recall. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta name="twitter:description" content="This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates,…">
+<meta name="twitter:description" content="This plugin serves as a memory provider for the Hermes Agent, providing features such as canonicalization, contradiction tracking, and explainable recall. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=yantrikdb-hermes-plugin&amp;subtitle=YantrikDB+memory+provider+for+NousResearch%2Fhermes-agent+%E2%80%94+self-maintaining+memory+with+benchmarked+recall%2C+self-tuning+ranking%2C+contradiction+tracking%2C+proactive+hygiene%2C+and+expla&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin#software",
   "name": "yantrikdb-hermes-plugin",
-  "description": "This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates, contradiction tracking, and recency-based ranking.",
+  "description": "This plugin serves as a memory provider for the Hermes Agent, providing features such as canonicalization, contradiction tracking, and explainable recall. It supports an in-process default backend and includes a self-directing loop that identifies knowledge gaps and queues tasks.",
   "url": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin",
   "codeRepository": "https://github.com/yantrikos/yantrikdb-hermes-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yantrikos",
     "url": "https://github.com/yantrikos"
   },
-  "dateModified": "2026-08-05T22:51:31.000Z",
+  "dateModified": "2026-08-06T06:20:51.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-05</span>
+    <span><span class="meta-label">updated</span>2026-08-06</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates, contradiction tracking, and recency-based ranking.</p>
+    <p class="summary-text">This plugin serves as a memory provider for the Hermes Agent, providing features such as canonicalization, contradiction tracking, and explainable recall. It supports an in-process default backend and includes a self-directing loop that identifies knowledge gaps and queues tasks.</p>
     <ul class="summary-highlights">
-      <li>Includes explainable recall via why_retrieved tags</li>
-      <li>Supports embedded in-process mode by default</li>
-      <li>Provides owner-scoping for multi-user environments</li>
+      <li>Provides explainable recall with why_retrieved tags</li>
+      <li>Includes built-in contradiction tracking and resolution</li>
+      <li>Supports owner-scoping for multi-user environments</li>
     </ul>
   </div>
 </section>
@@ -268,6 +268,13 @@
 <pre><code class="language-bash">echo "YANTRIKDB_OWNER_SCOPING=true" &gt;&gt; ~/.hermes/.env
 </code></pre>
 <p>Off by default because it changes where new memories are written; existing ones stay readable (<code>YANTRIKDB_INCLUDE_BASE_NAMESPACE_RECALL</code>, default on).</p>
+<h4>Standing rules — your guardrails (v0.14.0)</h4>
+<p>Write rules you want obeyed every turn into <code>$HERMES_HOME/yantrikdb-constitution.md</code>:</p>
+<pre><code class="language-markdown">- Never run destructive commands without asking.
+- Answer in British English.
+- Never reveal internal hostnames.
+</code></pre>
+<p>They are injected first and <strong>outrank recalled memory and any mounted knowledge pack's rules</strong>. Four things make them a guardrail rather than just another block: they are never trimmed when the context window fills (a rule that vanishes under pressure was never a rule), they still apply when the memory backend is unavailable, truncation of an oversize file is logged rather than silent, and <strong>there is no tool to edit them</strong> — the agent cannot rewrite its own rules; the file is the interface and you are the editor.</p>
 <h4>Running a fleet of agents (v0.13.0)</h4>
 <p>Hermes users run N agents, not one. Each agent already gets its own namespace (<code>{base}:{workspace}:{identity}</code>) automatically, so nothing contaminates anything else — verified with 6 separate processes writing one embedded database concurrently: 0 errors, 0 leakage.</p>
 <p>Two things make a fleet legible rather than just isolated:</p>
@@ -827,11 +834,11 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 62.6K</div>
+        <div class="stars">★ 62.7K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 19.1K</div>
+        <div class="stars">★ 19.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -839,7 +846,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 354</div>
+        <div class="stars">★ 355</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -847,7 +854,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 233</div>
+        <div class="stars">★ 234</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
