@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yantrikos/yantrikdb-hermes-plugin — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="This plugin serves as a memory provider for the Hermes Agent, utilizing YantrikDB to manage memory through canonicalization, contradiction tracking, and…">
+<meta name="description" content="This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta property="og:description" content="This plugin serves as a memory provider for the Hermes Agent, utilizing YantrikDB to manage memory through canonicalization, contradiction tracking, and…">
+<meta property="og:description" content="This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta name="twitter:description" content="This plugin serves as a memory provider for the Hermes Agent, utilizing YantrikDB to manage memory through canonicalization, contradiction tracking, and…">
+<meta name="twitter:description" content="This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=yantrikdb-hermes-plugin&amp;subtitle=YantrikDB+memory+provider+for+NousResearch%2Fhermes-agent+%E2%80%94+self-maintaining+memory+with+benchmarked+recall%2C+self-tuning+ranking%2C+contradiction+tracking%2C+proactive+hygiene%2C+and+expla&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin#software",
   "name": "yantrikdb-hermes-plugin",
-  "description": "This plugin serves as a memory provider for the Hermes Agent, utilizing YantrikDB to manage memory through canonicalization, contradiction tracking, and recency ranking. It supports an embedded in-process mode and includes features for owner-scoping, knowledge packs, and a self-directing gap-to-task loop.",
+  "description": "This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates, contradiction tracking, and recency-based ranking.",
   "url": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin",
   "codeRepository": "https://github.com/yantrikos/yantrikdb-hermes-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yantrikos",
     "url": "https://github.com/yantrikos"
   },
-  "dateModified": "2026-08-05T05:13:54.000Z",
+  "dateModified": "2026-08-05T22:51:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This plugin serves as a memory provider for the Hermes Agent, utilizing YantrikDB to manage memory through canonicalization, contradiction tracking, and recency ranking. It supports an embedded in-process mode and includes features for owner-scoping, knowledge packs, and a self-directing gap-to-task loop.</p>
+    <p class="summary-text">This plugin provides YantrikDB as a memory provider for the Hermes Agent. It features automated memory maintenance, including canonicalization of duplicates, contradiction tracking, and recency-based ranking.</p>
     <ul class="summary-highlights">
-      <li>Provides explainable recall with why_retrieved tags</li>
+      <li>Includes explainable recall via why_retrieved tags</li>
       <li>Supports embedded in-process mode by default</li>
-      <li>Includes contradiction tracking and recency ranking</li>
+      <li>Provides owner-scoping for multi-user environments</li>
     </ul>
   </div>
 </section>
@@ -268,6 +268,16 @@
 <pre><code class="language-bash">echo "YANTRIKDB_OWNER_SCOPING=true" &gt;&gt; ~/.hermes/.env
 </code></pre>
 <p>Off by default because it changes where new memories are written; existing ones stay readable (<code>YANTRIKDB_INCLUDE_BASE_NAMESPACE_RECALL</code>, default on).</p>
+<h4>Running a fleet of agents (v0.13.0)</h4>
+<p>Hermes users run N agents, not one. Each agent already gets its own namespace (<code>{base}:{workspace}:{identity}</code>) automatically, so nothing contaminates anything else — verified with 6 separate processes writing one embedded database concurrently: 0 errors, 0 leakage.</p>
+<p>Two things make a fleet legible rather than just isolated:</p>
+<pre><code class="language-bash"># agents learn from each other: explicit `remember` writes become shared
+echo "YANTRIKDB_SHARED_BRAIN_NAMESPACE=team-brain" &gt;&gt; ~/.hermes/.env
+# an agent can see its siblings: memory counts, last activity, open tasks
+echo "YANTRIKDB_FLEET_VIEW=true" &gt;&gt; ~/.hermes/.env
+</code></pre>
+<p>The fleet view is read-only, never crosses workspaces, declares truncation rather than implying full coverage, and is <strong>refused outright when <code>YANTRIKDB_OWNER_SCOPING</code> is on</strong> — under owner scoping siblings are people, not agents, and enumerating them would break the isolation you turned on.</p>
+<p>For a fleet at scale, point every agent at one <code>yantrikdb-server</code> (<code>YANTRIKDB_MODE=http</code>): one engine and one corpus instead of N. Note that packs are embedded-only today, so that path trades attachable expertise for shared scale — server-side pack endpoints are requested upstream.</p>
 <h4>Attachable expertise — knowledge packs (v0.11.0)</h4>
 <p>A <strong>pack</strong> is a sealed, signed knowledge file. Mount it to gain its knowledge and rules for a task; unmount to give them back, leaving your own memory byte-for-byte unchanged. No other Hermes memory provider can do this.</p>
 <pre><code class="language-bash">echo "YANTRIKDB_PACKS_ENABLED=true" &gt;&gt; ~/.hermes/.env
@@ -837,7 +847,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 232</div>
+        <div class="stars">★ 233</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

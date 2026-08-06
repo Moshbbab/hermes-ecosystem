@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Perseus-Computing-LLC/perseus — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It renders project-specific…">
+<meta name="description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single.perseus/context.md file…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta property="og:description" content="Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It renders project-specific…">
+<meta property="og:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single.perseus/context.md file…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta name="twitter:description" content="Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It renders project-specific…">
+<meta name="twitter:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single.perseus/context.md file…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=perseus&amp;subtitle=Live+context+engine+for+AI+agents%3A+resolve+verified+workspace+state+before+the+context+window+opens.+Pairs+with+Perseus+Vault+for+persistent+encrypted+memory.+Local-first%2C+MIT.+pip&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus#software",
   "name": "perseus",
-  "description": "Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It renders project-specific data into assistant-readable files and can expose this context via the Model Context Protocol (MCP).",
+  "description": "Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single.perseus/context.md file into formats like AGENTS.md or.cursorrules.",
   "url": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus",
   "codeRepository": "https://github.com/Perseus-Computing-LLC/perseus",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "Perseus-Computing-LLC",
     "url": "https://github.com/Perseus-Computing-LLC"
   },
-  "dateModified": "2026-08-05T19:55:02.000Z",
+  "dateModified": "2026-08-05T22:23:56.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It renders project-specific data into assistant-readable files and can expose this context via the Model Context Protocol (MCP).</p>
+    <p class="summary-text">Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single.perseus/context.md file into formats like AGENTS.md or.cursorrules.</p>
     <ul class="summary-highlights">
-      <li>Renders workspace facts into AGENTS.md, CLAUDE.md, or .cursorrules files.</li>
-      <li>Supports MCP via stdio or SSE with opt-in shell tools.</li>
-      <li>Integrates with Perseus Vault for persistent, encrypted memory storage.</li>
+      <li>Renders context locally without requiring a hosted service</li>
+      <li>Supports MCP via stdio or SSE</li>
+      <li>Scaffolds configuration and context files via quickstart</li>
     </ul>
   </div>
 </section>
@@ -395,6 +395,14 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 <td>List tasks from the project task board (tasks/*.md files). Use to see what is open, in progress, or completed. Filter by status. Read-only; returns task array with id, title, status, scope.</td>
 </tr>
 <tr>
+<td><code>perseus_agent_projection_preview</code></td>
+<td>Compile a bounded, task-scoped sanitized agent projection. Shows the exact agent view separately from provenance and selection reasons; receipts contain hashes/references only.</td>
+</tr>
+<tr>
+<td><code>perseus_agent_projection_release</code></td>
+<td>Release a previously previewed sanitized projection after matching per-scope consent. Durable release metadata excludes prompts, private bodies, secrets, and tool arguments.</td>
+</tr>
+<tr>
 <td><code>perseus_auto_skill</code></td>
 <td>Instruct the agent to load a specific skill before starting work. Use at the top of context documents to enforce critical hygiene skills (e.g., memory-hygiene, agent-safety). Renders as a mandatory instruction block. Read-only.</td>
 </tr>
@@ -409,6 +417,14 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 <tr>
 <td><code>perseus_context_diff</code></td>
 <td>Render a compact 'Since last session' delta (#714): git branch/commits, Agora task-board changes, new inbox messages, new checkpoints, and new vault session memories since the last recorded snapshot. Use at the top of a context document so the assistant spends zero turns re-orienting on unchanged state. Maintains its own per-workspace snapshot (refresh debounced by render.context_diff_min_age_s); reset=true forces a new baseline. Never cached.</td>
+</tr>
+<tr>
+<td><code>perseus_context_ask</code></td>
+<td>Answer one narrow question from at most 64 scoped records with evidence-linked validity/confidence, or an explicit insufficient-evidence/review/degraded/unavailable outcome.</td>
+</tr>
+<tr>
+<td><code>perseus_context_rank</code></td>
+<td>Deterministically rank at most 64 caller-supplied candidates for one task/scope, preserving identity and provenance commitments without exporting raw private memory.</td>
 </tr>
 <tr>
 <td><code>perseus_date</code></td>
@@ -1011,23 +1027,12 @@ re-derives the fingerprint and TTL as usual, so a wrong prediction costs
 nothing.</p>
 <p><strong>Observability:</strong></p>
 <pre><code class="language-console">$ perseus explain --speculate
-Speculate: enabled=true backend=markov k=3 threshold=0.30
-History: 42 intent(s); current: review PR
-Predicted next intents:
-  1. deploy staging  p=0.67  [1 candidate(s), 1 warm]
-     - warm: @read "runbook.md" @cache ttl=300
-Past speculation: hits=12 misses=4 hit_rate=0.75 (settled=16)
+Speculate: enabled=true backend=markov k=3 threshold=0.
+
+---
+
+*README truncated. [Continue reading on GitHub](https://github.com/Perseus-Computing-LLC/perseus#readme)*
 </code></pre>
-<p>Prediction outcomes (hit/miss per settled prediction, budget spend, warm
-results) persist to a workspace-keyed stats file
-(<code>&lt;cache_dir&gt;/speculate_stats-&lt;workspace_hash&gt;.json</code>, atomic writes) with a
-documented shape — a future <code>@bandit</code> ledger integration can consume it as a
-value signal.</p>
-<hr>
-<h3>Context Profiles &amp; Recall-First Memory (<code>@profile</code>)</h3>
-<p><strong>A context engine should retrieve, not pre-load.</strong> As of v1.0.14, Perseus is <strong>recall-first by default</strong>: the automatic long-term-memory dump that used to be stapled into every rendered context is replaced by a short, static retrieval pointe</p>
-<hr>
-<p><em>README truncated. <a href="https://github.com/Perseus-Computing-LLC/perseus#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1060,7 +1065,7 @@ value signal.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 232</div>
+        <div class="stars">★ 233</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

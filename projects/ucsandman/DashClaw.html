@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ucsandman/DashClaw — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
+<meta name="description" content="DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta property="og:description" content="DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
+<meta property="og:description" content="DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta name="twitter:description" content="DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
+<meta name="twitter:description" content="DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote, asynchronous approval via multiple…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=DashClaw&amp;subtitle=%F0%9F%9B%A1%EF%B8%8FThe+governance+runtime+for+AI+agents.+Intercept+actions%2C+enforce+guard+policies%2C+require+approvals%2C+and+produce+audit-ready+decision+trails.&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple platforms and maintains a tamper-evident audit ledger.",
+  "description": "DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote, asynchronous approval via multiple interfaces and maintains a tamper-evident audit ledger.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-08-05T17:07:04.000Z",
+  "dateModified": "2026-08-06T03:45:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-05</span>
+    <span><span class="meta-label">updated</span>2026-08-06</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is an approval layer that intercepts tool calls from AI agents to prevent destructive actions. It provides remote, asynchronous approval via multiple platforms and maintains a tamper-evident audit ledger.</p>
+    <p class="summary-text">DashClaw is an approval layer that intercepts agent tool calls to prevent destructive actions. It provides remote, asynchronous approval via multiple interfaces and maintains a tamper-evident audit ledger.</p>
     <ul class="summary-highlights">
-      <li>Provides fail-closed interception for blocked tool calls</li>
-      <li>Supports remote approval via CLI, PWA, Telegram, or Discord</li>
-      <li>Includes prompt-injection scanning and tamper-evident audit trails</li>
+      <li>Intercepts tool calls before execution using a fail-closed mechanism.</li>
+      <li>Supports remote approval via CLI, PWA, Telegram, or Discord.</li>
+      <li>Provides Ed25519-signed receipts and a replayable decision ledger.</li>
     </ul>
   </div>
 </section>
@@ -377,7 +377,7 @@ dashclaw install claude                          # wires ~/.claude/settings.json
 dashclaw install codex --project /path/to/repo   # wires manifest, hooks, AGENTS.md protocol
 bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Windows)
 </code></pre>
-<p>Claude Code hooks govern Bash, Edit, Write, MultiEdit, sub-agent spawns, and every <code>mcp__*</code> call with a fail-closed PreToolUse check. Fresh installs start in enforce mode (the seeded catastrophe pack holds the irreversible class); pass <code>--observe</code> or set <code>DASHCLAW_HOOK_MODE=observe</code> to log without blocking, and re-installs keep whichever mode you chose. Verify the wiring fires:</p>
+<p>Claude Code hooks govern Bash, Edit, Write, MultiEdit, sub-agent spawns, and every <code>mcp__*</code> call with a fail-closed PreToolUse check. Fresh installs start in enforce mode (the seeded catastrophe pack holds the irreversible class); pass <code>--observe</code> or set <code>DASHCLAW_HOOK_MODE=observe</code> to log without blocking, and re-installs keep whichever mode you chose. Observe mode is loud, never silent: <code>/approvals</code> and <code>/decisions</code> show a red banner while any agent reports it, unenforced verdicts render "Logged, not enforced" in the ledger, and a gated action that executes anyway gets an <code>executed_despite</code> witness stamp from PostToolUse — a logged block is never presented as an enforced one. Verify the wiring fires:</p>
 <pre><code class="language-bash">echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"},"tool_use_id":"t1","session_id":"smoke"}' | python .claude/hooks/dashclaw_pretool.py
 </code></pre>
 <p><strong>MCP server (zero code).</strong> <a href="mcp-server"><code>@dashclaw/mcp-server</code></a> exposes <strong>17 governance MCP tools</strong> across core governance, retrospection, identity, team tasks, and plans, plus 3 read-only resources (<code>dashclaw://policies</code>, <code>dashclaw://agent/{agent_id}/history</code>, <code>dashclaw://status</code>).</p>
