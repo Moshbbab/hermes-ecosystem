@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides…">
+<meta name="description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides…">
+<meta property="og:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides…">
+<meta name="twitter:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+Hermes+and+OpenClaw.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides retrieval-augmented search, intent classification, and session handoffs without requiring API keys or cloud dependencies.",
+  "description": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve context from markdown notes, project documentation, and conversation exports.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-08-05T19:39:27.000Z",
+  "dateModified": "2026-08-06T14:25:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-05</span>
+    <span><span class="meta-label">updated</span>2026-08-06</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is an on-device memory layer for AI agents that uses a local SQLite vault to store markdown notes and project documentation. It provides retrieval-augmented search, intent classification, and session handoffs without requiring API keys or cloud dependencies.</p>
+    <p class="summary-text">ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve context from markdown notes, project documentation, and conversation exports.</p>
     <ul class="summary-highlights">
-      <li>Integrates via Claude Code hooks, MCP, OpenClaw, or Hermes plugins.</li>
-      <li>Uses hybrid retrieval including BM25, vector search, and graph traversal.</li>
-      <li>Automates decision capture using a local GGUF observer model.</li>
+      <li>Uses hybrid retrieval including BM25 and vector search</li>
+      <li>Integrates via MCP, Claude Code hooks, and plugins</li>
+      <li>Operates locally without API keys or cloud dependencies</li>
     </ul>
   </div>
 </section>
@@ -350,7 +350,7 @@ clawmem embed             # Re-embed if upgrading embedding models (not needed f
 <h5>Claude Code</h5>
 <p>ClawMem integrates via hooks (<code>settings.json</code>) and an MCP stdio server. Hooks handle 90% of retrieval automatically - the agent never needs to call tools for routine context.</p>
 <pre><code class="language-bash">clawmem setup hooks    # Install lifecycle hooks (SessionStart, UserPromptSubmit, Stop, PreCompact)
-clawmem setup mcp      # Register MCP server in ~/.claude.json (31 tools)
+clawmem setup mcp      # Register MCP server in ~/.claude.json (33 tools)
 </code></pre>
 <p><strong>Automatic (90%):</strong> <code>context-surfacing</code> injects relevant memory on every prompt. <code>postcompact-inject</code> re-injects state after compaction. <code>decision-extractor</code>, <code>handoff-generator</code>, <code>feedback-loop</code> capture session state on stop.</p>
 <p><strong>Agent-initiated (10%):</strong> MCP tools (<code>query</code>, <code>intent_search</code>, <code>find_causal_links</code>, <code>timeline</code>, etc.) for targeted retrieval when hooks don't surface what's needed.</p>
@@ -380,7 +380,7 @@ OPENCLAW_STATE_DIR=~/.openclaw-dev clawmem setup openclaw
 <blockquote>
 <p><strong>OpenClaw v2026.4.11+ recommended (required for ClawMem v0.10.0+).</strong> v2026.4.11 introduced a new plugin discovery contract that requires each plugin directory to ship a <code>package.json</code> with <code>openclaw.extensions</code> declared, and that rejects symlinked plugin directories. ClawMem v0.10.0 includes both fixes. Older ClawMem versions (&lt; v0.10.0) on OpenClaw v2026.4.11+ will fail to discover silently — upgrade ClawMem, then re-run <code>clawmem setup openclaw</code>. See <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/upgrading.md#v090--v0100">docs/guides/upgrading.md</a>.</p>
 </blockquote>
-<p><strong>Alternative:</strong> OpenClaw agents can also use ClawMem's MCP server directly (<code>clawmem setup mcp</code>), with or without hooks. This gives full access to all 31 MCP tools but bypasses OpenClaw's plugin lifecycle, so you lose token budget awareness, native compaction orchestration, and the <code>agent_end</code> message pipeline. The native OpenClaw plugin is recommended for new setups; MCP is available as an additional or standalone integration.</p>
+<p><strong>Alternative:</strong> OpenClaw agents can also use ClawMem's MCP server directly (<code>clawmem setup mcp</code>), with or without hooks. This gives full access to all 33 MCP tools but bypasses OpenClaw's plugin lifecycle, so you lose token budget awareness, native compaction orchestration, and the <code>agent_end</code> message pipeline. The native OpenClaw plugin is recommended for new setups; MCP is available as an additional or standalone integration.</p>
 <h5>Hermes Agent</h5>
 <p>ClawMem integrates as a native MemoryProvider plugin — Hermes's pluggable interface for agent memory. Same automatic retrieval and extraction, delivered through Hermes's memory lifecycle instead of Claude Code hooks.</p>
 <p><strong>Install:</strong></p>
@@ -479,7 +479,7 @@ vault_sync(vault="work", content_root="~/work/docs")
 <p><strong>Heads-up before you serve:</strong> the zerank-2 <strong>GGUF is deprecated and inert</strong> — llama.cpp drops its score head, so the SOTA reranker must run as the <a href="extras/rerankers/zerank-2-seq/">seq-cls sidecar</a>, not a GGUF (verify with <code>clawmem rerank-health</code>). zembed-1 / reranking need <code>-ub</code> = <code>-b</code> (non-causal attention). Changing embedding dimensions requires <code>clawmem embed --force</code>. Set <code>CLAWMEM_NO_LOCAL_MODELS=true</code> to fail fast instead of silent CPU fallback.</p>
 <p>→ <strong>Full stack decision matrix, model/VRAM tables, and server-setup commands:</strong> <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/inference-services.md">docs/guides/inference-services.md</a>. Cloud providers, batch + TPM behavior: <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/cloud-embedding.md">docs/guides/cloud-embedding.md</a>. All environment variables: <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/reference/configuration.md">docs/reference/configuration.md</a>. Keeping servers running: <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/systemd-services.md">docs/guides/systemd-services.md</a>.</p>
 <h4>MCP Server</h4>
-<p>ClawMem exposes 31 MCP tools via the <a href="https://modelcontextprotocol.io">Model Context Protocol</a> and an optional HTTP REST API. Any MCP-compatible client or HTTP client can use it.</p>
+<p>ClawMem exposes 33 MCP tools via the <a href="https://modelcontextprotocol.io">Model Context Protocol</a> and an optional HTTP REST API. Any MCP-compatible client or HTTP client can use it.</p>
 <p><strong>Claude Code (automatic):</strong></p>
 <pre><code class="language-bash">./bin/clawmem setup mcp   # Registers in ~/.claude.json
 </code></pre>
@@ -760,7 +760,7 @@ clawmem status                                  Quick index status
 </code></pre>
 <h3>MCP Tools (31)</h3>
 <p>Registered by <code>clawmem setup mcp</code>. Available to any MCP-compatible client.</p>
-<p><strong>Internal-collection visibility (v0.21.0):</strong> the retrieval tools <code>search</code>, <code>vsearch</code>, <code>query</code>, <code>query_plan</code>, <code>memory_retrieve</code>, and <code>find_similar</code> exclude the system-internal <code>_clawmem</code> collection by default — pass <code>includeInternal: true</code> (or name <code>_clawmem</code> in an explicit <code>collection</code> filter where the tool has one) to include it. <code>find_similar</code> auto-includes internal neighbors when the reference document is itself internal; <code>intent_search</code>, <code>find_causal_links</code>, <code>kg_query</code>, <code>session_log</code>, and <code>timeline</code> are unfiltered by design. Full contract (including the <code>degraded</code> under-fill markers): <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/reference/mcp-tools.md">docs/reference/mcp-tools.md</a>.</p>
+<p><strong>Internal-collection visibility (v0.21.0):</strong> the retrieval tools <code>search</code>, <code>vsearch</code>, <code>query</code>, <code>query_plan</code>, <code>memory_retrieve</code>, and <code>find_similar</code> (plus <code>memory_rank</code> since v0.36.0) exclude the system-internal <code>_clawmem</code> collection by default — pass <code>includeInternal: true</code> (or name <code>_clawmem</code> in an explicit <code>collection</code> filter where the tool has one) to include it. <code>find_similar</code> auto-includes internal neighbors when the reference document is itself internal; <code>intent_search</code>, <code>find_causal_links</code>, <code>kg_query</code>, <code>session_log</code>, and <code>timeline</code> are unfiltered by design. Full contract (including the <code>degraded</code> under-fill markers): <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/reference/mcp-tools.md">docs/reference/mcp-tools.md</a>.</p>
 <table>
 <thead>
 <tr>
@@ -938,6 +938,14 @@ clawmem status                                  Quick index status
 <td>Detailed stats: types, staleness, access counts, sessions</td>
 </tr>
 <tr>
+<td><code>memory_stats</code></td>
+<td>Lifecycle + ranking-metadata aggregates per collection (v0.36.0): origin×active cross-tabs, pinned, accrual, deactivation reasons, and access/confidence/quality/effective-age distributions (mean/median/min/max over active rows). Deeper than <code>index_stats</code>; includes system collections.</td>
+</tr>
+<tr>
+<td><code>memory_rank</code></td>
+<td>Ranking diagnostic (v0.36.0): real-pipeline composite breakdown per result — weights, recency, confidence blend, quality/length/frequency/canonical multipliers, signed pinΔ, co-activation — plus raw-vs-composite rank shifts; demoted raw winners stay visible. FTS-only candidates; read-only.</td>
+</tr>
+<tr>
 <td><code>session_log</code></td>
 <td>USE THIS for "last time", "yesterday", "what happened", "what did we do". Returns session history with handoffs and file changes. DO NOT use <code>query()</code> for cross-session questions — this tool has session-specific data that search cannot find.</td>
 </tr>
@@ -1087,73 +1095,12 @@ clawmem status                                  Quick index status
 <td>Never decays — cross-session derived insights with source provenance</td>
 </tr>
 <tr>
-<td><code>preference</code></td>
-<td>∞</td>
-<td>0.80</td>
-<td>Never decays — user preferences are durable facts</td>
-</tr>
-<tr>
-<td><code>hub</code></td>
-<td>∞</td>
-<td>0.80</td>
-<td>Never decays</td>
-</tr>
-<tr>
-<td><code>antipattern</code></td>
-<td>∞</td>
-<td>0.75</td>
-<td>Never decays — accumulated negative patterns persist</td>
-</tr>
-<tr>
-<td><code>problem</code></td>
-<td>60 days</td>
-<td>0.75</td>
-<td>High priority but resolves over time</td>
-</tr>
-<tr>
-<td><code>research</code></td>
-<td>90 days</td>
-<td>0.70</td>
+<td>`prefer</td>
 <td></td>
-</tr>
-<tr>
-<td><code>milestone</code></td>
-<td>60 days</td>
-<td>0.70</td>
-<td>Important at the time, fades as project moves forward</td>
-</tr>
-<tr>
-<td><code>project</code></td>
-<td>120 days</td>
-<td>0.65</td>
 <td></td>
-</tr>
-<tr>
-<td><code>handoff</code></td>
-<td>30 days</td>
-<td>0.60</td>
-<td>Fast decay — most recent matters</td>
-</tr>
-<tr>
-<td><code>conversation</code></td>
-<td>45 days</td>
-<td>0.55</td>
-<td>Imported chat exchanges</td>
-</tr>
-<tr>
-<td><code>progress</code></td>
-<td>45 days</td>
-<td>0.50</td>
 <td></td>
-</tr>
-<tr>
-<td><code>note</code></td>
-<td>60 days</td>
-<td>0.50</td>
-<td>Default</td>
 </tr>
 </tbody></table>
-<p>Content types are inferred from f</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/yoloshii/ClawMem#readme">Continue reading on GitHub</a></em></p>
 
@@ -1184,7 +1131,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 234</div>
+        <div class="stars">★ 235</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

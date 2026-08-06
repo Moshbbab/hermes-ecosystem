@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>liaohch3/claude-tap — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="claude-tap is a local proxy and trace viewer for AI coding agents. It allows users to inspect API traffic, including system prompts, conversation history, tool…">
+<meta name="description" content="claude-tap is a local proxy and trace viewer designed for inspecting AI coding agent API traffic. It allows users to inspect system prompts, conversation…">
 <link rel="canonical" href="https://hermesatlas.com/projects/liaohch3/claude-tap">
 <meta property="og:title" content="liaohch3/claude-tap — Hermes Atlas">
-<meta property="og:description" content="claude-tap is a local proxy and trace viewer for AI coding agents. It allows users to inspect API traffic, including system prompts, conversation history, tool…">
+<meta property="og:description" content="claude-tap is a local proxy and trace viewer designed for inspecting AI coding agent API traffic. It allows users to inspect system prompts, conversation…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/liaohch3/claude-tap">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="liaohch3/claude-tap — Hermes Atlas">
-<meta name="twitter:description" content="claude-tap is a local proxy and trace viewer for AI coding agents. It allows users to inspect API traffic, including system prompts, conversation history, tool…">
+<meta name="twitter:description" content="claude-tap is a local proxy and trace viewer designed for inspecting AI coding agent API traffic. It allows users to inspect system prompts, conversation…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=claude-tap&amp;subtitle=Intercept+and+inspect+Coding+Agent+API+traffic+from+Claude+Code%2C+Codex+CLI%2C+Gemini+CLI%2C+Cursor+CLI%2C+OpenCode%2C+Kimi%2FKimi+Code%2C+Pi%2C+and+Hermes+in+a+local+trace+viewer.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/liaohch3/claude-tap#software",
   "name": "claude-tap",
-  "description": "claude-tap is a local proxy and trace viewer for AI coding agents. It allows users to inspect API traffic, including system prompts, conversation history, tool schemas, and token usage.",
+  "description": "claude-tap is a local proxy and trace viewer designed for inspecting AI coding agent API traffic. It allows users to inspect system prompts, conversation history, tool schemas, tool calls, streaming responses, token usage, and request diffs.",
   "url": "https://hermesatlas.com/projects/liaohch3/claude-tap",
   "codeRepository": "https://github.com/liaohch3/claude-tap",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "liaohch3",
     "url": "https://github.com/liaohch3"
   },
-  "dateModified": "2026-08-05T20:36:41.000Z",
+  "dateModified": "2026-08-06T13:12:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2976
+    "userInteractionCount": 2978
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-05</span>
+    <span><span class="meta-label">updated</span>2026-08-06</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">claude-tap is a local proxy and trace viewer for AI coding agents. It allows users to inspect API traffic, including system prompts, conversation history, tool schemas, and token usage.</p>
+    <p class="summary-text">claude-tap is a local proxy and trace viewer designed for inspecting AI coding agent API traffic. It allows users to inspect system prompts, conversation history, tool schemas, tool calls, streaming responses, token usage, and request diffs.</p>
     <ul class="summary-highlights">
-      <li>Inspect real API traffic and agent context</li>
-      <li>Compare adjacent requests to identify changes</li>
-      <li>Export local traces to self-contained HTML viewers</li>
+      <li>Supports various clients including Claude Code, Codex, Gemini, and Cursor.</li>
+      <li>Provides a self-contained HTML viewer for exported trace sessions.</li>
+      <li>Redacts common authentication headers before recording traces.</li>
     </ul>
   </div>
 </section>
@@ -264,8 +264,8 @@
 <td>Multi-provider Hermes TUI or gateway sessions</td>
 </tr>
 <tr>
-<td><a href="https://cursor.com/cli">Cursor CLI</a></td>
-<td>Cursor Agent sessions plus readable local transcript import</td>
+<td><a href="https://cursor.com/cli">Cursor</a> CLI / IDE Agent</td>
+<td>Launch <code>cursor-agent</code> + live transcript watch (<code>claude-tap --tap-client cursor</code>)</td>
 </tr>
 <tr>
 <td><a href="https://qoder.com/cli">Qoder CLI</a></td>
@@ -321,8 +321,11 @@ claude-tap --tap-client mimo
 # Pi
 claude-tap --tap-client pi -- --model openai-codex/gpt-5.3-codex-spark -p "hello"
 
-# Cursor CLI
-claude-tap --tap-client cursor -- -p --trust --model auto "hello"
+# Cursor: launch cursor-agent + live transcript watch + dashboard
+claude-tap --tap-client cursor
+
+# Watch IDE Agent transcripts only (no CLI launch)
+claude-tap --tap-client cursor --tap-no-launch
 
 # Qoder CLI
 claude-tap --tap-client qoder -- -p "hello" --permission-mode dont_ask
@@ -594,11 +597,17 @@ claude-tap --tap-client hermes --tap-proxy-mode reverse
 </details>
 
 <details>
-<summary>Cursor CLI examples</summary>
+<summary>Cursor CLI / IDE Agent examples</summary>
 
-<p>Cursor CLI uses forward proxy mode by default. Use <code>--model auto</code> on free plans, and omit <code>--mode ask</code> when you want tool calls.</p>
-<pre><code class="language-bash">claude-tap --tap-client cursor -- -p --trust --model auto "hello"
-claude-tap --tap-client cursor -- -p --trust --model auto --continue "continue"
+<p>Cursor is <strong>transcript-only</strong> (neither reverse nor forward proxy): claude-tap launches <code>cursor-agent</code>, watches <code>~/.cursor/projects/*/agent-transcripts/*.jsonl</code>, and writes <strong>one dashboard session per Cursor conversation JSONL</strong>. It does not MITM <code>api2.cursor.sh</code>.</p>
+<pre><code class="language-bash"># Launch agent + live watch + dashboard (default)
+claude-tap --tap-client cursor
+
+# Pass args through to cursor-agent
+claude-tap --tap-client cursor -- -p --trust --model auto "hello"
+
+# IDE Agent only (no CLI launch)
+claude-tap --tap-client cursor --tap-no-launch
 </code></pre>
 </details>
 
@@ -729,7 +738,7 @@ claude-tap --tap-no-open
 --tap-no-launch          Only start the proxy, don't launch client
 --tap-max-traces N       Max trace sessions to keep (default: 50, 0 = unlimited)
 --tap-store-stream-events Persist raw SSE/WebSocket event arrays during capture so viewer/export output can show them (default: off)
---tap-proxy-mode MODE    Proxy mode: reverse or forward (default: reverse for claude/codex/grok/kimi/kimi-code/openclaw/codebuddy, forward for agy/codexapp/gemini/mimo/opencode/pi/hermes/cursor/qoder)
+--tap-proxy-mode MODE    Proxy mode: reverse or forward (default: reverse for claude/codex/grok/kimi/kimi-code/openclaw/codebuddy, forward for agy/codexapp/gemini/mimo/opencode/pi/hermes/qoder; cursor is transcript-only and ignores proxy MITM)
 --tap-trust-ca           On macOS, explicitly trust the local CA in the user login keychain before launch (agy does this automatically)
 </code></pre>
 </details>
@@ -825,11 +834,11 @@ claude-tap --tap-no-open
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 64.9K</div>
+        <div class="stars">★ 65.0K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 824</div>
+        <div class="stars">★ 825</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
@@ -841,7 +850,7 @@ claude-tap --tap-no-open
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 536</div>
+        <div class="stars">★ 537</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
