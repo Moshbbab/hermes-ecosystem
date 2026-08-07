@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to entire artifacts rather than performing chunk-based RAG. It indexes…">
+<meta name="description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to entire artifacts rather than performing chunk-based RAG. It indexes…">
+<meta property="og:description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to entire artifacts rather than performing chunk-based RAG. It indexes…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Hermes+Agent+plugin+for+local+knowledge+search+and+artifact+routing%E2%80%94find+the+right+skill%2C+script%2C+runbook%2C+cron+job%2C+MCP+server%2C+or+document.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to entire artifacts rather than performing chunk-based RAG. It indexes various sources including skills, scripts, runbooks, and MCP server configurations to provide routing hints for the agent.",
+  "description": "Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It indexes various sources, including skills, scripts, markdown documents, cron jobs, and MCP server configurations.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-08-05T21:13:02.000Z",
+  "dateModified": "2026-08-07T13:34:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-05</span>
+    <span><span class="meta-label">updated</span>2026-08-07</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a Hermes Agent plugin designed to route local questions to entire artifacts rather than performing chunk-based RAG. It indexes various sources including skills, scripts, runbooks, and MCP server configurations to provide routing hints for the agent.</p>
+    <p class="summary-text">Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It indexes various sources, including skills, scripts, markdown documents, cron jobs, and MCP server configurations.</p>
     <ul class="summary-highlights">
-      <li>Provides five native tools for searching and managing local knowledge.</li>
+      <li>Provides five native tools for searching and managing local artifacts.</li>
       <li>Supports automatic tool-OKF generation via an opt-in process.</li>
-      <li>Indexes skills, scripts, markdown documents, and cron jobs.</li>
+      <li>Includes a proactive router skill for agent integration.</li>
     </ul>
   </div>
 </section>
@@ -258,6 +258,11 @@ hermes config set local_knowledge.okf.auto_generate true
 <pre><code class="language-bash">hermes local-knowledge install-router-skill --json
 </code></pre>
 <p><code>installed</code> and <code>current</code> are successful statuses. A different existing skill produces <code>conflict</code>; review it before choosing <code>--force</code>.</p>
+<p>To use an intentionally customized proactive skill instead, configure its deployed runtime path before running doctor or installer commands:</p>
+<pre><code class="language-yaml">local_knowledge:
+  router_skill_path: skills/note-taking/local-knowledge-router/SKILL.md
+</code></pre>
+<p>Relative paths resolve from <code>$HERMES_HOME</code>. The path must name an active <code>SKILL.md</code> under <code>$HERMES_HOME/skills</code>; that runtime path may be a symlink to a separately managed custom-skill repository. Doctor validates the skill's frontmatter name but does not require custom content to match the bundled copy. Invalid or missing configured custom skills appear as explicit doctor warnings while doctor retains its diagnostic-success exit status; the installer fails without modifying the configured target. <code>install-router-skill</code>, including <code>--force</code>, returns <code>current</code> with <code>router_skill_mode: custom</code> and does not overwrite a valid configured custom skill.</p>
 <p>From a source checkout before plugin CLI registration is available:</p>
 <pre><code class="language-bash">python -m hermes_local_knowledge.cli install-router-skill --json
 </code></pre>
@@ -267,6 +272,8 @@ hermes config set local_knowledge.okf.auto_generate true
 <pre><code class="language-yaml">local_knowledge:
   source_root: ~/repos/local-operations
   state_dir: ~/.hermes/local_knowledge
+  # Optional: use a deployed custom proactive skill instead of the bundled copy.
+  # router_skill_path: skills/note-taking/local-knowledge-router/SKILL.md
   custom_skill_dirs: [custom_skills]
   script_dirs: [scripts, hermes_home/scripts]
   memory_dirs: [memory]
@@ -304,6 +311,11 @@ hermes config set local_knowledge.okf.auto_generate true
 <td><code>hermes_home</code></td>
 <td><code>HERMES_HOME</code>; explicit CLI <code>--hermes-home</code> selects a profile</td>
 <td>Active Hermes home, otherwise <code>~/.hermes</code></td>
+</tr>
+<tr>
+<td><code>router_skill_path</code></td>
+<td>—</td>
+<td><code>$HERMES_HOME/skills/local-knowledge-router/SKILL.md</code>; an explicit relative path resolves from <code>$HERMES_HOME</code> and selects custom-skill validation</td>
 </tr>
 <tr>
 <td><code>custom_skill_dirs</code></td>
@@ -425,8 +437,10 @@ okf_index_dirty/
 <p>For historical comparisons from a source checkout:</p>
 <pre><code class="language-bash">python scripts/compare_historical_query_versions.py \
   --usage-db ~/.hermes/local_knowledge/usage.sqlite \
-  v0.3.12 WORKTREE
+  v0.4.2 WORKTREE
 </code></pre>
+<p>The comparator opens live telemetry read-only, freezes one private source/runtime/OKF corpus, and builds each ref with that ref's own code. A nonnegative recorded feedback boundary plus a matching index-corpus hash proves that the recorded event inputs are available. The report calls a ref replay event-time exact only when that ref's plugin version and index format also match the recorded event and the replay reproduces its recorded baseline/final pages plus route provenance; a changed candidate otherwise remains a counterfactual replay over exact inputs, not historical output. Migrated legacy rows use one fixed captured feedback state, while missing boundaries or input/ref/output mismatches remain explicitly non-exact best-effort evidence. The machine report counts these evidence classes without exposing raw queries.</p>
+<p>Correction-route acceptance uses <code>explicit_resolution</code> Hit@1 as the primary outcome, then <code>verified_event</code> Hit@1/MRR, while requiring no increase in negative-artifact exposure, no unaccepted production ordering changes, and no replay errors. The comparison assessment distinguishes <code>rejected</code>, <code>accepted_improved</code>, and <code>accepted_unchanged_or_insufficient_evidence</code>. Direct/legacy aggregate metrics remain useful coverage and trend signals, but are not sufficient by themselves to prove a correction. Raw queries and artifact IDs appear only with <code>--details</code> inside the owner-only evaluation directory.</p>
 <h3>Verification</h3>
 <p>Operator checks:</p>
 <pre><code class="language-bash">hermes local-knowledge doctor
@@ -470,7 +484,7 @@ git diff --check
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 62.7K</div>
+        <div class="stars">★ 62.8K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -490,7 +504,7 @@ git diff --check
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 235</div>
+        <div class="stars">★ 236</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
