@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Codename-11/hermes-relay — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
-<meta name="description" content="Hermes-Relay provides an Android companion app and a single-binary CLI for the Hermes agent platform. The Android app enables streaming chat, voice, and agent…">
+<meta name="description" content="Hermes-Relay is a native Android companion and single-binary CLI for the Hermes agent platform. It provides access to streaming chat, voice, and agent…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Codename-11/hermes-relay">
 <meta property="og:title" content="Codename-11/hermes-relay — Hermes Atlas">
-<meta property="og:description" content="Hermes-Relay provides an Android companion app and a single-binary CLI for the Hermes agent platform. The Android app enables streaming chat, voice, and agent…">
+<meta property="og:description" content="Hermes-Relay is a native Android companion and single-binary CLI for the Hermes agent platform. It provides access to streaming chat, voice, and agent…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Codename-11/hermes-relay">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Codename-11/hermes-relay — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-Relay provides an Android companion app and a single-binary CLI for the Hermes agent platform. The Android app enables streaming chat, voice, and agent…">
+<meta name="twitter:description" content="Hermes-Relay is a native Android companion and single-binary CLI for the Hermes agent platform. It provides access to streaming chat, voice, and agent…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-relay&amp;subtitle=Hermes-Relay+%E2%80%94+Your+Hermes+AI+agent%2C+in+your+pocket+%E2%80%94+chat%2C+voice%2C+and+control.&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Codename-11/hermes-relay#software",
   "name": "hermes-relay",
-  "description": "Hermes-Relay provides an Android companion app and a single-binary CLI for the Hermes agent platform. The Android app enables streaming chat, voice, and agent management, while the CLI provides agent access to files, terminal, search, and screenshots.",
+  "description": "Hermes-Relay is a native Android companion and single-binary CLI for the Hermes agent platform. It provides access to streaming chat, voice, and agent management, with optional extensions for terminal access and device control.",
   "url": "https://hermesatlas.com/projects/Codename-11/hermes-relay",
   "codeRepository": "https://github.com/Codename-11/hermes-relay",
   "applicationCategory": "CommunicationApplication",
@@ -47,13 +47,13 @@
     "name": "Codename-11",
     "url": "https://github.com/Codename-11"
   },
-  "dateModified": "2026-08-05T20:21:42.000Z",
+  "dateModified": "2026-08-07T01:59:52.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 105
+    "userInteractionCount": 106
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,11 +119,11 @@
   <p class="project-desc">Hermes-Relay — Your Hermes AI agent, in your pocket — chat, voice, and control.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 105</span>
+    <span class="stars">★ 106</span>
     <span><span class="meta-label">lang</span>Kotlin</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-05</span>
+    <span><span class="meta-label">updated</span>2026-08-07</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-Relay provides an Android companion app and a single-binary CLI for the Hermes agent platform. The Android app enables streaming chat, voice, and agent management, while the CLI provides agent access to files, terminal, search, and screenshots.</p>
+    <p class="summary-text">Hermes-Relay is a native Android companion and single-binary CLI for the Hermes agent platform. It provides access to streaming chat, voice, and agent management, with optional extensions for terminal access and device control.</p>
     <ul class="summary-highlights">
       <li>Native Android app for chat, voice, and agent management</li>
-      <li>Single-binary CLI in alpha for terminal and file access</li>
-      <li>Sideload builds enable agent screen reading and action</li>
+      <li>Alpha CLI provides agent access to files, terminal, and search</li>
+      <li>Optional Relay plugin enables terminal and phone control</li>
     </ul>
   </div>
 </section>
@@ -424,11 +424,14 @@ Always confirm before running shell commands. Never restart hermes-gateway witho
 
 <h3>Development</h3>
 <pre><code class="language-bash"># Android: open the repo root in Android Studio, wait for Gradle sync, Run (Shift+F10).
-scripts/dev.bat build      # Build debug APK
+scripts/dev.bat build      # Build sideload debug APK
+scripts/dev.bat compile    # Compile sideload Kotlin only
+scripts/dev.bat test-one "com.hermesandroid.relay.SomeTest"  # Focused unit test
+scripts/dev.bat install-fast  # arm64 phone build + install + launch
 scripts/dev.bat release    # Build signed release APK
 scripts/dev.bat bundle     # Build release AAB for Google Play
-scripts/dev.bat run        # Build + install + launch + logcat
-scripts/dev.bat test       # Run unit tests
+scripts/dev.bat run        # Build sideload + install + launch + logcat
+scripts/dev.bat test       # Run sideload debug unit tests
 scripts/dev.bat version    # Show current version
 scripts/dev.bat relay      # Start the relay server (dev, no TLS)
 </code></pre>
@@ -442,7 +445,7 @@ scripts/dev.bat relay      # Start the relay server (dev, no TLS)
 </thead>
 <tbody><tr>
 <td><strong>Android app</strong></td>
-<td>Kotlin 2.0, Jetpack Compose, Material 3, OkHttp</td>
+<td>Kotlin 2.4, Jetpack Compose, Material 3, OkHttp</td>
 </tr>
 <tr>
 <td><strong>Hermes-Relay CLI</strong></td>
@@ -458,7 +461,7 @@ scripts/dev.bat relay      # Start the relay server (dev, no TLS)
 </tr>
 <tr>
 <td><strong>Build</strong></td>
-<td>AGP 9, Gradle 8.13, JVM toolchain 17 (Android); <code>tsc</code> + <code>bun build --compile</code> (CLI)</td>
+<td>AGP 9.3.1, Gradle 9.6.1, JVM toolchain 17 (Android); <code>tsc</code> + <code>bun build --compile</code> (CLI)</td>
 </tr>
 <tr>
 <td><strong>CI/CD</strong></td>
@@ -466,7 +469,7 @@ scripts/dev.bat relay      # Start the relay server (dev, no TLS)
 </tr>
 <tr>
 <td><strong>Min SDK</strong></td>
-<td>26 (Android 8.0) · Target SDK 35</td>
+<td>26 (Android 8.0) · Target SDK 36</td>
 </tr>
 </tbody></table>
 <details>
@@ -539,7 +542,7 @@ ln -s "$PWD/plugin" ~/.hermes/plugins/hermes-relay
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 446</div>
+        <div class="stars">★ 448</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -559,7 +562,7 @@ ln -s "$PWD/plugin" ~/.hermes/plugins/hermes-relay
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 707</div>
+        <div class="stars">★ 708</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">
