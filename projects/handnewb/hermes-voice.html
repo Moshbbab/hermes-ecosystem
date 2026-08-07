@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>handnewb/hermes-voice — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Hermes-voice is a voice-enabled personal assistant designed for the Hermes Agent. It operates entirely offline using local speech recognition, detection, and…">
+<meta name="description" content="Hermes-voice is a voice-enabled personal assistant designed for Hermes Agent. It operates entirely locally using speech recognition, voice activity detection,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/handnewb/hermes-voice">
 <meta property="og:title" content="handnewb/hermes-voice — Hermes Atlas">
-<meta property="og:description" content="Hermes-voice is a voice-enabled personal assistant designed for the Hermes Agent. It operates entirely offline using local speech recognition, detection, and…">
+<meta property="og:description" content="Hermes-voice is a voice-enabled personal assistant designed for Hermes Agent. It operates entirely locally using speech recognition, voice activity detection,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/handnewb/hermes-voice">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="handnewb/hermes-voice — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-voice is a voice-enabled personal assistant designed for the Hermes Agent. It operates entirely offline using local speech recognition, detection, and…">
+<meta name="twitter:description" content="Hermes-voice is a voice-enabled personal assistant designed for Hermes Agent. It operates entirely locally using speech recognition, voice activity detection,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-voice&amp;subtitle=Voice-enabled+personal+assistant+for+Hermes+Agent.+Open+mic+with+wake+word%2C+fully+local+%E2%80%94+no+API+keys%2C+no+accounts%2C+35+languages.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/handnewb/hermes-voice#software",
   "name": "hermes-voice",
-  "description": "Hermes-voice is a voice-enabled personal assistant designed for the Hermes Agent. It operates entirely offline using local speech recognition, detection, and synthesis engines.",
+  "description": "Hermes-voice is a voice-enabled personal assistant designed for Hermes Agent. It operates entirely locally using speech recognition, voice activity detection, wake word detection, and speech synthesis.",
   "url": "https://hermesatlas.com/projects/handnewb/hermes-voice",
   "codeRepository": "https://github.com/handnewb/hermes-voice",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "handnewb",
     "url": "https://github.com/handnewb"
   },
-  "dateModified": "2026-08-07T16:17:16.000Z",
+  "dateModified": "2026-08-07T17:00:43.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-voice is a voice-enabled personal assistant designed for the Hermes Agent. It operates entirely offline using local speech recognition, detection, and synthesis engines.</p>
+    <p class="summary-text">Hermes-voice is a voice-enabled personal assistant designed for Hermes Agent. It operates entirely locally using speech recognition, voice activity detection, wake word detection, and speech synthesis.</p>
     <ul class="summary-highlights">
       <li>Supports 35 languages via Piper and 9 via Kokoro.</li>
-      <li>Features adaptive turn-taking and echo suppression.</li>
-      <li>Includes three trigger modes: wake word, console, and PTT.</li>
+      <li>Features adaptive turn-taking and barge-in capabilities.</li>
+      <li>Runs offline with no API keys or accounts required.</li>
     </ul>
   </div>
 </section>
@@ -156,15 +156,15 @@
 <a href="https://github.com/handnewb/hermes-voice/actions/workflows/codeql.yml"><img src="https://github.com/handnewb/hermes-voice/actions/workflows/codeql.yml/badge.svg" alt="CodeQL" loading="lazy" decoding="async"></a>
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python 3.10+" loading="lazy" decoding="async"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-green" alt="License: Apache 2.0" loading="lazy" decoding="async"></a></p>
-<pre><code>você:    "Jarvis, o que rodou essa noite?"
-hermes:  "Cento e quarenta e sete mil eventos, senhor. Três escalados."
-você:    "detalha o terceiro"          ← sem repetir a palavra de ativação
-hermes:  "Conexão para domínio registrado há dezoito horas. Isolei."
-         ...20 segundos de silêncio...
-                                        ← volta a dormir sozinho
+<pre><code>you:     "Jarvis, what ran overnight?"
+hermes:  "One hundred forty-seven thousand events, sir. Three escalated."
+you:     "detail the third"          ← no wake word needed
+hermes:  "Connection to a domain registered eighteen hours ago. Isolated."
+         ...20 seconds of silence...
+                                     ← goes back to sleep on its own
 </code></pre>
 <details>
-<summary><b>English</b> — the documentation below is in Brazilian Portuguese. Short version here.</summary>
+<summary><b>English</b> — short version</summary>
 
 <p>Talk to your Hermes agent the way you would talk to a person. Say the wake word
 and speak; the wake word opens a <strong>session</strong>, so follow-up turns need no
@@ -198,395 +198,421 @@ translations — see <a href="https://github.com/handnewb/hermes-voice/blob/main
 </details>
 
 <blockquote>
-<p><strong>Estado de verificação.</strong> Os componentes têm 229 testes automatizados, mas
-partes do projeto — todo o I/O de áudio, as engines de voz e os downloads —
-nunca foram executadas em hardware real. Antes de confiar, leia
-<a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VERIFICATION.md"><code>docs/VERIFICATION.md</code></a>: ele lista o que foi verificado,
-o que não foi, e onde eu apostaria que há problema.</p>
+<p><strong>Verification status.</strong> The components have 229 automated tests, but parts of
+the project — all audio I/O, the voice engines, and downloads — have never
+been executed on real hardware. Before trusting, read
+<a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VERIFICATION.md"><code>docs/VERIFICATION.md</code></a>: it lists what has been verified,
+what hasn't, and where I would bet there are issues.</p>
 </blockquote>
 <hr>
-<h3>O ponto de design</h3>
-<p>Se você tem que dizer a palavra de ativação a cada turno, isso é <strong>controle remoto</strong>, não conversa. Aqui a palavra abre uma <strong>sessão</strong>, e dentro dela você fala normalmente.</p>
+<h3>The design point</h3>
+<p>If you have to say the wake word every turn, that's a <strong>remote control</strong>, not a conversation. Here the word opens a <strong>session</strong>, and inside it you speak normally.</p>
 <pre><code>DORMANT ──"Jarvis"──────────► LISTENING
-LISTENING ──silêncio 700ms───► THINKING ──1º áudio──► SPEAKING
-SPEAKING ──fim do áudio──────► FOLLOW_UP
-FOLLOW_UP ──você fala────────► LISTENING     (sem repetir a palavra)
-FOLLOW_UP ──20s parado───────► DORMANT
+LISTENING ──700 ms silence──► THINKING ──1st audio──► SPEAKING
+SPEAKING ──end of audio─────► FOLLOW_UP
+FOLLOW_UP ──you speak───────► LISTENING     (no wake word needed)
+FOLLOW_UP ──20s idle────────► DORMANT
 </code></pre>
-<p>Os dois parâmetros que definem a sensação:</p>
+<p>The two parameters that define the feel:</p>
 <table>
 <thead>
 <tr>
-<th>Variável</th>
-<th>Padrão</th>
-<th>Efeito</th>
+<th>Variable</th>
+<th>Default</th>
+<th>Effect</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>SILENCE_MS</code></td>
 <td><code>700</code></td>
-<td>Silêncio que encerra sua fala. Abaixo de 400 corta você em pausa natural; acima de 900 soa hesitante.</td>
+<td>Silence that ends your speech. Below 400 cuts you off at natural pauses; above 900 sounds hesitant.</td>
 </tr>
 <tr>
 <td><code>FOLLOW_UP_SECONDS</code></td>
 <td><code>20</code></td>
-<td>Quanto a sessão fica aberta depois da resposta.</td>
+<td>How long the session stays open after the response.</td>
 </tr>
 </tbody></table>
-<p>Ajuste de ouvido, não de intuição.</p>
-<h3>Começando</h3>
+<p>Adjust by ear, not by intuition.</p>
+<h3>Getting started</h3>
 <pre><code class="language-bash">pip install "hermes-voice[wake,kokoro]"
-hermes-voice voices --install all   # baixa vozes e modelos, ~400 MB, uma vez
-hermes-voice --doctor               # diz exatamente o que falta
-hermes-voice                        # fale
+hermes-voice voices --install all   # downloads voices and models, ~400 MB, once
+hermes-voice --doctor               # tells you exactly what's missing
+hermes-voice                        # speak
 </code></pre>
-<p><strong>Nenhuma conta, nenhuma chave de API, nenhum serviço de nuvem.</strong> Todas as
-engines rodam localmente. O único endereço que o programa contata em execução é
-o seu próprio Hermes.</p>
-<p>Ou a partir do repositório, com o setup que baixa a voz e o binário do Piper:</p>
+<p><strong>No accounts, no API keys, no cloud services.</strong> All engines run locally. The
+only address the program contacts at runtime is your own Hermes.</p>
+<p>Or from the repository, with the setup that downloads the voice and the Piper binary:</p>
 <pre><code class="language-powershell">git clone https://github.com/handnewb/hermes-voice &amp;&amp; cd hermes-voice
 .\scripts\setup.ps1            # Windows
-./scripts/setup.sh             # Linux e macOS
+./scripts/setup.sh             # Linux and macOS
 </code></pre>
-<p><strong>Comece sempre pelo <code>--doctor</code>.</strong> Num projeto de voz, 90% dos problemas são de ambiente: driver de áudio, cuDNN faltando, wheel que não compilou, chave ausente, EDR bloqueando. O doctor verifica os oito grupos e diz a correção de cada falha, em vez de você descobrir na prática.</p>
-<h3>Três modos de gatilho</h3>
+<p><strong>Always start with <code>--doctor</code>.</strong> In a voice project, 90% of problems are environmental: audio driver, missing cuDNN, wheel that didn't compile, absent key, EDR blocking. The doctor checks the eight groups and tells you the fix for each failure, instead of you discovering through trial and error.</p>
+<h3>Three trigger modes</h3>
 <table>
 <thead>
 <tr>
-<th>Modo</th>
-<th>Como</th>
-<th>Quando usar</th>
+<th>Mode</th>
+<th>How</th>
+<th>When to use</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>--trigger wake</code> <em>(padrão)</em></td>
-<td>Diga a palavra e fale</td>
-<td>Uso normal</td>
+<td><code>--trigger wake</code> <em>(default)</em></td>
+<td>Say the word and speak</td>
+<td>Normal use</td>
 </tr>
 <tr>
 <td><code>--trigger console</code></td>
-<td>ENTER inicia, ENTER envia</td>
-<td>Quando não pode ter microfone aberto nem hook de teclado</td>
+<td>ENTER starts, ENTER sends</td>
+<td>When you can't have an open mic or keyboard hook</td>
 </tr>
 <tr>
 <td><code>--trigger ptt</code></td>
-<td>Segure uma tecla</td>
-<td>Ambiente ruidoso</td>
+<td>Hold a key</td>
+<td>Noisy environment</td>
 </tr>
 </tbody></table>
-<p>O modo <code>console</code> existe por um motivo específico. Um hook global de teclado (<code>SetWindowsHookEx</code>, usado pelo <code>pynput</code> no modo <code>ptt</code>) é a assinatura clássica de keylogger; somado a captura de microfone e egress de rede, forma a tríade comportamental de um implante de spyware. Motor de EDR comportamental vai sinalizar, e vai estar certo. O modo <code>console</code> não instala hook nenhum. Ver <a href="https://github.com/handnewb/hermes-voice/blob/main/SECURITY.md">SECURITY.md</a>.</p>
-<h3>A palavra de ativação</h3>
-<p>Três modos, com tradeoff explícito. Nenhum exige conta.</p>
+<p>The <code>console</code> mode exists for a specific reason. A global keyboard hook (<code>SetWindowsHookEx</code>, used by <code>pynput</code> in <code>ptt</code> mode) is the classic keylogger signature; combined with microphone capture and network egress, it forms the behavioral triad of a spyware implant. A behavioral EDR engine will flag it, and it will be right. The <code>console</code> mode installs no hook. See <a href="https://github.com/handnewb/hermes-voice/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+<h3>The wake word</h3>
+<p>Three modes, with explicit tradeoff. None requires an account.</p>
 <table>
 <thead>
 <tr>
 <th><code>WAKE_BACKEND</code></th>
-<th>Palavra</th>
-<th>Precisão</th>
-<th>Custo</th>
+<th>Word</th>
+<th>Accuracy</th>
+<th>Cost</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>auto</code> <em>(padrão)</em></td>
-<td>Catálogo do openWakeWord</td>
-<td>Melhor</td>
-<td>Exige "<strong>ei</strong> jarvis"; só 4 palavras</td>
+<td><code>auto</code> <em>(default)</em></td>
+<td>openWakeWord catalog</td>
+<td>Best</td>
+<td>Requires "<strong>hey</strong> jarvis"; only 4 words</td>
 </tr>
 <tr>
 <td><code>keyword</code></td>
-<td><strong>Qualquer palavra, qualquer idioma</strong></td>
-<td>Menor</td>
-<td>Transcreve a fala antes de ativar</td>
+<td><strong>Any word, any language</strong></td>
+<td>Lower</td>
+<td>Transcribes speech before activating</td>
 </tr>
 <tr>
 <td><code>open</code></td>
-<td>Nenhuma — qualquer fala</td>
+<td>None — any speech</td>
 <td>—</td>
-<td>Transcreve tudo. Só com fone.</td>
+<td>Transcribes everything. Headphones only.</td>
 </tr>
 </tbody></table>
-<p>O modo <code>auto</code> usa modelos pré-treinados (<code>hey_jarvis</code>, <code>alexa</code>, <code>hey_mycroft</code>,
-<code>hey_rhasspy</code>). Melhor detecção, mas catálogo pequeno e você precisa dizer "ei"
-antes.</p>
-<p>O modo <code>keyword</code> aceita a palavra que você quiser, em qualquer idioma, sem treinar
-nada: quando o VAD detecta fala, um Whisper <code>tiny</code> transcreve a janela e procura a
-palavra com tolerância a erro de transcrição.</p>
+<p>The <code>auto</code> mode uses pre-trained models (<code>hey_jarvis</code>, <code>alexa</code>, <code>hey_mycroft</code>,
+<code>hey_rhasspy</code>). Better detection, but a small catalog and you need to say "hey"
+first.</p>
+<p>The <code>keyword</code> mode accepts whatever word you want, in any language, without training
+anything: when the VAD detects speech, a Whisper <code>tiny</code> transcribes the window and
+searches for the word with transcription error tolerance.</p>
 <pre><code class="language-bash"># .env
 WAKE_BACKEND=keyword
 WAKE_WORDS=jarvis,jarvez,gervis
 </code></pre>
-<p>A lista separada por vírgula é o mecanismo que importa. A tolerância de edição é
-limitada a 1 de propósito — com 2, "computador" passa a aceitar "compilador", e
-ativação falsa é pior que ativação perdida. Para recuperar o que o Whisper erra na
-<em>sua</em> voz, <strong>adicione apelidos</strong> em vez de afrouxar o limiar: lista exata não
-introduz colisão nova.</p>
-<p>Escolha palavra distintiva de três sílabas ou mais, e verifique colisão antes de
-adotar: "hermes" colide com "herpes" a uma edição, "sofia" com "sofa". Isso vale
-para qualquer sistema de wake word.</p>
-<p><strong>Custo de privacidade do modo <code>keyword</code></strong>, e é real: a fala é transcrita antes de
-haver ativação. Não é transcrição contínua — só roda quando o VAD vê fala, nada é
-gravado e nada sai da máquina — mas a garantia "em <code>DORMANT</code> nada é transcrito"
-não vale nesse modo. Por isso não é o padrão, e o <code>--doctor</code> avisa.</p>
-<p>Para palavra própria com a precisão do modelo treinado, o openWakeWord tem um
-pipeline de treinamento com dados sintéticos. Ver <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/ROADMAP.md">roadmap</a>.</p>
-<h3>Voz</h3>
-<p>Centenas de vozes em dezenas de idiomas, todas gratuitas, todas com licença que
-permite uso comercial. Duas engines, ambas locais.</p>
-<pre><code class="language-bash">hermes-voice voices --languages           # que idiomas existem
-hermes-voice voices --lang es             # filtra
+<p>The comma-separated list is the mechanism that matters. Edit tolerance is
+deliberately limited to 1 — with 2, "computer" starts accepting "compiler", and
+false activation is worse than missed activation. To recover what Whisper gets
+wrong for <em>your</em> voice, <strong>add nicknames</strong> instead of loosening the threshold: an
+exact list introduces no new collisions.</p>
+<p>Choose a distinctive word of three syllables or more, and check for collisions
+before adopting: "hermes" collides with "herpes" at one edit, "sofia" with "sofa".
+This applies to any wake word system.</p>
+<p><strong>Privacy cost of <code>keyword</code> mode</strong>, and it's real: speech is transcribed before
+activation occurs. It's not continuous transcription — it only runs when the VAD
+sees speech, nothing is recorded, and nothing leaves the machine — but the
+guarantee "in <code>DORMANT</code> nothing is transcribed" doesn't hold in this mode. That's
+why it's not the default, and <code>--doctor</code> warns about it.</p>
+<p>For a custom word with trained model accuracy, openWakeWord has a training
+pipeline with synthetic data. See <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/ROADMAP.md">roadmap</a>.</p>
+<h3>Voice</h3>
+<p>Hundreds of voices in dozens of languages, all free, all with licenses permitting
+commercial use. Two engines, both local.</p>
+<pre><code class="language-bash">hermes-voice voices --languages           # which languages exist
+hermes-voice voices --lang es             # filter
 hermes-voice voices --install em_alex
 hermes-voice --voice em_alex
 </code></pre>
-<p><strong>Piper</strong>: o catálogo não está fixado no código. O programa consulta o
-<code>voices.json</code> publicado no Hugging Face em tempo de execução — 35 idiomas,
-centenas de vozes, licença MIT — e verifica o MD5 que vem no próprio índice. Voz
-nova no upstream aparece sem release nosso. Se o índice estiver inacessível, o
-Kokoro continua funcionando e um aviso é registrado.</p>
-<p><strong>Kokoro-82M</strong>: 54 vozes em 9 idiomas num único arquivo de pesos Apache-2.0 —
-inglês americano e britânico, espanhol, francês, hindi, italiano, japonês,
-português do Brasil e mandarim.</p>
+<p><strong>Piper</strong>: the catalog is not hardcoded. The program queries the
+<code>voices.json</code> published on Hugging Face at runtime — 35 languages, hundreds of
+voices, MIT license — and verifies the MD5 that comes in the index itself. A new
+voice upstream appears without a release from us. If the index is unreachable,
+Kokoro keeps working and a warning is logged.</p>
+<p><strong>Kokoro-82M</strong>: 54 voices in 9 languages in a single Apache-2.0 weights file —
+American and British English, Spanish, French, Hindi, Italian, Japanese, Brazilian
+Portuguese, and Mandarin.</p>
 <table>
 <thead>
 <tr>
-<th>Voz</th>
+<th>Voice</th>
 <th>Engine</th>
-<th>Licença</th>
-<th>Nota</th>
+<th>License</th>
+<th>Note</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>pt_BR-faber-medium</code></td>
 <td>Piper</td>
 <td>MIT</td>
-<td><strong>Padrão.</strong> 63 MB, roda em CPU, ~50 ms.</td>
+<td><strong>Default.</strong> 63 MB, runs on CPU, ~50 ms.</td>
 </tr>
 <tr>
 <td><code>pm_alex</code></td>
 <td>Kokoro</td>
 <td>Apache-2.0</td>
-<td>pt-BR, prosódia bem melhor que Piper.</td>
+<td>pt-BR, much better prosody than Piper.</td>
 </tr>
 <tr>
 <td><code>am_michael</code></td>
 <td>Kokoro</td>
 <td>Apache-2.0</td>
-<td>en-US masculina.</td>
+<td>en-US male.</td>
 </tr>
 <tr>
 <td><code>em_alex</code></td>
 <td>Kokoro</td>
 <td>Apache-2.0</td>
-<td>Espanhol masculina.</td>
+<td>Spanish male.</td>
 </tr>
 <tr>
 <td><code>zm_yunxi</code></td>
 <td>Kokoro</td>
 <td>Apache-2.0</td>
-<td>Mandarim masculina.</td>
+<td>Mandarin male.</td>
 </tr>
 <tr>
-<td>...e centenas de vozes Piper</td>
+<td>...and hundreds of Piper voices</td>
 <td>Piper</td>
 <td>MIT</td>
-<td><code>voices --lang &lt;código&gt;</code></td>
+<td><code>voices --lang &lt;code&gt;</code></td>
 </tr>
 </tbody></table>
-<p>Kokoro roda via <code>kokoro-onnx</code> e não pelo pacote oficial, porque o oficial arrasta
-PyTorch (~2,5 GB) e este projeto já tem onnxruntime instalado para o VAD.</p>
-<p>Nenhuma das duas engines faz clonagem de voz — são vozes fixas. Isso é escolha do
-projeto, e <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VOICE_LICENSING.md"><code>docs/VOICE_LICENSING.md</code></a> explica o terreno
-jurídico (direitos de personalidade, direito conexo do intérprete, voz como dado
-biométrico) e os caminhos limpos para quem quer um timbre específico.</p>
-<h4>Escolhendo a voz de forma séria</h4>
-<p><a href="https://github.com/handnewb/hermes-voice/blob/main/docs/script_avaliacao_voz.md"><code>docs/script_avaliacao_voz.md</code></a> tem um script de 11
-blocos, cada um isolando um modo de falha, com três critérios eliminatórios.</p>
-<p>Os dois blocos que ninguém pensa em testar: a voz precisa conseguir <strong>dizer não</strong>
-e <strong>admitir ignorância</strong> sem soar agressiva nem submissa. Vozes de pt-BR são quase
-todas treinadas para atendimento, vêm com sorriso embutido, e falham feio
-justamente nessas duas — que são as falas que mais importam num assistente que
-confirma ação destrutiva.</p>
-<p>Para estabilidade long-form há
-<a href="https://github.com/handnewb/hermes-voice/blob/main/docs/monologo_1000_palavras.txt"><code>docs/monologo_1000_palavras.txt</code></a>: 1.031
-palavras corridas, ~7 minutos. Compare o último minuto com o primeiro.</p>
-<h3>O estágio que faz mais diferença que o timbre</h3>
+<p>Kokoro runs via <code>kokoro-onnx</code> and not the official package, because the official
+one drags in PyTorch (~2.5 GB) and this project already has onnxruntime installed
+for the VAD.</p>
+<p>Neither engine does voice cloning — they are fixed voices. This is a project
+choice, and <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VOICE_LICENSING.md"><code>docs/VOICE_LICENSING.md</code></a> explains the
+legal landscape (personality rights, performer's related rights, voice as
+biometric data) and the clean paths for those who want a specific timbre.</p>
+<h4>Choosing a voice seriously</h4>
+<p><a href="https://github.com/handnewb/hermes-voice/blob/main/docs/script_avaliacao_voz.md"><code>docs/script_avaliacao_voz.md</code></a> has an 11-block
+script, each isolating a failure mode, with three elimination criteria.</p>
+<p>The two blocks nobody thinks to test: the voice needs to be able to <strong>say no</strong> and
+<strong>admit ignorance</strong> without sounding aggressive or submissive. Pt-BR voices are
+almost all trained for customer service, come with a built-in smile, and fail
+badly precisely on these two — which are the utterances that matter most for an
+assistant that confirms destructive actions.</p>
+<p>For long-form stability there's
+<a href="https://github.com/handnewb/hermes-voice/blob/main/docs/monologo_1000_palavras.txt"><code>docs/monologo_1000_palavras.txt</code></a>: 1,031
+continuous words, ~7 minutes. Compare the last minute with the first.</p>
+<h3>The stage that makes more difference than timbre</h3>
 <pre><code class="language-bash">hermes-voice --dsp room
 </code></pre>
-<p>Boa parte do que as pessoas identificam como "voz de assistente de ficção científica" não está no timbre — está no <strong>processamento</strong>. A fala é tratada como se viesse de alto-falantes num ambiente, e nenhum TTS entrega isso de fábrica.</p>
-<p>Quatro estágios, em streaming, só com numpy:</p>
+<p>Much of what people identify as "sci-fi assistant voice" isn't in the timbre — it's in the <strong>processing</strong>. Speech is treated as if coming from speakers in a space, and no TTS ships this out of the box.</p>
+<p>Four stages, streaming, numpy-only:</p>
 <ol>
-<li><strong>High-pass</strong> em 110 Hz — remove o peso "boca no microfone" que denuncia locução de proximidade</li>
-<li><strong>Compressor</strong> — achata a dinâmica; voz calma tem pouca variação de volume, e é o que dá sensação de controle</li>
-<li><strong>Realce de presença</strong> em 3 kHz — inteligibilidade a distância</li>
-<li><strong>Reverb curto de sala</strong>, muito baixo — dá lugar ao som</li>
+<li><strong>High-pass</strong> at 110 Hz — removes the "mouth on mic" weight that gives away close-miked speech</li>
+<li><strong>Compressor</strong> — flattens dynamics; a calm voice has little volume variation, and that's what gives a sense of control</li>
+<li><strong>Presence lift</strong> at 3 kHz — intelligibility at a distance</li>
+<li><strong>Short room reverb</strong>, very low — gives the sound a place</li>
 </ol>
-<p>Cinco presets: <code>off</code>, <code>room</code>, <code>close</code>, <code>hall</code>, <code>intercom</code>. Comece em <code>room</code>. Use <code>hall</code> uma vez só para ouvir o que cada parâmetro faz — ele exagera de propósito.</p>
-<p>Exagerar no reverb é o erro mais comum e soa como banheiro.</p>
-<h3>Fluidez</h3>
-<p>Três coisas separam "conversa" de "controle remoto por voz", e nenhuma delas é o
-timbre.</p>
-<p><strong>Endpointing adaptativo.</strong> Limiar fixo de silêncio não funciona: 400 ms corta
-você no meio de uma pausa de pensamento, 1000 ms deixa o assistente hesitante. A
-duração da pausa carrega significado. Então em vez de contar silêncio, o sistema
-transcreve num limiar curto e olha se a frase <em>parece terminada</em>:</p>
-<pre><code>"eu quero"                    → pendurado, espera até 1250 ms
-"o status do"                 → preposição solta, espera
-"qual o status?"              → pergunta fechada, responde em 380 ms
-"isola a máquina agora"       → imperativo completo, responde
+<p>Five presets: <code>off</code>, <code>room</code>, <code>close</code>, <code>hall</code>, <code>intercom</code>. Start with <code>room</code>. Use <code>hall</code> once just to hear what each parameter does — it exaggerates on purpose.</p>
+<p>Overdoing reverb is the most common mistake and sounds like a bathroom.</p>
+<h3>Fluidity</h3>
+<p>Three things separate "conversation" from "voice remote control", and none of them
+is timbre.</p>
+<p><strong>Adaptive endpointing.</strong> A fixed silence threshold doesn't work: 400 ms cuts you
+off mid-thought, 1000 ms makes the assistant sound hesitant. Pause length carries
+meaning. So instead of counting silence, the system transcribes at a short
+threshold and checks whether the sentence <em>looks finished</em>:</p>
+<pre><code>"I want"                      → dangling, waits up to 1250 ms
+"the status of"               → stranded preposition, waits
+"what's the status?"          → closed question, answers in 380 ms
+"isolate the machine now"     → complete imperative, answers
 </code></pre>
-<p>Se o texto não cresceu entre duas sondagens, encerra de todo modo — pessoa
-distraída no meio da frase não pode travar o turno.</p>
-<p><strong>Normalização de texto.</strong> Nenhum TTS local lê <code>R$ 1.500,00</code> ou <code>08/06/2026</code>
-corretamente. Piper soletra dígito por dígito. A normalização converte antes de
-sintetizar, e o ganho de qualidade percebida é maior que trocar de engine:</p>
-<pre><code>"R$ 1.500,50 em 08/06/2026 às 14:30, 99,7% de disponibilidade"
-→ "mil e quinhentos reais e cinquenta centavos em oito de junho de dois mil e
-   vinte e seis às quatorze e meia, noventa e nove vírgula sete por cento..."
+<p>If the text hasn't grown between two probes, it ends anyway — someone distracted
+mid-sentence can't lock the turn.</p>
+<p><strong>Text normalization.</strong> No local TTS reads <code>$1,500.00</code> or <code>06/08/2026</code> correctly.
+Piper spells digit by digit. Normalization converts before synthesizing, and the
+perceived quality gain is larger than switching engines:</p>
+<pre><code>"$1,500.50 on 06/08/2026 at 2:30 PM, 99.7% availability"
+→ "one thousand five hundred dollars and fifty cents on June eighth two
+   thousand twenty-six at two thirty PM, ninety-nine point seven percent..."
 </code></pre>
-<p><strong>Interrupção de verdade.</strong> Ver a seção de duplex abaixo.</p>
-<p>Ressalva de idioma: o endpointing e a normalização são <strong>específicos de pt-BR</strong>.
-A arquitetura é multilíngue e o STT, o VAD e as vozes também, mas as listas de
-palavras em <code>endpoint.py</code>, as regras de <code>normalize.py</code> e a persona são de
-português. Outros idiomas funcionam com limiar fixo e sem normalização — pior,
-não quebrado. Adicionar um idioma são quatro pontos, listados em
+<p><strong>Real interruption.</strong> See the duplex section below.</p>
+<p>Language caveat: endpointing and normalization are <strong>pt-BR specific</strong>. The
+architecture is multilingual and STT, VAD, and voices are too, but the word lists
+in <code>endpoint.py</code>, the rules in <code>normalize.py</code>, and the persona are in Portuguese.
+Other languages work with a fixed threshold and without normalization — worse, not
+broken. Adding a language is four points, listed in
 <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/ARCHITECTURE.md"><code>docs/ARCHITECTURE.md</code></a>.</p>
-<h3>Latência</h3>
-<p>O ganho não vem de otimizar cada estágio, vem de <strong>pipelinar</strong>: a primeira frase da resposta vai para o TTS enquanto o modelo ainda gera a segunda.</p>
+<h3>Latency</h3>
+<p>The gain doesn't come from optimizing each stage — it comes from <strong>pipelining</strong>: the first sentence of the response goes to TTS while the model is still generating the second.</p>
 <table>
 <thead>
 <tr>
-<th>Estágio</th>
-<th>Alvo</th>
+<th>Stage</th>
+<th>Target</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>Fim de fala (Silero VAD)</td>
-<td>~700 ms (é o <code>SILENCE_MS</code>, ajustável)</td>
+<td>End of speech (Silero VAD)</td>
+<td>~700 ms (that's <code>SILENCE_MS</code>, adjustable)</td>
 </tr>
 <tr>
 <td>STT (<code>large-v3-turbo</code>, GPU)</td>
 <td>200–400 ms</td>
 </tr>
 <tr>
-<td>Hermes até o 1º token</td>
+<td>Hermes to 1st token</td>
 <td>100–500 ms</td>
 </tr>
 <tr>
-<td>TTS até o 1º áudio</td>
+<td>TTS to 1st audio</td>
 <td>150–300 ms</td>
 </tr>
 <tr>
-<td><strong>Percebido</strong></td>
+<td><strong>Perceived</strong></td>
 <td><strong>~700–1000 ms</strong></td>
 </tr>
 </tbody></table>
-<p><code>--verbose</code> imprime o tempo real de cada estágio por turno. Meça antes de otimizar: quando parece lento, o culpado costuma ser o tempo até o primeiro token do Hermes, não o STT nem o TTS — que é onde a intuição manda olhar.</p>
-<h3>Privacidade</h3>
-<p>Microfone aberto numa máquina pessoal merece garantia, não configuração. Três propriedades implementadas em <a href="https://github.com/handnewb/hermes-voice/blob/main/src/hermes_voice/session.py"><code>session.py</code></a> <strong>por construção</strong> — não é possível desligá-las por engano:</p>
+<p><code>--verbose</code> prints the real time of each stage per turn. Measure before optimizing: when it feels slow, the culprit is usually the time to Hermes's first token, not STT or TTS — which is where intuition says to look.</p>
+<h3>Privacy</h3>
+<p>An open microphone on a personal machine deserves guarantees, not configuration.
+Three properties implemented in <a href="https://github.com/handnewb/hermes-voice/blob/main/src/hermes_voice/session.py"><code>session.py</code></a> <strong>by
+construction</strong> — they can't be turned off by accident:</p>
 <ul>
-<li><strong>Em <code>DORMANT</code> nada é transcrito.</strong> Os frames alimentam apenas o detector de palavra de ativação, que roda local e não produz texto.</li>
-<li><strong>O pré-roll é um <code>deque</code> com <code>maxlen</code> fixo</strong> de 480 ms. Há teste que alimenta 64 segundos de áudio contínuo e verifica que só 480 ms permanecem.</li>
-<li><strong>Ao adormecer o buffer é descartado</strong>, explicitamente e inclusive quando já estava dormindo.</li>
+<li><strong>In <code>DORMANT</code> nothing is transcribed.</strong> Frames only feed the wake word
+detector, which runs locally and produces no text.</li>
+<li><strong>The pre-roll is a <code>deque</code> with a fixed <code>maxlen</code></strong> of 480 ms. There's a test
+that feeds 64 seconds of continuous audio and verifies that only 480 ms are
+retained.</li>
+<li><strong>On sleeping, the buffer is discarded</strong>, explicitly and even when it was
+already dormant.</li>
 </ul>
-<p>Nada toca o disco a menos que você ligue <code>LOG_TRANSCRIPTS=1</code>, que é <code>0</code> por padrão e aparece como aviso no <code>--doctor</code>.</p>
-<p>Os 480 ms de pré-roll existem porque o detector dispara ~300 ms depois de a palavra terminar; sem eles você perde a primeira sílaba do que veio em seguida.</p>
-<p>Nada de áudio nem de texto sai para provedor de voz, porque não há provedor de voz: Piper, Kokoro, Silero e openWakeWord rodam todos localmente. O único endereço contatado em execução é o seu próprio endpoint do Hermes.</p>
-<h3>Duplex e interrupção</h3>
-<p><code>HALF_DUPLEX=1</code> (padrão): enquanto o assistente fala, o microfone não é avaliado.
-Robusto, e o custo é não poder interromper por voz.</p>
-<p><code>HALF_DUPLEX=0</code> liga a <strong>supressão de eco</strong> e você pode interromper falando.</p>
-<p>Isso não é AEC. AEC de verdade estima a resposta impulsiva da sala com filtro
-adaptativo e subtrai o eco do sinal. O que fazemos é mais modesto e resolve o
-caso que importa: como nós geramos o áudio de saída, sabemos exatamente o que foi
-enviado. Para cada frame do microfone, verificamos se <strong>algum</strong> alinhamento da
-referência, dentro de uma janela de 320 ms, explica a energia capturada. Se
-explica, é eco. Se não, é você. Duzentas linhas de numpy, zero dependência.</p>
-<p>Testado com atraso de 20 a 300 ms e ganho de sala de 0,25 a 1,3: zero falsos
-positivos com eco puro, e dispara quando há fala sobreposta.</p>
-<p>Consequência prática: você interrompe falando mais alto que a caixa. Não conversa
-sobreposto em volume baixo. Com fone nada disso é necessário — não há eco.</p>
-<h3>Arquitetura</h3>
+<p>Nothing touches disk unless you set <code>LOG_TRANSCRIPTS=1</code>, which is <code>0</code> by default
+and appears as a warning in <code>--doctor</code>.</p>
+<p>The 480 ms of pre-roll exist because the detector fires ~300 ms after the word
+ends; without it you lose the first syllable of what came next.</p>
+<p>No audio or text goes to a voice provider, because there is no voice provider:
+Piper, Kokoro, Silero, and openWakeWord all run locally. The only address
+contacted at runtime is your own Hermes endpoint.</p>
+<h3>Duplex and interruption</h3>
+<p><code>HALF_DUPLEX=1</code> (default): while the assistant speaks, the microphone is not
+evaluated. Robust, and the cost is not being able to interrupt by voice.</p>
+<p><code>HALF_DUPLEX=0</code> enables <strong>echo suppression</strong> and you can interrupt by speaking.</p>
+<p>This is not AEC. Real AEC estimates the room impulse response with an adaptive
+filter and subtracts echo from the signal. What we do is more modest and solves the
+case that matters: since we generate the output audio, we know exactly what was
+sent. For each microphone frame, we check whether <strong>any</strong> alignment of the
+reference, within a 320 ms window, explains the captured energy. If it does, it's
+echo. If not, it's you. Two hundred lines of numpy, zero dependencies.</p>
+<p>Tested with 20–300 ms delay and 0.25–1.3 room gain: zero false positives with
+pure echo, and triggers with overlapping speech.</p>
+<p>Practical consequence: you interrupt by speaking louder than the speaker. No
+low-volume overlapping conversation. With headphones none of this is necessary —
+there's no echo.</p>
+<h3>Architecture</h3>
 <table>
 <thead>
 <tr>
-<th>Módulo</th>
-<th>Responsabilidade</th>
+<th>Module</th>
+<th>Responsibility</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>session.py</code></td>
-<td>Máquina de estados, limites de buffer, limpeza da palavra de ativação</td>
+<td>State machine, buffer limits, wake word cleanup</td>
 </tr>
 <tr>
 <td><code>wake.py</code></td>
-<td>openWakeWord, com adaptador de tamanho de frame</td>
+<td>openWakeWord, with frame size adapter</td>
 </tr>
 <tr>
 <td><code>vad.py</code></td>
-<td>Silero via onnxruntime (sem torch), fallback por energia, histerese</td>
+<td>Silero via onnxruntime (no torch), energy fallback, hysteresis</td>
 </tr>
 <tr>
 <td><code>stt.py</code></td>
-<td>faster-whisper com vocabulário de domínio e queda para CPU</td>
+<td>faster-whisper with domain vocabulary and CPU fallback</td>
 </tr>
 <tr>
 <td><code>llm.py</code></td>
-<td>Cliente SSE e o fatiador de sentenças</td>
+<td>SSE client and sentence chunker</td>
 </tr>
 <tr>
 <td><code>tts/</code></td>
-<td>Quatro backends, DSP e playback interrompível</td>
+<td>Four backends, DSP, and interruptible playback</td>
 </tr>
 <tr>
 <td><code>endpoint.py</code></td>
-<td>Endpointing adaptativo por sintaxe</td>
+<td>Adaptive endpointing by syntax</td>
 </tr>
 <tr>
 <td><code>normalize.py</code></td>
-<td>Números, datas, siglas e abreviações em pt-BR</td>
+<td>Numbers, dates, acronyms and abbreviations in pt-BR</td>
 </tr>
 <tr>
 <td><code>echo.py</code></td>
-<td>Supressão de eco por referência, só numpy</td>
+<td>Reference-based echo suppression, numpy only</td>
 </tr>
 <tr>
 <td><code>voices.py</code></td>
-<td>Catálogo e download de vozes e modelos</td>
+<td>Voice and model catalog and download</td>
 </tr>
 <tr>
 <td><code>doctor.py</code></td>
-<td>Autodiagnóstico</td>
+<td>Self-diagnostic</td>
 </tr>
 <tr>
 <td><code>loops.py</code></td>
-<td>Os três modos de gatilho</td>
+<td>The three trigger modes</td>
 </tr>
 </tbody></table>
-<p>Não existe speech-to-speech local decente em pt-BR hoje — Moshi é inglês e francês, GLM-4-Voice é chinês e inglês, Qwen-Omni sintetiza só inglês e mandarim. Pipeline encadeado é a escolha certa, não um compromisso. Reavaliar em alguns meses.</p>
-<h3>Testes</h3>
+<p>There's no decent local speech-to-speech in pt-BR today — Moshi is English and
+French, GLM-4-Voice is Chinese and English, Qwen-Omni synthesizes only English and
+Mandarin. A chained pipeline is the right choice, not a compromise. Reassess in a
+few months.</p>
+<h3>Tests</h3>
 <pre><code class="language-bash">pip install -e ".[dev]" &amp;&amp; pytest
 </code></pre>
-<p>229 testes, nenhum exigindo placa de som, GPU, rede ou chave de API. Isso é requisito, não coincidência: projeto de áudio que só pode ser testado com hardware termina sem testes. Os imports de <code>sounddevice</code> são preguiçosos de propósito.</p>
-<p>O teste que mais vale: o fatiador de sentenças é verificado com deltas de 1 a 23 caracteres, exigindo resultado idêntico. Sem essa propriedade, o áudio muda conforme a velocidade da rede — que foi exatamente o bug que cortava "12:30" ao meio.</p>
-<h3>Nome e marcas</h3>
-<p>O projeto se chama <strong>hermes-voice</strong> e não é afiliado, patrocinado nem endossado por nenhum detentor de marca.</p>
-<p><code>hey_jarvis</code> aparece como valor padrão de <code>WAKE_MODEL</code> porque é o identificador de um dos poucos modelos pré-treinados que o openWakeWord distribui — é dependência funcional e nome de arquivo de terceiro, não branding deste projeto. Troque em <code>WAKE_MODEL</code> para qualquer outro do catálogo (<code>alexa</code>, <code>hey_mycroft</code>, <code>hey_rhasspy</code>), ou treine o seu.</p>
-<p>O <strong>nome da persona</strong> é configurável em <code>docs/persona.md</code>: o que você chama o seu assistente na sua máquina é decisão sua.</p>
-<p>Se você for renomear um fork, pesquise a marca antes de construir audiência. Há <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VOICE_LICENSING.md">casos conhecidos</a> de produtos de IA que precisaram ser renomeados, e renomear depois custa estrelas, links e SEO.</p>
-<h3>Contribuindo</h3>
-<p><a href="https://github.com/handnewb/hermes-voice/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> para o ambiente e as regras de código.
-<a href="https://github.com/handnewb/hermes-voice/blob/main/GOVERNANCE.md"><code>GOVERNANCE.md</code></a> para como decisões são tomadas, quem pode o quê,
-e qual processo entra em cada estágio do projeto. <a href="https://github.com/handnewb/hermes-voice/blob/main/SUPPORT.md"><code>SUPPORT.md</code></a> para
-onde perguntar o quê.</p>
-<p>Contribuir não exige nenhuma permissão: fork mais pull request cobre todos os
-casos. O único gate obrigatório é CI verde.</p>
-<h3>Licença</h3>
-<p><a href="LICENSE">Apache 2.0</a> para o código. Modelos e vozes baixados têm licenças
-próprias, todas permissivas: Piper e as vozes do rhasspy são MIT, Kokoro-82M é
-Apache-2.0, Silero VAD é MIT, openWakeWord é Apache-2.0.</p>
-<p>Nenhum componente do caminho padrão restringe uso comercial. Ver
-<a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VOICE_LICENSING.md"><code>docs/VOICE_LICENSING.md</code></a> para o que fica de fora e
-por quê.</p>
-<h3>Agradecimentos</h3>
+<p>229 tests, none requiring a sound card, GPU, network, or API key. This is a
+requirement, not a coincidence: an audio project that can only be tested with
+hardware ends up with no tests. The <code>sounddevice</code> imports are lazy on purpose.</p>
+<p>The test that matters most: the sentence chunker is verified with deltas of 1 to
+23 characters, requiring identical results. Without this property, the audio
+changes with network speed — which was exactly the bug that cut "12:30" in half.</p>
+<h3>Name and trademarks</h3>
+<p>The project is called <strong>hermes-voice</strong> and is not affiliated with, sponsored by, or
+endorsed by any trademark holder.</p>
+<p><code>hey_jarvis</code> appears as the default value of <code>WAKE_MODEL</code> because it's the
+identifier of one of the few pre-trained models that openWakeWord distributes — it's
+a functional dependency and a third-party filename, not branding of this project.
+Change it in <code>WAKE_MODEL</code> to any other in the catalog (<code>alexa</code>, <code>hey_mycroft</code>,
+<code>hey_rhasspy</code>), or train your own.</p>
+<p>The <strong>persona name</strong> is configurable in <code>docs/persona.md</code>: what you call your
+assistant on your machine is your decision.</p>
+<p>If you rename a fork, research the trademark before building an audience. There
+are <a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VOICE_LICENSING.md">known cases</a> of AI products that had to be renamed,
+and renaming later costs stars, links, and SEO.</p>
+<h3>Contributing</h3>
+<p><a href="https://github.com/handnewb/hermes-voice/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> for the environment and code rules.
+<a href="https://github.com/handnewb/hermes-voice/blob/main/GOVERNANCE.md"><code>GOVERNANCE.md</code></a> for how decisions are made, who can do what, and
+which process applies at each project stage. <a href="https://github.com/handnewb/hermes-voice/blob/main/SUPPORT.md"><code>SUPPORT.md</code></a> for where
+to ask what.</p>
+<p>Contributing requires no permission: fork plus pull request covers all cases. The
+only mandatory gate is green CI.</p>
+<h3>License</h3>
+<p><a href="LICENSE">Apache 2.0</a> for the code. Downloaded models and voices have their own
+licenses, all permissive: Piper and rhasspy voices are MIT, Kokoro-82M is
+Apache-2.0, Silero VAD is MIT, openWakeWord is Apache-2.0.</p>
+<p>No component in the default path restricts commercial use. See
+<a href="https://github.com/handnewb/hermes-voice/blob/main/docs/VOICE_LICENSING.md"><code>docs/VOICE_LICENSING.md</code></a> for what stays out and why.</p>
+<h3>Acknowledgments</h3>
 <p><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> (Nous Research) • <a href="https://github.com/SYSTRAN/faster-whisper">faster-whisper</a> • <a href="https://github.com/snakers4/silero-vad">Silero VAD</a> • <a href="https://github.com/rhasspy/piper">Piper</a> • <a href="https://github.com/dscripka/openWakeWord">openWakeWord</a> • <a href="https://huggingface.co/hexgrad/Kokoro-82M">Kokoro-82M</a> • <a href="https://github.com/thewh1teagle/kokoro-onnx">kokoro-onnx</a></p>
 
   </section>
