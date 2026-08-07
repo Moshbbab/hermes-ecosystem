@@ -47,6 +47,21 @@ hermes -w                         # Interactive mode in worktree
 hermes -w -z "Fix issue #123"     # Single query in worktree
 ```
 
+### Plugin management
+
+The `hermes plugins` commands manage native Hermes plugins and portable Agent Plugins v1 packages through the same opt-in workflow:
+
+```
+hermes plugins install owner/repository --no-enable
+hermes plugins list
+hermes plugins enable <plugin-name>
+hermes plugins disable <plugin-name>
+hermes plugins update <plugin-name>
+hermes plugins remove <plugin-name>
+```
+
+Portable packages remain disabled until explicitly enabled. Hermes currently loads portable Agent Skills and stdio MCP entries. See the [plugin developer guide](/docs/developer-guide/plugins#portable-agent-plugins-v1-packages) for the exact supported subset and trust boundary.
+
 ## Interface Layout
 
 ![Stylized preview of the Hermes CLI layout showing the banner, conversation area, and fixed input prompt.](/docs/img/docs/cli-layout.svg)

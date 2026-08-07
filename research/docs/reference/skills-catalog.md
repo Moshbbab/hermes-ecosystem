@@ -332,6 +332,12 @@ Airtable REST API via curl. Records CRUD, filters, upserts.
 
 `productivity/airtable`
 
+[`document-to-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items)
+
+Extract cited obligations, deadlines, tasks from documents.
+
+`productivity/document-to-action-items`
+
 [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx)
 
 Create, read, edit Word .docx documents and templates.
