@@ -424,12 +424,6 @@ Karpathy's LLM Wiki: build/query interlinked markdown KB.
 
 `research/llm-wiki`
 
-[`polymarket`](/docs/user-guide/skills/bundled/research/research-polymarket)
-
-Query Polymarket: markets, prices, orderbooks, history.
-
-`research/polymarket`
-
 [`research-paper-writing`](/docs/user-guide/skills/bundled/research/research-research-paper-writing)
 
 Write ML papers for NeurIPS/ICML/ICLR: design→submit.

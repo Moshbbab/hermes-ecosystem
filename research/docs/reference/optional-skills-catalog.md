@@ -225,6 +225,10 @@ Build leveraged buyout workbooks with IRR/MOIC in Excel.
 
 Build M&A accretion/dilution workbooks in Excel.
 
+[**polymarket**](/docs/user-guide/skills/optional/finance/finance-polymarket)
+
+Query Polymarket: markets, prices, orderbooks, history.
+
 [**pptx-author**](/docs/user-guide/skills/optional/finance/finance-pptx-author)
 
 Build PowerPoint decks headless with python-pptx.
