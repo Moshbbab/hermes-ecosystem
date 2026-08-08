@@ -190,6 +190,12 @@ Description
 
 Path
 
+[`email-inbox-triage`](/docs/user-guide/skills/bundled/email/email-email-inbox-triage)
+
+Triage an inbox: prioritize threads, draft replies safely.
+
+`email/email-inbox-triage`
+
 [`himalaya`](/docs/user-guide/skills/bundled/email/email-himalaya)
 
 Himalaya CLI: IMAP/SMTP email from terminal.
@@ -221,6 +227,12 @@ GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login.
 Review PRs: diffs, inline comments via gh or REST.
 
 `github/github-code-review`
+
+[`github-issue-to-pr`](/docs/user-guide/skills/bundled/github/github-github-issue-to-pr)
+
+Carry a GitHub issue to a verified PR with honest CI state.
+
+`github/github-issue-to-pr`
 
 [`github-issues`](/docs/user-guide/skills/bundled/github/github-github-issues)
 

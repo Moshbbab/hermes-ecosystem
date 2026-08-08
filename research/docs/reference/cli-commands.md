@@ -28,11 +28,15 @@ Select which Hermes profile to use for this invocation. Overrides the sticky def
 
 `--resume <session>`, `-r <session>`
 
-Resume a previous session by ID or title.
+Resume a previous session by ID or title. The keyword `latest` resumes the most recent session (workspace-scoped, same lookup as `-c`).
 
 `--continue [name]`, `-c [name]`
 
 Resume the most recent session, or the most recent session matching a title.
+
+`--in <dir>`
+
+Change into `<dir>` before starting or resuming. Scopes `--resume latest` / `-c` lookups to that directory's workspace and keeps the session there (skips the recorded-cwd restore).
 
 `--worktree`, `-w`
 
