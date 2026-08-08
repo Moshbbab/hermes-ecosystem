@@ -249,7 +249,7 @@ The rewrite uses `auxiliary.tts_audio_tags` and defaults to your main chat model
 
 ### Input length limits
 
-Each provider has a documented per-request input-character cap. Hermes truncates text before calling the provider so requests never fail with a length error:
+Each provider has a documented per-request input-character cap. Hermes splits longer replies into ordered, sentence-aware chunks before calling the provider, so the full normalized text is preserved instead of silently truncated:
 
 Provider
 
@@ -329,7 +329,7 @@ tts:
     max_text_length: 8192   # raise or lower the provider cap
 ```
 
-Only positive integers are honored. Zero, negative, non-numeric, or boolean values fall through to the provider default, so a broken config can't accidentally disable truncation.
+Only positive integers are honored. Zero, negative, non-numeric, or boolean values fall through to the provider default, so a broken config can't accidentally bypass the provider request limit.
 
 ### Telegram Voice Bubbles & ffmpeg
 
@@ -537,7 +537,7 @@ When `true`, Hermes converts MP3/WAV output to Opus/OGG via ffmpeg so Telegram r
 
 `5000`
 
-Input is truncated to this length before rendering the command.
+Maximum input characters per command invocation; longer text is split into ordered chunks.
 
 `voice` / `model`
 

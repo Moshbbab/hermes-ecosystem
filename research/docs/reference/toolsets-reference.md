@@ -168,9 +168,9 @@ Persistent cross-session memory management.
 
 `desktop_ui`
 
-`close_terminal`, `focus_pane`, `open_preview`, `react_to_message`, `read_preview`, `read_terminal`
+`close_terminal`, `focus_pane`, `open_preview`, `react_to_message`, `read_preview`, `read_terminal`, `read_window_below`
 
-Affordances that act on the Hermes desktop app itself — read/close the embedded terminal pane, open and read the in-app browser, reveal a pane, react to a message. Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions.
+Affordances that act on the Hermes desktop app itself — read/close the embedded terminal pane, open and read the in-app browser, identify the OS window behind the app, reveal a pane, react to a message. Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions.
 
 `project`
 
