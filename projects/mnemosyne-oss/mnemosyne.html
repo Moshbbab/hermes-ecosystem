@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mnemosyne-oss/mnemosyne — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Mnemosyne is a SQLite-backed memory layer for AI agents that operates without external cloud services. It provides a Python SDK and MCP server support for…">
+<meta name="description" content="Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server capabilities for storing and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta property="og:description" content="Mnemosyne is a SQLite-backed memory layer for AI agents that operates without external cloud services. It provides a Python SDK and MCP server support for…">
+<meta property="og:description" content="Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server capabilities for storing and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta name="twitter:description" content="Mnemosyne is a SQLite-backed memory layer for AI agents that operates without external cloud services. It provides a Python SDK and MCP server support for…">
+<meta name="twitter:description" content="Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server capabilities for storing and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=mnemosyne&amp;subtitle=Zero-cloud+AI+memory+that+works+everywhere.+SQLite-backed.+One+pure-Python+dependency.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a SQLite-backed memory layer for AI agents that operates without external cloud services. It provides a Python SDK and MCP server support for integration with various agent frameworks.",
+  "description": "Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server capabilities for storing and recalling information without external cloud services.",
   "url": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne",
   "codeRepository": "https://github.com/mnemosyne-oss/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "mnemosyne-oss",
     "url": "https://github.com/mnemosyne-oss"
   },
-  "dateModified": "2026-08-08T02:45:40.000Z",
+  "dateModified": "2026-08-08T12:39:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2218
+    "userInteractionCount": 2221
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -138,7 +138,7 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a SQLite-backed memory layer for AI agents that operates without external cloud services. It provides a Python SDK and MCP server support for integration with various agent frameworks.</p>
+    <p class="summary-text">Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server capabilities for storing and recalling information without external cloud services.</p>
     <ul class="summary-highlights">
       <li>Uses a single SQLite database</li>
       <li>Supports MCP via stdio or SSE</li>
@@ -761,6 +761,11 @@ Mnemosyne Sync supports optional client-side encryption. When disabled, memory c
 <td><code>BAAI/bge-small-en-v1.5</code></td>
 <td>Embedding model. Low-resource multilingual: <code>sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2</code>; larger options: <code>intfloat/multilingual-e5-base</code>, <code>BAAI/bge-m3</code>.</td>
 </tr>
+<tr>
+<td><code>MNEMOSYNE_EMBEDDING_DIM</code></td>
+<td><em>(unset)</em></td>
+<td>Optional embedding dimension override (positive integer); takes precedence over the built-in model table. Blank/whitespace-only is treated as unset.</td>
+</tr>
 </tbody></table>
 <p>Full reference: <a href="https://github.com/mnemosyne-oss/mnemosyne/blob/main/docs/configuration.md">docs/configuration.md</a></p>
 <h4>Language Support</h4>
@@ -795,7 +800,7 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 <td><code>mnemosyne-memory</code> (core)</td>
 <td>Low-resource (Raspberry Pi, 1 GB VPS), or when using a remote embedding API</td>
 <td>~50 MB</td>
-<td>No local embeddings. Point <code>MNEMOSYNE_EMBEDDING_API_URL</code> to an external endpoint.</td>
+<td>No local embeddings. Point <code>MNEMOSYNE_EMBEDDING_API_URL</code> to an external endpoint, and set <code>MNEMOSYNE_EMBEDDING_DIM</code> for models not in the built-in table (else direct startup fails loudly).</td>
 </tr>
 <tr>
 <td><code>mnemosyne-memory[embeddings]</code></td>
@@ -813,7 +818,7 @@ export MNEMOSYNE_EMBEDDING_MODEL=BAAI/bge-small-zh-v1.5
 <td><code>mnemosyne-hermes</code></td>
 <td>Hermes Agent users -- always pair with one of the above</td>
 <td>Same as base</td>
-<td>Wraps core library with plugin manifest + entry points. Run <code>hermes config set memory.provider mnemosyne</code> after install.</td>
+<td>Wraps core library with plugin manifest + entry points; degrades instead of exiting on core init errors. Run <code>hermes config set memory.provider mnemosyne</code> after install.</td>
 </tr>
 </tbody></table>
 <p><strong>Hardware guidance:</strong> Core alone runs on a Raspberry Pi 4 (4 GB) with ~300 MB free for LLM. <code>[embeddings]</code> needs at least 2 GB free RAM. <code>[all]</code> recommends 8 GB+.</p>
@@ -947,7 +952,7 @@ mnemosyne sync-status --remote https://my-vps:8765
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 232</div>
+        <div class="stars">★ 233</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
