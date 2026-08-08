@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files.",
+  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents and clients by accessing local data files.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-08-07T19:31:23.000Z",
+  "dateModified": "2026-08-08T00:21:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4842
+    "userInteractionCount": 4848
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-07</span>
+    <span><span class="meta-label">updated</span>2026-08-08</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents and clients by accessing local data files.</p>
     <ul class="summary-highlights">
       <li>Provides a CLI tool and visualization dashboard</li>
-      <li>Tracks token usage and costs across multiple AI coding agents</li>
-      <li>Supports data from clients including Claude Code, Cursor, and GitHub Copilot</li>
+      <li>Tracks token usage and costs for multiple AI coding agents</li>
+      <li>Supports data ingestion from various local client directories</li>
     </ul>
   </div>
 </section>
@@ -906,7 +906,7 @@ tokscale pricing list-overrides
   }
 }
 </code></pre>
-<p>Override prices are entered in dollars per million tokens, matching how most API providers publish pricing; Tokscale converts them to per-token rates internally. At least one of <code>input_cost_per_million_tokens</code> or <code>output_cost_per_million_tokens</code> must be present and positive, and cache-read/cache-creation fields are optional. LiteLLM-style per-token field names such as <code>input_cost_per_token</code>, <code>output_cost_per_token</code>, and <code>cache_read_input_token_cost</code> are also accepted for copy/paste compatibility, but the per-million names are the recommended user-facing form. To omit a tier or cache price, leave the field out; negative or non-finite values are treated as invalid and the whole model entry is skipped so typos do not silently alter accounting. Optional <code>source</code> and <code>notes</code> fields are ignored by Tokscale and can be used for your own bookkeeping.</p>
+<p>Override prices are entered in dollars per million tokens, matching how most API providers publish pricing; Tokscale converts them to per-token rates internally. At least one of <code>input_cost_per_million_tokens</code> or <code>output_cost_per_million_tokens</code> must be present, and cache-read/cache-creation fields are optional. An explicit <code>0</code> is allowed and is the way to declare a free model — it is a statement ("this costs nothing"), unlike an omitted field, which means the rate is unknown and leaves the usage unpriced. LiteLLM-style per-token field names such as <code>input_cost_per_token</code>, <code>output_cost_per_token</code>, and <code>cache_read_input_token_cost</code> are also accepted for copy/paste compatibility, but the per-million names are the recommended user-facing form. To omit a tier or cache price, leave the field out; negative or non-finite values are treated as invalid and the whole model entry is skipped so typos do not silently alter accounting. Optional <code>source</code> and <code>notes</code> fields are ignored by Tokscale and can be used for your own bookkeeping.</p>
 <p>Overrides are exact-only and case-insensitive. Tokscale checks the raw model ID first, then the existing synthetic <code>/models/</code> normalization, then falls through to LiteLLM, OpenRouter, Cursor pricing, and fuzzy matching if no override matches. Raw exact matches beat normalized exact matches, so <code>accounts/fireworks/routers/kimi-k2p6-turbo</code> can override one gateway-specific model while <code>kimi-k2p6-turbo</code> can cover normalized <code>/models/</code> paths. Overrides are loaded once at startup; restart the command after editing the file. This is the recommended local fix for wrong-model pricing bugs while waiting on upstream LiteLLM pricing updates.</p>
 <p><strong>Provider Preference:</strong></p>
 <p>When multiple matches exist, original model creators are preferred over resellers:</p>
@@ -1303,12 +1303,7 @@ tokscale codex switch work
 # only — the codex CLI's own auth.json/login is never touched)
 tokscale codex remove personal
 
-# Check subscription usage for the active or a named account
-tokscale codex status
-tokscale codex status --name personal --json
-
-# Fetch the active Codex app-server account activity separately from local totals
-tokscale codex 
+# Check subscription usage for the active
 
 ---
 
@@ -1330,7 +1325,7 @@ tokscale codex
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 828</div>
+        <div class="stars">★ 829</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1342,7 +1337,7 @@ tokscale codex
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 539</div>
+        <div class="stars">★ 540</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
@@ -1354,7 +1349,7 @@ tokscale codex
         <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
       </a>
       <a class="related-row" href="/projects/Abruptive/Ankh.md">
-        <div class="stars">★ 71</div>
+        <div class="stars">★ 72</div>
         <div class="name"><span class="org">Abruptive /</span> Ankh.md</div>
       </a>
     </div>
