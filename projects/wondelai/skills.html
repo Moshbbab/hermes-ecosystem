@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/wondelai/skills#software",
   "name": "wondelai/skills",
-  "description": "Wondel.ai Agent Skills provides 62 agent skills based on 50 frameworks from bestselling books. The library includes 12 metaskills that function as guided journeys to manage business, website, app, or code development.",
+  "description": "Wondel.ai Agent Skills provides 62 agent skills based on 50 frameworks from bestselling books. The library includes 12 metaskills that function as guided journeys to orchestrate business, website, app, or code development.",
   "url": "https://hermesatlas.com/projects/wondelai/skills",
   "codeRepository": "https://github.com/wondelai/skills",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "wondelai",
     "url": "https://github.com/wondelai"
   },
-  "dateModified": "2026-08-07T13:24:18.000Z",
+  "dateModified": "2026-08-09T15:33:04.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1871
+    "userInteractionCount": 1872
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Shell</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-07</span>
+    <span><span class="meta-label">updated</span>2026-08-09</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Wondel.ai Agent Skills provides 62 agent skills based on 50 frameworks from bestselling books. The library includes 12 metaskills that function as guided journeys to manage business, website, app, or code development.</p>
+    <p class="summary-text">Wondel.ai Agent Skills provides 62 agent skills based on 50 frameworks from bestselling books. The library includes 12 metaskills that function as guided journeys to orchestrate business, website, app, or code development.</p>
     <ul class="summary-highlights">
       <li>Compatible with Claude Code and agentskills.io-compatible agents</li>
-      <li>Includes 12 metaskills for guided business and code journeys</li>
-      <li>Supports installation via Claude Code Plugin Marketplace and skills.sh</li>
+      <li>Includes 12 metaskills that preserve state in a docs/ folder</li>
+      <li>Available as spec-conformant Agent Plugins</li>
     </ul>
   </div>
 </section>
@@ -151,7 +151,7 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <h2>Wondel.ai Agent Skills — Business, Marketing, UX &amp; Coding Frameworks from Bestselling Books</h2>
-<p>62 agent skills for Claude, Claude Code, Claude Cowork, Codex, Cursor, OpenClaw, Hermes Agent and other agentskills.io-compatible agents: 50 expert frameworks from bestselling books, plus 12 <strong>metaskills</strong> — guided journeys that orchestrate them step by step to create, improve, or grow a business, website, or app, and to improve code quality, remove technical debt, or design code architecture. Each metaskill asks you the decision questions phase by phase and keeps its state in your project's <code>docs/</code> folder, so a journey survives across sessions. Browse all skills at <a href="https://skills.wondel.ai/">skills.wondel.ai</a>.</p>
+<p>62 agent skills for Claude, Claude Code, Claude Cowork, Codex, Cursor, OpenClaw, Hermes Agent and other agentskills.io-compatible agents — also packaged as spec-conformant <a href="https://agent-plugins.org/">Agent Plugins</a>: 50 expert frameworks from bestselling books, plus 12 <strong>metaskills</strong> — guided journeys that orchestrate them step by step to create, improve, or grow a business, website, or app, and to improve code quality, remove technical debt, or design code architecture. Each metaskill asks you the decision questions phase by phase and keeps its state in your project's <code>docs/</code> folder, so a journey survives across sessions. Browse all skills at <a href="https://skills.wondel.ai/">skills.wondel.ai</a>.</p>
 <h3>Installation</h3>
 <h4>Via Claude Code Plugin Marketplace</h4>
 <pre><code class="language-bash"># Add the marketplace
@@ -244,7 +244,14 @@ npx skills add wondelai/skills/design-code-architecture --global
 <p>Codex adopted the same open <code>SKILL.md</code> standard, so every skill here works in Codex CLI too:</p>
 <ul>
 <li><strong>Individual skills</strong> — the <code>npx skills add wondelai/skills/&lt;name&gt;</code> commands above target Codex as well (Codex is a supported <a href="https://agentskills.io">agentskills.io</a> agent).</li>
-<li><strong>As Codex plugins</strong> — this repo ships a Codex plugin marketplace at <a href="https://github.com/wondelai/skills/blob/main/.agents/plugins/marketplace.json"><code>.agents/plugins/marketplace.json</code></a> with the same 10 collections. In a clone, Codex auto-discovers it (and the skills under <code>.agents/skills/</code>); manage installs from the <code>/plugins</code> menu in the Codex TUI. The Codex manifests are generated from <code>.claude-plugin/marketplace.json</code> (single source of truth) by <code>scripts/generate-codex-plugins.sh</code>.</li>
+<li><strong>As Codex plugins</strong> — this repo ships a Codex plugin marketplace at <a href="https://github.com/wondelai/skills/blob/main/.agents/plugins/marketplace.json"><code>.agents/plugins/marketplace.json</code></a> with the same 10 collections. In a clone, Codex auto-discovers it (and the skills under <code>.agents/skills/</code>); manage installs from the <code>/plugins</code> menu in the Codex TUI. The Codex manifests are generated from <code>.claude-plugin/marketplace.json</code> (single source of truth) by <code>scripts/generate-plugins.sh</code>.</li>
+</ul>
+<h4>Via Agent Plugins (agent-plugins.org)</h4>
+<p>The same collections also ship in the open <a href="https://agent-plugins.org/">Agent Plugins</a> format (spec v1.0.0), so any conforming client can install them:</p>
+<ul>
+<li><strong>Collection plugins</strong> — each <code>plugins/&lt;collection&gt;/</code> directory is a self-contained Agent Plugin: a root <code>plugin.json</code> manifest plus real copies of its skills under <code>skills/</code> — the same 10 collections as the Claude marketplace.</li>
+<li><strong>All-in-one bundle</strong> — <a href="plugins/wondelai-skills/"><code>plugins/wondelai-skills/</code></a> is a single Agent Plugin containing all 62 skills.</li>
+<li><strong>Installing</strong> — the spec defines the package format; installation is client-specific. Clone this repo and point your client at a plugin directory (e.g. <code>plugins/marketing-cro</code> or <code>plugins/wondelai-skills</code>). The manifests are generated from <a href="https://github.com/wondelai/skills/blob/main/.claude-plugin/marketplace.json"><code>.claude-plugin/marketplace.json</code></a> (single source of truth) by <code>scripts/generate-plugins.sh</code>.</li>
 </ul>
 <h3>Available Skills</h3>
 <table>
@@ -847,14 +854,7 @@ npx skills add wondelai/skills/design-code-architecture --global
 </ul>
 <hr>
 <h4><a href="https://skills.wondel.ai/skills/influence-psychology/">influence-psychology</a></h4>
-<p>Persuasion science framework applying Robert Cialdini's seven universal principles of influence (Reciprocity, Commitment &amp; Consistency, Social Proof, Authority, Liking, Scarcity, Unity) to product design, marketing, and communication.</p>
-<p><strong>About the author:</strong> <a href="https://x.com/RobertCialdini">Robert B. Cialdini, PhD</a> is Regents' Professor Emeritus of Psychology and Marketing at Arizona State University. His research on the psychology of influence has been published extensively and cited across disciplines. <a href="https://www.amazon.com/Influence-Psychology-Persuasion-Robert-Cialdini/dp/006124189X?tag=wondelai00-20"><em>"Influence: The Psychology of Persuasion"</em></a> has sold over 5 million copies worldwide and is considered the foundational text on persuasion science. Cialdini has consulted for Fortune 500 companies, government agencies, and nonprofits on ethical influence strategies.</p>
-<p><strong>Use when you need to:</strong></p>
-<ul>
-<li>Design features that leverage social proof</li>
-<li>Write persuasive copy and messaging</li>
-<li>Analyze why users tak</li>
-</ul>
+<p>Persuasion</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/wondelai/skills#readme">Continue reading on GitHub</a></em></p>
 
@@ -881,7 +881,7 @@ npx skills add wondelai/skills/design-code-architecture --global
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 7.3K</div>
+        <div class="stars">★ 7.4K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
@@ -889,7 +889,7 @@ npx skills add wondelai/skills/design-code-architecture --global
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 240</div>
+        <div class="stars">★ 241</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">

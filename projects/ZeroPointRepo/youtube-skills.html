@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZeroPointRepo/youtube-skills — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="YouTube Skills is a collection of tools that enables AI agents to interact with YouTube content without relying on browser automation or local binaries. It…">
+<meta name="description" content="YouTube Skills provides AI agents with access to YouTube transcripts, video search, channel data, and playlist extraction via TranscriptAPI. It is designed to…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ZeroPointRepo/youtube-skills">
 <meta property="og:title" content="ZeroPointRepo/youtube-skills — Hermes Atlas">
-<meta property="og:description" content="YouTube Skills is a collection of tools that enables AI agents to interact with YouTube content without relying on browser automation or local binaries. It…">
+<meta property="og:description" content="YouTube Skills provides AI agents with access to YouTube transcripts, video search, channel data, and playlist extraction via TranscriptAPI. It is designed to…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ZeroPointRepo/youtube-skills">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ZeroPointRepo/youtube-skills — Hermes Atlas">
-<meta name="twitter:description" content="YouTube Skills is a collection of tools that enables AI agents to interact with YouTube content without relying on browser automation or local binaries. It…">
+<meta name="twitter:description" content="YouTube Skills provides AI agents with access to YouTube transcripts, video search, channel data, and playlist extraction via TranscriptAPI. It is designed to…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=youtube-skills&amp;subtitle=YouTube+Transcript+API+skills+for+AI+agents.+Get+transcripts%2C+search+videos%2C+browse+channels.+Works+with+OpenClaw%2C+Hermes-Agent%2C+Claude+Code%2C+Cursor%2C+Windsurf.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ZeroPointRepo/youtube-skills#software",
   "name": "youtube-skills",
-  "description": "YouTube Skills is a collection of tools that enables AI agents to interact with YouTube content without relying on browser automation or local binaries. It utilizes the TranscriptAPI backend to bypass cloud IP blocks, providing agents with direct access to video transcripts, search results, and channel metadata. The project integrates with Hermes Agent, OpenClaw, and Claude Code using the Agent Skills format. Users can perform tasks like summarizing videos, extracting playlist contents, and sear",
+  "description": "YouTube Skills provides AI agents with access to YouTube transcripts, video search, channel data, and playlist extraction via TranscriptAPI. It is designed to work with agents supporting the Agent Skills format, including Hermes Agent, OpenClaw, Claude Code, Cursor, and Windsurf.",
   "url": "https://hermesatlas.com/projects/ZeroPointRepo/youtube-skills",
   "codeRepository": "https://github.com/ZeroPointRepo/youtube-skills",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "ZeroPointRepo",
     "url": "https://github.com/ZeroPointRepo"
   },
-  "dateModified": "2026-05-20T12:15:55.000Z",
+  "dateModified": "2026-08-09T18:50:42.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -122,7 +122,7 @@
     
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-05-20</span>
+    <span><span class="meta-label">updated</span>2026-08-09</span>
   </div>
 
   <div class="actions">
@@ -137,11 +137,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">YouTube Skills is a collection of tools that enables AI agents to interact with YouTube content without relying on browser automation or local binaries. It utilizes the TranscriptAPI backend to bypass cloud IP blocks, providing agents with direct access to video transcripts, search results, and channel metadata. The project integrates with Hermes Agent, OpenClaw, and Claude Code using the Agent Skills format. Users can perform tasks like summarizing videos, extracting playlist contents, and searching for specific channel uploads through natural language prompts.</p>
+    <p class="summary-text">YouTube Skills provides AI agents with access to YouTube transcripts, video search, channel data, and playlist extraction via TranscriptAPI. It is designed to work with agents supporting the Agent Skills format, including Hermes Agent, OpenClaw, Claude Code, Cursor, and Windsurf.</p>
     <ul class="summary-highlights">
-      <li>Extracts transcripts, captions, and timestamps without using yt-dlp</li>
-      <li>Supports video search, channel browsing, and playlist extraction</li>
-      <li>Compatible with Hermes Agent, OpenClaw, and Claude Code</li>
+      <li>Provides transcripts, search, channels, and playlist extraction</li>
+      <li>Powered by TranscriptAPI</li>
+      <li>Supports agents using the Agent Skills format</li>
     </ul>
   </div>
 </section>
@@ -520,10 +520,65 @@ npx skills add ZeroPointRepo/youtube-skills --skill transcript --skill youtube-s
 <h4>What is TranscriptAPI?</h4>
 <p><a href="https://transcriptapi.com">TranscriptAPI.com</a> is a REST API and MCP server for YouTube data. It provides transcript extraction, video search, channel browsing, and playlist operations — built for developers and AI agents. Also available as an <a href="https://github.com/ZeroPointRepo/youtube-mcp">MCP Server</a> for direct LLM integration (Claude, ChatGPT).</p>
 <hr>
+<h3>Troubleshooting</h3>
+<p>Quick fixes for the issues users actually hit. Error codes come from the API itself, so your agent will usually report them verbatim.</p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>401 Unauthorized</code></td>
+<td>API key missing, mistyped, or not loaded into the environment</td>
+<td>Confirm <code>TRANSCRIPT_API_KEY</code> is set in the shell your agent runs in and that the key starts with <code>sk_</code></td>
+</tr>
+<tr>
+<td><code>402 Payment Required</code></td>
+<td>The account is out of credits</td>
+<td>Check your balance at <a href="https://transcriptapi.com/billing">transcriptapi.com/billing</a></td>
+</tr>
+<tr>
+<td><code>403</code> with Cloudflare code <code>1010</code></td>
+<td>Request sent without a User-Agent header</td>
+<td>Send your agent's name as the User-Agent, for example <code>HermesAgent/0.11.0</code></td>
+</tr>
+<tr>
+<td><code>404 Not Found</code></td>
+<td>The video has no captions, is not public, or the ID is wrong</td>
+<td>Verify the URL opens in a browser and the player shows captions there</td>
+</tr>
+<tr>
+<td><code>408 Request Timeout</code></td>
+<td>Temporary upstream pressure on the video</td>
+<td>Transient by nature: retry once after a couple of seconds</td>
+</tr>
+<tr>
+<td><code>422 Validation Error</code></td>
+<td>A parameter is malformed, such as a bad channel or playlist reference</td>
+<td>Channels accept <code>@handle</code>, a channel URL, or a <code>UC</code> ID; playlists accept <code>PL</code>, <code>UU</code>, <code>LL</code>, <code>FL</code>, and <code>OL</code> prefixes</td>
+</tr>
+<tr>
+<td><code>429 Too Many Requests</code></td>
+<td>Rate limit reached</td>
+<td>Wait and respect the <code>Retry-After</code> header</td>
+</tr>
+</tbody></table>
+<p>Three more cases worth knowing:</p>
+<ul>
+<li><strong>The key is saved but the agent cannot see it.</strong> Shell config files load per shell type: check the table under "Where does the key get saved?" in the Setup section and make sure the file matches the shell your agent actually runs in. Restarting the agent after saving the key resolves most cases.</li>
+<li><strong>Live streams and premieres.</strong> Transcripts become available after the stream ends and captions are processed, not while it is live.</li>
+<li><strong>Transcript comes back in an unexpected language.</strong> Many videos only carry captions in their original language. Request the transcript with a preferred language parameter, or ask your agent to translate the result.</li>
+</ul>
+<hr>
 <h3>Powered by TranscriptAPI</h3>
 <p><a href="https://transcriptapi.com">TranscriptAPI.com</a> — 15M+ transcripts/month, 99.9% uptime.</p>
 <p>Also available: <a href="https://github.com/ZeroPointRepo/youtube-mcp">MCP Server</a> for direct LLM integration with Claude and ChatGPT.</p>
 <p>Full API docs: <a href="https://transcriptapi.com/docs">transcriptapi.com/docs</a></p>
+<h3>Disclosure</h3>
+<p>TranscriptAPI is an independent product and is not affiliated with or endorsed by YouTube or Google.</p>
 <h3>Contributing</h3>
 <p>PRs welcome. See <a href="https://github.com/ZeroPointRepo/youtube-skills/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
 <h3>License</h3>
@@ -556,7 +611,7 @@ npx skills add ZeroPointRepo/youtube-skills --skill transcript --skill youtube-s
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 7.3K</div>
+        <div class="stars">★ 7.4K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
@@ -564,7 +619,7 @@ npx skills add ZeroPointRepo/youtube-skills --skill transcript --skill youtube-s
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 240</div>
+        <div class="stars">★ 241</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
