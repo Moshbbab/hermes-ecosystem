@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents and clients by accessing local data files.",
+  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files and directories.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-08-09T02:12:38.000Z",
+  "dateModified": "2026-08-09T06:57:53.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents and clients by accessing local data files.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files and directories.</p>
     <ul class="summary-highlights">
       <li>Provides a CLI tool and visualization dashboard</li>
       <li>Tracks token usage and costs for multiple AI coding agents</li>
-      <li>Supports data ingestion from various local client directories</li>
+      <li>Supports monitoring via local data file analysis</li>
     </ul>
   </div>
 </section>
@@ -264,6 +264,11 @@
 <td><code>~/.codex/sessions/</code></td>
 </tr>
 <tr>
+<td><img width="48px" src="https://github.com/PrimeIntellect-ai.png" alt="Prime Agent"></td>
+<td><a href="https://github.com/PrimeIntellect-ai/prime-agent">Prime Agent</a></td>
+<td><code>~/.prime/agent/sessions/</code> and <code>~/.prime/agent/session-artifacts/</code> (RLM child sessions)</td>
+</tr>
+<tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-sakana.png" alt="Sakana Fugu"></td>
 <td><a href="https://sakana.ai/fugu/">Sakana Fugu</a></td>
 <td>via Codex — <code>~/.codex/sessions/*.jsonl</code> (<code>model_provider: sakana</code>)</td>
@@ -297,6 +302,11 @@
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-codebuff.png" alt="Codebuff"></td>
 <td><a href="https://codebuff.com/">Codebuff</a></td>
 <td><code>~/.config/manicode/</code> (+ <code>manicode-dev</code>, <code>manicode-staging</code>; override via <code>CODEBUFF_DATA_DIR</code>)</td>
+</tr>
+<tr>
+<td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-freebuff.png" alt="Freebuff"></td>
+<td><a href="https://github.com/CodebuffAI/freebuff">Freebuff</a></td>
+<td>shares <code>~/.config/manicode/</code> with Codebuff (same runtime); token usage is estimated from the transcript (no local usage; override via <code>FREEBUFF_DATA_DIR</code>)</td>
 </tr>
 <tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-droid.png" alt="Droid"></td>
@@ -554,7 +564,7 @@
 <li>Zero flicker rendering</li>
 </ul>
 </li>
-<li><strong>Multi-platform support</strong> - Track usage across OpenCode, Claude Code, Codex CLI, Copilot CLI, Cursor IDE, Gemini CLI, Amp, Codebuff, Droid, OpenClaw, Hermes Agent, Pi, Kimchi Coding, Reasonix, Kimi CLI, Qwen CLI, Roo Code, Kilo, Mux, Kilo CLI, Crush, Goose, Antigravity, Antigravity CLI, Zed, Kiro, Trae, Warp/Oz, Cline, Gajae-Code, Grok Build, Jcode, MiMo Code, Command Code, Junie, ZCode, OpenCodeReview, CodeBuddy, WorkBuddy, Devin CLI, Devin Desktop, Augment Code, and Synthetic</li>
+<li><strong>Multi-platform support</strong> - Track usage across OpenCode, Claude Code, Codex CLI, Prime Agent, Copilot CLI, Cursor IDE, Gemini CLI, Amp, Codebuff, Droid, OpenClaw, Hermes Agent, Pi, Kimchi Coding, Reasonix, Kimi CLI, Qwen CLI, Roo Code, Kilo, Mux, Kilo CLI, Crush, Goose, Antigravity, Antigravity CLI, Zed, Kiro, Trae, Warp/Oz, Cline, Gajae-Code, Grok Build, Jcode, MiMo Code, Command Code, Junie, ZCode, OpenCodeReview, CodeBuddy, WorkBuddy, Devin CLI, Devin Desktop, Augment Code, and Synthetic</li>
 <li><strong>Real-time pricing</strong> - Fetches current pricing from LiteLLM with 1-hour disk cache; automatic OpenRouter fallback and Cursor model pricing for newly released models</li>
 <li><strong>Detailed breakdowns</strong> - Input, output, cache read/write, and reasoning token tracking</li>
 <li><strong>Native Rust core</strong> - All parsing and aggregation done in Rust for 10x faster processing</li>
@@ -830,7 +840,7 @@ tokscale --client synthetic
 # Combine with other filters
 tokscale --client opencode,claude --week --json
 </code></pre>
-<p>Possible values: <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>copilot</code>, <code>gemini</code>, <code>cursor</code>, <code>amp</code>, <code>codebuff</code>, <code>droid</code>, <code>openclaw</code>, <code>hermes</code>, <code>pi</code>, <code>kimchi</code>, <code>kimi</code>, <code>qwen</code>, <code>roocode</code>, <code>kilocode</code>, <code>kilo</code>, <code>mux</code>, <code>crush</code>, <code>goose</code>, <code>antigravity</code>, <code>antigravity-cli</code>, <code>zed</code>, <code>kiro</code>, <code>trae</code>, <code>warp</code>, <code>cline</code>, <code>gjc</code>, <code>grok</code>, <code>jcode</code>, <code>micode</code>, <code>commandcode</code>, <code>junie</code>, <code>zcode</code>, <code>opencodereview</code>, <code>codebuddy</code>, <code>augment</code>, <code>synthetic</code>.</p>
+<p>Possible values: <code>opencode</code>, <code>claude</code>, <code>codex</code>, <code>copilot</code>, <code>gemini</code>, <code>cursor</code>, <code>amp</code>, <code>codebuff</code>, <code>droid</code>, <code>openclaw</code>, <code>hermes</code>, <code>pi</code>, <code>prime-agent</code>, <code>kimchi</code>, <code>kimi</code>, <code>qwen</code>, <code>roocode</code>, <code>kilocode</code>, <code>kilo</code>, <code>mux</code>, <code>crush</code>, <code>goose</code>, <code>antigravity</code>, <code>antigravity-cli</code>, <code>zed</code>, <code>kiro</code>, <code>trae</code>, <code>warp</code>, <code>cline</code>, <code>gjc</code>, <code>grok</code>, <code>jcode</code>, <code>micode</code>, <code>commandcode</code>, <code>junie</code>, <code>zcode</code>, <code>opencodereview</code>, <code>codebuddy</code>, <code>augment</code>, <code>synthetic</code>.</p>
 <blockquote>
 <p><strong>Breaking change (v4.0.0):</strong> The per-client boolean flags (<code>--opencode</code>, <code>--claude</code>, <code>--codex</code>, etc.) have been removed and now error. Use the canonical <code>--client</code>/<code>-c</code> flag instead — e.g. <code>tokscale --client opencode,claude</code>.</p>
 </blockquote>
@@ -1231,9 +1241,9 @@ tokscale usage --light
 </tr>
 <tr>
 <td><strong>Codex</strong> (OpenAI)</td>
-<td>OAuth (<code>~/.config/codex/auth.json</code>, <code>~/.codex/auth.json</code>, or saved Tokscale accounts)</td>
+<td>OAuth (Codex auth, saved Tokscale accounts, or OpenCode's <code>$XDG_DATA_HOME/opencode/auth.json</code>)</td>
 <td>Session, Weekly quotas</td>
-<td>Use <code>[Add Codex]</code> in the TUI Usage tab, run <code>codex</code> to log in, or import an existing auth with <code>tokscale codex import --name work</code></td>
+<td>Use <code>[Add Codex]</code>, run <code>codex</code>, import with <code>tokscale codex import --name work</code>, or connect OpenAI with ChatGPT Plus/Pro in OpenCode</td>
 </tr>
 <tr>
 <td><strong>Z.ai</strong></td>
@@ -1288,27 +1298,9 @@ tokscale usage --light
 <h5>Codex Multi-Account Usage</h5>
 <p>Tokscale can save multiple Codex OAuth accounts for subscription usage display. The TUI Usage tab groups saved accounts under one <strong>Codex</strong> section. The active account is marked with <code>*</code>; inactive accounts can be selected with <code>[Use]</code>; account removal uses <code>[Remove]</code> followed by <code>[Confirm]</code>.</p>
 <p>To add an account without leaving the TUI, click <code>[Add Codex]</code> in the Usage tab. Tokscale starts <code>codex login</code> with a temporary <code>CODEX_HOME</code>, displays the login output in the Usage tab, imports the resulting auth into Tokscale's saved account store, and then refreshes usage. This keeps the login isolated and does not switch the current Codex auth; click <code>[Use]</code> on a saved account when you want Tokscale to write that account into the real Codex auth file.</p>
-<p>The CLI commands are still available for scripted or manual account management, plus a separate opt-in account-activity snapshot:</p>
-<pre><code class="language-bash"># Save the current Codex auth as a named Tokscale account
-tokscale codex import --name work
-
-# List saved Codex accounts
-tokscale codex accounts
-tokscale codex accounts --json
-
-# Switch the active Codex account and write Codex auth.json
-tokscale codex switch work
-
-# Stop tracking a saved Codex account (removes it from Tokscale's store
-# only — the codex CLI's own auth.json/login is never touched)
-tokscale codex remove personal
-
-# Check subscription usage for the active
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/junhoyeo/tokscale#readme)*
-</code></pre>
+<p>The CLI commands are still available</p>
+<hr>
+<p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1325,7 +1317,7 @@ tokscale codex remove personal
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 835</div>
+        <div class="stars">★ 836</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
