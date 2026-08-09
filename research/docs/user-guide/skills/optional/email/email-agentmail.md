@@ -18,6 +18,14 @@ Version
 
 `1.0.0`
 
+Author
+
+teyrebaz33, Hermes Agent
+
+License
+
+MIT
+
 Platforms
 
 linux, macos, windows

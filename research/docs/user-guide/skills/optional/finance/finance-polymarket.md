@@ -22,6 +22,10 @@ Author
 
 Hermes Agent + Teknium
 
+License
+
+MIT
+
 Platforms
 
 linux, macos, windows

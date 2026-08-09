@@ -112,6 +112,10 @@ Duration
 
 Elapsed session time
 
+Session title
+
+Once the session has a title, it appears as a gold badge pinned to the far-right edge. Long titles truncate before displacing the essential model and context fields.
+
 ⚠ YOLO
 
 **YOLO mode warning** — shown whenever `HERMES_YOLO_MODE` is on (either `hermes --yolo` at launch or `/yolo` toggled mid-session). Mirrors the banner-line warning so you can't forget you're in auto-approve mode.

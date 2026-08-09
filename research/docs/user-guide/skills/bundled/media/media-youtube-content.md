@@ -14,9 +14,25 @@ Path
 
 `skills/media/youtube-content`
 
+Version
+
+`1.0.0`
+
+Author
+
+Teknium (teknium1), Hermes Agent
+
+License
+
+MIT
+
 Platforms
 
 linux, macos, windows
+
+Tags
+
+`YouTube`, `Video`, `Transcripts`, `Media`
 
 ## Reference: full SKILL.md
 

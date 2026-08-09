@@ -109,7 +109,7 @@ Tell the user:
 > 5.  If the app is still in Testing, add the user's Google account as a test user here: [https://console.cloud.google.com/auth/audience](https://console.cloud.google.com/auth/audience) Audience → Test users → Add users
 > 6.  Download the JSON file and tell me the file path
 > 
-> Important Hermes CLI note: if the file path starts with `/`, do NOT send only the bare path as its own message in the CLI, because it can be mistaken for a slash command. Send it in a sentence instead, like: `The JSON file path is: /home/user/Downloads/client_secret_....json`
+> Important Hermes CLI note: if the file path starts with `/`, do NOT send only the bare path as its own message in the CLI, because it can be mistaken for a slash command. Send it in a sentence instead, like: `The JSON file path is: ~/Downloads/client_secret_....json`
 
 Once they provide the path:
 

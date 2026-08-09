@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/security/security-oss-forensics
 
-Supply chain investigation, evidence recovery, and forensic analysis for GitHub repositories. Covers deleted commit recovery, force-push detection, IOC extraction, multi-source evidence collection, hypothesis formation/validation, and structured forensic reporting. Inspired by RAPTOR's 1800+ line OSS Forensics system.
+GitHub supply-chain forensics: recovery, IOCs, reporting.
 
 ## Skill metadata
 
@@ -14,9 +14,25 @@ Path
 
 `optional-skills/security/oss-forensics`
 
+Version
+
+`1.0.0`
+
+Author
+
+Teknium (teknium1), Hermes Agent
+
+License
+
+MIT
+
 Platforms
 
 linux, macos, windows
+
+Tags
+
+`Security`, `Forensics`, `GitHub`, `Supply-Chain`
 
 ## Reference: full SKILL.md
 

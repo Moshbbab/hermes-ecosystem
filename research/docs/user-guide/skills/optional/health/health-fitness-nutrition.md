@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/optional/health/health-fitness-nutrition
 
-Gym workout planner and nutrition tracker. Search 690+ exercises by muscle, equipment, or category via wger. Look up macros and calories for 380,000+ foods via USDA FoodData Central. Compute BMI, TDEE, one-rep max, macro splits, and body fat — pure Python, no pip installs. Built for anyone chasing gains, cutting weight, or just trying to eat better.
+Workout planning, macros, and body metrics via wger/USDA.
 
 ## Skill metadata
 
@@ -17,6 +17,10 @@ Path
 Version
 
 `1.0.0`
+
+Author
+
+Hailey Marshall (haileymarshall), Hermes Agent
 
 License
 

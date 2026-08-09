@@ -26,6 +26,10 @@ License
 
 MIT
 
+Platforms
+
+linux, macos, windows
+
 Tags
 
 `actual`, `actual-inc`, `provider`, `local-inference`, `relay`, `gguf`, `setup`

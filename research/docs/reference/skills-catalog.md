@@ -62,7 +62,7 @@ Delegate coding to OpenAI Codex CLI (features, PRs).
 
 [`computer-use`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use)
 
-Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable...
+Drive the desktop in the background without stealing focus.
 
 `autonomous-ai-agents/computer-use`
 
@@ -352,7 +352,7 @@ Extract cited obligations, deadlines, tasks from documents.
 
 [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx)
 
-Create, read, edit Word .docx documents and templates.
+Create, read, edit, template, and review Word .docx files.
 
 `productivity/docx`
 
@@ -367,6 +367,12 @@ Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.
 Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.
 
 `productivity/maps`
+
+[`meeting-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-meeting-action-items)
+
+Turn meeting notes into cited decisions, owners, tickets.
+
+`productivity/meeting-action-items`
 
 [`nano-pdf`](/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf)
 
@@ -388,15 +394,21 @@ Extract text from PDFs/scans (pymupdf, marker-pdf).
 
 [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
-Create, merge, split, fill, and secure PDF files.
+Create, read, merge, fill, and secure PDF files.
 
 `productivity/pdf`
 
 [`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
 
-Create, read, edit .pptx decks, slides, notes, templates.
+Create, read, edit .pptx decks with python-pptx.
 
 `productivity/powerpoint`
+
+[`product-price-monitor`](/docs/user-guide/skills/bundled/productivity/productivity-product-price-monitor)
+
+Watch product, flight, or listing prices; alert on target.
+
+`productivity/product-price-monitor`
 
 [`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline)
 
@@ -404,9 +416,15 @@ Teams meeting summaries, job replay, Graph subscriptions.
 
 `productivity/teams-meeting-pipeline`
 
+[`weekly-review-planning`](/docs/user-guide/skills/bundled/productivity/productivity-weekly-review-planning)
+
+Weekly reset: commitments, stalled work, next-week plan.
+
+`productivity/weekly-review-planning`
+
 [`xlsx`](/docs/user-guide/skills/bundled/productivity/productivity-xlsx)
 
-Create, read, edit Excel .xlsx spreadsheets and CSVs.
+Create, read, edit Excel .xlsx workbooks and CSVs.
 
 `productivity/xlsx`
 
@@ -429,6 +447,12 @@ Search arXiv papers by keyword, author, category, or ID.
 Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.
 
 `research/blogwatcher`
+
+[`competitor-news-monitor`](/docs/user-guide/skills/bundled/research/research-competitor-news-monitor)
+
+Watch named companies for material news; cited digests.
+
+`research/competitor-news-monitor`
 
 [`grounded-citations`](/docs/user-guide/skills/bundled/research/research-grounded-citations)
 
