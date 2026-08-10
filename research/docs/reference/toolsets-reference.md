@@ -166,6 +166,12 @@ Multi-agent coordination tools. Registered for dispatcher-spawned task workers (
 
 Persistent cross-session memory management.
 
+`desktop_ui`
+
+`close_terminal`, `focus_pane`, `open_preview`, `react_to_message`, `read_preview`, `read_terminal`, `read_window_below`
+
+Affordances that act on the Hermes desktop app itself — read/close the embedded terminal pane, open and read the in-app browser, identify the OS window behind the app, reveal a pane, react to a message. Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions.
+
 `project`
 
 `project_create`, `project_list`, `project_switch`
@@ -204,9 +210,9 @@ Native Spotify control (playback, queue, search, playlists, albums, library). Re
 
 `terminal`
 
-`close_terminal`, `focus_pane`, `open_preview`, `process`, `read_terminal`, `terminal`
+`process`, `terminal`
 
-Shell command execution and background process management. `read_terminal`, `close_terminal`, `open_preview`, and `focus_pane` drive the desktop GUI's embedded panes and are check\_fn-gated — they only register in desktop-app sessions.
+Shell command execution and background process management.
 
 `todo`
 
@@ -260,15 +266,15 @@ Differences from `hermes-cli`
 
 `hermes-cli`
 
-Full toolset — the default for interactive CLI sessions. Includes file, terminal (plus the desktop-GUI pane tools `read_terminal`, `close_terminal`, `open_preview`, `focus_pane`), web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, clarify, computer\_use, Home Assistant, and the kanban tools (all check\_fn-gated at runtime).
+Full toolset — the default for interactive CLI sessions. Includes file, terminal, web, browser, memory, skills, vision, image\_gen, todo, tts, delegation, code\_execution, cronjob, session\_search, clarify, computer\_use, Home Assistant, and the kanban tools (all check\_fn-gated at runtime).
 
 `hermes-acp`
 
-Drops `clarify`, `cronjob`, `image_generate`, `text_to_speech`, `computer_use`, all four Home Assistant tools, the kanban tools, and the desktop-GUI pane tools. Focused on coding tasks in IDE context.
+Drops `clarify`, `cronjob`, `image_generate`, `text_to_speech`, `computer_use`, all four Home Assistant tools, and the kanban tools. Focused on coding tasks in IDE context.
 
 `hermes-api-server`
 
-Drops `clarify`, `text_to_speech`, `computer_use`, the kanban tools, and the desktop-GUI pane tools. Keeps everything else — suitable for programmatic access where user interaction isn't possible.
+Drops `clarify`, `text_to_speech`, `computer_use`, and the kanban tools. Keeps everything else — suitable for programmatic access where user interaction isn't possible.
 
 `hermes-cron`
 

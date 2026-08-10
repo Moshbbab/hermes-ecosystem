@@ -26,6 +26,10 @@ License
 
 MIT
 
+Platforms
+
+linux, macos, windows
+
 Tags
 
 `Teams`, `Microsoft Graph`, `Meetings`, `Productivity`, `Operations`

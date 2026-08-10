@@ -75,7 +75,7 @@ Description
 
 [**one-three-one-rule**](/docs/user-guide/skills/optional/communication/communication-one-three-one-rule)
 
-Structured decision-making framework for technical proposals and trade-off analysis. When the user faces a choice between multiple approaches (architecture decisions, tool selection, refactoring strategies, migration paths), this skill p...
+1-3-1 decision briefs: problem, three options, one pick.
 
 ## creative
 
@@ -127,6 +127,10 @@ Create meme PNGs from templates with Pillow text overlay.
 
 Pixel art w/ era palettes (NES, Game Boy, PICO-8).
 
+[**social-media-content-calendar**](/docs/user-guide/skills/optional/creative/creative-social-media-content-calendar)
+
+Plan multi-platform social campaigns: briefs to posting.
+
 [**tldraw-offline**](/docs/user-guide/skills/optional/creative/creative-tldraw-offline)
 
 Drive and script tldraw offline canvases with an agent.
@@ -151,9 +155,9 @@ Skill
 
 Description
 
-[**inference-sh-cli**](/docs/user-guide/skills/optional/devops/devops-cli)
+[**actual-setup**](/docs/user-guide/skills/optional/devops/devops-actual-setup)
 
-Run 150+ AI apps (image, video, LLM) via inference.sh CLI.
+Set up Actual Computer (actual.inc) inference in Hermes.
 
 [**docker-management**](/docs/user-guide/skills/optional/devops/devops-docker-management)
 
@@ -162,6 +166,10 @@ Manage Docker containers, images, volumes, and Compose.
 [**hermes-s6-container-supervision**](/docs/user-guide/skills/optional/devops/devops-hermes-s6-container-supervision)
 
 Modify or debug s6 services in the Hermes Docker image.
+
+[**inference-sh-cli**](/docs/user-guide/skills/optional/devops/devops-inference-sh-cli)
+
+Run 150+ AI apps (image, video, LLM) via inference.sh CLI.
 
 [**pinggy-tunnel**](/docs/user-guide/skills/optional/devops/devops-pinggy-tunnel)
 
@@ -221,6 +229,10 @@ Build leveraged buyout workbooks with IRR/MOIC in Excel.
 
 Build M&A accretion/dilution workbooks in Excel.
 
+[**polymarket**](/docs/user-guide/skills/optional/finance/finance-polymarket)
+
+Query Polymarket: markets, prices, orderbooks, history.
+
 [**pptx-author**](/docs/user-guide/skills/optional/finance/finance-pptx-author)
 
 Build PowerPoint decks headless with python-pptx.
@@ -251,11 +263,11 @@ Description
 
 [**fitness-nutrition**](/docs/user-guide/skills/optional/health/health-fitness-nutrition)
 
-Gym workout planner and nutrition tracker. Search 690+ exercises by muscle, equipment, or category via wger. Look up macros and calories for 380,000+ foods via USDA FoodData Central. Compute BMI, TDEE, one-rep max, macro splits, and body...
+Workout planning, macros, and body metrics via wger/USDA.
 
 [**neuroskill-bci**](/docs/user-guide/skills/optional/health/health-neuroskill-bci)
 
-Connect to a running NeuroSkill instance and incorporate the user's real-time cognitive and emotional state (focus, relaxation, mood, cognitive load, drowsiness, heart rate, HRV, sleep staging, and 40+ derived EXG scores) into responses....
+Use live BCI cognitive and mood state from NeuroSkill.
 
 ## mcp
 
@@ -291,7 +303,7 @@ Skill
 
 Description
 
-[**huggingface-accelerate**](/docs/user-guide/skills/optional/mlops/mlops-accelerate)
+[**accelerate**](/docs/user-guide/skills/optional/mlops/mlops-accelerate)
 
 Run PyTorch training across GPUs with minimal changes.
 
@@ -315,7 +327,7 @@ DSPy: declarative LM programs, auto-optimize prompts, RAG.
 
 Fast vector similarity search at billion scale.
 
-[**optimizing-attention-flash**](/docs/user-guide/skills/optional/mlops/mlops-flash-attention)
+[**flash-attention**](/docs/user-guide/skills/optional/mlops/mlops-flash-attention)
 
 Speed up long-sequence transformer training and inference.
 
@@ -331,7 +343,7 @@ Fast BPE/WordPiece tokenization and custom vocab training.
 
 Structured LLM outputs validated with Pydantic.
 
-[**lambda-labs-gpu-cloud**](/docs/user-guide/skills/optional/mlops/mlops-lambda-labs)
+[**lambda-labs**](/docs/user-guide/skills/optional/mlops/mlops-lambda-labs)
 
 On-demand GPU cloud instances for ML training.
 
@@ -339,7 +351,7 @@ On-demand GPU cloud instances for ML training.
 
 Vision-language chat: VQA, captioning, image dialogue.
 
-[**modal-serverless-gpu**](/docs/user-guide/skills/optional/mlops/mlops-modal)
+[**modal**](/docs/user-guide/skills/optional/mlops/mlops-modal)
 
 Serverless GPU cloud for ML jobs and model APIs.
 
@@ -355,7 +367,7 @@ OBLITERATUS: abliterate LLM refusals (diff-in-means).
 
 Outlines: structured JSON/regex/Pydantic LLM generation.
 
-[**peft-fine-tuning**](/docs/user-guide/skills/optional/mlops/mlops-peft)
+[**peft**](/docs/user-guide/skills/optional/mlops/mlops-peft)
 
 Fine-tune large LLMs with LoRA on limited GPU memory.
 
@@ -371,11 +383,11 @@ Fully sharded data-parallel training for large models.
 
 Clean training loops with built-in distributed support.
 
-[**qdrant-vector-search**](/docs/user-guide/skills/optional/mlops/mlops-qdrant)
+[**qdrant**](/docs/user-guide/skills/optional/mlops/mlops-qdrant)
 
 Vector search engine for production RAG systems.
 
-[**sparse-autoencoder-training**](/docs/user-guide/skills/optional/mlops/mlops-saelens)
+[**saelens**](/docs/user-guide/skills/optional/mlops/mlops-saelens)
 
 Train sparse autoencoders to interpret model features.
 
@@ -383,15 +395,15 @@ Train sparse autoencoders to interpret model features.
 
 SAM: zero-shot image segmentation via points, boxes, masks.
 
-[**simpo-training**](/docs/user-guide/skills/optional/mlops/mlops-simpo)
+[**simpo**](/docs/user-guide/skills/optional/mlops/mlops-simpo)
 
 Reference-free preference alignment, simpler than DPO.
 
-[**slime-rl-training**](/docs/user-guide/skills/optional/mlops/mlops-slime)
+[**slime**](/docs/user-guide/skills/optional/mlops/mlops-slime)
 
 RL post-training for LLMs with Megatron and SGLang.
 
-[**stable-diffusion-image-generation**](/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion)
+[**stable-diffusion**](/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion)
 
 Text-to-image generation, inpainting, and img2img.
 
@@ -399,11 +411,11 @@ Text-to-image generation, inpainting, and img2img.
 
 High-throughput LLM inference on NVIDIA GPUs.
 
-[**distributed-llm-pretraining-torchtitan**](/docs/user-guide/skills/optional/mlops/mlops-torchtitan)
+[**torchtitan**](/docs/user-guide/skills/optional/mlops/mlops-torchtitan)
 
 Pretrain LLMs at scale with PyTorch 4D parallelism.
 
-[**fine-tuning-with-trl**](/docs/user-guide/skills/optional/mlops/mlops-training-trl-fine-tuning)
+[**trl-fine-tuning**](/docs/user-guide/skills/optional/mlops/mlops-training-trl-fine-tuning)
 
 TRL: SFT, DPO, GRPO, RLOO reward modeling for LLM RLHF.
 
@@ -443,13 +455,13 @@ Description
 
 Fetch Canvas LMS courses and assignments via API token.
 
-[**here.now**](/docs/user-guide/skills/optional/productivity/productivity-here-now)
+[**here-now**](/docs/user-guide/skills/optional/productivity/productivity-here-now)
 
 Publish sites to {slug}.here.now and store files in Drives.
 
 [**memento-flashcards**](/docs/user-guide/skills/optional/productivity/productivity-memento-flashcards)
 
-Spaced-repetition flashcard system. Create cards from facts or text, chat with flashcards using free-text answers graded by the agent, generate quizzes from YouTube transcripts, review due cards with adaptive scheduling, and export/impor...
+Spaced-repetition flashcards: create, review, quiz, export.
 
 [**shop**](/docs/user-guide/skills/optional/productivity/productivity-shop)
 
@@ -487,7 +499,7 @@ Passive recon of subdomains, SSL certs, WHOIS, and DNS.
 
 [**drug-discovery**](/docs/user-guide/skills/optional/research/research-drug-discovery)
 
-Pharmaceutical research assistant for drug discovery workflows. Search bioactive compounds on ChEMBL, calculate drug-likeness (Lipinski Ro5, QED, TPSA, synthetic accessibility), look up drug-drug interactions via OpenFDA, interpret ADMET...
+Drug discovery: ChEMBL search, drug-likeness, interactions.
 
 [**duckduckgo-search**](/docs/user-guide/skills/optional/research/research-duckduckgo-search)
 
@@ -537,7 +549,7 @@ Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN.
 
 [**oss-forensics**](/docs/user-guide/skills/optional/security/security-oss-forensics)
 
-Supply chain investigation, evidence recovery, and forensic analysis for GitHub repositories. Covers deleted commit recovery, force-push detection, IOC extraction, multi-source evidence collection, hypothesis formation/validation, and st...
+GitHub supply-chain forensics: recovery, IOCs, reporting.
 
 [**sherlock**](/docs/user-guide/skills/optional/security/security-sherlock)
 
@@ -549,13 +561,17 @@ Autonomously remove your info from data-broker sites.
 
 [**web-pentest**](/docs/user-guide/skills/optional/security/security-web-pentest)
 
-Authorized web application penetration testing — reconnaissance, vulnerability analysis, proof-based exploitation, and professional reporting. Adapts Shannon's "No Exploit, No Report" methodology with hard guardrails for scope, authoriza...
+Authorized web pentest: recon, proof-based exploits, report.
 
 ## software-development
 
 Skill
 
 Description
+
+[**ast-grep**](/docs/user-guide/skills/optional/software-development/software-development-ast-grep)
+
+AST-aware structural code search and rewrite via ast-grep.
 
 [**code-wiki**](/docs/user-guide/skills/optional/software-development/software-development-code-wiki)
 

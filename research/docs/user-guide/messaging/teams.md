@@ -109,15 +109,35 @@ TEAMS_ALLOWED_USERS=<your-aad-object-id>
 
 ## Step 5: Start the Gateway
 
+**Docker** (must run from the directory that contains `docker-compose.yml` — usually your cloned `hermes-agent` repo, not `~`):
+
 ```
+cd /path/to/hermes-agent
 HERMES_UID=$(id -u) HERMES_GID=$(id -g) docker compose up -d gateway
 ```
 
-This starts the gateway. The default webhook port is `3978` (override with `TEAMS_PORT`). Check that it's running:
+**Native / systemd install** (typical `hermes` one-liner installer under `~/.hermes/hermes-agent`):
+
+```
+hermes gateway restart
+# or foreground: hermes gateway run
+```
+
+The Teams SDK is optional; when Teams is enabled, the gateway lazy-installs it into Hermes' own venv on first start (do **not** use system `pip install` on Ubuntu 24.04 — that hits PEP 668 `externally-managed-environment`). To install manually into the Hermes venv:
+
+```
+~/.hermes/hermes-agent/venv/bin/pip install microsoft-teams-apps aiohttp
+# or from a clone of the agent: uv sync --extra teams
+```
+
+The default webhook port is `3978` (override with `TEAMS_PORT`). Check that it's running:
 
 ```
 curl http://localhost:3978/health   # should return: ok
+# Docker:
 docker logs -f hermes
+# Native:
+hermes gateway status -l
 ```
 
 Look for:
@@ -280,6 +300,14 @@ Problem
 
 Solution
 
+`Can't find a suitable configuration file` from `docker compose`
+
+You are not in the repo that has `docker-compose.yml`, or you are on a native install — use `hermes gateway restart` instead, or `cd` into the clone first
+
+`requirements not met` / `Teams SDK missing` / `No adapter available for teams`
+
+Restart gateway so lazy-install can run, or install into the **Hermes venv**: `~/.hermes/hermes-agent/venv/bin/pip install microsoft-teams-apps aiohttp`. System `pip` fails on Ubuntu 24.04 (PEP 668) and would not affect the service anyway
+
 `health` endpoint works but bot doesn't respond
 
 Check that your tunnel is still running and the bot's messaging endpoint matches the tunnel URL
@@ -306,7 +334,7 @@ devtunnel URLs are persistent if you use a named tunnel (`devtunnel create herme
 
 Teams shows "This bot is not responding"
 
-The webhook returned an error. Check `docker logs hermes` for tracebacks
+The webhook returned an error. Check `docker logs hermes` / `hermes gateway status -l` for tracebacks
 
 `[teams] Failed to connect` in logs
 

@@ -26,6 +26,10 @@ License
 
 MIT
 
+Platforms
+
+linux, macos, windows
+
 Tags
 
 `api`, `rest`, `graphql`, `http`, `debugging`, `testing`, `curl`, `integration`

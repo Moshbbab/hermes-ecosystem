@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use
 
-Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable model. Load this skill whenever the `computer_use` tool is available.
+Drive the desktop in the background without stealing focus.
 
 ## Skill metadata
 
@@ -17,6 +17,14 @@ Path
 Version
 
 `2.0.0`
+
+Author
+
+Francesco Bonacci (f-trycua), Hermes Agent
+
+License
+
+MIT
 
 Platforms
 

@@ -149,7 +149,7 @@ Use `/model` to switch models mid-session. Use a frontier model (Claude Sonnet/O
 
 tip
 
-Run `/usage` periodically to see your token consumption. Run `/insights` for a broader view of usage patterns over the last 30 days.
+Run `/usage` periodically to see your token consumption. Run `/insights` for a broader view of usage patterns over the last 30 days. To see what your _fixed_ per-message cost is before any conversation — system prompt, skills index, memory, tool schemas — run [`hermes prompt-size`](/docs/reference/cli-commands#hermes-prompt-size) (works offline).
 
 ## Messaging Tips
 

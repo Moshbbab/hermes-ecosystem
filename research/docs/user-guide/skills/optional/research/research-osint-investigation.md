@@ -22,6 +22,10 @@ Author
 
 Hermes Agent (adapted from ShinMegamiBoson/OpenPlanter, MIT)
 
+License
+
+MIT
+
 Platforms
 
 linux, macos, windows

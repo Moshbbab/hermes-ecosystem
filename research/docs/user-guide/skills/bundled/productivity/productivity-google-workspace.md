@@ -16,7 +16,7 @@ Path
 
 Version
 
-`1.1.0`
+`1.2.0`
 
 Author
 
@@ -51,6 +51,7 @@ Gmail, Calendar, Drive, Contacts, Sheets, and Docs — through Hermes-managed OA
 ## References
 
 -   `references/gmail-search-syntax.md` — Gmail search operators (is:unread, from:, newer\_than:, etc.)
+-   `references/daily-brief.md` — daily/morning brief procedure: schedule + conflicts + meeting prep + urgent mail from Gmail and Calendar. Load it when the user asks for a morning brief, meeting preparation, or "what's on my calendar and what email needs attention."
 
 ## Scripts
 
@@ -108,7 +109,7 @@ Tell the user:
 > 5.  If the app is still in Testing, add the user's Google account as a test user here: [https://console.cloud.google.com/auth/audience](https://console.cloud.google.com/auth/audience) Audience → Test users → Add users
 > 6.  Download the JSON file and tell me the file path
 > 
-> Important Hermes CLI note: if the file path starts with `/`, do NOT send only the bare path as its own message in the CLI, because it can be mistaken for a slash command. Send it in a sentence instead, like: `The JSON file path is: /home/user/Downloads/client_secret_....json`
+> Important Hermes CLI note: if the file path starts with `/`, do NOT send only the bare path as its own message in the CLI, because it can be mistaken for a slash command. Send it in a sentence instead, like: `The JSON file path is: ~/Downloads/client_secret_....json`
 
 Once they provide the path:
 

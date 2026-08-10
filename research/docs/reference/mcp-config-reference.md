@@ -216,6 +216,14 @@ both
 
 Server-initiated user-input requests. `enabled` (default `true`) and `timeout` in seconds (default `300`). Form-mode requests route through the approval surface; URL-mode is declined (see MCP guide)
 
+`trust`
+
+string
+
+both
+
+Trust tier: `full` (default) or `untrusted`. On an `untrusted` server, every write-capable tool call (any tool without a `readOnlyHint: true` annotation) requires user approval through the standard approval surface before it runs. `readOnlyHint` is a server-supplied _hint_ — a lying server can at most skip approval for tools it claims are read-only, never gain extra access — so mark any server you don't fully control as `untrusted`. Unrecognized values are treated as `untrusted` (fail-closed)
+
 ## Environment variable references
 
 String values anywhere in a server entry (`env`, `headers`, `args`, `url`, …) may reference environment variables with `${VAR}` or the Cursor-style SecretRef form `${env:VAR}` — both resolve to the same variable, so MCP snippets copied from Cursor / Claude configs work unchanged:
@@ -230,6 +238,41 @@ mcp_servers:
 ```
 
 Values resolve from the active profile's secret scope (falling back to the process environment), so put the secret in `~/.hermes/.env`. An unset variable keeps its literal placeholder.
+
+### Context variables
+
+Beyond env vars, the Cursor-style context variables are interpolated too (names are case-sensitive):
+
+Variable
+
+Resolves to
+
+`${userHome}`
+
+The current user's home directory
+
+`${workspaceFolder}`
+
+The session workspace root (the session's terminal cwd when known, else the process cwd)
+
+`${workspaceFolderBasename}`
+
+The basename of `${workspaceFolder}`
+
+`${pathSeparator}` / `${/}`
+
+The OS path separator (`os.sep`)
+
+```
+mcp_servers:
+  filesystem:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
+    env:
+      CACHE_DIR: "${userHome}${/}.cache${/}mcp"
+```
+
+Any other `${...}` reference falls through to the env-var lookup above.
 
 ## `tools` policy keys
 

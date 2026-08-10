@@ -73,7 +73,7 @@ tools:
     search_default_limit: 5
     max_search_limit: 20
     listing: auto       # embed a grouped name+description catalog manifest
-    listing_max_tokens: 20000
+    listing_max_tokens: 4000
 ```
 
 Key
@@ -114,9 +114,9 @@ Embed a skills-style manifest of every deferred tool (name + first sentence of i
 
 `listing_max_tokens`
 
-`20000`
+`4000`
 
-Absolute cap on the embedded listing, regardless of context size. Range 200–60000.
+Absolute cap on the embedded listing, regardless of context size. Range 200–60000. Large catalogs degrade to names-only or per-server summaries, keeping full schemas available through search.
 
 ### Why the listing exists
 

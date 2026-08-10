@@ -14,9 +14,25 @@ Path
 
 `optional-skills/research/domain-intel`
 
+Version
+
+`1.0.0`
+
+Author
+
+FurkanL0, Hermes Agent
+
+License
+
+MIT
+
 Platforms
 
 linux, macos, windows
+
+Tags
+
+`Domains`, `OSINT`, `DNS`, `Research`
 
 ## Reference: full SKILL.md
 

@@ -142,6 +142,14 @@ GMI Cloud API key ([gmicloud.ai](https://www.gmicloud.ai/))
 
 Override GMI Cloud base URL (default: `https://api.gmi-serving.com/v1`)
 
+`ACTUAL_API_KEY`
+
+Actual Computer inference key (`ac_...`, [actual.inc/user/keys](https://actual.inc/user/keys)). Not needed for the local daemon.
+
+`ACTUAL_BASE_URL`
+
+Override Actual Computer base URL (default: `https://api.actual.inc/v1`). Set to `http://127.0.0.1:8080` for the local offline daemon — loopback hosts need no API key.
+
 `MINIMAX_API_KEY`
 
 MiniMax API key — global endpoint ([minimax.io](https://www.minimax.io)). **Not used by `minimax-oauth`** (OAuth path uses browser login instead).

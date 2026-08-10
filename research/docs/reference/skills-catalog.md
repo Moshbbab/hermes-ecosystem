@@ -62,7 +62,7 @@ Delegate coding to OpenAI Codex CLI (features, PRs).
 
 [`computer-use`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use)
 
-Drive the user's desktop in the background — clicking, typing, scrolling, dragging — without stealing the cursor, keyboard focus, or switching virtual desktops / Spaces. Cross-platform: macOS, Windows, Linux. Works with any tool-capable...
+Drive the desktop in the background without stealing focus.
 
 `autonomous-ai-agents/computer-use`
 
@@ -190,6 +190,12 @@ Description
 
 Path
 
+[`email-inbox-triage`](/docs/user-guide/skills/bundled/email/email-email-inbox-triage)
+
+Triage an inbox: prioritize threads, draft replies safely.
+
+`email/email-inbox-triage`
+
 [`himalaya`](/docs/user-guide/skills/bundled/email/email-himalaya)
 
 Himalaya CLI: IMAP/SMTP email from terminal.
@@ -221,6 +227,12 @@ GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login.
 Review PRs: diffs, inline comments via gh or REST.
 
 `github/github-code-review`
+
+[`github-issue-to-pr`](/docs/user-guide/skills/bundled/github/github-github-issue-to-pr)
+
+Carry a GitHub issue to a verified PR with honest CI state.
+
+`github/github-issue-to-pr`
 
 [`github-issues`](/docs/user-guide/skills/bundled/github/github-github-issues)
 
@@ -332,9 +344,15 @@ Airtable REST API via curl. Records CRUD, filters, upserts.
 
 `productivity/airtable`
 
+[`document-to-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items)
+
+Extract cited obligations, deadlines, tasks from documents.
+
+`productivity/document-to-action-items`
+
 [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx)
 
-Create, read, edit Word .docx documents and templates.
+Create, read, edit, template, and review Word .docx files.
 
 `productivity/docx`
 
@@ -349,6 +367,12 @@ Gmail, Calendar, Drive, Docs, Sheets via gws CLI or Python.
 Geocode, POIs, routes, timezones via OpenStreetMap/OSRM.
 
 `productivity/maps`
+
+[`meeting-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-meeting-action-items)
+
+Turn meeting notes into cited decisions, owners, tickets.
+
+`productivity/meeting-action-items`
 
 [`nano-pdf`](/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf)
 
@@ -370,15 +394,21 @@ Extract text from PDFs/scans (pymupdf, marker-pdf).
 
 [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
-Create, merge, split, fill, and secure PDF files.
+Create, read, merge, fill, and secure PDF files.
 
 `productivity/pdf`
 
 [`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
 
-Create, read, edit .pptx decks, slides, notes, templates.
+Create, read, edit .pptx decks with python-pptx.
 
 `productivity/powerpoint`
+
+[`product-price-monitor`](/docs/user-guide/skills/bundled/productivity/productivity-product-price-monitor)
+
+Watch product, flight, or listing prices; alert on target.
+
+`productivity/product-price-monitor`
 
 [`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline)
 
@@ -386,9 +416,15 @@ Teams meeting summaries, job replay, Graph subscriptions.
 
 `productivity/teams-meeting-pipeline`
 
+[`weekly-review-planning`](/docs/user-guide/skills/bundled/productivity/productivity-weekly-review-planning)
+
+Weekly reset: commitments, stalled work, next-week plan.
+
+`productivity/weekly-review-planning`
+
 [`xlsx`](/docs/user-guide/skills/bundled/productivity/productivity-xlsx)
 
-Create, read, edit Excel .xlsx spreadsheets and CSVs.
+Create, read, edit Excel .xlsx workbooks and CSVs.
 
 `productivity/xlsx`
 
@@ -412,6 +448,12 @@ Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.
 
 `research/blogwatcher`
 
+[`competitor-news-monitor`](/docs/user-guide/skills/bundled/research/research-competitor-news-monitor)
+
+Watch named companies for material news; cited digests.
+
+`research/competitor-news-monitor`
+
 [`grounded-citations`](/docs/user-guide/skills/bundled/research/research-grounded-citations)
 
 Ground answers and documents in cited, verifiable sources.
@@ -423,12 +465,6 @@ Ground answers and documents in cited, verifiable sources.
 Karpathy's LLM Wiki: build/query interlinked markdown KB.
 
 `research/llm-wiki`
-
-[`polymarket`](/docs/user-guide/skills/bundled/research/research-polymarket)
-
-Query Polymarket: markets, prices, orderbooks, history.
-
-`research/polymarket`
 
 [`research-paper-writing`](/docs/user-guide/skills/bundled/research/research-research-paper-writing)
 
