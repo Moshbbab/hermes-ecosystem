@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Perseus-Computing-LLC/perseus — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single source into various…">
+<meta name="description" content="Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It uses a command-line…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta property="og:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single source into various…">
+<meta property="og:description" content="Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It uses a command-line…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Perseus-Computing-LLC/perseus — Hermes Atlas">
-<meta name="twitter:description" content="Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single source into various…">
+<meta name="twitter:description" content="Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It uses a command-line…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=perseus&amp;subtitle=Live+context+engine+for+AI+agents%3A+resolve+verified+workspace+state+before+the+context+window+opens.+Pairs+with+Perseus+Vault+for+persistent+encrypted+memory.+Local-first%2C+MIT.+pip&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus#software",
   "name": "perseus",
-  "description": "Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single source into various assistant-specific files and supports MCP-native integration via stdio or SSE.",
+  "description": "Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It uses a command-line interface to scaffold and render context files, such as AGENTS.md or .cursorrules, from a single source file.",
   "url": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus",
   "codeRepository": "https://github.com/Perseus-Computing-LLC/perseus",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "Perseus-Computing-LLC",
     "url": "https://github.com/Perseus-Computing-LLC"
   },
-  "dateModified": "2026-08-08T21:44:27.000Z",
+  "dateModified": "2026-08-09T22:36:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-08</span>
+    <span><span class="meta-label">updated</span>2026-08-09</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Perseus is a live context engine that resolves workspace state into verified facts for AI assistants. It renders context from a single source into various assistant-specific files and supports MCP-native integration via stdio or SSE.</p>
+    <p class="summary-text">Perseus is a local-first context engine that resolves workspace state into verified facts for AI agents before a session begins. It uses a command-line interface to scaffold and render context files, such as AGENTS.md or .cursorrules, from a single source file.</p>
     <ul class="summary-highlights">
-      <li>Renders context to files like AGENTS.md or.cursorrules</li>
-      <li>Supports local-first operation without hosted services</li>
-      <li>Exposes context as an MCP server</li>
+      <li>Renders live workspace facts into assistant-specific context files.</li>
+      <li>Functions as an MCP-native server via stdio or SSE.</li>
+      <li>Integrates with Perseus Vault for encrypted, persistent memory recall.</li>
     </ul>
   </div>
 </section>
@@ -432,7 +432,7 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 </tr>
 <tr>
 <td><code>perseus_drift</code></td>
-<td>Detect drift between predicted and actual tool usage patterns via the Pythia oracle. Use when tool behavior seems off or after config changes. For workspace hygiene checks, prefer perseus_health. Read-only; returns a markdown drift report.</td>
+<td>Detect drift between predicted and actual tool usage patterns via the Guide oracle. Use when tool behavior seems off or after config changes. For workspace hygiene checks, prefer perseus_health. Read-only; returns a markdown drift report.</td>
 </tr>
 <tr>
 <td><code>perseus_env</code></td>
@@ -497,6 +497,10 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 <tr>
 <td><code>perseus_skills</code></td>
 <td>List available skills with descriptions and freshness status. Use to discover what capabilities are installed. Filter by category for smaller output. Read-only; stale skills flagged automatically.</td>
+</tr>
+<tr>
+<td><code>perseus_skill_candidates</code></td>
+<td>List mined procedural-skill candidates (from session transcripts) pending operator review: trigger, steps, pitfalls, evidence sessions, token cost. Candidates are staged, never active — <code>perseus skills approve &lt;name&gt;</code> promotes one to the live skills dir. Opt-in surfacing: place the directive in your context source; the mining pipeline never writes AGENTS.md/CLAUDE.md. Read-only.</td>
 </tr>
 <tr>
 <td><code>perseus_tokens</code></td>
@@ -1020,19 +1024,9 @@ override the config for that source. Speculation is synchronous-after-render:
 it can never delay or interleave with the live render, and a failure inside
 speculation never breaks a render.</p>
 <p><strong>Cache safety:</strong> speculative warms run through the same prefetch executor and
-use the exact key derivation the renderer reads (workspace-scoped base key +
-dependency fingerprint), so a speculative entry is just an <em>early</em> warm — it
-can never shadow or poison real reads. On the real turn the renderer
-re-derives the fingerprint and TTL as usual, so a wrong prediction costs
-nothing.</p>
-<p><strong>Observability:</strong></p>
-<pre><code class="language-console">$ perseus explain --speculate
-Speculate: enabled=true backend=markov k=3 threshold=0.
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/Perseus-Computing-LLC/perseus#readme)*
-</code></pre>
+use the </p>
+<hr>
+<p><em>README truncated. <a href="https://github.com/Perseus-Computing-LLC/perseus#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
