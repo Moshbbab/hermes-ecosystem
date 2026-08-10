@@ -72,6 +72,12 @@ Use, configure, theme, extend, and orchestrate Hermes Agent.
 
 `autonomous-ai-agents/hermes-agent`
 
+[`merge-reconciler`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-merge-reconciler)
+
+Neutral third-party resolution of agent merge conflicts.
+
+`autonomous-ai-agents/merge-reconciler`
+
 [`opencode`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode)
 
 Delegate coding to OpenCode CLI (features, PR review).
