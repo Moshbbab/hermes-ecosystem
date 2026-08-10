@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>uzairansaruzi/Hermex — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile interface for managing an AI agent, allowing…">
+<meta name="description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for an AI agent, allowing…">
 <link rel="canonical" href="https://hermesatlas.com/projects/uzairansaruzi/hermex">
 <meta property="og:title" content="uzairansaruzi/Hermex — Hermes Atlas">
-<meta property="og:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile interface for managing an AI agent, allowing…">
+<meta property="og:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for an AI agent, allowing…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/uzairansaruzi/hermex">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="uzairansaruzi/Hermex — Hermes Atlas">
-<meta name="twitter:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile interface for managing an AI agent, allowing…">
+<meta name="twitter:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for an AI agent, allowing…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Hermex&amp;subtitle=Native+iPhone+app+for+your+Hermes+agent&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/uzairansaruzi/hermex#software",
   "name": "Hermex",
-  "description": "Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile interface for managing an AI agent, allowing users to interact with their agent while keeping data and compute on their own hardware.",
+  "description": "Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for an AI agent, allowing users to manage sessions, tasks, and skills from an iPhone running iOS 18 or later.",
   "url": "https://hermesatlas.com/projects/uzairansaruzi/hermex",
   "codeRepository": "https://github.com/uzairansaruzi/hermex",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "uzairansaruzi",
     "url": "https://github.com/uzairansaruzi"
   },
-  "dateModified": "2026-08-09T14:25:48.000Z",
+  "dateModified": "2026-08-10T06:12:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1042
+    "userInteractionCount": 1045
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">223·repos</span>
+    <span id="meta-count">224·repos</span>
     <span id="meta-version">hermes·v0.20.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Swift</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-09</span>
+    <span><span class="meta-label">updated</span>2026-08-10</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile interface for managing an AI agent, allowing users to interact with their agent while keeping data and compute on their own hardware.</p>
+    <p class="summary-text">Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for an AI agent, allowing users to manage sessions, tasks, and skills from an iPhone running iOS 18 or later.</p>
     <ul class="summary-highlights">
       <li>Native SwiftUI app for iOS 18+</li>
-      <li>Supports real-time streaming chat and file attachments</li>
-      <li>Manages agent tasks, skills, and workspace files</li>
+      <li>Manages agent sessions, tasks, and skills</li>
+      <li>Provides read-only access to agent memory and analytics</li>
     </ul>
   </div>
 </section>
@@ -212,7 +212,7 @@
 <h4>Making the server reachable</h4>
 <ul>
 <li><strong>HTTPS via a tunnel or reverse proxy (recommended).</strong> Expose the server through Cloudflare Tunnel or any reverse proxy that terminates real TLS at a hostname you own. Real HTTPS keeps iOS App Transport Security happy with no exceptions. On a publicly reachable hostname the password is your only app-level defense — set a strong one.</li>
-<li><strong>Tailscale.</strong> Run the server bound to all interfaces with a password, install Tailscale on both the server and the iPhone, and connect to <code>http://&lt;tailnet-ip&gt;:8787</code>. The app allows plain HTTP only for Tailscale's <code>100.64.0.0/10</code> device range.</li>
+<li><strong>Private HTTPS with Tailscale Serve.</strong> Keep the server password-protected and bound to <code>127.0.0.1:8787</code>, inspect existing Serve/Funnel routes, then add <code>tailscale serve --bg 8787</code> only when HTTPS port 443 at the root path is free. Install Tailscale on the iPhone and connect with the exact <code>https://…ts.net</code> URL reported by <code>tailscale serve status</code>. Direct binding to <code>0.0.0.0</code> over plain HTTP remains a manual fallback, not the default.</li>
 <li><strong>Simulator-only local testing</strong> can use <code>http://localhost:8787</code> when the server runs on the same Mac.</li>
 </ul>
 <h4>Troubleshooting the connection</h4>
@@ -299,7 +299,7 @@
         <div class="name"><span class="org">abundantbeing /</span> hermes-browser-extension</div>
       </a>
       <a class="related-row" href="/projects/Eynzof/Hermes-CN-Desktop">
-        <div class="stars">★ 1.5K</div>
+        <div class="stars">★ 1.6K</div>
         <div class="name"><span class="org">Eynzof /</span> Hermes-CN-Desktop</div>
       </a>
       <a class="related-row" href="/projects/Felix-Forever/hermes-agent-desktop">
@@ -307,7 +307,7 @@
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 765</div>
+        <div class="stars">★ 766</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>
