@@ -569,6 +569,10 @@ Skill
 
 Description
 
+[**ast-grep**](/docs/user-guide/skills/optional/software-development/software-development-ast-grep)
+
+AST-aware structural code search and rewrite via ast-grep.
+
 [**code-wiki**](/docs/user-guide/skills/optional/software-development/software-development-code-wiki)
 
 Generate wiki docs + Mermaid diagrams for any codebase.
