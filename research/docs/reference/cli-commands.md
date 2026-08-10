@@ -2618,6 +2618,10 @@ Migrate the full-text search index to the compact v23 external-content layout; o
 
 Repair a malformed `state.db` schema (e.g. `table messages_fts already exists`) so hidden sessions reappear; a backup is made first.
 
+`repair-routing`
+
+Re-attach gateway conversations stranded in session rows that lost their routing identity (a chat "jumping back in time" after a restart). Dry-run by default; `--apply` performs the adoptions (stop the gateway first); `--max-gap-seconds N` tunes the contiguity window. Only unambiguous cases are repaired. See [Sessions → Repair Stranded Gateway Sessions](/docs/user-guide/sessions#repair-stranded-gateway-sessions).
+
 `recover`
 
 Offline, non-destructive recovery of a damaged `state.db` into a separate clean database.

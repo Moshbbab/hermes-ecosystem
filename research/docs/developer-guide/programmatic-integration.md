@@ -89,11 +89,11 @@ Meaning
 
 `truncate_before_user_ordinal`
 
-Zero-based index of the user turn to cut at. Everything from that turn onward is dropped. Display-only timeline rows (`display_kind`) are not counted.
+Zero-based index of the user turn to cut at. Everything from that turn onward is dropped. Display-only timeline rows (`display_kind`) are not counted. Must be a real integer — a JSON boolean is refused with code `4004`.
 
 `confirm_truncate`
 
-Required whenever an ordinal is sent. Declares that this submit really is a rewind, not an ordinary send that happens to carry a leftover ordinal.
+Required whenever an ordinal is sent. Declares that this submit really is a rewind, not an ordinary send that happens to carry a leftover ordinal. Sending it without an ordinal is refused with code `4004` (leaked rewind state).
 
 `confirm_empty_truncate`
 
