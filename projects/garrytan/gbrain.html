@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a knowledge management layer designed for AI agents to perform synthesis, graph traversal, and gap analysis. It functions as a shared institutional…">
+<meta name="description" content="GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis across ingested documents, people, and companies.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a knowledge management layer designed for AI agents to perform synthesis, graph traversal, and gap analysis. It functions as a shared institutional…">
+<meta property="og:description" content="GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis across ingested documents, people, and companies.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a knowledge management layer designed for AI agents to perform synthesis, graph traversal, and gap analysis. It functions as a shared institutional…">
+<meta name="twitter:description" content="GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis across ingested documents, people, and companies.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a knowledge management layer designed for AI agents to perform synthesis, graph traversal, and gap analysis. It functions as a shared institutional memory for teams or a personal knowledge system that runs on local hardware.",
+  "description": "GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis across ingested documents, people, and companies. It functions as a background daemon that consolidates data from sources like meetings and emails into a self-wiring knowledge graph with scoped access for individuals or teams.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-08-10T00:43:40.000Z",
+  "dateModified": "2026-08-10T20:53:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 28106
+    "userInteractionCount": 28185
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,7 +119,7 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 28.1K</span>
+    <span class="stars">★ 28.2K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a knowledge management layer designed for AI agents to perform synthesis, graph traversal, and gap analysis. It functions as a shared institutional memory for teams or a personal knowledge system that runs on local hardware.</p>
+    <p class="summary-text">GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis across ingested documents, people, and companies. It functions as a background daemon that consolidates data from sources like meetings and emails into a self-wiring knowledge graph with scoped access for individuals or teams.</p>
     <ul class="summary-highlights">
-      <li>Provides synthesized answers with citations and gap analysis.</li>
-      <li>Features a self-wiring knowledge graph with typed edges.</li>
-      <li>Supports scoped access for multi-user team environments.</li>
+      <li>Generates cited prose answers and identifies missing information gaps.</li>
+      <li>Extracts entity relationships into a knowledge graph without LLM calls.</li>
+      <li>Supports local deployment using PGLite for serverless database operations.</li>
     </ul>
   </div>
 </section>
@@ -356,7 +356,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 </code></pre>
 <p>The command is idempotent (re-running with the same language is a no-op for vector content) and uses the same recreate-and-backfill primitives as the migration. For accent-insensitive Portuguese (<code>pt_br</code>), see <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/multi-language-fts.md">docs/guides/multi-language-fts.md</a> for the <code>unaccent</code> + portuguese stemmer recipe.</p>
 <p><strong>43 curated skills.</strong> Routing lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a>. Covers signal capture, ingest (idea / media / meeting), enrichment, querying, brain ops, citation fixing, daily task management, cron scheduling, reports, voice, soul audit, skill creation, eval framework, and migrations. Skills are markdown files (tool-agnostic), packaged as a single skillpack the installer drops into your agent workspace.</p>
-<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution) so a regression in "find the page this query names" fails CI loudly. Full methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md"><code>docs/eval/SEARCH_MODE_METHODOLOGY.md</code></a>.</p>
+<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution) so a regression in "find the page this query names" fails CI loudly. <code>gbrain eval brainbench</code> runs the cross-harness memory conformance suite: know-to-ask, push precision/recall, write-back fidelity, and cross-session continuity, scored per harness seam (your OpenClaw's production pipeline plus Claude Code and Codex injection contracts) against a committed 141-fixture synthetic corpus — hermetic by default (in-memory PGLite, no keys, seconds), and CI gates every PR against master's committed baseline. Methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/BRAINBENCH.md"><code>docs/eval/BRAINBENCH.md</code></a>; search-mode methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md"><code>docs/eval/SEARCH_MODE_METHODOLOGY.md</code></a>.</p>
 <p><strong>Brain consistency.</strong> <code>gbrain eval suspected-contradictions</code> samples retrieval pairs, layered date pre-filter, query-conditioned LLM judge, persistent cache. Surfaces conflicts between takes + facts the agent has written. Wired into the daily dream cycle.</p>
 <p><strong>Agent-authored schema (v0.40.7.0).</strong> Your brain has a shape — what page types exist (<code>person</code>, <code>meeting</code>, <code>paper</code>, <code>case</code>, <code>lab-result</code>), what they link to (<code>attended</code>, <code>authored</code>, <code>prescribed-by</code>), what facts get extracted automatically. The default ships with 22 universal types, but your brain's actual shape is not the default shape. Agents can now evolve that shape on your behalf via 14 <code>gbrain schema</code> CLI verbs + a batched MCP op (<code>schema_apply_mutations</code>, admin scope, NOT localOnly so remote agents reach it over HTTPS). Atomic file locks, audit log with the agent's identity, chunked UPDATE backfill in 1000-row batches that never wedge concurrent writers. The brain stops being a pile of notes and becomes something with structure. <strong>Why it matters:</strong> <a href="https://github.com/garrytan/gbrain/blob/main/docs/what-schemas-unlock.md"><code>docs/what-schemas-unlock.md</code></a> — 7 killer use cases (4000 invisible meetings, founder ops brain, research brain, legal brain, team brain, agent-as-co-curator). <strong>5-minute walkthrough:</strong> <a href="https://github.com/garrytan/gbrain/blob/main/docs/schema-author-tutorial.md"><code>docs/schema-author-tutorial.md</code></a>. <strong>Agent skill:</strong> <a href="https://github.com/garrytan/gbrain/blob/main/skills/schema-author/SKILL.md"><code>skills/schema-author/SKILL.md</code></a>.</p>
 <h3>Integrations</h3>
@@ -508,11 +508,11 @@ completes in ~1-2 seconds. (Closes #1605, #1581.)</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 62.9K</div>
+        <div class="stars">★ 63.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 19.4K</div>
+        <div class="stars">★ 19.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -520,7 +520,7 @@ completes in ~1-2 seconds. (Closes #1605, #1581.)</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 356</div>
+        <div class="stars">★ 357</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -528,11 +528,11 @@ completes in ~1-2 seconds. (Closes #1605, #1581.)</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 237</div>
+        <div class="stars">★ 239</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 235</div>
+        <div class="stars">★ 236</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
