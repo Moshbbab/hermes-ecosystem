@@ -140,6 +140,22 @@ There is a single process-level PID and lock (the multiplexer, under the default
 
 Per-profile `.env` credential isolation is preserved and, if anything, stricter: a profile's keys are resolved from its own scope and are never unioned into a shared environment (this also means subprocesses like MCP servers and Kanban workers only ever see their own profile's secrets). Kanban, profile-scoped skills/memory/SOUL, and model routing all behave per-profile exactly as they do with separate gateways.
 
+### Serving selected profiles
+
+By default, `gateway.multiplex_profiles: true` serves every valid named profile on the host. To keep unrelated profiles installed without starting their adapters or cron jobs, set `gateway.multiplex_profile_allowlist`:
+
+```
+gateway:
+  multiplex_profiles: true
+  multiplex_profile_allowlist:
+    - worker
+    - guest
+```
+
+The default profile is always served and does not need to be listed. An unset allowlist preserves the historical serve-all behavior; an empty list serves only the default profile. Names are normalized and deduplicated. Invalid list entries or names that are not installed are skipped with a warning. A malformed non-list value fails safely to default-only.
+
+The resulting served set also controls `/p/<profile>/` API and webhook prefixes, runtime status, profile-route eligibility, and which profiles the in-process cron scheduler ticks. A named profile outside the allowlist may still run its own standalone gateway.
+
 ### Routing shared-bot chats to profiles (`profile_routes`)
 
 Multiplexing selects a profile per **credential** (each profile's own bot token) or per **URL prefix** (`/p/<profile>/` for HTTP platforms). When several communities share **one** bot token — for example one Discord bot serving many guilds — you can additionally route specific guilds/channels/threads to different profiles with `gateway.profile_routes`:
@@ -170,7 +186,7 @@ gateway:
 
 Routes are matched most-specific-first (`thread_id` > `chat_id` > `guild_id`), all declared fields must hold (AND), and a route keyed on a channel also matches threads/forum posts whose parent is that channel. Messages that match no route stay on the default/active profile. The routed profile gets the full per-profile isolation described above (config, skills, memory, credentials, session namespace). Routing works on every platform adapter, not just Discord.
 
-`profile_routes` requires `gateway.multiplex_profiles: true`; with multiplexing off the routes are ignored. If a route names a profile that does not exist on disk, the gateway logs a warning naming the profile and source and falls back to the default home.
+`profile_routes` requires `gateway.multiplex_profiles: true`; with multiplexing off the routes are ignored. If an explicit route matches but its target profile is not installed or is outside `multiplex_profile_allowlist`, the gateway rejects that ingress and logs the route and target. It does not run the default profile. Traffic that matches no route keeps the historical default-profile behavior.
 
 ## Start, stop, or restart all gateways at once
 
