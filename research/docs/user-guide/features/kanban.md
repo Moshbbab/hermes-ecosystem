@@ -10,7 +10,7 @@ Hermes Kanban is a durable task board, shared across all your Hermes profiles, t
 
 The board has two front doors, both backed by the same `~/.hermes/kanban.db`:
 
--   **Agents drive the board through a dedicated `kanban_*` toolset** — `kanban_show`, `kanban_list`, `kanban_complete`, `kanban_block`, `kanban_heartbeat`, `kanban_comment`, `kanban_attach`, `kanban_attach_url`, `kanban_attachments`, `kanban_create`, `kanban_link`, `kanban_unblock`. The dispatcher spawns each worker with these tools already in its schema; orchestrator profiles can also enable the `kanban` toolset explicitly. The model reads and routes tasks by calling tools directly, _not_ by shelling out to `hermes kanban`. See [How workers interact with the board](#how-workers-interact-with-the-board) below.
+-   **Agents drive the board through a dedicated `kanban_*` toolset** — `kanban_show`, `kanban_list`, `kanban_complete`, `kanban_request_review`, `kanban_request_changes`, `kanban_block`, `kanban_heartbeat`, `kanban_comment`, `kanban_attach`, `kanban_attach_url`, `kanban_attachments`, `kanban_create`, `kanban_link`, `kanban_unblock`. The dispatcher spawns each worker with these tools already in its schema; orchestrator profiles can also enable the `kanban` toolset explicitly. The model reads and routes tasks by calling tools directly, _not_ by shelling out to `hermes kanban`. See [How workers interact with the board](#how-workers-interact-with-the-board) below.
 -   **You (and scripts, and cron) drive the board through `hermes kanban …`** on the CLI, `/kanban …` as a slash command, or the dashboard. These are for humans and automation — the places without a tool-calling model behind them.
 
 Both surfaces route through the same `kanban_db` layer, so reads see a consistent view and writes can't drift. The rest of this page shows CLI examples because they're easy to copy-paste, but every CLI verb has a tool-call equivalent the model uses.
@@ -92,7 +92,7 @@ They coexist: a kanban worker may call `delegate_task` internally during its run
 ## Core concepts
 
 -   **Board** — a standalone queue of tasks with its own SQLite DB, workspaces directory, and dispatcher loop. A single install can have many boards (e.g. one per project, repo, or domain); see [Boards (multi-project)](#boards-multi-project) below. Single-project users stay on the `default` board and never see the word "board" outside this docs section.
--   **Task** — a row with title, optional body, one assignee (a profile name), status (`triage | todo | ready | running | blocked | done | archived`), optional tenant namespace, optional idempotency key (dedup for retried automation).
+-   **Task** — a row with title, optional body, one assignee (a profile name), status (`triage | todo | ready | running | blocked | review | done | archived`), optional tenant namespace, optional idempotency key (dedup for retried automation).
 -   **Link** — `task_links` row recording a parent → child dependency. The dispatcher promotes `todo → ready` when all parents are `done`.
 -   **Comment** — the inter-agent protocol. Agents and humans append comments; when a worker is (re-)spawned it reads the full comment thread as part of its context.
 -   **Workspace** — the directory a worker operates in. Three kinds:
@@ -211,6 +211,9 @@ The dispatcher runs inside the gateway process. Nothing to install, no separate 
 kanban:
   dispatch_in_gateway: true        # default
   dispatch_interval_seconds: 60    # default
+  review_dispatch: true            # default: spawn the assigned profile with
+                                   # the bundled sdlc-review skill. Set false
+                                   # for human-only review boards.
 ```
 
 Override the config flag at runtime via `HERMES_KANBAN_DISPATCH_IN_GATEWAY=0` for debugging. Standard gateway supervision applies: run `hermes gateway start` directly, or wire the gateway up as a systemd user unit (see the gateway docs). Without a running gateway, `ready` tasks stay where they are until one comes up — `hermes kanban create` warns about this at creation time.
@@ -241,7 +244,7 @@ hermes kanban block    t_abc "need input" --ids t_def t_hij
 
 Where an unblocked task lands
 
-`unblock` itself only ever moves a task to **`ready`** (all parents `done`) or **`todo`** (a parent is still open — the task is dependency-gated and the dispatcher auto-promotes it once the parent finishes). It never routes to `triage`.
+`unblock` restores the safe source phase: **`review`** for reviewer-origin work whose parents are complete, **`ready`** for implementation work whose parents are complete, or **`todo`** while any parent remains open. A `todo` task keeps its source-phase provenance and returns to `review` or `ready` automatically when the dependency gate clears. `unblock` never routes directly to `triage`.
 
 If you unblock a task and it later shows up in **`triage`**, the unblock is not what put it there. A subsequent _re-block for the same reason_ did: after a task is blocked → unblocked → re-blocked for the same cause `BLOCK_RECURRENCE_LIMIT` times (default `2`), the unblock-loop breaker stops sending it back to `blocked` — where a cron would just keep unblocking it — and routes it to `triage` for a human decision. This is a deterministic DB guard, not an LLM judgment call, and a task's body text cannot opt out of it: the recurrence counter deliberately survives each unblock (it resets only on a successful `complete`). To keep an unblocked task in the work pool, resolve _why it keeps re-blocking_ (unfinished parent, missing input, unmet capability) before unblocking, or raise `BLOCK_RECURRENCE_LIMIT` if the loop is expected.
 
@@ -272,6 +275,18 @@ List task summaries with filters for `assignee`, `status`, `tenant`, archived vi
 Finish with `summary` + `metadata` structured handoff.
 
 at least one of `summary` / `result`
+
+`kanban_request_review`
+
+Start same-card review with a durable `summary`, optional `metadata`, and optional reviewer profile. The task moves to `review`; this is not a block.
+
+`summary`
+
+`kanban_request_changes`
+
+Reviewer verdict from an active review run. Closes that run, reapplies parent gating, and routes the task to its original implementer without block-loop accounting.
+
+`reason`
 
 `kanban_block`
 
@@ -323,7 +338,7 @@ List a task's attachments.
 
 `kanban_unblock`
 
-(Orchestrators) move a blocked task to `ready` when all parents are done, or `todo` while any parent remains open.
+(Orchestrators) restore a blocked task to its source phase (`review` or `ready`), or `todo` while a parent remains open.
 
 `task_id`
 
@@ -545,6 +560,8 @@ kanban_complete(
 ```
 
 The orchestrator guidance ships in the worker's system prompt automatically — there is nothing to install or sync per profile.
+
+**Decide before you fan out.** Design decisions belong to the orchestrator, not to the workers. If two parallel cards would each have to pick the same thing — a naming scheme, a schema, a file format, an API shape — the orchestrator decides it once and stamps the decision into **both** card bodies. Workers cannot see sibling cards, so every child card body must carry every decision it depends on. Example: for the parallel cards "build the exporter" and "build the importer", don't let each worker invent its own file format — pick one up front (say, newline-delimited JSON with a `version` field) and write it into both bodies, or the two halves will never round-trip.
 
 For best results, pair it with a profile whose toolsets are restricted to board operations (`kanban`, `gateway`, `memory`) so the orchestrator literally cannot execute implementation tasks even if it tries.
 
@@ -868,6 +885,10 @@ hermes kanban block <id> "<reason>" [--ids <id>...]
 hermes kanban unblock <id>...
 hermes kanban archive <id>...
 
+hermes kanban request-review <id> [--summary "..."] [--metadata JSON] [--reviewer PROFILE]
+hermes kanban request-changes <id> "<required changes>"               # active reviewer -> implementer
+hermes kanban reopen-review  <id>... [--reason "..."]                 # changes requested: 'review' -> ready/todo
+
 hermes kanban tail <id>                                # follow a single task's event stream
 hermes kanban watch [--assignee P] [--tenant T]        # live stream ALL events to the terminal
         [--kinds completed,blocked,…] [--interval SECS]
@@ -988,7 +1009,7 @@ hermes kanban swarm "Design a multi-region failover plan" \
   --verifier reviewer --synthesizer writer
 ```
 
-The resulting graph dispatches normally — workers run in parallel, the verifier wakes after they all finish, the synthesizer wakes after the verifier marks the work clean.
+The resulting graph is committed atomically: dispatchers and dashboard readers see either no new swarm or the complete topology, never a partially linked root/worker/verifier graph. It then dispatches normally — workers run in parallel, the verifier wakes after they all finish, and the synthesizer wakes after the verifier marks the work clean.
 
 ## `/kanban` slash command
 
@@ -1145,6 +1166,16 @@ The remediation worker spawns with the original card's summary and metadata (cha
 ### Reconciling colliding worker branches
 
 In engineering pipelines (P1/P2 with worktrees), two workers' branches can conflict when merged. Don't let either worker self-adjudicate — the colliding agent lacks its peer's context and reliably overwrites the other side or abandons its own. Instead, create a reconciliation card assigned to a **third, neutral profile** with **both** conflicted cards linked as parents: the parent links carry both sides' completion summaries into the reconciler's context, so it receives both diffs _and_ both intents. The bundled [`merge-reconciler` skill](https://github.com/NousResearch/hermes-agent/blob/main/skills/autonomous-ai-agents/merge-reconciler/SKILL.md) gives that worker the full procedure: classify each conflicted hunk, resolve impartially, verify, and hand back a summary naming every decision.
+
+### Collision hotspots in parallel campaigns
+
+In wide campaigns some files become collision magnets: many workers each add a little to the same file, nobody owns keeping it small, and it turns into the site of constant merge conflicts. The mitigation is a comment convention, not a new primitive. A worker that notices its diff keeps colliding with siblings in one file — or that a file it touches keeps appearing in other cards' recent comments — should not silently pile on. Instead it leaves a comment on its own card with a recognizable prefix:
+
+```
+hotspot: hermes_cli/kanban_db.py — third conflicting edit to the dispatch loop this wave
+```
+
+and repeats the flag in its completion `metadata`. Orchestrators (or humans reviewing the board) who see **two or more `hotspot:` comments naming the same path** should create a dedicated refactor/decomposition card for that file **before** queuing more work that touches it — splitting the magnet file is cheaper than reconciling every future collision it would cause. For conflicts that have _already_ happened, use the reconciliation-card pattern above with the `merge-reconciler` skill; hotspot flagging is the upstream fix that keeps the reconciler from becoming a standing lane.
 
 ## Multi-tenant usage
 

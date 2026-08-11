@@ -143,6 +143,7 @@ Impartiality contract: never favor the side that spawned you; touch ONLY conflic
 -   **Per-file classification**: files usually mix hunk classes; classifying a whole file as one class silently drops a disjoint change.
 -   **Drive-by edits** make the merge unreviewable and steal decisions from the original agents.
 -   **Missing intents**: commit messages alone can be thin; prefer kanban completion summaries or PR bodies. If neither side's intent is recoverable, escalate instead of guessing.
+-   **Repeat offenders**: repeated conflicts on the SAME file across rounds are a hotspot signal, not routine reconciliation work — flag it (e.g. a `hotspot: <path> — <reason>` kanban comment) so the orchestrator decomposes that file, rather than serially reconciling every new collision on it.
 
 ## Verification
 

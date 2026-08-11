@@ -336,6 +336,18 @@ Block the current task on a question for the user — the dispatcher pauses, sur
 
 `HERMES_KANBAN_TASK` or `kanban` toolset
 
+`kanban_request_review`
+
+Hand the implementation to a reviewer with `summary`, optional structured `metadata`, and an optional reviewer profile. Moves the same task to `review`; it is not a block and does not affect block-loop accounting.
+
+`HERMES_KANBAN_TASK` or `kanban` toolset
+
+`kanban_request_changes`
+
+Reviewer verdict for an actively claimed review run. Closes the review run, reapplies parent gating, and routes the task back to the original implementer without using a block.
+
+`HERMES_KANBAN_TASK` or `kanban` toolset
+
 `kanban_heartbeat`
 
 Send a progress heartbeat during a long-running operation so the dispatcher knows the worker is still alive.

@@ -188,6 +188,20 @@ Control TouchDesigner via twozero MCP.
 
 `creative/touchdesigner-mcp`
 
+## devops
+
+Skill
+
+Description
+
+Path
+
+[`sdlc-review`](/docs/user-guide/skills/bundled/devops/devops-sdlc-review)
+
+Review Kanban handoffs and route verified outcomes.
+
+`devops/sdlc-review`
+
 ## email
 
 Skill

@@ -95,10 +95,6 @@ Article illustrations: type × style × palette consistency.
 
 Knowledge comics (知识漫画): educational, biography, tutorial.
 
-[**blender-mcp**](/docs/user-guide/skills/optional/creative/creative-blender-mcp)
-
-Drive Blender via the catalog blender MCP, with bpy recipes.
-
 [**concept-diagrams**](/docs/user-guide/skills/optional/creative/creative-concept-diagrams)
 
 Generate flat, minimal educational SVG visuals as HTML.
