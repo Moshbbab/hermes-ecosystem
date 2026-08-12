@@ -47,13 +47,13 @@
     "name": "nexu-io",
     "url": "https://github.com/nexu-io"
   },
-  "dateModified": "2026-08-12T08:07:22.000Z",
+  "dateModified": "2026-08-12T13:53:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 85197
+    "userInteractionCount": 85262
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,7 +119,7 @@
   <p class="project-desc">🎨 The open-source Claude Design alternative. 🖥️ Local-first desktop app. 🖼️ Your coding agent becomes the design engine: prototypes, landing pages, dashboards, slides, images &amp; video — real files, HTML/PDF/PPTX/MP4 export. 🤖 Claude Code / Codex / Cursor / Gemini / OpenCode / Qwen &amp; 20+ CLIs via BYOK.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 85.2K</span>
+    <span class="stars">★ 85.3K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
@@ -141,8 +141,8 @@
     <p class="summary-text">Open Design is an open-source design and prototyping system available as a native desktop application for macOS and Windows. It generates various artifacts including web, desktop, and mobile prototypes, decks, images, video, and motion graphics.</p>
     <ul class="summary-highlights">
       <li>Supports HTML, PDF, PPTX, and MP4 exports</li>
-      <li>Compatible with various coding agents and local CLI executables</li>
-      <li>Includes automation, design system, and plugin features</li>
+      <li>Provides an MCP server for integration with coding agents</li>
+      <li>Uses DESIGN.md for brand system definitions</li>
     </ul>
   </div>
 </section>
@@ -262,6 +262,11 @@
 <td><code>od mcp install claude</code></td>
 </tr>
 <tr>
+<td><a href="https://claude.ai/download">Claude Desktop</a></td>
+<td align="center">✅ Supported¹</td>
+<td><code>od mcp install claude-desktop</code></td>
+</tr>
+<tr>
 <td><a href="https://github.com/openai/codex">Codex CLI</a></td>
 <td align="center">✅ Supported</td>
 <td><code>od mcp install codex</code></td>
@@ -343,6 +348,7 @@
 </tr>
 </tbody></table>
 <p><code>od mcp install &lt;agent&gt; --print</code> for a dry-run preview · <code>--uninstall</code> to remove · full list with <code>od mcp install --help</code>.</p>
+<p>¹ Automatic MCP configuration for Claude Desktop is currently supported on macOS and Windows only.</p>
 <p align="center">
   <img src="https://repo-assets.open-design.ai/resources/images/coding-agents.png" alt="The 25 coding-agent CLIs Open Design supports — Claude Code · Codex · OpenCode · Hermes · Antigravity · Vela · Grok Build · Kimi · Cursor Agent · Qwen · Qoder · GitHub Copilot · Pi · Kiro · Kilo · Mistral Vibe · DeepSeek · Reasonix · Aider · Amp · CodeBuddy · Mimo · AtomCode · Devin · Trae" width="100%">
 </p>
@@ -574,11 +580,12 @@ cd open-design/deploy
 cp .env.example .env
 echo "OD_API_TOKEN=$(openssl rand -hex 32)" &gt;&gt; .env
 docker compose up -d
-# open http://localhost:7456
+# open http://127.0.0.1:7456
 </code></pre>
-<blockquote>
-<p><strong>macOS users:</strong> If the web UI shows <code>Authorization: Bearer &lt;OD_API_TOKEN&gt; required</code>, Docker Desktop bridge networking is the cause. See <a href="https://github.com/nexu-io/open-design/blob/main/deploy/README.md#docker-desktop-on-macos">Docker Desktop on macOS</a> for the fix.</p>
-</blockquote>
+<p>If the browser asks for credentials, use <code>open-design</code> as the username and the
+<code>OD_API_TOKEN</code> value from <code>deploy/.env</code> as the password. This keeps Docker bridge
+traffic authenticated without requiring host networking. API clients can keep
+using <code>Authorization: Bearer &lt;OD_API_TOKEN&gt;</code>.</p>
 <h4>🚀 Deploy on Sealos</h4>
 <p><a href="https://sealos.io/products/app-store/open-design/"><img src="https://sealos.io/Deploy-on-Sealos.svg" alt="Deploy on Sealos" loading="lazy" decoding="async"></a></p>
 <p>The Sealos App Store template runs the published Open Design Docker image with persistent workspace storage and Basic Auth on the public proxy. For custom public or shared Docker deployments, follow the reverse-proxy and <code>OPEN_DESIGN_ALLOWED_ORIGINS</code> guidance in <a href="https://github.com/nexu-io/open-design/blob/main/deploy/README.md#local-compose"><code>deploy/README.md</code></a>.</p>
@@ -997,23 +1004,11 @@ pnpm guard &amp;&amp; pnpm --filter @open-design/plugin-runtime typecheck
 <tr>
 <td>Fix a bug or polish UI</td>
 <td>Browse the <a href="https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><code>good-first-issue</code></a> label</td>
-<td><a href="https://github.com/nexu-io/open-design/issues">Issues →</a></td>
-</tr>
-<tr>
-<td>Translate the docs</td>
-<td>Update the <code>README.&lt;lang&gt;.md</code> files</td>
-<td><a href="https://github.com/nexu-io/open-design/blob/main/TRANSLATIONS.md"><code>TRANSLATIONS.md</code></a></td>
+<td>[Issues →](<a href="https://github.com/nexu-io/open-design/is">https://github.com/nexu-io/open-design/is</a></td>
 </tr>
 </tbody></table>
-<h4>🤖 Contributing as an agent</h4>
-<p>If <em>you are the agent reading this</em>, the fastest path is:</p>
-<pre><code class="language-bash"># 1. Boot locally
-git clone https://github.com/nexu-io
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/nexu-io/open-design#readme)*
-</code></pre>
+<hr>
+<p><em>README truncated. <a href="https://github.com/nexu-io/open-design#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1026,11 +1021,11 @@ git clone https://github.com/nexu-io
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 27.6K</div>
+        <div class="stars">★ 27.7K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
-        <div class="stars">★ 2.9K</div>
+        <div class="stars">★ 3.0K</div>
         <div class="name"><span class="org">conorbronsdon /</span> avoid-ai-writing</div>
       </a>
       <a class="related-row" href="/projects/wondelai/skills">
