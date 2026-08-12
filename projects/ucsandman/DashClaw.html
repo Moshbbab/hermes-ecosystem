@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote approval layer for unattended agent runs, routing high-risk commands to an inbox for human review via CLI, PWA, or messaging platforms.",
+  "description": "DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote approval layer for unattended agent sessions, routing high-risk commands to an inbox for human review via CLI, PWA, or messaging platforms.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-08-12T02:03:10.000Z",
+  "dateModified": "2026-08-12T07:56:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote approval layer for unattended agent runs, routing high-risk commands to an inbox for human review via CLI, PWA, or messaging platforms.</p>
+    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote approval layer for unattended agent sessions, routing high-risk commands to an inbox for human review via CLI, PWA, or messaging platforms.</p>
     <ul class="summary-highlights">
-      <li>Intercepts and cancels tool calls before execution using exit 2 hooks.</li>
-      <li>Records every decision in a signed, tamper-evident replayable ledger.</li>
-      <li>Includes default prompt-injection scanning and calibrated interruption tuning.</li>
+      <li>Intercepts and cancels tool calls before execution via hook seams.</li>
+      <li>Records every decision in a signed, tamper-evident audit ledger.</li>
+      <li>Includes default scanning for prompt-injection and credential exfiltration.</li>
     </ul>
   </div>
 </section>
@@ -384,7 +384,7 @@ dashclaw install claude                          # wires ~/.claude/settings.json
 dashclaw install codex --project /path/to/repo   # wires manifest, hooks, AGENTS.md protocol
 bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Windows)
 </code></pre>
-<p>Claude Code hooks govern Bash, Edit, Write, MultiEdit, sub-agent spawns, and every <code>mcp__*</code> call with a fail-closed PreToolUse check. Fresh installs start in enforce mode (the seeded catastrophe pack holds the irreversible class); pass <code>--observe</code> or set <code>DASHCLAW_HOOK_MODE=observe</code> to log without blocking, and re-installs keep whichever mode you chose. Observe mode is loud, never silent: <code>/approvals</code> and <code>/decisions</code> show a red banner while any agent reports it, unenforced verdicts render "Logged, not enforced" in the ledger, and a gated action that executes anyway gets an <code>executed_despite</code> witness stamp from PostToolUse — a logged block is never presented as an enforced one. Verify the wiring fires:</p>
+<p>Claude Code hooks govern Bash, Edit, Write, MultiEdit, sub-agent spawns, and every <code>mcp__*</code> call with a fail-closed PreToolUse check. Fresh installs start in enforce mode (the seeded catastrophe pack holds the irreversible class); pass <code>--observe</code> or set <code>DASHCLAW_HOOK_MODE=observe</code> to log without blocking, and re-installs keep whichever mode you chose. Observe mode is loud, never silent: <code>/approvals</code> and <code>/decisions</code> show a red banner while any agent reports it, unenforced verdicts render "Logged, not enforced" in the ledger, and a gated action that executes anyway gets an <code>executed_despite</code> witness stamp from PostToolUse — a logged block is never presented as an enforced one. <strong>Narrowing the scope is loud too:</strong> <code>DASHCLAW_GOVERNED_CATEGORIES</code> decides which tool categories call guard at all, and an excluded category exits before the network call, so its tool calls are simply <em>absent</em> from <code>/decisions</code> — which reads identically to "that agent did nothing." Since v5.20 the hook declares the categories it is not governing on the calls it does make, and any category dropped below the default raises a red <strong>Governance scope narrowed</strong> signal naming what stopped being watched. Verify the wiring fires:</p>
 <pre><code class="language-bash">echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"},"tool_use_id":"t1","session_id":"smoke"}' | python .claude/hooks/dashclaw_pretool.py
 </code></pre>
 <p><strong>OpenClaw.</strong> <a href="packages/openclaw-plugin"><code>@dashclaw/openclaw-plugin</code></a> intercepts every tool call at the gateway, so the agent calls no DashClaw tool itself — the CLI installs it, patches config, and writes the governance protocol into the resolved workspace's <code>AGENTS.md</code>.</p>
