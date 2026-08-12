@@ -238,9 +238,9 @@ Kettlebell
 ```
 # Search exercises by name
 QUERY="$1"
-ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$QUERY")
+ENCODED=$(python -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$QUERY")
 curl -s "https://wger.de/api/v2/exercise/search/?term=${ENCODED}&language=english&format=json" \
-  | python3 -c "
+  | python -c "
 import json,sys
 data=json.load(sys.stdin)
 for s in data.get('suggestions',[])[:10]:
@@ -253,7 +253,7 @@ for s in data.get('suggestions',[])[:10]:
 # Get full details for a specific exercise
 EXERCISE_ID="$1"
 curl -s "https://wger.de/api/v2/exerciseinfo/${EXERCISE_ID}/?format=json" \
-  | python3 -c "
+  | python -c "
 import json,sys,html,re
 data=json.load(sys.stdin)
 trans=[t for t in data.get('translations',[]) if t.get('language')==2]
@@ -275,7 +275,7 @@ if imgs: print(f\"Image     : {imgs[0].get('image','')}\")
 # Combine filters as needed: ?muscles=4&equipment=1&language=2&status=2
 FILTER="$1"  # e.g. "muscles=4" or "category=11" or "equipment=3"
 curl -s "https://wger.de/api/v2/exercise/?${FILTER}&language=2&status=2&limit=20&format=json" \
-  | python3 -c "
+  | python -c "
 import json,sys
 data=json.load(sys.stdin)
 print(f'Found {data.get(\"count\",0)} exercises.')
@@ -292,9 +292,9 @@ Uses `USDA_API_KEY` env var if set, otherwise falls back to `DEMO_KEY`. DEMO\_KE
 # Search foods by name
 FOOD="$1"
 API_KEY="${USDA_API_KEY:-DEMO_KEY}"
-ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$FOOD")
+ENCODED=$(python -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$FOOD")
 curl -s "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${API_KEY}&query=${ENCODED}&pageSize=5&dataType=Foundation,SR%20Legacy" \
-  | python3 -c "
+  | python -c "
 import json,sys
 data=json.load(sys.stdin)
 foods=data.get('foods',[])
@@ -315,7 +315,7 @@ for f in foods:
 FDC_ID="$1"
 API_KEY="${USDA_API_KEY:-DEMO_KEY}"
 curl -s "https://api.nal.usda.gov/fdc/v1/food/${FDC_ID}?api_key=${API_KEY}" \
-  | python3 -c "
+  | python -c "
 import json,sys
 d=json.load(sys.stdin)
 print(f\"Food: {d.get('description','N/A')}\")
@@ -332,11 +332,11 @@ for x in sorted(d.get('foodNutrients',[]),key=lambda x:x.get('nutrient',{}).get(
 
 Use the helper scripts in `scripts/` for batch operations, or run inline for single calculations:
 
--   `python3 scripts/body_calc.py bmi <weight_kg> <height_cm>`
--   `python3 scripts/body_calc.py tdee <weight_kg> <height_cm> <age> <M|F> <activity 1-5>`
--   `python3 scripts/body_calc.py 1rm <weight> <reps>`
--   `python3 scripts/body_calc.py macros <tdee_kcal> <cut|maintain|bulk>`
--   `python3 scripts/body_calc.py bodyfat <M|F> <neck_cm> <waist_cm> [hip_cm] <height_cm>`
+-   `python scripts/body_calc.py bmi <weight_kg> <height_cm>`
+-   `python scripts/body_calc.py tdee <weight_kg> <height_cm> <age> <M|F> <activity 1-5>`
+-   `python scripts/body_calc.py 1rm <weight> <reps>`
+-   `python scripts/body_calc.py macros <tdee_kcal> <cut|maintain|bulk>`
+-   `python scripts/body_calc.py bodyfat <M|F> <neck_cm> <waist_cm> [hip_cm] <height_cm>`
 
 See `references/FORMULAS.md` for the science behind each formula.
 
@@ -421,4 +421,4 @@ BMI / TDEE / 1RM / macros
 
 offline
 
-`python3 scripts/body_calc.py`
+`python scripts/body_calc.py`

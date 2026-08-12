@@ -74,12 +74,12 @@ Ledger location: `$HERMES_HOME/cache/citations/ledger.json` (profile-aware). Ove
 ```
 S=~/.hermes/skills/research/grounded-citations/scripts/sources.py
 
-python3 "$S" reset                                  # start a clean ledger
-python3 "$S" add https://example.com/a --title "A"  # prints: [1]
-python3 "$S" add https://example.com/b --title "B"  # prints: [2]
-python3 "$S" list                                   # ledger table
-python3 "$S" render                                 # Sources: block
-python3 "$S" verify draft.md                        # catch bad citations
+python "$S" reset                                  # start a clean ledger
+python "$S" add https://example.com/a --title "A"  # prints: [1]
+python "$S" add https://example.com/b --title "B"  # prints: [2]
+python "$S" list                                   # ledger table
+python "$S" render                                 # Sources: block
+python "$S" verify draft.md                        # catch bad citations
 ```
 
 `add` is idempotent and URL-normalized: the same page always returns the same id within a ledger, so ids stay stable across many search/extract rounds.
@@ -162,7 +162,7 @@ For work where the reader must be able to check the chain — medical, legal, fi
 ① **Attach a verbatim quote per source.** After extracting a page, save its text to a file and attach the sentence(s) that carry each claim:
 
 ```
-python3 "$S" quote 1 --text "Ice is about 9% less dense than liquid water." --from page1.txt
+python "$S" quote 1 --text "Ice is about 9% less dense than liquid water." --from page1.txt
 ```
 
 The quote is rejected unless it appears verbatim in the evidence text (insensitive to whitespace, case, and markdown markup — inline links like `_[ERAP1](https://…)_` in extracted text match the plain prose a reader sees), so a paraphrase or misremembered figure cannot masquerade as evidence. Copy-paste from the fetched text; never retype. Quote the sentence as the reader sees it — the matcher sees through the extractor's markup for you, so you don't have to reproduce link syntax or escaped asterisks in your quote.
@@ -180,8 +180,8 @@ The refactor likely predates the 2.0 release.[unverified]
 ④ **Verify with the evidence gate and render the evidence block:**
 
 ```
-python3 "$S" verify report.md --evidence --min-coverage 0.5
-python3 "$S" render --style evidence --replace-in report.md
+python "$S" verify report.md --evidence --min-coverage 0.5
+python "$S" render --style evidence --replace-in report.md
 ```
 
 `--evidence` fails the draft if any cited source has no attached quote. The `evidence` render style prints each source's quotes beneath its URL, so the deliverable shows claim → source → exact supporting text with nothing taken on faith. Use `--replace-in <draft>` to rewrite an existing Sources block in place (idempotent — safe to re-run after attaching more quotes); `--cited-in` prints to stdout instead. Both emit the heading `## Sources` (`--style plain` emits `Sources:`).
@@ -205,7 +205,7 @@ python3 "$S" render --style evidence --replace-in report.md
 ## Verification
 
 ```
-python3 "$S" verify report.md --strict --min-coverage 0.5
+python "$S" verify report.md --strict --min-coverage 0.5
 ```
 
 Green means: every `[n]` in the draft exists in the ledger, the Sources block lists exactly the cited ids with the ledger's URLs, and the cited share of source-bearing sentences meets the threshold. Read the warnings even when the exit code is 0 — uncited registered sources usually mean a claim lost its attribution during editing.
