@@ -1716,7 +1716,7 @@ Force Nous Portal
 
 Force Codex OAuth (ChatGPT account). Supports vision (gpt-5.3-codex).
 
-`hermes model` → Codex
+`hermes model` → ChatGPT or Codex Subscription
 
 `"minimax-oauth"`
 

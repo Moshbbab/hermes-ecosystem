@@ -139,9 +139,9 @@ OAuth login via `hermes model`
 
 **OpenAI Codex**
 
-ChatGPT OAuth, uses Codex models
+ChatGPT or Codex subscription, uses Codex models
 
-Device code auth via `hermes model`
+Device code auth via `hermes model` → **ChatGPT or Codex Subscription**
 
 **Anthropic**
 
