@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>hermes-labs-ai/lintlang — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="LintLang is a static analysis tool for AI agent configurations, tool descriptions, and system prompts. It identifies patterns such as ambiguous tool…">
+<meta name="description" content="LintLang is a static analysis tool for natural-language instructions used by AI agents. It identifies issues such as ambiguous tool descriptions, missing…">
 <link rel="canonical" href="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta property="og:description" content="LintLang is a static analysis tool for AI agent configurations, tool descriptions, and system prompts. It identifies patterns such as ambiguous tool…">
+<meta property="og:description" content="LintLang is a static analysis tool for natural-language instructions used by AI agents. It identifies issues such as ambiguous tool descriptions, missing…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta name="twitter:description" content="LintLang is a static analysis tool for AI agent configurations, tool descriptions, and system prompts. It identifies patterns such as ambiguous tool…">
+<meta name="twitter:description" content="LintLang is a static analysis tool for natural-language instructions used by AI agents. It identifies issues such as ambiguous tool descriptions, missing…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=lintlang&amp;subtitle=Static+analysis+for+AI+agent+configs%2C+tool+descriptions%2C+and+system+prompts+%E2%80%94+catches+vague+tool+descriptions%2C+missing+stop+conditions%2C+and+schema+gaps+before+they+reach+runtime.+Z&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for AI agent configurations, tool descriptions, and system prompts. It identifies patterns such as ambiguous tool descriptions, missing stop conditions, and conflicting output formats without making network or API calls.",
+  "description": "LintLang is a static analysis tool for natural-language instructions used by AI agents. It identifies issues such as ambiguous tool descriptions, missing constraints, and conflicting directives without making network or LLM calls.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-08-11T05:01:34.000Z",
+  "dateModified": "2026-08-13T06:09:35.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-11</span>
+    <span><span class="meta-label">updated</span>2026-08-13</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for AI agent configurations, tool descriptions, and system prompts. It identifies patterns such as ambiguous tool descriptions, missing stop conditions, and conflicting output formats without making network or API calls.</p>
+    <p class="summary-text">LintLang is a static analysis tool for natural-language instructions used by AI agents. It identifies issues such as ambiguous tool descriptions, missing constraints, and conflicting directives without making network or LLM calls.</p>
     <ul class="summary-highlights">
-      <li>Analyzes JSON, YAML,.txt,.md,.prompt, and Python files</li>
-      <li>Detects issues like missing limits and conflicting directives</li>
-      <li>Provides deterministic, local static checks</li>
+      <li>Detects ambiguous, vague, or overlapping tool descriptions.</li>
+      <li>Identifies missing stop conditions and unbounded retries.</li>
+      <li>Provides deterministic, local static checks.</li>
     </ul>
   </div>
 </section>
@@ -153,6 +153,7 @@
     <h2>LintLang</h2>
 <p><a href="https://github.com/hermes-labs-ai/lintlang/actions/workflows/ci.yml"><img src="https://github.com/hermes-labs-ai/lintlang/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" decoding="async"></a>
 <a href="https://pypi.org/project/lintlang/"><img src="https://img.shields.io/pypi/v/lintlang" alt="PyPI" loading="lazy" decoding="async"></a>
+<a href="https://pypistats.org/packages/lintlang"><img src="https://img.shields.io/pypi/dm/lintlang?label=downloads%2Fmonth" alt="PyPI downloads" loading="lazy" decoding="async"></a>
 <a href="https://pypi.org/project/lintlang/"><img src="https://img.shields.io/pypi/pyversions/lintlang" alt="Python" loading="lazy" decoding="async"></a>
 <a href="LICENSE"><img src="https://img.shields.io/pypi/l/lintlang" alt="License" loading="lazy" decoding="async"></a></p>
 <p><strong>LintLang statically analyzes the natural-language instructions that control
@@ -197,7 +198,10 @@ shell, and retry the scan.</p>
 </code></pre>
 <p>If your project uses another filename, replace <code>AGENTS.md</code> with its prompt,
 tool-definition, agent-configuration, or supported directory path.</p>
-<p><strong>3,000+ PyPI downloads · Used in recurring CI by <a href="https://github.com/character-ai/larch/pull/7960">Character.AI's public Larch repository</a> · Independently packaged for <a href="https://github.com/thehaven/haven-overlay/tree/master/dev-util/lintlang">Gentoo</a></strong></p>
+<p><a href="https://github.com/character-ai/larch/pull/7960">Character.AI's public Larch repository</a>
+runs a pinned LintLang release in recurring CI. LintLang is also packaged for
+Gentoo through the third-party
+<a href="https://github.com/thehaven/haven-overlay/tree/master/dev-util/lintlang">Haven overlay</a>.</p>
 <p>When you are ready to make <code>HIGH</code> or <code>CRITICAL</code> findings block CI:</p>
 <pre><code class="language-bash">lintlang scan AGENTS.md --fail-on fail
 </code></pre>
@@ -210,17 +214,17 @@ cd lintlang
 
 lintlang scan samples/bad_tool_descriptions.yaml --fail-on fail
 </code></pre>
-<p>Excerpt from <code>lintlang 0.3.1</code>:</p>
-<pre><code class="language-text">LINTLANG v0.3.1
+<p>Excerpt from <code>lintlang 0.4.0</code>:</p>
+<pre><code class="language-text">LINTLANG v0.4.0
 
-FAIL — 1 CRITICAL, 2 HIGH, 6 MEDIUM, 3 LOW
+FAIL — 1 CRITICAL, 2 HIGH, 7 MEDIUM, 3 LOW
 
 H1: Tool Description Ambiguity
 
-  [CRITICAL] tool:process_ticket
+  [CRITICAL] H1.1 tool:process_ticket
   Tool 'process_ticket' has no description.
 
-  [HIGH] tool:get_user_info
+  [HIGH] H1.2 tool:get_user_info
   Tool 'get_user_info' has a very short description (13 chars):
   "Get user info"
 
@@ -268,7 +272,7 @@ A clean LintLang scan is not evidence that an agent is safe or runtime-correct.<
 <li><code>--fail-on review</code> blocks on <code>REVIEW</code> or <code>FAIL</code>.</li>
 <li>Missing, malformed, unreadable, or otherwise unscannable requested inputs
 remain nonzero regardless of the chosen finding threshold.</li>
-<li>A requested directory with no eligible files also exits nonzero.</li>
+<li>An invocation that finds no eligible files exits nonzero.</li>
 </ul>
 <p>Filters such as <code>--min-severity</code> are applied before the verdict. For initial
 adoption, keep the full output visible and use <code>--fail-on fail</code> to block only
@@ -279,10 +283,10 @@ the highest-severity findings.</p>
   lint-agent-instructions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Inspect agent instructions
-        uses: hermes-labs-ai/lintlang@v0.3.8
+        uses: hermes-labs-ai/lintlang@v0.4.0
         with:
           path: AGENTS.md
 </code></pre>
@@ -294,7 +298,7 @@ making them blocking.</p>
 to scan:</p>
 <pre><code class="language-yaml">repos:
   - repo: https://github.com/hermes-labs-ai/lintlang
-    rev: v0.3.8
+    rev: v0.4.0
     hooks:
       - id: lintlang
         args: [AGENTS.md]
@@ -312,9 +316,48 @@ After reviewing the repository's baseline, opt into blocking <code>FAIL</code> f
     args: [AGENTS.md, --fail-on, fail]
 </code></pre>
 <p>Missing, unreadable, or malformed configured inputs still return nonzero.</p>
+<h3>Machine-readable output and GitHub Code Scanning</h3>
 <p>For machine-readable output:</p>
 <pre><code class="language-bash">lintlang scan AGENTS.md --format json --fail-on fail
 </code></pre>
+<p>For deterministic SARIF 2.1.0 output on stdout:</p>
+<pre><code class="language-bash">lintlang scan AGENTS.md --format sarif --fail-on fail &gt; lintlang.sarif
+</code></pre>
+<p>Relative inputs are resolved from the current directory. Artifact URIs are
+URI-encoded paths relative to the nearest Git worktree root (or the current
+directory when there is no Git worktree). A resolved source outside that root
+is a fatal output error rather than an absolute-path leak. Python AST findings
+carry supported line spans; YAML, JSON, and text findings intentionally remain
+file-level.</p>
+<p>The composite Action can write the same report with its optional <code>sarif-file</code>
+input. In that mode SARIF stdout is redirected to the requested file, while
+verdict messages remain on stderr and <code>fail-on</code> keeps its normal exit status.
+Directory creation or file-write errors are fatal.</p>
+<p>To ask GitHub to ingest the report, keep generation and upload as separate
+steps so the upload still runs after a blocking LintLang verdict:</p>
+<pre><code class="language-yaml">permissions:
+  contents: read
+  security-events: write
+
+steps:
+  - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+  - name: Run LintLang
+    uses: hermes-labs-ai/lintlang@v0.4.0
+    with:
+      path: AGENTS.md
+      fail-on: fail
+      sarif-file: lintlang.sarif
+  - name: Upload LintLang SARIF
+    if: always() &amp;&amp; (github.event_name == 'push' || (github.actor != 'dependabot[bot]' &amp;&amp; github.event.pull_request.head.repo.full_name == github.repository))
+    uses: github/codeql-action/upload-sarif@5595ccaf912efad79be6eef63a5619ff05969be3 # v4
+    with:
+      sarif_file: lintlang.sarif
+</code></pre>
+<p>The complete copy-paste workflow is
+<a href="https://github.com/hermes-labs-ai/lintlang/blob/main/examples/github-code-scanning.yml"><code>examples/github-code-scanning.yml</code></a>.
+LintLang emits code-quality/static-language results without security tags,
+security severity, source snippets, or custom fingerprints. GitHub's upload
+Action may calculate fingerprints during ingestion.</p>
 <h3>What it inspects</h3>
 <p>LintLang currently accepts:</p>
 <ul>
@@ -351,9 +394,11 @@ is not evidence that no such pair exists.</p>
 <p>Use narrow, intentional paths. Directory scans can discover Markdown and Python
 files that were not written as agent configuration; use <code>.lintlangignore</code> or
 <code>--exclude</code> where needed.</p>
-<p>For exact H-series and Python rule identifiers:</p>
+<p>For the exact H-series identifiers:</p>
 <pre><code class="language-bash">lintlang patterns
 </code></pre>
+<p><code>lintlang patterns</code> lists the H1-H7 structural detectors only. Python pipeline
+findings report as <code>P1</code> and <code>P2</code> in scan, JSON, and SARIF output.</p>
 <p>See the <a href="https://github.com/hermes-labs-ai/lintlang/blob/main/llms-full.txt">full technical reference</a> for detector details.</p>
 <h3>Where it fits</h3>
 <pre><code class="language-text">syntax and schema validation
@@ -374,19 +419,6 @@ testing. It does not:</p>
 <li>replace runtime evaluation or human review.</li>
 </ul>
 <p>Suggestions are review aids, not guaranteed meaning-preserving fixes.</p>
-<h3>Ecosystem</h3>
-<p>Public ecosystem signals include:</p>
-<ul>
-<li><a href="https://github.com/character-ai/larch/pull/7960">Character.AI's public Larch repository</a>
-runs the pinned <code>lintlang==0.3.1</code> package in recurring CI.</li>
-<li><a href="https://github.com/zhupanov/agent-lint/issues/192">Agent Lint</a> explicitly
-attributes improvements to LintLang's ideas, including structured diagnostics,
-rule selection, regression coverage, and prompt analysis.</li>
-<li><a href="https://github.com/thehaven/haven-overlay/tree/master/dev-util/lintlang">The Haven Gentoo overlay</a>
-packages LintLang for downstream installation.</li>
-</ul>
-<p>These represent three distinct ecosystem signals: direct package execution,
-product influence, and downstream packaging.</p>
 <h3>Optional instruction preflight</h3>
 <p>Secondary capability: <a href="https://github.com/hermes-labs-ai/lintlang/blob/main/docs/preflight.md">provider-neutral instruction preflight</a>
 inspects one present instruction plus explicit context.</p>
@@ -414,7 +446,7 @@ inspects one present instruction plus explicit context.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 66.1K</div>
+        <div class="stars">★ 66.2K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
