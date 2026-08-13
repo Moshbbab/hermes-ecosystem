@@ -759,9 +759,9 @@ Extremely privileged in-process objects expose inbound user/routing data and hos
 
 Observer
 
-After the gateway's profile-scoped authorization succeeds, when a supported platform-native event is normalized at the gateway boundary (Telegram reactions currently); return ignored.
+After the gateway's profile-scoped authorization succeeds, when a supported platform-native event is normalized at the gateway boundary (Telegram: reactions, message edits; Discord: message edits/deletes, thread created/renamed); return ignored.
 
-`platform`, `event_type`, `payload` (reactions: `emojis`, `custom_emoji_ids`, `chat_id`, `message_id`, `thread_id`)
+`platform`, `event_type`, `payload` (event-type-specific dict — see the per-event contracts below)
 
 Normalized plain-dict envelope only; raw SDK objects, adapter handles, and bot clients are never exposed.
 
@@ -1928,12 +1928,14 @@ def register(ctx):
 
 Fires for supported platform-native events only **after** the gateway's normal, profile-scoped authorization check succeeds. The callback receives plain dictionaries; raw SDK objects, adapter handles, bot clients, and callback contexts are never part of this stable contract.
 
-Telegram message reactions are the first supported event:
+Telegram message reactions were the first supported event; message edits, deletes, and thread lifecycle events followed:
 
 ```
 def on_platform_event(platform, event_type, payload, **kwargs):
     if platform == "telegram" and event_type == "reaction":
         print(payload["chat_id"], payload["message_id"], payload["emojis"])
+    elif event_type == "message_edited":
+        print(platform, payload["chat_id"], payload["message_id"], payload["text"])
 
 def register(ctx):
     ctx.register_hook("gateway_platform_event", on_platform_event)
@@ -1949,23 +1951,63 @@ Description
 
 `str`
 
-Stable platform id (`"telegram"`).
+Stable platform id (`"telegram"`, `"discord"`).
 
 `event_type`
 
 `str`
 
-Event-local contract id (`"reaction"`).
+Event-local contract id (see the table below).
 
 `payload`
 
 `dict`
 
-For reactions: `emojis: list[str]`, `custom_emoji_ids: list[str]`, `chat_id: str | None`, `message_id: str`, and `thread_id: str | None`.
+Event-type-specific fields, documented per event type below.
 
-The reaction payload is additive and event-specific; there is no monolithic gateway payload version. Telegram reaction updates do not carry a topic id, so `thread_id` is currently `None` rather than guessed. Malformed events and events whose source cannot be authorized are dropped. A transient Telegram Application rebuild re-registers the observer together with the core handlers.
+Every payload is additive and event-specific; there is no monolithic gateway payload version. All ids are strings; missing/unavailable fields are `None`, never guessed. Malformed events and events whose source cannot be authorized are dropped (fail closed). A transient Telegram Application rebuild re-registers the observer together with the core handlers.
 
-This hook is observer-only. It does **not** add raw-event access, adapter access, cross-chat actions, or a platform-action facade. `PluginContext.dispatch_tool()` can only call tools registered in the tool registry; `send_message` is intentionally not registered there (its transport is reserved for explicit CLI, cron, kanban, and MCP delivery paths). Consequently a hook callback cannot currently call `ctx.dispatch_tool("send_message", ...)` for a media fallback. A future outbound-delivery contract must first provide stable delivered content/handles across all adapters; this slice does not pre-register an inert `gateway_message_delivered` hook.
+**Per-event payload contracts (v1, additive):**
+
+`event_type`
+
+Platforms
+
+Payload fields
+
+`reaction`
+
+telegram
+
+`emojis: list[str]`, `custom_emoji_ids: list[str]`, `chat_id: str`, `message_id: str`, `thread_id: str | None` (Telegram reaction updates carry no topic id, so currently always `None`).
+
+`message_edited`
+
+telegram, discord
+
+`chat_id: str`, `message_id: str`, `thread_id: str | None`, `text: str | None` (edited text or caption, bounded; `None` for media-only edits or when uncached), `edited_at: str | None` (ISO 8601).
+
+`message_deleted`
+
+discord
+
+`chat_id: str`, `message_id: str`, `thread_id: str | None`, `author_id: str | None`. Discord's delete event does not identify the deleter; the authorized source is the deleted message's author, and uncached deletions never fire.
+
+`thread_created`
+
+discord
+
+`thread_id: str`, `parent_chat_id: str | None`, `name: str | None`, `owner_id: str | None`.
+
+`thread_renamed`
+
+discord
+
+`thread_id: str`, `parent_chat_id: str | None`, `old_name: str | None`, `new_name: str`. Fired only when the name actually changed; other thread updates (archive, slowmode, tags) are dropped. Discord's thread-update event carries no actor, so the thread owner is the authorized source.
+
+The bot's own progressive message edits (streaming) never fire `message_edited` on Discord — bot-authored events are dropped at the fire-site.
+
+This hook is observer-only: it does **not** add raw-event access or adapter access. **Raw SDK payload access is deliberately not shipped** — adapter SDK objects change shape without notice and would become un-evolvable API surface; where genuinely needed it requires its own explicit capability (`gateway.raw_events`) with a "no stability guarantee" label and its own design (tracked in #64228). For _acting_ on a platform (adding a reaction, renaming a thread), use the capability-gated `ctx.platform_actions` facade documented in the [plugins guide](/docs/user-guide/features/plugins#platform-actions) — it is gated off by default behind the `gateway.platform_actions` capability. `PluginContext.dispatch_tool()` can only call tools registered in the tool registry; `send_message` is intentionally not registered there (its transport is reserved for explicit CLI, cron, kanban, and MCP delivery paths). A future outbound-delivery contract must first provide stable delivered content/handles across all adapters; this slice does not pre-register an inert `gateway_message_delivered` hook.
 
 * * *
 

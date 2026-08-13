@@ -378,6 +378,10 @@ ctx.os.openExternal(url)                   // OS default handler (browser, mail,
 ctx.os.revealPath(path)                    // reveal in Finder / Explorer → Promise<boolean>
 ctx.os.writeClipboard(text)                // system clipboard → Promise<boolean>
 host.navigate('/route')                    // hash-route navigation
+host.openSession(id, { profile?, intent? }) // open a stored session core-style;
+                                           //   profile: soft-swap to that profile's backend first
+                                           //   intent: 'in-place' (default) | 'stack' | 'tab' | 'window'
+host.newChat(profile?)                     // fresh chat draft, optionally in another profile
 host.onEvent(type, fn)                     // gateway event stream ('*' = all); returns disposer
 host.logs(...)                             // tail an app log file
 host.status()                              // one-shot system status snapshot
@@ -385,7 +389,7 @@ host.restartGateway()                      // restart the backend gateway
 host.request<T>(method, params?)           // gateway JSON-RPC — the real power
 ```
 
-`host.request` is the same JSON-RPC the app itself uses (sessions, config, skills, cron, kanban, …). `host.onEvent` streams live gateway events (message deltas, session lifecycle, tool activity). Listeners are isolated — a throw in your listener can't affect app dispatch. Every `host` door is async-safe: a sync throw from an internal helper (e.g. no desktop bridge in a plain browser) becomes a rejection your `.catch()` sees, never an error-boundary crash.
+`host.request` is the same JSON-RPC the app itself uses (sessions, config, skills, cron, kanban, …). Profile-shaped plugins get first-class methods too: `profiles.list` (each profile + its most recent conversation as `last_session`; pass `include_sessions: false` to skip the per-profile DB probe) and `profiles.create` (`name`, `description`, `clone_from`, `clone_all`, `no_skills`, `soul`, optional `model` + `provider` pin) — the ws twins of the dashboard's `/api/profiles` REST routes. `host.onEvent` streams live gateway events (message deltas, session lifecycle, tool activity). Listeners are isolated — a throw in your listener can't affect app dispatch. Every `host` door is async-safe: a sync throw from an internal helper (e.g. no desktop bridge in a plain browser) becomes a rejection your `.catch()` sees, never an error-boundary crash.
 
 `ctx.os` is the curated OS door — every way a plugin reaches outside the app window, in one namespace attributed to your plugin. `ctx.os.notify` posts a **native OS notification** — the same Electron pipeline the app's own approval/turn alerts use. It fires only while the user is away from Hermes (backgrounded / unfocused); use `host.notify` for the in-app toast when they're looking at the app. Users can silence it per device under Settings ▸ Notifications ▸ "Plugin notifications", and repeats from the same plugin are throttled, so treat it as a signal for genuinely notable events — not a log. The other doors (`openExternal`, `revealPath`, `writeClipboard`) resolve `false` instead of throwing when the capability isn't available (older desktop shell, plain browser) — branch on the result rather than sniffing the bridge.
 

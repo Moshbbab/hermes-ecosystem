@@ -114,10 +114,6 @@ Run the background memory/skill self-improvement review **now** instead of waiti
 
 Run a single prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore your current model. One-shot — does not change your session model.
 
-`/council <question>`
-
-Convene a **model council**: the default MoA preset's reference models answer the question independently, and the aggregator chairs the deliberation — reporting where the models agree, where they disagree (with per-model attribution and the differing assumptions behind each divergence), what each uniquely surfaced, and a recommendation with an explicit confidence level. Built for ambiguous judgment calls where model disagreement is itself the signal. One-shot — does not change your session model. See [Council mode](/docs/user-guide/features/mixture-of-agents#council-mode).
-
 `/resume [name]`
 
 Resume a previously-named session
@@ -628,10 +624,6 @@ Run the memory/skill self-improvement review now, optionally with focus instruct
 `/moa <prompt>`
 
 Run one prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore the session model.
-
-`/council <question>`
-
-One-shot [model council](/docs/user-guide/features/mixture-of-agents#council-mode): reference models answer independently; the chair reports consensus, disagreements, and a recommendation with confidence.
 
 `/branch [name]` (alias: `/fork`)
 
