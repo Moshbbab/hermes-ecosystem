@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-08-07T18:48:53.000Z",
+  "dateModified": "2026-08-13T02:51:19.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2950
+    "userInteractionCount": 2965
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-07</span>
+    <span><span class="meta-label">updated</span>2026-08-13</span>
   </div>
 
   <div class="actions">
@@ -141,7 +141,7 @@
     <p class="summary-text">This tool audits and rewrites content to remove detectable AI writing patterns. It supports three modes: Rewrite, Detect, and Edit, and includes optional voice profiles for different prose styles.</p>
     <ul class="summary-highlights">
       <li>Features a structured audit with a two-pass detection process.</li>
-      <li>Uses a 112-entry word replacement table across three tiers.</li>
+      <li>Utilizes a 112-entry word replacement table across three tiers.</li>
       <li>Compatible with Claude Code, OpenClaw, Hermes, and Cursor.</li>
     </ul>
   </div>
@@ -185,7 +185,7 @@
 <li><strong>Structured audit</strong> — returns identified issues with quoted text, the rewrite, a change summary, and a second-pass audit in four discrete sections. You see exactly what changed and why.</li>
 <li><strong>Two-pass detection</strong> — the second pass re-reads the rewrite and catches patterns that survive the first edit: recycled transitions, lingering inflation, copula swaps that snuck through.</li>
 <li><strong>112-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 words always flag, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 1 itself splits into <strong>1A frequency markers</strong> (<code>delve</code>, <code>tapestry</code>) and <strong>1B clarity edits</strong> (<code>in order to</code>, <code>utilize</code>) — same fix, but only 1A is evidence about how a passage was produced, and 1B is weighted lower so a wordiness fix cannot push a document toward an AI classification. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
-<li><strong>61 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
+<li><strong>62 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
 <li><strong>Detect mode</strong> — flag patterns without rewriting. See which flags are real problems vs. judgment calls. Useful when patterns might be intentional or you're auditing content you don't want altered.</li>
 <li><strong>Works across platforms</strong> — one <code>SKILL.md</code> runs in Claude Code, Cowork (as a plugin), OpenClaw, and Cursor (as a ported rule). See the install paths below.</li>
 </ul>
@@ -299,7 +299,7 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 <p>Trigger detect mode with: "detect," "flag only," "audit only," "just flag," "scan," or similar.</p>
 <h3>Pattern reference</h3>
 <blockquote>
-<p>Representative examples from the catalog — not the exhaustive list (that's <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>). The skill's human-facing prose catalog and the <a href="./detector/">detector engine</a> use <strong>different counts on purpose</strong>: the engine implements 47 <code>type</code> categories because it splits the vocabulary tiers and adds stylometric/fingerprint signals (punctuation distribution, function-word entropy, bypass-trick detection) that work as math over a document rather than as a rule you'd look up. The two are mapped in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/CATEGORIES.md"><code>detector/CATEGORIES.md</code></a>; don't "fix" one count to match the other.</p>
+<p>Representative examples from the catalog — not the exhaustive list (that's <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>). The skill's human-facing prose catalog and the <a href="./detector/">detector engine</a> use <strong>different counts on purpose</strong>: the engine implements 48 <code>type</code> categories because it splits the vocabulary tiers and adds stylometric/fingerprint signals (punctuation distribution, function-word entropy, bypass-trick detection) that work as math over a document rather than as a rule you'd look up. The two are mapped in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/CATEGORIES.md"><code>detector/CATEGORIES.md</code></a>; don't "fix" one count to match the other.</p>
 </blockquote>
 <h4>Content Patterns</h4>
 <table>
@@ -656,9 +656,9 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 </tr>
 <tr>
 <td>47</td>
-<td><strong>Hyphenated-pair overuse</strong></td>
+<td><strong>Hyphenated modifier stacking</strong></td>
 <td>"a high-quality, well-architected, future-proof solution"</td>
-<td>Cut to the modifier that matters; no hyphen in predicate ("the report is high quality")</td>
+<td>Cut to the modifier that matters; the individual hyphens may be correct</td>
 </tr>
 <tr>
 <td>48</td>
@@ -741,6 +741,23 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 <td><strong>Narrated candor</strong></td>
 <td>"Two caveats I would rather flag than let you discover later:", "I want to be upfront:"</td>
 <td>State the caveats. Judgment-only: the same words carry real content in conflict-of-interest disclosure ("in the interest of full disclosure, I own shares in…"), which a regex cannot separate from the empty frame</td>
+</tr>
+</tbody></table>
+<h4>Unnecessary hyphenation (v3.24)</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pattern</th>
+<th>Before</th>
+<th>After</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>56</td>
+<td><strong>Unnecessary hyphenation</strong></td>
+<td>"research-impact aggregator," "code-base," "in real-time," "works out-of-the-box"</td>
+<td>"research impact aggregator," "codebase," "in real time," "works out of the box." Preserve legitimate modifiers such as "real-time analytics"</td>
 </tr>
 </tbody></table>
 <p>Two writer-side <strong>tests</strong> round out the catalog (judgment checks, not auto-detected): <strong>paragraph-reshuffle immunity</strong> (can you swap two body paragraphs without breaking the piece?) and the <strong>treadmill effect</strong> ("what's actually new in this paragraph?").</p>
