@@ -591,6 +591,10 @@ Description
 
 Deploy a Worker live, no account, via wrangler --temporary.
 
+[**har-derived-api-client**](/docs/user-guide/skills/optional/web-development/web-development-har-derived-api-client)
+
+Record a site's XHR into a HAR, derive an HTTP client.
+
 [**page-agent**](/docs/user-guide/skills/optional/web-development/web-development-page-agent)
 
 Embed an in-page natural-language GUI copilot in web apps.

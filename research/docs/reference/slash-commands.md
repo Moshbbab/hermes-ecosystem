@@ -114,6 +114,10 @@ Run the background memory/skill self-improvement review **now** instead of waiti
 
 Run a single prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore your current model. One-shot — does not change your session model.
 
+`/council <question>`
+
+Convene a **model council**: the default MoA preset's reference models answer the question independently, and the aggregator chairs the deliberation — reporting where the models agree, where they disagree (with per-model attribution and the differing assumptions behind each divergence), what each uniquely surfaced, and a recommendation with an explicit confidence level. Built for ambiguous judgment calls where model disagreement is itself the signal. One-shot — does not change your session model. See [Council mode](/docs/user-guide/features/mixture-of-agents#council-mode).
+
 `/resume [name]`
 
 Resume a previously-named session
@@ -203,6 +207,14 @@ Manage reasoning effort and display. Levels include `none` / `minimal` / `low` /
 `/skin`
 
 Show or change the display skin/theme
+
+`/export [profile] [-o out.tar.gz]`
+
+**CLI only.** Pack a profile into a shareable `.tar.gz` — skills, memory, persona, crons, plugins, settings, and (from the desktop) themes and layout. Credentials (`auth.json`, `.env`) are stripped. Defaults to the active profile and `<name>.tar.gz` in the current directory. Same archive as `hermes profile export`; for a versioned, updatable share use a [profile distribution](/docs/user-guide/profile-distributions) instead.
+
+`/import <archive.tar.gz> [--name <name>]`
+
+**CLI only.** Install a profile archive as a new profile, inferring the name from the archive unless `--name` is given. Refuses to overwrite an existing profile and cannot import as `default`. Creates a shell wrapper when the name is free. See [Export and import a profile file](/docs/user-guide/profile-distributions#export-and-import-a-profile-file).
 
 `/statusbar` (alias: `/sb`)
 
@@ -617,6 +629,10 @@ Run the memory/skill self-improvement review now, optionally with focus instruct
 
 Run one prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore the session model.
 
+`/council <question>`
+
+One-shot [model council](/docs/user-guide/features/mixture-of-agents#council-mode): reference models answer independently; the chair reports consensus, disagreements, and a recommendation with confidence.
+
 `/branch [name]` (alias: `/fork`)
 
 Branch the current session (explore a different path).
@@ -731,7 +747,7 @@ Invoke any installed skill by name.
 
 ## Notes
 
--   `/skin`, `/snapshot`, `/reload`, `/tools`, `/toolsets`, `/browser`, `/config`, `/cron`, `/platforms`, `/paste`, `/image`, `/statusbar`, `/battery`, `/focus`, `/plugins`, `/busy`, `/indicator`, `/wake`, `/journey`, `/redraw`, `/clear`, `/history`, `/save`, `/copy`, `/handoff`, `/prompt`, `/pet`, `/hatch`, `/timestamps`, `/subscription`, and `/quit` are **CLI-only** commands.
+-   `/skin`, `/snapshot`, `/export`, `/import`, `/reload`, `/tools`, `/toolsets`, `/browser`, `/config`, `/cron`, `/platforms`, `/paste`, `/image`, `/statusbar`, `/battery`, `/focus`, `/plugins`, `/busy`, `/indicator`, `/wake`, `/journey`, `/redraw`, `/clear`, `/history`, `/save`, `/copy`, `/handoff`, `/prompt`, `/pet`, `/hatch`, `/timestamps`, `/subscription`, and `/quit` are **CLI-only** commands.
 -   `/skills` is **CLI-only for search/browse/install**; its write-approval review subcommands (`pending`, `approve`, `reject`, `diff`, `approval`) also work on messaging platforms when `skills.write_approval` is on. `/memory` works on **both** surfaces.
 -   `/verbose` is **CLI-only by default**, but can be enabled for messaging platforms by setting `display.tool_progress_command: true` in `config.yaml`. When enabled, it cycles the `display.tool_progress` mode and saves to config.
 -   `/focus` and `/verbose` share one suppression path (`display.tool_progress`), so they can never contradict each other: `/focus on` pins tool progress to `off` and stashes your mode under `display.focus_saved_tool_progress`; `/focus off` restores it; cycling `/verbose` while focus is on takes the mode back and clears the focus badge. Focus view is display-only — it never changes conversation history, the system prompt, or anything sent to the model, so it has zero prompt-cache impact.

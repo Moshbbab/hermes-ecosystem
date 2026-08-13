@@ -430,6 +430,12 @@ Watch product, flight, or listing prices; alert on target.
 
 `productivity/product-price-monitor`
 
+[`session-librarian`](/docs/user-guide/skills/bundled/productivity/productivity-session-librarian)
+
+Organize sessions by prompt: find, rename, archive, prune.
+
+`productivity/session-librarian`
+
 [`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline)
 
 Teams meeting summaries, job replay, Graph subscriptions.
@@ -461,6 +467,12 @@ Path
 Search arXiv papers by keyword, author, category, or ID.
 
 `research/arxiv`
+
+[`blocked-page-recovery`](/docs/user-guide/skills/bundled/research/research-blocked-page-recovery)
+
+Recover blocked/paywalled/WAF'd pages via fallbacks.
+
+`research/blocked-page-recovery`
 
 [`blogwatcher`](/docs/user-guide/skills/bundled/research/research-blogwatcher)
 
