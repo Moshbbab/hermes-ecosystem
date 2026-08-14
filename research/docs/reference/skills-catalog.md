@@ -364,6 +364,12 @@ Airtable REST API via curl. Records CRUD, filters, upserts.
 
 `productivity/airtable`
 
+[`box`](/docs/user-guide/skills/bundled/productivity/productivity-box)
+
+Box manages cloud files, sharing, search, and metadata.
+
+`productivity/box`
+
 [`document-to-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items)
 
 Extract cited obligations, deadlines, tasks from documents.

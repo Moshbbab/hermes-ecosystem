@@ -2756,7 +2756,7 @@ Enable auto-discovery of repo-local plugins from `./.hermes/plugins/` for both t
 
 `HERMES_BACKGROUND_NOTIFICATIONS`
 
-Background process notification mode in gateway: `all` (default), `result`, `error`, `off`
+Background process notification mode in gateway: `concise` (default), `all`, `result`, `error`, `off`
 
 `HERMES_EPHEMERAL_SYSTEM_PROMPT`
 

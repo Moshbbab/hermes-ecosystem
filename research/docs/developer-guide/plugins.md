@@ -227,6 +227,18 @@ def register(ctx):
 
 Known capability ids: `tools.override`, `llm.provider_override`, `llm.model_override`, `llm.agent_id_override`, `llm.profile_override`, `llm.task_override` (see `hermes_cli/plugin_capabilities.py` for the canonical registry). Unknown ids are ignored. The older per-capability config keys (`plugins.entries.<id>.allow_tool_override`, …) still work but are deprecated — declare capabilities instead so users get a single, auditable consent screen. Capabilities are consent + audit, **not a sandbox**: they gate host API surfaces, nothing more.
 
+**Pip-distributed plugins** have no `plugin.yaml` directory once installed, so declare capabilities in distribution metadata instead, via the companion `hermes_agent.plugin_capabilities` entry-point group. Each declaration is named `<plugin-id>.<capability-id>` and points at the same object as your `hermes_agent.plugins` entry point:
+
+```
+[project.entry-points."hermes_agent.plugins"]
+calculator = "my_pkg:register"
+
+[project.entry-points."hermes_agent.plugin_capabilities"]
+"calculator.tools.override" = "my_pkg:register"
+```
+
+Hermes reads these from installed metadata without importing your code, so `hermes plugins capabilities` and the consent flow stay accurate for pip installs.
+
 ### Manifest v2 reference
 
 `plugin.yaml` also supports an additive **v2 schema** (#64165). Every field is optional; a manifest without `manifest_version` is a v1 manifest and stays fully supported forever. Unknown fields never break loading — they are ignored with a warning (forward compatibility), and a `manifest_version` newer than this Hermes understands still loads with a warning.

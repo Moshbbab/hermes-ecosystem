@@ -38,6 +38,14 @@ users, agents
 
 none — plain ESM, loaded uncompiled
 
+**Unified package**
+
+`$HERMES_HOME/plugins/<id>/desktop/plugin.js`
+
+plugins that also ship agent-side code
+
+none — same disk pipeline
+
 **Bundled**
 
 `apps/desktop/src/plugins/<id>/plugin.tsx`
@@ -46,7 +54,7 @@ in-tree, shipped with the app
 
 the app's own Vite build
 
-Both take the same `HermesPlugin` contract, appear in **Settings → Plugins**, and enable/disable live. Everything on this page is written against the disk door (what you and the agent write); [Bundled plugins](#bundled-plugins) notes the two differences. No desktop plugins ship in the core tree today — reference demos live in the companion [`hermes-example-plugins`](https://github.com/NousResearch/hermes-example-plugins) repo.
+All three take the same `HermesPlugin` contract, appear in **Settings → Plugins**, and enable/disable live. A unified package is just the disk door scanning inside your agent plugin's folder — see [One package, both SDKs](#one-package-both-sdks). Everything on this page is written against the disk door (what you and the agent write); [Bundled plugins](#bundled-plugins) notes the two differences. No desktop plugins ship in the core tree today — reference demos live in the companion [`hermes-example-plugins`](https://github.com/NousResearch/hermes-example-plugins) repo.
 
 ## Quick start — your first plugin
 
@@ -256,6 +264,8 @@ data: {
 
 `dock.pane` is any pane id (`workspace` is the main thread; also `sessions`, `terminal`, `files`, `review`, `logs`); `dock.pos` is `'top' | 'bottom' | 'left' | 'right' | 'center'`. Declare a `width`/`height` so the pane doesn't claim half the zone.
 
+Closing the only pane contributed by a plugin disables that plugin, which can be re-enabled from **Settings → Plugins**. When a plugin contributes multiple panes, closing one dismisses only that pane and leaves the plugin's other panes, commands, and middleware active. **Reset layout** restores dismissed contributed panes.
+
 ### Pages and sidebar nav
 
 A route mounts a full page in the workspace pane, like any built-in view. Pair it with a sidebar nav row (and/or a palette command) to make it reachable.
@@ -432,6 +442,29 @@ Plus helpers: `cn` (class merge), `icons.*` (the app's lucide set), `haptic`, `p
 ## A backend for your plugin
 
 If your plugin needs server-side work, ship a Python `plugin_api.py` and reach it through `ctx.rest` / `ctx.socket` — a namespace scoped to your plugin **by construction**.
+
+### One package, both SDKs
+
+A feature that needs a desktop UI **and** agent-side code (a Python plugin, its backend routes, skills) doesn't have to ship as two co-dependent installs. The desktop app also scans `$HERMES_HOME/plugins/<id>/` — the regular agent-plugin root — for a `desktop/plugin.js`, and loads it through the exact same pipeline as the standalone disk door (hot reload included):
+
+```
+~/.hermes/plugins/<id>/           # ONE installable folder
+├── plugin.yaml                   # the agent half: tools, hooks, commands
+├── skills/…
+├── dashboard/
+│   ├── manifest.json             # { "name": "<id>", "api": "plugin_api.py" }
+│   └── plugin_api.py             # backend routes → /api/plugins/<id>/
+└── desktop/
+    └── plugin.js                 # the desktop half: panes, commands, ctx.rest
+```
+
+The `desktop/plugin.js` half is an ordinary disk plugin — same contract, same imports, same `ctx.rest('/…')` reaching the `plugin_api.py` sitting beside it. Installing, sharing, or removing the feature is one folder.
+
+Two enable switches still apply, on purpose, and both default to **off**: the desktop half ships opt-in — it inventories in **Settings → Plugins** but stays disabled until the user toggles it — matching the Python half's `plugins.enabled` gate in `config.yaml` (the security boundary below). Dropping a package into `~/.hermes/plugins` is inert on every surface until the user says otherwise. The desktop half degrades gracefully when the backend half is off — `ctx.rest` returns errors, not crashes.
+
+note
+
+The scan is local to the machine the desktop app runs on. Against a remote backend, the remote box's `~/.hermes/plugins` is not reachable as a filesystem — only locally installed packages contribute a desktop half (same rule as the standalone door).
 
 ### The Python side
 
