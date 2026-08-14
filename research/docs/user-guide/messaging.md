@@ -950,24 +950,28 @@ When the agent running a background session uses `terminal(background=true)` to 
 
 ```
 display:
-  background_process_notifications: all    # all | result | error | off
+  background_process_notifications: concise    # concise | all | result | error | off
 ```
 
 Mode
 
 What you receive
 
+`concise`
+
+One-line status message on completion; failures append a short output tail (default)
+
 `all`
 
-Running-output updates **and** the final completion message (default)
+Running-output updates **and** the final raw-output message
 
 `result`
 
-Only the final completion message (regardless of exit code)
+Only the final raw-output completion message (regardless of exit code)
 
 `error`
 
-Only the final message when the exit code is non-zero
+Only the final raw-output message when the exit code is non-zero
 
 `off`
 
