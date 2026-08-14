@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ucsandman/DashClaw — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="DashClaw is a fail-closed approval layer designed to intercept tool calls from AI coding agents before execution. It provides remote, asynchronous approval…">
+<meta name="description" content="DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta property="og:description" content="DashClaw is a fail-closed approval layer designed to intercept tool calls from AI coding agents before execution. It provides remote, asynchronous approval…">
+<meta property="og:description" content="DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta name="twitter:description" content="DashClaw is a fail-closed approval layer designed to intercept tool calls from AI coding agents before execution. It provides remote, asynchronous approval…">
+<meta name="twitter:description" content="DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=DashClaw&amp;subtitle=%F0%9F%9B%A1%EF%B8%8F+The+approval+and+policy+layer+for+AI+agents.+Intercept+risky+actions+before+they+run%2C+block+them%2C+or+approve+them+remotely.&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a fail-closed approval layer designed to intercept tool calls from AI coding agents before execution. It provides remote, asynchronous approval capabilities and maintains a signed, replayable audit ledger of all decisions.",
+  "description": "DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval layer that supports remote, asynchronous decision-making and maintains a signed, replayable audit ledger.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-08-12T13:52:13.000Z",
+  "dateModified": "2026-08-14T02:42:40.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">227·repos</span>
-    <span id="meta-version">hermes·v0.20.0</span>
+    <span id="meta-version">hermes·v0.20.1</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-12</span>
+    <span><span class="meta-label">updated</span>2026-08-14</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a fail-closed approval layer designed to intercept tool calls from AI coding agents before execution. It provides remote, asynchronous approval capabilities and maintains a signed, replayable audit ledger of all decisions.</p>
+    <p class="summary-text">DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval layer that supports remote, asynchronous decision-making and maintains a signed, replayable audit ledger.</p>
     <ul class="summary-highlights">
-      <li>Intercepts destructive tool calls before they run.</li>
-      <li>Supports remote approval via CLI, PWA, Telegram, or Discord.</li>
-      <li>Provides a tamper-evident, signed decision ledger.</li>
+      <li>Intercepts destructive tool calls before execution</li>
+      <li>Supports remote approval via CLI, PWA, Telegram, or Discord</li>
+      <li>Provides multi-runtime support including Node, Python, and MCP</li>
     </ul>
   </div>
 </section>
@@ -402,15 +402,16 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
 </details>
 
 <h3>The governance model</h3>
-<p>Control before execution, not observability after it. Seven points, each falsifiable:</p>
+<p>Control before execution, not observability after it. Eight points, each falsifiable:</p>
 <ol>
-<li><strong>Every risky action is evaluated against active policies before it runs.</strong> Policies are declarative. The builder ships with ten pre-built safety switches (Deploy Gate, Risk Threshold, Rate Limiter, Evidence Required, Protected Path, Subagent Constraint, and others across 16 guard policy types), an AI generator, and YAML import.</li>
+<li><strong>Every risky action is evaluated against active policies before it runs.</strong> Policies are declarative. The builder ships with ten pre-built safety switches (Deploy Gate, Risk Threshold, Rate Limiter, Evidence Required, Protected Path, Subagent Constraint, and others across 17 guard policy types), an AI generator, and YAML import.</li>
 <li><strong>The default pack is catastrophe-only.</strong> Seeded automatically for every new self-hosted org, it interrupts for the irreversible class: it blocks mass-destructive filesystem, git, and database actions outright, and holds writes to secret files (<code>.env</code>, <code>*.pem</code>, <code>*.key</code>, <code>secrets/**</code>) for one-click approval. A warn-only rate limit nets runaways; everything else runs. This is a documented lesson, not a preference. See below.</li>
 <li><strong>Sensitive actions require human approval, and the approval is one click.</strong> Approvals route to <code>/approvals</code>, the CLI, the mobile PWA at <code>/approve</code>, Telegram, or Discord. When one policy blows its interruption budget, per-action pings collapse into one flood banner with bulk-resolve. A repeat interruption can be retired at the card with "Allow, don't ask again", which writes a target-scoped, expiring, revocable grant rather than silencing anything. Pending approvals are never auto-resolved.</li>
 <li><strong>Every decision is recorded and outcomes are durable.</strong> A five-state finality machine plus a lost-confirmation sweep guarantee no silent double-execute on retry. Spec below and in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/durable-execution-finality.md"><code>docs/architecture/durable-execution-finality.md</code></a>.</li>
 <li><strong>Interruption precision is calibrated, not guessed.</strong> A distribution-free controller (<a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/governance-core-theory.md"><code>/calibration</code></a>, default off) turns your approve/deny verdicts into a proven false-interruption bound. Shadow-first, tighten-only; loosening always routes through human-ratified proposals.</li>
 <li><strong>Enforcement proves it is still on.</strong> A liveness probe drives a synthetic held action through the real hook seam and verdicts by whether it executed, never by reading the ledger. Because once it did not, and nothing noticed. Stale never renders green.</li>
 <li><strong>Prompt-injection scanning is on by default.</strong> High-confidence system-override patterns force a <code>block</code> at guard time; lower-severity patterns raise a <code>warn</code>.</li>
+<li><strong>An outside decision engine can tighten decisions, never loosen them.</strong> An org can configure one external decision provider (configured on <code>/policies</code>); the guard calls it during every evaluation and joins its verdict stricter-wins — external <code>deny</code> is absolute for the evaluated act, external <code>allow</code> never overrides a stricter local result, and the verdict is identity-bound to the exact act. An unreachable provider takes an explicit posture (<code>fail_closed</code> default) and is always recorded as <code>external unavailable</code>, never as governance that happened. Contract: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/external-verdict-provider.md"><code>docs/external-verdict-provider.md</code></a>.</li>
 </ol>
 <details>
 <summary><strong>Why each of those is the way it is (the incidents behind the design)</strong></summary>

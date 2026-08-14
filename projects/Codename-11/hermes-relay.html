@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Codename-11/hermes-relay — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
-<meta name="description" content="Hermes-Relay is a companion for the Hermes agent platform, providing an Android app and a single-binary CLI. The Android app enables streaming chat, voice, and…">
+<meta name="description" content="Hermes-Relay is a native Android companion and CLI for the Hermes agent platform, facilitating remote interaction with an agent running on a separate machine.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Codename-11/hermes-relay">
 <meta property="og:title" content="Codename-11/hermes-relay — Hermes Atlas">
-<meta property="og:description" content="Hermes-Relay is a companion for the Hermes agent platform, providing an Android app and a single-binary CLI. The Android app enables streaming chat, voice, and…">
+<meta property="og:description" content="Hermes-Relay is a native Android companion and CLI for the Hermes agent platform, facilitating remote interaction with an agent running on a separate machine.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Codename-11/hermes-relay">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Codename-11/hermes-relay — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-Relay is a companion for the Hermes agent platform, providing an Android app and a single-binary CLI. The Android app enables streaming chat, voice, and…">
+<meta name="twitter:description" content="Hermes-Relay is a native Android companion and CLI for the Hermes agent platform, facilitating remote interaction with an agent running on a separate machine.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-relay&amp;subtitle=Hermes-Relay+%E2%80%94+Your+Hermes+AI+agent%2C+in+your+pocket+%E2%80%94+chat%2C+voice%2C+and+control.&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Codename-11/hermes-relay#software",
   "name": "hermes-relay",
-  "description": "Hermes-Relay is a companion for the Hermes agent platform, providing an Android app and a single-binary CLI. The Android app enables streaming chat, voice, and agent management, while the CLI provides access to files, terminal, search, and screenshots.",
+  "description": "Hermes-Relay is a native Android companion and CLI for the Hermes agent platform, facilitating remote interaction with an agent running on a separate machine. It supports streaming chat, voice interaction, and agent management, with optional plugins for terminal access and device control.",
   "url": "https://hermesatlas.com/projects/Codename-11/hermes-relay",
   "codeRepository": "https://github.com/Codename-11/hermes-relay",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "Codename-11",
     "url": "https://github.com/Codename-11"
   },
-  "dateModified": "2026-08-12T22:43:50.000Z",
+  "dateModified": "2026-08-14T01:18:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">227·repos</span>
-    <span id="meta-version">hermes·v0.20.0</span>
+    <span id="meta-version">hermes·v0.20.1</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Kotlin</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-12</span>
+    <span><span class="meta-label">updated</span>2026-08-14</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-Relay is a companion for the Hermes agent platform, providing an Android app and a single-binary CLI. The Android app enables streaming chat, voice, and agent management, while the CLI provides access to files, terminal, search, and screenshots.</p>
+    <p class="summary-text">Hermes-Relay is a native Android companion and CLI for the Hermes agent platform, facilitating remote interaction with an agent running on a separate machine. It supports streaming chat, voice interaction, and agent management, with optional plugins for terminal access and device control.</p>
     <ul class="summary-highlights">
-      <li>Native Android app for chat, voice, and agent management</li>
-      <li>Single-binary CLI in alpha for terminal and file access</li>
-      <li>Sideload builds enable agent screen reading and action</li>
+      <li>Native Android app for chat, voice, and agent management.</li>
+      <li>Alpha CLI for file, terminal, and screenshot access via pairing.</li>
+      <li>Optional Relay plugin enables terminal and remote device control.</li>
     </ul>
   </div>
 </section>
@@ -211,6 +211,19 @@ hermes dashboard       # start the standard Dashboard/Gateway surface
 an HTTPS reverse proxy. The <a href="https://hermes-relay.dev/docs/guide/getting-started">full walkthrough</a>
 covers Windows, remote access, and dashboard authentication. You do not need to
 enable the separate API server or invent an API key for the standard path.</p>
+<p>For plugin-enabled setups, optional <strong>Hermes Secure Link</strong> presents Relay, API,
+and Dashboard routes through one pairing-pinned TLS origin. It protects traffic
+to the paired endpoint while each service keeps its own authentication; it does
+not provide reachability or independently identify the physical host. You still
+use LAN routing, Tailscale or another VPN, or an operator-managed public route
+to reach the listener. Secure Link is off by default and requires a fresh QR
+pairing after it is enabled. See the
+<a href="https://hermes-relay.dev/docs/guide/remote-access/">remote-access guide</a>.</p>
+<p><strong>Hermes Reach</strong> is an experimental, advanced outbound-broker route. It remains
+available for development and self-hosted evaluation, but it is disabled by
+default, ordered after supported routes, and not recommended for normal remote
+access. Use Tailscale for the easiest supported remote setup, or a public TLS
+domain / Direct Secure Link when you want to own the complete network path.</p>
 <h4>3 · Connect and talk</h4>
 <p>Open the app, choose <strong>Connect to Hermes</strong>, and enter or discover the dashboard
 address (conventionally <code>http://&lt;host&gt;:9119</code>). Sign in through the dashboard's
@@ -342,6 +355,13 @@ hermes-relay update                            # self-update via GitHub Releases
 </code></pre>
 <p>It pairs against the <strong>same relay and credential store</strong> as the Android app — pair once from either, both work. Tagged on the <code>desktop-v*</code> <a href="https://github.com/Codename-11/hermes-relay/releases?q=desktop">release track</a>, with historical releases still visible under <code>cli-v*</code>.</p>
 <p>On Windows, the default installer adds the optional compact <strong>Hermes-Relay CLI UI</strong> tray popup for host selection and pairing, connection and daemon state, per-host Ask/Trusted/Full Access, local grant dialogs, authorized-client revocation, activity, settings, and emergency stop. It is a management surface only—chat, TUI, plugins, voice, and agent sessions remain CLI/upstream concerns.</p>
+<p>Structured Windows computer control prefers a compatible local CUA Driver
+runtime for window-targeted background actions and virtual per-session agent
+cursors. It remains behind Hermes host policy, grants, targeting, audit, and
+emergency stop; Windows input is an explicit compatibility backend. CUA is not
+bundled or updated automatically, but the local CLI/UI can explicitly install,
+check, or update its verified canonical package. It is never exposed as a raw
+remote tool surface. See the <a href="https://hermes-relay.dev/docs/desktop/tools.html#computer-use-engines">desktop tools guide</a>.</p>
 <ul>
 <li><strong>Docs:</strong> <a href="https://hermes-relay.dev/docs/desktop/">CLI guide</a> · <a href="https://github.com/Codename-11/hermes-relay/blob/main/desktop/README.md"><code>desktop/README.md</code></a></li>
 <li><strong>AI-agent setup recipe:</strong> <code>/hermes-relay-desktop-setup</code></li>
@@ -542,7 +562,7 @@ ln -s "$PWD/plugin" ~/.hermes/plugins/hermes-relay
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 458</div>
+        <div class="stars">★ 461</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -562,7 +582,7 @@ ln -s "$PWD/plugin" ~/.hermes/plugins/hermes-relay
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 713</div>
+        <div class="stars">★ 714</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

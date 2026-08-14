@@ -40,14 +40,11 @@
   "codeRepository": "https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal",
   "applicationCategory": "CommunicationApplication",
   "operatingSystem": "Cross-platform",
-  "programmingLanguage": "JavaScript",
-  "license": "https://spdx.org/licenses/MIT.html",
   "author": {
     "@type": "Organization",
     "name": "DIALLOUBE-RESEARCH",
     "url": "https://github.com/DIALLOUBE-RESEARCH"
   },
-  "dateModified": "2026-08-07T23:18:51.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +79,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">227·repos</span>
-    <span id="meta-version">hermes·v0.20.0</span>
+    <span id="meta-version">hermes·v0.20.1</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -120,15 +117,15 @@
 
   <div class="meta-row">
     <span class="stars">★ 3</span>
-    <span><span class="meta-label">lang</span>JavaScript</span>
-    <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-07</span>
+    
+    
+    
   </div>
 
   <div class="actions">
     <a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
-    <a href="https://hypernatt.com" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+    
   </div>
 </section>
 
@@ -150,205 +147,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>HyperNatt Terminal</h2>
-<p><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/actions/workflows/ci.yml"><img src="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" decoding="async"></a>
-<a href="https://glama.ai/mcp/servers/DIALLOUBE-RESEARCH/hypernatt-terminal"><img src="https://glama.ai/mcp/servers/DIALLOUBE-RESEARCH/hypernatt-terminal/badges/score.svg" alt="Glama" loading="lazy" decoding="async"></a>
-<a href="https://x402-list.com/services/hypernatt-terminal?utm_source=badge&amp;utm_medium=referral&amp;utm_campaign=embed"><img src="https://x402-list.com/badge/hypernatt-terminal.svg?data=uptime" alt="x402-list" loading="lazy" decoding="async"></a>
-<a href="./CHANGELOG.md"><img src="https://img.shields.io/badge/version-2.7.0-green" alt="Version" loading="lazy" decoding="async"></a>
-<a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License" loading="lazy" decoding="async"></a>
-<a href="./CHANGELOG.md"><img src="https://img.shields.io/badge/npm%20audit-0%20high-brightgreen" alt="npm audit" loading="lazy" decoding="async"></a></p>
-<p><strong>Forced-order map</strong> for AI agents + <strong>Li.Fi</strong> cross-chain swap. Pay-per-call via x402.</p>
-<p>Most agents (and most humans) only see classic public indicators. This MCP shows <strong>where leveraged liquidations stack</strong> — a market-structure layer those indicators do not expose. Read-only context. Your agent still decides.</p>
-<p>Built by one person. Code is public. Backend is private. No custody. Not trade advice.</p>
-<p>Full HyperNatt platform (vault, assistant): <a href="https://hypernatt.com">https://hypernatt.com</a> — this repo is one agent-facing brick.</p>
-<blockquote>
-<p>Public mirror synced from a private monorepo. History here is mirror commits.</p>
-</blockquote>
-<h3>Quick start (30 seconds)</h3>
-<p>No install for the hosted MCP. In <strong>Claude → Settings → Connectors → Add custom connector</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Name</td>
-<td>HyperNatt Terminal</td>
-</tr>
-<tr>
-<td>URL</td>
-<td><code>https://hypernatt.com/mcp/protocol</code></td>
-</tr>
-</tbody></table>
-<p>Then ask:</p>
-<blockquote>
-<p>Call get_agent_manifest, then get_liq_radar — where is the nearest liquidation cluster on the forced-order map? Do not treat this as a trade signal.</p>
-</blockquote>
-<p>More clients (Cursor / Cline / Codex / Windsurf): <a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/docs/integrations.md">docs/integrations.md</a>.</p>
-<h3>What HyperNatt Terminal gives your agent</h3>
-<p>A map of <strong>forced orders</strong>: where leveraged positions will be liquidated if price reaches them (clusters, OI build-up, observed liquidations).</p>
-<p>This is <strong>market structure context</strong>, not a trade signal. It shows terrain so a sovereign trading agent can judge timing, sizing, and risk with more awareness than agents that only read RSI/MACD-style public feeds.</p>
-<p>Your agent still decides. We show the terrain.</p>
-<h4>What your agent can do with this (honest scenarios)</h4>
-<h5>Scenario 1 — Wait near the cluster</h5>
-<p>Price is approaching a dense liquidation zone. Your agent can wait for forced flow to print (<code>real_liquidations</code>), then reassess — <strong>without</strong> assuming a guaranteed reversal.</p>
-<h5>Scenario 2 — Size relative to distance</h5>
-<p>Cluster ~5% away vs ~0.5% away is a different risk parameter. Distance informs sizing or patience — it is <strong>not</strong> a prediction that the level will be hit.</p>
-<h5>Scenario 3 — After real liquidations, check OI</h5>
-<p>If price swept a zone and real liquidations spiked, compare with OI change. A large OI drop can mean forced flow is partly exhausted — still context, <strong>not</strong> an auto entry.</p>
-<h4>Glossary (short)</h4>
-<table>
-<thead>
-<tr>
-<th>Term</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Cluster</td>
-<td>Zone where leveraged positions may liquidate if mark reaches it. Not a TP.</td>
-</tr>
-<tr>
-<td>Nearest vs largest</td>
-<td>Closest to mark vs most estimated size in the ±10% window — different jobs.</td>
-</tr>
-<tr>
-<td>Real vs estimated</td>
-<td><code>real_liquidations</code> = observed; <code>liq_density</code> clusters = modeled. Both labeled.</td>
-</tr>
-<tr>
-<td><code>magnet.score</code></td>
-<td>Directional density bias from OI / L-S / funding. <strong>Not</strong> a hit probability.</td>
-</tr>
-</tbody></table>
-<p>Live glossary + scenarios also ship on <code>get_agent_manifest</code> → <code>agent_interpretation_rules_v1</code>.</p>
-<h3>What you get</h3>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Price</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>get_agent_manifest</code></td>
-<td>Free — call first</td>
-</tr>
-<tr>
-<td><code>get_liq_radar</code></td>
-<td><strong>$0.001</strong> x402 (Base + Solana)</td>
-</tr>
-<tr>
-<td><code>swap_via_nattswap</code></td>
-<td>Free at MCP (you sign; gas + Li.Fi fee on-chain)</td>
-</tr>
-</tbody></table>
-<p>Whitelist <code>get_liq_radar</code>: <strong>BTC ETH SOL BNB XRP HYPE ZEC</strong> (omit <code>symbol</code> = BTC).</p>
-<h4>What we do NOT claim</h4>
-<table>
-<thead>
-<tr>
-<th>We do <strong>not</strong> claim</th>
-<th>What we <strong>do</strong> show</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Generic Coinglass wrapper</td>
-<td>Operator-shaped forced-order map for agents</td>
-</tr>
-<tr>
-<td>Predictive Fuel Score / sweep classifier</td>
-<td>Distance, size, OI, real liqs — labeled</td>
-</tr>
-<tr>
-<td>Custody of keys or funds</td>
-<td>Agent signs own txs</td>
-</tr>
-<tr>
-<td>Trade advice / guaranteed edge</td>
-<td>Read-only JSON context</td>
-</tr>
-<tr>
-<td>More than 3 MCP tools</td>
-<td><strong>Exactly 3</strong> · v2.7.0</td>
-</tr>
-<tr>
-<td>Vault / <code>/stats</code> = Terminal P&amp;L</td>
-<td>Separate HyperNatt vault product</td>
-</tr>
-<tr>
-<td>Independent security audit</td>
-<td>Public code + <a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/SECURITY.md">SECURITY.md</a></td>
-</tr>
-</tbody></table>
-<h3>Try it</h3>
-<pre><code class="language-bash">curl -s https://hypernatt.com/api/m2m/agent/manifest
-curl -i https://hypernatt.com/api/m2m/liq-radar
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Step</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Quickstart</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/docs/quickstart.md">docs/quickstart.md</a></td>
-</tr>
-<tr>
-<td>Integrations (5 clients + AgentKit)</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/docs/integrations.md">docs/integrations.md</a></td>
-</tr>
-<tr>
-<td>HL terrain example (read-only)</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/examples/hyperliquid/read_terrain.py">examples/hyperliquid/read_terrain.py</a></td>
-</tr>
-<tr>
-<td>Honest interpret example</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/examples/liq_radar_interpret.py">examples/liq_radar_interpret.py</a></td>
-</tr>
-<tr>
-<td>CDP Bazaar checklist</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/docs/cdp-bazaar-checklist.md">docs/cdp-bazaar-checklist.md</a></td>
-</tr>
-<tr>
-<td>Examples</td>
-<td><a href="examples/">examples/</a></td>
-</tr>
-<tr>
-<td>Security</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/SECURITY.md">SECURITY.md</a></td>
-</tr>
-<tr>
-<td>Buyer skill (use the MCP)</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/skills/hypernatt-terminal/SKILL.md">skills/hypernatt-terminal/SKILL.md</a></td>
-</tr>
-<tr>
-<td>Seller skill (x402 hardening)</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/solana-x402-seller-security-skill">solana-x402-seller-security-skill</a></td>
-</tr>
-<tr>
-<td>Tests</td>
-<td><a href="test/">test/</a> — <code>npm test</code></td>
-</tr>
-<tr>
-<td>Changelog</td>
-<td><a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal/blob/main/CHANGELOG.md">CHANGELOG.md</a></td>
-</tr>
-</tbody></table>
-<p>MCP: <a href="https://hypernatt.com/mcp/protocol">https://hypernatt.com/mcp/protocol</a></p>
-<h4>For non-crypto users (x402 wallet)</h4>
-<p>If you do not already have a funded USDC wallet, install <strong>Coinbase Agentic Wallet MCP</strong> first (email/OTP + card onramp — no seed phrase):</p>
-<pre><code class="language-bash">npx @coinbase/payments-mcp
-</code></pre>
-<p>Docs: <a href="https://docs.cdp.coinbase.com/agentic-wallet/mcp/welcome">Agentic Wallet MCP</a>. Then connect HyperNatt Terminal (<code>https://hypernatt.com/mcp/protocol</code>). Your agent can pay <code>get_liq_radar</code> ($0.001) automatically when it sees HTTP 402.</p>
-<p>Optional heavy use (not required): swap-earned quota or $5/mo Agent Pass — see live <code>pass_program</code> / <code>quota_program</code> on the manifest.</p>
-<h3>License</h3>
-<p>MIT — see <a href="LICENSE">LICENSE</a>.</p>
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/DIALLOUBE-RESEARCH/hypernatt-terminal" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
@@ -360,7 +159,7 @@ curl -i https://hypernatt.com/api/m2m/liq-radar
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/raulvidis/hermes-android">
-        <div class="stars">★ 458</div>
+        <div class="stars">★ 461</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
       </a>
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
@@ -380,7 +179,7 @@ curl -i https://hypernatt.com/api/m2m/liq-radar
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 713</div>
+        <div class="stars">★ 714</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
