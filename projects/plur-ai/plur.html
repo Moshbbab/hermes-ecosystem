@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and…">
+<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and…">
+<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and…">
+<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and preferences across different tools and sessions using an open format.",
+  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections, preferences, and conventions across different tools and sessions.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-08-14T07:43:55.000Z",
+  "dateModified": "2026-08-14T12:53:02.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -138,9 +138,9 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections and preferences across different tools and sessions using an open format.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams. It allows agents to persist corrections, preferences, and conventions across different tools and sessions.</p>
     <ul class="summary-highlights">
-      <li>Stores memory as plain-text YAML engrams</li>
+      <li>Uses an open YAML engram format</li>
       <li>Supports Claude Code, Cursor, OpenClaw, and Hermes</li>
       <li>Provides local-first, zero-cost search</li>
     </ul>
@@ -186,10 +186,14 @@
 </tr>
 <tr>
 <td><strong>+ BGE-reranker-v2-m3</strong></td>
-<td><strong>98.0%</strong></td>
-<td>local cross-encoder, max quality — R@1 93.8%, R@10 99.0%</td>
+<td><strong>97.6%</strong></td>
+<td>local cross-encoder, max quality — opt-in, ≈5s p50 on CPU</td>
 </tr>
 </tbody></table>
+<p>Numbers come from <a href="https://github.com/plur-ai/plur-bench">plur-ai/plur-bench</a>,
+which is the source of truth for every benchmark figure PLUR publishes. Where
+an in-repo number and a plur-bench number disagree, plur-bench wins — it is the
+reproducible harness, and it is what CI regression-checks.</p>
 <p>Chunk granularity, canonical-doc scoring, corpus SHA256 pinned — reproduce it in <a href="https://github.com/plur-ai/plur-bench">plur-ai/plur-bench</a>. No cloud call is required for any of these numbers (an <em>optional</em> cloud embedder, openai-3-large, reaches 97.0% hybrid). A faster reranker — <code>ms-marco-minilm-l6</code> (p50≈245ms vs BGE's ≈5s on CPU) — trades a little recall for sub-second latency.</p>
 <p><strong>Run it yourself — and tell us what you get.</strong> The harness is <a href="https://github.com/plur-ai/plur-bench">plur-ai/plur-bench</a>: CPU-runnable, no API key needed for the local path, corpus auto-fetched and SHA-verified. If you run it, we'd genuinely love to see your numbers — open an issue or discussion with your results, <strong>especially if they don't match ours.</strong> Independent reproduction is worth more than any number we publish, and we'll gladly credit you.</p>
 <p><strong>Retrieval ≠ answer accuracy — and we report them separately, never conflated.</strong> End-to-end (LLM-judge) answer accuracy with the reranker stack is <strong>60.5%</strong>, versus <strong>52.0%</strong> for dumping full context into the prompt and <strong>5.5%</strong> with no memory at all.</p>
@@ -368,6 +372,14 @@ await plur.sync('git@github.com:you/plur-memory.git')
 <td>Retire a memory (activation decays, eventually pruned)</td>
 </tr>
 <tr>
+<td><code>plur_rescope</code></td>
+<td>Move an existing engram to another scope — personal → team, or back</td>
+</tr>
+<tr>
+<td><code>plur_session_scope</code></td>
+<td>Change the session's default write scope mid-session</td>
+</tr>
+<tr>
 <td><code>plur_capture</code></td>
 <td>Record an event — incident, resolution, session milestone</td>
 </tr>
@@ -391,7 +403,24 @@ await plur.sync('git@github.com:you/plur-memory.git')
 <td><code>plur_receipt</code></td>
 <td>Counted, local report of what your memory retrieved for you</td>
 </tr>
+<tr>
+<td><code>plur_outbox</code></td>
+<td>Inspect (and retry) team writes queued while their store was unreachable</td>
+</tr>
 </tbody></table>
+<h4>The outbox</h4>
+<p>A write to a team scope goes to that team's remote store. When the store cannot
+be reached — VPN off, server down, token expired — the engram is <strong>not lost and
+not silently dropped</strong>: it is written locally with queue metadata and retried on
+the next session start, on <code>plur sync</code>, or on demand.</p>
+<p>The queue is not a directory. It lives as <code>structured_data._outbox</code> inside the
+affected engrams in <code>engrams.yaml</code>, which is why it needs a command to see:</p>
+<pre><code>plur outbox            # what is queued, for which scope, how long, last error
+plur outbox --flush    # retry now
+</code></pre>
+<p>The same thing is available to agents as <code>plur_outbox</code> (<code>{flush: true}</code> to
+retry), and <code>plur status</code> reports the pending count. Neither surface prints the
+target URL or the token.</p>
 <h3>The memory receipt</h3>
 <p><code>plur receipt</code> (and the <code>plur_receipt</code> MCP tool) show what your memory actually did — counted from PLUR's own retrieval history, never estimated:</p>
 <pre><code>Your Memory Receipt
@@ -427,7 +456,11 @@ await plur.sync('git@github.com:you/plur-memory.git')
 </ul>
 <p>In both modes <strong><code>scope: local</code> engrams</strong> are machine-specific by design (paths, local ports, per-host quirks), so they are stripped from every commit and never reach any remote. Stripping happens on the <em>staged blob</em>: your local working copy always keeps every engram.</p>
 <h3>Benchmark details</h3>
-<p>Per-category retrieval recall — full LongMemEval-S (N=500), fully local (BGE-small + BGE-reranker-v2-m3, chunk granularity):</p>
+<p>Per-category retrieval recall, from an <strong>earlier in-repo run</strong> — full
+LongMemEval-S (N=500), fully local (BGE-small + BGE-reranker-v2-m3, chunk
+granularity). Its overall figure (98.0%) predates the current plur-bench
+measurement of the same stack (97.6%) and has not been re-run per category;
+treat the shape as indicative and the headline table above as current.</p>
 <table>
 <thead>
 <tr>
