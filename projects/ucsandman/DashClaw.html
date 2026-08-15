@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ucsandman/DashClaw — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval…">
+<meta name="description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta property="og:description" content="DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval…">
+<meta property="og:description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta name="twitter:description" content="DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval…">
+<meta name="twitter:description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=DashClaw&amp;subtitle=%F0%9F%9B%A1%EF%B8%8F+The+approval+and+policy+layer+for+AI+agents.+Intercept+risky+actions+before+they+run%2C+block+them%2C+or+approve+them+remotely.&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval layer that supports remote, asynchronous decision-making and maintains a signed, replayable audit ledger.",
+  "description": "DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to resolve blocked actions via a web inbox, CLI, or mobile devices.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,13 +47,13 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-08-14T10:38:44.000Z",
+  "dateModified": "2026-08-15T03:08:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 292
+    "userInteractionCount": 293
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,11 +119,11 @@
   <p class="project-desc">🛡️ The approval and policy layer for AI agents. Intercept risky actions before they run, block them, or approve them remotely.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 292</span>
+    <span class="stars">★ 293</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-14</span>
+    <span><span class="meta-label">updated</span>2026-08-15</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a decision infrastructure designed to intercept and approve tool calls made by AI agents before they execute. It provides a fail-closed approval layer that supports remote, asynchronous decision-making and maintains a signed, replayable audit ledger.</p>
+    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to resolve blocked actions via a web inbox, CLI, or mobile devices.</p>
     <ul class="summary-highlights">
-      <li>Intercepts destructive tool calls before execution</li>
-      <li>Supports remote approval via CLI, PWA, Telegram, or Discord</li>
-      <li>Provides multi-runtime support including Node, Python, and MCP</li>
+      <li>Intercepts destructive tool calls before execution using a fail-closed hook.</li>
+      <li>Provides signed, tamper-evident audit trails for every decision.</li>
+      <li>Supports remote approvals via PWA, Telegram, Discord, and CLI.</li>
     </ul>
   </div>
 </section>
@@ -385,13 +385,17 @@ dashclaw install claude                          # wires ~/.claude/settings.json
 dashclaw install codex --project /path/to/repo   # wires manifest, hooks, AGENTS.md protocol
 bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Windows)
 </code></pre>
+<p>This repo is also a native Claude Code plugin marketplace — no CLI needed:</p>
+<pre><code class="language-bash">/plugin marketplace add ucsandman/DashClaw       # inside Claude Code
+/plugin install dashclaw@dashclaw                # MCP server + governance skill + hooks
+</code></pre>
 <p>Claude Code hooks govern Bash, Edit, Write, MultiEdit, sub-agent spawns, and every <code>mcp__*</code> call with a fail-closed PreToolUse check. Fresh installs start in enforce mode (the seeded catastrophe pack holds the irreversible class); pass <code>--observe</code> or set <code>DASHCLAW_HOOK_MODE=observe</code> to log without blocking, and re-installs keep whichever mode you chose. Observe mode is loud, never silent: <code>/approvals</code> and <code>/decisions</code> show a red banner while any agent reports it, unenforced verdicts render "Logged, not enforced" in the ledger, and a gated action that executes anyway gets an <code>executed_despite</code> witness stamp from PostToolUse — a logged block is never presented as an enforced one. <strong>Narrowing the scope is loud too:</strong> <code>DASHCLAW_GOVERNED_CATEGORIES</code> decides which tool categories call guard at all, and an excluded category exits before the network call, so its tool calls are simply <em>absent</em> from <code>/decisions</code> — which reads identically to "that agent did nothing." Since v5.20 the hook declares the categories it is not governing on the calls it does make, and any category dropped below the default raises a red <strong>Governance scope narrowed</strong> signal naming what stopped being watched. Verify the wiring fires:</p>
 <pre><code class="language-bash">echo '{"tool_name":"Bash","tool_input":{"command":"echo hello"},"tool_use_id":"t1","session_id":"smoke"}' | python .claude/hooks/dashclaw_pretool.py
 </code></pre>
 <p><strong>OpenClaw.</strong> <a href="packages/openclaw-plugin"><code>@dashclaw/openclaw-plugin</code></a> intercepts every tool call at the gateway, so the agent calls no DashClaw tool itself — the CLI installs it, patches config, and writes the governance protocol into the resolved workspace's <code>AGENTS.md</code>.</p>
 <pre><code class="language-bash">dashclaw install openclaw
 </code></pre>
-<p>Full guide: <a href="https://www.dashclaw.io/guides/openclaw">dashclaw.io/guides/openclaw</a>.</p>
+<p>Run it bare in a terminal and it walks you through everything you're missing: no DashClaw instance yet? it offers the hosted trial or a local install (<code>dashclaw up</code>) inline; no API key? it collects one; then it suggests a per-machine agent id (<code>&lt;hostname&gt;-openclaw</code>). With <code>--base-url</code>, <code>--api-key</code>, and <code>--agent-id</code> (or the matching env vars) it runs non-interactively. Full guide: <a href="https://www.dashclaw.io/guides/openclaw">dashclaw.io/guides/openclaw</a>.</p>
 <p><strong>MCP server (zero code).</strong> <a href="mcp-server"><code>@dashclaw/mcp-server</code></a> exposes <strong>17 governance MCP tools</strong> across core governance, retrospection, identity, team tasks, and plans, plus 3 read-only resources (<code>dashclaw://policies</code>, <code>dashclaw://agent/{agent_id}/history</code>, <code>dashclaw://status</code>).</p>
 <pre><code class="language-json">{ "mcpServers": { "dashclaw": { "command": "npx", "args": ["@dashclaw/mcp-server"],
   "env": { "DASHCLAW_URL": "https://your-dashclaw.vercel.app", "DASHCLAW_API_KEY": "oc_live_xxx" } } } }
@@ -404,14 +408,14 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
 <h3>The governance model</h3>
 <p>Control before execution, not observability after it. Eight points, each falsifiable:</p>
 <ol>
-<li><strong>Every risky action is evaluated against active policies before it runs.</strong> Policies are declarative. The builder ships with ten pre-built safety switches (Deploy Gate, Risk Threshold, Rate Limiter, Evidence Required, Protected Path, Subagent Constraint, and others across 17 guard policy types), an AI generator, and YAML import.</li>
+<li><strong>Every risky action is evaluated against active policies before it runs.</strong> Policies are declarative. The builder ships with ten pre-built safety switches (Deploy Gate, Risk Threshold, Rate Limiter, Evidence Required, Protected Path, Subagent Constraint, and others across 17 guard policy types), an AI generator, YAML import, and a pack gallery at <code>/policies/packs</code> — 18 curated packs (spend, outbound comms, unattended overnight runs, prod infra, subagent fleets, and more), each previewable against your own action history before a one-click install.</li>
 <li><strong>The default pack is catastrophe-only.</strong> Seeded automatically for every new self-hosted org, it interrupts for the irreversible class: it blocks mass-destructive filesystem, git, and database actions outright, and holds writes to secret files (<code>.env</code>, <code>*.pem</code>, <code>*.key</code>, <code>secrets/**</code>) for one-click approval. A warn-only rate limit nets runaways; everything else runs. This is a documented lesson, not a preference. See below.</li>
 <li><strong>Sensitive actions require human approval, and the approval is one click.</strong> Approvals route to <code>/approvals</code>, the CLI, the mobile PWA at <code>/approve</code>, Telegram, or Discord. When one policy blows its interruption budget, per-action pings collapse into one flood banner with bulk-resolve. A repeat interruption can be retired at the card with "Allow, don't ask again", which writes a target-scoped, expiring, revocable grant rather than silencing anything. Pending approvals are never auto-resolved.</li>
 <li><strong>Every decision is recorded and outcomes are durable.</strong> A five-state finality machine plus a lost-confirmation sweep guarantee no silent double-execute on retry. Spec below and in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/durable-execution-finality.md"><code>docs/architecture/durable-execution-finality.md</code></a>.</li>
 <li><strong>Interruption precision is calibrated, not guessed.</strong> A distribution-free controller (<a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/governance-core-theory.md"><code>/calibration</code></a>, default off) turns your approve/deny verdicts into a proven false-interruption bound. Shadow-first, tighten-only; loosening always routes through human-ratified proposals.</li>
 <li><strong>Enforcement proves it is still on.</strong> A liveness probe drives a synthetic held action through the real hook seam and verdicts by whether it executed, never by reading the ledger. Because once it did not, and nothing noticed. Stale never renders green.</li>
 <li><strong>Prompt-injection scanning is on by default.</strong> High-confidence system-override patterns force a <code>block</code> at guard time; lower-severity patterns raise a <code>warn</code>.</li>
-<li><strong>An outside decision engine can tighten decisions, never loosen them.</strong> An org can configure one external decision provider (configured on <code>/policies</code>); the guard calls it during every evaluation and joins its verdict stricter-wins — external <code>deny</code> is absolute for the evaluated act, external <code>allow</code> never overrides a stricter local result, and the verdict is identity-bound to the exact act. An unreachable provider takes an explicit posture (<code>fail_closed</code> default) and is always recorded as <code>external unavailable</code>, never as governance that happened. Contract: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/external-verdict-provider.md"><code>docs/external-verdict-provider.md</code></a>.</li>
+<li><strong>An outside decision engine can tighten decisions, never loosen them.</strong> An org can configure one external decision provider (configured on <code>/policies</code>); the guard calls it during every evaluation and joins its verdict stricter-wins — external <code>deny</code> is absolute for the evaluated act, external <code>allow</code> never overrides a stricter local result, and the verdict is identity-bound to the exact act. An unreachable provider takes an explicit posture (<code>fail_closed</code> default) and is always recorded as <code>external unavailable</code>, never as governance that happened. A domain-specific provider can be scoped to the exact action types it governs; out-of-scope acts stay local-only, never billed to the provider's authority. Contract: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/external-verdict-provider.md"><code>docs/external-verdict-provider.md</code></a>.</li>
 </ol>
 <details>
 <summary><strong>Why each of those is the way it is (the incidents behind the design)</strong></summary>
@@ -485,7 +489,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
 <tr>
 <td>Telegram</td>
 <td>Inline Approve/Reject in an admin chat.</td>
-<td><a href="https://github.com/ucsandman/DashClaw/blob/main/docs/telegram-setup.md">telegram-setup.md</a></td>
+<td><code>dashclaw install telegram</code> (<a href="https://github.com/ucsandman/DashClaw/blob/main/docs/telegram-setup.md">guide</a>)</td>
 </tr>
 <tr>
 <td>Discord</td>
@@ -525,6 +529,11 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
   <br>
   <sub>Built by <a href="https://practicalsystems.io">Practical Systems</a></sub>
 </div>
+
+<h3>Support</h3>
+<p>If my tools save you time, you can support my work here:</p>
+<p><a href="https://github.com/sponsors/ucsandman"><img src="https://img.shields.io/badge/GitHub%20Sponsors-%E2%9D%A4-db61a2?logo=githubsponsors&amp;logoColor=white" alt="Sponsor on GitHub" loading="lazy" decoding="async"></a>
+<a href="https://buymeacoffee.com/wes_sander"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-%E2%98%95-ffdd00?logo=buymeacoffee&amp;logoColor=black" alt="Buy Me a Coffee" loading="lazy" decoding="async"></a></p>
 
   </section>
 </details>

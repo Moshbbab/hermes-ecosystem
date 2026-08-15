@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It…">
+<meta name="description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, support documents, scripts, and MCP servers. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It…">
+<meta property="og:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, support documents, scripts, and MCP servers. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, support documents, scripts, and MCP servers. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Hermes+Agent+plugin+for+local+knowledge+search+and+artifact+routing%E2%80%94find+the+right+skill%2C+script%2C+runbook%2C+cron+job%2C+MCP+server%2C+or+document.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It indexes various sources, including skills, scripts, markdown documents, cron jobs, and MCP server configurations.",
+  "description": "Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, support documents, scripts, and MCP servers. It functions as an artifact router rather than a chunk-based RAG system, providing routing hints that direct the agent to inspect entire files before acting.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-08-14T13:26:12.000Z",
+  "dateModified": "2026-08-14T18:39:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5
+    "userInteractionCount": 6
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,7 +119,7 @@
   <p class="project-desc">Hermes Agent plugin for local knowledge search and artifact routing—find the right skill, script, runbook, cron job, MCP server, or document.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 5</span>
+    <span class="stars">★ 6</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a reusable Hermes Agent plugin designed for routing local questions to specific artifacts rather than performing chunked RAG. It indexes various sources, including skills, scripts, markdown documents, cron jobs, and MCP server configurations.</p>
+    <p class="summary-text">Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, support documents, scripts, and MCP servers. It functions as an artifact router rather than a chunk-based RAG system, providing routing hints that direct the agent to inspect entire files before acting.</p>
     <ul class="summary-highlights">
-      <li>Provides five native tools for searching and managing local artifacts.</li>
-      <li>Supports automatic tool-OKF generation via an opt-in process.</li>
-      <li>Includes a proactive router skill for agent integration.</li>
+      <li>Indexes skills, scripts, runbooks, cron jobs, and MCP server configurations.</li>
+      <li>Provides tools for knowledge search, neighbor traversal, and usage reporting.</li>
+      <li>Supports optional, opt-in automatic tool-routing note generation using model calls.</li>
     </ul>
   </div>
 </section>
@@ -226,7 +226,15 @@
 <td>Summarize local usage, failures, zero-result queries, and feedback.</td>
 </tr>
 </tbody></table>
-<p>The plugin also registers <code>post_tool_call</code> and <code>on_session_finalize</code> hooks for optional tool-OKF capture and generation.</p>
+<p>The plugin also registers <code>pre_llm_call</code>, <code>post_tool_call</code>, <code>on_session_end</code>, and <code>on_session_finalize</code> hooks for optional same-turn implicit search-result feedback and tool-OKF capture/generation. The turn lifecycle hooks keep correlation inside the plugin when Hermes dispatches local-knowledge tools through its deferred-tool bridge.</p>
+<p>Implicit feedback is disabled by default. In a private controlled installation, it can learn a routing hint when the same artifact is consumed after distinct matching searches, with each <code>knowledge_get</code> tied to that search's unassisted baseline in the same Hermes session, task, and turn:</p>
+<pre><code class="language-yaml">local_knowledge:
+  implicit_feedback:
+    enabled: true
+    min_confirmations: 2
+    max_generic_queries: 5
+</code></pre>
+<p>Only a recent search from the same Hermes session, task, and turn is eligible. Repeated gets from one search are deduplicated, and overly generic artifacts stop receiving implicit promotion. Explicit feedback remains authoritative, and implicit evidence is not used as evaluation ground truth.</p>
 <h3>Install and model consent</h3>
 <p>Install and enable the directory plugin:</p>
 <pre><code class="language-bash">hermes plugins install https://github.com/stepanov1975/hermes-local-knowledge.git --enable
@@ -377,6 +385,21 @@ hermes config set local_knowledge.okf.auto_generate true
 <td>flat <code>okf_min_use_count</code></td>
 <td><code>1</code></td>
 </tr>
+<tr>
+<td><code>implicit_feedback.enabled</code></td>
+<td>—</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>implicit_feedback.min_confirmations</code></td>
+<td>—</td>
+<td><code>2</code></td>
+</tr>
+<tr>
+<td><code>implicit_feedback.max_generic_queries</code></td>
+<td>—</td>
+<td><code>5</code></td>
+</tr>
 </tbody></table>
 <p>All nested <code>okf</code> keys also accept their flat <code>okf_*</code> form. YAML lists are preferred in <code>config.yaml</code>; comma-separated or bracket-list strings written by <code>hermes config set</code> are normalized.</p>
 <p>When <code>source_root</code> is omitted, runtime skills, cron jobs, and MCP configuration are still indexed from <code>$HERMES_HOME</code>, but arbitrary root-level Markdown is not included by default. Generated state belongs outside a source repository and must not be committed.</p>
@@ -431,7 +454,8 @@ okf_index_dirty/
 <p>Version 0.4.0 reads the current v0.3.12 queue shape by normalizing a selected claim's stored schema into the bounded routing projection. It does not promise a general migration ladder for arbitrary older private schemas.</p>
 <h3>Feedback and evaluation</h3>
 <p>Lookup telemetry and feedback stay in <code>&lt;state_dir&gt;/usage.sqlite</code>. Tool handlers fail open for telemetry-only errors; explicit <code>knowledge_feedback</code> writes remain strict so callers know whether feedback was recorded. Do not put secrets or private document text in queries or feedback notes.</p>
-<p>Managed searches may use one deterministic feedback prior when the index was built for the configured source root. Only the latest significant explicit rating for a query/artifact pair is eligible, only <code>useful</code> is positive, and a newer rejection for that route or matching current query suppresses an older overlap route. A matching artifact already present in current results may move to rank one. If it is absent, the plugin performs at most one retry with an accepted query no longer than the current query and the mapped artifact type, and promotes only the exact artifact when that live retry rediscovers it. Searches against an explicit caller-owned <code>--db</code> remain unassisted.</p>
+<p>Managed searches may use one deterministic feedback prior when the index was built for the configured source root. Only the latest significant explicit rating for a query/artifact pair is eligible. Among ratings accepted by the current tool, only <code>useful</code> is positive; legacy persisted <code>great</code> rows remain positive compatibility input. A newer rejection for that route or matching current query suppresses an older overlap route. A matching artifact already present in current results may move to rank one. If it is absent, the plugin performs at most one retry with an accepted query no longer than the current query and the mapped artifact type, and promotes only the exact artifact when that live retry rediscovers it. Searches against an explicit caller-owned <code>--db</code> remain unassisted.</p>
+<p>When opt-in implicit feedback is enabled and no explicit route matches, mature same-turn evidence may supply the lower-priority route. It uses the same current-index promotion or one verified typed-retry path, and a matching explicit rejection can veto it.</p>
 <p><code>knowledge_usage_report</code> summarizes recent activity before changing ranking, triggers, source coverage, or graph edges.</p>
 <p><code>evaluate</code> is read-only and intentionally measures the unassisted index ranking to avoid training/evaluation leakage. It replays positive local feedback against the current index and reports exact Hit@k/MRR plus parent-equivalent metrics. Parent equivalence is deliberately limited to a <code>skill_support_doc</code> and its owning skill; generic graph neighbors are not treated as successful equivalents.</p>
 <p>For historical comparisons from a source checkout:</p>
@@ -439,7 +463,7 @@ okf_index_dirty/
   --usage-db ~/.hermes/local_knowledge/usage.sqlite \
   v0.4.2 WORKTREE
 </code></pre>
-<p>The comparator opens live telemetry read-only, freezes one private source/runtime/OKF corpus, and builds each ref with that ref's own code. A nonnegative recorded feedback boundary plus a matching index-corpus hash proves that the recorded event inputs are available. The report calls a ref replay event-time exact only when that ref's plugin version and index format also match the recorded event and the replay reproduces its recorded baseline/final pages plus route provenance; a changed candidate otherwise remains a counterfactual replay over exact inputs, not historical output. Migrated legacy rows use one fixed captured feedback state, while missing boundaries or input/ref/output mismatches remain explicitly non-exact best-effort evidence. The machine report counts these evidence classes without exposing raw queries.</p>
+<p>The comparator opens live telemetry read-only, freezes one private source/runtime/OKF corpus, and builds each ref with that ref's own code. Nonnegative recorded explicit and enabled implicit feedback boundaries plus a matching index-corpus hash prove that the recorded event inputs are available. Implicit rows are accepted only when their exact successful search event has matching root, query, session, task, non-empty turn, and baseline-result membership. Searches recorded with implicit feedback disabled do not require unused implicit state. The report calls a ref replay event-time exact only when that ref's plugin version and index format also match the recorded event and the replay reproduces its recorded baseline/final pages plus route provenance; a changed candidate otherwise remains a counterfactual replay over exact inputs, not historical output. Migrated legacy rows without complete boundaries and same-turn provenance remain explicitly non-exact best-effort evidence. The machine report counts these evidence classes without exposing raw queries.</p>
 <p>Correction-route acceptance uses <code>explicit_resolution</code> Hit@1 as the primary outcome, then <code>verified_event</code> Hit@1/MRR, while requiring no increase in negative-artifact exposure, no unaccepted production ordering changes, and no replay errors. The comparison assessment distinguishes <code>rejected</code>, <code>accepted_improved</code>, and <code>accepted_unchanged_or_insufficient_evidence</code>. Direct/legacy aggregate metrics remain useful coverage and trend signals, but are not sufficient by themselves to prove a correction. Raw queries and artifact IDs appear only with <code>--details</code> inside the owner-only evaluation directory.</p>
 <h3>Verification</h3>
 <p>Operator checks:</p>
@@ -457,17 +481,23 @@ python scripts/check_version_policy.py --base-ref origin/main
 git diff --check
 </code></pre>
 <p>See <a href="https://github.com/stepanov1975/hermes-local-knowledge/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a>, <a href="https://github.com/stepanov1975/hermes-local-knowledge/blob/main/SECURITY.md"><code>SECURITY.md</code></a>, and <a href="https://github.com/stepanov1975/hermes-local-knowledge/blob/main/docs/github-security.md"><code>docs/github-security.md</code></a> for contribution, vulnerability-reporting, and repository-security guidance.</p>
+<h3>Acknowledgments</h3>
+<p>This project benefits from people who contribute code, share ideas, or inspire features:</p>
+<ul>
+<li><a href="https://github.com/xXLODXx">@xXLODXx</a> — contributed the initial opt-in implicit usage-feedback implementation and its confirmation and generic-artifact gates in <a href="https://github.com/stepanov1975/hermes-local-knowledge/pull/27">PR #27</a>, adapting ideas from <a href="https://github.com/xXLODXx/hermes-skill-router">hermes-skill-router</a>.</li>
+</ul>
 <h3>Owner map</h3>
 <ul>
 <li><code>config.py</code> — configuration models, aliases, defaults, and the single resolver.</li>
+<li><code>implicit.py</code> — opt-in same-turn search-result consumption attribution.</li>
 <li><code>artifacts.py</code> — whole-artifact models, source collection, privacy-safe metadata extraction, and graph edges.</li>
 <li><code>index.py</code> — format-4 SQLite/JSONL publication, cross-version and SQLite build locking, managed rebuild classification, and deterministic search/get/neighbors.</li>
 <li><code>telemetry.py</code> — local usage and feedback persistence/reporting.</li>
-<li><code>routing.py</code> — bounded live-root feedback matching, promotion, and one verified typed retry.</li>
+<li><code>routing.py</code> — bounded live-root explicit/implicit feedback matching, promotion, and one verified typed retry.</li>
 <li><code>evaluation.py</code> — read-only feedback-label replay and exact/parent-equivalent metrics.</li>
 <li><code>service.py</code> — one resolved configuration's managed index and telemetry lifecycle.</li>
 <li><code>okf.py</code> — privacy-safe OKF queue, hooks, detached worker, validation, and fenced publication.</li>
-<li><code>plugin.py</code> — Hermes registration for five tools, two hooks, the bundled skill, and installed CLI adapter; <code>register</code> is its public export.</li>
+<li><code>plugin.py</code> — Hermes registration for five tools, four hooks, the bundled skill, and installed CLI adapter; <code>register</code> is its public export.</li>
 <li><code>cli.py</code> — primary standalone command surface and the smaller Hermes CLI adapter.</li>
 <li><code>indexer.py</code> — thin compatibility facade exporting exactly <code>Artifact</code>, <code>Edge</code>, <code>IndexSettings</code>, <code>build_index</code>, <code>search_index</code>, <code>get_artifact</code>, <code>get_neighbors</code>, and <code>main</code>.</li>
 <li><code>__init__.py</code> — package version.</li>
@@ -484,11 +514,11 @@ git diff --check
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 63.2K</div>
+        <div class="stars">★ 63.3K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 19.9K</div>
+        <div class="stars">★ 20.0K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -496,7 +526,7 @@ git diff --check
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 359</div>
+        <div class="stars">★ 360</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
