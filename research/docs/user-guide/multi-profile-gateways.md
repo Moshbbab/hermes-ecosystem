@@ -4,7 +4,7 @@
 
 Operate multiple [profiles](/docs/user-guide/profiles) — each with its own bot tokens, sessions, and memory — as managed services on a single machine. This page covers the operational concerns: starting them all together, viewing logs across profiles, preventing the host from sleeping, and recovering from common launchd/systemd quirks.
 
-If you only run one Hermes agent, you don't need this page — see [Profiles](/docs/user-guide/profiles) for the basics.
+If you only run one Hermes agent, you don't need this page — see [Profiles](/docs/user-guide/profiles) for the basics. And if your instances live on _different_ machines that one desktop app should reach simultaneously, see [Connecting Desktop to Many Hermes Instances](/docs/user-guide/multi-connection-desktop).
 
 ## When to use this
 
