@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>greyhaven-ai/autocontext — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="autocontext is a recursive self-improving harness that executes tasks against evaluations to refine agent performance. It captures traces, playbooks, and…">
+<meta name="description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It runs tasks against evaluation, retains useful lessons, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta property="og:description" content="autocontext is a recursive self-improving harness that executes tasks against evaluations to refine agent performance. It captures traces, playbooks, and…">
+<meta property="og:description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It runs tasks against evaluation, retains useful lessons, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta name="twitter:description" content="autocontext is a recursive self-improving harness that executes tasks against evaluations to refine agent performance. It captures traces, playbooks, and…">
+<meta name="twitter:description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It runs tasks against evaluation, retains useful lessons, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=autocontext&amp;subtitle=a+recursive+self-improving+harness+designed+to+help+your+agents+%28and+future+iterations+of+those+agents%29+succeed+on+any+task&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "autocontext is a recursive self-improving harness that executes tasks against evaluations to refine agent performance. It captures traces, playbooks, and datasets from each run, allowing users to discard failed attempts and retain successful strategies for future iterations or local-model training.",
+  "description": "Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It runs tasks against evaluation, retains useful lessons, and generates traces, reports, playbooks, datasets, and optional local-model training artifacts.",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-08-15T04:12:26.000Z",
+  "dateModified": "2026-08-15T20:40:35.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1271
+    "userInteractionCount": 1272
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">autocontext is a recursive self-improving harness that executes tasks against evaluations to refine agent performance. It captures traces, playbooks, and datasets from each run, allowing users to discard failed attempts and retain successful strategies for future iterations or local-model training.</p>
+    <p class="summary-text">Autocontext is a recursive self-improving harness designed to help agents succeed on tasks. It runs tasks against evaluation, retains useful lessons, and generates traces, reports, playbooks, datasets, and optional local-model training artifacts.</p>
     <ul class="summary-highlights">
-      <li>Generates filesystem-first artifacts including playbooks, reports, and datasets.</li>
-      <li>Supports local-model training and schema-enforced role outputs.</li>
-      <li>Integrates with MCP clients, Pi extensions, and OpenAI-compatible endpoints.</li>
+      <li>Supports multiple providers including Anthropic, OpenAI-compatible, and local models</li>
+      <li>Provides Python and TypeScript CLI surfaces</li>
+      <li>Generates filesystem-based traces, reports, and playbooks</li>
     </ul>
   </div>
 </section>
@@ -182,11 +182,11 @@
 </thead>
 <tbody><tr>
 <td>Python CLI</td>
-<td><code>uv tool install autocontext==0.15.1</code></td>
+<td><code>uv tool install autocontext==0.16.1</code></td>
 </tr>
 <tr>
 <td>Python library/dev</td>
-<td><code>uv pip install autocontext==0.15.1</code></td>
+<td><code>uv pip install autocontext==0.16.1</code></td>
 </tr>
 <tr>
 <td>TypeScript/Node CLI</td>
@@ -275,8 +275,8 @@ knowledge/&lt;scenario&gt;/
 </tr>
 <tr>
 <td><code>scenario</code></td>
-<td><code>autoctx scenario create --description "..."</code></td>
-<td>Create a reusable scenario from a description</td>
+<td><code>autoctx scenario create --help</code></td>
+<td>Create from a description, template, or harness spec</td>
 </tr>
 <tr>
 <td><code>mission</code></td>
@@ -305,16 +305,38 @@ compatibility alias. <code>autoctx --version --json</code> reports the package v
 runtime (<code>python</code> or <code>typescript</code>).</p>
 <p>Python owns the full control-plane package; TypeScript owns several operator-facing surfaces, the TUI, and Node runtime adapters. Start with <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/README.md">autocontext/README.md</a> or <a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a>.</p>
 
-<h3>What's New in 0.15.1</h3>
+<h3>What's New in 0.16.1</h3>
 <ul>
-<li><strong>Local models as a first-class peer tier:</strong> endpoints now declare hosting (<code>local</code>/<code>remote</code>) and capability (<code>fast</code>/<code>mid_tier</code>/<code>frontier</code>) separately, so a self-hosted frontier-class model is no longer permanently misclassified as mid-tier. Per-provider model defaults stop leaking Claude ids into local endpoints, providers that serve real tiers get a model per tier, and <code>autoctx run</code> preflights every configured endpoint before spending generation tokens.</li>
-<li><strong>Offline mode:</strong> <code>AUTOCONTEXT_OFFLINE=1</code> enforces that the Python engine never initiates an outbound connection, verified by a test that runs a full generation with a socket-level guard and asserts zero connection attempts. Operator-initiated access such as SSH stays in scope, so an airgapped host does not have to be unreachable. The TypeScript engine refuses to start rather than run unenforced.</li>
-<li><strong>Schema-enforced role output:</strong> analyst, coach and architect responses are constrained to a JSON Schema on OpenAI-compatible and Anthropic backends instead of being scraped out of Markdown headings. Measured on llama3.1:8b, analyst format drift went from 100% to 0%. Set <code>AUTOCONTEXT_CONSTRAINED_OUTPUT=false</code> to keep the previous behavior.</li>
-<li><strong>Judge scoring correctness:</strong> a reasoning block emitted before the answer could win the judge's score parse, recording 0.05 for a run the judge scored 0.88. Both engines now share one model-JSON extractor that prefers the answer over the scratchpad.</li>
-<li><strong>Refreshed model ids:</strong> shipped defaults move to Claude Opus 5 / Sonnet 5 and the GPT-5.6 family. Cost attribution moves with them; the previous table still priced Opus 4.6 at $15/$75 per M, overstating spend on a default run by roughly 3x.</li>
+<li><strong>A clearer paved-road CLI:</strong> <code>run</code> now requires an explicit scenario, <code>--iterations</code> is the primary spelling, concise help leads with the core workflow, and <code>autoctx commands --all</code> exposes the full catalog. Existing <code>--gens</code> and legacy command aliases remain available for compatibility.</li>
+<li><strong>Stable machine-readable inspection:</strong> <code>status</code>, <code>show</code>, and <code>watch --ndjson</code> emit versioned, schema-backed envelopes with consistent stdout, stderr, and exit-code behavior. Status and show accept <code>--run-id</code>, while <code>--version --json</code> identifies the Python runtime and package version.</li>
+<li><strong>More reliable run inspection:</strong> <code>watch</code> no longer exits before a completed generation becomes visible, and <code>show</code> defaults to the latest generation while rejecting conflicting selectors instead of guessing.</li>
+<li><strong>Portable exports by default:</strong> <code>export</code> now writes JSON to stdout when no output path is supplied, supports Pi packages, and retains <code>strategy</code> as a compatibility alias for the default JSON format.</li>
+<li><strong>Contracts ship with the package:</strong> CLI contract v2 schemas and shared fixtures are included in wheels and source distributions so downstream tools can validate the same status, show, queue, and export shapes as the CLI.</li>
+<li><strong>Ratcheted package boundaries:</strong> domain, analytics, configuration, and storage implementations now follow enforced dependency directions while legacy module paths remain available as compatibility shims.</li>
 </ul>
 
 
+<h4>npm runtime highlights included in 0.16.1</h4>
+<p>The aligned <code>autoctx@0.16.1</code> package also carries the TypeScript-first runtime
+work introduced in 0.16.0 and hardened in 0.16.1:</p>
+<ul>
+<li><strong>Host-owned live composition:</strong> typed runtime capabilities, scoped cleanup
+and effect policies, reactive component graphs, and durable transactional
+activation/rollback for trusted hosts.</li>
+<li><strong>A production-oriented operator TUI:</strong> the pi-tui client supports local and
+remote attachment, durable replay, run control and inspection, and bounded,
+redacted terminal state on Node.js 22.19+.</li>
+<li><strong>Image-aware interactive sessions:</strong> compatible TypeScript providers can
+advertise <code>image_attachments_v1</code>; attachment validation is bounded and
+fail-closed before provider inference.</li>
+<li><strong>Protocol and terminal hardening:</strong> exact capability negotiation, protected
+priority controls, bounded WebSocket resources, credential redaction, and
+terminal-control sanitization are enforced across the interactive path.</li>
+</ul>
+<p>Python parity for the pi-tui client and image attachments remains deferred.
+See the <a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">TypeScript guide</a>, <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/internal/runtime-component-graph.md">runtime composition
+contracts</a>, and the full
+<a href="https://github.com/greyhaven-ai/autocontext/blob/main/CHANGELOG.md">changelog</a> for details.</p>
 <h3>Scenario Families</h3>
 <p>The shipped families cover games, agent tasks, simulations, artifact editing, investigations, workflows, negotiation, schema evolution, tool fragility, operator loops, and coordination. Python and TypeScript share the family vocabulary; see <a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/internal/scenario-parity-matrix.md">docs/internal/scenario-parity-matrix.md</a> for parity details.</p>
 <h3>Package Guides</h3>
@@ -383,7 +405,7 @@ runtime (<code>python</code> or <code>typescript</code>).</p>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 198</div>
+        <div class="stars">★ 199</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">

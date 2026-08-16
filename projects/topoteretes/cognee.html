@@ -47,13 +47,13 @@
     "name": "topoteretes",
     "url": "https://github.com/topoteretes"
   },
-  "dateModified": "2026-08-15T12:32:38.000Z",
+  "dateModified": "2026-08-15T22:37:58.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30041
+    "userInteractionCount": 30053
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -119,7 +119,7 @@
   <p class="project-desc">Cognee is the open-source AI memory platform for agents. Give your AI agents persistent long-term memory across sessions with a self-hosted knowledge graph engine.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 30.0K</span>
+    <span class="stars">★ 30.1K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
@@ -141,8 +141,8 @@
     <p class="summary-text">Cognee is an open-source AI memory platform designed to provide AI agents with persistent long-term memory across sessions. It uses a self-hosted knowledge graph engine to ingest data in various formats and combine vector embeddings with graph reasoning.</p>
     <ul class="summary-highlights">
       <li>Provides persistent long-term memory for AI agents</li>
-      <li>Builds self-hosted knowledge graphs from ingested data</li>
-      <li>Supports Python, Rust, and TypeScript clients</li>
+      <li>Builds self-hosted knowledge graphs from any data format</li>
+      <li>Supports Rust and TypeScript clients</li>
     </ul>
   </div>
 </section>
@@ -174,7 +174,7 @@
 
 
 <p>  <a href="https://GitHub.com/topoteretes/cognee/network/"><img src="https://img.shields.io/github/forks/topoteretes/cognee.svg?style=social&amp;label=Fork&amp;maxAge=2592000" alt="GitHub forks" loading="lazy" decoding="async"></a>
-  <a href="https://GitHub.com/topoteretes/cognee/stargazers/"><img src="https://img.shields.io/github/stars/topoteretes/cognee.svg?style=social&amp;label=Star&amp;maxAge=2592000" alt="GitHub stars" loading="lazy" decoding="async"></a>
+  <a href="https://github.com/topoteretes/cognee"><img src="https://img.shields.io/github/stars/topoteretes/cognee.svg?style=social&amp;label=Star&amp;maxAge=2592000" alt="GitHub stars" loading="lazy" decoding="async"></a>
   <a href="https://GitHub.com/topoteretes/cognee/commit/"><img src="https://badgen.net/github/commits/topoteretes/cognee" alt="GitHub commits" loading="lazy" decoding="async"></a>
   <a href="https://github.com/topoteretes/cognee/tags/"><img src="https://badgen.net/github/tag/topoteretes/cognee" alt="GitHub tag" loading="lazy" decoding="async"></a>
   <a href="https://pepy.tech/project/cognee"><img src="https://static.pepy.tech/badge/cognee" alt="Downloads" loading="lazy" decoding="async"></a>
@@ -296,10 +296,30 @@ cognee-cli forget --all
 Docker Desktop, Colima, or any OCI-compatible runtime with a working <code>docker</code> CLI is
 required. See <a href="https://github.com/topoteretes/cognee/blob/main/docs/docker-colima-setup.md">Docker &amp; Colima Setup</a> for details.</p>
 </blockquote>
+<h4>Performance tuning</h4>
+<p>Cognee's defaults favor memory quality over raw latency. Two knobs matter:</p>
+<ul>
+<li><strong><code>AUTO_FEEDBACK=false</code></strong> removes the one LLM call cognee makes after each answered
+query to self-tune its memory. Reads get faster and cheaper; session memory itself
+keeps working. Turn it back on when you want memory that improves from conversation
+signals.</li>
+<li><strong><code>CACHING=false</code></strong> disables session memory entirely — <code>remember(session_id=...)</code>
+stops working and <code>recall()</code> loses conversation context. Only set this if you don't
+use session memory at all. <strong>If you're benchmarking cognee, leave it on</strong> — turning
+it off benchmarks cognee with its memory layer removed.</li>
+</ul>
+<p>A third flag, <code>DATASET_QUEUE_ENABLED=false</code>, removes the per-process concurrency guard
+on datasets; it saves a little latency but risks file-lock leaks and resource
+exhaustion when multiple datasets run in parallel — leave it on for servers.</p>
 <h3>Run with Docker</h3>
 <p>Prefer containers? Cognee publishes prebuilt images to Docker Hub on every push to <code>main</code>:
 <a href="https://hub.docker.com/r/cognee/cognee"><code>cognee/cognee</code></a> (the API server) and
 <a href="https://hub.docker.com/r/cognee/cognee-mcp"><code>cognee/cognee-mcp</code></a> (the MCP server).</p>
+<blockquote>
+<p><strong>Just want to try it?</strong> Follow the
+<a href="https://github.com/topoteretes/cognee/blob/main/docs/minimal-docker-compose.md">minimal docker-compose try-out</a> — a single
+copy-pasteable compose file that runs the prebuilt image, no clone or build needed.</p>
+</blockquote>
 <h4>Option A — Docker Compose (build from source)</h4>
 <p>Clone the repo, create a <code>.env</code> with at least <code>LLM_API_KEY</code>, then:</p>
 <pre><code class="language-bash">cp .env.template .env   # then edit .env and set LLM_API_KEY
@@ -501,6 +521,39 @@ DB_NAME=cognee_db
 </tr>
 </tbody></table>
 <p>See the <a href="distributed/"><code>distributed/</code></a> folder for deploy scripts, worker configurations, and additional details.</p>
+<h4>Multi-tenant deployments</h4>
+<p>With <code>ENABLE_BACKEND_ACCESS_CONTROL=true</code> (the default), each user+dataset combination
+gets its own isolated graph and vector databases. Not every backend supports this:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Isolation supported</th>
+<th>Not supported</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Graph</td>
+<td>Ladybug/Kuzu (default), Neo4j*, Postgres (demo), Turso</td>
+<td>Neptune, remote Ladybug</td>
+</tr>
+<tr>
+<td>Vector</td>
+<td>LanceDB (default), PGVector, Turso</td>
+<td>Neptune Analytics, community adapters</td>
+</tr>
+<tr>
+<td>Relational</td>
+<td>—</td>
+<td>SQLite/Postgres is always one shared database (users, permissions, registry)</td>
+</tr>
+</tbody></table>
+<p>* Neo4j isolation creates one database per dataset inside your DBMS, which requires an
+edition with multi-database support (Enterprise or Aura).</p>
+<p>Both your graph <strong>and</strong> vector backends must support isolation — if either doesn't,
+cognee raises an error naming the unsupported backend rather than silently falling
+back to shared databases. To run an unsupported backend, deploy
+single-tenant with <code>ENABLE_BACKEND_ACCESS_CONTROL=false</code>.</p>
 <h3>Use Cognee in Other Languages</h3>
 <p>Prefer something other than Python? Cognee also ships official clients for Rust and TypeScript.</p>
 <h4>Getting Started with Rust</h4>
@@ -572,7 +625,7 @@ DB_NAME=cognee_db
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 27.8K</div>
+        <div class="stars">★ 27.9K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
