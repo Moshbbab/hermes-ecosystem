@@ -136,6 +136,14 @@ both
 
 Initial connection timeout in seconds (default: `60`)
 
+`protocol`
+
+string
+
+both
+
+Protocol-era negotiation: `auto` (default — legacy `initialize` handshake first, falling back to the 2026-07-28 `server/discover` stateless probe when the server rejects the handshake as modern-only), `stateless` (probe `server/discover` first; one legacy retry), or `legacy` (handshake only, no fallback)
+
 `supports_parallel_tool_calls`
 
 bool

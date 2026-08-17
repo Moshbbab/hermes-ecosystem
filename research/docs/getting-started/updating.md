@@ -255,6 +255,10 @@ hermes uninstall
 
 The uninstaller gives you the option to keep your configuration files (`~/.hermes/`) for a future reinstall.
 
+Moving to a new machine rather than leaving?
+
+Take your setup with you before removing anything: `hermes backup` captures the entire `~/.hermes` directory including credentials, while `hermes profile export` packs a single profile with credentials excluded by design (so an export alone is not a full backup). See [`hermes backup` vs `hermes profile export`](/docs/reference/faq#hermes-backup-vs-hermes-profile-export).
+
 ### Manual Uninstall
 
 ```
