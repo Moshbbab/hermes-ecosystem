@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/CorsenAI/hermes-windows-runtime-skills#software",
   "name": "hermes-windows-runtime-skills",
-  "description": "This community-maintained skill pack for Hermes Agent provides deterministic path routing and Python runtime selection across Windows, Git Bash/MSYS, and WSL. It identifies execution domains and verifies existing interpreters without installing software, changing dependencies, or modifying project files.",
+  "description": "This community-maintained skill pack for Hermes Agent provides deterministic path routing and Python runtime selection across Windows, Git Bash/MSYS, and WSL. It enables agents to identify execution domains and verify existing Python interpreters without installing new software or modifying project files.",
   "url": "https://hermesatlas.com/projects/CorsenAI/hermes-windows-runtime-skills",
   "codeRepository": "https://github.com/CorsenAI/hermes-windows-runtime-skills",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "CorsenAI",
     "url": "https://github.com/CorsenAI"
   },
-  "dateModified": "2026-08-17T03:32:30.000Z",
+  "dateModified": "2026-08-17T16:41:55.000Z",
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
   }
@@ -75,7 +75,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">228·repos</span>
-    <span id="meta-version">hermes·v0.20.2</span>
+    <span id="meta-version">hermes·v0.20.3</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -131,11 +131,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This community-maintained skill pack for Hermes Agent provides deterministic path routing and Python runtime selection across Windows, Git Bash/MSYS, and WSL. It identifies execution domains and verifies existing interpreters without installing software, changing dependencies, or modifying project files.</p>
+    <p class="summary-text">This community-maintained skill pack for Hermes Agent provides deterministic path routing and Python runtime selection across Windows, Git Bash/MSYS, and WSL. It enables agents to identify execution domains and verify existing Python interpreters without installing new software or modifying project files.</p>
     <ul class="summary-highlights">
-      <li>Routes file operations between native Windows, MSYS, and WSL path syntaxes.</li>
-      <li>Selects and verifies project-compatible Python interpreters using a PowerShell resolver.</li>
-      <li>Operates without network requests, package installations, or file edits.</li>
+      <li>Routes file operations using environment-specific path syntax.</li>
+      <li>Selects and verifies existing project-compatible Python interpreters.</li>
+      <li>Supports native Windows, Git Bash/MSYS, and WSL environments.</li>
     </ul>
   </div>
 </section>
@@ -204,6 +204,10 @@ hermes skills install CorsenAI/hermes-windows-runtime-skills/windows-python-runt
 <pre><code class="language-text">/windows-wsl-file-navigation
 /windows-python-runtime
 </code></pre>
+<p>The root <a href="https://github.com/CorsenAI/hermes-windows-runtime-skills/blob/main/skills.sh.json"><code>skills.sh.json</code></a> groups both entries under
+<strong>Windows and WSL Runtime</strong> when Hermes indexes the tap for Skills Hub. This
+controls presentation only; it does not change installation, trust, or search
+ranking.</p>
 <h3>Why these skills exist</h3>
 <p>The shell shown to an agent does not determine the path syntax accepted by the
 next executable. A native Windows <code>rg.exe</code> launched from Git Bash, a Linux
@@ -299,11 +303,24 @@ distribution.</p>
 <p>For a release, first run the full suite and secret scan on a clean commit, then
 create the deterministic source archive:</p>
 <pre><code class="language-text">&amp; tests/gitleaks.ps1 -RepoRoot $PWD.Path
-&amp; tests/package.ps1 -RepoRoot $PWD.Path -OutputPath ../hermes-windows-runtime-skills-v0.1.0.zip
+&amp; tests/package.ps1 -RepoRoot $PWD.Path -OutputPath ../hermes-windows-runtime-skills-v0.1.0.zip -PythonExe $python
 </code></pre>
-<p>The packaging gate refuses a dirty tree or an existing output file, builds
-from <code>HEAD</code> with <code>git archive</code>, rejects private or traversal entries, and
-verifies that archive files exactly match <code>git ls-files</code>.</p>
+<p>The packaging gate refuses a dirty tree or an existing output file, reads only
+tracked blobs from <code>HEAD</code>, rejects private or traversal entries, and writes a
+canonical uncompressed ZIP with fixed metadata. GitHub Actions builds it
+independently on Windows and Ubuntu; <code>archive hygiene</code> succeeds only when both
+SHA-256 values are byte-identical. For a version tag, attach the exact
+<code>release-source-verified</code> artifact to the GitHub release without rebuilding it.</p>
+<h3>Contributing and security</h3>
+<p>Read <a href="https://github.com/CorsenAI/hermes-windows-runtime-skills/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> before proposing a change. Public bug
+reports and feature requests use the structured GitHub issue forms, and pull
+requests must keep the validation, secret-history, and archive-hygiene gates
+green.</p>
+<p>Do not disclose vulnerabilities in a public issue. Follow
+<a href="https://github.com/CorsenAI/hermes-windows-runtime-skills/blob/main/SECURITY.md"><code>SECURITY.md</code></a> and use the repository's
+<a href="https://github.com/CorsenAI/hermes-windows-runtime-skills/security/advisories/new">private vulnerability reporting</a>
+instead. Project interactions are also governed by the
+<a href="https://github.com/CorsenAI/hermes-windows-runtime-skills/blob/main/CODE_OF_CONDUCT.md"><code>CODE_OF_CONDUCT.md</code></a>.</p>
 <h3>Scope of the public-source review</h3>
 <p>No exact counterpart was identified in the official Hermes skill catalogs or
 the public sources checked on 2026-08-17. This is a bounded research result,
@@ -336,7 +353,7 @@ Windows/MSYS/WSL runtime selection.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 28.1K</div>
+        <div class="stars">★ 28.3K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
