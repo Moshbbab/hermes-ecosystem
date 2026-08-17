@@ -95,10 +95,6 @@ Article illustrations: type × style × palette consistency.
 
 Knowledge comics (知识漫画): educational, biography, tutorial.
 
-[**blender-mcp**](/docs/user-guide/skills/optional/creative/creative-blender-mcp)
-
-Drive Blender via the catalog blender MCP, with bpy recipes.
-
 [**concept-diagrams**](/docs/user-guide/skills/optional/creative/creative-concept-diagrams)
 
 Generate flat, minimal educational SVG visuals as HTML.
@@ -594,6 +590,10 @@ Description
 [**cloudflare-temporary-deploy**](/docs/user-guide/skills/optional/web-development/web-development-cloudflare-temporary-deploy)
 
 Deploy a Worker live, no account, via wrangler --temporary.
+
+[**har-derived-api-client**](/docs/user-guide/skills/optional/web-development/web-development-har-derived-api-client)
+
+Record a site's XHR into a HAR, derive an HTTP client.
 
 [**page-agent**](/docs/user-guide/skills/optional/web-development/web-development-page-agent)
 

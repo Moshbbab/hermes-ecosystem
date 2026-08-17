@@ -474,6 +474,33 @@ def register(ctx):
 -   Correlation fields such as `turn_id`, `api_request_id`, `task_id`, `session_id`, and `api_call_count` are hook-specific and may be absent. Treat IDs as opaque.
 -   Runtime event-name validity comes from `hermes_cli.plugins.VALID_HOOKS`. `hermes hooks list` lists configured shell/outbound hooks, not every available event; `hermes hooks test <event>` reports the valid set only when an invalid event is supplied.
 
+### Cache-safe system prompt sections
+
+Plugins that need durable, always-on guidance can register a bounded system prompt section instead of injecting the same text through `pre_llm_call` on every turn:
+
+```
+def board_rules(session_info):
+    return f"Apply the worker rules for profile {session_info['profile_name']}."
+
+def register(ctx):
+    ctx.register_system_prompt_section(
+        "kanban-advanced.worker-rules",
+        board_rules,                       # a string is also accepted
+        position="after_memory",
+        max_chars=4000,
+    )
+```
+
+The contract is deliberately narrow:
+
+-   IDs are global, stable, 1–128 character lowercase identifiers using only letters, numbers, `.`, `_`, and `-`. Duplicate IDs are rejected.
+-   `after_memory` is the only placement anchor. Sections are sorted by ID, rendered after memory/profile context and before session metadata; plugins cannot reorder or replace core prompt content.
+-   A callable receives a read-only mapping with `session_id`, `model`, `provider`, `platform`, `profile_name`, and `cwd`. It runs **once for a new session**. Its rendered bytes are frozen on compression and recovered from the already-persisted full system prompt after a process restart/resume; plugin state is not re-read for an existing session.
+-   `max_chars` is capped at 4,000 characters. All plugin sections together, including their audit headings, are capped at 8,000 characters and 32 sections. Empty, non-string, oversized, aggregate-over-budget, or raising sections are skipped with a warning; prompt construction continues.
+-   Every accepted section is named in the prompt and logged at session start with its plugin, position, and character count.
+
+Use `pre_llm_call` for truly dynamic per-turn context. There is intentionally no plugin environment-hints hook in this contract: changing cwd, branch, or other environment data must not silently mutate a session's cached prompt. Such a hook needs a concrete consumer and the same frozen/resume-safe semantics before it can be added.
+
 ### Shipped plugin-hook catalog
 
 Payload fields below are the exact event-specific fields supplied by each call site. For backward compatibility, `PluginManager` also adds `telemetry_schema_version="hermes.observer.v1"` to every plugin-hook callback. That legacy envelope marker does not mean all hook payloads share one semantic schema; new versioned contracts belong to their concrete event or capability family.
@@ -488,11 +515,11 @@ Explicit payload fields
 
 Privacy / sensitivity
 
-`pre_tool_call`
+[`pre_tool_call`](#pre_tool_call)
 
 Directive/control
 
-Once before execution; first valid `block` or `approve` directive wins.
+Once before execution; first valid `block` or `approve` directive wins, and `modify` returns are shallow-merged into the tool arguments.
 
 `tool_name`, `args`, `task_id`, `session_id`, `tool_call_id`, `turn_id`, `api_request_id`, `middleware_trace`
 
@@ -527,6 +554,16 @@ After bounded foreground process capture, before final output limiting; first st
 `command`, `output`, `returncode`, `task_id`, `env_type`
 
 Command/output may contain credentials.
+
+`pre_transcription`
+
+Transform
+
+Fired by the STT dispatcher after provider resolution and before any backend (built-in, command-type, or plugin-registered) is invoked; dict results are applied in registration order, last-writer-wins per field (`prompt`, `language`, `model`; `file_path` is read-only).
+
+`file_path`, `provider`, `model`, `language`, `prompt`, `source`
+
+The final prompt is uploaded to the configured STT provider with the audio — keep secrets out of hook returns.
 
 `pre_llm_call`
 
@@ -597,6 +634,56 @@ On each failed provider attempt; return ignored.
 `task_id`, `turn_id`, `api_request_id`, `session_id`, `platform`, `model`, `provider`, `base_url`, `api_mode`, `api_call_count`, `api_duration`, `started_at`, `ended_at`, `status_code`, `retry_count`, `max_retries`, `retryable`, `reason`, `error`, `request`
 
 Error text may contain provider/user data; `request` is intended to be sanitized.
+
+`on_stream_start`
+
+Observer
+
+Dispatched when a streaming LLM response begins; delivered off the token path via a host-owned bounded queue with one worker per callback; return ignored.
+
+`turn_id`, `iteration`, `session_id`, `model`, `provider`, `surface`
+
+Identifiers and routing metadata only.
+
+`on_stream_delta`
+
+Observer
+
+Dispatched per normalized streaming text delta via the bounded observer queue; a stalled callback drops only its own oldest events; return ignored.
+
+`delta`, `kind` (`text` or `reasoning`), `turn_id`, `iteration`, `session_id`, `model`, `provider`, `surface`
+
+Delta text is raw model output; reasoning deltas require the `plugins.stream_reasoning_deltas` opt-in.
+
+`on_stream_end`
+
+Observer
+
+Dispatched when a streaming response finishes or errors, after the stream closes; return ignored.
+
+`final_text`, `finished`, `error`, `turn_id`, `iteration`, `session_id`, `model`, `provider`, `surface`
+
+Full assembled response text; error text may include provider data.
+
+`on_interim_message`
+
+Observer
+
+Dispatched when a mid-loop assistant message is surfaced before the final answer (streaming or non-streaming); return ignored.
+
+`text`, `already_streamed`, `turn_id`, `iteration`, `session_id`, `model`, `provider`, `surface`
+
+Full interim assistant text.
+
+`transform_api_error_classification`
+
+Transform
+
+On each failed provider attempt, at the top of the built-in classifier; all callbacks run, then the first dict with a valid `reason` wins (run-all-then-pick-first), and skipped valid results log a runtime warning. Python plugins only.
+
+`provider`, `model`, `status_code`, `error_type`, `error_code`, `error_message`, `error_body`, `error`, `approx_tokens`, `context_length`, `num_messages`
+
+`error_message` and `error_body` may contain raw provider/user data.
 
 `on_session_start`
 
@@ -678,6 +765,26 @@ Incoming non-internal message before auth/pairing/dispatch; first valid `skip`, 
 
 Extremely privileged in-process objects expose inbound user/routing data and host handles.
 
+`gateway_platform_event`
+
+Observer
+
+After the gateway's profile-scoped authorization succeeds, when a supported platform-native event is normalized at the gateway boundary (Telegram: reactions, message edits; Discord: message edits/deletes, thread created/renamed); return ignored.
+
+`platform`, `event_type`, `payload` (event-type-specific dict — see the per-event contracts below)
+
+Normalized plain-dict envelope only; raw SDK objects, adapter handles, and bot clients are never exposed.
+
+`pre_command`
+
+Observer
+
+Recognized slash command about to be dispatched, before the handler runs, on CLI and gateway cold-path dispatch; return ignored in v1 (directive-shaped dicts are logged at debug). Gateway running-agent intercept commands (`/stop`, `/approve` during an active run) are deliberately excluded — control-plane escape hatches must stay outside plugin reach.
+
+`surface` (`"cli"` | `"gateway"`), `command` (canonical name), `alias_used`, `args_raw`, `session_key`, `platform`
+
+`args_raw` may contain user content or secrets typed after the command.
+
 `pre_approval_request`
 
 Observer
@@ -728,6 +835,150 @@ After a blocked transition; the dependency-wait path fires before its transactio
 
 Reason may contain project/user content.
 
+`on_kanban_worker_spawned`
+
+Observer
+
+After `spawn_fn` returns and the worker PID is persisted; runs inside the dispatch lock, keep callbacks fast. Return ignored.
+
+`task_id`, `profile_name`, `board`, `assignee`, `run_id`, `worker_pid`, `workspace_path`
+
+`workspace_path` is a filesystem path and may reveal project layout or usernames.
+
+`on_kanban_worker_exited`
+
+Observer
+
+Tick-derived: after `detect_crashed_workers` reclaims a dead-PID task and the reclaim commits. Return ignored.
+
+`task_id`, `profile_name`, `board`, `assignee`, `run_id`, `worker_pid`, `exit_kind`, `exit_code`, `outcome`, `retry_status`
+
+Identifiers and exit metadata only.
+
+`on_kanban_worker_stale_claim`
+
+Observer
+
+After a TTL-expired claim is reclaimed; live-PID extensions don't fire. Return ignored.
+
+`task_id`, `profile_name`, `board`, `assignee`, `run_id`, `worker_pid`, `heartbeat_stale`, `retry_status`
+
+Identifiers and claim metadata only.
+
+`on_kanban_task_updated`
+
+Observer
+
+After a committed task-field write outside the claim/complete/block lifecycle (assign, overrides, dashboard editors). Return ignored.
+
+`task_id`, `profile_name`, `board`, `assignee`, `run_id`, `changed_fields`
+
+`changed_fields` carries field names only, never values; the named title/body values in the board DB may contain user/project content.
+
+`on_kanban_dispatch_tick`
+
+Observer
+
+Once per dispatcher tick, strictly after the dispatch lock is released; idle and contended ticks fire too. Return ignored.
+
+`board`, `profile_name`, `dry_run`, `outcome`, `result`
+
+`result` is the tick's `DispatchResult` and carries task ids, assignees, and workspace paths.
+
+* * *
+
+### Streaming output hooks
+
+These observer-only hooks let plugins consume streaming LLM output for telemetry, live dashboards, or TTS pipelines without changing the response. They are delivered through host-owned bounded queues with one background worker per registered callback, so plugin callbacks never run inline on the token path. If one callback stalls, only that callback's queue can fill and drop its oldest pending observer event; other observers continue receiving events independently.
+
+Register them like any other plugin hook:
+
+```
+def on_delta(delta, kind, model, provider, **kwargs):
+    if kind == "text":
+        print(delta, end="", flush=True)
+
+def register(ctx):
+    ctx.register_hook("on_stream_delta", on_delta)
+```
+
+Common fields for all four hooks:
+
+Parameter
+
+Type
+
+Description
+
+`turn_id`
+
+`str`
+
+Opaque turn identifier, when available
+
+`iteration`
+
+`int`
+
+Current API-call/tool-loop iteration
+
+`session_id`
+
+`str`
+
+Current Hermes session id
+
+`model`
+
+`str`
+
+Active model identifier
+
+`provider`
+
+`str`
+
+Active provider name
+
+`surface`
+
+`str`
+
+Calling surface, e.g. `cli`, `discord`, `telegram`
+
+Additional fields:
+
+Hook
+
+Extra fields
+
+`on_stream_start`
+
+none
+
+`on_stream_delta`
+
+`delta: str`, \`kind: "text"
+
+`on_stream_end`
+
+`final_text: str`, `finished: bool`, \`error: str
+
+`on_interim_message`
+
+`text: str`, `already_streamed: bool`
+
+`on_interim_message` can also fire after a non-streaming response, so registering only that hook does not force a provider call onto streaming transport.
+
+Reasoning deltas are not exposed to plugins by default. Opt in explicitly:
+
+```
+plugins:
+  stream_reasoning_deltas: true
+```
+
+Return values are ignored. To keep the stream fast, callbacks should enqueue their own work and return quickly. Exceptions are logged and do not stop the stream.
+
 * * *
 
 ### `pre_tool_call`
@@ -774,9 +1025,25 @@ return {"action": "block", "message": "Reason the tool call was blocked"}
 return {"action": "approve", "message": "Why approval is required", "rule_key": "optional:scope"}
 ```
 
-The first valid directive wins. `block` requires a non-empty `message` and short-circuits the tool with that text as the error returned to the model. `approve` escalates the call to the existing human-approval gate; `message` and `rule_key` are optional, and denial, timeout, or gate error fails closed. Other return values are ignored.
+The first valid directive wins (Python plugins registered first, then shell hooks). `block` requires a non-empty `message` and short-circuits the tool with that text as the error returned to the model. `approve` escalates the call to the existing human-approval gate; `message` and `rule_key` are optional, and denial, timeout, or gate error fails closed. Other return values are ignored, so existing observer-only callbacks keep working unchanged.
 
-**Use cases:** Logging, audit trails, tool call counters, blocking dangerous operations, rate limiting, per-user policy enforcement.
+**Return value — rewrite the tool's arguments:**
+
+```
+return {"action": "modify", "args": {"new_string": "fixed content"}}
+```
+
+The returned `args` dictionary is shallow-merged over the original tool arguments before the tool executes. Multiple `modify` hooks accumulate — each hook's keys are merged into one accumulated dict built from the original args, so hook A changing `path` and hook B changing `content` both survive. If two hooks modify the same key, the later hook wins.
+
+Shell hooks also accept the Claude Code-compatible format:
+
+```
+{"decision": "modify", "tool_input": {"new_string": "fixed content"}}
+```
+
+Both formats are normalized internally to `{"action": "modify", "args": {...}}`.
+
+**Use cases:** Logging, audit trails, tool call counters, blocking dangerous operations, rate limiting, per-user policy enforcement, argument sanitization, path rewriting, injecting default parameters.
 
 **Example — tool call audit log:**
 
@@ -1199,6 +1466,23 @@ def register(ctx):
 ```
 
 For standing guidance that should shape the built-in missing-evidence nudge, use `agent.verify_guidance`. For broader coding posture rules that don't need to _gate_ verification, prefer `agent.coding_instructions` in `config.yaml` — it rides the coding brief and costs no extra turn.
+
+* * *
+
+### `transform_api_error_classification`
+
+Fires once per failed API call, at the top of `agent/error_classifier.classify_api_error()`, before the built-in pipeline. Provider plugins use it to own their provider's error quirks without core patches. It is behavior-changing (transform family): the returned classification drives retry, compression, credential rotation, and fallback routing.
+
+Callbacks receive the parsed error context as kwargs — `provider` (self-scope on this), `model`, `status_code`, `error_type`, `error_code`, `error_message`, `error_body`, `error`, `approx_tokens`, `context_length`, `num_messages`. Return `None` to decline, or a dict to claim the error:
+
+```
+return {"reason": "model_not_found",   # required: a FailoverReason name
+        "retryable": False, "should_fallback": True}  # optional recovery-hint overrides
+```
+
+Dispatch is run-all-then-pick-first: every callback runs, failures are isolated, and the first valid result in registration order wins (valid-but-losing results log a runtime warning). Invalid dicts and unknown reasons are skipped, so a broken plugin can never break classification.
+
+**Privacy:** `error_message` and `error_body` may carry unredacted provider data. **Python plugins only** — shell registrations are refused at config parse with a warning.
 
 * * *
 
@@ -1733,6 +2017,93 @@ def register(ctx):
 
 * * *
 
+### `gateway_platform_event`
+
+Fires for supported platform-native events only **after** the gateway's normal, profile-scoped authorization check succeeds. The callback receives plain dictionaries; raw SDK objects, adapter handles, bot clients, and callback contexts are never part of this stable contract.
+
+Telegram message reactions were the first supported event; message edits, deletes, and thread lifecycle events followed:
+
+```
+def on_platform_event(platform, event_type, payload, **kwargs):
+    if platform == "telegram" and event_type == "reaction":
+        print(payload["chat_id"], payload["message_id"], payload["emojis"])
+    elif event_type == "message_edited":
+        print(platform, payload["chat_id"], payload["message_id"], payload["text"])
+
+def register(ctx):
+    ctx.register_hook("gateway_platform_event", on_platform_event)
+```
+
+Parameter
+
+Type
+
+Description
+
+`platform`
+
+`str`
+
+Stable platform id (`"telegram"`, `"discord"`).
+
+`event_type`
+
+`str`
+
+Event-local contract id (see the table below).
+
+`payload`
+
+`dict`
+
+Event-type-specific fields, documented per event type below.
+
+Every payload is additive and event-specific; there is no monolithic gateway payload version. All ids are strings; missing/unavailable fields are `None`, never guessed. Malformed events and events whose source cannot be authorized are dropped (fail closed). A transient Telegram Application rebuild re-registers the observer together with the core handlers.
+
+**Per-event payload contracts (v1, additive):**
+
+`event_type`
+
+Platforms
+
+Payload fields
+
+`reaction`
+
+telegram
+
+`emojis: list[str]`, `custom_emoji_ids: list[str]`, `chat_id: str`, `message_id: str`, `thread_id: str | None` (Telegram reaction updates carry no topic id, so currently always `None`).
+
+`message_edited`
+
+telegram, discord
+
+`chat_id: str`, `message_id: str`, `thread_id: str | None`, `text: str | None` (edited text or caption, bounded; `None` for media-only edits or when uncached), `edited_at: str | None` (ISO 8601).
+
+`message_deleted`
+
+discord
+
+`chat_id: str`, `message_id: str`, `thread_id: str | None`, `author_id: str | None`. Discord's delete event does not identify the deleter; the authorized source is the deleted message's author, and uncached deletions never fire.
+
+`thread_created`
+
+discord
+
+`thread_id: str`, `parent_chat_id: str | None`, `name: str | None`, `owner_id: str | None`.
+
+`thread_renamed`
+
+discord
+
+`thread_id: str`, `parent_chat_id: str | None`, `old_name: str | None`, `new_name: str`. Fired only when the name actually changed; other thread updates (archive, slowmode, tags) are dropped. Discord's thread-update event carries no actor, so the thread owner is the authorized source.
+
+The bot's own progressive message edits (streaming) never fire `message_edited` on Discord — bot-authored events are dropped at the fire-site.
+
+This hook is observer-only: it does **not** add raw-event access or adapter access. **Raw SDK payload access is deliberately not shipped** — adapter SDK objects change shape without notice and would become un-evolvable API surface; where genuinely needed it requires its own explicit capability (`gateway.raw_events`) with a "no stability guarantee" label and its own design (tracked in #64228). For _acting_ on a platform (adding a reaction, renaming a thread), use the capability-gated `ctx.platform_actions` facade documented in the [plugins guide](/docs/user-guide/features/plugins#platform-actions) — it is gated off by default behind the `gateway.platform_actions` capability. `PluginContext.dispatch_tool()` can only call tools registered in the tool registry; `send_message` is intentionally not registered there (its transport is reserved for explicit CLI, cron, kanban, and MCP delivery paths). A future outbound-delivery contract must first provide stable delivered content/handles across all adapters; this slice does not pre-register an inert `gateway_message_delivered` hook.
+
+* * *
+
 ### `pre_approval_request`
 
 Fires before an approval decision is requested. It covers prompted surfaces—interactive CLI, Ink TUI, gateway platforms, and ACP clients—and `approvals.mode=smart` decisions made without a human prompt (`surface="smart"`). In smart mode, the hook runs before the auxiliary LLM is called.
@@ -1868,6 +2239,86 @@ def log_decision(command, choice, session_key, **kwargs):
 def register(ctx):
     ctx.register_hook("post_approval_response", log_decision)
 ```
+
+* * *
+
+### `pre_transcription`
+
+Fires inside the STT dispatcher (`tools.transcription_tools.transcribe_audio`) **after** the provider has been resolved and **before** any backend is invoked, whether that backend is built-in, a `type: command` provider, or a plugin-registered provider. Lets a plugin steer the transcription request itself instead of only observing the transcript afterwards.
+
+**Callback signature:**
+
+```
+def my_callback(
+    file_path: str,
+    provider: str,
+    model: str | None,
+    language: str | None,
+    prompt: str | None,
+    source: str | None,
+    **kwargs,
+) -> dict | None:
+```
+
+Parameter
+
+Type
+
+Description
+
+`file_path`
+
+`str`
+
+Absolute path to the audio file about to be transcribed. Read-only.
+
+`provider`
+
+`str`
+
+Resolved STT provider (`local`, `groq`, `openai`, `mistral`, `xai`, `elevenlabs`, `deepinfra`, `local_command`, a command provider name, or a plugin provider name).
+
+`model`
+
+`str | None`
+
+Model resolved so far, or `None` when the backend default applies.
+
+`language`
+
+`str | None`
+
+Language from the provider's config section, or `None`.
+
+`prompt`
+
+`str | None`
+
+The static [`stt.prompt`](/docs/user-guide/configuration#transcription-prompt-vocabulary-hints) value, or `None`.
+
+`source`
+
+`str | None`
+
+Caller surface label (`gateway`, `voice_mode`, …). Observability only, not used for dispatch.
+
+**Return value:** a `dict` with any of `"prompt"`, `"language"`, `"model"` mapped to strings, or `None` to leave the request unchanged. Non-string values, unknown keys, and `file_path` are ignored (`file_path` attempts are logged as a warning). Results are applied in **registration order, last-writer-wins per field**, on top of the `stt.prompt` config value. Returning `""` for `prompt` clears the configured prompt for that request.
+
+**Use cases:** Inject a per-user or per-chat vocabulary list before the audio is uploaded, force `language` from the caller's locale, downgrade `model` for long recordings, route noisy sources to a different model.
+
+```
+VOCAB = "Hermes, Teknium, Nous Research, kanban"
+
+def add_vocab(provider, prompt, source, **kwargs):
+    if source != "gateway":
+        return None
+    return {"prompt": f"{prompt}. {VOCAB}" if prompt else VOCAB}
+
+def register(ctx):
+    ctx.register_hook("pre_transcription", add_vocab)
+```
+
+Not every backend accepts a prompt. `local` maps it to faster-whisper's `initial_prompt`; `openai`, `groq`, `mistral`, and `deepinfra` send it as `prompt`; `xai`, `elevenlabs`, `local_command`, and `type: command` providers log at DEBUG and transcribe without it. See the [provider support table](/docs/user-guide/configuration#transcription-prompt-vocabulary-hints) for the full matrix and the privacy boundary. Hook-plumbing errors are fail-open: the dispatch continues with the unmodified request.
 
 * * *
 
@@ -2075,6 +2526,16 @@ Fires after a normal blocked transition. The dependency-wait path invokes it bef
 
 All three kanban hooks are observer-only and carry `task_id`, `profile_name`, `board`, `assignee`, and `run_id`; completed adds `summary`, and blocked adds `reason`.
 
+### Kanban worker-lifecycle, task-mutation, and dispatch observers
+
+Five additional observers (RFC #58548) extend the kanban family. All are observer-only, fire after the relevant transaction commits, and short-circuit on `has_hook` — with no subscriber, dispatch behavior is unchanged. Task-scoped hooks carry the same common fields as the hooks above.
+
+-   **`on_kanban_worker_spawned`** — after `spawn_fn` returns and the worker PID is persisted. Adds `worker_pid` (may be `None`) and `workspace_path`. Runs inside the dispatch lock; keep callbacks fast.
+-   **`on_kanban_worker_exited`** — tick-derived, when `detect_crashed_workers` reclaims a dead-PID task. Adds `worker_pid`, `exit_kind`, `exit_code`, `outcome`, `retry_status`.
+-   **`on_kanban_worker_stale_claim`** — when a TTL-expired claim is reclaimed; live-PID extensions don't fire. Adds `worker_pid`, `heartbeat_stale`, `retry_status`.
+-   **`on_kanban_task_updated`** — after a committed task-field write outside the claim/complete/block lifecycle (`assign_task`, model/reasoning overrides, dashboard editors). Adds `changed_fields` — field names only, never values.
+-   **`on_kanban_dispatch_tick`** — once per dispatcher tick, strictly after the dispatch lock is released, including idle and lock-contended ticks. Payload: `board`, `profile_name`, `dry_run`, `outcome`, `result`.
+
 * * *
 
 ## Shell Hooks
@@ -2083,7 +2544,7 @@ Declare shell-script hooks in your `~/.hermes/config.yaml` and Hermes will run t
 
 Use shell hooks when you want a drop-in, single-file script (Bash, Python, anything with a shebang) to:
 
--   **Block a tool call** — reject dangerous `terminal` commands, enforce per-directory policies, require approval for destructive `write_file` / `patch` operations.
+-   **Block or modify a tool call** — reject dangerous `terminal` commands, enforce per-directory policies, require approval for destructive `write_file` / `patch` operations, or rewrite arguments (sanitize paths, inject defaults) before the tool runs.
 -   **Run after a tool call** — auto-format Python or TypeScript files that the agent just wrote, log API calls, trigger a CI workflow.
 -   **Inject context into the next LLM turn** — prepend `git status` output, the current weekday, or retrieved documents to the user message (see [`pre_llm_call`](#pre_llm_call)).
 -   **Observe lifecycle events** — write a log line when a subagent completes (`subagent_stop`) or a session starts (`on_session_start`).
@@ -2213,6 +2674,10 @@ Each time the event fires, Hermes spawns a subprocess for every matching hook (m
 // Block a pre_tool_call (both shapes accepted; normalised internally):
 {"decision": "block", "reason":  "Forbidden: rm -rf"}   // Claude-Code style
 {"action":   "block", "message": "Forbidden: rm -rf"}   // Hermes-canonical
+
+// Modify a pre_tool_call — rewrite tool args before dispatch:
+{"action": "modify", "args": {"new_string": "fixed content"}}         // Hermes-canonical
+{"decision": "modify", "tool_input": {"new_string": "fixed content"}} // Claude-Code style
 
 // Inject context for pre_llm_call:
 {"context": "Today is Friday, 2026-04-17"}

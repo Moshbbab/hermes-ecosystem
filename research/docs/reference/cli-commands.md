@@ -1126,7 +1126,7 @@ Purpose
 
 Operate on a specific board. Defaults to the current board (set via `hermes kanban boards switch`, the `HERMES_KANBAN_BOARD` env var, or `default`).
 
-**This is the human / scripting surface.** Agent workers spawned by the dispatcher drive the board through a dedicated `kanban_*` [toolset](/docs/user-guide/features/kanban#how-workers-interact-with-the-board) (`kanban_show`, `kanban_complete`, `kanban_block`, `kanban_create`, `kanban_link`, `kanban_comment`, `kanban_heartbeat`; orchestrator profiles also get `kanban_list` and `kanban_unblock`) instead of shelling to `hermes kanban`. Workers have `HERMES_KANBAN_BOARD` pinned in their env so they physically cannot see other boards.
+**This is the human / scripting surface.** Agent workers spawned by the dispatcher drive the board through a dedicated `kanban_*` [toolset](/docs/user-guide/features/kanban#how-workers-interact-with-the-board) (`kanban_show`, `kanban_complete`, `kanban_request_review`, `kanban_request_changes`, `kanban_block`, `kanban_create`, `kanban_link`, `kanban_comment`, `kanban_heartbeat`; orchestrator profiles also get `kanban_list` and `kanban_unblock`) instead of shelling to `hermes kanban`. Workers have `HERMES_KANBAN_BOARD` pinned in their env so they physically cannot see other boards.
 
 Action
 
@@ -1200,13 +1200,25 @@ Mark task done. Flags: `--result`, `--summary`, `--metadata`.
 
 Mark task blocked for human input. Also appends the reason as a comment.
 
+`request-review <id>`
+
+Move a task to `review` with a reviewer handoff — NOT a block. Flags: `--summary`, `--metadata`, `--reviewer` (reassigns before review dispatch).
+
+`request-changes <id> <reason>`
+
+Reviewer verdict for an active review run: close the review attempt and route the task back to its original implementer.
+
+`reopen-review <id>...`
+
+Send review task(s) back for changes (`review` → ready/todo). Flag: `--reason` (appended as a comment).
+
 `schedule <id> "<reason>"`
 
 Park time-delay/follow-up work in `scheduled` so it is not shown as a human blocker.
 
 `unblock <id>`
 
-Return a blocked or scheduled task to ready (or `todo` if dependencies are still open).
+Restore a blocked task to its source phase (`review` or `ready`), or `todo` while dependencies remain open.
 
 `archive <id>`
 
@@ -2439,13 +2451,17 @@ _(none)_
 
 Composite interactive UI — general plugin toggles + provider plugin configuration.
 
-`install <identifier> [--force]`
+`install <identifier> [--force] [--ref COMMIT_SHA]`
 
-Install a plugin from a Git URL or `owner/repo`.
+Install a plugin from a Git URL, `owner/repo`, or a bare index name. Bare names (no slash) are resolved through the community plugin index to `owner/repo` plus the index-pinned commit; ambiguous names list candidates and exit. `--ref` accepts only a full 40-character commit SHA, installs that exact immutable revision, and overrides any index pin.
+
+`search [term] [--json] [--capability CAP] [--refresh]`
+
+Search the community plugin index (fuzzy match on name/description/tags; omit `term` to browse). Fetched from `plugins.index_url` (default: the NousResearch plugin index), cached under `~/.hermes/cache/` for 24h, falling back to the stale cache and then the bundled seed when offline. Indexed ≠ audited — inclusion is a metadata review only.
 
 `update <name>`
 
-Pull latest changes for an installed plugin.
+Pull latest changes for an unpinned installed plugin. Pinned plugins must be reinstalled with `--force --ref <new-commit>` to move.
 
 `remove <name>` (aliases: `rm`, `uninstall`)
 
@@ -2463,12 +2479,28 @@ Disable a plugin without removing it.
 
 List installed plugins with enabled/disabled status.
 
+`doctor [path-or-id] [--ci]`
+
+Validate a native plugin through the real manifest parser, loader, and registration path. `--ci` exits 1 on errors.
+
+`pack install <path-or-url> [--force]`
+
+Install a plugin pack (`hermes-pack.yaml`) — a declarative set of plugins each pinned to an exact 40-character commit SHA. Shows a mandatory review screen (every plugin, source, pinned ref, declared capabilities), asks one confirmation for the pack contents, then runs ordinary pinned installs. Each plugin's declared capabilities still go through the standard per-plugin consent — a pack never bulk-grants. Partial failures are reported per plugin; exits non-zero when any plugin failed. Interactive only (no `--yes`).
+
+`pack export [--enabled-only] [--name NAME]`
+
+Emit a pack YAML on stdout from the current install: repo + exact SHA of each git-installed plugin plus sanitized non-secret `plugins.entries` config. Local-only plugins (no git provenance) are listed as warning comments, never as installable entries. Secrets, capability grants, and `allow_*` gates are always stripped.
+
+`pack show <path-or-url>`
+
+Dry-run: parse, validate, and display a pack without installing anything.
+
 Provider plugin selections are saved to `config.yaml`:
 
 -   `memory.provider` — active memory provider (empty = built-in only)
 -   `context.engine` — active context engine (`"compressor"` = built-in default)
 
-General plugin disabled list is stored in `config.yaml` under `plugins.disabled`.
+General plugin disabled list is stored in `config.yaml` under `plugins.disabled`. Git installs also record only their canonical source, exact installed revision, and pin status in the profile-local `plugins/.install-metadata.json` sidecar. It does not contain plugin config, environment values, secrets, or capability grants.
 
 See [Plugins](/docs/user-guide/features/plugins) and [Build a Hermes Plugin](/docs/developer-guide/plugins).
 
@@ -2512,7 +2544,25 @@ Re-run the installer even if cua-driver is already on PATH. The upstream script 
 
 Print whether `cua-driver` is on `$PATH` and which version is installed.
 
+`doctor [--include CHECK] [--skip CHECK] [--json]`
+
+Run cua-driver's health report and show its platform checks.
+
+`permissions status [--json]`
+
+Report macOS Accessibility and Screen Recording grants.
+
+`permissions grant`
+
+Ask macOS to grant Accessibility and Screen Recording to Cua Driver.
+
 `hermes computer-use install` is the stable entry point for installing the [cua-driver](https://github.com/trycua/cua) binary used by the `computer_use` toolset. It runs the same upstream installer that `hermes tools` invokes when you first enable Computer Use, so it's safe to use for re-running the install if the toolset toggle didn't trigger it (for example, on returning-user setups).
+
+If cua-driver is already present, Hermes checks its version and runtime manifest. A compatible 0.20.0 or newer installation is left in place. An old or incomplete standard installation is repaired with the current upstream installer. Hermes never replaces a custom binary selected through `HERMES_CUA_DRIVER_CMD`; update that binary directly or remove the override. `hermes computer-use status` reports when repair is required.
+
+The built-in `computer_use` toolset is the recommended Hermes integration. Registering raw Cua MCP tools is an alternative when you need Cua's low-level tool vocabulary. `cua-driver skills install` detects Hermes and links Cua's skill pack into the Hermes skills directory automatically.
+
+Permission mode, capability-manifest approval, and the existing-profile grant belong to runtime launch. In bounded mode Hermes passes Cua's canonical `--capability-manifest` and `--approve-capability-manifest` flags. Every MCP transport owns a private lifecycle session inside its runtime. Public session names label cursor and session state; they do not own or share the runtime.
 
 `hermes update` automatically re-runs the upstream installer at the end of the update if cua-driver is on PATH, so most users will not need to call `--upgrade` manually. Use it when upstream ships a fix you want right now without waiting for the next Hermes update.
 
@@ -2580,7 +2630,7 @@ List recent sessions.
 
 `browse`
 
-Interactive session picker with search and resume.
+Interactive session picker with search and resume. Each row shows a lifecycle status tag (`done` / `intr` / `err` / `empty`, derived from the session's final message) and its message count. Press `d` on a highlighted row (while the search filter is empty) to delete that session after a y/N confirmation; while a filter is active, `d` types into the search instead.
 
 `export <output> [--session-id ID]`
 
@@ -2617,6 +2667,10 @@ Migrate the full-text search index to the compact v23 external-content layout; o
 `repair`
 
 Repair a malformed `state.db` schema (e.g. `table messages_fts already exists`) so hidden sessions reappear; a backup is made first.
+
+`repair-routing`
+
+Re-attach gateway conversations stranded in session rows that lost their routing identity (a chat "jumping back in time" after a restart). Dry-run by default; `--apply` performs the adoptions (stop the gateway first); `--max-gap-seconds N` tunes the contiguity window. Only unambiguous cases are repaired. See [Sessions → Repair Stranded Gateway Sessions](/docs/user-guide/sessions#repair-stranded-gateway-sessions).
 
 `recover`
 

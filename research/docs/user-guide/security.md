@@ -30,6 +30,7 @@ approvals:
   mode: smart                     # smart | manual | off
   timeout: 300                    # seconds to wait for user response (default: 300)
   cron_mode: deny                 # deny | approve — what cron jobs do when they hit a dangerous command
+  single_query_mode: deny         # deny | approve — what single-query (-q) sessions do on a dangerous command
   mcp_reload_confirm: true        # /reload-mcp asks before invalidating the MCP tool cache
   destructive_slash_confirm: true # /clear, /new, /reset, /undo prompt before discarding state
 ```
@@ -60,6 +61,12 @@ Seconds Hermes waits for an approval reply before timing out.
 
 How [cron jobs](/docs/user-guide/features/cron) behave headlessly when they trigger a dangerous-command prompt. `deny` blocks the command (the agent must find another path); `approve` auto-approves everything in cron context.
 
+`single_query_mode`
+
+`deny`
+
+How one-shot [`hermes chat -q`](/docs/user-guide/cli) sessions behave when they trigger a dangerous-command prompt. A `-q` session runs a single turn and exits with no user waiting to answer prompts; `deny` blocks the command (the agent must find another path), `approve` auto-approves everything in single-query context. Mirrors `cron_mode`.
+
 `mcp_reload_confirm`
 
 `true`
@@ -70,7 +77,7 @@ When true, `/reload-mcp` asks before rebuilding the MCP tool set. Rebuilding inv
 
 `true`
 
-When true, destructive session slash commands (`/clear`, `/new`, `/reset`, `/undo`) prompt before discarding conversation state. Three-option dialog (Approve Once / Always Approve / Cancel) routed through native yes/no buttons on Telegram, Discord, and Slack; text fallback elsewhere. Users who click **Always Approve** flip this key to `false`. TUI uses its own modal overlay (set `HERMES_TUI_NO_CONFIRM=1` to opt out there).
+When true, destructive session slash commands (`/clear`, `/new`, `/reset`, `/undo`) prompt before discarding conversation state. Three-option dialog (Approve Once / Always Approve / Cancel) routed through native yes/no buttons on Telegram, Discord, and Slack; text fallback elsewhere. Users who click **Always Approve** flip this key to `false`. The TUI also honors this setting for its `/clear`, `/new`, and `/reset` modal; `HERMES_TUI_NO_CONFIRM=1` force-skips that modal regardless of the configured value.
 
 Mode
 
@@ -428,7 +435,7 @@ Examples
 
 OS credential stores
 
-`~/.ssh/`, `~/.aws/`, `~/.kube/`, `/etc/sudoers`, `~/.netrc`
+`~/.ssh/` (keys, `authorized_keys`), `~/.aws/`, `~/.kube/`, `/etc/sudoers`, `~/.netrc`
 
 Hermes credential stores
 
@@ -441,6 +448,8 @@ Project secret files
 Sensitive paths inside the safe root are still blocked — pointing `HERMES_WRITE_SAFE_ROOT` at `$HOME` does not allow writing `~/.ssh/id_rsa`.
 
 Safe-root violations return `Write denied: '…' is outside HERMES_WRITE_SAFE_ROOT (…)`. Credential-path blocks use `Write denied: '…' is a protected system/credential file.`
+
+**Exception — `~/.ssh/config` is approval-gated, not hard-blocked.** The SSH _client config_ holds no private-key material and editing it (host aliases, `ProxyJump`, VS Code Remote-SSH targets) is a routine task, so `write_file` / `patch` route it through the same approve-once/session/always prompt the terminal tool already uses for `~/.ssh` writes — instead of the flat refusal that used to apply. It can still carry `ProxyCommand` / `Match exec` directives that run commands, so the write is never silent. Non-interactive callers (ACP file bridge, background jobs with no human channel) fail closed. Private keys, `authorized_keys`, and everything else under `~/.ssh/` remain hard-blocked.
 
 ### HERMES\_WRITE\_SAFE\_ROOT (optional sandbox)
 

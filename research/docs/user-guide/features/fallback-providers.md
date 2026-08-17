@@ -68,7 +68,7 @@ OpenAI Codex
 
 `openai-codex`
 
-`hermes model` (ChatGPT OAuth)
+`hermes model` → **ChatGPT or Codex Subscription** (ChatGPT OAuth)
 
 GitHub Copilot
 
@@ -565,7 +565,7 @@ Force Nous Portal
 
 Force Codex OAuth
 
-`hermes model` → Codex
+`hermes model` → ChatGPT or Codex Subscription
 
 `"main"`
 

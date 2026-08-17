@@ -53,6 +53,18 @@ Mid-session switches reset the prompt cache
 
 Prompt caches are keyed to the model serving the request, so any mid-conversation model change — an explicit `/model` switch, an [automatic fallback](/docs/user-guide/features/fallback-providers), or a [credential-pool](/docs/user-guide/features/credential-pools) rotation onto a different account — means the next message re-reads the entire conversation at full input-token price instead of the cached (~75–90% discounted) rate. On a long session this one-time re-read can dwarf the per-token difference between the two models. Switch when you need to, but prefer doing it early in a conversation or right after starting a fresh session.
 
+### Unattended data-training tiers
+
+Models such as `muse-spark-1.2-contributor` are discounted because the vendor may train on your prompts and completions. Interactive model selection always shows a confirmation prompt. Non-interactive startup paths such as Kanban workers and cron agents fail closed because they cannot ask that question.
+
+If training on the unattended workload's data is acceptable, record a persistent acknowledgement:
+
+```
+hermes config set security.allow_data_training_tiers_noninteractive true
+```
+
+Hermes still prints the full data-policy warning and the acknowledgement key on every unattended startup, so worker logs retain an audit trail. This setting does not approve expensive-model or provider-routing warnings, and it does not replace the interactive confirmation prompt. Revoke it with `hermes config unset security.allow_data_training_tiers_noninteractive`.
+
 ## Setting auxiliary models
 
 Click **Show auxiliary** to reveal the 11 task slots:
@@ -69,7 +81,7 @@ When to override
 
 **Title Gen**
 
-Almost always. A $0.10/M flash model writes session titles as well as Opus. Default config sets this to `google/gemini-3-flash-preview` on OpenRouter.
+When title latency or cost matters more than matching the main model. Pin a known-good flash model, or set `auxiliary.title_generation.prefer_fast_model: true` to let Hermes choose the provider's fast tier.
 
 **Vision**
 
@@ -219,6 +231,21 @@ providers:
 ```
 
 With discovery off, the model picker (`hermes model`, `/model`) shows the configured list instead of a live probe.
+
+For an Anthropic-compatible gateway that resolves a bare model alias only after receiving the request, opt the alias into native prompt-cache markers with the per-model `prompt_caching` capability:
+
+```
+providers:
+  anthropic-proxy:
+    api: https://gateway.example.com/anthropic
+    transport: anthropic_messages
+    models:
+      fable:
+        context_length: 1000000
+        prompt_caching: true
+```
+
+Hermes matches this declaration to the exact provider route and runtime model id, without rewriting the alias. Set `prompt_caching: false` to explicitly disable cache markers for a model; when omitted, Hermes keeps its normal provider and model capability detection.
 
 Legacy format
 

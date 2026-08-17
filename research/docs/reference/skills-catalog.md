@@ -72,6 +72,12 @@ Use, configure, theme, extend, and orchestrate Hermes Agent.
 
 `autonomous-ai-agents/hermes-agent`
 
+[`merge-reconciler`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-merge-reconciler)
+
+Neutral third-party resolution of agent merge conflicts.
+
+`autonomous-ai-agents/merge-reconciler`
+
 [`opencode`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode)
 
 Delegate coding to OpenCode CLI (features, PR review).
@@ -181,6 +187,20 @@ Songwriting craft and Suno AI music prompts.
 Control TouchDesigner via twozero MCP.
 
 `creative/touchdesigner-mcp`
+
+## devops
+
+Skill
+
+Description
+
+Path
+
+[`sdlc-review`](/docs/user-guide/skills/bundled/devops/devops-sdlc-review)
+
+Review Kanban handoffs and route verified outcomes.
+
+`devops/sdlc-review`
 
 ## email
 
@@ -344,6 +364,12 @@ Airtable REST API via curl. Records CRUD, filters, upserts.
 
 `productivity/airtable`
 
+[`box`](/docs/user-guide/skills/bundled/productivity/productivity-box)
+
+Box manages cloud files, sharing, search, and metadata.
+
+`productivity/box`
+
 [`document-to-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items)
 
 Extract cited obligations, deadlines, tasks from documents.
@@ -410,6 +436,12 @@ Watch product, flight, or listing prices; alert on target.
 
 `productivity/product-price-monitor`
 
+[`session-librarian`](/docs/user-guide/skills/bundled/productivity/productivity-session-librarian)
+
+Organize sessions by prompt: find, rename, archive, prune.
+
+`productivity/session-librarian`
+
 [`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline)
 
 Teams meeting summaries, job replay, Graph subscriptions.
@@ -441,6 +473,12 @@ Path
 Search arXiv papers by keyword, author, category, or ID.
 
 `research/arxiv`
+
+[`blocked-page-recovery`](/docs/user-guide/skills/bundled/research/research-blocked-page-recovery)
+
+Recover blocked/paywalled/WAF'd pages via fallbacks.
+
+`research/blocked-page-recovery`
 
 [`blogwatcher`](/docs/user-guide/skills/bundled/research/research-blogwatcher)
 
