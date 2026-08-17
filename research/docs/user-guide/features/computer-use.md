@@ -53,7 +53,7 @@ hermes computer-use install
 
 This fetches and runs the upstream cua-driver installer — `install.sh` on macOS/Linux, `install.ps1` on Windows. Use `hermes computer-use status` to verify the install.
 
-Already have cua-driver? Hermes reuses it when it supports the 0.20 runtime contract. During setup and toolset enablement, Hermes checks the local version and manifest. It repairs an old or incomplete standard installation through the upstream installer. A binary selected with `HERMES_CUA_DRIVER_CMD` stays under your control, so Hermes reports the incompatibility and leaves it unchanged.
+Already have cua-driver? Hermes reuses it when it supports the 0.20 runtime contract. During setup, toolset enablement, `hermes update`, and the first `computer_use` call of a session, Hermes checks the local version and manifest. It repairs an old or incomplete standard installation through the upstream installer (at most once per session at runtime). A binary selected with `HERMES_CUA_DRIVER_CMD` stays under your control, so Hermes reports the incompatibility and leaves it unchanged.
 
 If you install Cua Driver first, `cua-driver skills install` installs Cua's skill pack under `~/.cua-driver/skills/cua-driver`. Hermes autodetection is a planned cua-driver follow-up, so currently point Hermes at that directory or symlink it into your skill space. You can also register raw Cua MCP tools as a custom MCP server, but that is an alternative for users who need the low-level interface. The built-in toolset provides Hermes actions, configuration, approvals, and diagnostics.
 
