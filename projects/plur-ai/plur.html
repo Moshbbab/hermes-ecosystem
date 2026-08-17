@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents across…">
+<meta name="description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents to persist…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents across…">
+<meta property="og:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents to persist…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents across…">
+<meta name="twitter:description" content="PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents to persist…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents across different tools to persist and share corrections, preferences, and conventions without relying on cloud storage or model weights.",
+  "description": "PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents to persist corrections, preferences, and conventions across different sessions and tools, including Claude Code, Cursor, and OpenClaw.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-08-16T21:03:02.000Z",
+  "dateModified": "2026-08-17T14:09:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">227·repos</span>
+    <span id="meta-count">228·repos</span>
     <span id="meta-version">hermes·v0.20.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-16</span>
+    <span><span class="meta-label">updated</span>2026-08-17</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents across different tools to persist and share corrections, preferences, and conventions without relying on cloud storage or model weights.</p>
+    <p class="summary-text">PLUR is a local-first shared memory layer for AI agents that stores information as plain-text YAML engrams on the user's disk. It allows agents to persist corrections, preferences, and conventions across different sessions and tools, including Claude Code, Cursor, and OpenClaw.</p>
     <ul class="summary-highlights">
       <li>Stores memory as human-readable YAML engrams on local disk.</li>
-      <li>Supports MCP tools including Claude Code, Cursor, and OpenClaw.</li>
-      <li>Provides local-first retrieval using BM25 and hybrid search stacks.</li>
+      <li>Provides shared context across multiple MCP tools and AI agents.</li>
+      <li>Uses a local-first architecture requiring no cloud API calls.</li>
     </ul>
   </div>
 </section>
@@ -256,9 +256,12 @@ npm install -g @plur-ai/cli
 <p>The plugin registers automatically via Hermes' plugin system. It injects relevant memories before each LLM call, extracts learnings from agent responses, and exposes all PLUR tools to the agent. Hermes shells out to the PLUR CLI.</p>
 <h4>Python SDK (LangChain, llama.cpp, scripts)</h4>
 <p>For Python environments that aren't Hermes:</p>
-<pre><code class="language-bash">pip install plur-ai
+<pre><code class="language-bash">pip install "plur-ai @ git+https://github.com/plur-ai/plur.git#subdirectory=packages/python"
 npm install -g @plur-ai/cli   # bridge (required)
 </code></pre>
+<blockquote>
+<p><strong>Note:</strong> <code>plur-ai</code> is not yet on PyPI — use the git install above until <a href="https://github.com/plur-ai/plur/issues/915">#915</a> is resolved.</p>
+</blockquote>
 <pre><code class="language-python">from plur_ai import Plur
 
 plur = Plur()
