@@ -816,9 +816,12 @@ The hub now tracks enough provenance to re-check upstream copies of installed sk
 hermes skills check          # Report which installed hub skills changed upstream
 hermes skills update         # Reinstall only the skills with updates available
 hermes skills update react   # Update one specific installed hub skill
+hermes skills update react --force   # Overwrite a skill you've edited locally
 ```
 
 This uses the stored source identifier plus the current upstream bundle content hash to detect drift.
+
+Skills you have edited locally (the on-disk content no longer matches the hash recorded at install time) are **skipped** by `hermes skills update` so your changes are never silently overwritten. Pass `--force` to replace them with the upstream version anyway.
 
 GitHub rate limits
 

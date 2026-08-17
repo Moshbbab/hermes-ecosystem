@@ -150,9 +150,9 @@ Run a prompt in a separate background session. The agent processes your prompt i
 
 Branch the current session (explore a different path)
 
-`/journey [list|delete <id>|edit <id>]` (aliases: `/learning`, `/memory-graph`)
+`/worktree [new [name]|list]`
 
-**CLI only.** Open the learning journey timeline.
+**CLI only.** Inspect or create isolated git worktrees mid-session (inspired by Copilot CLI's `/worktree new`). Bare `/worktree` shows the active worktree; `/worktree list` lists the repo's worktrees; `/worktree new [name]` creates a worktree under `.worktrees/` (branched from the freshly-fetched remote tip, honoring `worktree_sync`) and retargets the session's terminal and file tools into it. Named trees use your name (`hermes/<name>` branch); unnamed ones get a random `hermes-<id>`. On exit the tree is kept only if it has unpushed commits — same lifecycle as `hermes -w`. See [Git Worktrees](/docs/user-guide/git-worktrees).
 
 `/handoff <platform>`
 
