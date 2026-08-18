@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Javis603/Token Monitor — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Token Monitor is a desktop widget for Windows, macOS, and Linux that provides a live dashboard for tracking AI coding tool activity. It displays real-time…">
+<meta name="description" content="Token Monitor is a desktop widget for Windows, macOS, and Linux that tracks live token usage and account limits across more than 30 AI coding tools. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Javis603/token-monitor">
 <meta property="og:title" content="Javis603/Token Monitor — Hermes Atlas">
-<meta property="og:description" content="Token Monitor is a desktop widget for Windows, macOS, and Linux that provides a live dashboard for tracking AI coding tool activity. It displays real-time…">
+<meta property="og:description" content="Token Monitor is a desktop widget for Windows, macOS, and Linux that tracks live token usage and account limits across more than 30 AI coding tools. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Javis603/token-monitor">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Javis603/Token Monitor — Hermes Atlas">
-<meta name="twitter:description" content="Token Monitor is a desktop widget for Windows, macOS, and Linux that provides a live dashboard for tracking AI coding tool activity. It displays real-time…">
+<meta name="twitter:description" content="Token Monitor is a desktop widget for Windows, macOS, and Linux that tracks live token usage and account limits across more than 30 AI coding tools. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Token+Monitor&amp;subtitle=Local-first+desktop+widget+for+tracking+token+usage%2C+costs%2C+and+limits+across+30%2B+AI+coding+tools%E2%80%94including+Claude+Code%2C+Codex%2C+Cursor%2C+OpenCode%2C+and+OpenClaw%E2%80%94with+multi-device+syn&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Javis603/token-monitor#software",
   "name": "Token Monitor",
-  "description": "Token Monitor is a desktop widget for Windows, macOS, and Linux that provides a live dashboard for tracking AI coding tool activity. It displays real-time token usage, account limits, and historical trends across 30+ supported tools with multi-device synchronization.",
+  "description": "Token Monitor is a desktop widget for Windows, macOS, and Linux that tracks live token usage and account limits across more than 30 AI coding tools. It provides real-time multi-device synchronization and displays historical usage trends categorized by tool, device, model, session, or project.",
   "url": "https://hermesatlas.com/projects/Javis603/token-monitor",
   "codeRepository": "https://github.com/Javis603/token-monitor",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "Javis603",
     "url": "https://github.com/Javis603"
   },
-  "dateModified": "2026-08-18T07:03:24.000Z",
+  "dateModified": "2026-08-18T13:26:27.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1435
+    "userInteractionCount": 1440
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,8 +81,8 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">228·repos</span>
-    <span id="meta-version">hermes·v0.20.3</span>
+    <span id="meta-count">229·repos</span>
+    <span id="meta-version">hermes·v0.20.4</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Token Monitor is a desktop widget for Windows, macOS, and Linux that provides a live dashboard for tracking AI coding tool activity. It displays real-time token usage, account limits, and historical trends across 30+ supported tools with multi-device synchronization.</p>
+    <p class="summary-text">Token Monitor is a desktop widget for Windows, macOS, and Linux that tracks live token usage and account limits across more than 30 AI coding tools. It provides real-time multi-device synchronization and displays historical usage trends categorized by tool, device, model, session, or project.</p>
     <ul class="summary-highlights">
-      <li>Tracks token usage and limits for 30+ AI coding tools.</li>
-      <li>Supports real-time multi-device synchronization and historical usage trends.</li>
-      <li>Compatible with Windows 10+, macOS 12+, and Linux x64.</li>
+      <li>Supports over 30 AI tools including Claude Code and Hermes Agent.</li>
+      <li>Synchronizes usage data across multiple machines in real-time.</li>
+      <li>Provides historical usage breakdowns by model, session, and project.</li>
     </ul>
   </div>
 </section>
@@ -576,6 +576,7 @@ npm run dist:linux   # Linux x64 AppImage         → dist/
 npm run pack         # unpacked app dir (no installer), for quick local testing
 </code></pre>
 <p>Output lands in <code>dist/</code>. Windows and Linux use the matching <code>dist:*</code> script above on the target OS. Packaging the macOS release build requires a local Developer ID Application signing identity; use <code>npm start</code> for local development or unsupported platforms.</p>
+<p>Runtime and packaging scripts explicitly ensure the pinned tokscale binary on the four vendored targets. Other source platforms keep the npm binary and filter clients it does not support; <code>npm install</code>, lint, and tests do not download it.</p>
 <h3>How it works</h3>
 <pre><code class="language-text">Mode A — Local (default, no setup)
     widget (Electron) ──▶ tokscale ──▶ ~/.claude, ~/.codex, $HERMES_HOME
@@ -642,7 +643,7 @@ Mode B — Sync (opt-in, multi-device)
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 66.8K</div>
+        <div class="stars">★ 66.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
@@ -662,7 +663,7 @@ Mode B — Sync (opt-in, multi-device)
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 553</div>
+        <div class="stars">★ 554</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
