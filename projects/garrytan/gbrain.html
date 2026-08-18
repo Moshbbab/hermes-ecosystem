@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a memory and synthesis layer for AI agents that provides answers with citations by performing graph traversal and gap analysis across ingested data.…">
+<meta name="description" content="GBrain is a memory and context layer designed for AI agents that performs synthesis, graph traversal, and gap analysis. It functions as a persistent daemon…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a memory and synthesis layer for AI agents that provides answers with citations by performing graph traversal and gap analysis across ingested data.…">
+<meta property="og:description" content="GBrain is a memory and context layer designed for AI agents that performs synthesis, graph traversal, and gap analysis. It functions as a persistent daemon…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a memory and synthesis layer for AI agents that provides answers with citations by performing graph traversal and gap analysis across ingested data.…">
+<meta name="twitter:description" content="GBrain is a memory and context layer designed for AI agents that performs synthesis, graph traversal, and gap analysis. It functions as a persistent daemon…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory and synthesis layer for AI agents that provides answers with citations by performing graph traversal and gap analysis across ingested data. It functions as a persistent daemon that extracts entity relationships and creates a self-wiring knowledge graph to consolidate information from meetings, emails, and other sources.",
+  "description": "GBrain is a memory and context layer designed for AI agents that performs synthesis, graph traversal, and gap analysis. It functions as a persistent daemon that ingests, enriches, and consolidates data into a self-wiring knowledge graph.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-08-17T18:57:53.000Z",
+  "dateModified": "2026-08-18T03:40:16.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 28606
+    "userInteractionCount": 28640
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-17</span>
+    <span><span class="meta-label">updated</span>2026-08-18</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory and synthesis layer for AI agents that provides answers with citations by performing graph traversal and gap analysis across ingested data. It functions as a persistent daemon that extracts entity relationships and creates a self-wiring knowledge graph to consolidate information from meetings, emails, and other sources.</p>
+    <p class="summary-text">GBrain is a memory and context layer designed for AI agents that performs synthesis, graph traversal, and gap analysis. It functions as a persistent daemon that ingests, enriches, and consolidates data into a self-wiring knowledge graph.</p>
     <ul class="summary-highlights">
-      <li>Synthesizes prose answers with citations and explicit gap analysis.</li>
-      <li>Extracts typed entity relationships without requiring LLM calls.</li>
-      <li>Supports multi-user scoped access and local deployment via PGLite.</li>
+      <li>Provides synthesized answers with citations and gap analysis.</li>
+      <li>Uses a self-wiring knowledge graph with typed edges.</li>
+      <li>Supports scoped data access for multi-user company environments.</li>
     </ul>
   </div>
 </section>
@@ -278,7 +278,7 @@ gbrain query "what themes show up across my notes?"
 <h4>Connect GBrain to your AI client (MCP)</h4>
 <p>GBrain exposes nearly all of its 100+ operations as MCP tools (stdio and HTTP; a handful of local-only ops stay CLI-side) — or exactly the seven memory verbs with <code>--surface verbs</code>. The specific snippet depends on which client you use:</p>
 <ul>
-<li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CLAUDE_CODE.md">Claude Code</a></strong> — plugin: <code>/plugin marketplace add garrytan/gbrain</code> + <code>/plugin install gbrain@gbrain</code> (MCP + skills). Or local one-liner: <code>claude mcp add gbrain -- gbrain serve</code> (zero server, zero tunnel). Remote with just a bearer token: <code>gbrain connect https://your-host/mcp --token gbrain_xxx</code> prints a paste-ready block (or <code>--install</code> wires it up and smoke-tests the token).</li>
+<li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CLAUDE_CODE.md">Claude Code</a></strong> — plugin: <code>/plugin marketplace add garrytan/gbrain</code> + <code>/plugin install gbrain@gbrain</code> (MCP + skills; persona variants <code>gbrain-coding</code> / <code>gbrain-daily</code> install curated subsets — pick exactly one gbrain plugin). Marketplace-free skills: <code>gbrain skillpack scaffold --harness claude-code</code> copies a persona-curated skill set into your user-scope skills dir with a local-edit-respecting update lens. Or local one-liner: <code>claude mcp add gbrain -- gbrain serve</code> (zero server, zero tunnel). Remote with just a bearer token: <code>gbrain connect https://your-host/mcp --token gbrain_xxx</code> prints a paste-ready block (or <code>--install</code> wires it up and smoke-tests the token).</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CODEX.md">Codex</a></strong> — plugin (recommended): <code>codex plugin marketplace add garrytan/gbrain@codex-plugin</code> + <code>codex plugin add gbrain@gbrain</code> installs the MCP server AND the curated skill set. Or connect-only: <code>gbrain connect https://your-host/mcp --token gbrain_xxx --agent codex</code> (or <code>--install</code>); Codex reads the bearer from <code>$GBRAIN_REMOTE_TOKEN</code> at runtime, so the token never lands in Codex config.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CLAUDE_CODE.md">Cursor / Windsurf / any stdio MCP client</a></strong> — same shape, add <code>{"command": "gbrain", "args": ["serve"]}</code> to your MCP config.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/HERMES.md">Hermes</a></strong> — <code>printf 'Y\n' | hermes mcp add gbrain --env GBRAIN_HOME=$HOME --connect-timeout 60 --command $(which gbrain) --args serve</code>. Keep <code>--args</code> last, and verify with <code>hermes mcp test gbrain</code> (the add exits 0 even on failure).</li>
@@ -502,14 +502,7 @@ for the full triage.</p>
 with <code>getaddrinfo ENOTFOUND</code>?</strong> Upgrade — schema bring-up now runs its
 phases in-process instead of spawning a child <code>gbrain init --migrate-only</code> per phase. The spawned child died on
 Windows + bun + Supabase pooler with a DNS-resolution failure even
-though the parent connected fine; running in-process removes the spawn
-entirely. The grandfather migration that used to hang 70+ minutes on an
-80K-page PGLite brain also runs as a chunked bulk SQL pass now (keyed on
-the page PK, soft-delete-filtered, source-safe) and completes in seconds.</p>
-<h3>Docs</h3>
-<ul>
-<li><a href="https://github.com/garrytan/gbrain/blob/main/docs/INSTALL.md"><code>docs/INSTALL.md</code></a> — every</li>
-</ul>
+though the parent connected fine; running in-process re</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
@@ -536,7 +529,7 @@ the page PK, soft-delete-filtered, source-safe) and completes in seconds.</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 360</div>
+        <div class="stars">★ 361</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -544,7 +537,7 @@ the page PK, soft-delete-filtered, source-safe) and completes in seconds.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 249</div>
+        <div class="stars">★ 250</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
