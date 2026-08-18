@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>hermes-labs-ai/lintlang — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="LintLang is a static analysis tool for AI agent instructions that identifies issues such as ambiguous tool descriptions, conflicting directives, and missing…">
+<meta name="description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
 <link rel="canonical" href="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta property="og:description" content="LintLang is a static analysis tool for AI agent instructions that identifies issues such as ambiguous tool descriptions, conflicting directives, and missing…">
+<meta property="og:description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta name="twitter:description" content="LintLang is a static analysis tool for AI agent instructions that identifies issues such as ambiguous tool descriptions, conflicting directives, and missing…">
+<meta name="twitter:description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=lintlang&amp;subtitle=Static+analysis+for+AI+agent+configs%2C+tool+descriptions%2C+and+system+prompts+%E2%80%94+catches+vague+tool+descriptions%2C+missing+stop+conditions%2C+and+schema+gaps+before+they+reach+runtime.+Z&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for AI agent instructions that identifies issues such as ambiguous tool descriptions, conflicting directives, and missing termination conditions. It performs deterministic, local checks on configuration files and prompts without making network or LLM API calls.",
+  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or LLM calls.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-08-17T20:45:24.000Z",
+  "dateModified": "2026-08-18T18:20:36.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-17</span>
+    <span><span class="meta-label">updated</span>2026-08-18</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions that identifies issues such as ambiguous tool descriptions, conflicting directives, and missing termination conditions. It performs deterministic, local checks on configuration files and prompts without making network or LLM API calls.</p>
+    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or LLM calls.</p>
     <ul class="summary-highlights">
-      <li>Flags overlapping tool descriptions and inconsistent schemas.</li>
-      <li>Detects missing stop conditions and unbounded retries.</li>
-      <li>Supports local execution, GitHub Actions, and pre-commit hooks.</li>
+      <li>Flags vague tool descriptions and missing retry budgets.</li>
+      <li>Performs local static analysis without API or telemetry calls.</li>
+      <li>Supports SARIF output for GitHub Code Scanning integration.</li>
     </ul>
   </div>
 </section>
@@ -288,10 +288,10 @@ the highest-severity findings.</p>
   lint-agent-instructions:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Inspect agent instructions
-        uses: hermes-labs-ai/lintlang@v0.4.0
+        uses: hermes-labs-ai/lintlang@v0.4.1
         with:
           path: AGENTS.md
 </code></pre>
@@ -303,7 +303,7 @@ making them blocking.</p>
 to scan:</p>
 <pre><code class="language-yaml">repos:
   - repo: https://github.com/hermes-labs-ai/lintlang
-    rev: v0.4.0
+    rev: v0.4.1
     hooks:
       - id: lintlang
         args: [AGENTS.md]
@@ -345,9 +345,9 @@ steps so the upload still runs after a blocking LintLang verdict:</p>
   security-events: write
 
 steps:
-  - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+  - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
   - name: Run LintLang
-    uses: hermes-labs-ai/lintlang@v0.4.0
+    uses: hermes-labs-ai/lintlang@v0.4.1
     with:
       path: AGENTS.md
       fail-on: fail
