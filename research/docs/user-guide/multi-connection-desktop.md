@@ -103,6 +103,7 @@ Switching agents is the same gesture as switching profiles:
 -   **The profile rail** at the sidebar foot switches the active profile; the home pill returns to the default profile and the layers pill shows the **All profiles** view. **Cmd/Ctrl+1–9** switch profiles from the keyboard.
 -   The sidebar's session list, cron jobs, and messaging status are **scoped to the active profile** — and, for agents on another source, to that source's machine. Sessions you see under `@research-homelab` live on the Homelab; its cron jobs run there; its messaging channels are the ones its gateway hosts. The **All profiles** view merges every profile's sessions into one list, with per-profile tags.
 -   Hovering an agent pre-warms its backend so the switch doesn't pay a cold boot.
+-   The **Capabilities** page (Skills / Tools / MCP) grows a matching scope: its **Configuring** selector lists every `(profile, device)` agent from the union roster, and picking one reads and writes **that machine's** skills, toolsets, and MCP servers — no gateway switch. Hub installs, env keys, and MCP setup all land on the selected agent's backend. (One caveat: the MCP tab's _hot-reload into a live session_ button only appears for agents on the gateway your window is connected to; edits on other machines apply on their next session.)
 
 ## Updating every instance at once
 
