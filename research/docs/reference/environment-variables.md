@@ -2616,6 +2616,10 @@ Inactivity timeout for cron job agent runs in seconds (default: `600`). The agen
 
 Timeout for pre-run scripts attached to cron jobs in seconds (default: `3600`). Bounds the script only — skill/agent jobs use the separate `HERMES_CRON_TIMEOUT` inactivity budget. Also configurable via `cron.script_timeout_seconds` in `config.yaml`.
 
+`HERMES_CRON_MEDIA_SEND_TIMEOUT`
+
+Timeout for each media attachment send during cron delivery via a live gateway adapter, in seconds (default: `300`). Raise it if large attachments (long TTS audio, big exports) time out during upload. Also configurable via `cron.media_send_timeout_seconds` in `config.yaml`.
+
 `HERMES_CRON_MAX_PARALLEL`
 
 Max cron jobs run in parallel per tick (default: `4`).
