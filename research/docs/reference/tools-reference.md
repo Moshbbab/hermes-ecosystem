@@ -114,6 +114,18 @@ Ask the user a question when you need clarification, feedback, or a decision bef
 
 —
 
+### Asking multiple questions at once
+
+The `clarify` tool also accepts a `questions` array (2–5 independent questions, each with its own `choices` and `multi_select`) so the agent can batch several clarification needs into a single prompt instead of asking sequentially. The result is a `responses` array in the same order, with each question's `id` (when supplied) echoed back.
+
+Per-surface behavior:
+
+-   **Desktop** shows every question on one card. Picks and typed answers stage locally, and one **Confirm and continue** button (enabled once every question has an answer) submits the whole batch. Staged answers stay editable until that confirm. Skip cancels the whole batch.
+-   **TUI and CLI** show a compact status list (`✓` answered / `▸` active / `·` pending) with only the active question's choices expanded. Enter locks the active answer and jumps to the next unanswered question; Tab moves between questions to answer in any order; Esc cancels the batch.
+-   **Messaging platforms** (Telegram, Discord, …) fall back to asking the questions one at a time through the existing single-question prompt. If the user stops responding, the remaining questions are not sent.
+
+If the prompt times out part-way, answers the user already locked are kept: the tool result carries them plus `"timed_out": true`, with the unanswered entries left blank, so the agent can distinguish a deliberate skip from an absent user.
+
 ## `code_execution` toolset
 
 Tool
