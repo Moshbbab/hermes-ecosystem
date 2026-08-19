@@ -340,6 +340,10 @@ Description
 
 One-shot, non-interactive prompt.
 
+`--query-file PATH`
+
+Read the one-shot prompt from a file (`-` = stdin). Nothing is shell-interpreted, so quotes, `$(...)`, and backticks arrive verbatim — use this for programmatic or untrusted message bodies (Bot Mode teammate DMs use it). Mutually exclusive with `-q`.
+
 `-m`, `--model <model>`
 
 Override the model for this run.
