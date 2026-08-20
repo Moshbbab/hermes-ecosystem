@@ -312,7 +312,7 @@ Manage profiles — multiple isolated Hermes instances.
 
 Print shell completion scripts (bash/zsh/fish).
 
-`hermes version`
+`hermes --version`
 
 Show version information.
 
@@ -3102,7 +3102,7 @@ Command
 
 Description
 
-`hermes version`
+`hermes --version`
 
 Print version information.
 

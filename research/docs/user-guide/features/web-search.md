@@ -23,13 +23,13 @@ Free tier
 
 **Firecrawl** (default)
 
-`FIRECRAWL_API_KEY`
+`FIRECRAWL_API_KEY` (optional — keyless when selected)
 
 ✔
 
 ✔
 
-500 credits/mo
+500 credits/mo · keyless cloud when selected
 
 **SearXNG**
 
@@ -63,13 +63,13 @@ Free tier
 
 **Tavily**
 
-`TAVILY_API_KEY`
+`TAVILY_API_KEY` (optional)
 
 ✔
 
 ✔
 
-1 000 searches/mo
+✔ Keyless ring member · 1 000 searches/mo with a free key
 
 **Exa**
 
@@ -79,7 +79,7 @@ Free tier
 
 ✔
 
-✔ Keyless free tier · 1 000 searches/mo with key
+✔ Keyless ring member · 1 000 searches/mo with key
 
 **Parallel**
 
@@ -89,7 +89,17 @@ Free tier
 
 ✔
 
-✔ Keyless free tier · paid with key
+✔ Keyless ring member · paid with key
+
+**Keenable**
+
+`KEENABLE_API_KEY` (optional)
+
+✔
+
+✔
+
+✔ Keyless ring member · paid with key
 
 **xAI (Grok)**
 
@@ -105,11 +115,11 @@ Brave Search, DDGS, and xAI are **search-only** — pair any of them with Firecr
 
 **Per-capability split:** you can use different providers for search and extract independently — for example SearXNG (free) for search and Firecrawl for extract. See [Per-capability configuration](#per-capability-configuration) below.
 
-Works out of the box — keyless free tier
+Works out of the box — keyless free-tier rotation
 
-A fresh install with **no web credentials at all** still gets working `web_search` and `web_extract`: Hermes falls back to Exa's and Parallel's public anonymous endpoints (rate-limited free tiers), splitting unpinned installs 50/50 between the two vendors — the pick is random per process and stable within it. No signup, no key. This tier is strictly last-resort — any configured backend or present API key always wins — and requests carry no user identifiers (only a random per-process session id, rotated on restart). For reliable, unthrottled service, set up a keyed provider. Disable the keyless tier entirely with `web.keyless_fallback: false`.
+A fresh install with **no web credentials at all** gets working `web_search` and `web_extract` out of the box: requests rotate round-robin across five vendors' public free tiers — **Exa, Parallel, Tavily, Firecrawl, and Keenable** — spreading load evenly, and a rate-limited request automatically retries on the next vendor in the ring (multi-hop, until one serves or all are throttled). No signup, no key. This tier is strictly last-resort — any configured backend or present API key always wins — and requests carry no user identifiers (only a random per-process session id, rotated on restart). For guaranteed, unthrottled service, set up a keyed provider. Disable the keyless tier entirely with `web.keyless_fallback: false`.
 
-**Choosing free vs paid explicitly:** in `hermes tools`, Exa and Parallel each appear as two rows — **Free (keyless)** and **Paid (API key)**. Picking Free pins the anonymous endpoint (even if you later add a key); picking Paid pins the keyed SDK path (a missing key then errors instead of silently downgrading to the free tier). The selection is stored as `web.provider_tier.<name>: free|paid`; leave it unset for auto (key present → paid, otherwise free).
+**Choosing free vs paid explicitly:** in `hermes tools`, Exa, Parallel, and Keenable each appear as two rows — **Free (keyless)** and **Paid (API key)**. Picking Free pins that vendor's anonymous endpoint (even if you later add a key); picking Paid pins the keyed path (a missing key then errors instead of silently downgrading to the free tier). The selection is stored as `web.provider_tier.<name>: free|paid`; leave it unset for auto (key present → paid, otherwise the keyless ring).
 
 Nous Subscribers
 
@@ -321,14 +331,17 @@ With this config, Hermes uses SearXNG for all search queries and Firecrawl for U
 
 ### Tavily
 
-AI-optimised search and extract with a generous free tier.
+AI-optimised search and extract. Select Tavily in `hermes tools` (or set `web.backend: tavily`) to use it **keyless** with no account (rate-limited). Set an API key when you want higher limits.
 
 ```
+# optional — skip this for keyless access after selecting Tavily
 # ~/.hermes/.env
 TAVILY_API_KEY=tvly-your-key-here
 ```
 
-Get a key at [app.tavily.com](https://app.tavily.com/home). The free tier includes 1 000 searches/month.
+Get a key at [app.tavily.com](https://app.tavily.com/home). See [Tavily keyless](https://docs.tavily.com/documentation/keyless).
+
+Empty installs keep Firecrawl as the named default. Keyless Tavily is not auto-selected.
 
 * * *
 
@@ -474,9 +487,11 @@ ddgs
 
 _(nothing set at all)_
 
-exa / parallel keyless free tier (50/50 split)
+keyless ring: exa / parallel / tavily / firecrawl / keenable (round-robin)
 
-**Keyless free tier:** when _no_ credential above is present, Hermes falls back to Exa's and Parallel's public anonymous endpoints so web tools work on a fresh install with zero setup — unpinned installs split 50/50 between the two vendors (random per process, stable within it); pick one explicitly in `hermes tools` to pin it. Both free tiers are rate-limited by the vendors under burst load; in practice sustained normal usage goes through fine. On throttling, the tool returns an error suggesting the matching API key. Set `web.keyless_fallback: false` to turn this tier off — with it off and no credentials, web tools are unavailable until a provider is configured.
+**Keyless free-tier ring:** when _no_ credential above is present, requests rotate across five vendors' public free tiers (Exa, Parallel, Tavily, Firecrawl, Keenable) so web tools work on a fresh install with zero setup — and a rate-limited request fails over to the next vendor in the ring automatically. Pin one vendor in `hermes tools` to stop the rotation (the ring is then only used as failover succession on throttles). All free tiers are vendor-rate-limited under burst load; sustained normal usage goes through fine. Set `web.keyless_fallback: false` to turn the tier off — with it off and no credentials, web tools are unavailable until a provider is configured.
+
+**One-shot keyless rescue for keyed backends:** when your chosen/keyed backend fails a call (bad key, outage, upstream 5xx), that single call automatically retries on the keyless free-tier ring instead of erroring — the result notes which vendor served it and why (`rescued_from` / `backend_error`). The failover is never sticky: the very next `web_search`/`web_extract` call attempts your chosen backend again. Disable with `web.keyless_rescue: false` (also off whenever `keyless_fallback` is off).
 
 xAI Web Search is **not** in the auto-detection chain — having `XAI_API_KEY` set (or being signed in via xAI Grok OAuth) does not automatically route web traffic through xAI, since those credentials are also used for inference / TTS / image gen and the user may want a different backend for web. Opt in explicitly with `web.backend: "xai"`.
 

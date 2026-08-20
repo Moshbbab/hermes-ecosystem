@@ -163,7 +163,7 @@ info
 
 When `container.enable = true` and `addToSystemPackages = true`, **every** `hermes` command on the host automatically routes into the managed container. This means your interactive CLI session runs inside the same environment as the gateway service — with access to all container-installed packages and tools.
 
--   The routing is transparent: `hermes chat`, `hermes sessions list`, `hermes version`, etc. all exec into the container under the hood
+-   The routing is transparent: `hermes chat`, `hermes sessions list`, `hermes --version`, etc. all exec into the container under the hood
 -   All CLI flags are forwarded as-is
 -   If the container isn't running, the CLI retries briefly (5s with a spinner for interactive use, 10s silently for scripts) then fails with a clear error — no silent fallback
 -   For developers working on the hermes codebase, set `HERMES_DEV=1` to bypass container routing and run the local checkout directly
@@ -206,7 +206,7 @@ systemctl status hermes-agent
 journalctl -u hermes-agent -f
 
 # If addToSystemPackages is true, test the CLI
-hermes version
+hermes --version
 hermes config       # shows the generated config
 ```
 
@@ -842,7 +842,7 @@ journalctl --user -u hermes-agent -f
 launchctl list | grep hermes
 tail -f ~/Library/Logs/hermes-agent.log
 
-hermes version
+hermes --version
 hermes config     # shows the configuration that Nix wrote
 ```
 
@@ -1236,7 +1236,7 @@ What it tests
 
 `package-contents`
 
-`hermes` and `hermes-agent` binaries exist and `hermes version` runs
+`hermes` and `hermes-agent` binaries exist and `hermes --version` runs
 
 `entry-points-sync`
 
@@ -1925,7 +1925,7 @@ Container recreated unexpectedly
 
 Expected — writable layer resets. Reinstall packages or use a custom image
 
-`hermes version` shows old version
+`hermes --version` shows old version
 
 Container not restarted
 

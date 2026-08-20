@@ -130,6 +130,8 @@ Direct bot mentions and delegation remain gateway-local by default. Crossing a b
 
 Each instance reports independently, so one unreachable box never wedges the batch. Backends that manage updates externally (Docker, Nix) refuse politely with their own message, per row.
 
+You rarely need the Settings button, though: once more than one update target exists, the app's regular update affordances (**Update now** on the About panel, ⌘K **Update Hermes**, the update-ready toast) run the same fan-out automatically — active backend first, then every other eligible gateway, then the desktop app itself last. See [Updating](/docs/user-guide/desktop#updating) in the desktop guide.
+
 ## Security notes
 
 -   **Where tokens live.** Remote-gateway session tokens are encrypted at rest with Electron's `safeStorage` (the OS keychain — Keychain on macOS, DPAPI on Windows, the session keyring backend on Linux) and stay in the Electron main process; the renderer and plugins never see token bytes. OAuth tokens for native sign-in are stored the same way, keyed by gateway base URL, and refreshed automatically before expiry.

@@ -490,7 +490,7 @@ Custom Firecrawl API endpoint for self-hosted instances (optional)
 
 `TAVILY_API_KEY`
 
-Tavily API key for AI-native web search, extract, and crawl ([app.tavily.com](https://app.tavily.com/home))
+Optional Tavily API key for higher search/extract limits. After selecting Tavily as the web backend, keyless access works without it ([app.tavily.com](https://app.tavily.com/home), [keyless docs](https://docs.tavily.com/documentation/keyless))
 
 `SEARXNG_URL`
 
