@@ -349,6 +349,36 @@ import { THEMES_AREA } from '@hermes/plugin-sdk'
 ctx.register({ id: 'noir', area: THEMES_AREA, data: myDesktopTheme })
 ```
 
+Registering a theme lists it; it does not select it. `useTheme()` reads the painted appearance (`theme`, `themeName`, `availableThemes`, `resolvedMode`) and changes it (`setTheme`, `setMode`, `previewTheme`) from a component:
+
+```
+import { Button, useTheme } from '@hermes/plugin-sdk'
+
+function ThemePicker() {
+  const { availableThemes, setTheme, themeName } = useTheme()
+
+  return availableThemes.map(t => (
+    <Button key={t.name} disabled={t.name === themeName} onClick={() => setTheme(t.name)}>
+      {t.label}
+    </Button>
+  ))
+}
+```
+
+A switch driven by something other than a render — a gateway connecting, a socket event, any `host.onEvent` callback — has no component to hang the hook on. Use `requestTheme(name)` there. An unresolvable name is refused rather than coerced to the default skin, so the return value doubles as the availability check and a wrong name can never silently reset someone's appearance:
+
+```
+import { host, requestTheme } from '@hermes/plugin-sdk'
+
+host.onEvent('gateway.ready', () => {
+  if (!requestTheme('noir')) {
+    host.notifyError('Connected, but the noir theme is not installed.')
+  }
+})
+```
+
+Both doors persist per profile, so a plugin-driven switch sticks exactly like a manual pick. To tint the _active_ theme rather than replace it, use `setAccentOverride(hex)` and clear it in `ctx.onDispose` — the bundled `accent` plugin is the worked example.
+
 ### Composer extensions
 
 `COMPOSER_AREAS` (`top`, `bottom`, `leading`, `actions`, `attachments`, `middleware`) let a plugin add controls around the message composer, provide an attachment source, or transform a draft before it is sent (`ComposerMiddleware` with a `handler(draft) => draft | null`).
@@ -685,6 +715,10 @@ Area payloads
 React / state
 
 `useValue`, `atom`, `computed`, `useQuery`, `useMutation`, `useQueryClient`, `queryClient`, `Contribute`
+
+Theming
+
+`useTheme`, `requestTheme`, `setAccentOverride`, `$accentOverride`, `retintTheme`, `themeHue`, `DesktopTheme`, `DesktopThemeColors`, plus OKLCH math (`hexToOklch`, `oklchToHex`, `oklchToSrgb255`, `mixOklab`, `maxChroma`, `hueDelta`, `contrastRatio`, `readableOn`, `normalizeHex`)
 
 UI kit
 
