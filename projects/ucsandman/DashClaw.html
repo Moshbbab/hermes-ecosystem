@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny actions through various interfaces including a CLI, PWA, and messaging platforms.",
+  "description": "DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny destructive actions via a web inbox, CLI, or mobile platforms.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-08-20T18:08:07.000Z",
+  "dateModified": "2026-08-21T04:24:21.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-20</span>
+    <span><span class="meta-label">updated</span>2026-08-21</span>
   </div>
 
   <div class="actions">
@@ -138,11 +138,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny actions through various interfaces including a CLI, PWA, and messaging platforms.</p>
+    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny destructive actions via a web inbox, CLI, or mobile platforms.</p>
     <ul class="summary-highlights">
-      <li>Intercepts tool calls before execution using a fail-closed hook.</li>
-      <li>Generates signed, tamper-evident audit trails for every decision.</li>
-      <li>Supports remote approvals via Telegram, Discord, and mobile PWA.</li>
+      <li>Intercepts tool calls before execution to prevent destructive actions.</li>
+      <li>Provides remote, asynchronous approval via PWA, Telegram, or Discord.</li>
+      <li>Generates signed, tamper-evident audit records for every decision.</li>
     </ul>
   </div>
 </section>
@@ -409,10 +409,10 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
 <p>Control before execution, not observability after it. Eight points, each falsifiable:</p>
 <ol>
 <li><strong>Every risky action is evaluated against active policies before it runs.</strong> Policies are declarative. The builder ships with ten pre-built safety switches (Deploy Gate, Risk Threshold, Rate Limiter, Evidence Required, Protected Path, Subagent Constraint, and others across 17 guard policy types), an AI generator, YAML import, and a pack gallery at <code>/policies/packs</code> — 18 curated packs (spend, outbound comms, unattended overnight runs, prod infra, subagent fleets, and more), each previewable against your own action history before a one-click install.</li>
-<li><strong>The default pack is catastrophe-only.</strong> Seeded automatically for every new self-hosted org, it interrupts for the irreversible class: it blocks mass-destructive filesystem, git, and database actions outright, and holds writes to secret files (<code>.env</code>, <code>*.pem</code>, <code>*.key</code>, <code>secrets/**</code>) for one-click approval. A warn-only rate limit nets runaways; everything else runs. This is a documented lesson, not a preference. See below.</li>
+<li><strong>The default pack is catastrophe-only.</strong> Seeded automatically for every new self-hosted org, it interrupts for the irreversible class: mass-destructive filesystem, git, and database actions and writes to secret files (<code>.env</code>, <code>*.pem</code>, <code>*.key</code>, <code>secrets/**</code>) are held for one-click approval. Nothing is refused outright; the human decides. A warn-only rate limit nets runaways; everything else runs. This is a documented lesson, not a preference. See below.</li>
 <li><strong>Sensitive actions require human approval, and the approval is one click.</strong> Approvals route to <code>/approvals</code>, the CLI, the mobile PWA at <code>/approve</code>, Telegram, or Discord. When one policy blows its interruption budget, per-action pings collapse into one flood banner with bulk-resolve. A repeat interruption can be retired at the card with "Allow, don't ask again", which writes a target-scoped, expiring, revocable grant rather than silencing anything. Pending approvals are never auto-resolved.</li>
 <li><strong>Every decision is recorded and outcomes are durable.</strong> A five-state finality machine plus a lost-confirmation sweep guarantee no silent double-execute on retry. Spec below and in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/durable-execution-finality.md"><code>docs/architecture/durable-execution-finality.md</code></a>.</li>
-<li><strong>Interruption precision is calibrated, not guessed.</strong> A distribution-free controller (<a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/governance-core-theory.md"><code>/calibration</code></a>, default off) turns your approve/deny verdicts into a proven false-interruption bound. Shadow-first, then it loosens as well as tightens: below the calibrated threshold an approval request becomes a recorded warning instead, bounded by the riskiest action you have personally approved and retracted by a single deny. It never reaches <code>allow</code>, never touches a <code>block</code>, and never edits a policy — standing policy changes still route through human-ratified proposals.</li>
+<li><strong>Interruption precision is calibrated, not guessed.</strong> A distribution-free controller (<a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/governance-core-theory.md"><code>/policies#calibration</code></a>, default preview) turns your approve/deny verdicts into a proven false-interruption bound. Shadow-first, then it loosens as well as tightens: below the calibrated threshold an approval request becomes a recorded warning instead, bounded by the riskiest action you have personally approved and retracted by a single deny. It never reaches <code>allow</code>, never touches a <code>block</code>, and never edits a policy — standing policy changes still route through human-ratified proposals.</li>
 <li><strong>Enforcement proves it is still on.</strong> A liveness probe drives a synthetic held action through the real hook seam and verdicts by whether it executed, never by reading the ledger. Because once it did not, and nothing noticed. Stale never renders green.</li>
 <li><strong>Prompt-injection scanning is on by default.</strong> High-confidence system-override patterns force a <code>block</code> at guard time; lower-severity patterns raise a <code>warn</code>.</li>
 <li><strong>An outside decision engine can tighten decisions, never loosen them.</strong> An org can configure one external decision provider (configured on <code>/policies</code>); the guard calls it during every evaluation and joins its verdict stricter-wins — external <code>deny</code> is absolute for the evaluated act, external <code>allow</code> never overrides a stricter local result, and the verdict is identity-bound to the exact act. An unreachable provider takes an explicit posture (<code>fail_closed</code> default) and is always recorded as <code>external unavailable</code>, never as governance that happened. A domain-specific provider can be scoped to the exact action types it governs; out-of-scope acts stay local-only, never billed to the provider's authority. Contract: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/external-verdict-provider.md"><code>docs/external-verdict-provider.md</code></a>.</li>
@@ -562,7 +562,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
         <div class="name"><span class="org">JackTheGit /</span> hermes-ai-infrastructure-monitoring-toolkit</div>
       </a>
       <a class="related-row" href="/projects/bigph00t/hermescraft">
-        <div class="stars">★ 62</div>
+        <div class="stars">★ 63</div>
         <div class="name"><span class="org">bigph00t /</span> hermescraft</div>
       </a>
       <a class="related-row" href="/projects/hxsteric/mercury">
