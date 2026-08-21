@@ -1121,11 +1121,11 @@ Show scheduled jobs.
 
 `create` / `add`
 
-Create a scheduled job from a prompt, optionally attaching one or more skills via repeated `--skill`.
+Create a scheduled job from a prompt, optionally attaching one or more skills via repeated `--skill`. Supports a per-job reasoning pin via `--reasoning-effort <none|minimal|low|medium|high|xhigh|max|ultra>`.
 
 `edit`
 
-Update a job's schedule, prompt, name, delivery, repeat count, or attached skills. Supports `--clear-skills`, `--add-skill`, and `--remove-skill`.
+Update a job's schedule, prompt, name, delivery, repeat count, or attached skills. Supports `--clear-skills`, `--add-skill`, and `--remove-skill`, plus `--reasoning-effort` (empty string clears the pin).
 
 `pause`
 
