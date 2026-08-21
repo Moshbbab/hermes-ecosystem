@@ -213,7 +213,7 @@ If Chronos is misconfigured or the agent isn't logged into Nous, `resolve_cron_s
 Each cron job runs in a completely fresh agent session:
 
 -   No conversation history from previous runs
--   No memory of previous cron executions (unless persisted to memory/files)
+-   No memory of previous cron executions (persistent memory — MEMORY.md / USER.md — does load, like any other agent run, so durable preferences and facts carry over; per-run conversation context does not)
 -   The prompt must be self-contained — cron jobs cannot ask clarifying questions
 -   The `cronjob` toolset is disabled (recursion guard)
 

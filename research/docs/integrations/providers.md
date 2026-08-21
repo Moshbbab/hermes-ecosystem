@@ -120,6 +120,10 @@ Setup
 
 `OPENCODE_GO_API_KEY` in `~/.hermes/.env` (provider: `opencode-go`)
 
+**OpenCode Free**
+
+Keyless — no API key or account needed (provider: `opencode-free`, aliases: `free`, `opencode_free`). Select via `hermes model` or `/model free`; requests are sent anonymously
+
 **DeepSeek**
 
 `DEEPSEEK_API_KEY` in `~/.hermes/.env` (provider: `deepseek`)
