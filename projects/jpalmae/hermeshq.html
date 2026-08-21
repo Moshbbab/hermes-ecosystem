@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>jpalmae/hermeshq — Hermes Agent Deployment &amp; Infra | Hermes Atlas</title>
-<meta name="description" content="HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an…">
+<meta name="description" content="HermesHQ is a Docker-first control plane designed to orchestrate and operate multiple Hermes Agent instances through a single web application. It adds an…">
 <link rel="canonical" href="https://hermesatlas.com/projects/jpalmae/hermeshq">
 <meta property="og:title" content="jpalmae/hermeshq — Hermes Atlas">
-<meta property="og:description" content="HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an…">
+<meta property="og:description" content="HermesHQ is a Docker-first control plane designed to orchestrate and operate multiple Hermes Agent instances through a single web application. It adds an…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/jpalmae/hermeshq">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="jpalmae/hermeshq — Hermes Atlas">
-<meta name="twitter:description" content="HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an…">
+<meta name="twitter:description" content="HermesHQ is a Docker-first control plane designed to orchestrate and operate multiple Hermes Agent instances through a single web application. It adds an…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermeshq&amp;subtitle=HermesHQ+is+a+Docker-first+control+plane+for+running+and+operating+multiple+Hermes+Agent+instances+from+one+web+application.&amp;kind=project+%C2%B7+deployment">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/jpalmae/hermeshq#software",
   "name": "hermeshq",
-  "description": "HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an operational layer that wraps the Hermes execution engine, providing centralized task dispatching, scheduling, and a runtime ledger. The platform enables multi-agent delegation, RBAC-controlled user access, and per-agent communication channels for Telegram and WhatsApp. It also features an enterprise MCP bridge to expose specific agents to e",
+  "description": "HermesHQ is a Docker-first control plane designed to orchestrate and operate multiple Hermes Agent instances through a single web application. It adds an operational layer to the Hermes runtime, providing features for task dispatch, multi-agent management, and centralized governance.",
   "url": "https://hermesatlas.com/projects/jpalmae/hermeshq",
   "codeRepository": "https://github.com/jpalmae/hermeshq",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "jpalmae",
     "url": "https://github.com/jpalmae"
   },
-  "dateModified": "2026-08-19T03:03:47.000Z",
+  "dateModified": "2026-08-21T14:42:04.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">231·repos</span>
+    <span id="meta-count">232·repos</span>
     <span id="meta-version">hermes·v0.20.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-08-19</span>
+    <span><span class="meta-label">updated</span>2026-08-21</span>
   </div>
 
   <div class="actions">
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">HermesHQ is a Docker-first control plane designed to orchestrate and manage multiple Hermes Agent instances from a single web application. It functions as an operational layer that wraps the Hermes execution engine, providing centralized task dispatching, scheduling, and a runtime ledger. The platform enables multi-agent delegation, RBAC-controlled user access, and per-agent communication channels for Telegram and WhatsApp. It also features an enterprise MCP bridge to expose specific agents to external AI clients like Claude Code and Codex.</p>
+    <p class="summary-text">HermesHQ is a Docker-first control plane designed to orchestrate and operate multiple Hermes Agent instances through a single web application. It adds an operational layer to the Hermes runtime, providing features for task dispatch, multi-agent management, and centralized governance.</p>
     <ul class="summary-highlights">
-      <li>Orchestrates multiple Hermes Agent instances with separate workspaces and identities</li>
-      <li>Provides hierarchy-aware inter-agent delegation and task scheduling</li>
-      <li>Offers enterprise MCP access for external AI client integrations</li>
+      <li>Managed agents with separate workspaces and RBAC-controlled access.</li>
+      <li>Inter-agent delegation with hierarchy-aware communication and callbacks.</li>
+      <li>Enterprise MCP access for external AI client integration.</li>
     </ul>
   </div>
 </section>
@@ -324,8 +324,15 @@ python3 scripts/hermeshq-mcp-stdio.py
 <li>automatic rollback cleanup on failed first-time installs</li>
 </ul>
 <h3>Run With Docker Manually</h3>
-<pre><code class="language-bash">docker compose up --build -d
+<pre><code class="language-bash">cp .env.example .env
+# Set JWT_SECRET, FERNET_KEY, ADMIN_PASSWORD and RUNTIME_RUNNER_TOKEN.
+docker compose up --build -d
 </code></pre>
+<p>Generate the runner credential with <code>openssl rand -hex 32</code>. Production tasks
+run in ephemeral containers, while native messaging gateways use isolated
+long-lived containers. Each receives only its own workspace, a private network,
+a read-only root filesystem, resource limits, and allowlisted outbound access.
+Add custom model-provider domains through <code>RUNTIME_EGRESS_ALLOWLIST</code>.</p>
 <p>Default URLs:</p>
 <ul>
 <li>frontend: <code>http://localhost:3420</code></li>

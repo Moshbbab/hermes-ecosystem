@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pomponchik/incontext — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
+<meta name="description" content="incontext is a Hermes Agent plugin that manages LLM output budgets by calculating a dynamic max_tokens value relative to the context-compression boundary. It…">
+<link rel="canonical" href="https://hermesatlas.com/projects/pomponchik/incontext">
+<meta property="og:title" content="pomponchik/incontext — Hermes Atlas">
+<meta property="og:description" content="incontext is a Hermes Agent plugin that manages LLM output budgets by calculating a dynamic max_tokens value relative to the context-compression boundary. It…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/pomponchik/incontext">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=incontext&amp;subtitle=Exact+dynamic+output+budgeting+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="pomponchik/incontext — Hermes Atlas">
+<meta name="twitter:description" content="incontext is a Hermes Agent plugin that manages LLM output budgets by calculating a dynamic max_tokens value relative to the context-compression boundary. It…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=incontext&amp;subtitle=Exact+dynamic+output+budgeting+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "plugins &amp; extensions", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 3, "name": "incontext" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/pomponchik/incontext#software",
+  "name": "incontext",
+  "description": "incontext is a Hermes Agent plugin that manages LLM output budgets by calculating a dynamic max_tokens value relative to the context-compression boundary. It uses exact token counts to ensure requests maintain a minimum viable output reserve while preventing oversized budgets from consuming input space.",
+  "url": "https://hermesatlas.com/projects/pomponchik/incontext",
+  "codeRepository": "https://github.com/pomponchik/incontext",
+  "applicationCategory": "BrowserApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "author": {
+    "@type": "Organization",
+    "name": "pomponchik",
+    "url": "https://github.com/pomponchik"
+  },
+  "dateModified": "2026-08-21T14:21:05.000Z",
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script src="/assets/js/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span id="meta-count">232·repos</span>
+    <span id="meta-version">hermes·v0.20.5</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/lists/">lists</a>
+    <a href="/skills/">skills</a>
+    <a href="/use-cases/">use cases</a>
+    <a href="/guide/">handbook</a>
+    <a href="/masterclass/">masterclass</a>
+    <a href="/dev/">dev</a>
+    <a href="/reports/">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-icon tt-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2.25M12 19.75V22M4.93 4.93l1.59 1.59M17.48 17.48l1.59 1.59M2 12h2.25M19.75 12H22M4.93 19.07l1.59-1.59M17.48 6.52l1.59-1.59"/></svg>
+    </span>
+    <span class="tt-icon tt-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M20.2 15.1A8.4 8.4 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+    </span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/">plugins &amp; extensions</a><span class="sep">/</span>incontext
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">pomponchik</span><span class="slash">/</span>incontext
+  </h1>
+  <p class="project-desc">Exact dynamic output budgeting for Hermes Agent</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 0</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    <span><span class="meta-label">license</span>MIT</span>
+    
+    <span><span class="meta-label">updated</span>2026-08-21</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/pomponchik/incontext" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    
+  </div>
+</section>
+
+
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">incontext is a Hermes Agent plugin that manages LLM output budgets by calculating a dynamic max_tokens value relative to the context-compression boundary. It uses exact token counts to ensure requests maintain a minimum viable output reserve while preventing oversized budgets from consuming input space.</p>
+    <ul class="summary-highlights">
+      <li>Calculates dynamic output budgets based on context-compression boundaries.</li>
+      <li>Prevents max_tokens from falling below a configurable minimum viable reserve.</li>
+      <li>Supports vLLM as the default inference backend for exact tokenization.</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <details>
+  <summary>ⓘ</summary>
+
+<p><a href="https://github.com/pomponchik/incontext/actions/workflows/tests_and_coverage.yml"><img src="https://github.com/pomponchik/incontext/actions/workflows/tests_and_coverage.yml/badge.svg?branch=develop" alt="Tests" loading="lazy" decoding="async"></a>
+<a href="https://github.com/pomponchik/incontext/actions/workflows/hermes_e2e.yml"><img src="https://github.com/pomponchik/incontext/actions/workflows/hermes_e2e.yml/badge.svg?branch=develop" alt="Hermes e2e" loading="lazy" decoding="async"></a>
+<a href="https://pypi.org/project/incontext/"><img src="https://img.shields.io/pypi/pyversions/incontext.svg" alt="Python versions" loading="lazy" decoding="async"></a>
+<a href="https://pypi.org/project/incontext/"><img src="https://badge.fury.io/py/incontext.svg" alt="PyPI version" loading="lazy" decoding="async"></a>
+<a href="https://mypy-lang.org/"><img src="https://www.mypy-lang.org/static/mypy_badge.svg" alt="Checked with mypy" loading="lazy" decoding="async"></a>
+<a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff" loading="lazy" decoding="async"></a></p>
+</details>
+
+<p><img src="https://raw.githubusercontent.com/pomponchik/incontext/develop/docs/assets/logo.svg" alt="incontext logo" loading="lazy" decoding="async"></p>
+<p><code>incontext</code> is a Hermes Agent plugin that gives each LLM request a viable
+output budget below Hermes' context-compression boundary. It prevents a fixed,
+oversized <code>max_tokens</code> value from consuming input space, but also refuses to
+manufacture tiny completions that are technically valid and operationally
+useless to an agent.</p>
+<h3>Algorithm</h3>
+<p>The policy uses these values:</p>
+<ul>
+<li><code>W</code> is Hermes' effective compression window, read from the installed
+<code>ContextCompressor</code>.</li>
+<li><code>P</code> is the exact number of tokens in the provider-visible prompt.</li>
+<li><code>R</code> is the minimum viable output reserve. It is configured with
+<code>INCONTEXT_MIN_OUTPUT_TOKENS</code> and defaults to <code>4096</code>. An explicit smaller
+Hermes-wide output cap lowers <code>R</code>, because that cap is an operator decision.</li>
+<li><code>B</code> is an optional positive output cap on an individual request.</li>
+<li><code>F</code> is <code>INCONTEXT_FALLBACK_MARGIN_TOKENS</code>, used only when exact tokenization
+is unavailable.</li>
+</ul>
+<p>Before Hermes constructs the main provider request, incontext reports this
+token pressure to its compression preflight:</p>
+<pre><code class="language-text">preflight_pressure = P + R - 1
+</code></pre>
+<p>Hermes compresses when that pressure is at least <code>W</code>. Therefore compression is
+requested exactly when <code>W - P &lt; R</code>. The subtraction of one is intentional: a
+prompt with exactly <code>R</code> tokens of output space remains valid, while a prompt
+with <code>R - 1</code> tokens does not.</p>
+<p>After the final request has been constructed, the middleware counts it again
+and computes:</p>
+<pre><code class="language-text">required_output = min(R, B) if B is present else R
+remaining       = W - P
+max_tokens      = min(remaining, B) if B is present else remaining
+</code></pre>
+<p>The middleware inserts the output cap only when <code>remaining &gt;= required_output</code>.
+Otherwise it leaves the request unchanged: the preflight path owns main-turn
+compression, and fail-open behavior is safer for call sites that bypass it than
+sending a predictably truncated tool call or text fragment. A provider-specific
+output constraint must also leave at least <code>required_output</code> tokens.</p>
+<p>A smaller positive caller cap is preserved and becomes that request's required
+minimum. This keeps deliberately bounded operations, such as context summaries
+and generated titles, bounded. Without an explicit smaller cap, incontext never
+dynamically emits <code>max_tokens</code> below <code>R</code>; in particular it does not turn an
+exhausted window into <code>max_tokens=1</code>.</p>
+<p>Hermes auxiliary calls do not pass through the public <code>llm_request</code> middleware,
+and Hermes omits <code>max_tokens</code> for most custom providers. The plugin therefore
+wraps the auxiliary request builder with the same budgeting rule. If exact
+tokenization fails, both preflight and middleware use Hermes' rough estimate
+plus <code>F</code>, so they retain the same decision boundary. If both estimators fail,
+the original request is left unchanged.</p>
+<p>Startup rejects <code>F + R &gt;= W</code>. Hermes normalizes a rough prompt estimate to at
+least one token, so that configuration could never leave <code>R</code> viable output
+tokens during a tokenizer outage, even after compressing everything else.</p>
+<p>This addresses the same output-budget arithmetic discussed in
+<a href="https://github.com/NousResearch/hermes-agent/issues/38652">NousResearch/hermes-agent#38652</a>.</p>
+<h3>Installation</h3>
+<p>Install the published package from PyPI and enable it using the same plugin
+name, <code>incontext</code>:</p>
+<pre><code class="language-bash">python -m pip install incontext
+hermes plugins enable incontext
+</code></pre>
+<p>To use the current development branch instead, install it directly from GitHub:</p>
+<pre><code class="language-bash">python -m pip install 'git+https://github.com/pomponchik/incontext.git@develop'
+hermes plugins enable incontext
+</code></pre>
+<p>Restart the long-running Hermes gateway after installing or upgrading the
+Python package. Hermes discovers it through the official
+<code>hermes_agent.plugins</code> entry-point group; no source file has to be copied into
+<code>$HERMES_HOME/plugins</code>.</p>
+<h3>Configuration</h3>
+<p>The bundled <code>vllm</code> backend is selected by default. Its
+<code>INCONTEXT_TOKENIZER_URL</code> setting is required and must point to the <code>/tokenize</code>
+endpoint of the same vLLM model Hermes uses:</p>
+<pre><code class="language-bash">export INCONTEXT_BACKEND='vllm'
+export INCONTEXT_TOKENIZER_URL='https://inference.example/tokenize'
+export INCONTEXT_TOKENIZER_TIMEOUT_SECONDS='30'
+export INCONTEXT_FALLBACK_MARGIN_TOKENS='1024'
+export INCONTEXT_MIN_OUTPUT_TOKENS='4096'
+</code></pre>
+<p>Environment variables are loaded through typed <code>skelet.Storage</code> fields backed
+by ordered <code>skelet.EnvSource</code> instances. Primary <code>INCONTEXT_*</code> names take
+precedence over the supported legacy aliases. Text normalization and blank
+value rejection are implemented by the fields' native <code>conversion</code> and
+<code>validation</code> rules.</p>
+<p>Hermes' <code>model.default</code>, <code>model.context_length</code>, and <code>compression.threshold</code>
+remain the source of truth. The plugin constructs Hermes' installed
+<code>ContextCompressor</code> and uses its resolved <code>threshold_tokens</code>; it does not copy
+version-sensitive threshold arithmetic.</p>
+<p>The optional variables are:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th align="right">Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>INCONTEXT_BACKEND</code></td>
+<td align="right"><code>vllm</code></td>
+<td>Named <code>pristan</code> backend plugin</td>
+</tr>
+<tr>
+<td><code>INCONTEXT_TOKENIZER_TIMEOUT_SECONDS</code></td>
+<td align="right"><code>30</code></td>
+<td><code>/tokenize</code> request timeout</td>
+</tr>
+<tr>
+<td><code>INCONTEXT_TOKENIZER_USER_AGENT</code></td>
+<td align="right">automatic</td>
+<td>HTTP user agent derived from installed package metadata</td>
+</tr>
+<tr>
+<td><code>INCONTEXT_FALLBACK_MARGIN_TOKENS</code></td>
+<td align="right"><code>1024</code></td>
+<td>Extra reserve only when exact tokenization fails</td>
+</tr>
+<tr>
+<td><code>INCONTEXT_MIN_OUTPUT_TOKENS</code></td>
+<td align="right"><code>4096</code></td>
+<td>Minimum viable output budget before compression is required</td>
+</tr>
+<tr>
+<td><code>INCONTEXT_COMPRESSION_WINDOW_TOKENS</code></td>
+<td align="right">unset</td>
+<td>Explicit emergency override for the resolved Hermes boundary</td>
+</tr>
+</tbody></table>
+<p>The former <code>HERMES_VLLM_TOKENIZER_*</code> and
+<code>HERMES_DYNAMIC_BUDGET_FALLBACK_MARGIN_TOKENS</code> names are accepted as migration
+aliases. New deployments should use the <code>INCONTEXT_*</code> names.</p>
+<h3>Replacing the inference backend</h3>
+<p>The budgeting core depends only on the abstract <code>incontext.Backend</code> contract.
+It has no import or construction dependency on vLLM. A backend supplies its
+safe diagnostic <code>source</code>, exact <code>count(...)</code>, cache invalidation, and an
+optional output-field normalization hook.</p>
+<p>Backend implementations are named <code>pristan</code> plugins in the
+<code>incontext.backends</code> entry-point group. The generic <code>skelet</code> environment has a
+typed <code>backend</code> field whose default is <code>vllm</code>. At runtime incontext performs
+the single named resolution directly:</p>
+<pre><code class="language-python">backend = backends[environment.backend].one()
+</code></pre>
+<p>The <code>incontext</code> distribution itself publishes the <code>vllm</code> entry point. Loading
+that entry point imports <code>incontext.vllm_provider</code>, whose only responsibility is
+to construct <code>VllmBackend</code>. All <code>/tokenize</code> payload rules, vLLM response fields,
+context-length validation, transport settings, and caching live inside that
+class rather than in the budgeting core.</p>
+<p>A third-party distribution can provide another backend without changing
+incontext. Its implementation subclasses the stable abstract contract and its
+plugin module registers a provider under a new name:</p>
+<pre><code class="language-python"># acme_backend/plugin.py
+from __future__ import annotations
+
+from typing import Any, Dict
+
+from incontext import Backend, backends
+
+
+class AcmeBackend(Backend):
+    @property
+    def source(self) -&gt; str:
+        return "acme-tokenizer"
+
+    def count(
+        self,
+        request: Dict[str, Any],
+        *,
+        context_length: int,
+    ) -&gt; int:
+        ...
+
+    def clear_cache(self) -&gt; None:
+        ...
+
+
+@backends.plugin("acme")
+def provide_acme_backend() -&gt; Backend:
+    return AcmeBackend()
+</code></pre>
+<p>The third-party package makes that module discoverable in <code>pyproject.toml</code>:</p>
+<pre><code class="language-toml">[project.entry-points."incontext.backends"]
+acme = "acme_backend.plugin"
+</code></pre>
+<p>After installing the package, select it through the same typed configuration
+field and restart the Hermes process:</p>
+<pre><code class="language-bash">export INCONTEXT_BACKEND='acme'
+</code></pre>
+<p>Only the selected provider is instantiated. An unknown name fails <code>.one()</code>;
+the unique slot rejects duplicate providers under the same name while loading
+entry points. Startup therefore fails instead of choosing a backend implicitly.
+Each backend owns and validates its backend-specific configuration; the generic
+settings object contains only the compression-window, viability-reserve, and
+fallback-budget policy.</p>
+<h3>Safety properties</h3>
+<ul>
+<li>With the bundled backend, vLLM applies its real chat template to messages, tools, and
+<code>chat_template_kwargs</code>; local tokenizer approximations are not used.</li>
+<li>The returned <code>max_model_len</code> must equal Hermes' configured context length.</li>
+<li><code>max_tokens</code>, <code>max_completion_tokens</code>, and <code>max_output_tokens</code> are reduced to
+the smallest positive caller cap while preserving the corresponding
+provider-selected field name; an implicit cap below the minimum viable
+output reserve is handed to preflight compression.</li>
+<li>The incoming request is copied and never mutated.</li>
+<li>Exact counts use a bounded, thread-safe cache.</li>
+<li>The exact counter is also used by Hermes' preflight compressor, eliminating
+the former gap where compression used a rough count but budgeting used an
+exact one.</li>
+<li>If <code>/tokenize</code> fails, Hermes' own rough estimator is used with an additional
+safety margin. If both counters fail, the middleware leaves the request
+unchanged instead of taking Hermes down.</li>
+<li>Logs contain counts and exception types, never prompts, credentials, or raw
+provider errors.</li>
+</ul>
+<p>The tokenizer endpoint sees the prompt content by design. Run it on a trusted
+network path and use the same access controls as the inference endpoint.</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in plugins &amp; extensions</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
+        <div class="stars">★ 384</div>
+        <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
+      </a>
+      <a class="related-row" href="/projects/42-evey/hermes-plugins">
+        <div class="stars">★ 409</div>
+        <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
+      </a>
+      <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
+        <div class="stars">★ 47</div>
+        <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
+      </a>
+      <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
+        <div class="stars">★ 13</div>
+        <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
+      </a>
+      <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
+        <div class="stars">★ 14</div>
+        <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
+      </a>
+      <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
+        <div class="stars">★ 50</div>
+        <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
+      </a>
+      <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
+        <div class="stars">★ 376</div>
+        <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
+      </a>
+      <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
+        <div class="stars">★ 304</div>
+        <div class="name"><span class="org">stainlu /</span> hermes-labyrinth</div>
+      </a>
+    </div>
+    
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>
