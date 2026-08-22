@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>junhoyeo/tokscale — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding…">
+<meta name="description" content="Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data locations…">
 <link rel="canonical" href="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding…">
+<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data locations…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding…">
+<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data locations…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=tokscale&amp;subtitle=%F0%9F%9B%B0%EF%B8%8F+Track+token+usage+across+AI+coding+agents+from+your+terminal.+%F0%9F%8F%85+Global+leaderboard+with+trillions+of+tokens+tracked.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files.",
+  "description": "Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data locations and databases to provide daily summaries, model-specific statistics, and usage visualizations.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-08-22T05:20:59.000Z",
+  "dateModified": "2026-08-22T06:51:29.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5116
+    "userInteractionCount": 5118
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to monitor and analyze token consumption and costs. It tracks usage data from various AI coding agents by accessing local data files.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data locations and databases to provide daily summaries, model-specific statistics, and usage visualizations.</p>
     <ul class="summary-highlights">
-      <li>Provides a CLI tool and visualization dashboard</li>
-      <li>Tracks token usage and costs for multiple AI coding agents</li>
-      <li>Supports data from clients including Claude Code and Gemini CLI</li>
+      <li>Tracks token usage across multiple AI coding agents and IDEs.</li>
+      <li>Provides a CLI-based TUI and a 3D frontend dashboard.</li>
+      <li>Supports data submission for public profiles and leaderboards.</li>
     </ul>
   </div>
 </section>
@@ -1029,6 +1029,18 @@ tokscale logout
 </code></pre>
 <img alt="CLI Submit" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/cli-submit.png">
 
+<h5>Unpriced usage is excluded from submission</h5>
+<p>Before anything is submitted, every message must resolve to an authoritative price that covers every token bucket the message populated (input, output, cache read, cache write). Messages that cannot be priced are skipped and reported as <code>Warning: excluded N unpriced provider/model message(s)</code> — unknown models never submit invented or guessed spend, and all remaining priced usage still submits normally.</p>
+<p>The exclusion reasons:</p>
+<ul>
+<li><code>no authoritative model-to-price mapping</code> — the model ID is absent from LiteLLM, OpenRouter, models.dev, and your custom overrides.</li>
+<li><code>generic routing label has no authoritative model-to-price mapping</code> — the ID is a router label (<code>auto</code>, <code>gemini-default</code>, …) whose underlying model varies per request, so it is refused outright. An explicit entry for the label in <code>custom-pricing.json</code> is the supported way to assert a rate you know applies.</li>
+<li><code>pricing does not cover every populated token bucket</code> — a price row was found, but it is missing a rate (most often cache read or cache creation) that this usage actually populates.</li>
+<li><code>model price match does not establish the requested provider</code> — a price row was found only by matching the model part of the ID, or by trying a provider prefix, which does not prove your provider bills at that row's rate.</li>
+<li><code>model price match does not exactly name the requested model</code> — a fuzzy or provider-scoped match was found, but nothing proves the priced key names the model you actually used.</li>
+<li><code>model price lookup is ambiguous across non-equivalent candidates</code> — several candidate rows matched and they quote different prices.</li>
+</ul>
+<p>To include previously excluded usage, add an exact-match entry to <code>custom-pricing.json</code> (see <a href="#custom-pricing-overrides">Custom Pricing Overrides</a>) — an explicit <code>0</code> declares a genuinely free model — then re-run <code>tokscale submit --dry-run</code> until no warnings remain. <code>tokscale pricing &lt;model-id&gt;</code> shows which entry matched. The file is keyed by the model ID alone — the <code>model</code> half of the <code>provider/model</code> pair shown in the warning.</p>
 <h4>Autosubmit</h4>
 <p>Autosubmit schedules the normal <code>tokscale submit</code> flow with the operating system scheduler. It is useful for keeping your public profile current without a manual terminal run.</p>
 <pre><code class="language-bash"># Enable periodic submission. Uses launchd on macOS, systemd user timers on Linux
@@ -1168,80 +1180,12 @@ tokscale warp logout --purge-cache
 <p><strong>How it works</strong>: <code>tokscale warp sync</code> calls Warp's authenticated GraphQL API for account and workspace aggregate counters. Tokscale preserves request counts as message counts and vendor-reported spend as cost, but it never converts requests into synthetic tokens. Warp is excluded from default <code>submit</code> data because the public leaderboard accepts token-attributed usage, not aggregate request counters.</p>
 <h4>Task-Attributed Report</h4>
 <p>The <code>report</code> command generates a task-attributed usage breakdown. It uses an LLM to summarize each session into a short title and category, then groups related sessions into high-level task clusters for a bird's-eye view of where your tokens went.</p>
-<pre><code class="language-bash"># Basic report (today, default Apple FM summarizer)
-tokscale report
+<pre><code class="language-bash"># Basic report (today, defau
 
-# Last 7 days
-tokscale report --week
+---
 
-# Use Claude Code as the summarizer backend
-tokscale report --week --summarizer claude
-
-# Use Codex, Gemini, Kiro, or MiniMax
-tokscale report --summarizer codex
-tokscale report --summarizer gemini
-tokscale report --summarizer kiro
-tokscale report --summarizer minimax
-
-# Skip LLM summarization (show raw data only)
-tokscale report --no-summarize
-
-# Re-summarize from scratch (resets cached summaries in range)
-tokscale report --week --rebuild
-
-# Output as JSON
-tokscale report --week --json
-
-# Filter by workspace or client
-tokscale report --workspace my-project --client opencode
+*README truncated. [Continue reading on GitHub](https://github.com/junhoyeo/tokscale#readme)*
 </code></pre>
-<p><strong>Summarizer backends:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Backend</th>
-<th>Command</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>apple-fm</code></td>
-<td>(default)</td>
-<td>On-device Apple Foundation Models via native Rust FFI (no Python). Enabled in the prebuilt Apple Silicon (macOS arm64) binary; runs on macOS 26+ with Apple Intelligence on, and transparently falls back to a built-in Rust heuristic everywhere else (Intel Macs, older macOS, Linux, Windows) — so the default works on every platform.</td>
-</tr>
-<tr>
-<td><code>claude</code></td>
-<td><code>claude -p</code></td>
-<td>Requires Claude Code CLI installed and authenticated.</td>
-</tr>
-<tr>
-<td><code>codex</code></td>
-<td><code>codex --quiet</code></td>
-<td>Requires Codex CLI installed and authenticated.</td>
-</tr>
-<tr>
-<td><code>gemini</code></td>
-<td><code>gemini -p</code></td>
-<td>Requires Gemini CLI installed and authenticated.</td>
-</tr>
-<tr>
-<td><code>kiro</code></td>
-<td><code>kiro --non-interactive</code></td>
-<td>Requires Kiro CLI installed and authenticated.</td>
-</tr>
-<tr>
-<td><code>minimax</code></td>
-<td>(HTTP API)</td>
-<td>OpenAI-compatible chat-completions API, so no CLI is needed. Set <code>MINIMAX_API_KEY</code> or <code>MINIMAX_API_TOKEN</code>. Defaults to <code>MiniMax-M3</code> on the global endpoint (<code>https://api.minimax.io/v1</code>); set <code>MINIMAX_API_REGION=cn</code> to use <code>https://api.minimaxi.com/v1</code>, and <code>MINIMAX_MODEL</code> to select another model (for example <code>MiniMax-M2.7</code>).</td>
-</tr>
-</tbody></table>
-<p><strong>How it works:</strong></p>
-<ol>
-<li>Sessions are scanned and inserted into a local SQLite wiki database (<code>wiki.db</code> in your platform config dir — e.g. <code>~/.config/tokscale/</code> on Linux, <code>~/Library/Application Support/tokscale/</code> on macOS)</li>
-<li>Unsummarized sessions are sent to the chosen LLM backend in bat</li>
-</ol>
-<hr>
-<p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
