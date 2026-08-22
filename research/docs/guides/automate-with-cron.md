@@ -285,6 +285,29 @@ Threaded
 
 A specific Telegram topic thread
 
+Bot Chat
+
+`--deliver bot-chat`
+
+Inject output into this profile's canonical Bot Chat — the bot reads it and responds
+
+Bot Chat (named)
+
+`--deliver bot-chat:research`
+
+Another local profile's Bot Chat
+
+### Bot Chat delivery
+
+`bot-chat` targets deliver the job's output **into a profile's canonical "Bot Chat" session as a real message** — the bot receives it like any other message, acts on anything that needs action, and responds in that chat. This is the target to use when you want a bot to _see and react to_ scheduled output instead of just having it archived in Run history.
+
+Things to know:
+
+-   **Machine-local.** The profile must exist on the machine running the scheduler (`hermes profile list`). Names are validated at create time; profiles on other gateways/machines cannot be targeted.
+-   **Costs a bot turn.** Each delivery runs a full agent turn in the target bot's Bot Chat — budget accordingly for high-frequency jobs.
+-   **Combinable.** `--deliver bot-chat,telegram` posts to the bot AND your Telegram home channel. The `all` token never expands to bot-chat targets.
+-   The delivered message is prefixed so the bot knows it came from a scheduled job, not from you.
+
 * * *
 
 ## Tips

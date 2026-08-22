@@ -60,7 +60,7 @@ It's not a coding copilot tethered to an IDE or a chatbot wrapper around a singl
 
 🚀 **[Installation](/docs/getting-started/installation)**
 
-Install in 60 seconds on Linux, macOS, WSL2, native Windows, or Android
+Install in 60 seconds on Linux, macOS, WSL2, native Windows, Nix & NixOS or Android
 
 📖 **[Quickstart Tutorial](/docs/getting-started/quickstart)**
 
@@ -152,7 +152,7 @@ Common questions and solutions
 
 Machine-readable entry points to this documentation:
 
--   **[`/llms.txt`](/docs/assets/files/llms-9ee4a9412414b5571a1f37e257c529e3.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
--   **[`/llms-full.txt`](/docs/assets/files/llms-full-975b36d3611b8c7d8656a82ac226f44b.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
+-   **[`/llms.txt`](/docs/assets/files/llms-fea9e70c1923de8ac8ea9ae1e0f9687a.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
+-   **[`/llms-full.txt`](/docs/assets/files/llms-full-49854d19e2d579260dbb1d8e68576dd8.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
 
 Both files also resolve at `/docs/llms.txt` and `/docs/llms-full.txt`. Generated fresh on every deploy.
