@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph is a local code knowledge graph designed for use with coding agents. It uses a Rust-powered kernel to provide semantic code intelligence through an…">
+<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph is a local code knowledge graph designed for use with coding agents. It uses a Rust-powered kernel to provide semantic code intelligence through an…">
+<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph is a local code knowledge graph designed for use with coding agents. It uses a Rust-powered kernel to provide semantic code intelligence through an…">
+<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+tool+calls&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local code knowledge graph designed for use with coding agents. It uses a Rust-powered kernel to provide semantic code intelligence through an MCP server.",
+  "description": "CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a Rust-powered kernel and maintains a pre-indexed graph that automatically updates as files are modified.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-08-20T17:53:49.000Z",
+  "dateModified": "2026-08-22T18:02:38.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 67662
+    "userInteractionCount": 67700
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>C</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-20</span>
+    <span><span class="meta-label">updated</span>2026-08-22</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local code knowledge graph designed for use with coding agents. It uses a Rust-powered kernel to provide semantic code intelligence through an MCP server.</p>
+    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a Rust-powered kernel and maintains a pre-indexed graph that automatically updates as files are modified.</p>
     <ul class="summary-highlights">
-      <li>Runs 100% locally</li>
-      <li>Supports Windows, macOS, and Linux</li>
-      <li>Includes an auto-sync feature</li>
+      <li>Operates 100% locally with a Rust-powered kernel.</li>
+      <li>Provides an MCP server for integration with multiple coding agents.</li>
+      <li>Automatically syncs the index on every file change.</li>
     </ul>
   </div>
 </section>
@@ -1062,6 +1062,22 @@ only revives embedded git repos, not plain source):</p>
 <p>CodeGraph discovers those files off disk, overriding <code>.gitignore</code>, on index,
 sync, and watch. An explicit <code>exclude</code> still wins, and built-in skips
 (<code>node_modules</code>, <code>dist</code>, <code>.git</code>) are never re-included.</p>
+<p>Sometimes a directory shouldn't leave the index — you still want to find things
+in it — it just shouldn't <em>outrank</em> your real code. A <code>scripts/</code> or
+<code>optional-skills/</code> tree whose helpers use generic names (<code>usage</code>, <code>status</code>,
+<code>run</code>) can win on an exact name match and crowd out the product code that
+actually answers the query. Name those trees under <code>deprioritize</code>:</p>
+<pre><code class="language-json">{
+  "deprioritize": ["optional-skills/", "scripts/"]
+}
+</code></pre>
+<p>This is the ranking counterpart to <code>exclude</code>: those paths stay indexed and
+findable — searching for them directly still works — they just stop winning
+against first-party code. It applies to <code>query</code> / <code>search</code> and to <code>explore</code>'s
+ranking. It is <em>not</em> a filter: unlike the built-in <code>example/</code>, <code>sample/</code>,
+<code>fixture/</code>, <code>benchmark/</code> and <code>demo/</code> handling — which also drops those files
+from some result sets outright — <code>deprioritize</code> only ever changes rank. Reach
+for <code>exclude</code> when you want something gone.</p>
 <h4>Custom file extensions</h4>
 <p>If your project uses a non-standard extension for a <a href="#supported-languages">supported
 language</a> — say <code>.dota_lua</code> for Lua, or <code>.tpl</code> for PHP —
@@ -1084,24 +1100,7 @@ Re-index (<code>codegraph index</code>) after adding or changing mappings.</p>
 <p>CodeGraph collects <strong>anonymous usage statistics</strong> — which tools and commands get
 used, which languages get indexed — to guide where language and agent support
 work goes. <strong>Never</strong> any code, paths, file or symbol names, queries, or IP
-addresses; usage is aggregated locally into daily totals before anything is
-sent, and the ingest endpoint is <a href="telemetry-worker/">public code in this repo</a>
-that enforces the documented field list. The installer asks up front; turn it
-off any time:</p>
-<pre><code class="language-bash">codegraph telemetry off    # or: CODEGRAPH_TELEMETRY=0, or DO_NOT_TRACK=1
-</code></pre>
-<p><a href="https://github.com/colbymchenry/codegraph/blob/main/TELEMETRY.md"><code>TELEMETRY.md</code></a> lists every field, with the off-switches and the
-full data-handling story.</p>
-<h3>Verified releases</h3>
-<p>Every artifact is built and published by the public
-<a href="https://github.com/colbymchenry/codegraph/blob/main/.github/workflows/release.yml">Release workflow</a> — never from a laptop — and
-carries cryptographic proof of it:</p>
-<ul>
-<li><strong>npm packages</strong> are published via <a href="https://docs.npmjs.com/trusted-publishers">trusted publishing</a>
-(OIDC — no long-lived npm tokens exist that could be stolen) with
-<a href="https://docs.npmjs.com/generating-provenance-statements">provenance attestations</a>
-linking every version to the exact commit and workflow run th</li>
-</ul>
+addresses;</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 

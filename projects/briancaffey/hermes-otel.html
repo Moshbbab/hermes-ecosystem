@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="This OpenTelemetry plugin for Hermes Agent exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting to OTLP-compatible…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports various…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="This OpenTelemetry plugin for Hermes Agent exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting to OTLP-compatible…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports various…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="This OpenTelemetry plugin for Hermes Agent exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting to OTLP-compatible…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports various…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "This OpenTelemetry plugin for Hermes Agent exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting to OTLP-compatible backends, including Phoenix, Langfuse, LangSmith, SigNoz, Jaeger, Grafana Tempo, Grafana LGTM, Uptrace, OpenObserve, Honeycomb, and W&B Weave.",
+  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports various OTLP-compatible backends including Phoenix, Langfuse, and SigNoz to track traces, metrics, and logs.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-07-11T00:50:05.000Z",
+  "dateModified": "2026-08-22T14:35:00.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-07-11</span>
+    <span><span class="meta-label">updated</span>2026-08-22</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This OpenTelemetry plugin for Hermes Agent exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting to OTLP-compatible backends, including Phoenix, Langfuse, LangSmith, SigNoz, Jaeger, Grafana Tempo, Grafana LGTM, Uptrace, OpenObserve, Honeycomb, and W&amp;B Weave.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports various OTLP-compatible backends including Phoenix, Langfuse, and SigNoz to track traces, metrics, and logs.</p>
     <ul class="summary-highlights">
-      <li>Exports LLM tool calls and model invocations as OTel spans</li>
-      <li>Supports OTLP HTTP endpoints</li>
-      <li>Provides integration tests for multiple backends</li>
+      <li>Exports LLM tool calls and model invocations as OTel spans.</li>
+      <li>Compatible with OTLP backends like Phoenix, Langfuse, and Jaeger.</li>
+      <li>Includes a four-tier test suite for unit, integration, and E2E testing.</li>
     </ul>
   </div>
 </section>
@@ -181,9 +181,13 @@
 <li>For OpenObserve see <a href="https://github.com/briancaffey/hermes-otel/blob/main/docker-compose/openobserve.yaml">docker-compose/openobserve.yaml</a> and <a href="https://github.com/briancaffey/hermes-otel/blob/main/docker-compose/openobserve/README.md">docker-compose/openobserve/README.md</a></li>
 </ul>
 <h3>Installation</h3>
-<pre><code>hermes plugins install briancaffey/hermes-otel
+<pre><code>hermes plugins install briancaffey/hermes-otel/hermes_otel
 </code></pre>
-<p>The plugin lives in <code>~/.hermes/plugins/hermes_otel/</code> and Hermes auto-discovers it via <code>plugin.yaml</code>. However, the OTel dependencies must be installed into the <strong>hermes-agent virtual environment</strong> (where <code>hermes</code> itself runs):</p>
+<p>The trailing <code>/hermes_otel</code> is the plugin package inside this repo — Hermes installs that
+subdirectory (<del>40 files) rather than the whole repository, so docs, tests and the example
+Compose stacks never land in `</del>/.hermes/plugins/<code>. It unpacks to </code>~/.hermes/plugins/hermes_otel/<code>either way, and Hermes auto-discovers it via</code>plugin.yaml`.</p>
+<p>The OTel dependencies must then be installed into the <strong>hermes-agent virtual environment</strong>
+(where <code>hermes</code> itself runs) — Hermes never installs plugin dependencies for you:</p>
 <pre><code class="language-bash"># Install OTel runtime dependencies into the hermes-agent venv
 ~/git/hermes-agent/venv/bin/pip install \
   opentelemetry-api \
@@ -193,12 +197,16 @@
 # Optional: for LangSmith time-ordered run IDs
 ~/git/hermes-agent/venv/bin/pip install langsmith
 </code></pre>
-<p>You can also install the plugin package itself in editable mode (this pulls in the same OTel deps automatically):</p>
-<pre><code class="language-bash">~/git/hermes-agent/venv/bin/pip install -e ~/.hermes/plugins/hermes_otel
+<p>The same list ships with the plugin, so this is equivalent:</p>
+<pre><code class="language-bash">~/git/hermes-agent/venv/bin/pip install -r ~/.hermes/plugins/hermes_otel/requirements.txt
+</code></pre>
+<p>Working from a clone instead? An editable install of the repo pulls the same dependencies
+and makes <code>pip show hermes-otel</code> report a real version:</p>
+<pre><code class="language-bash">~/git/hermes-agent/venv/bin/pip install -e ~/git/hermes-otel
 </code></pre>
 <h4>Running tests</h4>
 <p>The test suite uses its own isolated environment via <code>uv</code> and does <strong>not</strong> require the hermes-agent venv:</p>
-<pre><code class="language-bash">cd ~/.hermes/plugins/hermes_otel
+<pre><code class="language-bash">cd ~/git/hermes-otel   # a clone of this repo, not the installed plugin dir
 
 # Unit + integration tests (no Docker needed, &lt;1s)
 uv run --extra dev pytest
@@ -289,7 +297,7 @@ uv run --extra dev --extra e2e pytest -m smoke
 </code></pre>
 <p><strong>Langfuse</strong> — full stack (Langfuse + Postgres + Redis + ClickHouse + MinIO), starts in ~60s:</p>
 <pre><code class="language-bash">docker compose -f docker-compose/langfuse.yaml up -d
-# Pre-seeded API keys: lf_pk_test_hermes_otel / lf_sk_test_hermes_otel
+# Pre-seeded API keys: lf_pk_hermes_dev / lf_sk_hermes_dev
 # UI at http://localhost:3000, OTEL endpoint at http://localhost:3000/api/public/otel
 </code></pre>
 <p>The E2E fixtures will start/stop Docker services automatically if they aren't already running. If a service is already running on the expected port, it is reused.</p>
@@ -318,8 +326,7 @@ the yaml file, env-var detection is skipped.</p>
 <h4>Multi-backend (<code>config.yaml</code>)</h4>
 <p>A fully annotated template lives at <a href="https://github.com/briancaffey/hermes-otel/blob/main/config.yaml.example"><code>config.yaml.example</code></a>
 in the plugin root. Copy it to <code>config.yaml</code> and edit in place:</p>
-<pre><code class="language-bash">cp ~/.hermes/plugins/hermes_otel/config.yaml.example \
-   ~/.hermes/plugins/hermes_otel/config.yaml
+<pre><code class="language-bash">cp config.yaml.example ~/.hermes/hermes_otel.yaml
 </code></pre>
 <p><code>config.yaml</code> is gitignored so local endpoints and (avoidable) secrets
 never get committed. Only <code>config.yaml.example</code> is tracked. A minimal
@@ -465,7 +472,7 @@ export HERMES_OTEL_DEBUG=true             # Enable debug logging (see below)
 <p>Debug output is written to <code>~/.hermes/plugins/hermes_otel/debug.log</code> and does not clutter hermes stdout.</p>
 <p><strong>Priority order:</strong> LangSmith (if <code>LANGSMITH_TRACING=true</code>) &gt; Langfuse (if credentials set) &gt; SigNoz (<code>OTEL_SIGNOZ_ENDPOINT</code>) &gt; Uptrace (<code>OTEL_UPTRACE_ENDPOINT</code> + DSN) &gt; OpenObserve (<code>OTEL_OPENOBSERVE_ENDPOINT</code> + creds) &gt; Weave (<code>WANDB_API_KEY</code> + <code>WANDB_ENTITY</code> + <code>WANDB_PROJECT</code>) &gt; Honeycomb (<code>HONEYCOMB_API_KEY</code>) &gt; Jaeger (<code>OTEL_JAEGER_ENDPOINT</code>) &gt; Tempo (<code>OTEL_TEMPO_ENDPOINT</code>) &gt; Phoenix (<code>OTEL_PHOENIX_ENDPOINT</code>).</p>
 <h4>Shaping knobs — <code>config.yaml</code> and <code>HERMES_OTEL_*</code> env vars</h4>
-<p>Backend selection stays env-var-driven (above). For telemetry <strong>shaping</strong> — sampling, preview size, resource attributes, TTL, extra headers — you can also use a YAML file at <code>~/.hermes/plugins/hermes_otel/config.yaml</code>.</p>
+<p>Backend selection stays env-var-driven (above). For telemetry <strong>shaping</strong> — sampling, preview size, resource attributes, TTL, extra headers — you can also use a YAML file at <code>~/.hermes/hermes_otel.yaml</code> (or wherever <code>HERMES_OTEL_CONFIG</code> points). The legacy location inside the plugin directory still works, but a reinstall replaces that directory.</p>
 <p><strong>Precedence (per-field):</strong> <code>HERMES_OTEL_*</code> env var &gt; <code>config.yaml</code> value &gt; default.</p>
 <p>Example <code>config.yaml</code>:</p>
 <pre><code class="language-yaml">enabled: true
@@ -955,7 +962,7 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 413</div>
+        <div class="stars">★ 417</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -963,7 +970,7 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
         <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
-        <div class="stars">★ 14</div>
+        <div class="stars">★ 15</div>
         <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
       </a>
       <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
