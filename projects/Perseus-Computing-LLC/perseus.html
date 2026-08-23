@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus#software",
   "name": "perseus",
-  "description": "Perseus is a local-first context engine that resolves live workspace state into verified facts for AI agents before the context window opens. It functions as a three-layer platform comprising a context engine for workspace briefings, a vault for persistent memory, and a ledger for recording hash-chained events.",
+  "description": "Perseus is a local-first context engine that resolves live workspace state into verified facts for AI agents before the context window opens. It functions as a three-layer platform comprising a context engine for workspace briefings, a vault for durable memory persistence, and a ledger for event reconstruction.",
   "url": "https://hermesatlas.com/projects/Perseus-Computing-LLC/perseus",
   "codeRepository": "https://github.com/Perseus-Computing-LLC/perseus",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "Perseus-Computing-LLC",
     "url": "https://github.com/Perseus-Computing-LLC"
   },
-  "dateModified": "2026-08-23T02:13:15.000Z",
+  "dateModified": "2026-08-23T18:06:22.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Perseus is a local-first context engine that resolves live workspace state into verified facts for AI agents before the context window opens. It functions as a three-layer platform comprising a context engine for workspace briefings, a vault for persistent memory, and a ledger for recording hash-chained events.</p>
+    <p class="summary-text">Perseus is a local-first context engine that resolves live workspace state into verified facts for AI agents before the context window opens. It functions as a three-layer platform comprising a context engine for workspace briefings, a vault for durable memory persistence, and a ledger for event reconstruction.</p>
     <ul class="summary-highlights">
-      <li>Resolves live workspace state into rendered context files like AGENTS.md.</li>
-      <li>Operates as a local-first MCP-native server with no required external services.</li>
-      <li>Integrates with Perseus Vault for SQLite-backed durable memory and semantic recall.</li>
+      <li>Resolves live workspace state into rendered context files or MCP servers.</li>
+      <li>Provides local-first storage using SQLite and bundled offline embeddings.</li>
+      <li>Supports multiple assistant profiles including Claude, Cursor, and Hermes.</li>
     </ul>
   </div>
 </section>
@@ -399,6 +399,10 @@ docker run --rm -v /path/to/workspace:/workspace perseus mcp serve
 <tr>
 <td><code>perseus_context_diff</code></td>
 <td>Render a compact 'Since last session' delta (#714): git branch/commits, Agora task-board changes, new inbox messages, new checkpoints, and new vault session memories since the last recorded snapshot. Use at the top of a context document so the assistant spends zero turns re-orienting on unchanged state. Maintains its own per-workspace snapshot (refresh debounced by render.context_diff_min_age_s); reset=true forces a new baseline. Never cached.</td>
+</tr>
+<tr>
+<td><code>perseus_context_inspect</code></td>
+<td>Read-only progressive-disclosure projection of a compiled context run: high-signal summary, separated rendered-token budget ledgers, bounded selection decisions, DAG/evidence/quality commitments, and deterministic fixture replay metadata. Raw prompts, credentials, tool payloads, and unredacted bodies are excluded.</td>
 </tr>
 <tr>
 <td><code>perseus_context_ask</code></td>
@@ -992,20 +996,12 @@ speculate:
   confidence_threshold: 0.30 # only warm predictions at/above this probability
   intents:                   # intent pattern (fnmatch) → prefetch directive line(s)
     "deploy*":
-      - '@read "runbook.md" @cache ttl=300'
-    "review*":
-      - '@query "git log --oneline -10" @cache ttl=120'
-</code></pre>
-<pre><code class="language-markdown">@perseus v1
+      - '@read 
 
-Your context here...
-@speculate k=3 budget=2000
+---
+
+*README truncated. [Continue reading on GitHub](https://github.com/Perseus-Computing-LLC/perseus#readme)*
 </code></pre>
-<p>The <code>@speculate</code> pragma never appears in rendered output; <code>k=</code> / <code>budget=</code>
-override the config for that source. Speculation is synchronous-after-render:
-it can never</p>
-<hr>
-<p><em>README truncated. <a href="https://github.com/Perseus-Computing-LLC/perseus#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1022,7 +1018,7 @@ it can never</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 20.9K</div>
+        <div class="stars">★ 21.0K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1034,11 +1030,11 @@ it can never</p>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 199</div>
+        <div class="stars">★ 200</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 259</div>
+        <div class="stars">★ 260</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

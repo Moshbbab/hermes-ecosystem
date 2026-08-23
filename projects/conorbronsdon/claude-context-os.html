@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/claude-context-os — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Context OS is a Git-backed framework for managing agent context and workflows using Markdown files. It provides a structured lifecycle for Claude Code, Codex,…">
+<meta name="description" content="Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use with coding agents. It uses…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta property="og:description" content="Context OS is a Git-backed framework for managing agent context and workflows using Markdown files. It provides a structured lifecycle for Claude Code, Codex,…">
+<meta property="og:description" content="Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use with coding agents. It uses…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta name="twitter:description" content="Context OS is a Git-backed framework for managing agent context and workflows using Markdown files. It provides a structured lifecycle for Claude Code, Codex,…">
+<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use with coding agents. It uses…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=claude-context-os&amp;subtitle=A+Git-backed+context+and+workflow+layer+for+Claude+Code%2C+Codex%2C+Hermes+Agent%2C+and+compatible+coding+agents.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os#software",
   "name": "claude-context-os",
-  "description": "Context OS is a Git-backed framework for managing agent context and workflows using Markdown files. It provides a structured lifecycle for Claude Code, Codex, and Hermes to share state, project instructions, and decision logs across different coding assistants.",
+  "description": "Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use with coding agents. It uses a deterministic lifecycle kernel to manage session handoffs, checkpoints, and memory proposals through hash-checked receipts rather than relying on an agent's native memory.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os",
   "codeRepository": "https://github.com/conorbronsdon/claude-context-os",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-08-22T06:53:30.000Z",
+  "dateModified": "2026-08-23T11:50:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-22</span>
+    <span><span class="meta-label">updated</span>2026-08-23</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Context OS is a Git-backed framework for managing agent context and workflows using Markdown files. It provides a structured lifecycle for Claude Code, Codex, and Hermes to share state, project instructions, and decision logs across different coding assistants.</p>
+    <p class="summary-text">Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use with coding agents. It uses a deterministic lifecycle kernel to manage session handoffs, checkpoints, and memory proposals through hash-checked receipts rather than relying on an agent's native memory.</p>
     <ul class="summary-highlights">
-      <li>Uses Git to track changes in durable Markdown context files.</li>
-      <li>Provides a shared lifecycle core for session starts and handoffs.</li>
-      <li>Includes a migration workflow for importing selected chat and project data.</li>
+      <li>Stores durable context, workflows, and decision logs in plain Markdown.</li>
+      <li>Provides a shared lifecycle kernel for Claude Code, Codex, and Hermes.</li>
+      <li>Includes a migration workflow to convert chat archives into reviewable files.</li>
     </ul>
   </div>
 </section>
@@ -166,7 +166,10 @@
 </div>
 
 <p>Chat history, project instructions, and copied prompts drift apart. Context OS puts the durable parts in plain Markdown: who you are, what you are working on, decisions already made, and the workflows you want an agent to follow.</p>
-<p>Claude Code and Codex read the same repository state. Git shows what changed. A reviewed start, checkpoint, and close loop keeps the context current without treating an assistant's private memory as the source of truth.</p>
+<p>Claude Code, Codex, and Hermes read the same repository state. A deterministic
+lifecycle kernel turns reviewed setup, checkpoint, and close requests into
+hash-checked proposals and receipts, without treating native memory as the
+source of truth.</p>
 <table>
 <thead>
 <tr>
@@ -180,7 +183,7 @@
 </tr>
 <tr>
 <td>Work across coding agents</td>
-<td>Provider-neutral state and skills live outside host adapters. Claude Code and Codex share the same lifecycle core.</td>
+<td>Provider-neutral state, skills, and lifecycle transitions live outside host adapters. Claude Code, Codex, and Hermes share the same kernel.</td>
 </tr>
 <tr>
 <td>Add the tools that fit</td>
@@ -204,6 +207,7 @@ git remote add origin &lt;YOUR_PRIVATE_REPO_URL&gt;
 # Pick a host, or omit --agent to auto-detect one:
 bash scripts/setup.sh --agent claude
 # bash scripts/setup.sh --agent codex
+# bash scripts/setup.sh --agent hermes
 </code></pre>
 <p>Then start your agent from the repository root:</p>
 <table>
@@ -219,7 +223,11 @@ bash scripts/setup.sh --agent claude
 </tr>
 <tr>
 <td>New workspace in Codex</td>
-<td>Run <code>$context-setup</code></td>
+<td>Run <code>$setup</code></td>
+</tr>
+<tr>
+<td>New workspace in Hermes</td>
+<td>Run <code>/setup</code> after exposing the repository skills</td>
 </tr>
 <tr>
 <td>Existing context in another assistant</td>
@@ -233,8 +241,10 @@ bash scripts/setup.sh --agent claude
 <p>The setup interview fills the identity, first project, workflows, and weekly state files. It can start from your answers or from a migration packet you reviewed first. See the full <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/getting-started.md">getting started guide</a> for prerequisites, privacy choices, and verification.</p>
 <h3>See the loop</h3>
 <p><img src="https://raw.githubusercontent.com/conorbronsdon/claude-context-os/main/docs/assets/start-demo.gif" alt="A start session in Claude Code: state files load and a session briefing comes back, using sample data from the included example musician project" loading="lazy" decoding="async"></p>
-<p><code>/start</code> in Claude Code and <code>$context-start</code> in Codex read your state, priorities, decisions, blockers, and recent handoff. The result is a working briefing grounded in files, not a request to reconstruct everything from chat.</p>
-<p>At the end, <code>/end</code> or <code>$context-end</code> proposes a handoff for review before it updates <code>sessions/</code> and <code>state/</code>.</p>
+<p><code>/start</code> in Claude Code or Hermes and <code>$start</code> in Codex read your state,
+priorities, decisions, blockers, and recent handoff. The result is grounded in
+files rather than reconstructed from chat.</p>
+<p>At the end, <code>/end</code> or <code>$end</code> proposes a handoff for review before it updates <code>sessions/</code> and <code>state/</code>. The namespaced <code>$context-end</code> form remains supported.</p>
 <p><sub>The GIF is scripted with sample data. <a href="docs/start-demo.tape"><code>docs/start-demo.tape</code></a> regenerates it, and <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/demo/start-session.sh"><code>docs/demo/start-session.sh</code></a> contains the transcript. Neither reads your state or calls a model.</sub></p>
 <h3>Daily workflow</h3>
 <p>Start small. Use the core loop for a week, add one active project, then turn a repeated task into a skill when the repetition is clear.</p>
@@ -244,34 +254,41 @@ bash scripts/setup.sh --agent claude
 <th>Moment</th>
 <th>Claude Code</th>
 <th>Codex</th>
+<th>Hermes</th>
 <th>Shared result</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>First run or major refresh</td>
 <td><code>/setup</code></td>
-<td><code>$context-setup</code></td>
-<td>Identity, projects, workflows, and weekly state</td>
+<td><code>$setup</code></td>
+<td><code>/setup</code></td>
+<td>Reviewed context proposal</td>
 </tr>
 <tr>
 <td>Start work</td>
 <td><code>/start</code></td>
-<td><code>$context-start</code></td>
-<td>Briefing from current state and recent sessions</td>
+<td><code>$start</code></td>
+<td><code>/start</code></td>
+<td>Read-only continuity inventory and briefing</td>
 </tr>
 <tr>
 <td>Save a checkpoint</td>
 <td><code>/update</code></td>
-<td><code>$context-update</code></td>
-<td>Short session update with minimal state churn</td>
+<td><code>$update</code></td>
+<td><code>/update</code></td>
+<td>Hash-checked update and receipt</td>
 </tr>
 <tr>
 <td>Finish work</td>
 <td><code>/end</code></td>
-<td><code>$context-end</code></td>
-<td>Reviewed handoff, state updates, decisions, and git safety report</td>
+<td><code>$end</code></td>
+<td><code>/end</code></td>
+<td>Hash-checked handoff, decisions, and receipt</td>
 </tr>
 </tbody></table>
+<p>The namespaced <code>$context-setup</code>, <code>$context-start</code>, <code>$context-update</code>, and
+<code>$context-end</code> invocations remain available for compatibility.</p>
 <p>Claude Code also ships host-specific commands for capture, daily checks, recovery, context search, and auto-memory curation. The <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/codex-onboarding.md#host-specific-boundaries">host boundary</a> names what is portable and what is not.</p>
 <h3>Bring existing context with you</h3>
 <p>Do not import an entire chat archive into active context. Use the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/migration-guide.md">migration guide</a> to:</p>
@@ -297,11 +314,11 @@ bash scripts/setup.sh --agent claude
 </tr>
 <tr>
 <td>Codex</td>
-<td>First-class shared lifecycle and repository skills; no claim of Claude hook or auto-memory parity</td>
+<td>First-class lifecycle, repository skills, trusted project hooks, and the shared deterministic kernel; native memory remains outside the contract</td>
 </tr>
 <tr>
 <td>Hermes Agent</td>
-<td>Reads <code>AGENTS.md</code> automatically; installs the portable lifecycle skills as slash commands (<code>hermes skills install</code>); native memory mapping in <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/memory-across-agents.md">memory across agents</a>; no Claude hook or auto-memory parity</td>
+<td><code>AGENTS.md</code>, portable skills, the shared kernel, and optional hook adapter; copied skills and native memory remain explicit host boundaries</td>
 </tr>
 <tr>
 <td>Gemini CLI / Antigravity CLI</td>
@@ -326,45 +343,45 @@ bash scripts/setup.sh --agent claude
 <tr>
 <th>Capability</th>
 <th align="right">Shared</th>
-<th align="right">Claude Code adapter</th>
-<th align="right">Codex adapter</th>
+<th align="right">Claude Code</th>
+<th align="right">Codex</th>
+<th align="right">Hermes</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>Identity, project, state, and session files</td>
 <td align="right">Yes</td>
-<td align="right">Reads the repository</td>
-<td align="right">Reads the repository</td>
+<td align="right">Reads</td>
+<td align="right">Reads</td>
+<td align="right">Reads</td>
 </tr>
 <tr>
-<td>Lifecycle workflow core</td>
+<td>Deterministic proposal/apply and receipts</td>
 <td align="right">Yes</td>
-<td align="right"><code>/setup</code>, <code>/start</code>, <code>/update</code>, <code>/end</code></td>
-<td align="right"><code>$context-setup</code>, <code>$context-start</code>, <code>$context-update</code>, <code>$context-end</code></td>
+<td align="right">Adapter</td>
+<td align="right">Native skill calls</td>
+<td align="right">Installed skill calls</td>
 </tr>
 <tr>
-<td>Reusable provider-neutral skills</td>
-<td align="right">Yes</td>
-<td align="right">Thin slash commands when needed</td>
-<td align="right">Repository skills under <code>.agents/skills/</code></td>
+<td>Lifecycle vocabulary</td>
+<td align="right">Semantics</td>
+<td align="right"><code>/setup</code> etc.</td>
+<td align="right"><code>$setup</code> etc.</td>
+<td align="right"><code>/setup</code> etc.</td>
 </tr>
 <tr>
-<td>Checked-in hooks and settings</td>
+<td>Project hooks</td>
+<td align="right">Event contract only</td>
+<td align="right"><code>.claude/</code></td>
+<td align="right"><code>.codex/</code></td>
+<td align="right">Optional adapter</td>
+</tr>
+<tr>
+<td>Native memory</td>
 <td align="right">No</td>
-<td align="right">Included</td>
-<td align="right">No equivalent claimed</td>
-</tr>
-<tr>
-<td>Claude auto-memory and <code>/dream</code></td>
-<td align="right">No</td>
-<td align="right">Included</td>
-<td align="right">Use repository state and sessions for shared continuity</td>
-</tr>
-<tr>
-<td>Browser project knowledge</td>
-<td align="right">Selected files only</td>
-<td align="right">Manual upload to claude.ai</td>
-<td align="right">Product-specific import or attachment flows remain separate</td>
+<td align="right">Claude auto-memory</td>
+<td align="right">Outside contract</td>
+<td align="right"><code>MEMORY.md</code> / <code>USER.md</code></td>
 </tr>
 </tbody></table>
 <p>The shared layer is intentionally plain files. Provider-specific tool names, hooks, permissions, and memory features stay in their adapter directories.</p>
@@ -373,7 +390,7 @@ bash scripts/setup.sh --agent claude
 <p>Start with the task-based <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/integrations-guide.md">integration chooser</a>, add at most one new trust boundary at a time, then read the selected generated entry in full.</p>
 <p>The current catalog includes portable skill collections and creator tools, plus reviewed paths for Tolaria MCP, Obsidian CLI, Beads for Gemini CLI, Granola MCP, Google Workspace CLI, Notion MCP, and Substack MCP. <code>listed</code> and <code>experimental</code> entries are leads, not endorsements. Setup never installs, authenticates, or activates them.</p>
 <h3>Repository layout</h3>
-<pre><code class="language-text">AGENTS.md                  Codex repository instructions
+<pre><code class="language-text">AGENTS.md                  Portable repository instructions
 CLAUDE.md                  Claude Code root context and adapter index
 ROUTING.md                 Task-to-context routing table
 TODO.md                    Full backlog
@@ -382,9 +399,13 @@ projects/                  Project context and project-specific workflows
 state/                     Current focus, priorities, blockers, and decisions
 sessions/                  Reviewed session handoffs
 .agents/skills/            Provider-neutral workflow cores
+contextos/                 Deterministic lifecycle kernel
 .claude/commands/          Claude Code slash-command adapters
 .claude/skills/            Claude Code-only skills
 .claude/hooks/             Claude Code-only safety and session hooks
+.codex/hooks.json          Codex lifecycle advisory adapter
+adapters/hermes/           Hermes installation and optional hook adapter
+runtimes/                  Machine-readable capability manifests
 integrations/              Machine-checked opt-in integration catalog
 references/                Generated catalog and integration setup notes
 scripts/                   Setup, validation, migration, and maintenance tools
@@ -482,7 +503,7 @@ docs/                      Onboarding, architecture, safety, and migration guide
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 20.9K</div>
+        <div class="stars">★ 21.0K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -494,11 +515,11 @@ docs/                      Onboarding, architecture, safety, and migration guide
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 199</div>
+        <div class="stars">★ 200</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 259</div>
+        <div class="stars">★ 260</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
