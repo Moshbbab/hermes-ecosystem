@@ -2,7 +2,35 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/guides/aws-bedrock
 
-Hermes Agent supports Amazon Bedrock as a native provider using the **Converse API** — not the OpenAI-compatible endpoint. This gives you full access to the Bedrock ecosystem: IAM authentication, Guardrails, cross-region inference profiles, and all foundation models.
+Hermes Agent supports Amazon Bedrock as a native provider. This gives you full access to the Bedrock ecosystem: IAM authentication, Guardrails, cross-region inference profiles, and all foundation models.
+
+Hermes routes each model family through the API that serves it best:
+
+Model family
+
+API route
+
+Why
+
+Anthropic Claude
+
+Anthropic SDK (`AnthropicBedrock`)
+
+Prompt caching, thinking budgets, adaptive thinking — features not exposed via Converse
+
+OpenAI GPT-5.5 / GPT-5.6 (Sol, Terra, Luna)
+
+Bedrock Mantle **OpenAI Responses** endpoint (`bedrock-mantle.<region>.api.aws/openai/v1`)
+
+These models are Mantle-only — their model cards list bedrock-runtime/Converse as unsupported
+
+Everything else (Nova, DeepSeek, Llama, GPT-OSS, …)
+
+Native **Converse API** (`bedrock-runtime`)
+
+Full Bedrock feature set: Guardrails, inference profiles, streaming
+
+All three routes share the same AWS credential chain and region resolution — no separate configuration is needed. Requests to the Mantle endpoint are authenticated with `AWS_BEARER_TOKEN_BEDROCK` when set, or SigV4-signed via the standard boto3 credential chain otherwise.
 
 ## Prerequisites
 
@@ -120,6 +148,30 @@ Claude Haiku 4.5
 
 Fastest Claude
 
+OpenAI GPT-5.6 Sol
+
+`openai.gpt-5.6-sol`
+
+OpenAI frontier model (via Bedrock Mantle)
+
+OpenAI GPT-5.6 Terra
+
+`openai.gpt-5.6-terra`
+
+Balanced (via Bedrock Mantle)
+
+OpenAI GPT-5.6 Luna
+
+`openai.gpt-5.6-luna`
+
+Fast, affordable (via Bedrock Mantle)
+
+OpenAI GPT-5.5
+
+`openai.gpt-5.5`
+
+Previous OpenAI flagship (via Bedrock Mantle)
+
 Amazon Nova Pro
 
 `us.amazon.nova-pro-v1:0`
@@ -146,7 +198,7 @@ Meta's latest
 
 Cross-Region Inference
 
-Models prefixed with `us.` use cross-region inference profiles, which provide better capacity and automatic failover across AWS regions. Models prefixed with `global.` route across all available regions worldwide.
+Models prefixed with `us.` use cross-region inference profiles, which provide better capacity and automatic failover across AWS regions. Models prefixed with `global.` route across all available regions worldwide. OpenAI `openai.*` model IDs are served by Bedrock Mantle in the configured region and don't use inference-profile prefixes.
 
 ## Switching Models Mid-Session
 

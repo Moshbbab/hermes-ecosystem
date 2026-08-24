@@ -122,7 +122,7 @@ Otherwise, provide a concise summary of the activity." --name "Repo watcher" --d
 
 Self-Contained Prompts
 
-Notice how the prompt includes the exact `gh` commands. The cron agent has no memory of previous runs or your preferences — spell everything out.
+Notice how the prompt includes the exact `gh` commands. The cron agent has no conversation history from previous runs — spell everything out. (Persistent memory does load, so durable preferences saved to MEMORY.md carry over, but don't rely on it for job-critical details.)
 
 * * *
 
@@ -284,6 +284,29 @@ Threaded
 `--deliver telegram:-1001234567890:17585`
 
 A specific Telegram topic thread
+
+Bot Chat
+
+`--deliver bot-chat`
+
+Inject output into this profile's canonical Bot Chat — the bot reads it and responds
+
+Bot Chat (named)
+
+`--deliver bot-chat:research`
+
+Another local profile's Bot Chat
+
+### Bot Chat delivery
+
+`bot-chat` targets deliver the job's output **into a profile's canonical "Bot Chat" session as a real message** — the bot receives it like any other message, acts on anything that needs action, and responds in that chat. This is the target to use when you want a bot to _see and react to_ scheduled output instead of just having it archived in Run history.
+
+Things to know:
+
+-   **Machine-local.** The profile must exist on the machine running the scheduler (`hermes profile list`). Names are validated at create time; profiles on other gateways/machines cannot be targeted.
+-   **Costs a bot turn.** Each delivery runs a full agent turn in the target bot's Bot Chat — budget accordingly for high-frequency jobs.
+-   **Combinable.** `--deliver bot-chat,telegram` posts to the bot AND your Telegram home channel. The `all` token never expands to bot-chat targets.
+-   The delivered message is prefixed so the bot knows it came from a scheduled job, not from you.
 
 * * *
 

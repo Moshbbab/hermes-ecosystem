@@ -190,11 +190,23 @@ OpenCode Zen
 
 `OPENCODE_ZEN_API_KEY`
 
+CommandCode
+
+`commandcode` (alias `commandcode-chat`; Claude via `commandcode-anthropic`)
+
+`COMMANDCODE_API_KEY`
+
 OpenCode Go
 
 `opencode-go`
 
 `OPENCODE_GO_API_KEY`
+
+OpenCode Free
+
+`opencode-free`
+
+— (keyless, no credential)
 
 Kilo Code
 
@@ -444,6 +456,12 @@ Title Generation
 Session title summaries
 
 `auxiliary.title_generation`
+
+Review
+
+`/review` reviewer subagent (full agent, not a single LLM call)
+
+`auxiliary.review`
 
 Triage Specifier
 
