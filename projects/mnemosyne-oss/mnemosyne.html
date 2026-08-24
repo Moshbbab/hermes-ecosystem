@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mnemosyne-oss/mnemosyne — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server support for storing and…">
+<meta name="description" content="Mnemosyne is a SQLite-backed AI memory system designed for local use with one pure-Python dependency. It provides a memory layer for agent frameworks and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta property="og:description" content="Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server support for storing and…">
+<meta property="og:description" content="Mnemosyne is a SQLite-backed AI memory system designed for local use with one pure-Python dependency. It provides a memory layer for agent frameworks and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta name="twitter:description" content="Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server support for storing and…">
+<meta name="twitter:description" content="Mnemosyne is a SQLite-backed AI memory system designed for local use with one pure-Python dependency. It provides a memory layer for agent frameworks and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=mnemosyne&amp;subtitle=Zero-cloud+AI+memory+that+works+everywhere.+SQLite-backed.+One+pure-Python+dependency.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server support for storing and recalling information without external cloud services.",
+  "description": "Mnemosyne is a SQLite-backed AI memory system designed for local use with one pure-Python dependency. It provides a memory layer for agent frameworks and Python applications through an SDK, CLI, and Model Context Protocol (MCP) support.",
   "url": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne",
   "codeRepository": "https://github.com/mnemosyne-oss/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "mnemosyne-oss",
     "url": "https://github.com/mnemosyne-oss"
   },
-  "dateModified": "2026-08-23T17:02:03.000Z",
+  "dateModified": "2026-08-24T02:03:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2727
+    "userInteractionCount": 2735
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-23</span>
+    <span><span class="meta-label">updated</span>2026-08-24</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a SQLite-backed memory layer designed for use with various agent frameworks. It provides a Python SDK and MCP server support for storing and recalling information without external cloud services.</p>
+    <p class="summary-text">Mnemosyne is a SQLite-backed AI memory system designed for local use with one pure-Python dependency. It provides a memory layer for agent frameworks and Python applications through an SDK, CLI, and Model Context Protocol (MCP) support.</p>
     <ul class="summary-highlights">
-      <li>Uses a single SQLite database</li>
-      <li>Supports MCP via stdio or SSE</li>
-      <li>Includes a Python SDK for direct memory operations</li>
+      <li>Operates locally using a single SQLite database without cloud dependencies.</li>
+      <li>Supports MCP for integration with Cursor, Claude Code, and Windsurf.</li>
+      <li>Features episodic compression and sub-linear storage growth for memory retrieval.</li>
     </ul>
   </div>
 </section>
@@ -419,6 +419,9 @@ results = recall("user preferences")
 <pre><code class="language-bash"># MCP server (works with any MCP client)
 mnemosyne mcp                          # stdio (default)
 mnemosyne mcp --transport sse --port 8080  # SSE (web clients)
+mnemosyne mcp --transport streamable-http --port 8080  # Streamable HTTP (native MCP http)
+# A non-loopback streamable-http bind also requires MNEMOSYNE_MCP_ALLOWED_HOSTS
+# (and, for browser clients, MNEMOSYNE_MCP_ALLOWED_ORIGINS) -- see docs/cli-reference.md.
 
 # Direct memory ops
 mnemosyne store "User likes dark mode"
