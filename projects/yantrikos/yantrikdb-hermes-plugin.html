@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yantrikos/yantrikdb-hermes-plugin — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="yantrikdb-hermes-plugin is a memory provider for Hermes Agent that offers self-maintaining storage with recency-aware ranking and contradiction tracking. It…">
+<meta name="description" content="yantrikdb-hermes-plugin is a memory provider for Hermes Agent that uses an in-process YantrikDB engine to manage long-term context. It features a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta property="og:description" content="yantrikdb-hermes-plugin is a memory provider for Hermes Agent that offers self-maintaining storage with recency-aware ranking and contradiction tracking. It…">
+<meta property="og:description" content="yantrikdb-hermes-plugin is a memory provider for Hermes Agent that uses an in-process YantrikDB engine to manage long-term context. It features a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta name="twitter:description" content="yantrikdb-hermes-plugin is a memory provider for Hermes Agent that offers self-maintaining storage with recency-aware ranking and contradiction tracking. It…">
+<meta name="twitter:description" content="yantrikdb-hermes-plugin is a memory provider for Hermes Agent that uses an in-process YantrikDB engine to manage long-term context. It features a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=yantrikdb-hermes-plugin&amp;subtitle=YantrikDB+memory+provider+for+NousResearch%2Fhermes-agent+%E2%80%94+self-maintaining+memory+with+benchmarked+recall%2C+self-tuning+ranking%2C+contradiction+tracking%2C+proactive+hygiene%2C+and+expla&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin#software",
   "name": "yantrikdb-hermes-plugin",
-  "description": "yantrikdb-hermes-plugin is a memory provider for Hermes Agent that offers self-maintaining storage with recency-aware ranking and contradiction tracking. It operates as an in-process embedded backend by default and supports features such as proactive memory hygiene, knowledge gap identification, and owner-scoping for multi-user environments.",
+  "description": "yantrikdb-hermes-plugin is a memory provider for Hermes Agent that uses an in-process YantrikDB engine to manage long-term context. It features a self-directing loop that identifies knowledge gaps, tracks contradictions, and ranks memories by recency to prevent constraint loss during session compression.",
   "url": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin",
   "codeRepository": "https://github.com/yantrikos/yantrikdb-hermes-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yantrikos",
     "url": "https://github.com/yantrikos"
   },
-  "dateModified": "2026-08-19T21:39:27.000Z",
+  "dateModified": "2026-08-24T18:44:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-19</span>
+    <span><span class="meta-label">updated</span>2026-08-24</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">yantrikdb-hermes-plugin is a memory provider for Hermes Agent that offers self-maintaining storage with recency-aware ranking and contradiction tracking. It operates as an in-process embedded backend by default and supports features such as proactive memory hygiene, knowledge gap identification, and owner-scoping for multi-user environments.</p>
+    <p class="summary-text">yantrikdb-hermes-plugin is a memory provider for Hermes Agent that uses an in-process YantrikDB engine to manage long-term context. It features a self-directing loop that identifies knowledge gaps, tracks contradictions, and ranks memories by recency to prevent constraint loss during session compression.</p>
     <ul class="summary-highlights">
-      <li>Provides explainable recall with scoring reasons for every result.</li>
-      <li>Automates memory maintenance through a self-directing gap-to-task loop.</li>
-      <li>Supports idempotent writes and first-class contradiction tracking.</li>
+      <li>Provides explainable recall with why_retrieved tags for every result.</li>
+      <li>Includes a self-directing loop to queue and resolve knowledge gaps.</li>
+      <li>Supports owner-scoping for multi-user environments like Discord or Telegram.</li>
     </ul>
   </div>
 </section>
@@ -167,6 +167,7 @@
 <p><strong>YantrikDB as a memory provider for <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a>.</strong> Self-maintaining memory — canonicalizes duplicates, surfaces contradictions, explains recall — in a drop-in plugin. As of <strong>v0.2.0</strong> the default backend is <strong>in-process</strong> (<code>pip install</code> and go, no separate server).</p>
 </blockquote>
 <p>This repository <strong>is</strong> the canonical distribution. Per Hermes maintainer guidance, new memory providers aren't being merged upstream — the recommended pattern is standalone plugins that users install via <code>pip</code> and register with their Hermes home directory. That keeps the version cadence, CI gating, issue triage, and review cycle on the plugin author's side, so fixes ship the same day they're ready instead of waiting on upstream review bandwidth.</p>
+<p><img src="https://raw.githubusercontent.com/yantrikos/yantrikdb-hermes-plugin/main/assets/demos/self-directing/demo.gif" alt="Self-directing memory loop: gap → task → agenda → learn → close" loading="lazy" decoding="async"></p>
 <h3>Why this exists</h3>
 <p>Two recurring observations from the Hermes community map directly to what yantrikdb does:</p>
 <blockquote>
@@ -263,7 +264,6 @@
 </tr>
 </tbody></table>
 <h3>The self-directing substrate (v0.8)</h3>
-<p><img src="https://raw.githubusercontent.com/yantrikos/yantrikdb-hermes-plugin/main/assets/demos/self-directing/demo.gif" alt="Self-directing memory loop: gap → task → agenda → learn → close" loading="lazy" decoding="async"></p>
 <p>The loop no other Hermes memory provider can do — the memory <strong>notices what it doesn't know, queues the work, hands the agent its own agenda, and closes the loop</strong> when the gap is answered. <strong>On by default since v0.10.0</strong> (it was opt-in through v0.9.x, which meant most installs never saw it); bounded to <code>gap_task_max</code> new tasks per session and <code>agenda_max_items</code> prompt lines, and gated on <em>recurring</em> poorly-answered queries so one weak recall can't mint a task. Disable with <code>YANTRIKDB_AUTO_GAP_TASKS=false</code> / <code>YANTRIKDB_SURFACE_AGENDA=false</code>. Runnable via <code>python demos/self_directing_memory.py</code>. Details: <strong><a href="./assets/demos/self-directing/">assets/demos/self-directing/</a></strong>.</p>
 <h4>Running an agent 24/7</h4>
 <p>Hermes fires <code>on_session_end</code> only at real session boundaries — CLI exit, <code>/reset</code>, gateway session expiry. An always-on deployment (a Pi, a Telegram or Discord gateway) can go a long time without one, so since <strong>v0.12.0</strong> consolidation and the self-directing gap-to-task loop also run on a cadence: every <code>YANTRIKDB_MAINTENANCE_CADENCE_TURNS</code> turns (default 40) once <code>YANTRIKDB_MAINTENANCE_MIN_INTERVAL_SECONDS</code> (default 1800) have passed. Both conditions must hold, it runs in the background, and never two at once. Set the cadence to <code>0</code> for session-end only.</p>
@@ -848,7 +848,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 63.9K</div>
+        <div class="stars">★ 64.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -864,7 +864,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 200</div>
+        <div class="stars">★ 201</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">

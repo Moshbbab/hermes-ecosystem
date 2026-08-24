@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/jiawood2006/hermes-skills#software",
   "name": "hermes-skills",
-  "description": "Hermes Skills is an open-source collection of ready-to-use tools for Hermes/Agent and other agents compatible with the agentskills.io standard. The project provides specific modules for video transcription, AI text rewriting, local OCR, and e-commerce image generation.",
+  "description": "Hermes Skills is an open-source collection of ready-to-use tools for Hermes/Agent and other agents compatible with the agentskills.io standard. The project provides specific modules for video transcription, AI text rewriting, local OCR, e-commerce image generation, and engineering project management via WeChat.",
   "url": "https://hermesatlas.com/projects/jiawood2006/hermes-skills",
   "codeRepository": "https://github.com/jiawood2006/hermes-skills",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "jiawood2006",
     "url": "https://github.com/jiawood2006"
   },
-  "dateModified": "2026-08-24T01:45:03.000Z",
+  "dateModified": "2026-08-24T16:17:40.000Z",
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
   }
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Skills is an open-source collection of ready-to-use tools for Hermes/Agent and other agents compatible with the agentskills.io standard. The project provides specific modules for video transcription, AI text rewriting, local OCR, and e-commerce image generation.</p>
+    <p class="summary-text">Hermes Skills is an open-source collection of ready-to-use tools for Hermes/Agent and other agents compatible with the agentskills.io standard. The project provides specific modules for video transcription, AI text rewriting, local OCR, e-commerce image generation, and engineering project management via WeChat.</p>
     <ul class="summary-highlights">
-      <li>Supports video-to-text transcription via links or local files.</li>
-      <li>Provides local OCR for PDFs and images to ensure privacy.</li>
-      <li>Includes batch e-commerce material generation with brand overlays.</li>
+      <li>Includes video-to-text extraction for Douyin and local files.</li>
+      <li>Provides local, private OCR for PDFs and images.</li>
+      <li>Supports batch e-commerce material generation with brand overlays.</li>
     </ul>
   </div>
 </section>
@@ -192,6 +192,11 @@
 <td align="left">素材工坊：场景图+卖点合成一条龙</td>
 <td align="left"><strong>ecommerce-material-studio</strong></td>
 </tr>
+<tr>
+<td align="left">🏗️ 工程项目资料太多理不清？</td>
+<td align="left">微信对话式 AI 工程顾问（记忆图谱+多群）</td>
+<td align="left"><strong>ai-project-advisor</strong></td>
+</tr>
 </tbody></table>
 <hr>
 <h3>📦 技能清单 / Skill List</h3>
@@ -219,6 +224,12 @@
 <li><strong>English</strong>: Batch e-commerce images (main/detail/scene), auto product-scale + brand overlay</li>
 <li><strong>适用</strong>：淘宝/拼多多/快手商家素材生产</li>
 </ul>
+<h4>5️⃣ ai-project-advisor · AI 工程顾问</h4>
+<ul>
+<li><strong>中文</strong>：微信/企微对话式工程项目顾问——记录项目事实、盯关键节点、提醒风险</li>
+<li><strong>English</strong>: WeChat/WeCom conversational engineering project advisor — records facts, tracks milestones, alerts risks</li>
+<li><strong>适用</strong>：工程公司老板/项目经理的项目管理助手</li>
+</ul>
 <hr>
 <h3>🚀 安装 / Installation</h3>
 <pre><code class="language-bash"># 方式一：hermes skills 命令（推荐）
@@ -226,18 +237,57 @@ hermes skills install jiawood2006/hermes-skills/skills/video-to-text
 hermes skills install jiawood2006/hermes-skills/skills/de-ai-writer
 hermes skills install jiawood2006/hermes-skills/skills/doc-ocr
 hermes skills install jiawood2006/hermes-skills/skills/ecommerce-material-studio
+hermes skills install jiawood2006/hermes-skills/skills/ai-project-advisor
 
 # 方式二：复制目录（任意 Agent 都可用）
-cp -r skills/video-to-text skills/de-ai-writer skills/doc-ocr skills/ecommerce-material-studio ~/.hermes/skills/
+cp -r skills/* ~/.hermes/skills/
 </code></pre>
 <blockquote>
 <p>💡 兼容 agentskills.io 开放标准——其他支持 Skills 的 Agent 也能用。</p>
 </blockquote>
 <hr>
 <h3>🖼️ 效果示例 / Demo</h3>
-<p><img src="https://raw.githubusercontent.com/jiawood2006/hermes-skills/main/docs/demo-ecommerce.jpg" alt="电商素材工坊效果示例" loading="lazy" decoding="async"></p>
-<p><em>电商素材工坊输出示例：三头浮动剃须刀主图（渐变背景+卖点文字）</em>
-<em>E-commerce Material Studio output: floating-head shaver main image (gradient + selling points)</em></p>
+<h4>🛒 电商素材工坊：白底图 → 使用场景图</h4>
+<table>
+<thead>
+<tr>
+<th align="center">输入：产品白底图 / Input</th>
+<th align="center">输出：场景合成图 / Output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><img src="https://raw.githubusercontent.com/jiawood2006/hermes-skills/main/docs/demo/demo_product_before.jpg" alt="before" loading="lazy" decoding="async"></td>
+<td align="center"><img src="https://raw.githubusercontent.com/jiawood2006/hermes-skills/main/docs/demo/demo_scene_after.jpg" alt="after" loading="lazy" decoding="async"></td>
+</tr>
+</tbody></table>
+<p><em>一键把白底产品图放进真实使用场景（演示图为 AI 生成的无品牌通用产品）</em>
+<em>One-click scene composition from a plain product photo (demo shows an AI-generated unbranded product)</em></p>
+<h4>✍️ de-ai-writer：去 AI 味前后对比</h4>
+<table>
+<thead>
+<tr>
+<th align="left">之前（AI 味）/ Before</th>
+<th align="left">之后（真人感）/ After</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">首先，这款产品具有非常出色的性能表现。其次，它的外观设计也非常时尚。总而言之，它是一款值得推荐的产品。</td>
+<td align="left">这机器上手就俩字：顺手。性能不拖后腿，长得也拿得出手，用过的都懂。</td>
+</tr>
+</tbody></table>
+<p><em>去掉"首先/其次/总而言之"，恢复真人说话的样子</em>
+<em>Removes "firstly / moreover / in conclusion" — sounds like a human again</em></p>
+<hr>
+<h3>💬 欢迎反馈 / Feedback</h3>
+<p><strong>用了有意见、有问题、有想法？欢迎提出来，每条都会认真看！</strong>
+<strong>Used it and have feedback, questions, or ideas? Please share — every issue is read!</strong></p>
+<ul>
+<li>🐛 发现 Bug / Found a bug → <a href="https://github.com/jiawood2006/hermes-skills/issues/new?template=bug_report.md">提 Issue / Open an Issue</a></li>
+<li>💡 想要新技能 / Want a new skill → <a href="https://github.com/jiawood2006/hermes-skills/issues/new?template=feature_request.md">求新技能 / Request a skill</a></li>
+<li>💬 随便聊聊 / Just chat → <a href="https://github.com/jiawood2006/hermes-skills/discussions">Discussions</a></li>
+</ul>
+<p><em>你的意见能让这些技能更好用——尤其是"哪里不好用"的吐槽最宝贵。</em>
+<em>Your feedback makes these skills better — especially "what doesn't work well".</em></p>
 <hr>
 <h3>⭐ 支持作者 / Support</h3>
 <p><strong>好用请点 Star ⭐——你的支持是开源的动力！</strong>
@@ -262,7 +312,7 @@ cp -r skills/video-to-text skills/de-ai-writer skills/doc-ocr skills/ecommerce-m
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 30.9K</div>
+        <div class="stars">★ 31.0K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -278,7 +328,7 @@ cp -r skills/video-to-text skills/de-ai-writer skills/doc-ocr skills/ecommerce-m
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 7.9K</div>
+        <div class="stars">★ 8.0K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
