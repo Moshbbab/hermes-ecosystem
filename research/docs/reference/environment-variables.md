@@ -1948,7 +1948,7 @@ OAuth client id (`agent:{instance_id}`) for the gated/public dashboard, activati
 
 `HERMES_DASHBOARD_PUBLIC_URL`
 
-Complete public URL the dashboard is reached at, for OAuth callback construction behind reverse proxies. Overrides `dashboard.public_url`.
+Complete public URL the dashboard is reached at behind a reverse proxy. It controls OAuth callback construction, adds its exact hostname to the HTTP Host/WebSocket Origin guard, and requires the auth gate for non-loopback public hosts even when the backend binds to loopback. Overrides `dashboard.public_url`.
 
 `HERMES_DASHBOARD_OIDC_ISSUER`
 

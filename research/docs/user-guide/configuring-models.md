@@ -232,20 +232,20 @@ providers:
 
 With discovery off, the model picker (`hermes model`, `/model`) shows the configured list instead of a live probe.
 
-For an Anthropic-compatible gateway that resolves a bare model alias only after receiving the request, opt the alias into native prompt-cache markers with the per-model `prompt_caching` capability:
+For a gateway that resolves a bare model alias only after receiving the request, opt the alias into prompt-cache markers with the per-model `prompt_caching` capability:
 
 ```
 providers:
-  anthropic-proxy:
-    api: https://gateway.example.com/anthropic
-    transport: anthropic_messages
+  model-proxy:
+    api: https://gateway.example.com/v1
+    transport: openai_chat  # or anthropic_messages
     models:
       fable:
         context_length: 1000000
         prompt_caching: true
 ```
 
-Hermes matches this declaration to the exact provider route and runtime model id, without rewriting the alias. Set `prompt_caching: false` to explicitly disable cache markers for a model; when omitted, Hermes keeps its normal provider and model capability detection.
+Hermes matches this declaration to the exact provider route and runtime model id, without rewriting the alias or inferring support from its provider name, host, or model family. The marker layout follows the configured transport: `openai_chat` uses the OpenAI-compatible envelope layout and `anthropic_messages` uses the native inner-block layout. Set `prompt_caching: false` to explicitly disable cache markers for a model; when omitted, Hermes keeps its normal provider and model capability detection.
 
 Legacy format
 
