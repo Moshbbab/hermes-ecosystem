@@ -110,6 +110,10 @@ Set a recurring prompt that re-enters **this session** as a normal user turn whe
 
 Run the background memory/skill self-improvement review **now** instead of waiting for the automatic post-turn trigger. Optional focus text steers the review (e.g. `/refine save the deploy workflow as a skill`). Runs in a background fork against a conversation snapshot — the live session and prompt cache are untouched; results are reported when done.
 
+`/review [instructions]`
+
+Spawn an independent, full-privilege reviewer subagent to review the work just discussed — a PR, code, docs, any artifact referenced in the last 10 chat messages. It investigates in the background (opens the PR, reads the diff, runs code) and its full review re-enters this session as a background-subagent completion the primary agent can act on. Pin a dedicated review model via `auxiliary.review` in config.yaml (defaults to your main model). See [Subagent Delegation](/docs/user-guide/features/delegation#the-review-command).
+
 `/moa <prompt>`
 
 Run a single prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore your current model. One-shot — does not change your session model.
@@ -624,6 +628,10 @@ Set a recurring prompt that re-enters this session when idle. Subcommands: `stat
 `/refine [focus]`
 
 Run the memory/skill self-improvement review now, optionally with focus instructions. On Slack use `/hermes refine …`.
+
+`/review [instructions]`
+
+Spawn an independent reviewer subagent for the work just discussed (PR, code, docs); its review re-enters this chat when done. On Slack use `/hermes review …`.
 
 `/moa <prompt>`
 

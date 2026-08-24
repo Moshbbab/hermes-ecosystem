@@ -457,6 +457,12 @@ Session title summaries
 
 `auxiliary.title_generation`
 
+Review
+
+`/review` reviewer subagent (full agent, not a single LLM call)
+
+`auxiliary.review`
+
 Triage Specifier
 
 `hermes kanban specify` / dashboard ✨ button — fleshes out a one-liner triage task into a real spec
