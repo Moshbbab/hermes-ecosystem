@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sahil-SS9/Toolaria — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them…">
+<meta name="description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Sahil-SS9/Toolaria">
 <meta property="og:title" content="Sahil-SS9/Toolaria — Hermes Atlas">
-<meta property="og:description" content="Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them…">
+<meta property="og:description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Sahil-SS9/Toolaria">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sahil-SS9/Toolaria — Hermes Atlas">
-<meta name="twitter:description" content="Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them…">
+<meta name="twitter:description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Toolaria&amp;subtitle=Rescue+oversized+tool+results+before+they+flood+context.+SHA256-addressed+blob+store+with+per-session+indexes&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria#software",
   "name": "Toolaria",
-  "description": "Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle. This allows the model to\u003cpad>\u003cpad>检索 specific data slices via semantic search, structural outlines, or pass-by-reference\u003cpad>\u003cpad>\u003cpad>EOF",
+  "description": "Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle to retrieve specific data slices.",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria",
   "codeRepository": "https://github.com/Sahil-SS9/Toolaria",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Sahil-SS9",
     "url": "https://github.com/Sahil-SS9"
   },
-  "dateModified": "2026-08-25T01:29:57.000Z",
+  "dateModified": "2026-08-25T17:15:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Toolaria is a Hermes Agent plugin designed to prevent oversized tool outputs from flooding the model's context window. It intercepts large results, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle. This allows the model to&lt;pad&gt;&lt;pad&gt;检索 specific data slices via semantic search, structural outlines, or pass-by-reference&lt;pad&gt;&lt;pad&gt;&lt;pad&gt;EOF</p>
+    <p class="summary-text">Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle to retrieve specific data slices.</p>
     <ul class="summary-highlights">
-      <li>Stores large results in a SHA256-addressed blob store</li>
-      <li>Provides structural outlines and semantic search capabilities</li>
-      <li>Enables pass-by-reference for tool-to-tool data transfer</li>
+      <li>Stores oversized tool outputs in a SHA256-addressed local blob store.</li>
+      <li>Provides structural maps, semantic search, and lexical retrieval over blobs.</li>
+      <li>Supports pass-by-reference to feed large results into downstream tools.</li>
     </ul>
   </div>
 </section>
@@ -245,6 +245,13 @@ hermes plugin reload
 </code></pre>
 <p>Any oversized web extract, search, or MCP result now returns a compact excerpt
 with a fetch handle instead of flooding context. Check status with <code>/rescuer</code>.</p>
+<p>Run the test suite:</p>
+<pre><code class="language-bash"># Canonical runner (needs the regex package for the grep timeout tests)
+uv run --with pytest --with regex python -m pytest tests/ -q
+
+# With encryption-tier tests (needs the cryptography package)
+uv run --with pytest --with regex --with cryptography python -m pytest tests/ -q
+</code></pre>
 <blockquote>
 <p><strong>Availability in restricted sessions.</strong> The rescue runs as an ungated hook, so
 it fires in every session, including toolset-restricted ones (cron jobs, scoped
@@ -450,7 +457,49 @@ treating the preview as complete.</p>
 <td><code>[]</code></td>
 <td>Strict allowlist; empty means all but exec/exfil sinks</td>
 </tr>
+<tr>
+<td><code>toolaria_key_file</code></td>
+<td><em>(unset)</em></td>
+<td>Path to a Fernet key file for credential-tier encryption (see below)</td>
+</tr>
+<tr>
+<td><code>sensitivity_tool_labels</code></td>
+<td><code>{}</code></td>
+<td><code>{tool_name: label}</code> overrides for the built-in tool→label map</td>
+</tr>
 </tbody></table>
+<hr>
+<h3>Sensitivity labels</h3>
+<p>Every rescued result carries a label: <code>public</code>, <code>personal</code>, or <code>credential</code>.
+Labels come from a built-in tool map (mail tools default to <code>personal</code>, web
+tools to <code>public</code>), overridable per tool with <code>sensitivity_tool_labels</code>. When
+content is referenced from several sessions the most sensitive label wins.</p>
+<p>Credential-labelled content is handled carefully: slices shown to the model
+are masked, per-blob byte budgets apply, and expansion into exec/exfil sinks
+is denied. Enforcement is <strong>audit-first</strong>: it ships off by default and flips
+on only when you configure it.</p>
+<hr>
+<h3>Encryption (optional)</h3>
+<p>Credential-tier blobs can be encrypted at rest with Fernet. It is off by
+default and stays byte-for-byte identical to today's plaintext store until
+you opt in.</p>
+<ol>
+<li>Generate a key (mode 0600, outside the store directory):
+<code>python -c "from cryptography.fernet import Fernet; open('/home/you/.hermes/secrets/toolaria.key','wb').write(Fernet.generate_key())"</code></li>
+<li>Point the plugin at it in <code>config.yaml</code>:
+<code>toolaria.toolaria_key_file: /home/you/.hermes/secrets/toolaria.key</code></li>
+<li>Restart the gateway. Credential-labelled blobs now write ciphertext.</li>
+</ol>
+<p>Notes:</p>
+<ul>
+<li><code>cryptography</code> must be installed; with a key configured but the package
+missing, credential writes are <strong>refused</strong> rather than silently stored as
+plaintext.</li>
+<li>Rotate keys with the <code>/toolaria-rotate-key &lt;new-key-path&gt;</code> command — it
+re-encrypts blobs, updates the durable config atomically, and preserves
+config permissions.</li>
+<li><strong>Back up the key file.</strong> Losing it makes every encrypted blob unreadable.</li>
+</ul>
 <hr>
 <h3>What gets rescued</h3>
 <p>Only MCP server tool results and specific built-in tools:</p>
@@ -509,6 +558,11 @@ memory tools are explicitly excluded and never intercepted.</p>
 <td><code>grep</code></td>
 <td><code>id</code>, <code>pattern</code></td>
 <td>Regex match within the blob, with line numbers</td>
+</tr>
+<tr>
+<td><code>chain</code></td>
+<td><code>id</code>, <code>pattern</code>, <code>count</code></td>
+<td>Composite: grep for <code>pattern</code> then return <code>count</code> lines of context around each match</td>
 </tr>
 <tr>
 <td><code>full</code></td>
@@ -593,7 +647,7 @@ handle. Swept-blob guidance is scoped to the owning session.</li>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 435</div>
+        <div class="stars">★ 436</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -613,7 +667,7 @@ handle. Swept-blob guidance is scoped to the owning session.</li>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 377</div>
+        <div class="stars">★ 376</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

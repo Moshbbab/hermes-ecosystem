@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>supernovae-st/nika — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable AI work…">
+<meta name="description" content="Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable graphs of…">
 <link rel="canonical" href="https://hermesatlas.com/projects/supernovae-st/nika">
 <meta property="og:title" content="supernovae-st/nika — Hermes Atlas">
-<meta property="og:description" content="Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable AI work…">
+<meta property="og:description" content="Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable graphs of…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/supernovae-st/nika">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="supernovae-st/nika — Hermes Atlas">
-<meta name="twitter:description" content="Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable AI work…">
+<meta name="twitter:description" content="Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable graphs of…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=nika&amp;subtitle=Intent+as+Code+%7C+the+workflow+language+for+AI.+One+file%2C+4+verbs%2C+one+Rust+binary.+Local-first%2C+any+model%2C+AGPL-3.0.+%F0%9F%A6%8B&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/supernovae-st/nika#software",
   "name": "nika",
-  "description": "Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable AI work as files containing model calls, tools, and processes that can be audited, executed, and verified without cloud dependencies.",
+  "description": "Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable graphs of model calls, tools, and processes in a single file that can be audited, executed, and verified.",
   "url": "https://hermesatlas.com/projects/supernovae-st/nika",
   "codeRepository": "https://github.com/supernovae-st/nika",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "supernovae-st",
     "url": "https://github.com/supernovae-st"
   },
-  "dateModified": "2026-08-25T10:36:15.000Z",
+  "dateModified": "2026-08-25T16:06:46.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable AI work as files containing model calls, tools, and processes that can be audited, executed, and verified without cloud dependencies.</p>
+    <p class="summary-text">Nika is a local-first workflow language and reference engine for AI tasks, implemented as a single Rust binary. It allows users to declare repeatable graphs of model calls, tools, and processes in a single file that can be audited, executed, and verified.</p>
     <ul class="summary-highlights">
       <li>Audits workflows for costs, permissions, and types before execution.</li>
-      <li>Generates hash-chained receipts to verify and replay runs.</li>
-      <li>Uses a four-verb language based on an open Apache-2.0 specification.</li>
+      <li>Generates hash-chained, tamper-evident receipts for every run.</li>
+      <li>Supports local execution without cloud requirements using an open specification.</li>
     </ul>
   </div>
 </section>
@@ -648,8 +648,24 @@ tasks:
       prompt: "Say hello in one sentence."
 </code></pre>
 <p>(No model handy? The built-in <code>mock/echo</code> previews any workflow offline.)</p>
-<p>For real inference, run a local model (Ollama / LM Studio) or set a provider
-key, then see what's wired:</p>
+<p>Already paying for a coding agent? Run on that seat instead of buying a third
+subscription. If <code>qwen-code</code>, <code>gemini-cli</code>, <code>kimi-code</code> or <code>codex</code> is installed
+and signed in, nika drives it over ACP and the work rides the plan you already
+have:</p>
+<pre><code class="language-sh">nika doctor                              # which seats this machine can actually reach
+nika run pr-review.nika.yaml --access codex-acp
+</code></pre>
+<p>Two honest limits, because a seat is not a provider:</p>
+<ul>
+<li><code>agent:</code> sits on any attested seat. <code>infer:</code> sits on <strong>one</strong> admitted adapter
+today (<code>codex exec --json</code>, single turn, schema-checked). A seat that cannot
+meet that contract refuses at check time rather than guessing.</li>
+<li>A seated run reports <strong>no price and no token count</strong>. It spends your
+subscription's quota, and the receipt says exactly that. It names the seat and
+the model you <em>asked</em> for, never a claim about which model answered.</li>
+</ul>
+<p>For real inference without a seat, run a local model (Ollama / LM Studio) or set
+a provider key, then see what's wired:</p>
 <pre><code class="language-sh">nika doctor                  # provider keys + local servers, with the exact fix
 nika init                    # schema wiring + AGENTS.md for this repo
 nika wire cursor             # explicit MCP wiring · also: vscode · windsurf · claude · codex · zed · all
