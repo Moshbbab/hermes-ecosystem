@@ -148,6 +148,10 @@ Register a context-compression engine
 
 `ctx.register_context_engine(engine)` — see [Context Engine Plugins](/docs/developer-guide/context-engine-plugin)
 
+Register a terminal execution backend (cloud sandbox)
+
+`ctx.register_terminal_environment_provider(provider)` — see [Terminal Environment Plugins](/docs/developer-guide/terminal-environment-plugin)
+
 Route human approval prompts
 
 `ctx.register_approval_transport(name, present_fn)` — see [Approval transports](#approval-transports)

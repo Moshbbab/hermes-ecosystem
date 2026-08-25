@@ -2942,21 +2942,9 @@ Direct OpenAI-compatible endpoint for vision tasks
 
 API key paired with `AUXILIARY_VISION_BASE_URL`
 
-`AUXILIARY_WEB_EXTRACT_PROVIDER`
+note
 
-Override provider for web extraction/summarization
-
-`AUXILIARY_WEB_EXTRACT_MODEL`
-
-Override model for web extraction/summarization
-
-`AUXILIARY_WEB_EXTRACT_BASE_URL`
-
-Direct OpenAI-compatible endpoint for web extraction/summarization
-
-`AUXILIARY_WEB_EXTRACT_API_KEY`
-
-API key paired with `AUXILIARY_WEB_EXTRACT_BASE_URL`
+`AUXILIARY_WEB_EXTRACT_*` variables are obsolete: `web_extract` and browser snapshots no longer use an auxiliary LLM. Long pages and snapshots are truncated deterministically with the full text stored on disk for `read_file` paging.
 
 For task-specific direct endpoints, Hermes uses the task's configured API key or `OPENAI_API_KEY`. It does not reuse `OPENROUTER_API_KEY` for those custom endpoints.
 

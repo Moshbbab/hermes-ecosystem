@@ -1,4 +1,4 @@
-# Desktop App
+# Hermes Desktop
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/desktop
 
@@ -18,7 +18,7 @@ Pick whichever fits the moment. They share state, so you can start a session in 
 
 ## Install
 
-Follow the [installation instructions for Hermes Desktop](/docs/getting-started/installation).
+Download the app from the [Hermes Desktop product page](https://hermes-agent.nousresearch.com/desktop), or follow the [installation instructions for Hermes Desktop](/docs/getting-started/installation).
 
 If you already have Hermes installed, simply run
 
