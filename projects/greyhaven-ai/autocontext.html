@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>greyhaven-ai/autocontext — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="autocontext is a recursive harness for agent improvement that executes tasks against evaluations to refine performance. It captures useful lessons and discards…">
+<meta name="description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, playbooks, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta property="og:description" content="autocontext is a recursive harness for agent improvement that executes tasks against evaluations to refine performance. It captures useful lessons and discards…">
+<meta property="og:description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, playbooks, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta name="twitter:description" content="autocontext is a recursive harness for agent improvement that executes tasks against evaluations to refine performance. It captures useful lessons and discards…">
+<meta name="twitter:description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, playbooks, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=autocontext&amp;subtitle=a+recursive+self-improving+harness+designed+to+help+your+agents+%28and+future+iterations+of+those+agents%29+succeed+on+any+task&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "autocontext is a recursive harness for agent improvement that executes tasks against evaluations to refine performance. It captures useful lessons and discards unsuccessful attempts, generating trace logs, playbooks, and datasets to inform subsequent runs or local-model training.",
+  "description": "autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, playbooks, and datasets from each run, discarding unsuccessful approaches while retaining useful lessons for future iterations.",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-08-24T18:56:41.000Z",
+  "dateModified": "2026-08-24T22:28:13.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">autocontext is a recursive harness for agent improvement that executes tasks against evaluations to refine performance. It captures useful lessons and discards unsuccessful attempts, generating trace logs, playbooks, and datasets to inform subsequent runs or local-model training.</p>
+    <p class="summary-text">autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, playbooks, and datasets from each run, discarding unsuccessful approaches while retaining useful lessons for future iterations.</p>
     <ul class="summary-highlights">
-      <li>Supports Python and TypeScript CLI, library, and MCP server integrations.</li>
-      <li>Stores run data as filesystem-first traces, reports, and context bundles.</li>
-      <li>Provides tools for scenario simulation, evidence-driven diagnosis, and model distillation.</li>
+      <li>Generates traces, reports, playbooks, and local-model training artifacts.</li>
+      <li>Supports Python, TypeScript, and MCP client integrations.</li>
+      <li>Uses outcome-gated promotion to manage context bundles and prompt selection.</li>
     </ul>
   </div>
 </section>
@@ -212,6 +212,11 @@ autoctx solve "improve customer-support replies for billing disputes" --iteratio
 <p>Use <code>AUTOCONTEXT_AGENT_PROVIDER=anthropic</code>, <code>openai-compatible</code>, <code>openrouter</code>, <code>claude-cli</code>, <code>codex</code>, <code>pi-rpc</code>, or another provider when you need that runtime. See <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/agent-integration.md">agent integration</a> for the full matrix.</p>
 <p>Running it on your own GPU instead? <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/self-hosted-models.md">Self-hosted models</a> covers the whole loop on vLLM, Ollama, or any OpenAI-compatible endpoint — including what each role actually resolves to, and why constrained output matters more on open weights.
 Self-hosted endpoints can additionally declare <code>AUTOCONTEXT_PROVIDER_HOSTING=local</code> and a <code>fast</code>, <code>mid_tier</code>, or <code>frontier</code> <code>AUTOCONTEXT_PROVIDER_CAPABILITY</code>; role-specific endpoints use matching <code>&lt;ROLE&gt;_PROVIDER_*</code> declarations.</p>
+<p>Prime remote execution also supports opt-in accelerator requests with explicit
+type/count, immutable-image, region, and telemetry capability validation. It
+fails before provider creation when the configured pool cannot satisfy the
+request and never downgrades accelerator work to CPU; see
+<a href="https://github.com/greyhaven-ai/autocontext/blob/main/docs/remote-execution-sessions.md">remote execution sessions</a>.</p>
 <h3>Agent Entry Points</h3>
 <ul>
 <li><strong>Pi:</strong> install <code>pi-autocontext</code>, then ask Pi to solve, judge, improve, list, or inspect runs through the packaged skill.</li>
@@ -412,11 +417,11 @@ contracts</a>, and the full
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 21.0K</div>
+        <div class="stars">★ 21.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 364</div>
+        <div class="stars">★ 365</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">

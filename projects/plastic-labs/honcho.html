@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plastic-labs/honcho — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Honcho is memory infrastructure designed for building stateful agents by storing messages, events, and documents. It uses background reasoning to extract…">
+<meta name="description" content="Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plastic-labs/honcho">
 <meta property="og:title" content="plastic-labs/honcho — Hermes Atlas">
-<meta property="og:description" content="Honcho is memory infrastructure designed for building stateful agents by storing messages, events, and documents. It uses background reasoning to extract…">
+<meta property="og:description" content="Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plastic-labs/honcho">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plastic-labs/honcho — Hermes Atlas">
-<meta name="twitter:description" content="Honcho is memory infrastructure designed for building stateful agents by storing messages, events, and documents. It uses background reasoning to extract…">
+<meta name="twitter:description" content="Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=honcho&amp;subtitle=+Memory+library+for+building+stateful+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plastic-labs/honcho#software",
   "name": "honcho",
-  "description": "Honcho is memory infrastructure designed for building stateful agents by storing messages, events, and documents. It uses background reasoning to extract conclusions from data and allows users to query peer representations, session context, or search results.",
+  "description": "Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks evolving entities like users and projects as peers, allowing developers to query natural-language insights or session context for injection into LLM calls.",
   "url": "https://hermesatlas.com/projects/plastic-labs/honcho",
   "codeRepository": "https://github.com/plastic-labs/honcho",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plastic-labs",
     "url": "https://github.com/plastic-labs"
   },
-  "dateModified": "2026-08-24T18:37:37.000Z",
+  "dateModified": "2026-08-24T21:44:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 6811
+    "userInteractionCount": 6817
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Honcho is memory infrastructure designed for building stateful agents by storing messages, events, and documents. It uses background reasoning to extract conclusions from data and allows users to query peer representations, session context, or search results.</p>
+    <p class="summary-text">Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks evolving entities like users and projects as peers, allowing developers to query natural-language insights or session context for injection into LLM calls.</p>
     <ul class="summary-highlights">
-      <li>Provides a FastAPI server for managed or self-hosted use.</li>
-      <li>Supports Python and TypeScript client SDKs.</li>
-      <li>Offers hybrid search and prompt-ready context injection.</li>
+      <li>Extracts conclusions from conversations via background reasoning processes.</li>
+      <li>Supports managed hosting or self-hosting via a FastAPI server.</li>
+      <li>Provides Python and TypeScript SDKs for session and peer management.</li>
     </ul>
   </div>
 </section>
@@ -567,63 +567,11 @@ components need to be running:</p>
 <p>Contributors: see <a href="https://github.com/plastic-labs/honcho/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> for pre-commit setup. Deploying to Fly.io: see <a href="https://honcho.dev/docs/v3/contributing/self-hosting#deploying-on-fly-io">Self-hosting docs → Deploying on Fly.io</a>.</p>
 <h3>Configuration</h3>
 <p>Honcho uses a flexible configuration system that supports both TOML files and environment variables. Configuration values are loaded in priority order: <strong>environment variables &gt; <code>.env</code> file &gt; <code>config.toml</code> &gt; defaults</strong>.</p>
-
-<details>
-<summary>Full configuration reference</summary>
-
-<h4>Using config.toml</h4>
-<p>Copy the example configuration file to get started:</p>
+<p>Copy the example file to get started:</p>
 <pre><code class="language-bash">cp config.toml.example config.toml
 </code></pre>
-<p>Then modify the values as needed. The TOML file is organized into sections:</p>
-<ul>
-<li><code>[app]</code> - Application-level settings (log level, session limits, embedding settings, namespace)</li>
-<li><code>[db]</code> - Database connection and pool settings</li>
-<li><code>[auth]</code> - Authentication configuration</li>
-<li><code>[cache]</code> - Redis cache configuration</li>
-<li><code>[llm]</code> - LLM provider API keys and general settings</li>
-<li><code>[deriver]</code> - Background worker settings and representation configuration</li>
-<li><code>[peer_card]</code> - Peer card generation settings</li>
-<li><code>[dialectic]</code> - Chat Endpoint configuration with per-level reasoning settings</li>
-<li><code>[summary]</code> - Session summarization settings</li>
-<li><code>[dream]</code> - Dream processing configuration (including specialist models and surprisal settings)</li>
-<li><code>[webhook]</code> - Webhook configuration</li>
-<li><code>[metrics]</code> - Prometheus pull-based metrics</li>
-<li><code>[telemetry]</code> - CloudEvents telemetry for analytics</li>
-<li><code>[vector_store]</code> - Vector store configuration (pgvector, turbopuffer, or lancedb)</li>
-<li><code>[sentry]</code> - Error tracking and monitoring settings</li>
-</ul>
-<h4>Using Environment Variables</h4>
-<p>All configuration values can be overridden using environment variables. The environment variable names follow this pattern:</p>
-<ul>
-<li><code>{SECTION}_{KEY}</code> for top-level section settings</li>
-<li>Use <code>__</code> inside <code>{KEY}</code> for nested settings</li>
-<li>Just <code>{KEY}</code> for app-level settings</li>
-</ul>
-<p>Examples:</p>
-<ul>
-<li><code>DB_CONNECTION_URI</code> - Database connection string</li>
-<li><code>AUTH_JWT_SECRET</code> - JWT secret key</li>
-<li><code>DERIVER_MODEL_CONFIG__TRANSPORT</code> - Transport for the background deriver</li>
-<li><code>SUMMARY_MODEL_CONFIG__MODEL</code> - Summary model override</li>
-<li><code>DIALECTIC_LEVELS__low__MODEL_CONFIG__MODEL</code> - Model for low reasoning level</li>
-<li><code>LOG_LEVEL</code> - Application log level</li>
-<li><code>METRICS_ENABLED</code> - Enable Prometheus metrics</li>
-<li><code>TELEMETRY_ENABLED</code> - Enable CloudEvents telemetry</li>
-</ul>
-<h4>Example</h4>
-<p>If you have this in <code>config.toml</code>:</p>
-<pre><code class="language-toml">[db]
-CONNECTION_URI = "postgresql+psycopg://localhost/honcho_dev"
-POOL_SIZE = 10
-</code></pre>
-<p>You can override just the connection URI in production:</p>
-<pre><code class="language-bash">export DB_CONNECTION_URI="postgresql+psycopg://prod-server/honcho_prod"
-</code></pre>
-<p>The application will use the production connection URI while keeping the pool size from config.toml.</p>
-</details>
-
-
+<p>The file is organized by subsystem — <code>[app]</code>, <code>[db]</code>, <code>[auth]</code>, <code>[cache]</code>, <code>[llm]</code>, <code>[deriver]</code>, <code>[dialectic]</code>, <code>[summary]</code>, <code>[dream]</code>, <code>[peer_card]</code>, <code>[webhook]</code>, <code>[metrics]</code>, <code>[telemetry]</code>, <code>[vector_store]</code>, and <code>[sentry]</code>. Any value can be overridden by an environment variable named <code>{SECTION}_{KEY}</code>, using <code>__</code> for nesting (<code>DIALECTIC_LEVELS__low__MODEL_CONFIG__MODEL</code>), or just <code>{KEY}</code> for app-level settings.</p>
+<p>See the <a href="https://honcho.dev/docs/v3/contributing/configuration">configuration reference</a> for every available option, and <a href="./.env.template"><code>.env.template</code></a> for an annotated list of environment variables.</p>
 <h3>Architecture</h3>
 <p>Honcho splits into two services: <strong>Storage</strong> (workspaces, peers, sessions, messages, internal collections) and <strong>Insights</strong> (reasoning, conclusions, representations, summaries, the chat endpoint). Storage is synchronous via the API; Insights is asynchronous via a background queue consumed by the deriver worker process.</p>
 <p><strong>Key features:</strong></p>
@@ -748,7 +696,8 @@ the results.</p>
 <li><a href="https://blog.plasticlabs.ai/">Plastic Labs blog</a> — design philosophy and history of the project.</li>
 </ul>
 <h3>Contributing</h3>
-<p>We welcome contributions to Honcho! Please read our <a href="https://github.com/plastic-labs/honcho/blob/main/CONTRIBUTING.md">Contributing Guide</a> for details on our development process, coding conventions, and how to submit pull requests.</p>
+<p>We welcome contributions to Honcho. One thing to know before you start: <strong>pull requests must be linked to an issue carrying the <code>maintainer-approved</code> label</strong>, or they are closed automatically. <a href="https://github.com/plastic-labs/honcho/issues?q=is%3Aissue+is%3Aopen+label%3Amaintainer-approved">Browse the approved queue</a>, or make your case in <a href="http://discord.gg/honcho">Discord</a> — that is where maintainers are most active.</p>
+<p>See <a href="https://github.com/plastic-labs/honcho/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for the full process, an architecture walkthrough, and a map of where to change what. For vulnerabilities, see <a href="https://github.com/plastic-labs/honcho/blob/main/SECURITY.md">SECURITY.md</a> — note that Honcho does not operate a bug bounty.</p>
 <h3>License</h3>
 <p>Honcho is licensed under the AGPL-3.0 License. Learn more at the <a href="./LICENSE">License file</a>.</p>
 
@@ -767,7 +716,7 @@ the results.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 21.0K</div>
+        <div class="stars">★ 21.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -775,7 +724,7 @@ the results.</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 364</div>
+        <div class="stars">★ 365</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
