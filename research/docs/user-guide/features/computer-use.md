@@ -183,6 +183,8 @@ The check matrix is platform-aware: `bundle_identity` / `tcc_*` are `skip` on Wi
 
 When the agent acts, you'll see a **tinted overlay cursor** glide across the screen to where each click / type / scroll lands. The real OS cursor never moves. The overlay shows where the agent is acting. Each Hermes run declares a public cua-driver **session name** (something like `hermes-3a7b9c14d2e8`). The name labels cursor identity and related state, so concurrent runs and subagents get distinct cursors. The MCP transport owns the private lifecycle session inside the runtime; the public name does not.
 
+The overlay cursor is cosmetic — captures, clicks, and typing all work without it. Hermes disables it automatically where it is a known failure mode: macOS (idle CPU burn), headless Linux / WSL2 / containers, and **Linux X11 desktops** (the overlay is a fullscreen always-on-top window that can get stuck over every workspace after an unclean session end, wedging desktop input). Linux Wayland and Windows keep the overlay. Set `computer_use.no_overlay: false` in `config.yaml` to force the cursor on (or `true` to force it off) on any platform.
+
 Tune the cursor with `cua-driver`'s CLI flags or the runtime `set_agent_cursor_style` MCP tool — see [cua.ai/docs/how-to-guides/driver/personalize-cursor](https://cua.ai/docs/how-to-guides/driver/personalize-cursor) for the full menu (built-in `arrow` vs `teardrop` silhouette, custom SVG / PNG / ICO via `--cursor-icon`, runtime gradient colors, bloom halo).
 
 ## Going deeper — the cua-driver skill pack
