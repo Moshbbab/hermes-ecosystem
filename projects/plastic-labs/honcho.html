@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plastic-labs/honcho — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks…">
+<meta name="description" content="Honcho is a memory infrastructure and FastAPI server designed to build stateful agents by storing and reasoning over messages, events, and documents. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plastic-labs/honcho">
 <meta property="og:title" content="plastic-labs/honcho — Hermes Atlas">
-<meta property="og:description" content="Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks…">
+<meta property="og:description" content="Honcho is a memory infrastructure and FastAPI server designed to build stateful agents by storing and reasoning over messages, events, and documents. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plastic-labs/honcho">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plastic-labs/honcho — Hermes Atlas">
-<meta name="twitter:description" content="Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks…">
+<meta name="twitter:description" content="Honcho is a memory infrastructure and FastAPI server designed to build stateful agents by storing and reasoning over messages, events, and documents. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=honcho&amp;subtitle=+Memory+library+for+building+stateful+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plastic-labs/honcho#software",
   "name": "honcho",
-  "description": "Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks evolving entities like users and projects as peers, allowing developers to query natural-language insights or session context for injection into LLM calls.",
+  "description": "Honcho is a memory infrastructure and FastAPI server designed to build stateful agents by storing and reasoning over messages, events, and documents. It processes data in the background to create persistent representations of users, agents, and projects that can be queried for context or natural-language insights.",
   "url": "https://hermesatlas.com/projects/plastic-labs/honcho",
   "codeRepository": "https://github.com/plastic-labs/honcho",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plastic-labs",
     "url": "https://github.com/plastic-labs"
   },
-  "dateModified": "2026-08-25T18:58:11.000Z",
+  "dateModified": "2026-08-25T21:39:27.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 6830
+    "userInteractionCount": 6838
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">239·repos</span>
+    <span id="meta-count">240·repos</span>
     <span id="meta-version">hermes·v0.20.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Honcho is memory infrastructure for building stateful agents, providing a FastAPI server to store and reason over messages, events, and documents. It tracks evolving entities like users and projects as peers, allowing developers to query natural-language insights or session context for injection into LLM calls.</p>
+    <p class="summary-text">Honcho is a memory infrastructure and FastAPI server designed to build stateful agents by storing and reasoning over messages, events, and documents. It processes data in the background to create persistent representations of users, agents, and projects that can be queried for context or natural-language insights.</p>
     <ul class="summary-highlights">
-      <li>Extracts conclusions from conversations via background reasoning processes.</li>
-      <li>Supports managed hosting or self-hosting via a FastAPI server.</li>
-      <li>Provides Python and TypeScript SDKs for session and peer management.</li>
+      <li>Provides reasoning-first memory by extracting conclusions from conversations and events.</li>
+      <li>Supports managed hosting or self-hosting via Docker and FastAPI.</li>
+      <li>Offers Python and TypeScript SDKs for session management and hybrid search.</li>
     </ul>
   </div>
 </section>
@@ -161,7 +161,7 @@
 
 
 <hr>
-<p><img src="https://img.shields.io/badge/Server-3.0.9-blue" alt="Static Badge" loading="lazy" decoding="async">
+<p><img src="https://img.shields.io/badge/Server-3.1.0-blue" alt="Static Badge" loading="lazy" decoding="async">
 <a href="https://pypi.org/project/honcho-ai/"><img src="https://img.shields.io/pypi/v/honcho-ai.svg" alt="PyPI version" loading="lazy" decoding="async"></a>
 <a href="https://npmjs.org/package/@honcho-ai/sdk"><img src="https://img.shields.io/npm/v/@honcho-ai/sdk.svg" alt="NPM version" loading="lazy" decoding="async"></a>
 <a href="https://discord.gg/honcho"><img src="https://img.shields.io/discord/1016845111637839922?style=flat&amp;logo=discord&amp;logoColor=23ffffff&amp;label=Plastic%20Labs&amp;labelColor=235865F2" alt="Discord" loading="lazy" decoding="async"></a></p>
@@ -413,6 +413,7 @@ openclaw gateway --force
 <li><strong>Workspace</strong> (formerly App): top-level container; isolates data between use cases.</li>
 <li><strong>Peer</strong> (formerly User): any participant — human user or AI agent.</li>
 <li><strong>Session</strong>: a conversation context; many-to-many with peers.</li>
+<li><strong>Scope</strong>: a named grouping of sessions that bounds recall (chat, representation, search) to those members.</li>
 <li><strong>Message</strong>: an atomic data unit (peer-to-peer communication or ingested document chunk).</li>
 </ul>
 <p>What you query out of Honcho:</p>
@@ -573,7 +574,7 @@ components need to be running:</p>
 <p>The file is organized by subsystem — <code>[app]</code>, <code>[db]</code>, <code>[auth]</code>, <code>[cache]</code>, <code>[llm]</code>, <code>[deriver]</code>, <code>[dialectic]</code>, <code>[summary]</code>, <code>[dream]</code>, <code>[peer_card]</code>, <code>[webhook]</code>, <code>[metrics]</code>, <code>[telemetry]</code>, <code>[vector_store]</code>, and <code>[sentry]</code>. Any value can be overridden by an environment variable named <code>{SECTION}_{KEY}</code>, using <code>__</code> for nesting (<code>DIALECTIC_LEVELS__low__MODEL_CONFIG__MODEL</code>), or just <code>{KEY}</code> for app-level settings.</p>
 <p>See the <a href="https://honcho.dev/docs/v3/contributing/configuration">configuration reference</a> for every available option, and <a href="./.env.template"><code>.env.template</code></a> for an annotated list of environment variables.</p>
 <h3>Architecture</h3>
-<p>Honcho splits into two services: <strong>Storage</strong> (workspaces, peers, sessions, messages, internal collections) and <strong>Insights</strong> (reasoning, conclusions, representations, summaries, the chat endpoint). Storage is synchronous via the API; Insights is asynchronous via a background queue consumed by the deriver worker process.</p>
+<p>Honcho splits into two services: <strong>Storage</strong> (workspaces, peers, sessions, scopes, messages, internal collections) and <strong>Insights</strong> (reasoning, conclusions, representations, summaries, the chat endpoint). Storage is synchronous via the API; Insights is asynchronous via a background queue consumed by the deriver worker process.</p>
 <p><strong>Key features:</strong></p>
 <ul>
 <li><strong>Rich Reasoning System</strong> — multiple implementation methods that extract conclusions from interactions and build comprehensive representations of peers</li>
@@ -596,15 +597,17 @@ easily scalable from a single user to a million.</p>
 │   ├── Sessions             │
 │   └── (internal collections, keyed by observer/observed peer pair)
 │                            │
+├── Scopes ←─────────────────┤ (many-to-many with sessions)
 │                            │
-└── Sessions ←───────────────┤ (many-to-many)
+└── Sessions ←───────────────┤ (many-to-many with peers)
     ├── Peers ───────────────┘
     └── Messages (session-level)
 </code></pre>
 <p><strong>Relationship Details:</strong></p>
 <ul>
-<li>A <strong>Workspace</strong> contains multiple <strong>Peers</strong>.</li>
+<li>A <strong>Workspace</strong> contains multiple <strong>Peers</strong> and <strong>Scopes</strong>.</li>
 <li><strong>Peers</strong> and <strong>Sessions</strong> have a many-to-many relationship (peers can participate in multiple sessions, sessions can have multiple peers).</li>
+<li><strong>Scopes</strong> and <strong>Sessions</strong> have a many-to-many relationship (a session can belong to several scopes; a scope groups many sessions).</li>
 <li><strong>Messages</strong> belong to a session and are labelled by their source peer.</li>
 <li><strong>Internal collections</strong> of vector-embedded <strong>documents</strong> are keyed by <code>(observer, observed)</code> peer pairs. They are not directly exposed via the API; the observations stored in them are exposed as <strong>Conclusions</strong>.</li>
 </ul>
@@ -621,7 +624,25 @@ This unified model enables complex multi-participant interactions.</p>
 <h5>Sessions</h5>
 <p>The <code>Session</code> object represents a set of interactions between <code>Peers</code> within a
 <code>Workspace</code>. Other applications may refer to this as a thread or conversation.
-Sessions can involve multiple peers with configurable observation settings.</p>
+Sessions can involve multiple peers with configurable observation settings.
+A session can optionally join one or more <strong>Scopes</strong> at creation, or later via
+the scopes API.</p>
+<h5>Scopes</h5>
+<p>A <code>Scope</code> is a named grouping of sessions inside a <code>Workspace</code>. It is a
+visibility boundary on recall: chat, representation, session context, and
+workspace search answered through a scope see only what happened in that
+scope's member sessions. The underlying peers keep their unified
+representations across everything they have participated in.</p>
+<p>Developers manage scopes through the scopes API (<code>honcho.scope(...)</code> /
+<code>honcho.scopes()</code>) and an optional <code>scopes</code> field on session create — not
+through observer/observed configuration. Adding a session that already has
+messages copies its existing explicit conclusions into the scope (no
+re-derivation); removing one reconciles those copies back out. Query
+backfill progress with the scope <code>status</code> endpoint.</p>
+<p>A single scope name answers from that scope's collection and card. A list of
+scopes restricts recall to the union of their member sessions. Empty scopes
+fail closed. <code>scope</code> is mutually exclusive with <code>session</code> / <code>filters</code> on the
+same read.</p>
 <h5>Messages</h5>
 <p>The <code>Message</code> represents an atomic data unit that exists at the session level:
 communication between peers within a session context. All messages are labelled
