@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>freehul/progressive-skill — Hermes Agent Guides &amp; Docs | Hermes Atlas</title>
-<meta name="description" content="Progressive Skill provides a method for compressing skill indices to reduce token usage in agent system prompts. It uses toolset mapping, usage-frequency…">
+<meta name="description" content="Progressive Skill is a tool for managing agent skill indices through progressive disclosure, budget control, and usage-frequency learning. It reduces token…">
 <link rel="canonical" href="https://hermesatlas.com/projects/freehul/progressive-skill">
 <meta property="og:title" content="freehul/progressive-skill — Hermes Atlas">
-<meta property="og:description" content="Progressive Skill provides a method for compressing skill indices to reduce token usage in agent system prompts. It uses toolset mapping, usage-frequency…">
+<meta property="og:description" content="Progressive Skill is a tool for managing agent skill indices through progressive disclosure, budget control, and usage-frequency learning. It reduces token…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/freehul/progressive-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="freehul/progressive-skill — Hermes Atlas">
-<meta name="twitter:description" content="Progressive Skill provides a method for compressing skill indices to reduce token usage in agent system prompts. It uses toolset mapping, usage-frequency…">
+<meta name="twitter:description" content="Progressive Skill is a tool for managing agent skill indices through progressive disclosure, budget control, and usage-frequency learning. It reduces token…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=progressive-skill&amp;subtitle=Smart+skill+index+compaction+for+Hermes+Agent+%E2%80%94+progressive+disclosure+with+budget+control+and+usage-frequency+learning.+Cuts+skills+index+%7E70%25+tokens+%28issue+%2322620%29.&amp;kind=project+%C2%B7+guides">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/freehul/progressive-skill#software",
   "name": "progressive-skill",
-  "description": "Progressive Skill provides a method for compressing skill indices to reduce token usage in agent system prompts. It uses toolset mapping, usage-frequency learning, and a configurable token budget to determine which skill descriptions to display in full or demote to compact lines.",
+  "description": "Progressive Skill is a tool for managing agent skill indices through progressive disclosure, budget control, and usage-frequency learning. It reduces token overhead by demoting less relevant skill categories into compact single-line summaries while maintaining discoverability.",
   "url": "https://hermesatlas.com/projects/freehul/progressive-skill",
   "codeRepository": "https://github.com/freehul/progressive-skill",
   "applicationCategory": "ReferenceApplication",
@@ -47,7 +47,7 @@
     "name": "freehul",
     "url": "https://github.com/freehul"
   },
-  "dateModified": "2026-08-25T19:51:10.000Z",
+  "dateModified": "2026-08-26T05:04:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-25</span>
+    <span><span class="meta-label">updated</span>2026-08-26</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Progressive Skill provides a method for compressing skill indices to reduce token usage in agent system prompts. It uses toolset mapping, usage-frequency learning, and a configurable token budget to determine which skill descriptions to display in full or demote to compact lines.</p>
+    <p class="summary-text">Progressive Skill is a tool for managing agent skill indices through progressive disclosure, budget control, and usage-frequency learning. It reduces token overhead by demoting less relevant skill categories into compact single-line summaries while maintaining discoverability.</p>
     <ul class="summary-highlights">
-      <li>Reduces skill index tokens by approximately 70%.</li>
-      <li>Works with Hermes and other agents via an agnostic core.</li>
-      <li>Uses usage-frequency learning with recency decay.</li>
+      <li>Reduces skill index token overhead by approximately 70%.</li>
+      <li>Uses recency-decayed usage scores to prioritize frequently used skills.</li>
+      <li>Supports Hermes via plugin and other agents via CLI.</li>
     </ul>
   </div>
 </section>
@@ -228,7 +228,7 @@ python generic/cli.py demote --snapshot snap.json --usage usage.json --toolsets 
 # Budget-compress a rendered skills index
 python generic/cli.py budget --input index.txt --usage usage.json --relevant devops,hermes
 </code></pre>
-<p>Prerequisites: Python 3.10+, your own skills snapshot JSON (one entry per skill: <code>{"category": "...", "frontmatter_name": "..."}</code>) and optional <code>usage.json</code>.</p>
+<p>Prerequisites: Python 3.9+, your own skills snapshot JSON (one entry per skill: <code>{"category": "...", "frontmatter_name": "..."}</code>) and optional <code>usage.json</code>.</p>
 <h3>Configuration</h3>
 <p>All tunables live in <code>plugin.yaml</code> under the <code>config:</code> section (v2.1+). Defaults:</p>
 <table>
@@ -279,7 +279,7 @@ python generic/cli.py budget --input index.txt --usage usage.json --relevant dev
 <li><strong>Agent-agnostic core</strong> — decision logic extracted to <code>generic/core/</code> (pure Python, zero Hermes imports). Hermes plugin is now a thin adapter; other agents drive the same logic via <code>cli.py</code>.</li>
 <li><strong>CLI</strong> — <code>cli.py demote</code> / <code>cli.py budget</code> for universal agent usage</li>
 <li><strong>Claude Code skill</strong> — <code>skills/progressive-skill/SKILL.md</code> entry point</li>
-<li><strong>Unit tests</strong> — <code>tests/test_core.py</code> (11 cases, pytest)</li>
+<li><strong>Unit tests</strong> — <code>tests/test_core.py</code> + <code>tests/test_audit.py</code> (27 cases, pytest)</li>
 </ul>
 <h3>Design principles</h3>
 <ul>
@@ -343,7 +343,7 @@ python generic/cli.py budget --input index.txt --usage usage.json --relevant dev
         <div class="name"><span class="org">alchaincyf /</span> hermes-agent-orange-book</div>
       </a>
       <a class="related-row" href="/projects/OnlyTerp/hermes-optimization-guide">
-        <div class="stars">★ 606</div>
+        <div class="stars">★ 608</div>
         <div class="name"><span class="org">OnlyTerp /</span> hermes-optimization-guide</div>
       </a>
       <a class="related-row" href="/projects/metantonio/hermes-wsl-ubuntu">
