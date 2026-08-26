@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph is a local semantic code intelligence tool designed to provide structural context to AI coding agents through a pre-indexed knowledge graph. It…">
+<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file structural graph of a project's codebase. It integrates with…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool designed to provide structural context to AI coding agents through a pre-indexed knowledge graph. It…">
+<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file structural graph of a project's codebase. It integrates with…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool designed to provide structural context to AI coding agents through a pre-indexed knowledge graph. It…">
+<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file structural graph of a project's codebase. It integrates with…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+tool+calls&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local semantic code intelligence tool designed to provide structural context to AI coding agents through a pre-indexed knowledge graph. It utilizes a Rust-powered kernel to perform cross-file resolution and structural extraction across multiple programming languages.",
+  "description": "CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file structural graph of a project's codebase. It integrates with various coding agents and IDEs via an MCP server to provide context for automated code editing and analysis.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-08-25T16:09:48.000Z",
+  "dateModified": "2026-08-26T17:09:09.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 68157
+    "userInteractionCount": 68232
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">240·repos</span>
+    <span id="meta-count">241·repos</span>
     <span id="meta-version">hermes·v0.20.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>C</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-25</span>
+    <span><span class="meta-label">updated</span>2026-08-26</span>
   </div>
 
   <div class="actions">
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local semantic code intelligence tool designed to provide structural context to AI coding agents through a pre-indexed knowledge graph. It utilizes a Rust-powered kernel to perform cross-file resolution and structural extraction across multiple programming languages.</p>
+    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file structural graph of a project's codebase. It integrates with various coding agents and IDEs via an MCP server to provide context for automated code editing and analysis.</p>
     <ul class="summary-highlights">
       <li>Operates 100% locally with a Rust-powered kernel.</li>
-      <li>Integrates with coding agents via an MCP server.</li>
+      <li>Auto-syncs the index on every file change.</li>
       <li>Supports TypeScript, JavaScript, ArkTS, Python, Go, and Rust.</li>
     </ul>
   </div>
@@ -772,6 +772,7 @@ codegraph init
 <p>The installer <strong>wires up your agents only — it does not index your code.</strong> After it finishes, build each project's graph yourself with <code>codegraph init</code> (step 3). One global <code>codegraph install</code> covers every project; you run <code>codegraph init</code> once per project.</p>
 <p><strong>Non-interactive (scripting / CI):</strong></p>
 <pre><code class="language-bash">codegraph install --yes                              # auto-detect agents, install global
+codegraph install --yes --init                       # same, then build the current project's index (one-shot bootstrap)
 codegraph install --target=cursor,claude --yes       # explicit target list
 codegraph install --target=auto --location=local     # detected agents, project-local
 codegraph install --target=copilot-vscode,copilot-cli,copilot-jetbrains --yes  # GitHub Copilot everywhere
@@ -802,6 +803,11 @@ codegraph install --print-config copilot-vscode      # same, for Copilot in VS C
 <td>prompt every step</td>
 </tr>
 <tr>
+<td><code>--init</code></td>
+<td>(boolean) run <code>codegraph init</code> in the current directory after wiring agents</td>
+<td>—</td>
+</tr>
+<tr>
 <td><code>--no-permissions</code></td>
 <td>(boolean) skip Claude auto-allow list</td>
 <td>permissions on</td>
@@ -818,7 +824,7 @@ codegraph install --print-config copilot-vscode      # same, for Copilot in VS C
 <pre><code class="language-bash">cd your-project
 codegraph init
 </code></pre>
-<p>Builds the per-project knowledge graph index, which then auto-syncs on every file change. A single global <code>codegraph install</code> works in every project you open — no need to re-run the installer per project.</p>
+<p>Builds the per-project knowledge graph index, which then auto-syncs on every file change. A single global <code>codegraph install</code> works in every project you open — no need to re-run the installer per project. Add <code>--yes</code> to skip every prompt (scripts / CI / container bootstraps).</p>
 <p>That's it — your agent will use CodeGraph tools automatically when a <code>.codegraph/</code> directory exists.</p>
 <details>
 <summary><strong>Manual Setup (Alternative)</strong></summary>
@@ -1095,12 +1101,7 @@ defaults and win on conflict, so you can also re-point a built-in (e.g.
 <code>".h": "cpp"</code>). Commit the file to share the mapping with your team. A typo'd
 language or a malformed file is warned about and skipped — it never breaks
 indexing — and a project with no <code>codegraph.json</code> behaves exactly as before.
-Re-index (<code>codegraph index</code>) after adding or changing mappings.</p>
-<h3>Telemetry</h3>
-<p>CodeGraph collects <strong>anonymous usage statistics</strong> — which tools and commands get
-used, which languages get indexed — to guide where language and agent support
-work goes. <strong>Never</strong> any code, paths, file or symbol names, queries, or IP
-addresses;</p>
+Re-index (<code>codegraph index</code>) after </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 
@@ -1115,7 +1116,7 @@ addresses;</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 853</div>
+        <div class="stars">★ 854</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
