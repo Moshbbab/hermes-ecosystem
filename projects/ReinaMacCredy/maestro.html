@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReinaMacCredy/maestro — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root.…">
+<meta name="description" content="Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It manages durable work, decisions, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ReinaMacCredy/maestro">
 <meta property="og:title" content="ReinaMacCredy/maestro — Hermes Atlas">
-<meta property="og:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root.…">
+<meta property="og:description" content="Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It manages durable work, decisions, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ReinaMacCredy/maestro">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ReinaMacCredy/maestro — Hermes Atlas">
-<meta name="twitter:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root.…">
+<meta name="twitter:description" content="Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It manages durable work, decisions, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=maestro&amp;subtitle=Local-first+coordination+for+human+and+agent+work%3A+durable+work%2C+decisions%2C+dispatches%2C+evidence%2C+and+prompt-first+methods%2C+powered+by+TypeScript+and+Bun.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ReinaMacCredy/maestro#software",
   "name": "maestro",
-  "description": "Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. Written in TypeScript and running on Bun, it uses a mechanism kernel and SQLite store to manage durable agent roles and lane-based task dispatches without requiring a background service.",
+  "description": "Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It manages durable work, decisions, and evidence within a repository's shared Git root using a three-layer architecture of a mechanism kernel, plugins, and Markdown-based recipes.",
   "url": "https://hermesatlas.com/projects/ReinaMacCredy/maestro",
   "codeRepository": "https://github.com/ReinaMacCredy/maestro",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "ReinaMacCredy",
     "url": "https://github.com/ReinaMacCredy"
   },
-  "dateModified": "2026-08-27T12:58:36.000Z",
+  "dateModified": "2026-08-27T17:08:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. Written in TypeScript and running on Bun, it uses a mechanism kernel and SQLite store to manage durable agent roles and lane-based task dispatches without requiring a background service.</p>
+    <p class="summary-text">Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It manages durable work, decisions, and evidence within a repository's shared Git root using a three-layer architecture of a mechanism kernel, plugins, and Markdown-based recipes.</p>
     <ul class="summary-highlights">
-      <li>Operates as a local-first system using Git and SQLite storage.</li>
-      <li>Manages three durable agent roles: Supervisor, Lead, and Peer.</li>
-      <li>Coordinates work through plan-approve-execute cycles and Markdown-based recipes.</li>
+      <li>Uses a local-first SQLite store and Git root for durability.</li>
+      <li>Organizes work through Human, Supervisor, Lead, and Peer roles.</li>
+      <li>Supports five lane types for different work scopes.</li>
     </ul>
   </div>
 </section>
@@ -204,17 +204,26 @@ wiring, permissions, and store access without repairing them. A healthy report
 exits zero; a reported problem names the next command when the repair is
 mechanical.</p>
 <h3>Roles and lanes</h3>
-<p>Maestro uses three durable agent roles:</p>
-<ul>
-<li>The <strong>Supervisor</strong> lives in <code>~/maestro</code>. It represents the owner across
-projects, filters attention, and works through each project's Lead. It does
-not edit project code, dispatch Peers directly, or accept technical work.</li>
-<li>A repository session is its <strong>Lead</strong>. The Lead owns the project outcome,
-contracts, topology, integration, and technical acceptance.</li>
-<li>A pane opened with a dispatch is a <strong>Peer</strong>. The Peer owns independent
-judgment or bounded delivery inside the stored contract, then returns a
-handback with layered evidence.</li>
-</ul>
+<p>Maestro uses four durable roles. The <strong>Human</strong> owns purpose, risk, priority,
+and external effects. The single <strong>Supervisor</strong> in <code>~/maestro</code> represents the
+Human across registered projects, but works through each project's Lead and
+does not edit project code, dispatch Peers directly, or accept technical work.
+Its owner, scope, observation boundary, and denied write, acceptance,
+transcript, and recovery authorities are explicit in <code>~/maestro/IDENTITY.md</code>;
+the installer also denies Claude's <code>Agent</code> and <code>Task</code> tools in that room.</p>
+<p>A repository session is the <strong>Lead</strong> for that scope. The Lead owns the outcome,
+contracts, topology, one write owner per moving scope, integration, and
+technical acceptance. A pane opened with a dispatch becomes a <strong>Peer</strong> when it
+accepts the stored contract. The Peer owns independent judgment or bounded
+delivery and returns a handback with layered evidence.</p>
+<pre><code class="language-mermaid">flowchart TB
+  Human --&gt; Supervisor
+  Human --&gt; Lead
+  Supervisor -. "owner authority through Lead" .-&gt; Lead
+  Lead --&gt; PeerA["Peer: bounded scope A"]
+  Lead --&gt; PeerB["Peer: bounded scope B"]
+  Lead --&gt; PeerC["Peer: independent review"]
+</code></pre>
 <p>Read the full authority model with <code>maestro recipe show slp</code>.</p>
 <p>Using SLP requires <a href="https://herdr.dev">Herdr</a>, which hosts the Supervisor
 room and every lane pane. Install it with:</p>
@@ -226,25 +235,44 @@ the lane contract with <code>maestro dispatch open</code>, the Peer takes it wit
 <code>maestro handback file</code>. Herdr owns pane creation, agent startup, prompting,
 wake-up, and pane closure; Maestro owns the durable contract and evidence.
 The room's <code>~/maestro/lane.md</code> contains the complete lane procedure.</p>
-<p>The four lane types are <code>scout</code> for no-write discovery, <code>decision</code> for a
-recommendation, <code>delivery</code> for bounded writes, and <code>challenge</code> for trying to
-break a premise or candidate. Concurrent dispatches on one work item form a
-council. The council stays sealed until every member returns, so no view can
-bias another and work cannot begin on a partial result.</p>
+<p>The five lane types are <code>scout</code> for no-write discovery, <code>decision</code> for a
+recommendation, <code>delivery</code> for bounded writes, <code>challenge</code> for trying to break
+a premise or candidate, and <code>shadow</code> for no-write comparison evidence that is
+never a candidate. Concurrent dispatches on one work item form a sealed
+council. If the first views conflict, the Lead can open a targeted second
+generation that quotes the other handbacks; Peers answer by handback and never
+prompt each other.</p>
+<p>Each moving scope has one Lead. Continuing or replacing that Lead requires a
+frozen handoff packet and the ordered receipts <code>packet_ready</code>,
+<code>successor_authorized</code>, <code>successor_acknowledged</code>, and
+<code>predecessor_released</code> before the predecessor stops writing.</p>
 <h3>Work, decisions, and evidence</h3>
 <ul>
 <li><code>maestro status</code> shows session identity, held work, and live peers;
 <code>maestro ready</code> shows work that can start and the gates blocking other work.</li>
 <li><code>maestro work</code> manages work trees, dependencies, leases, notes, cancellation,
 claims, and proof.</li>
+<li>Method depth is <strong>quickfix</strong> for a one-sentence diff with inline verification
+and no record, <strong>Light</strong> for one session and branch tracked with a work item,
+and <strong>Full</strong> for multi-session, shared-scope, high-risk, or repeated work
+tracked with a SPEC/NOTES/VERIFY bundle.</li>
 <li><code>maestro decision</code> records draft, locked, and superseded choices with their
 rationale and work links. Supersession takes effect when the replacement is
 locked, not while it is still a draft.</li>
+<li>Cross-role decisions are drafted in the store before a Herdr prompt names the
+sender role and decision id. The answer is the locked or superseding record;
+non-decision questions and answers are work notes.</li>
 <li><code>maestro dispatch</code> stores lane contracts and council state;
-<code>maestro handback</code> stores shape-checked return packets.</li>
+<code>maestro handback</code> stores shape-checked return packets, including explicit
+dependency, council, challenge, reopen, unknown, and failure outcomes.</li>
 <li><code>maestro search</code> searches native work, decisions, notes, events, bundles, and
 imported Rust records.</li>
 </ul>
+<p>Proof is layered as <code>source</code>, <code>artifact</code>, <code>installed</code>, <code>live</code>, and <code>journey</code>.
+Claims stop at the last proven layer and name untested links rather than
+rounding them up to completion. Repeated failures route by holder: Peer-held
+work reaches the Lead through the repository brief; Lead-held work reaches the
+Supervisor through the room brief.</p>
 <p>Failed commands emit a JSON error envelope on stderr and exit nonzero. Empty or
 whitespace-only required arguments are rejected rather than interpreted as
 missing identities or targets.</p>
@@ -327,7 +355,7 @@ their exact counts.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 31.3K</div>
+        <div class="stars">★ 31.4K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
