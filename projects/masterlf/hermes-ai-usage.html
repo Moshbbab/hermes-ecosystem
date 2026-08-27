@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>masterlf/hermes-ai-usage — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Hermes AI Usage Monitor is a read-only extension for Hermes Agent that provides token telemetry and provider quota tracking. It displays local usage data from…">
+<meta name="description" content="Hermes AI Usage Monitor is a read-only extension for Hermes Agent that tracks provider quotas and local token telemetry. It provides data visualization for the…">
 <link rel="canonical" href="https://hermesatlas.com/projects/masterlf/hermes-ai-usage">
 <meta property="og:title" content="masterlf/hermes-ai-usage — Hermes Atlas">
-<meta property="og:description" content="Hermes AI Usage Monitor is a read-only extension for Hermes Agent that provides token telemetry and provider quota tracking. It displays local usage data from…">
+<meta property="og:description" content="Hermes AI Usage Monitor is a read-only extension for Hermes Agent that tracks provider quotas and local token telemetry. It provides data visualization for the…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/masterlf/hermes-ai-usage">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="masterlf/hermes-ai-usage — Hermes Atlas">
-<meta name="twitter:description" content="Hermes AI Usage Monitor is a read-only extension for Hermes Agent that provides token telemetry and provider quota tracking. It displays local usage data from…">
+<meta name="twitter:description" content="Hermes AI Usage Monitor is a read-only extension for Hermes Agent that tracks provider quotas and local token telemetry. It provides data visualization for the…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-ai-usage&amp;subtitle=Read-only+provider+quota+and+token+telemetry+for+Hermes+Agent+Desktop+and+Web+Dashboard&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,19 +35,19 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/masterlf/hermes-ai-usage#software",
   "name": "hermes-ai-usage",
-  "description": "Hermes AI Usage Monitor is a read-only extension for Hermes Agent that provides token telemetry and provider quota tracking. It displays local usage data from the Hermes state database and official provider snapshots for OpenAI Codex, Anthropic, and OpenRouter across Desktop and Web Dashboard interfaces.",
+  "description": "Hermes AI Usage Monitor is a read-only extension for Hermes Agent that tracks provider quotas and local token telemetry. It provides data visualization for the Hermes Desktop app and Web Dashboard without reading prompt or message content.",
   "url": "https://hermesatlas.com/projects/masterlf/hermes-ai-usage",
   "codeRepository": "https://github.com/masterlf/hermes-ai-usage",
   "applicationCategory": "BrowserApplication",
   "operatingSystem": "Cross-platform",
-  "programmingLanguage": "JavaScript",
+  "programmingLanguage": "Python",
   "license": "https://spdx.org/licenses/Apache-2.0.html",
   "author": {
     "@type": "Organization",
     "name": "masterlf",
     "url": "https://github.com/masterlf"
   },
-  "dateModified": "2026-08-26T17:36:36.000Z",
+  "dateModified": "2026-08-27T09:04:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">241·repos</span>
+    <span id="meta-count">242·repos</span>
     <span id="meta-version">hermes·v0.20.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -121,10 +121,10 @@
 
   <div class="meta-row">
     <span class="stars">★ 2</span>
-    <span><span class="meta-label">lang</span>JavaScript</span>
+    <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-26</span>
+    <span><span class="meta-label">updated</span>2026-08-27</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes AI Usage Monitor is a read-only extension for Hermes Agent that provides token telemetry and provider quota tracking. It displays local usage data from the Hermes state database and official provider snapshots for OpenAI Codex, Anthropic, and OpenRouter across Desktop and Web Dashboard interfaces.</p>
+    <p class="summary-text">Hermes AI Usage Monitor is a read-only extension for Hermes Agent that tracks provider quotas and local token telemetry. It provides data visualization for the Hermes Desktop app and Web Dashboard without reading prompt or message content.</p>
     <ul class="summary-highlights">
-      <li>Tracks token counters, provider quotas, and session history without reading message content.</li>
-      <li>Uses read-only SQLite queries and adds zero runtime dependencies to Hermes.</li>
-      <li>Supports native Desktop status-bar indicators and a dedicated Web Dashboard tab.</li>
+      <li>Supports OpenAI Codex, Anthropic OAuth, and OpenRouter provider quotas.</li>
+      <li>Displays token usage via UTC charts and session history tables.</li>
+      <li>Operates with zero runtime dependencies and read-only SQLite access.</li>
     </ul>
   </div>
 </section>
@@ -168,9 +168,12 @@ that separates three facts people often blur together:</p>
 </ol>
 <p>The plugin supports the native Hermes Desktop app and the Hermes Web Dashboard.
 It never reads prompt or message content.</p>
-<p>Current plugin version: <strong>v0.7.3</strong>.</p>
-<p>Tested baseline (not a minimum-support claim): Hermes v0.20.5, upstream <code>1bbb6e5b</code>,
-local <code>981101239a064c020a9d18fc3b1060ae306934ed</code>, tested 2026-08-25.</p>
+<p>Current plugin version: <strong>v0.7.4</strong>.</p>
+<p>Merging or publishing v0.7.4 distributes artifacts only; neither action deploys, restarts,
+upgrades, or changes any Hermes installation. Installation or migration remains a separate,
+explicit operator action.</p>
+<p>Tested baseline (not a minimum-support claim): Hermes v0.20.5, local source authority
+<code>981101239a064c020a9d18fc3b1060ae306934ed</code>, tested 2026-08-25.</p>
 <h3>Features</h3>
 <ul>
 <li>account-quota windows, remaining percentage, and reset time for providers supported
@@ -230,11 +233,13 @@ Gitleaks, dependency review, zizmor, and OpenSSF Scorecard;</li>
 <p>Read <a href="https://github.com/masterlf/hermes-ai-usage/blob/main/SECURITY.md">SECURITY.md</a>, <a href="https://github.com/masterlf/hermes-ai-usage/blob/main/docs/THREAT_MODEL.md">the threat model</a>, and
 <a href="https://github.com/masterlf/hermes-ai-usage/blob/main/docs/PRIVACY.md">the privacy model</a> before deploying in a shared environment.</p>
 <h3>Repository layout</h3>
-<pre><code class="language-text">desktop/plugin.js                         Native Hermes Desktop extension
-runtime/dashboard/manifest.json           Web Dashboard manifest
-runtime/dashboard/dist/index.js           Web Dashboard UI bundle
-runtime/dashboard/dist/style.css          Theme-aware dashboard styles
-runtime/dashboard/plugin_api.py           Read-only FastAPI router
+<pre><code class="language-text">plugin.yaml                              Hermes plugin manifest (`ai-usage-monitor`)
+__init__.py                              Inert agent entry point
+desktop/plugin.js                         Native Hermes Desktop extension
+dashboard/manifest.json                   Web Dashboard manifest
+dashboard/dist/index.js                   Web Dashboard UI bundle
+dashboard/dist/style.css                  Theme-aware dashboard styles
+dashboard/plugin_api.py                   Read-only FastAPI router
 tests/                                    Backend and frontend smoke tests
 scripts/security_invariants.py             Privacy/security regression gate
 docs/                                     Architecture, installation, privacy, threat model
@@ -242,12 +247,66 @@ docs/                                     Architecture, installation, privacy, t
 <h3>Installation</h3>
 <p>See <a href="https://github.com/masterlf/hermes-ai-usage/blob/main/docs/INSTALLATION.md">docs/INSTALLATION.md</a> for complete installation,
 verification, upgrade, and removal instructions.</p>
-<p>Install only the exact <code>v0.7.3</code> release archive after verifying <code>SHA256SUMS</code> and its
-repo-and-workflow-scoped GitHub provenance attestation. The archive's checked-in Python
-installer requires an explicit canonical <code>HERMES_HOME</code>, atomically replaces exact Dashboard
-and Desktop trees, keeps distinct component backups, and rolls both back if either swap
-fails. Configuration edits remain separate. This repository is not a native
-<code>hermes plugins install</code> package.</p>
+<p>Before the primary Git install, select the profile with <code>hermes profile show PROFILE_NAME</code>, copy
+its exact home, and run this fail-closed preflight. Any legacy standalone Desktop tree or
+non-Git/manual unified destination must use
+<a href="https://github.com/masterlf/hermes-ai-usage/blob/main/docs/INSTALLATION.md#legacy-split-tree-migration-or-deterministic-manual-fallback">Legacy split-tree migration or deterministic manual fallback</a>
+instead; do not delete either tree or unrelated plugins.</p>
+<pre><code class="language-bash">export HERMES_HOME="/exact/Path/from-profile-show"
+test "$HERMES_HOME" = "$(realpath -e -- "$HERMES_HOME")"
+test -f "$HERMES_HOME/config.yaml"
+PLUGINS_ROOT="$HERMES_HOME/plugins"
+DESKTOP_PLUGINS_ROOT="$HERMES_HOME/desktop-plugins"
+for PLUGIN_ROOT in "$PLUGINS_ROOT" "$DESKTOP_PLUGINS_ROOT"; do
+  if [ -L "$PLUGIN_ROOT" ]; then
+    printf '%s\n' "Symlinked plugin root found; use the migration procedure." &gt;&amp;2
+    exit 1
+  fi
+  if [ -e "$PLUGIN_ROOT" ]; then
+    test -d "$PLUGIN_ROOT" &amp;&amp;
+      test "$PLUGIN_ROOT" = "$(realpath -e -- "$PLUGIN_ROOT")" || {
+        printf '%s\n' "Plugin root is not a canonical directory; use the migration procedure." &gt;&amp;2
+        exit 1
+      }
+  fi
+done
+LEGACY_DESKTOP="$HERMES_HOME/desktop-plugins/ai-usage-monitor"
+UNIFIED="$HERMES_HOME/plugins/ai-usage-monitor"
+if [ -e "$LEGACY_DESKTOP" ] || [ -L "$LEGACY_DESKTOP" ]; then
+  printf '%s\n' "Legacy Desktop tree found; use the migration procedure." &gt;&amp;2
+  exit 1
+fi
+if [ -e "$UNIFIED" ] || [ -L "$UNIFIED" ]; then
+  test -d "$UNIFIED" &amp;&amp; test ! -L "$UNIFIED" || exit 1
+  test "$(git -C "$UNIFIED" rev-parse --show-toplevel)" = "$(realpath -e -- "$UNIFIED")" || {
+    printf '%s\n' "Existing unified tree is not its own Git clone; use the migration procedure." &gt;&amp;2
+    exit 1
+  }
+fi
+</code></pre>
+<p>The complete guide then resolves <code>v0.7.4</code> to an exact commit, installs it with
+<code>hermes plugins install ... --enable</code>, and verifies the installed clone's <code>HEAD</code>. That command
+enables the agent/Dashboard half only. For both a fresh Git install and a v0.7.2/v0.7.3
+split-tree migration, open Hermes Desktop <strong>Settings → Plugins</strong>, find <strong>AI Usage Monitor</strong> under
+<strong>Desktop plugins</strong>, choose <strong>Rescan</strong> if it is not inventoried yet, and confirm its switch is
+off. If an upgrade shows it on, switch it off first: the old standalone copy's enablement state
+is not authority for the new unified root. Then switch it on explicitly. No Desktop reload or
+restart is required; the tested host activates Desktop contributions live. Only then verify the
+AI Usage page and status-bar indicator.</p>
+<p>Git clone installation is not covered by archive <code>SHA256SUMS</code> or attestation. The manual
+migration verifies those controls, requires positive unified-host-contract evidence, swaps the
+two historical trees transactionally, preserves rollback evidence and configuration, and never
+removes unrelated plugins.</p>
+<p>A pinned exact-SHA install is intentionally immutable:
+<code>hermes plugins update ai-usage-monitor</code> is expected to fail closed rather than move it. For a
+Git version transition, preserve the old exact SHA and recovery prerequisites before removal,
+resolve the published version to a new exact 40-character commit SHA, disable and remove only
+<code>ai-usage-monitor</code> with supported commands, then install that SHA with the scanner enabled. Use
+a bounded interactive review of every <code>CAUTION</code> finding and stop on <code>BLOCK</code>. Never use <code>--force</code>
+or disable the scanner. Split-tree/manual users must use the transactional release installer,
+not this Git lifecycle. This transition must not delete or edit unrelated plugins or
+configuration. The complete commands and rollback path are in
+<a href="https://github.com/masterlf/hermes-ai-usage/blob/main/docs/INSTALLATION.md#pinned-git-version-transition">docs/INSTALLATION.md</a>.</p>
 <h3>Development</h3>
 <pre><code class="language-bash">python3 -m venv .venv
 . .venv/bin/activate
@@ -316,7 +375,7 @@ local token allowances.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 385</div>
+        <div class="stars">★ 386</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
@@ -336,7 +395,7 @@ local token allowances.</p>
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
-        <div class="stars">★ 50</div>
+        <div class="stars">★ 51</div>
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">

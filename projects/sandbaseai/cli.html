@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sandbaseai/cli — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
+<meta name="description" content="@sandbaseai/cli is a command-line interface and local bridge that connects AI agents to over 2,000 models and APIs using the Model Context Protocol. It enables…">
+<link rel="canonical" href="https://hermesatlas.com/projects/sandbaseai/cli">
+<meta property="og:title" content="sandbaseai/cli — Hermes Atlas">
+<meta property="og:description" content="@sandbaseai/cli is a command-line interface and local bridge that connects AI agents to over 2,000 models and APIs using the Model Context Protocol. It enables…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/sandbaseai/cli">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=cli&amp;subtitle=Open-source+AI+CLI+and+local+MCP+server+connecting+25+AI+clients%E2%80%94including+Claude+Code%2C+Cursor%2C+Codex%2C+and+ChatGPT%E2%80%94to+2%2C000%2B+models+and+APIs%2C+with+OAuth+and+rollback.&amp;kind=project+%C2%B7+integrations">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="sandbaseai/cli — Hermes Atlas">
+<meta name="twitter:description" content="@sandbaseai/cli is a command-line interface and local bridge that connects AI agents to over 2,000 models and APIs using the Model Context Protocol. It enables…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=cli&amp;subtitle=Open-source+AI+CLI+and+local+MCP+server+connecting+25+AI+clients%E2%80%94including+Claude+Code%2C+Cursor%2C+Codex%2C+and+ChatGPT%E2%80%94to+2%2C000%2B+models+and+APIs%2C+with+OAuth+and+rollback.&amp;kind=project+%C2%B7+integrations">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "map", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "integrations &amp; bridges", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 3, "name": "cli" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/sandbaseai/cli#software",
+  "name": "cli",
+  "description": "@sandbaseai/cli is a command-line interface and local bridge that connects AI agents to over 2,000 models and APIs using the Model Context Protocol. It enables agents to perform tasks such as web searching, social media analysis, and image or video generation through a unified connection.",
+  "url": "https://hermesatlas.com/projects/sandbaseai/cli",
+  "codeRepository": "https://github.com/sandbaseai/cli",
+  "applicationCategory": "CommunicationApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "TypeScript",
+  "license": "https://spdx.org/licenses/Apache-2.0.html",
+  "author": {
+    "@type": "Organization",
+    "name": "sandbaseai",
+    "url": "https://github.com/sandbaseai"
+  },
+  "dateModified": "2026-08-27T08:30:05.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 58
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script src="/assets/js/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span id="meta-count">242·repos</span>
+    <span id="meta-version">hermes·v0.20.5</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/" class="active">map</a>
+    <a href="/lists/">lists</a>
+    <a href="/skills/">skills</a>
+    <a href="/use-cases/">use cases</a>
+    <a href="/guide/">handbook</a>
+    <a href="/masterclass/">masterclass</a>
+    <a href="/dev/">dev</a>
+    <a href="/reports/">reports</a>
+    <a href="/#newsletter">newsletter</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-icon tt-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2.25M12 19.75V22M4.93 4.93l1.59 1.59M17.48 17.48l1.59 1.59M2 12h2.25M19.75 12H22M4.93 19.07l1.59-1.59M17.48 6.52l1.59-1.59"/></svg>
+    </span>
+    <span class="tt-icon tt-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M20.2 15.1A8.4 8.4 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+    </span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">map</a><span class="sep">/</span><a href="/">integrations &amp; bridges</a><span class="sep">/</span>cli
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">sandbaseai</span><span class="slash">/</span>cli
+  </h1>
+  <p class="project-desc">Open-source AI CLI and local MCP server connecting 25 AI clients—including Claude Code, Cursor, Codex, and ChatGPT—to 2,000+ models and APIs, with OAuth and rollback.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 58</span>
+    <span><span class="meta-label">lang</span>TypeScript</span>
+    <span><span class="meta-label">license</span>Apache-2.0</span>
+    
+    <span><span class="meta-label">updated</span>2026-08-27</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/sandbaseai/cli" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://blog.sandbase.ai/sandbase-cli-mcp-bridge-25-ai-clients/" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">@sandbaseai/cli is a command-line interface and local bridge that connects AI agents to over 2,000 models and APIs using the Model Context Protocol. It enables agents to perform tasks such as web searching, social media analysis, and image or video generation through a unified connection.</p>
+    <ul class="summary-highlights">
+      <li>Connects AI agents to 2,000+ models via Model Context Protocol.</li>
+      <li>Supports web search, social media scraping, and media generation tools.</li>
+      <li>Includes a catalog for 25 verified AI clients.</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <p align="center">
+  </p><h1 align="center">@sandbaseai/cli</h1>
+  <p align="center">
+    <strong>Give your AI agent superpowers. One command. 2,000+ AI models.</strong>
+  </p>
+  <p align="center">
+    English | <a href="./README.zh-CN.md">中文</a> | <a href="./README.ja.md">日本語</a> | <a href="./README.ko.md">한국어</a> | <a href="./README.es.md">Español</a> | <a href="./README.fr.md">Français</a> | <a href="./README.de.md">Deutsch</a> | <a href="./README.pt-BR.md">Português</a>
+  </p>
+  <p align="center">
+    <a href="https://github.com/sandbaseai/cli/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/v/release/sandbaseai/cli"></a>
+    <a href="https://github.com/sandbaseai/cli/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sandbaseai/cli/actions/workflows/ci.yml/badge.svg"></a>
+    <a href="https://github.com/sandbaseai/cli/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/sandbaseai/cli"></a>
+    <a href="https://github.com/sandbaseai/cli/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/sandbaseai/cli?style=social"></a>
+  </p>
+<p></p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sandbaseai/cli/main/.github/assets/sandbase-cli-hero.webp" alt="SandBase CLI connects AI clients to 2,000+ AI models" width="100%">
+</p>
+
+<hr>
+<p>Your AI coding assistant is smart, but it's trapped in a box. It can't search the web, check social media, generate images, or access real-time data — unless you wire up each API yourself.</p>
+<p><strong>SandBase changes that.</strong> One command connects your agent to 2,000+ AI models through the <a href="https://modelcontextprotocol.io">Model Context Protocol</a>. No API keys to manage. No configuration headaches.</p>
+<p>Building directly over HTTP instead of MCP? Start with the <a href="https://www.sandbase.ai/docs/getting-started/">SandBase API quickstart</a>
+or compare the unified <a href="https://blog.sandbase.ai/unified-ai-api-llm-image-video-2026/">LLM, image, and video API</a>
+with specialized model gateways.</p>
+<pre><code class="language-sh">npx -y https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz connect
+</code></pre>
+<p>For a reproducible install, verify the immutable release archive before
+running it. The SHA-256 for <code>sandbaseai-cli-0.1.17.tgz</code> is
+<code>1ad535b2899ca460b57b3c268aef278fee28fd28e649a89b92951514fd71fffa</code>.</p>
+<pre><code class="language-sh">curl -fL -o sandbaseai-cli-0.1.17.tgz \
+  https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz
+echo '1ad535b2899ca460b57b3c268aef278fee28fd28e649a89b92951514fd71fffa  sandbaseai-cli-0.1.17.tgz' | shasum -a 256 -c -
+npx -y ./sandbaseai-cli-0.1.17.tgz connect
+</code></pre>
+<p>Approve the browser authorization once; each supported client can then discover,
+inspect, and run available SandBase models and APIs through the local MCP bridge.</p>
+<p>Want to inspect compatibility before signing in or changing configuration? The current
+<a href="https://github.com/sandbaseai/cli/releases/tag/v0.1.17"><code>v0.1.17</code> GitHub release</a>
+includes a verified 25-client catalog:</p>
+<pre><code class="language-sh">npx -y https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz catalog --json
+</code></pre>
+<p>The npm <code>latest</code> tag currently serves v0.1.14 while tokenless trusted publishing is
+being enabled. The GitHub release tarball is built from the immutable <code>v0.1.17</code> tag;
+its SHA-256 is published with the release.</p>
+<p>For a security-focused walkthrough of client detection, MCP tools, and rollback,
+read the <a href="https://blog.sandbase.ai/sandbase-cli-mcp-bridge-25-ai-clients/">25-client SandBase CLI setup guide</a>.
+AI agents and automated installers can use the concise
+<a href="https://github.com/sandbaseai/cli/blob/main/llms-install.md"><code>llms-install.md</code></a> instructions.</p>
+<h3>SandBase Open-Source Stack</h3>
+<ul>
+<li><strong><a href="https://github.com/sandbaseai/sandbase-harness">SandBase Harness</a></strong> — self-hosted agent runtime with persistent sessions, sandbox isolation, approvals, audit, and replay.</li>
+<li><strong><a href="https://github.com/sandbaseai/sandbase-skills">SandBase Agent Skills</a></strong> — 88 installable Skills for research, social intelligence, marketing, and business workflows.</li>
+</ul>
+<p>Discover the bridge on the <a href="https://tensorblock.co/mcp/servers/github-sandbaseai-cli-c4e113db">TensorBlock MCP Index</a>,
+<a href="https://mcprepository.com/sandbaseai/cli">MCPRepository</a>,
+<a href="https://mcpserver.dev/s/sandbase-cli_r2sjd4x">MCP Server Hub</a>,
+<a href="https://www.mcpserverspot.com/servers/sandbase-cli">MCP Server Spot</a>, or the
+<a href="https://github.com/howardpen9/awesome-ai-api-proxy#global-gateways--aggregators">Awesome AI API Proxy</a>.
+The Hermes integration is independently listed as beta in
+<a href="https://github.com/0xNyk/awesome-hermes-agent#integrations--bridges">Awesome Hermes Agent</a>.
+Install its
+verified <a href="https://www.skills.sh/sandbaseai/cli/sandbase"><code>sandbase</code> Agent Skill from skills.sh</a>,
+the <a href="https://skills.cat/skills/sandbaseai/cli/sandbase"><code>sandbaseai/cli/sandbase</code> listing on SkillsCat</a>,
+the <a href="https://skills.re/skills/sandbaseai/cli/sandbase"><code>sandbaseai/cli/sandbase</code> listing on skills.re</a>,
+the <a href="https://verified-skill.com/skills/sandbaseai/cli/sandbase">93/100 verified SandBase listing on vSkill</a>,
+the <a href="https://skillstore.io/skills/sandbaseai-sandbase">security-audited SandBase listing on Skillstore</a>,
+or the versioned <a href="https://agentskillhub.dev/u/sandbaseai/sk/sandbase"><code>sandbaseai/sandbase</code> snapshot on Agent Skill Hub</a>.</p>
+<hr>
+<h3>See It In Action</h3>
+<p>After connecting, just ask your agent naturally. It handles the rest.</p>
+<blockquote>
+<p>The outputs below are illustrative examples of the interaction pattern. Live
+results, latency, availability, and pricing vary by provider and request; use
+<code>sandbase_inspect</code> before running a model or API to see its current schema and
+price.</p>
+</blockquote>
+<h4>"Search the web for React 19 new features"</h4>
+<pre><code>Agent → SandBase Web Search → 10 results in 0.8s
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. "React 19 is Here: What's New" — react.dev
+2. "React 19 Compiler Deep Dive" — Dan Abramov's blog
+3. "Migrating to React 19" — Vercel Engineering
+...
+</code></pre>
+<h4>"Get trending posts about AI on Twitter"</h4>
+<pre><code>Agent → SandBase Twitter API → Top 10 posts
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. @karpathy: "LLMs are the new CPUs..." (45K ❤️)
+2. @emollick: "Agent benchmarks just crossed..." (12K ❤️)
+3. @swyx: "The MCP ecosystem is growing fast..." (8K ❤️)
+...
+</code></pre>
+<h4>"Generate a minimalist logo for my startup 'NightOwl'"</h4>
+<pre><code>Agent → SandBase Flux Image Gen → 1024x1024 PNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Generated: nightowl-logo.png
+  Style: Minimalist, dark theme
+  Cost: $0.003
+  Time: 2.1s
+</code></pre>
+<h4>"Scrape the pricing table from linear.app"</h4>
+<pre><code>Agent → SandBase Firecrawl Scraper → Structured data
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Extracted 3 plans:
+  Free: $0/mo — Up to 250 issues
+  Standard: $8/user/mo — Unlimited issues + cycles
+  Plus: $14/user/mo — Advanced features + analytics
+</code></pre>
+<h4>"Use GPT-4o to review this pull request for issues"</h4>
+<pre><code>Agent → SandBase GPT-4o → Analysis complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Found 2 issues:
+  ⚠️  Race condition in useEffect (line 42)
+  ⚠️  Missing error boundary around async component
+  ✓  Type safety looks good
+  ✓  Test coverage adequate
+</code></pre>
+<h4>"Create a 5-second product demo video"</h4>
+<pre><code>Agent → SandBase Kling Video Gen → Async processing
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⏳ Generating... (45s)
+✓ Output: product-demo.mp4 (5s, 720p)
+  Cost: $0.10
+</code></pre>
+<hr>
+<h3>What's Inside</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Tools</th>
+<th>What You Can Do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Web Search</strong></td>
+<td>Google, Exa, Tavily, Scholar</td>
+<td>Research anything in real-time</td>
+</tr>
+<tr>
+<td><strong>Social Media</strong></td>
+<td>Twitter/X, YouTube, Reddit, Instagram, TikTok, Xiaohongshu, Weibo, Bilibili</td>
+<td>Monitor trends, pull posts, analyze content</td>
+</tr>
+<tr>
+<td><strong>Scraping</strong></td>
+<td>Firecrawl, Exa Content</td>
+<td>Extract data from any public webpage</td>
+</tr>
+<tr>
+<td><strong>AI Models</strong></td>
+<td>GPT-4o, Claude, Gemini, DeepSeek, Qwen, Llama</td>
+<td>Run any model without managing keys</td>
+</tr>
+<tr>
+<td><strong>Image Gen</strong></td>
+<td>Flux, DALL-E, Ideogram, Recraft</td>
+<td>Create logos, illustrations, mockups</td>
+</tr>
+<tr>
+<td><strong>Video Gen</strong></td>
+<td>Kling, MiniMax, Runway, Luma</td>
+<td>Generate short clips and animations</td>
+</tr>
+<tr>
+<td><strong>Audio</strong></td>
+<td>ElevenLabs, Whisper</td>
+<td>Text-to-speech, transcription</td>
+</tr>
+<tr>
+<td><strong>E-commerce</strong></td>
+<td>Taobao, Amazon</td>
+<td>Product research, price comparison</td>
+</tr>
+<tr>
+<td><strong>Finance</strong></td>
+<td>Stock data, company info</td>
+<td>Market research and analysis</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Supported Clients (25 Targets)</h3>
+<p>Works with every major AI coding tool:</p>
+<table>
+<thead>
+<tr>
+<th>Auto-configured</th>
+<th>Manual setup</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cursor, Cursor CLI</td>
+<td>ChatGPT</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>Claude Desktop</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td></td>
+</tr>
+<tr>
+<td>Kiro IDE, Kiro CLI</td>
+<td></td>
+</tr>
+<tr>
+<td>Windsurf</td>
+<td></td>
+</tr>
+<tr>
+<td>Gemini CLI</td>
+<td></td>
+</tr>
+<tr>
+<td>Amp</td>
+<td></td>
+</tr>
+<tr>
+<td>Warp</td>
+<td></td>
+</tr>
+<tr>
+<td>OpenCode, Qwen Code, Kimi CLI</td>
+<td></td>
+</tr>
+<tr>
+<td>Hermes, OpenClaw</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Preview the complete compatibility catalog without signing in or changing any files:</p>
+<pre><code class="language-sh">npx -y https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz catalog --json
+</code></pre>
+<pre><code class="language-sh"># Connect all detected clients at once
+npx -y https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz connect
+
+# Or target one specific client
+npx -y https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz connect --client cursor
+</code></pre>
+<hr>
+<h3>How It Works</h3>
+<pre><code>┌─────────────────┐         ┌───────────────┐         ┌────────────────────┐
+│   Your Agent    │  MCP    │  Local Bridge │  HTTPS  │    SandBase API     │
+│  (Cursor, etc.) │────────▶│  (on-demand)  │────────▶│  2,000+ AI models  │
+│                 │◀────────│               │◀────────│                    │
+└─────────────────┘         └───────────────┘         └────────────────────┘
+</code></pre>
+<ol>
+<li>Run <code>connect</code> → CLI opens browser auth → you approve</li>
+<li>API key saved locally (file permissions <code>0600</code>)</li>
+<li>MCP bridge configured for your client</li>
+<li>Agent calls tools on-demand. No daemon. No background process.</li>
+</ol>
+<hr>
+<h3>Commands</h3>
+<h4>CLI Commands</h4>
+<pre><code class="language-sh">sandbase connect [--client &lt;name&gt;]    # Authorize + configure
+sandbase doctor [--client &lt;name&gt;]     # Health check
+sandbase unregister [--client &lt;name&gt;] # Remove configuration
+sandbase catalog --json               # List all supported clients
+</code></pre>
+<h4>MCP Tools (available to your agent after connecting)</h4>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sandbase_discover</code></td>
+<td>Search all 2,000+ available AI models</td>
+</tr>
+<tr>
+<td><code>sandbase_inspect</code></td>
+<td>Get input schema, pricing, and ready-to-use template</td>
+</tr>
+<tr>
+<td><code>sandbase_run</code></td>
+<td>Execute a model or API endpoint</td>
+</tr>
+<tr>
+<td><code>sandbase_run_get</code></td>
+<td>Poll status/result of an async run (video gen, etc.)</td>
+</tr>
+<tr>
+<td><code>sandbase_runs</code></td>
+<td>List your recent API calls with cost breakdown</td>
+</tr>
+<tr>
+<td><code>sandbase_account</code></td>
+<td>Check account balance (free, no cost)</td>
+</tr>
+</tbody></table>
+<p><strong>Workflow your agent follows automatically:</strong></p>
+<pre><code>discover → inspect → run
+</code></pre>
+<pre><code>1. sandbase_discover(q: "twitter search")        → finds matching tools
+2. sandbase_inspect(name: "twitter_timeline")    → gets schema + pricing
+3. sandbase_run(name: "twitter_timeline", ...)   → executes and returns data
+</code></pre>
+<hr>
+<h3>Security</h3>
+<ul>
+<li><strong>Zero secrets in URLs or CLI args</strong> — OAuth device flow with PKCE</li>
+<li><strong>Restricted file permissions</strong> — Credentials stored with <code>0600</code></li>
+<li><strong>Ownership-aware updates</strong> — Existing JSONC comments and user-managed MCP entries are preserved</li>
+<li><strong>Exact rollback</strong> — On failure or <code>unregister</code>, only configuration owned by SandBase is removed</li>
+<li><strong>Revoke anytime</strong> — One click in the <a href="https://sandbase.ai/console/keys">SandBase Dashboard</a></li>
+</ul>
+<hr>
+<h3>Get Started</h3>
+<pre><code class="language-sh">npx -y https://github.com/sandbaseai/cli/releases/download/v0.1.17/sandbaseai-cli-0.1.17.tgz connect
+</code></pre>
+<p>Then ask your agent to do something it couldn't before.</p>
+<p><strong><a href="https://sandbase.ai">Create a free account →</a></strong></p>
+<p>If SandBase saves you setup time, <a href="https://github.com/sandbaseai/cli">star the repository</a> — it helps more agent users discover the project.</p>
+<hr>
+<h3>Links</h3>
+<ul>
+<li><a href="https://sandbase.ai">SandBase Platform</a></li>
+<li><a href="https://www.sandbase.ai/docs/">Documentation</a></li>
+<li><a href="https://www.sandbase.ai/docs/setup/cli">CLI setup guide</a></li>
+<li>CLI deep dive: <a href="https://blog.sandbase.ai/sandbase-cli-mcp-bridge-25-ai-clients/">English</a> · <a href="https://blog.sandbase.ai/zh-CN/sandbase-cli-mcp-bridge-25-ai-clients/">中文</a></li>
+<li><a href="https://www.npmjs.com/package/@sandbaseai/cli">npm Package</a></li>
+<li><a href="https://sandbase.ai/console">Dashboard</a></li>
+</ul>
+<h3>Community</h3>
+<ul>
+<li><a href="https://github.com/sandbaseai/cli/discussions">Ask a question or share what you built</a></li>
+<li><a href="https://github.com/sandbaseai/cli/issues/new?template=bug-report.yml">Report a reproducible bug</a></li>
+<li><a href="https://github.com/sandbaseai/cli/issues/new?template=feature-request.yml">Propose an integration or improvement</a></li>
+<li><a href="https://github.com/sandbaseai/cli/blob/main/CONTRIBUTING.md">Contribute to SandBase CLI</a></li>
+</ul>
+<p>Community-curated listings:</p>
+<ul>
+<li><a href="https://github.com/AlexMili/Awesome-MCP">Awesome MCP</a></li>
+<li><a href="https://github.com/howardpen9/awesome-ai-api-proxy">Awesome AI API Proxy</a></li>
+<li><a href="https://github.com/Piebald-AI/awesome-gemini-cli">Awesome Gemini CLI</a></li>
+<li><a href="https://github.com/0xNyk/awesome-hermes-agent">Awesome Hermes Agent</a></li>
+<li><a href="https://github.com/QAInsights/awesome-ai-tools">Awesome AI Tools</a></li>
+<li><a href="https://github.com/AIAnytime/Awesome-MCP-Server">Awesome MCP Server</a></li>
+</ul>
+<h3>License</h3>
+<p>Apache-2.0</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in integrations &amp; bridges</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/raulvidis/hermes-android">
+        <div class="stars">★ 480</div>
+        <div class="name"><span class="org">raulvidis /</span> hermes-android</div>
+      </a>
+      <a class="related-row" href="/projects/teknium1/hermes-miniverse">
+        <div class="stars">★ 55</div>
+        <div class="name"><span class="org">teknium1 /</span> hermes-miniverse</div>
+      </a>
+      <a class="related-row" href="/projects/Ridwannurudeen/hermes-council">
+        <div class="stars">★ 51</div>
+        <div class="name"><span class="org">Ridwannurudeen /</span> hermes-council</div>
+      </a>
+      <a class="related-row" href="/projects/gizdusum/hermes-blockchain-oracle">
+        <div class="stars">★ 6</div>
+        <div class="name"><span class="org">gizdusum /</span> hermes-blockchain-oracle</div>
+      </a>
+      <a class="related-row" href="/projects/kevinmarmstrong/hermes-claude-code-rc">
+        <div class="stars">★ 3</div>
+        <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
+      </a>
+      <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
+        <div class="stars">★ 718</div>
+        <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
+      </a>
+      <a class="related-row" href="/projects/Codename-11/hermes-relay">
+        <div class="stars">★ 162</div>
+        <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
+      </a>
+      <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">
+        <div class="stars">★ 1</div>
+        <div class="name"><span class="org">kfa-ai /</span> hermes-timetree-sync</div>
+      </a>
+    </div>
+    
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

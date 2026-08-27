@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/claude-context-os — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use by coding agents. It uses a…">
+<meta name="description" content="Context OS is a Git-backed context and workflow layer designed to maintain durable project state across coding agents including Claude Code, Codex, and Hermes.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta property="og:description" content="Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use by coding agents. It uses a…">
+<meta property="og:description" content="Context OS is a Git-backed context and workflow layer designed to maintain durable project state across coding agents including Claude Code, Codex, and Hermes.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use by coding agents. It uses a…">
+<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer designed to maintain durable project state across coding agents including Claude Code, Codex, and Hermes.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=claude-context-os&amp;subtitle=Portable%2C+evolving+context+and+workflow+layer+that+works+across+Claude+Code%2C+Codex%2C+Hermes+Agent%2C+and+other+compatible+coding+agents.+All+backed+by+Git.+&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os#software",
   "name": "claude-context-os",
-  "description": "Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use by coding agents. It uses a deterministic lifecycle kernel to manage session handoffs, checkpoints, and memory proposals across supported hosts like Claude Code, Codex, and Hermes.",
+  "description": "Context OS is a Git-backed context and workflow layer designed to maintain durable project state across coding agents including Claude Code, Codex, and Hermes. It uses a deterministic lifecycle kernel to manage reviewed proposals and receipts for setup, checkpoints, and session handoffs stored in Markdown files.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os",
   "codeRepository": "https://github.com/conorbronsdon/claude-context-os",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-08-25T16:11:38.000Z",
+  "dateModified": "2026-08-27T09:08:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">241·repos</span>
+    <span id="meta-count">242·repos</span>
     <span id="meta-version">hermes·v0.20.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-25</span>
+    <span><span class="meta-label">updated</span>2026-08-27</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Context OS is a Git-backed context and workflow layer that stores identity, project state, and decisions in Markdown files for use by coding agents. It uses a deterministic lifecycle kernel to manage session handoffs, checkpoints, and memory proposals across supported hosts like Claude Code, Codex, and Hermes.</p>
+    <p class="summary-text">Context OS is a Git-backed context and workflow layer designed to maintain durable project state across coding agents including Claude Code, Codex, and Hermes. It uses a deterministic lifecycle kernel to manage reviewed proposals and receipts for setup, checkpoints, and session handoffs stored in Markdown files.</p>
     <ul class="summary-highlights">
-      <li>Stores project instructions and state in reviewable Markdown files.</li>
-      <li>Provides a migration workflow for importing selected chat history and documents.</li>
-      <li>Uses host-neutral lifecycle commands for session starts, updates, and handoffs.</li>
+      <li>Stores identity, decisions, and workflows in plain Markdown files.</li>
+      <li>Provides a shared lifecycle kernel for Claude Code, Codex, and Hermes.</li>
+      <li>Includes migration workflows for importing context from external chat archives.</li>
     </ul>
   </div>
 </section>
@@ -204,11 +204,21 @@ cd my-context
 git remote rename origin upstream
 git remote add origin &lt;YOUR_PRIVATE_REPO_URL&gt;
 
-# Pick a host, or omit --agent to auto-detect one:
-bash scripts/setup.sh --agent claude
-# bash scripts/setup.sh --agent codex
-# bash scripts/setup.sh --agent hermes
+# Select every agent this repository will use:
+bash scripts/setup.sh --agents claude,codex
+# bash scripts/setup.sh --agents hermes
+# bash scripts/setup.sh --agents none  # core-only
 </code></pre>
+<p>Setup presents an exact, digest-bound proposal before recording the selected
+set. Reruns add agents but never remove them; use the explicit lifecycle to
+disable one later. Omit the option, or use <code>--agents auto</code>, for local
+auto-detection without changing repository intent. The singular <code>--agent</code> form
+is a deprecated singleton alias. See <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/workspace-configuration.md">workspace
+configuration</a> for the full contract.</p>
+<p>After setup, <code>bash scripts/contextos.sh agent list</code> shows tracked activation and
+local registration separately. <code>agent enable</code> (or <code>agent add</code>) creates an
+additive proposal; <code>agent disable</code> creates the only proposal allowed to shrink
+the set. Neither operation deletes bundled adapter files.</p>
 <p>Then start your agent from the repository root:</p>
 <table>
 <thead>
@@ -301,26 +311,42 @@ files rather than reconstructed from chat.</p>
 </ol>
 <p>The guide covers ChatGPT, Claude, Gemini Apps, Gemini CLI, and a generic path for other systems. Gemini CLI also has privacy-first <code>$migrate-gemini</code> and <code>$mine-gemini-workflows</code> skills for selected configuration and session evidence. Consumer Gemini CLI requests transitioned to Antigravity CLI in June 2026; continuing enterprise/API-key Gemini CLI and Antigravity are separate targets, and this repository does not claim Antigravity lifecycle or permission parity.</p>
 <h3>Host support</h3>
+
 <table>
 <thead>
 <tr>
 <th>Host</th>
-<th>Support level</th>
+<th>Tier</th>
+<th>Support</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>Claude Code</td>
-<td>Full experience: shared lifecycle, slash-command adapters, hooks, optional live reads, and Claude-only auto-memory curation</td>
+<td>first-class</td>
+<td>Shared lifecycle, slash-command adapters, hooks, optional live reads, and Claude-only auto-memory curation</td>
 </tr>
 <tr>
 <td>Codex</td>
-<td>First-class lifecycle, repository skills, trusted project hooks, and the shared deterministic kernel; native memory remains outside the contract</td>
+<td>first-class</td>
+<td>Shared lifecycle, native skills, project instructions, hooks, and reviewed proposal/apply writes</td>
 </tr>
 <tr>
 <td>Hermes Agent</td>
-<td><code>AGENTS.md</code>, portable skills, the shared kernel, and optional hook adapter; copied skills and native memory remain explicit host boundaries</td>
+<td>first-class</td>
+<td>Shared lifecycle through portable skills, advisory hooks, MCP, and separate Hermes-native memory</td>
 </tr>
+</tbody></table>
+
+
+<p>Compatibility paths that are not registered runtime adapters:</p>
+<table>
+<thead>
 <tr>
+<th>Host</th>
+<th>Compatibility path</th>
+</tr>
+</thead>
+<tbody><tr>
 <td>Gemini CLI / Antigravity CLI</td>
 <td>Migration tooling plus portable-skill discovery for continuing enterprise/API-key Gemini CLI; no complete workspace adapter, and no Antigravity discovery or permission parity is claimed</td>
 </tr>
@@ -406,11 +432,23 @@ contextos/                 Deterministic lifecycle kernel
 .codex/hooks.json          Codex lifecycle advisory adapter
 adapters/hermes/           Hermes installation and optional hook adapter
 runtimes/                  Machine-readable capability manifests
+components/                Component ownership and dependency manifest
+workspace/                 Schema and inactive canonical config example
 integrations/              Machine-checked opt-in integration catalog
 references/                Generated catalog and integration setup notes
 scripts/                   Setup, validation, migration, and maintenance tools
 docs/                      Onboarding, architecture, safety, and migration guides
 </code></pre>
+<p>The workspace migration command can now create a digest-bound proposal for
+<code>contextos.workspace.json</code> and, when applicable, retire legacy <code>workspace.yaml</code>
+in the same recoverable transaction. Setup-time agent selection remains tracked
+in #65. The template does not ship a live root file because that would override
+an existing clone's legacy YAML before its migration is reviewed.</p>
+<p>Once present, <code>contextos.workspace.json</code> is the provider-neutral root marker,
+including for a core-only workspace. Existing <code>AGENTS.md</code> plus <code>state/</code> or
+<code>workspace.yaml</code> roots remain discoverable. The nearest recognized root wins,
+and discovery never climbs past a nested <code>.git</code> repository boundary; use
+<code>--root</code> when deliberately targeting an outer workspace.</p>
 <p>Each fact should have one canonical home. <code>ROUTING.md</code> points an agent to the right file instead of copying the same context across prompts.</p>
 <h3>Skills and memory</h3>
 <p>A skill is a Markdown workflow for a task you repeat. Provider-neutral skills belong in <code>.agents/skills/&lt;name&gt;/SKILL.md</code>. Claude Code can add a thin adapter under <code>.claude/commands/</code>; Codex discovers the repository skill directly. <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/first-skill.md">Build a first portable skill</a> after the core loop is working, or follow <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/projects/README.md">the portable skill structure</a> for a shared workflow.</p>
@@ -423,10 +461,16 @@ docs/                      Onboarding, architecture, safety, and migration guide
 <li>Use one git worktree per concurrent agent session.</li>
 <li>Follow <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/safety-contract.md"><code>docs/safety-contract.md</code></a> before external writes, destructive actions, or permission changes.</li>
 </ul>
-<p>Run the full local check after changing instructions, skills, scripts, adapters, or generated references:</p>
-<pre><code class="language-bash">bash scripts/validate-all.sh
+<p>Run the full local check after changing instructions, skills, scripts, adapters,
+generated references, or tracked personal context:</p>
+<pre><code class="language-bash">bash scripts/validate-all.sh --workspace
 </code></pre>
-<p>CI runs the same aggregate validator. It checks structure, adapter mappings, links, shell syntax, hook behavior, JSON, tests, and generated integration documentation. It cannot prove the behavior of an installed agent version or an external service.</p>
+<p>The workspace mode permits new tracked files only below the component catalog's
+declared extensible roots. CI and product contributors run the strict form
+without <code>--workspace</code>, so every tracked template file still requires an owner.
+Both forms check structure, adapter mappings, links, shell syntax, hook behavior,
+JSON, tests, and generated integration documentation. They cannot prove the
+behavior of an installed agent version or an external service.</p>
 <h3>Documentation</h3>
 <table>
 <thead>
@@ -438,6 +482,10 @@ docs/                      Onboarding, architecture, safety, and migration guide
 <tbody><tr>
 <td>Install and choose a host</td>
 <td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/getting-started.md">Getting started</a></td>
+</tr>
+<tr>
+<td>Understand agent selection and legacy migration</td>
+<td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/workspace-configuration.md">Workspace configuration</a></td>
 </tr>
 <tr>
 <td>Import useful context from another system</td>
@@ -458,6 +506,10 @@ docs/                      Onboarding, architecture, safety, and migration guide
 <tr>
 <td>See every command and portable skill</td>
 <td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/commands-and-skills.md">Commands and skills</a></td>
+</tr>
+<tr>
+<td>Understand component ownership and future clean composition</td>
+<td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/component-model.md">Component model</a></td>
 </tr>
 <tr>
 <td>Choose an optional add-on</td>
@@ -508,11 +560,11 @@ docs/                      Onboarding, architecture, safety, and migration guide
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 64.1K</div>
+        <div class="stars">★ 64.2K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 21.2K</div>
+        <div class="stars">★ 21.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -520,7 +572,7 @@ docs/                      Onboarding, architecture, safety, and migration guide
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 366</div>
+        <div class="stars">★ 367</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -528,11 +580,11 @@ docs/                      Onboarding, architecture, safety, and migration guide
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 261</div>
+        <div class="stars">★ 262</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 242</div>
+        <div class="stars">★ 243</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
