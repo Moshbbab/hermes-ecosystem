@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>greyhaven-ai/autocontext — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks by running them against evaluation. It retains useful lessons while…">
+<meta name="description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta property="og:description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks by running them against evaluation. It retains useful lessons while…">
+<meta property="og:description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta name="twitter:description" content="Autocontext is a recursive self-improving harness designed to help agents succeed on tasks by running them against evaluation. It retains useful lessons while…">
+<meta name="twitter:description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=autocontext&amp;subtitle=a+recursive+self-improving+harness+designed+to+help+your+agents+%28and+future+iterations+of+those+agents%29+succeed+on+any+task&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "Autocontext is a recursive self-improving harness designed to help agents succeed on tasks by running them against evaluation. It retains useful lessons while discarding dead ends, producing traces, reports, playbooks, datasets, and optional local-model training artifacts.",
+  "description": "autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and playbooks from each run, retaining successful strategies while discarding ineffective ones to create datasets and training artifacts.",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-08-27T17:35:11.000Z",
+  "dateModified": "2026-08-27T21:39:51.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">243·repos</span>
-    <span id="meta-version">hermes·v0.20.5</span>
+    <span id="meta-version">hermes·v0.20.6</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Autocontext is a recursive self-improving harness designed to help agents succeed on tasks by running them against evaluation. It retains useful lessons while discarding dead ends, producing traces, reports, playbooks, datasets, and optional local-model training artifacts.</p>
+    <p class="summary-text">autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and playbooks from each run, retaining successful strategies while discarding ineffective ones to create datasets and training artifacts.</p>
     <ul class="summary-highlights">
-      <li>Supports various providers including Pi, Anthropic, and OpenAI-compatible endpoints.</li>
-      <li>Provides filesystem-first outputs including traces, reports, and context bundles.</li>
-      <li>Offers CLI surfaces for solving goals, simulating behavior, and investigating evidence.</li>
+      <li>Generates filesystem-first artifacts including traces, playbooks, and context bundles.</li>
+      <li>Supports multiple agent providers including Anthropic, OpenAI-compatible, and self-hosted models.</li>
+      <li>Features outcome-gated promotion and ablation-backed attribution for context management.</li>
     </ul>
   </div>
 </section>
@@ -193,7 +193,7 @@
 </tr>
 <tr>
 <td>TypeScript/Node CLI</td>
-<td><code>bun add -g autoctx@0.17.2</code></td>
+<td><code>bun add -g autoctx@0.17.3</code></td>
 </tr>
 <tr>
 <td>Pi extension</td>
@@ -347,6 +347,15 @@ runtime (<code>python</code> or <code>typescript</code>).</p>
 </ul>
 
 
+<h4>npm 0.17.3 minimum iteration floors</h4>
+<p><code>autoctx@0.17.3</code> advertises <code>minimum_iterations_v1</code>. Structured task contracts
+may set <code>minimumIterations</code>, interactive <code>start_run</code> commands may override it
+with <code>minimum_generations</code>, and the effective value must be between one and the
+maximum iteration count. Normal quality, plateau, unchanged-output, and cached
+verdict convergence cannot stop below the floor; cancellation, provider or
+evaluator failure, and time/token safety exits remain immediate. The effective
+minimum is retained in live protocol metadata and SQLite-backed run history so
+Cockpit clients recover it after restart.</p>
 <h4>npm 0.17.2 structured tasks and durable outcomes</h4>
 <p><code>autoctx@0.17.2</code> is a TypeScript-only patch release; the Python package remains
 at <code>autocontext==0.17.0</code>. The npm package adds:</p>
