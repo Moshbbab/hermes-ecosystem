@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>greyhaven-ai/autocontext — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and…">
+<meta name="description" content="autocontext is a harness for agent improvement that executes tasks against evaluations to capture useful lessons while discarding ineffective approaches. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta property="og:description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and…">
+<meta property="og:description" content="autocontext is a harness for agent improvement that executes tasks against evaluations to capture useful lessons while discarding ineffective approaches. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta name="twitter:description" content="autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and…">
+<meta name="twitter:description" content="autocontext is a harness for agent improvement that executes tasks against evaluations to capture useful lessons while discarding ineffective approaches. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=autocontext&amp;subtitle=a+recursive+self-improving+harness+designed+to+help+your+agents+%28and+future+iterations+of+those+agents%29+succeed+on+any+task&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and playbooks from each run, retaining successful strategies while discarding ineffective ones to create datasets and training artifacts.",
+  "description": "autocontext is a harness for agent improvement that executes tasks against evaluations to capture useful lessons while discarding ineffective approaches. It generates traces, reports, playbooks, and datasets that can be used for future agent iterations or local-model training.",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-08-28T18:16:23.000Z",
+  "dateModified": "2026-08-28T21:17:52.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">243·repos</span>
+    <span id="meta-count">244·repos</span>
     <span id="meta-version">hermes·v0.20.6</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">autocontext is a recursive self-improving harness that executes agent tasks against evaluations to refine performance. It captures traces, reports, and playbooks from each run, retaining successful strategies while discarding ineffective ones to create datasets and training artifacts.</p>
+    <p class="summary-text">autocontext is a harness for agent improvement that executes tasks against evaluations to capture useful lessons while discarding ineffective approaches. It generates traces, reports, playbooks, and datasets that can be used for future agent iterations or local-model training.</p>
     <ul class="summary-highlights">
-      <li>Generates filesystem-first artifacts including traces, playbooks, and context bundles.</li>
-      <li>Supports multiple agent providers including Anthropic, OpenAI-compatible, and self-hosted models.</li>
-      <li>Features outcome-gated promotion and ablation-backed attribution for context management.</li>
+      <li>Supports Python and TypeScript CLI interfaces and MCP client integration.</li>
+      <li>Produces filesystem-first artifacts including traces, playbooks, and context bundles.</li>
+      <li>Features outcome-gated promotion and ablation-backed attribution for context changes.</li>
     </ul>
   </div>
 </section>
@@ -335,6 +335,13 @@ the full catalog. <code>--iterations</code> is the primary iteration flag; <code
 compatibility alias. <code>autoctx --version --json</code> reports the package version and
 runtime (<code>python</code> or <code>typescript</code>).</p>
 <p>Python owns the full control-plane package; TypeScript owns several operator-facing surfaces, the TUI, and Node runtime adapters. Start with <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/README.md">autocontext/README.md</a> or <a href="https://github.com/greyhaven-ai/autocontext/blob/main/ts/README.md">ts/README.md</a>.</p>
+<p>HTTP and WebSocket control planes bind to loopback by default. A non-loopback
+bind fails closed unless <code>AUTOCONTEXT_SERVER_TOKEN</code> contains a random value of
+at least 32 characters. Send it as an <code>Authorization: Bearer</code> value; browser
+WebSocket clients use the <code>autocontext.bearer.&lt;base64url-token&gt;</code> subprotocol.
+Tokens in endpoint URLs are rejected. See the
+<a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/persistent-host.md#trust-and-credential-boundary">persistent-host security model</a>
+before exposing a server beyond one trusted operator.</p>
 
 <h3>What's New in 0.17.0</h3>
 <ul>
@@ -465,7 +472,7 @@ contracts</a>, and the full
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 202</div>
+        <div class="stars">★ 203</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -481,7 +488,7 @@ contracts</a>, and the full
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
       <a class="related-row" href="/projects/garrytan/gbrain">
-        <div class="stars">★ 29.2K</div>
+        <div class="stars">★ 29.3K</div>
         <div class="name"><span class="org">garrytan /</span> gbrain</div>
       </a>
     </div>

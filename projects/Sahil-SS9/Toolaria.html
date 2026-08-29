@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sahil-SS9/Toolaria — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores…">
+<meta name="description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It stores large outputs in a SHA256-addressed blob store…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Sahil-SS9/Toolaria">
 <meta property="og:title" content="Sahil-SS9/Toolaria — Hermes Atlas">
-<meta property="og:description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores…">
+<meta property="og:description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It stores large outputs in a SHA256-addressed blob store…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Sahil-SS9/Toolaria">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sahil-SS9/Toolaria — Hermes Atlas">
-<meta name="twitter:description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores…">
+<meta name="twitter:description" content="Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It stores large outputs in a SHA256-addressed blob store…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Toolaria&amp;subtitle=Rescue+oversized+tool+results+before+they+flood+context.+SHA256-addressed+blob+store+with+per-session+indexes&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria#software",
   "name": "Toolaria",
-  "description": "Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle to retrieve specific data slices.",
+  "description": "Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It stores large outputs in a SHA256-addressed blob store and provides the model with a compact excerpt and a fetch handle to prevent context window flooding.",
   "url": "https://hermesatlas.com/projects/Sahil-SS9/Toolaria",
   "codeRepository": "https://github.com/Sahil-SS9/Toolaria",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Sahil-SS9",
     "url": "https://github.com/Sahil-SS9"
   },
-  "dateModified": "2026-08-25T17:15:25.000Z",
+  "dateModified": "2026-08-29T01:49:36.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">243·repos</span>
+    <span id="meta-count">244·repos</span>
     <span id="meta-version">hermes·v0.20.6</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-25</span>
+    <span><span class="meta-label">updated</span>2026-08-29</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It intercepts large outputs from MCP or web tools, stores them in a SHA256-addressed blob store, and provides the model with a compact excerpt and a fetch handle to retrieve specific data slices.</p>
+    <p class="summary-text">Toolaria is a Hermes Agent plugin that implements a spill-to-disk pattern for oversized tool results. It stores large outputs in a SHA256-addressed blob store and provides the model with a compact excerpt and a fetch handle to prevent context window flooding.</p>
     <ul class="summary-highlights">
-      <li>Stores oversized tool outputs in a SHA256-addressed local blob store.</li>
-      <li>Provides structural maps, semantic search, and lexical retrieval over blobs.</li>
-      <li>Supports pass-by-reference to feed large results into downstream tools.</li>
+      <li>Stores oversized results in a SHA256-addressed blob store.</li>
+      <li>Provides structural maps, semantic search, and pass-by-reference tool arguments.</li>
+      <li>Functions as a zero-config plugin for Hermes Agent.</li>
     </ul>
   </div>
 </section>
@@ -340,7 +340,7 @@ treating the preview as complete.</p>
 <tr>
 <td><code>excerpt_max_chars</code></td>
 <td><code>8000</code></td>
-<td>Cap on short-content excerpts</td>
+<td><strong>Exact</strong> cap on the excerpt block, incl. its truncation marker (min 200)</td>
 </tr>
 <tr>
 <td><code>store_path</code></td>
@@ -468,6 +468,19 @@ treating the preview as complete.</p>
 <td><code>{tool_name: label}</code> overrides for the built-in tool→label map</td>
 </tr>
 </tbody></table>
+<h4>Excerpt budget contract</h4>
+<p><code>excerpt_max_chars</code> is an <strong>exact cap</strong> on the excerpt block that lands in
+the rescue handle — for every payload kind (JSON, HTML, code, text), the
+assembled excerpt including its truncation marker is never longer than the
+configured limit. Minimum 200; smaller values (and malformed values at
+runtime) clamp to the minimum/default, and a non-integer or sub-minimum
+value fails loudly at plugin registration. When the budget binds, space is
+allocated by priority — promoted error/decision anchors (40%) ≥ head (40%)
+≥ tail (20%), renormalised over the sections actually present — so a fat
+head can no longer push the tail or a fatal-error line out of the preview.
+A truncated excerpt ends with <code>[... excerpt truncated to excerpt_max_chars]</code> and the handle's preview line switches from
+"first N / last M lines" to "budget C chars, truncated" so the description
+never claims sections the excerpt does not carry.</p>
 <hr>
 <h3>Sensitivity labels</h3>
 <p>Every rescued result carries a label: <code>public</code>, <code>personal</code>, or <code>credential</code>.
@@ -628,6 +641,12 @@ supported.</li>
 <li><strong>Fetch is a capability model.</strong> Any caller that knows a 12-hex blob id can
 fetch it; ids are content-derived and only revealed in the rescuing session's
 handle. Swept-blob guidance is scoped to the owning session.</li>
+</ul>
+<h3>Contributors</h3>
+<ul>
+<li><a href="https://github.com/Dr-Amp">Dr-Amp</a> — session-scoped blob fetch (<a href="https://github.com/Sahil-SS9/Toolaria/pull/1">PR #1</a>)</li>
+<li><a href="https://github.com/Gerkinfeltser">Gerkinfeltser</a> — package-style plugin imports (<a href="https://github.com/Sahil-SS9/Toolaria/pull/2">PR #2</a>)</li>
+<li><a href="https://github.com/Masterlincs">Lincoln Vann-Wakelin (Masterlincs)</a> — excerpt budget enforcement (<a href="https://github.com/Sahil-SS9/Toolaria/pull/4">PR #4</a>/<a href="https://github.com/Sahil-SS9/Toolaria/pull/5">#5</a>)</li>
 </ul>
 <h3>License</h3>
 <p>MIT, see <code>LICENSE</code>.</p>
