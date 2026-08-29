@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/claude-context-os — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Context OS is a Git-backed context and workflow layer designed for coding agents including Claude Code, Codex, Hermes, and OpenClaw. It stores project…">
+<meta name="description" content="Context OS is a portable, Git-backed context and workflow layer designed for coding agents such as Claude Code, Codex, Hermes, OpenClaw, Cursor, and Devin. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta property="og:description" content="Context OS is a Git-backed context and workflow layer designed for coding agents including Claude Code, Codex, Hermes, and OpenClaw. It stores project…">
+<meta property="og:description" content="Context OS is a portable, Git-backed context and workflow layer designed for coding agents such as Claude Code, Codex, Hermes, OpenClaw, Cursor, and Devin. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer designed for coding agents including Claude Code, Codex, Hermes, and OpenClaw. It stores project…">
+<meta name="twitter:description" content="Context OS is a portable, Git-backed context and workflow layer designed for coding agents such as Claude Code, Codex, Hermes, OpenClaw, Cursor, and Devin. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=claude-context-os&amp;subtitle=Portable%2C+evolving+context+and+workflow+layer+that+works+across+Claude+Code%2C+Codex%2C+Hermes+Agent%2C+and+other+compatible+coding+agents.+All+backed+by+Git.+&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os#software",
   "name": "claude-context-os",
-  "description": "Context OS is a Git-backed context and workflow layer designed for coding agents including Claude Code, Codex, Hermes, and OpenClaw. It stores project instructions, decisions, and workflows in Markdown files to provide a deterministic source of truth outside of an agent's native memory.",
+  "description": "Context OS is a portable, Git-backed context and workflow layer designed for coding agents such as Claude Code, Codex, Hermes, OpenClaw, Cursor, and Devin. It stores durable project information, decisions, and workflows in plain Markdown files to maintain state across different agents.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os",
   "codeRepository": "https://github.com/conorbronsdon/claude-context-os",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-08-29T11:28:26.000Z",
+  "dateModified": "2026-08-29T12:39:58.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Context OS is a Git-backed context and workflow layer designed for coding agents including Claude Code, Codex, Hermes, and OpenClaw. It stores project instructions, decisions, and workflows in Markdown files to provide a deterministic source of truth outside of an agent's native memory.</p>
+    <p class="summary-text">Context OS is a portable, Git-backed context and workflow layer designed for coding agents such as Claude Code, Codex, Hermes, OpenClaw, Cursor, and Devin. It stores durable project information, decisions, and workflows in plain Markdown files to maintain state across different agents.</p>
     <ul class="summary-highlights">
-      <li>Uses a Git-backed kernel for reviewed context proposals and receipts.</li>
-      <li>Provides provider-neutral state management across multiple supported coding agents.</li>
-      <li>Includes a migration workflow to convert chats and documents into files.</li>
+      <li>Uses a deterministic lifecycle kernel for hash-checked proposals and receipts.</li>
+      <li>Provides a source-neutral migration workflow for importing chat and documents.</li>
+      <li>Includes an opt-in integration catalog for documenting external tools.</li>
     </ul>
   </div>
 </section>
@@ -223,7 +223,15 @@ configuration</a> for the full contract.</p>
 local registration separately. <code>agent enable</code> (or <code>agent add</code>) creates an
 additive proposal; <code>agent disable</code> creates the only proposal allowed to shrink
 the set. Neither operation deletes bundled adapter files.</p>
-<p>Then start your agent from the repository root:</p>
+<p>Then start your agent from the repository root. In the normal v0.12
+full-template wrapper path, the product kernel, durable context, and nominal
+active work share one root. A marker-only JSON workspace may use an already-loaded
+executable package for discovery and reports, but a marker-only root cannot
+apply content or configure runtimes until the trusted product closure is
+materialized there. A containing Git worktree may supply read-only commit
+evidence without gaining context mutation authority. A separate
+application-repository attachment is not yet a supported lifecycle path; see
+the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/root-contract.md">root contract</a>.</p>
 <table>
 <thead>
 <tr>
@@ -515,10 +523,12 @@ in the same recoverable transaction. Setup-time agent selection remains tracked
 in #65. The template does not ship a live root file because that would override
 an existing clone's legacy YAML before its migration is reviewed.</p>
 <p>Once present, <code>contextos.workspace.json</code> is the provider-neutral root marker,
-including for a core-only workspace. Existing <code>AGENTS.md</code> plus <code>state/</code> or
+including for a marker-only workspace. Existing <code>AGENTS.md</code> plus <code>state/</code> or
 <code>workspace.yaml</code> roots remain discoverable. The nearest recognized root wins,
 and discovery never climbs past a nested <code>.git</code> repository boundary; use
-<code>--root</code> when deliberately targeting an outer workspace.</p>
+<code>--root</code> to choose an explicit discovery start when cwd is not the intended
+starting point. Discovery may still ascend from that path to the nearest valid
+root before a nested Git boundary.</p>
 <p>Each fact should have one canonical home. <code>ROUTING.md</code> points an agent to the right file instead of copying the same context across prompts.</p>
 <h3>Skills and memory</h3>
 <p>A skill is a Markdown workflow for a task you repeat. Provider-neutral skills belong in <code>.agents/skills/&lt;name&gt;/SKILL.md</code>. Claude Code can add a thin adapter under <code>.claude/commands/</code>; Codex discovers the repository skill directly. <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/first-skill.md">Build a first portable skill</a> after the core loop is working, or follow <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/projects/README.md">the portable skill structure</a> for a shared workflow.</p>
@@ -592,6 +602,10 @@ behavior of an installed agent version or an external service.</p>
 <tr>
 <td>Verify an offline bundle or inspect a structural plan</td>
 <td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/bundle-locks.md">Bundle locks and plans</a></td>
+</tr>
+<tr>
+<td>Understand KernelRoot, ContextRoot, WorkingRoot, and the v0.12 compatibility boundary</td>
+<td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/root-contract.md">Root contract</a></td>
 </tr>
 <tr>
 <td>Choose an optional add-on</td>
