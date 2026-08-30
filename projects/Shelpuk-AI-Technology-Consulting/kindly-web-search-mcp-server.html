@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Kindly Web Search is an MCP server designed to provide up-to-date API and package documentation through web search and content retrieval. It retrieves full…">
+<meta name="description" content="Kindly Web Search is an MCP server that provides web search and content retrieval for AI coding agents. It uses a priority chain of specialized API handlers…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta property="og:description" content="Kindly Web Search is an MCP server designed to provide up-to-date API and package documentation through web search and content retrieval. It retrieves full…">
+<meta property="og:description" content="Kindly Web Search is an MCP server that provides web search and content retrieval for AI coding agents. It uses a priority chain of specialized API handlers…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta name="twitter:description" content="Kindly Web Search is an MCP server designed to provide up-to-date API and package documentation through web search and content retrieval. It retrieves full…">
+<meta name="twitter:description" content="Kindly Web Search is an MCP server that provides web search and content retrieval for AI coding agents. It uses a priority chain of specialized API handlers…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=kindly-web-search-mcp-server&amp;subtitle=Kindly+Web+Search+MCP+Server%3A+Web+search+%2B+robust+content+retrieval+for+AI+coding+tools+%28Claude+Code%2C+Codex%2C+Cursor%2C+GitHub+Copilot%2C+Gemini%2C+etc.%29+and+AI+agents+%28Claude+Desktop%2C+Op&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server#software",
   "name": "kindly-web-search-mcp-server",
-  "description": "Kindly Web Search is an MCP server designed to provide up-to-date API and package documentation through web search and content retrieval. It retrieves full conversations and metadata from sources like StackExchange, GitHub, Wikipedia, and arXiv using specialized API handlers.",
+  "description": "Kindly Web Search is an MCP server that provides web search and content retrieval for AI coding agents. It uses a priority chain of specialized API handlers and a headless browser to deliver structured content from sources like StackExchange, GitHub, arXiv, and Wikipedia.",
   "url": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "codeRepository": "https://github.com/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Shelpuk-AI-Technology-Consulting",
     "url": "https://github.com/Shelpuk-AI-Technology-Consulting"
   },
-  "dateModified": "2026-07-29T15:55:04.000Z",
+  "dateModified": "2026-08-30T15:47:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-29</span>
+    <span><span class="meta-label">updated</span>2026-08-30</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Kindly Web Search is an MCP server designed to provide up-to-date API and package documentation through web search and content retrieval. It retrieves full conversations and metadata from sources like StackExchange, GitHub, Wikipedia, and arXiv using specialized API handlers.</p>
+    <p class="summary-text">Kindly Web Search is an MCP server that provides web search and content retrieval for AI coding agents. It uses a priority chain of specialized API handlers and a headless browser to deliver structured content from sources like StackExchange, GitHub, arXiv, and Wikipedia.</p>
     <ul class="summary-highlights">
-      <li>Supports Serper, SerpBase, Tavily, SearXNG, and Sofya search providers</li>
-      <li>Uses a headless browser for real-time webpage parsing</li>
-      <li>Returns structured content including questions, answers, and comments</li>
+      <li>Supports Serper, SerpBase, Tavily, SearXNG, and Sofya search providers.</li>
+      <li>Integrates with StackExchange, GitHub, Wikipedia, and arXiv APIs.</li>
+      <li>Uses a headless Chromium browser for universal HTML parsing.</li>
     </ul>
   </div>
 </section>
@@ -780,6 +780,84 @@ Create <code>.vscode/mcp.json</code>:</p>
 <li>Remote HTTP is typically <strong>unauthenticated</strong> and <strong>unencrypted</strong> by default; don’t expose this port publicly. Use VPN/firewall rules or a reverse proxy with TLS + auth.</li>
 <li>Don’t bake API keys into the image; pass them via env vars at runtime.</li>
 </ul>
+<h4>Host and origin allowlists (<code>421</code> and <code>403</code> errors)</h4>
+<p>The HTTP transports enforce DNS rebinding protection. Out of the box only loopback is
+accepted — <code>127.0.0.1</code>, <code>localhost</code> and <code>[::1]</code> — which covers <code>docker run -p 8000:8000</code>
+reached as <code>http://localhost:8000/mcp</code>, but not much else. Reach the server under any
+other name (a Compose service name, a LAN address, a reverse-proxy hostname) and you get:</p>
+<ul>
+<li><code>421 Invalid Host header</code> — the <code>Host</code> header isn’t in the allowlist.</li>
+<li><code>403 Invalid Origin header</code> — a browser-based client sent an <code>Origin</code> that isn’t.</li>
+</ul>
+<p>Widen the allowlist with two comma-separated variables:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Matches against</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>FASTMCP_ALLOWED_HOSTS</code></td>
+<td>the <code>Host</code> header</td>
+<td><code>kindly-web-search-mcp:*,localhost:*,127.0.0.1:*</code></td>
+</tr>
+<tr>
+<td><code>FASTMCP_ALLOWED_ORIGINS</code></td>
+<td>the <code>Origin</code> header (browser clients)</td>
+<td><code>http://localhost:*,https://app.example</code></td>
+</tr>
+</tbody></table>
+<p>Syntax notes:</p>
+<ul>
+<li>An entry is either an <strong>exact</strong> value or a <code>name:*</code> <strong>port wildcard</strong>. A bare <code>*</code> matches
+nothing — <code>FASTMCP_ALLOWED_HOSTS=*</code> rejects every request.</li>
+<li><code>kindly-web-search-mcp:*</code> matches <code>kindly-web-search-mcp:8000</code> but <strong>not</strong> a portless
+<code>Host: kindly-web-search-mcp</code>. List both if your client may omit the port.</li>
+<li>Setting a variable <strong>replaces</strong> the loopback defaults for that header rather than adding
+to them. Keep <code>localhost:*</code> and <code>127.0.0.1:*</code> in the list if you still want local access.</li>
+<li>The two default independently. Setting only <code>FASTMCP_ALLOWED_HOSTS</code> keeps the loopback
+origins, so browser clients on <code>http://localhost:&lt;port&gt;</code> keep working.</li>
+<li>CORS is derived from <code>FASTMCP_ALLOWED_ORIGINS</code>, so an origin that passes preflight is
+always one the server will also accept on the real request.</li>
+</ul>
+<p>Neither variable is a way to turn the protection off, and that is deliberate: this server
+is unauthenticated, and <code>get_content</code> will fetch any URL it is given from wherever it runs.
+An open allowlist lets any web page you happen to visit drive it against your own network
+and read the response. List the hosts you actually use.</p>
+<h4>Docker-compose</h4>
+<p>Add a subsection to <code>services:</code> in your <code>docker-compose.yml</code>. Setup variables as described above.</p>
+<pre><code class="language-yaml">  kindly-web-search-mcp:
+    build:
+      context: https://github.com/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server.git#main
+    container_name: kindly-web-search-mcp
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - SEARXNG_BASE_URL=...
+      - GITHUB_TOKEN=${KINDLY_GITHUB_TOKEN:-}
+      - FASTMCP_HOST=0.0.0.0
+      - FASTMCP_PORT=8000
+      - FASTMCP_TRANSPORT=http
+      # Other containers reach this one by its service name, which is not loopback.
+      # Without this you get `421 Invalid Host header`. See the section above.
+      - FASTMCP_ALLOWED_HOSTS=kindly-web-search-mcp:*,localhost:*,127.0.0.1:*
+</code></pre>
+<p><code>FASTMCP_TRANSPORT</code> can be <code>streamable-http</code> (or simply <code>http</code>) for Streamable HTTP, <code>sse</code> for SSE.
+It is read by every entry point, including <code>kindly-web-search-mcp-server start-mcp-server</code>.
+An unrecognised value logs a warning and falls back to stdio.</p>
+<p>Run with:</p>
+<pre><code class="language-bash">docker compose up -d
+</code></pre>
+<p>Container will be built at the first run. To rebuild it, append <code>--build</code> to the command above.</p>
+<blockquote>
+<p><strong>Warning:</strong> <code>ports: - "8000:8000"</code> publishes the server on <strong>all</strong> host interfaces. As with
+<code>docker run</code> above, remote HTTP here is <strong>unauthenticated</strong> and <strong>unencrypted</strong> — don’t expose
+this port publicly. Bind it to loopback (<code>"127.0.0.1:8000:8000"</code>), keep it on an internal
+Compose network, or put a reverse proxy with TLS + auth in front.</p>
+</blockquote>
 <h3>Troubleshooting</h3>
 <ul>
 <li>“No Chromium-based browser executable found”: install Chrome/Chromium/Edge and set <code>KINDLY_BROWSER_EXECUTABLE_PATH</code> if needed.</li>
