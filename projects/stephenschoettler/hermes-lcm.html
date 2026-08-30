@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stephenschoettler/hermes-lcm — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta name="description" content="hermes-lcm is a context management plugin for Hermes Agent that replaces standard one-shot compression with a SQLite-backed, DAG-based engine. It preserves raw…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta property="og:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta property="og:description" content="hermes-lcm is a context management plugin for Hermes Agent that replaces standard one-shot compression with a SQLite-backed, DAG-based engine. It preserves raw…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stephenschoettler/hermes-lcm">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stephenschoettler/hermes-lcm — Hermes Atlas">
-<meta name="twitter:description" content="Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages…">
+<meta name="twitter:description" content="hermes-lcm is a context management plugin for Hermes Agent that replaces standard one-shot compression with a SQLite-backed, DAG-based engine. It preserves raw…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-lcm&amp;subtitle=Lossless+Context+Management+plugin+for+Hermes+Agent+%E2%80%94+DAG-based+context+engine+that+never+loses+a+message&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm#software",
   "name": "hermes-lcm",
-  "description": "Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover detailed information without flooding the active prompt.",
+  "description": "hermes-lcm is a context management plugin for Hermes Agent that replaces standard one-shot compression with a SQLite-backed, DAG-based engine. It preserves raw messages and builds hierarchical summary nodes, allowing agents to recover specific details through a suite of recall tools without exceeding active prompt limits.",
   "url": "https://hermesatlas.com/projects/stephenschoettler/hermes-lcm",
   "codeRepository": "https://github.com/stephenschoettler/hermes-lcm",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stephenschoettler",
     "url": "https://github.com/stephenschoettler"
   },
-  "dateModified": "2026-08-13T01:47:30.000Z",
+  "dateModified": "2026-08-30T18:36:41.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-13</span>
+    <span><span class="meta-label">updated</span>2026-08-30</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes-lcm is a plugin for Hermes Agent that replaces one-shot context compression with a SQLite-backed, DAG-based context engine. It preserves raw messages and uses a hierarchical summary structure to allow agents to recover detailed information without flooding the active prompt.</p>
+    <p class="summary-text">hermes-lcm is a context management plugin for Hermes Agent that replaces standard one-shot compression with a SQLite-backed, DAG-based engine. It preserves raw messages and builds hierarchical summary nodes, allowing agents to recover specific details through a suite of recall tools without exceeding active prompt limits.</p>
     <ul class="summary-highlights">
-      <li>Uses a SQLite-backed message store with FTS metadata</li>
-      <li>Builds depth-aware summary nodes in a hierarchical DAG</li>
-      <li>Provides agent tools for searching and expanding compacted material</li>
+      <li>Uses a SQLite store and DAG to manage hierarchical context summaries.</li>
+      <li>Provides agent tools for searching, expanding, and inspecting compacted material.</li>
+      <li>Supports Python 3.11+ and integrates as a Hermes Agent context engine.</li>
     </ul>
   </div>
 </section>
@@ -1055,9 +1055,12 @@ manifest-based rollback. See the <a href="https://github.com/stephenschoettler/h
 the runtime exposes LCM tools, LCM is loaded. The <code>lcm (not found)</code> line is a
 Hermes host discovery/status mismatch, not an LCM storage or compaction failure.</p>
 <h4><code>/lcm status</code> looks unbound after restart</h4>
-<p>After a fresh Hermes restart, <code>/lcm status</code> may show <code>session_id: (unbound)</code> or
-<code>threshold_tokens: (uninitialized)</code>. Send one normal Hermes message first, then
-run <code>lcm_status</code> or <code>/lcm status</code> again for live per-session fields.</p>
+<p>Compatible Hermes gateway hosts expose task-local lane metadata while
+dispatching <code>/lcm</code>. Once that lane has constructed an agent, <code>/lcm status</code>
+resolves the same active LCM runtime as <code>lcm_status</code>, including its foreground
+view while an ignored or stateless side channel is bound. Before the first
+normal message constructs an agent, or in a genuinely sessionless process,
+<code>session_id: (unbound)</code> and <code>threshold_tokens: (uninitialized)</code> remain expected.</p>
 <h3>Architecture</h3>
 <p>The engine sits between Hermes context assembly and the backing conversation
 store. It records raw messages, compacts old material into a summary DAG, and
@@ -1151,7 +1154,7 @@ for changelogs.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 21.8K</div>
+        <div class="stars">★ 21.9K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

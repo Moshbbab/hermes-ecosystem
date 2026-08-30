@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It uses…">
+<meta name="description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, scripts, and support documents. It functions as…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It uses…">
+<meta property="og:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, scripts, and support documents. It functions as…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It uses…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, scripts, and support documents. It functions as…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Hermes+Agent+plugin+for+local+knowledge+search+and+artifact+routing%E2%80%94find+the+right+skill%2C+script%2C+runbook%2C+cron+job%2C+MCP+server%2C+or+document.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It uses intent-based search to provide the agent with routing hints toward specific sources rather than performing chunk-based retrieval-augmented generation.",
+  "description": "Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, scripts, and support documents. It functions as an artifact router rather than a chunk-based RAG system, providing routing hints to help the agent select and inspect sources before acting.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-08-30T16:42:43.000Z",
+  "dateModified": "2026-08-30T19:20:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It uses intent-based search to provide the agent with routing hints toward specific sources rather than performing chunk-based retrieval-augmented generation.</p>
+    <p class="summary-text">Hermes Local Knowledge is a plugin for the Hermes Agent that indexes and routes local artifacts such as skills, scripts, and support documents. It functions as an artifact router rather than a chunk-based RAG system, providing routing hints to help the agent select and inspect sources before acting.</p>
     <ul class="summary-highlights">
-      <li>Indexes skills, scripts, runbooks, and MCP server configurations.</li>
-      <li>Provides five native tools for searching, fetching, and feedback.</li>
+      <li>Registers five native tools for searching and managing local knowledge.</li>
+      <li>Indexes skills, scripts, cron jobs, and MCP server configurations.</li>
       <li>Supports opt-in automatic generation of tool routing notes.</li>
     </ul>
   </div>
@@ -253,7 +253,7 @@
 <p>Before enabling automatic generation, an installer must explain that:</p>
 <ul>
 <li>a detached worker invokes the active Hermes model and consumes additional model tokens;</li>
-<li>one worker claims at most <code>max_candidates_per_session</code> candidates (default <code>2</code>) and makes one structured batch call when it has claims;</li>
+<li>one worker claims at most <code>max_candidates_per_session</code> candidates (default <code>2</code>) and makes at most one structured batch call when new content must be authored;</li>
 <li><code>max_generation_seconds</code> is passed as the provider-request timeout, while provider retry/fallback policy can extend total elapsed time and token use behind that host call;</li>
 <li>session finalization does not wait for generation.</li>
 </ul>
@@ -266,6 +266,7 @@
 hermes config set local_knowledge.okf.auto_generate true
 </code></pre>
 <p>If it is already enabled, report that instead of asking again. If the user declines, leave <code>auto_generate</code> disabled and report that existing lookup and manual OKF management remain available, but new tool-routing notes will not be generated automatically.</p>
+<p>Generated tool notes use Open Knowledge Format v0.2 concept metadata (<code>type</code> plus structured <code>generated.by</code>/<code>generated.at</code> provenance). When automatic generation is enabled, the same bounded worker opportunistically claims completed generator-v3 notes and converts their deterministic frontmatter to v0.2 without a model call, preserving the existing routing content and generation timestamp. A legacy note that cannot be converted losslessly falls back to normal model-backed regeneration.</p>
 <h4>Install the proactive router skill</h4>
 <p>The per-turn hook makes the primary search tool discoverable without loading a full routing skill. The bundled skill adds the detailed search/fetch/inspect workflow, freshness guidance, and feedback procedure:</p>
 <pre><code class="language-bash">hermes local-knowledge install-router-skill --json
@@ -524,7 +525,7 @@ git diff --check
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 21.8K</div>
+        <div class="stars">★ 21.9K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
