@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`sketch`](/docs/user-guide/skills/bundled/creative/creative-sketch), [`subagent-driven-development`](/docs/user-guide/skills/optional/software-development/software-development-subagent-driven-development)
+[`sketch`](/docs/user-guide/skills/optional/creative/creative-sketch), [`subagent-driven-development`](/docs/user-guide/skills/optional/software-development/software-development-subagent-driven-development)
 
 ## Reference: full SKILL.md
 

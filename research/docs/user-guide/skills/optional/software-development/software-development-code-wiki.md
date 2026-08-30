@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`codebase-inspection`](/docs/user-guide/skills/bundled/github/github-codebase-inspection), [`github-repo-management`](/docs/user-guide/skills/bundled/github/github-github-repo-management)
+[`codebase-inspection`](/docs/user-guide/skills/bundled/software-development/software-development-codebase-inspection), [`github`](/docs/user-guide/skills/bundled/software-development/software-development-github)
 
 ## Reference: full SKILL.md
 

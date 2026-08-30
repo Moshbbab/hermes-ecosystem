@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`research-paper-writing`](/docs/user-guide/skills/bundled/research/research-research-paper-writing), [`arxiv`](/docs/user-guide/skills/bundled/research/research-arxiv), [`ocr-and-documents`](/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents)
+[`arxiv`](/docs/user-guide/skills/bundled/research/research-arxiv), [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
 ## Reference: full SKILL.md
 
@@ -50,7 +50,7 @@ Every claim taken from an outside source gets an inline numbered citation and a 
 
 For high-stakes work the same ledger doubles as a fact-checking chain: verbatim quotes are attached to each source (rejected unless they literally appear in the fetched page text), claims from model knowledge are flagged `[unverified]`, and `verify --evidence` fails any draft whose cited sources carry no evidence.
 
-This skill covers answers in chat, written documents (markdown, PDF, docx, slides), and research reports. It does not cover academic BibTeX pipelines — for conference papers use the `research-paper-writing` skill, which this skill feeds (see `references/citation-formats.md`).
+This skill covers answers in chat, written documents (markdown, PDF, docx, slides), and research reports. It does not cover academic BibTeX pipelines — for conference papers use the `arxiv` skill, which this skill feeds (see `references/citation-formats.md`).
 
 ## When to Use
 

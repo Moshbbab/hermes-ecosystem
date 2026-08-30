@@ -1176,7 +1176,7 @@ The remediation worker spawns with the original card's summary and metadata (cha
 
 ### Reconciling colliding worker branches
 
-In engineering pipelines (P1/P2 with worktrees), two workers' branches can conflict when merged. Don't let either worker self-adjudicate — the colliding agent lacks its peer's context and reliably overwrites the other side or abandons its own. Instead, create a reconciliation card assigned to a **third, neutral profile** with **both** conflicted cards linked as parents: the parent links carry both sides' completion summaries into the reconciler's context, so it receives both diffs _and_ both intents. The bundled [`merge-reconciler` skill](https://github.com/NousResearch/hermes-agent/blob/main/skills/autonomous-ai-agents/merge-reconciler/SKILL.md) gives that worker the full procedure: classify each conflicted hunk, resolve impartially, verify, and hand back a summary naming every decision.
+In engineering pipelines (P1/P2 with worktrees), two workers' branches can conflict when merged. Don't let either worker self-adjudicate — the colliding agent lacks its peer's context and reliably overwrites the other side or abandons its own. Instead, create a reconciliation card assigned to a **third, neutral profile** with **both** conflicted cards linked as parents: the parent links carry both sides' completion summaries into the reconciler's context, so it receives both diffs _and_ both intents. The bundled [`agent-merge-conflict-arbiter` optional skill](https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/autonomous-ai-agents/agent-merge-conflict-arbiter/SKILL.md) gives that worker the full procedure: classify each conflicted hunk, resolve impartially, verify, and hand back a summary naming every decision.
 
 ### Collision hotspots in parallel campaigns
 
@@ -1186,7 +1186,7 @@ In wide campaigns some files become collision magnets: many workers each add a l
 hotspot: hermes_cli/kanban_db.py — third conflicting edit to the dispatch loop this wave
 ```
 
-and repeats the flag in its completion `metadata`. Orchestrators (or humans reviewing the board) who see **two or more `hotspot:` comments naming the same path** should create a dedicated refactor/decomposition card for that file **before** queuing more work that touches it — splitting the magnet file is cheaper than reconciling every future collision it would cause. For conflicts that have _already_ happened, use the reconciliation-card pattern above with the `merge-reconciler` skill; hotspot flagging is the upstream fix that keeps the reconciler from becoming a standing lane.
+and repeats the flag in its completion `metadata`. Orchestrators (or humans reviewing the board) who see **two or more `hotspot:` comments naming the same path** should create a dedicated refactor/decomposition card for that file **before** queuing more work that touches it — splitting the magnet file is cheaper than reconciling every future collision it would cause. For conflicts that have _already_ happened, use the reconciliation-card pattern above with the `agent-merge-conflict-arbiter` optional skill; hotspot flagging is the upstream fix that keeps the reconciler from becoming a standing lane.
 
 ## Multi-tenant usage
 
