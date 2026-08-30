@@ -7,7 +7,7 @@ Hermes has two slash-command surfaces, both driven by a central `COMMAND_REGISTR
 -   **Interactive CLI slash commands** — dispatched by `cli.py`, with autocomplete from the registry
 -   **Messaging slash commands** — dispatched by `gateway/run.py`, with help text and platform menus generated from the registry
 
-Installed skills are also exposed as dynamic slash commands on both surfaces. That includes bundled skills like `/plan`, which opens plan mode and saves markdown plans under `.hermes/plans/` relative to the active workspace/backend working directory.
+Installed skills are also exposed as dynamic slash commands on both surfaces. (`/plan` used to be one of these; it is now a built-in command — see the Session table below.)
 
 ## Permissions and admin/user split
 
@@ -293,6 +293,10 @@ List configured skill bundles — `/<name>` slash aliases that preload several s
 `/learn <what to learn from>`
 
 Distill a reusable skill from anything you describe — a directory, a URL, the workflow you just walked the agent through, or pasted notes. Open-ended: the agent gathers the sources with its own tools and authors a `SKILL.md` following the house authoring standards. Works in the CLI, the messaging gateway, the TUI, and the dashboard Skills page.
+
+`/plan [task]`
+
+Write a markdown implementation plan to `.hermes/plans/` in the active workspace — planning only, no execution. Empty argument infers the task from the conversation. (Formerly the bundled `plan` skill; now built-in so it survives the Telegram/Discord command-menu caps.)
 
 `/init [notes]`
 
@@ -672,6 +676,10 @@ Generate or update `AGENTS.md` from a repo scan.
 `/learn <what to learn from>`
 
 Distill a reusable skill from anything you describe.
+
+`/plan [task]`
+
+Write a markdown implementation plan to `.hermes/plans/`; no execution.
 
 `/bundles`
 

@@ -290,13 +290,33 @@ Qwen Cloud (Alibaba DashScope) API key for Qwen models ([modelstudio.console.ali
 
 Custom DashScope base URL (default: `https://dashscope-intl.aliyuncs.com/compatible-mode/v1`; use `https://dashscope.aliyuncs.com/compatible-mode/v1` for mainland-China region)
 
+`DASHSCOPE_CN_BASE_URL`
+
+Override the `alibaba-cn` mainland-China DashScope base URL
+
 `ALIBABA_CODING_PLAN_API_KEY`
 
-Qwen Coding Plan API key (`alibaba-coding-plan` provider)
+Qwen Coding Plan API key (`alibaba-coding-plan` / `alibaba-coding-plan-cn` providers)
 
 `ALIBABA_CODING_PLAN_BASE_URL`
 
-Override the Qwen Coding Plan base URL
+Override the Qwen Coding Plan base URL (international)
+
+`ALIBABA_CODING_PLAN_CN_BASE_URL`
+
+Override the Qwen Coding Plan base URL (mainland China)
+
+`ALIBABA_TOKEN_PLAN_API_KEY`
+
+Alibaba Model Studio Token Plan API key (`alibaba-token-plan` / `alibaba-token-plan-cn` providers)
+
+`ALIBABA_TOKEN_PLAN_BASE_URL`
+
+Override the Token Plan base URL (international)
+
+`ALIBABA_TOKEN_PLAN_CN_BASE_URL`
+
+Override the Token Plan base URL (mainland China)
 
 `DEEPSEEK_API_KEY`
 

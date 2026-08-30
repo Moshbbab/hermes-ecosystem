@@ -570,12 +570,6 @@ Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
 
 `software-development/node-inspect-debugger`
 
-[`plan`](/docs/user-guide/skills/bundled/software-development/software-development-plan)
-
-Write a markdown plan to .hermes/plans/; no execution.
-
-`software-development/plan`
-
 [`python-debugpy`](/docs/user-guide/skills/bundled/software-development/software-development-python-debugpy)
 
 Debug Python: pdb REPL + debugpy remote (DAP).

@@ -358,7 +358,7 @@ Enable a comma-separated set of toolsets.
 
 `--provider <provider>`
 
-Force a provider: `auto`, `openrouter`, `nous`, `openai-codex`, `copilot-acp`, `copilot`, `anthropic`, `gemini`, `huggingface`, `novita` (aliases `novita-ai`, `novitaai`), `openai-api`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth`, `kilocode`, `xiaomi`, `arcee`, `gmi`, `upstage` (alias `solar`), `alibaba`, `alibaba-coding-plan` (alias `alibaba_coding`), `deepseek`, `nvidia`, `ollama-cloud`, `xai` (alias `grok`), `xai-oauth` (alias `grok-oauth`), `qwen-oauth`, `bedrock`, `opencode-zen`, `opencode-go`, `opencode-free` (aliases `free`, `opencode_free`; keyless), `commandcode`, `commandcode-anthropic`, `ai-gateway`, `azure-foundry`, `lmstudio`, `stepfun`, `tencent-tokenhub` (alias `tencent`, `tokenhub`), `router` (aliases `ramp-router`, `ramp`), `nebius-token-factory` (aliases `nebius`, `nebius-tf`, `tokenfactory`), `tencent-tokenplan` (aliases `tokenplan`, `tencent-lkeap`).
+Force a provider: `auto`, `openrouter`, `nous`, `openai-codex`, `copilot-acp`, `copilot`, `anthropic`, `gemini`, `huggingface`, `novita` (aliases `novita-ai`, `novitaai`), `openai-api`, `zai`, `kimi-coding`, `kimi-coding-cn`, `minimax`, `minimax-cn`, `minimax-oauth`, `kilocode`, `xiaomi`, `arcee`, `gmi`, `upstage` (alias `solar`), `alibaba`, `alibaba-cn`, `alibaba-coding-plan` (alias `alibaba_coding`), `alibaba-coding-plan-cn`, `alibaba-token-plan`, `alibaba-token-plan-cn`, `deepseek`, `nvidia`, `ollama-cloud`, `xai` (alias `grok`), `xai-oauth` (alias `grok-oauth`), `qwen-oauth`, `bedrock`, `opencode-zen`, `opencode-go`, `opencode-free` (aliases `free`, `opencode_free`; keyless), `commandcode`, `commandcode-anthropic`, `ai-gateway`, `azure-foundry`, `lmstudio`, `stepfun`, `tencent-tokenhub` (alias `tencent`, `tokenhub`), `router` (aliases `ramp-router`, `ramp`), `nebius-token-factory` (aliases `nebius`, `nebius-tf`, `tokenfactory`), `tencent-tokenplan` (aliases `tokenplan`, `tencent-lkeap`).
 
 `-s`, `--skills <name>`
 
@@ -2612,7 +2612,7 @@ If cua-driver is already present, Hermes checks its version and runtime manifest
 
 The built-in `computer_use` toolset is the recommended Hermes integration. Registering raw Cua MCP tools is an alternative when you need Cua's low-level tool vocabulary. `cua-driver skills install` detects Hermes and links Cua's skill pack into the Hermes skills directory automatically.
 
-Permission mode, capability-manifest approval, and the existing-profile grant belong to runtime launch. In bounded mode Hermes passes Cua's canonical `--capability-manifest` and `--approve-capability-manifest` flags. Every MCP transport owns a private lifecycle session inside its runtime. Public session names label cursor and session state; they do not own or share the runtime.
+Permission mode and capability-manifest approval belong to runtime launch. In bounded mode Hermes passes Cua's canonical `--capability-manifest` and `--approve-capability-manifest` flags. Every MCP transport owns a private lifecycle session inside its runtime. Public session names label cursor and session state; they do not own or share the runtime.
 
 `hermes update` automatically re-runs the upstream installer at the end of the update if cua-driver is on PATH, so most users will not need to call `--upgrade` manually. Use it when upstream ships a fix you want right now without waiting for the next Hermes update.
 

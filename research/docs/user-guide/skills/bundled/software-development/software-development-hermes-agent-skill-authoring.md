@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`plan`](/docs/user-guide/skills/bundled/software-development/software-development-plan), [`requesting-code-review`](/docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review)
+[`requesting-code-review`](/docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review)
 
 ## Reference: full SKILL.md
 

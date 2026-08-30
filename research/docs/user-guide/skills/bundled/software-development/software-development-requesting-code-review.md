@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`subagent-driven-development`](/docs/user-guide/skills/optional/software-development/software-development-subagent-driven-development), [`plan`](/docs/user-guide/skills/bundled/software-development/software-development-plan), [`test-driven-development`](/docs/user-guide/skills/bundled/software-development/software-development-test-driven-development), [`github-code-review`](/docs/user-guide/skills/bundled/github/github-github-code-review)
+[`subagent-driven-development`](/docs/user-guide/skills/optional/software-development/software-development-subagent-driven-development), [`test-driven-development`](/docs/user-guide/skills/bundled/software-development/software-development-test-driven-development), [`github-code-review`](/docs/user-guide/skills/bundled/github/github-github-code-review)
 
 ## Reference: full SKILL.md
 

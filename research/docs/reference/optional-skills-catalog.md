@@ -115,6 +115,10 @@ HeartMuLa: Suno-like song generation from lyrics + tags.
 
 Render MP4/WebM videos from HTML compositions.
 
+[**impeccable**](/docs/user-guide/skills/optional/creative/creative-impeccable)
+
+Frontend design guidance, upstream-maintained (impeccable).
+
 [**kanban-video-orchestrator**](/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator)
 
 Plan and run multi-agent video production pipelines.
