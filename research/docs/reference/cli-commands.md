@@ -887,6 +887,9 @@ hermes send --list telegram         # filter by platform
 hermes peer add <name> --url http://host:port --key <API_SERVER_KEY>
 hermes peer list
 hermes peer dm <peer>[/<agent>] "message"
+hermes peer run <peer>[/<agent>] --idempotency-key <key> "message"
+hermes peer status <peer>[/<agent>] <run_id>
+hermes peer stop <peer>[/<agent>] <run_id>
 hermes peer remove <name>
 ```
 
@@ -909,6 +912,18 @@ List peers and whether each has a key configured.
 `dm <peer>[/<agent>] [message]`
 
 Message the peer agent's canonical Bot Chat and print the reply (`--json` for machine-readable output; message falls back to stdin).
+
+`run <peer>[/<agent>] [message]`
+
+Start a long canonical Bot Chat turn asynchronously and return its `run_id`, session ID, and idempotency key (`--json` supported). Reuse `--idempotency-key` when retrying the same request.
+
+`status <peer>[/<agent>] <run_id>`
+
+Poll an asynchronous peer run and print its final output when complete (`--json` supported).
+
+`stop <peer>[/<agent>] <run_id>`
+
+Stop the exact asynchronous peer run without targeting another turn (`--json` supported).
 
 `remove <name>`
 

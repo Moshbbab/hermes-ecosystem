@@ -532,17 +532,9 @@ Web scraping and cloud browser ([firecrawl.dev](https://firecrawl.dev/))
 
 Custom Firecrawl API endpoint for self-hosted instances (optional)
 
-`TAVILY_API_KEY`
-
-Optional Tavily API key for higher search/extract limits. After selecting Tavily as the web backend, keyless access works without it ([app.tavily.com](https://app.tavily.com/home), [keyless docs](https://docs.tavily.com/documentation/keyless))
-
 `SEARXNG_URL`
 
 SearXNG instance URL for free self-hosted web search — no API key required ([searxng.github.io](https://searxng.github.io/searxng/))
-
-`TAVILY_BASE_URL`
-
-Override the Tavily API endpoint. Useful for corporate proxies and self-hosted Tavily-compatible search backends. Same pattern as `GROQ_BASE_URL`.
 
 `EXA_API_KEY`
 
@@ -2371,6 +2363,10 @@ Send agent replies as markdown — iMessage renders it natively, other Spectrum 
 `PHOTON_REACTIONS`
 
 Tapback 👀/👍/👎 on messages as processing status and route tapbacks on bot messages to the agent (`true`/`false`, default `false`).
+
+`PHOTON_READ_RECEIPTS`
+
+Mark inbound iMessages read after forwarding to Hermes (`true`/`false`, default `true`).
 
 `PHOTON_TELEMETRY`
 
