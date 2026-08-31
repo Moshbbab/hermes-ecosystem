@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`blogwatcher`](/docs/user-guide/skills/bundled/research/research-blogwatcher)
+[`blogwatcher`](/docs/user-guide/skills/optional/research/research-blogwatcher)
 
 ## Reference: full SKILL.md
 

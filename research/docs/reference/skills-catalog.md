@@ -62,7 +62,7 @@ Delegate coding to OpenAI Codex CLI (features, PRs).
 
 [`computer-use`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-computer-use)
 
-Drive the desktop in the background without stealing focus.
+Drive the desktop background-first; escalate on signal.
 
 `autonomous-ai-agents/computer-use`
 
@@ -71,12 +71,6 @@ Drive the desktop in the background without stealing focus.
 Use, configure, theme, extend, and orchestrate Hermes Agent.
 
 `autonomous-ai-agents/hermes-agent`
-
-[`merge-reconciler`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-merge-reconciler)
-
-Neutral third-party resolution of agent merge conflicts.
-
-`autonomous-ai-agents/merge-reconciler`
 
 [`opencode`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode)
 
@@ -98,12 +92,6 @@ Dark-themed SVG architecture/cloud/infra diagrams as HTML.
 
 `creative/architecture-diagram`
 
-[`ascii-art`](/docs/user-guide/skills/bundled/creative/creative-ascii-art)
-
-ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
-
-`creative/ascii-art`
-
 [`ascii-video`](/docs/user-guide/skills/bundled/creative/creative-ascii-video)
 
 ASCII video: convert video/audio to colored ASCII MP4/GIF.
@@ -122,23 +110,11 @@ Design one-off HTML artifacts (landing, deck, prototype).
 
 `creative/claude-design`
 
-[`comfyui`](/docs/user-guide/skills/bundled/creative/creative-comfyui)
-
-Generate images, video, and audio via diffusion workflows.
-
-`creative/comfyui`
-
 [`design-md`](/docs/user-guide/skills/bundled/creative/creative-design-md)
 
 Author/validate/export Google's DESIGN.md token spec files.
 
 `creative/design-md`
-
-[`excalidraw`](/docs/user-guide/skills/bundled/creative/creative-excalidraw)
-
-Hand-drawn Excalidraw JSON diagrams (arch, flow, seq).
-
-`creative/excalidraw`
 
 [`humanizer`](/docs/user-guide/skills/bundled/creative/creative-humanizer)
 
@@ -164,29 +140,11 @@ p5.js sketches: gen art, shaders, interactive, 3D.
 
 `creative/popular-web-designs`
 
-[`pretext`](/docs/user-guide/skills/bundled/creative/creative-pretext)
-
-Build creative browser demos with DOM-free text layout.
-
-`creative/pretext`
-
-[`sketch`](/docs/user-guide/skills/bundled/creative/creative-sketch)
-
-Throwaway HTML mockups: 2-3 design variants to compare.
-
-`creative/sketch`
-
 [`songwriting-and-ai-music`](/docs/user-guide/skills/bundled/creative/creative-songwriting-and-ai-music)
 
 Songwriting craft and Suno AI music prompts.
 
 `creative/songwriting-and-ai-music`
-
-[`touchdesigner-mcp`](/docs/user-guide/skills/bundled/creative/creative-touchdesigner-mcp)
-
-Control TouchDesigner via twozero MCP.
-
-`creative/touchdesigner-mcp`
 
 ## devops
 
@@ -222,56 +180,6 @@ Himalaya CLI: IMAP/SMTP email from terminal.
 
 `email/himalaya`
 
-## github
-
-Skill
-
-Description
-
-Path
-
-[`codebase-inspection`](/docs/user-guide/skills/bundled/github/github-codebase-inspection)
-
-Inspect codebases w/ pygount: LOC, languages, ratios.
-
-`github/codebase-inspection`
-
-[`github-auth`](/docs/user-guide/skills/bundled/github/github-github-auth)
-
-GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login.
-
-`github/github-auth`
-
-[`github-code-review`](/docs/user-guide/skills/bundled/github/github-github-code-review)
-
-Review PRs: diffs, inline comments via gh or REST.
-
-`github/github-code-review`
-
-[`github-issue-to-pr`](/docs/user-guide/skills/bundled/github/github-github-issue-to-pr)
-
-Carry a GitHub issue to a verified PR with honest CI state.
-
-`github/github-issue-to-pr`
-
-[`github-issues`](/docs/user-guide/skills/bundled/github/github-github-issues)
-
-Create, triage, label, assign GitHub issues via gh or REST.
-
-`github/github-issues`
-
-[`github-pr-workflow`](/docs/user-guide/skills/bundled/github/github-github-pr-workflow)
-
-GitHub PR lifecycle: branch, commit, open, CI, merge.
-
-`github/github-pr-workflow`
-
-[`github-repo-management`](/docs/user-guide/skills/bundled/github/github-github-repo-management)
-
-Clone/create/fork repos; manage remotes, releases.
-
-`github/github-repo-management`
-
 ## media
 
 Skill
@@ -297,44 +205,6 @@ Audio spectrograms/features (mel, chroma, MFCC) via CLI.
 YouTube transcripts to summaries, threads, blogs.
 
 `media/youtube-content`
-
-## mlops
-
-Skill
-
-Description
-
-Path
-
-[`evaluating-llms-harness`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-evaluating-llms-harness)
-
-lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
-
-`mlops/evaluation/evaluating-llms-harness`
-
-[`huggingface-hub`](/docs/user-guide/skills/bundled/mlops/mlops-huggingface-hub)
-
-HuggingFace hf CLI: search/download/upload models, datasets.
-
-`mlops/huggingface-hub`
-
-[`llama-cpp`](/docs/user-guide/skills/bundled/mlops/mlops-inference-llama-cpp)
-
-llama.cpp local GGUF inference + HF Hub model discovery.
-
-`mlops/inference/llama-cpp`
-
-[`serving-llms-vllm`](/docs/user-guide/skills/bundled/mlops/mlops-inference-serving-llms-vllm)
-
-vLLM: high-throughput LLM serving, OpenAI API, quantization.
-
-`mlops/inference/serving-llms-vllm`
-
-[`weights-and-biases`](/docs/user-guide/skills/bundled/mlops/mlops-evaluation-weights-and-biases)
-
-W&B: log ML experiments, sweeps, model registry, dashboards.
-
-`mlops/evaluation/weights-and-biases`
 
 ## note-taking
 
@@ -400,27 +270,15 @@ Turn meeting notes into cited decisions, owners, tickets.
 
 `productivity/meeting-action-items`
 
-[`nano-pdf`](/docs/user-guide/skills/bundled/productivity/productivity-nano-pdf)
-
-Edit text in existing PDFs via natural-language prompts.
-
-`productivity/nano-pdf`
-
 [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
 
 Notion API + ntn CLI: pages, databases, markdown, Workers.
 
 `productivity/notion`
 
-[`ocr-and-documents`](/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents)
-
-Extract text from PDFs/scans (pymupdf, marker-pdf).
-
-`productivity/ocr-and-documents`
-
 [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
-Create, read, merge, fill, and secure PDF files.
+PDF files: create, read, merge, fill, OCR, edit text.
 
 `productivity/pdf`
 
@@ -435,12 +293,6 @@ Create, read, edit .pptx decks with python-pptx.
 Watch product, flight, or listing prices; alert on target.
 
 `productivity/product-price-monitor`
-
-[`session-librarian`](/docs/user-guide/skills/bundled/productivity/productivity-session-librarian)
-
-Organize sessions by prompt: find, rename, archive, prune.
-
-`productivity/session-librarian`
 
 [`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline)
 
@@ -474,18 +326,6 @@ Search arXiv papers by keyword, author, category, or ID.
 
 `research/arxiv`
 
-[`blocked-page-recovery`](/docs/user-guide/skills/bundled/research/research-blocked-page-recovery)
-
-Recover blocked/paywalled/WAF'd pages via fallbacks.
-
-`research/blocked-page-recovery`
-
-[`blogwatcher`](/docs/user-guide/skills/bundled/research/research-blogwatcher)
-
-Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.
-
-`research/blogwatcher`
-
 [`competitor-news-monitor`](/docs/user-guide/skills/bundled/research/research-competitor-news-monitor)
 
 Watch named companies for material news; cited digests.
@@ -503,26 +343,6 @@ Ground answers and documents in cited, verifiable sources.
 Karpathy's LLM Wiki: build/query interlinked markdown KB.
 
 `research/llm-wiki`
-
-[`research-paper-writing`](/docs/user-guide/skills/bundled/research/research-research-paper-writing)
-
-Write ML papers for NeurIPS/ICML/ICLR: design→submit.
-
-`research/research-paper-writing`
-
-## smart-home
-
-Skill
-
-Description
-
-Path
-
-[`openhue`](/docs/user-guide/skills/bundled/smart-home/smart-home-openhue)
-
-Control Philips Hue lights, scenes, rooms via OpenHue CLI.
-
-`smart-home/openhue`
 
 ## social-media
 
@@ -546,11 +366,23 @@ Description
 
 Path
 
+[`codebase-inspection`](/docs/user-guide/skills/bundled/software-development/software-development-codebase-inspection)
+
+Inspect codebases w/ pygount: LOC, languages, ratios.
+
+`software-development/codebase-inspection`
+
 [`dogfood`](/docs/user-guide/skills/bundled/software-development/software-development-dogfood)
 
 Exploratory QA of web apps: find bugs, evidence, reports.
 
 `software-development/dogfood`
+
+[`github`](/docs/user-guide/skills/bundled/software-development/software-development-github)
+
+GitHub via gh CLI: PRs, issues, reviews, repos, auth.
+
+`software-development/github`
 
 [`hermes-agent-skill-authoring`](/docs/user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring)
 
@@ -569,12 +401,6 @@ Read the live Hermes desktop DOM/CSS over CDP.
 Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
 
 `software-development/node-inspect-debugger`
-
-[`plan`](/docs/user-guide/skills/bundled/software-development/software-development-plan)
-
-Write a markdown plan to .hermes/plans/; no execution.
-
-`software-development/plan`
 
 [`python-debugpy`](/docs/user-guide/skills/bundled/software-development/software-development-python-debugpy)
 
@@ -611,3 +437,17 @@ Throwaway experiments to validate an idea before build.
 TDD: enforce RED-GREEN-REFACTOR, tests before code.
 
 `software-development/test-driven-development`
+
+## web
+
+Skill
+
+Description
+
+Path
+
+[`blocked-page-recovery`](/docs/user-guide/skills/bundled/web/web-blocked-page-recovery)
+
+Use when a fetch fails: 403/429, paywall, WAF, bot wall.
+
+`web/blocked-page-recovery`

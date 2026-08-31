@@ -29,6 +29,10 @@ Skill
 
 Description
 
+[**agent-merge-conflict-arbiter**](/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-agent-merge-conflict-arbiter)
+
+Neutral arbiter for merge conflicts between two agents.
+
 [**antigravity-cli**](/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-antigravity-cli)
 
 Operate the Antigravity CLI (agy): plugins, auth, sandbox.
@@ -83,6 +87,10 @@ Skill
 
 Description
 
+[**ascii-art**](/docs/user-guide/skills/optional/creative/creative-ascii-art)
+
+ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
+
 [**audiocraft-audio-generation**](/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation)
 
 AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.
@@ -94,6 +102,10 @@ Article illustrations: type × style × palette consistency.
 [**baoyu-comic**](/docs/user-guide/skills/optional/creative/creative-baoyu-comic)
 
 Knowledge comics (知识漫画): educational, biography, tutorial.
+
+[**comfyui**](/docs/user-guide/skills/optional/creative/creative-comfyui)
+
+Generate images, video, and audio via diffusion workflows.
 
 [**concept-diagrams**](/docs/user-guide/skills/optional/creative/creative-concept-diagrams)
 
@@ -107,6 +119,10 @@ Generate ideas via named methods from creative practice.
 
 Turn a handwriting photo into an installable TTF font.
 
+[**excalidraw**](/docs/user-guide/skills/optional/creative/creative-excalidraw)
+
+Hand-drawn Excalidraw JSON diagrams (arch, flow, seq).
+
 [**heartmula**](/docs/user-guide/skills/optional/creative/creative-heartmula)
 
 HeartMuLa: Suno-like song generation from lyrics + tags.
@@ -114,6 +130,10 @@ HeartMuLa: Suno-like song generation from lyrics + tags.
 [**hyperframes**](/docs/user-guide/skills/optional/creative/creative-hyperframes)
 
 Render MP4/WebM videos from HTML compositions.
+
+[**impeccable**](/docs/user-guide/skills/optional/creative/creative-impeccable)
+
+Frontend design guidance, upstream-maintained (impeccable).
 
 [**kanban-video-orchestrator**](/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator)
 
@@ -127,9 +147,17 @@ Create meme PNGs from templates with Pillow text overlay.
 
 Pixel art w/ era palettes (NES, Game Boy, PICO-8).
 
+[**pretext**](/docs/user-guide/skills/optional/creative/creative-pretext)
+
+Build creative browser demos with DOM-free text layout.
+
 [**simple-english**](/docs/user-guide/skills/optional/creative/creative-simple-english)
 
 Rewrite text to ASD-STE100 Simplified Technical English.
+
+[**sketch**](/docs/user-guide/skills/optional/creative/creative-sketch)
+
+Throwaway HTML mockups: 2-3 design variants to compare.
 
 [**social-media-content-calendar**](/docs/user-guide/skills/optional/creative/creative-social-media-content-calendar)
 
@@ -138,6 +166,10 @@ Plan multi-platform social campaigns: briefs to posting.
 [**tldraw-offline**](/docs/user-guide/skills/optional/creative/creative-tldraw-offline)
 
 Drive and script tldraw offline canvases with an agent.
+
+[**touchdesigner-mcp**](/docs/user-guide/skills/optional/creative/creative-touchdesigner-mcp)
+
+Control TouchDesigner via twozero MCP.
 
 [**unreal-mcp**](/docs/user-guide/skills/optional/creative/creative-unreal-mcp)
 
@@ -179,6 +211,10 @@ Run 150+ AI apps (image, video, LLM) via inference.sh CLI.
 
 Zero-install localhost tunnels over SSH via Pinggy.
 
+[**setup-wizard-generator**](/docs/user-guide/skills/optional/devops/devops-setup-wizard-generator)
+
+Generate a bash wizard guiding a human through manual setup.
+
 [**watchers**](/docs/user-guide/skills/optional/devops/devops-watchers)
 
 Poll RSS, JSON APIs, and GitHub with watermark dedup.
@@ -201,7 +237,7 @@ Description
 
 [**agentmail**](/docs/user-guide/skills/optional/email/email-agentmail)
 
-Give the agent its own inbox: send and receive email.
+Use when an agent needs AgentMail CLI email inboxes.
 
 ## finance
 
@@ -327,6 +363,10 @@ Zero-shot image classification and image-text search.
 
 DSPy: declarative LM programs, auto-optimize prompts, RAG.
 
+[**evaluating-llms-harness**](/docs/user-guide/skills/optional/mlops/mlops-evaluation-evaluating-llms-harness)
+
+lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc.).
+
 [**faiss**](/docs/user-guide/skills/optional/mlops/mlops-faiss)
 
 Fast vector similarity search at billion scale.
@@ -339,6 +379,10 @@ Speed up long-sequence transformer training and inference.
 
 Constrain LLM output with grammars; guarantee valid JSON.
 
+[**huggingface-hub**](/docs/user-guide/skills/optional/mlops/mlops-models-huggingface-hub)
+
+HuggingFace hf CLI: search/download/upload models, datasets.
+
 [**huggingface-tokenizers**](/docs/user-guide/skills/optional/mlops/mlops-huggingface-tokenizers)
 
 Fast BPE/WordPiece tokenization and custom vocab training.
@@ -350,6 +394,10 @@ Structured LLM outputs validated with Pydantic.
 [**lambda-labs**](/docs/user-guide/skills/optional/mlops/mlops-lambda-labs)
 
 On-demand GPU cloud instances for ML training.
+
+[**llama-cpp**](/docs/user-guide/skills/optional/mlops/mlops-inference-llama-cpp)
+
+llama.cpp local GGUF inference + HF Hub model discovery.
 
 [**llava**](/docs/user-guide/skills/optional/mlops/mlops-llava)
 
@@ -399,6 +447,10 @@ Train sparse autoencoders to interpret model features.
 
 SAM: zero-shot image segmentation via points, boxes, masks.
 
+[**serving-llms-vllm**](/docs/user-guide/skills/optional/mlops/mlops-inference-serving-llms-vllm)
+
+vLLM: high-throughput LLM serving, OpenAI API, quantization.
+
 [**simpo**](/docs/user-guide/skills/optional/mlops/mlops-simpo)
 
 Reference-free preference alignment, simpler than DPO.
@@ -426,6 +478,10 @@ TRL: SFT, DPO, GRPO, RLOO reward modeling for LLM RLHF.
 [**unsloth**](/docs/user-guide/skills/optional/mlops/mlops-training-unsloth)
 
 Unsloth: 2-5x faster LoRA/QLoRA fine-tuning, less VRAM.
+
+[**weights-and-biases**](/docs/user-guide/skills/optional/mlops/mlops-evaluation-weights-and-biases)
+
+W&B: log ML experiments, sweeps, model registry, dashboards.
 
 [**whisper**](/docs/user-guide/skills/optional/mlops/mlops-whisper)
 
@@ -458,6 +514,10 @@ Description
 [**canvas**](/docs/user-guide/skills/optional/productivity/productivity-canvas)
 
 Fetch Canvas LMS courses and assignments via API token.
+
+[**decision-questionnaire**](/docs/user-guide/skills/optional/productivity/productivity-decision-questionnaire)
+
+Turn an unanswerable decision into a questionnaire doc.
 
 [**here-now**](/docs/user-guide/skills/optional/productivity/productivity-here-now)
 
@@ -492,6 +552,10 @@ Description
 [**bioinformatics**](/docs/user-guide/skills/optional/research/research-bioinformatics)
 
 Gateway to 400+ genomics and computational biology skills.
+
+[**blogwatcher**](/docs/user-guide/skills/optional/research/research-blogwatcher)
+
+Monitor blogs and RSS/Atom feeds via blogwatcher-cli tool.
 
 [**darwinian-evolver**](/docs/user-guide/skills/optional/research/research-darwinian-evolver)
 
@@ -528,6 +592,10 @@ Agent RAG and long-term memory with Pinecone.
 [**qmd**](/docs/user-guide/skills/optional/research/research-qmd)
 
 Hybrid local search over notes, docs, and transcripts.
+
+[**research-paper-writing**](/docs/user-guide/skills/optional/research/research-research-paper-writing)
+
+Write ML papers for NeurIPS/ICML/ICLR: design→submit.
 
 [**scrapling**](/docs/user-guide/skills/optional/research/research-scrapling)
 
@@ -567,6 +635,16 @@ Autonomously remove your info from data-broker sites.
 
 Authorized web pentest: recon, proof-based exploits, report.
 
+## smart-home
+
+Skill
+
+Description
+
+[**openhue**](/docs/user-guide/skills/optional/smart-home/smart-home-openhue)
+
+Control Philips Hue lights, scenes, rooms via OpenHue CLI.
+
 ## software-development
 
 Skill
@@ -580,6 +658,10 @@ AST-aware structural code search and rewrite via ast-grep.
 [**code-wiki**](/docs/user-guide/skills/optional/software-development/software-development-code-wiki)
 
 Generate wiki docs + Mermaid diagrams for any codebase.
+
+[**grill-me**](/docs/user-guide/skills/optional/software-development/software-development-grill-me)
+
+Adversarial plan interview before implementation.
 
 [**rest-graphql-debug**](/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug)
 
@@ -606,6 +688,10 @@ Record a site's XHR into a HAR, derive an HTTP client.
 [**page-agent**](/docs/user-guide/skills/optional/web-development/web-development-page-agent)
 
 Embed an in-page natural-language GUI copilot in web apps.
+
+[**publish-site**](/docs/user-guide/skills/optional/web-development/web-development-publish-site)
+
+Versioned site deploys to GitHub/Cloudflare/Netlify Pages.
 
 ## yuanbao
 

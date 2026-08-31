@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`ocr-and-documents`](/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents)
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
 ## Reference: full SKILL.md
 

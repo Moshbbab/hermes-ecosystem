@@ -198,6 +198,14 @@ Tencent TokenHub API key ([tokenhub.tencentmaas.com](https://tokenhub.tencentmaa
 
 Override Tencent TokenHub base URL (default: `https://tokenhub.tencentmaas.com/v1`)
 
+`TOKENPLAN_API_KEY`
+
+Tencent TokenPlan API key (LKEAP; Anthropic Messages endpoint)
+
+`TOKENPLAN_BASE_URL`
+
+Override Tencent TokenPlan base URL (default: `https://api.lkeap.cloud.tencent.com/plan/anthropic`)
+
 `AZURE_FOUNDRY_API_KEY`
 
 Microsoft Foundry / Azure OpenAI API key ([ai.azure.com](https://ai.azure.com/)). Not needed when `model.auth_mode: entra_id`
@@ -282,13 +290,33 @@ Qwen Cloud (Alibaba DashScope) API key for Qwen models ([modelstudio.console.ali
 
 Custom DashScope base URL (default: `https://dashscope-intl.aliyuncs.com/compatible-mode/v1`; use `https://dashscope.aliyuncs.com/compatible-mode/v1` for mainland-China region)
 
+`DASHSCOPE_CN_BASE_URL`
+
+Override the `alibaba-cn` mainland-China DashScope base URL
+
 `ALIBABA_CODING_PLAN_API_KEY`
 
-Qwen Coding Plan API key (`alibaba-coding-plan` provider)
+Qwen Coding Plan API key (`alibaba-coding-plan` / `alibaba-coding-plan-cn` providers)
 
 `ALIBABA_CODING_PLAN_BASE_URL`
 
-Override the Qwen Coding Plan base URL
+Override the Qwen Coding Plan base URL (international)
+
+`ALIBABA_CODING_PLAN_CN_BASE_URL`
+
+Override the Qwen Coding Plan base URL (mainland China)
+
+`ALIBABA_TOKEN_PLAN_API_KEY`
+
+Alibaba Model Studio Token Plan API key (`alibaba-token-plan` / `alibaba-token-plan-cn` providers)
+
+`ALIBABA_TOKEN_PLAN_BASE_URL`
+
+Override the Token Plan base URL (international)
+
+`ALIBABA_TOKEN_PLAN_CN_BASE_URL`
+
+Override the Token Plan base URL (mainland China)
 
 `DEEPSEEK_API_KEY`
 
@@ -313,6 +341,22 @@ NovitaAI API key — AI-native cloud for Model API, Agent Sandbox, and GPU Cloud
 `NOVITA_BASE_URL`
 
 Override NovitaAI base URL (default: `https://api.novita.ai/openai/v1`)
+
+`RAMP_ROUTER_API_KEY`
+
+Ramp Router API key ([app.router.com/keys](https://app.router.com/keys)); alias `ROUTER_API_KEY` also accepted
+
+`RAMP_ROUTER_BASE_URL`
+
+Override Ramp Router base URL (default: `https://api.router.com/v1`)
+
+`NEBIUS_API_KEY`
+
+Nebius Token Factory API key ([tokenfactory.nebius.com](https://tokenfactory.nebius.com/)); `NEBIUS_TOKEN_FACTORY_API_KEY` also accepted
+
+`NEBIUS_BASE_URL`
+
+Override Nebius Token Factory base URL (default: `https://api.tokenfactory.nebius.com/v1`)
 
 `NVIDIA_API_KEY`
 
@@ -1948,7 +1992,7 @@ OAuth client id (`agent:{instance_id}`) for the gated/public dashboard, activati
 
 `HERMES_DASHBOARD_PUBLIC_URL`
 
-Complete public URL the dashboard is reached at, for OAuth callback construction behind reverse proxies. Overrides `dashboard.public_url`.
+Complete public URL the dashboard is reached at behind a reverse proxy. It controls OAuth callback construction, adds its exact hostname to the HTTP Host/WebSocket Origin guard, and requires the auth gate for non-loopback public hosts even when the backend binds to loopback. Overrides `dashboard.public_url`.
 
 `HERMES_DASHBOARD_OIDC_ISSUER`
 
@@ -2554,7 +2598,7 @@ Per-platform connect timeout during gateway startup and reconnect (seconds; `0`/
 
 `HERMES_GATEWAY_BUSY_INPUT_MODE`
 
-Default gateway busy-input behavior: `queue`, `steer`, or `interrupt`. Can be overridden per chat with `/busy`.
+Default gateway busy-input behavior: `queue`, `steer`, or `interrupt`. Can be overridden for the active profile with `/busy`.
 
 `HERMES_GATEWAY_BUSY_ACK_ENABLED`
 
@@ -2942,21 +2986,9 @@ Direct OpenAI-compatible endpoint for vision tasks
 
 API key paired with `AUXILIARY_VISION_BASE_URL`
 
-`AUXILIARY_WEB_EXTRACT_PROVIDER`
+note
 
-Override provider for web extraction/summarization
-
-`AUXILIARY_WEB_EXTRACT_MODEL`
-
-Override model for web extraction/summarization
-
-`AUXILIARY_WEB_EXTRACT_BASE_URL`
-
-Direct OpenAI-compatible endpoint for web extraction/summarization
-
-`AUXILIARY_WEB_EXTRACT_API_KEY`
-
-API key paired with `AUXILIARY_WEB_EXTRACT_BASE_URL`
+`AUXILIARY_WEB_EXTRACT_*` variables are obsolete: `web_extract` and browser snapshots no longer use an auxiliary LLM. Long pages and snapshots are truncated deterministically with the full text stored on disk for `read_file` paging.
 
 For task-specific direct endpoints, Hermes uses the task's configured API key or `OPENAI_API_KEY`. It does not reuse `OPENROUTER_API_KEY` for those custom endpoints.
 

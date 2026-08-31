@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`ocr-and-documents`](/docs/user-guide/skills/bundled/productivity/productivity-ocr-and-documents), [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx), [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx), [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
 
 ## Reference: full SKILL.md
 
@@ -46,7 +46,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # Document to Action Items
 
-Turn documents into cited facts and proposed actions. Extraction is not legal advice, and low-confidence OCR or ambiguous language must remain visible. The `ocr-and-documents` / `pdf` / `docx` skills own extraction mechanics; this skill owns what happens to the extracted content.
+Turn documents into cited facts and proposed actions. Extraction is not legal advice, and low-confidence OCR or ambiguous language must remain visible. The `pdf` / `pdf` / `docx` skills own extraction mechanics; this skill owns what happens to the extracted content.
 
 ## When to Use
 
@@ -55,7 +55,7 @@ Turn documents into cited facts and proposed actions. Extraction is not legal ad
 -   "Read these scanned forms and structure the data."
 -   "Find risks, owners, and follow-ups in these attachments."
 
-Don't use for: plain text extraction with no downstream structuring (load `ocr-and-documents` directly).
+Don't use for: plain text extraction with no downstream structuring (load `pdf` directly).
 
 ## Procedure
 
@@ -65,7 +65,7 @@ Use `read_file` for local files and `web_extract` for URLs to identify files, ve
 
 ### 2\. Extract with provenance
 
-Load `ocr-and-documents`, `pdf`, or `docx`. Extract text/tables while retaining file and page/section coordinates. For scans, record OCR confidence or visible quality issues. Done when every extracted field can cite its source location.
+Load `pdf`, `pdf`, or `docx`. Extract text/tables while retaining file and page/section coordinates. For scans, record OCR confidence or visible quality issues. Done when every extracted field can cite its source location.
 
 ### 3\. Classify evidence
 
