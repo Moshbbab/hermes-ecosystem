@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It…">
+<meta name="description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that routes local questions to specific artifacts such as skills, support documents, scripts, and MCP…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It…">
+<meta property="og:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that routes local questions to specific artifacts such as skills, support documents, scripts, and MCP…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that routes local questions to specific artifacts such as skills, support documents, scripts, and MCP…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Hermes+Agent+plugin+for+local+knowledge+search+and+artifact+routing%E2%80%94find+the+right+skill%2C+script%2C+runbook%2C+cron+job%2C+MCP+server%2C+or+document.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It provides tools for searching and retrieving artifact metadata to help the agent identify the correct source before performing actions.",
+  "description": "Hermes Local Knowledge is a plugin for the Hermes Agent that routes local questions to specific artifacts such as skills, support documents, scripts, and MCP servers. It functions as an artifact router rather than a chunk-based RAG system, providing routing hints that require the agent to read the selected source before taking action.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-08-31T11:13:32.000Z",
+  "dateModified": "2026-08-31T11:26:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a plugin for the Hermes Agent that indexes local artifacts like skills, scripts, and documentation to act as a routing layer. It provides tools for searching and retrieving artifact metadata to help the agent identify the correct source before performing actions.</p>
+    <p class="summary-text">Hermes Local Knowledge is a plugin for the Hermes Agent that routes local questions to specific artifacts such as skills, support documents, scripts, and MCP servers. It functions as an artifact router rather than a chunk-based RAG system, providing routing hints that require the agent to read the selected source before taking action.</p>
     <ul class="summary-highlights">
-      <li>Routes queries to local skills, runbooks, and MCP servers.</li>
-      <li>Provides five tools for searching, fetching, and reporting on artifacts.</li>
-      <li>Uses an opt-in worker for automatic tool-OKF note generation.</li>
+      <li>Indexes local artifacts including skills, runbooks, scripts, and MCP servers.</li>
+      <li>Provides five native tools for search, retrieval, and feedback.</li>
+      <li>Supports automatic generation of tool routing notes using model calls.</li>
     </ul>
   </div>
 </section>
@@ -232,7 +232,7 @@
 </tbody></table>
 <p>Native tool responses are intentionally model-facing and concise. Search, get, and neighbor calls return only routing metadata needed to choose or inspect the next artifact, plus actionable warnings or rebuild state when present. Internal trigger vocabularies, index/configuration diagnostics, hashes, counts, and local database paths remain available to the service, CLI doctor, and local telemetry but are not serialized into routine agent context. The usage-report tool similarly returns a compact improvement-oriented projection rather than the complete telemetry schema.</p>
 <p>The plugin also registers <code>pre_llm_call</code>, <code>post_tool_call</code>, <code>on_session_end</code>, and <code>on_session_finalize</code> hooks. When the configured source is available, Hermes hosts with cache-safe plugin prompt sections add one concise system-prompt hint for each new session: use <code>knowledge_search</code> before broad file search for local Hermes/homelab artifacts, then verify live state directly. Older hosts use the same hint through a deduplicated <code>pre_llm_call</code> compatibility fallback. In either case, <code>pre_llm_call</code> continues to bind optional same-turn implicit search-result feedback; the remaining lifecycle hooks support exact successful consumption through <code>knowledge_get</code>, <code>skill_view</code>, or <code>read_file</code> plus tool-OKF capture/generation while keeping correlation inside the plugin when Hermes dispatches local-knowledge tools through its deferred-tool bridge.</p>
-<p>Implicit feedback is disabled by default. In a private controlled installation, it can learn a routing hint when the same artifact is consumed after distinct matching searches, with each supported consumer tied to that search's unassisted baseline in the same Hermes session, task, and turn:</p>
+<p>Implicit feedback is enabled by default. It learns a local routing hint when the same artifact is consumed after distinct matching searches, with each supported consumer tied to that search's unassisted baseline in the same Hermes session, task, and turn:</p>
 <pre><code class="language-yaml">local_knowledge:
   implicit_feedback:
     enabled: true
@@ -240,7 +240,7 @@
     max_generic_queries: 5
 </code></pre>
 <p>Only a recent search from the same Hermes session, task, and turn is eligible. <code>skill_view</code> and <code>read_file</code> must run in a later model request, after the search result is available, and count only when their successful result resolves by canonical source path to exactly one baseline artifact in the same current index snapshot. Repeated consumption from one search is deduplicated, and overly generic artifacts stop receiving implicit promotion. Explicit feedback remains authoritative, and implicit evidence is not used as evaluation ground truth.</p>
-<h3>Install and model consent</h3>
+<h3>Install and model-token notice</h3>
 <p>Install and enable the directory plugin:</p>
 <pre><code class="language-bash">hermes plugins install https://github.com/stepanov1975/hermes-local-knowledge.git --enable
 </code></pre>
@@ -252,24 +252,18 @@
 <pre><code class="language-bash">hermes plugins update local_knowledge
 hermes plugins enable local_knowledge
 </code></pre>
-<h4>Automatic tool-OKF generation is opt-in</h4>
-<p>Existing-artifact lookup works without model calls. <code>local_knowledge.okf.auto_generate</code> defaults to <code>false</code>; while it is off, safe tool-use candidates can be recorded but are not automatically converted into new routing notes.</p>
-<p>Before enabling automatic generation, an installer must explain that:</p>
+<h4>Automatic tool-OKF generation and token use</h4>
+<p>Existing-artifact lookup works without model calls. <code>local_knowledge.okf.auto_generate</code> defaults to <code>true</code> because generated routing notes significantly improve future tool discovery.</p>
+<p>Installers and agents should tell users that automatic generation:</p>
 <ul>
 <li>a detached worker invokes the active Hermes model and consumes additional model tokens;</li>
 <li>one worker claims at most <code>max_candidates_per_session</code> candidates (default <code>2</code>) and makes at most one structured batch call when new content must be authored;</li>
 <li><code>max_generation_seconds</code> is passed as the provider-request timeout, while provider retry/fallback policy can extend total elapsed time and token use behind that host call;</li>
 <li>session finalization does not wait for generation.</li>
 </ul>
-<p>Then ask explicitly:</p>
-<blockquote>
-<p>Enable automatic OKF generation now? (Recommended; uses additional model tokens.)</p>
-</blockquote>
-<p>Only after the user agrees, run:</p>
-<pre><code class="language-bash">hermes config set local_knowledge.okf.enabled true
-hermes config set local_knowledge.okf.auto_generate true
+<p>Users who do not want the additional model calls can disable automatic generation while retaining existing lookup and manual OKF management:</p>
+<pre><code class="language-bash">hermes config set local_knowledge.okf.auto_generate false
 </code></pre>
-<p>If it is already enabled, report that instead of asking again. If the user declines, leave <code>auto_generate</code> disabled and report that existing lookup and manual OKF management remain available, but new tool-routing notes will not be generated automatically.</p>
 <p>Generated tool notes use Open Knowledge Format v0.2 concept metadata (<code>type</code> plus structured <code>generated.by</code>/<code>generated.at</code> provenance). When automatic generation is enabled, the same bounded worker opportunistically claims completed generator-v3 notes and converts their deterministic frontmatter to v0.2 without a model call, preserving the existing routing content and generation timestamp. A legacy note that cannot be converted losslessly falls back to normal model-backed regeneration.</p>
 <h4>Install the proactive router skill</h4>
 <p>The per-turn hook makes the primary search tool discoverable without loading a full routing skill. The bundled skill adds the detailed search/fetch/inspect workflow, freshness guidance, and feedback procedure:</p>
@@ -301,7 +295,7 @@ hermes config set local_knowledge.okf.auto_generate true
   known_entities: [Hermes, GitHub, MCP, Cron]
   okf:
     enabled: true
-    auto_generate: false  # change only after explicit model-token consent
+    auto_generate: true  # uses additional model tokens in a bounded background worker
     max_candidates_per_session: 2
     max_generation_seconds: 120
     min_use_count: 1
@@ -378,7 +372,7 @@ hermes config set local_knowledge.okf.auto_generate true
 <tr>
 <td><code>okf.auto_generate</code></td>
 <td>flat <code>okf_auto_generate</code></td>
-<td><code>false</code></td>
+<td><code>true</code></td>
 </tr>
 <tr>
 <td><code>okf.max_candidates_per_session</code></td>
@@ -398,7 +392,7 @@ hermes config set local_knowledge.okf.auto_generate true
 <tr>
 <td><code>implicit_feedback.enabled</code></td>
 <td>—</td>
-<td><code>false</code></td>
+<td><code>true</code></td>
 </tr>
 <tr>
 <td><code>implicit_feedback.min_confirmations</code></td>
@@ -466,7 +460,7 @@ okf_index_dirty/
 <h3>Feedback and evaluation</h3>
 <p>Lookup telemetry and feedback stay in <code>&lt;state_dir&gt;/usage.sqlite</code>. Tool handlers fail open for telemetry-only errors; explicit <code>knowledge_feedback</code> writes remain strict so callers know whether feedback was recorded. Do not put secrets or private document text in queries or feedback notes.</p>
 <p>Managed searches may use one deterministic feedback prior when the index was built for the configured source root. Only the latest significant explicit rating for a query/artifact pair is eligible. Among ratings accepted by the current tool, only <code>useful</code> is positive; legacy persisted <code>great</code> rows remain positive compatibility input. A newer rejection for that route or matching current query suppresses an older overlap route. A matching artifact already present in current results may move to rank one. If it is absent, the plugin performs at most one retry with an accepted query no longer than the current query and the mapped artifact type, and promotes only the exact artifact when that live retry rediscovers it. Searches against an explicit caller-owned <code>--db</code> remain unassisted.</p>
-<p>When opt-in implicit feedback is enabled and no explicit route matches, mature same-turn evidence may supply the lower-priority route. Consumption through <code>skill_view</code> and <code>read_file</code> is accepted only from a later model request when a successful call resolves to exactly one caller-visible baseline artifact in the same current index snapshot; same-request parallel calls and route-assisted-only results remain ineligible. It uses the same current-index promotion or one verified typed-retry path, and a matching explicit rejection can veto it.</p>
+<p>When implicit feedback is enabled and no explicit route matches, mature same-turn evidence may supply the lower-priority route. Consumption through <code>skill_view</code> and <code>read_file</code> is accepted only from a later model request when a successful call resolves to exactly one caller-visible baseline artifact in the same current index snapshot; same-request parallel calls and route-assisted-only results remain ineligible. It uses the same current-index promotion or one verified typed-retry path, and a matching explicit rejection can veto it.</p>
 <p><code>knowledge_usage_report</code> summarizes recent activity before changing ranking, triggers, source coverage, or graph edges. Its model-facing <code>search_quality</code> section isolates live native searches from the current plugin version while excluding known probe queries. When observed consumption exists, the nested <code>implicit_consumed_rank_lower_bound</code> aggregates where it fell in each search's unassisted <code>baseline_top_ids_json</code>; it is a lower-bound operational diagnostic, never evaluation ground truth. <code>event_cohorts</code> separates current searches, probes, hourly doctor runs, other CLI/native activity, and historical-version searches, while the nested feedback summary distinguishes learned <code>knowledge_get</code>, <code>skill_view</code>, and <code>read_file</code> signals. Empty sections and duplicated aggregate/configuration diagnostics are omitted from the native response; the complete local telemetry report remains available to service, CLI, and evaluation code.</p>
 <p><code>evaluate</code> is read-only and intentionally measures the unassisted index ranking to avoid training/evaluation leakage. It replays positive local feedback against the current index and reports exact Hit@k/MRR plus parent-equivalent metrics. Parent equivalence is deliberately limited to a <code>skill_support_doc</code> and its owning skill; generic graph neighbors are not treated as successful equivalents.</p>
 <p>For historical comparisons from a source checkout:</p>
@@ -500,7 +494,7 @@ git diff --check
 <h3>Owner map</h3>
 <ul>
 <li><code>config.py</code> — configuration models, aliases, defaults, and the single resolver.</li>
-<li><code>implicit.py</code> — opt-in same-turn search-result consumption attribution.</li>
+<li><code>implicit.py</code> — default-enabled same-turn search-result consumption attribution.</li>
 <li><code>artifacts.py</code> — whole-artifact models, source collection, privacy-safe metadata extraction, and graph edges.</li>
 <li><code>index.py</code> — format-4 SQLite/JSONL publication, cross-version and SQLite build locking, managed rebuild classification, and deterministic search/get/neighbors.</li>
 <li><code>telemetry.py</code> — local usage and feedback persistence/reporting.</li>
