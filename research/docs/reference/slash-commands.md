@@ -481,7 +481,14 @@ model_aliases:
     model: qwen3-coder:30b
     provider: custom
     base_url: http://localhost:11434/v1
+  theta:
+    model: theta-1
+    provider: custom
+    base_url: https://theta.example.com/v1
+    key_env: THETA_API_KEY        # or: api_key: "${THETA_API_KEY}"
 ```
+
+An alias with its own `base_url` can carry that endpoint's credential via `api_key` (a literal, or a `"${VAR}"` reference) or `key_env` (an environment variable name); `api_key` wins if both are set. With neither set, the key is resolved from the alias **host** and never inherited from the provider that was active before the switch.
 
 **Short form** — `provider/model` in one string. Set from the shell without editing YAML:
 
@@ -575,7 +582,7 @@ Resume a previously named session.
 
 `/sessions [all] [search <query>]`
 
-List previous sessions for this chat. `/sessions search <query>` filters by title/id match (most recently active first); `/sessions all` lists across origins (admin only).
+List previous sessions for this chat; the active session appears with a `(current)` marker. `/sessions search <query>` filters by title/id match (most recently active first); `/sessions all` lists across origins (admin only — non-admins get a notice and the chat-scoped list).
 
 `/usage`
 
