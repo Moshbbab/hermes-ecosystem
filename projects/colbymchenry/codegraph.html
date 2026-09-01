@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph is a local code intelligence tool that builds a semantic graph of a project to provide context for AI agents. It uses a Rust-powered kernel to index…">
+<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file code graph for use with AI coding agents. It features a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph is a local code intelligence tool that builds a semantic graph of a project to provide context for AI agents. It uses a Rust-powered kernel to index…">
+<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file code graph for use with AI coding agents. It features a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph is a local code intelligence tool that builds a semantic graph of a project to provide context for AI agents. It uses a Rust-powered kernel to index…">
+<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file code graph for use with AI coding agents. It features a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+CoPilot%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+t&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local code intelligence tool that builds a semantic graph of a project to provide context for AI agents. It uses a Rust-powered kernel to index code and automatically updates the graph as files are modified.",
+  "description": "CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file code graph for use with AI coding agents. It features a Rust-powered kernel and provides a browser-based UI to visualize symbol callers, source code, and dependencies.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-08-26T17:09:09.000Z",
+  "dateModified": "2026-08-31T23:15:02.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 68845
+    "userInteractionCount": 68947
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 68.8K</span>
+    <span class="stars">★ 68.9K</span>
     <span><span class="meta-label">lang</span>C</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-26</span>
+    <span><span class="meta-label">updated</span>2026-08-31</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local code intelligence tool that builds a semantic graph of a project to provide context for AI agents. It uses a Rust-powered kernel to index code and automatically updates the graph as files are modified.</p>
+    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds and maintains a cross-file code graph for use with AI coding agents. It features a Rust-powered kernel and provides a browser-based UI to visualize symbol callers, source code, and dependencies.</p>
     <ul class="summary-highlights">
-      <li>Operates 100% locally with a Rust-powered kernel.</li>
-      <li>Auto-syncs the index on every file change.</li>
-      <li>Integrates with agents via an MCP server.</li>
+      <li>Operates 100% locally with automatic graph synchronization on file changes.</li>
+      <li>Supports integration with agents including Claude Code, Cursor, and GitHub Copilot.</li>
+      <li>Provides structural extraction for TypeScript, JavaScript, ArkTS, and Python.</li>
     </ul>
   </div>
 </section>
@@ -196,6 +196,7 @@
 <li><a href="#language-support">Language Support</a></li>
 <li><a href="#why-codegraph">Why CodeGraph?</a></li>
 <li><a href="#key-features">Key Features</a></li>
+<li><a href="#read-your-graph-in-the-browser">Read your graph in the browser</a></li>
 <li><a href="#framework-aware-routes">Framework-aware Routes</a></li>
 <li><a href="#mixed-ios--react-native--expo-bridging">Mixed iOS / React Native / Expo bridging</a></li>
 <li><a href="#quick-start">Quick Start</a></li>
@@ -248,6 +249,12 @@ codegraph init
 
 <h4>4. No more syncing!</h4>
 <p>Auto-sync is enabled by default. CodeGraph watches the project and updates the graph on every file change — while your agent edits code, or you add, modify, or delete files. <strong>The index is never stale, and there is nothing to re-run.</strong></p>
+<h4>5. See what your agent sees</h4>
+<pre><code class="language-bash">codegraph ui
+</code></pre>
+<p>Opens the graph in your browser at <code>http://127.0.0.1:4747</code> — callers on the left, the symbol's
+source in the middle, what it calls on the right. See
+<a href="#read-your-graph-in-the-browser">Read your graph in the browser</a>.</p>
 <h4>Uninstall</h4>
 <p>Changed your mind? One command removes CodeGraph from every agent it configured <strong>and</strong> the CLI itself — every install it finds (standalone bundle, npm global package, launcher link), shown to you before anything is deleted:</p>
 <pre><code class="language-bash">codegraph uninstall
@@ -575,6 +582,46 @@ codegraph init
 </details>
 
 <hr>
+<h3>Read your graph in the browser</h3>
+<p><code>codegraph ui</code> opens a viewer for a project you have already indexed. It is the same graph
+your agent reads, on screen: pick a symbol and you see <strong>who calls it on the left</strong>, its
+<strong>verbatim source in the middle</strong>, and <strong>what it calls on the right — each one drawn level
+with the line that calls it</strong>.</p>
+<pre><code class="language-bash">codegraph init          # once per project, if you haven't already
+codegraph ui            # opens http://127.0.0.1:4747 in your browser
+</code></pre>
+<img src="https://raw.githubusercontent.com/colbymchenry/codegraph/main/assets/codegraph-ui-symbol-view.png?v=1" alt="The CodeGraph viewer: callers on the left, the symbol's source in the middle with a marker on every calling line, and the symbols it calls on the right, each level with its call site" width="100%">
+
+<p>What you get on that screen:</p>
+<ul>
+<li><strong>Callers, grouped by file</strong>, each with the exact line it calls from — click one to jump there. Test callers fold into a single line so real callers stay in view.</li>
+<li><strong>The real source</strong>, syntax-highlighted, with a marker in the gutter on every line that calls something.</li>
+<li><strong>Callees on the right</strong>, positioned at the line that calls them, joined by a hairline. Hover either end and both light up.</li>
+<li><strong>Blast radius</strong> — direct dependents, everything within three hops, and how many files and test files that touches.</li>
+<li><strong>Honest edges.</strong> A guess CodeGraph isn't sure about is folded away as "uncertain" rather than shown as fact, and a symbol no test reaches within three hops says so.</li>
+<li><strong>Search</strong> (<code>/</code> or ⌘K) over every symbol and file, and a <strong>trail</strong> of the path you walked that lives in the URL, so you can send someone the exact route you took. Typing a name also surfaces matching <strong>entry points</strong> under their own heading, so a URL comes back with the symbol that serves it rather than on its own.</li>
+<li><strong>Entry points</strong> — the first screen on a codebase you have never opened, and the answer to "where does anything start". Every route with its handler and the line it is registered on, grouped by router file and named with the framework it was detected from; the files that run something at import time (a CLI, a worker entry, a script); the tests, ranked by how much of the project each one exercises; and the symbols the most code depends on. Nothing is guessed from a filename — it is all read out of the graph, and a project with no routes says so instead of drawing an empty list. Any row that names a symbol can start a <strong>flow</strong>: pick a second symbol and you get the path between them, so "how does <code>POST /v1/payroll/cycles/{cycleID}/run</code> reach the database" is two clicks.</li>
+<li>Click any file path to open the <strong>file view</strong>: everything that file depends on, its outline in source order, and everything that depends on it. Its <strong>Source</strong> tab shows the whole file with the same gutter markers, plus an arc in the left margin for every call that stays inside the file — the one place a file's internal call structure is legible, because source order does the layout. A 6,800-line file scrolls at full speed.</li>
+<li><strong>Ask for a path.</strong> Type "how does execute reach getFile" (or <code>execute -&gt; getFile</code>) and you get the <strong>flow</strong>: one card per hop, each opened at the line that makes the next call. Hops that no static edge records — a callback, an interface dispatch, a React re-render — are drawn dashed and name where the handler was wired. "Read as flow" turns a walk you did by hand into the same strip.</li>
+<li><strong>And when the path runs out, it says where.</strong> A flow that doesn't get there ends in "Where the graph stops": the kind of dispatch that ended it (a computed member call, a <code>getattr</code>, a reflective invoke, a message bus), its line, the key when the source spells one out, and a shortlist of what could be on the other side — plus the name-only matches CodeGraph refused to follow, with their confidence. Nothing is guessed, and a flow that does connect never shows it.</li>
+<li><strong>What happens from here.</strong> On an app with screens, the <strong>Screens</strong> tab draws one box per screen and an arrow for every way of getting from one to another, each labelled with the condition under which it happens. The <strong>Steps</strong> tab does the same for what happens <em>on</em> a screen: pick one (or any symbol) and you get its handlers, the calls that cross into native code, the native events that come back, the store actions it writes and the requests that leave the app, as typed steps with the plumbing between them folded into the arrows — the whole capture-to-upload flow of a React Native app on one picture, with every step a click from the next anchor or a Flow strip.</li>
+<li><strong>The map</strong>: the whole project at module granularity, laid out from the graph with dependencies pointing down — never drawn by hand, and the same picture every time. Cycles are listed rather than straightened away.</li>
+<li><strong>Take the picture with you.</strong> A flow strip or a map can be copied as an image straight into a pull-request comment, or saved as an SVG for a README — always in the light theme, whichever one you are reading in, with a caption saying what the picture is. The SVG is real text, so it stays sharp at any size and the names in it are selectable.</li>
+<li><strong>Keep a walk.</strong> Press <strong>Save trail</strong> on the trail bar, name it, and the path is kept — listed on the empty screen and on Entry points, above the suggestions, and reopened at the symbol you left with the whole walk restored. Steps are remembered by what they are, not where they sat, so a saved trail survives editing the code it describes; when something does move it says which step moved, which was renamed away, and how much of the walk still opens. Trails are plain JSON under <code>.codegraph/ui/trails/</code> (git already ignores it), and <strong>Export</strong> hands you the file if you would rather commit one.</li>
+<li><strong>It keeps up.</strong> Save a file and a banner appears within about a third of a second saying the index hasn't caught up yet — and the screen switches to the file's current source rather than a body sliced at lines it no longer has. When something re-indexes, whatever is on screen refetches itself and says "Index updated · reloaded". A symbol that moved because you added a line above it is followed, not lost. Nothing polls: the viewer watches, and if it loses touch with the server it retries a few times and then says so instead of hammering it.</li>
+</ul>
+<p>Options: <code>--port &lt;n&gt;</code> to pin a port (without it the viewer takes 4747, or the next free one),
+<code>--no-open</code> to just print the URL for a headless box or an SSH session, and
+<code>CODEGRAPH_BROWSER=&lt;command&gt;</code> to choose the browser (<code>CODEGRAPH_BROWSER=none</code> never opens one).
+<code>codegraph web</code> is an alias for the same command.</p>
+<p><strong>Privacy:</strong> the viewer listens on <code>127.0.0.1</code> only, so nothing on your network can reach it,
+and requests claiming to come from any other host are refused. It opens an index that already
+exists, never creates one, and never changes your graph or a line of your code. The one thing
+it writes is a trail you asked it to save, into <code>.codegraph/ui/trails/</code>; <code>codegraph ui --read-only</code> refuses even that. <strong>It sends nothing anywhere</strong>: no code, no paths, no analytics.
+There is no account and no cloud in this feature at all.</p>
+<p>The viewer reads an index that already exists — it never creates one — so <code>codegraph init</code> has
+to have run first. <code>codegraph ui /path/to/project</code> points it at a project you indexed elsewhere.</p>
+<hr>
 <h3>Framework-aware Routes</h3>
 <p>CodeGraph detects web-framework routing files and emits <code>route</code> nodes linked by <code>references</code> edges to their handler classes or functions. Querying callers of a view/controller now surfaces the URL pattern that binds it.</p>
 <table>
@@ -641,18 +688,52 @@ codegraph init
 <td><code>app.get("x", use: handler)</code></td>
 </tr>
 <tr>
-<td><strong>React Router</strong> / <strong>SvelteKit</strong></td>
-<td>Route component nodes</td>
-</tr>
-<tr>
-<td><strong>Vue Router</strong> / <strong>Nuxt</strong></td>
-<td><code>pages/</code> file-based routes, <code>server/api/</code> endpoints, route middleware</td>
-</tr>
-<tr>
 <td><strong>Astro</strong></td>
 <td><code>src/pages/</code> file-based routes (<code>.astro</code> pages + <code>.ts</code> endpoints, <code>[param]</code>/<code>[...rest]</code> syntax)</td>
 </tr>
 </tbody></table>
+<h4>Routers — routes <em>and</em> the navigation between them</h4>
+<p>These frameworks additionally emit <strong><code>navigates</code></strong> edges: the function that sends a user somewhere is linked to the screen it names, so "where does tapping this go" is one hop in the graph rather than a search. Each reads a literal destination — a computed one, or a path no route serves, is left unresolved rather than guessed — and a link written in markup is marked as inferred.</p>
+<table>
+<thead>
+<tr>
+<th>Router</th>
+<th>Routes from</th>
+<th>Navigation from</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Expo Router</strong></td>
+<td>Every screen file under <code>app/</code> (<code>app/item/[id].tsx</code> → <code>/item/[id]</code>, groups stripped), bound to its default-export component</td>
+<td><code>router.push</code> / <code>replace</code> / <code>navigate</code>, template hrefs, <code>{ pathname }</code> objects, and a helper's returned href</td>
+</tr>
+<tr>
+<td><strong>Next.js</strong></td>
+<td>App Router <code>app/**/page.tsx</code> and Pages Router pages (<code>(group)</code> stripped, <code>[slug]</code> → <code>:slug</code>); <code>app/api/**/route.ts</code> exports and <code>pages/api/*</code> are endpoints, not screens</td>
+<td><code>router.push</code> / <code>replace</code> / <code>prefetch</code>, <code>redirect()</code> / <code>permanentRedirect()</code> in a server action or page, <code>NextResponse.redirect(new URL(…))</code> in middleware, <code>&lt;Link href&gt;</code> and internal <code>&lt;a href&gt;</code></td>
+</tr>
+<tr>
+<td><strong>React Router</strong></td>
+<td><code>&lt;Route path component/element&gt;</code> (v5 and v6) and <code>createBrowserRouter([{ path, element }])</code></td>
+<td><code>history.push</code> / <code>replace</code>, <code>useNavigate</code>'s <code>navigate</code>, a loader's <code>redirect</code>, <code>&lt;Link to&gt;</code> / <code>&lt;NavLink to&gt;</code> / <code>&lt;Navigate to&gt;</code> / react-router-bootstrap's <code>&lt;LinkContainer to&gt;</code></td>
+</tr>
+<tr>
+<td><strong>TanStack Router</strong></td>
+<td><code>createFileRoute('/posts/$postId')</code> (file-based) and <code>createRoute({ path, getParentRoute })</code> composed up its parent chain (code-based); <code>_pathless</code> segments, <code>(group)</code> folders, <code>__root</code> and <code>&lt;Outlet/&gt;</code> layouts are not addresses</td>
+<td><code>navigate({ to })</code>, a thrown <code>redirect({ to })</code>, <code>&lt;Link to&gt;</code> / <code>&lt;Navigate to&gt;</code> — where <code>to</code> is the route PATTERN and the values ride beside it in <code>params</code></td>
+</tr>
+<tr>
+<td><strong>Vue Router</strong> / <strong>Nuxt</strong></td>
+<td><code>createRouter({ routes: [...] })</code> with the view each entry names, plus Nuxt <code>pages/</code> file-based routes, <code>server/api/</code> endpoints and route middleware</td>
+<td><code>router.push</code> / <code>replace</code>, <code>$router.push</code>, Nuxt's <code>navigateTo</code>, <code>&lt;router-link&gt;</code> / <code>&lt;RouterLink&gt;</code> / <code>&lt;NuxtLink&gt;</code> — <strong>by route name</strong> (<code>push({ name: 'profile' })</code>) as well as by path</td>
+</tr>
+<tr>
+<td><strong>SvelteKit</strong></td>
+<td><code>src/routes/**/+page.svelte</code> (<code>[slug]</code> → <code>:slug</code>, <code>[[opt]]</code> → <code>:opt?</code>), joined to the <code>+page.server.js</code> beside it so a loader's guard belongs to its page</td>
+<td><code>goto('/x')</code>, <code>redirect(status, '/x')</code> from a load or form action, and the plain <code>&lt;a href&gt;</code> that is a link in a SvelteKit app</td>
+</tr>
+</tbody></table>
+<p>In a repository holding several apps, each app's routes are matched only against navigation written inside that app.</p>
 <hr>
 <h3>Mixed iOS / React Native / Expo bridging</h3>
 <p>Real iOS and React Native codebases live across multiple languages — a Swift caller invokes an Objective-C selector that's been auto-bridged, a JS file calls into a native module via the React Native bridge, a JSX component delegates to a native view manager. Static tree-sitter extraction stops at each language boundary. CodeGraph bridges them so <code>codegraph_explore</code> connects the flow end-to-end across the gap — call paths and blast radius cross the boundary instead of stopping at it.</p>
@@ -903,207 +984,12 @@ codegraph init
 <h3>CLI Reference</h3>
 <pre><code class="language-bash">codegraph                         # Run interactive installer
 codegraph install                 # Run installer (explicit)
-codegraph uninstall               # Remove CodeGraph from your agents AND the CLI (--keep-cli for configs only)
-codegraph init [path]             # Initialize a project + build its graph (one step)
-codegraph uninit [path]           # Remove CodeGraph from a project (--force to skip prompt)
-codegraph index [path]            # Full index (--force to re-index, --quiet for less output)
-codegraph sync [path]             # Incremental update
-codegraph status [path]           # Show statistics
-codegraph unlock [path]           # Remove a stale lock file that's blocking indexing
-codegraph query &lt;search&gt;          # Search symbols (--kind, --limit, --json)
-codegraph explore &lt;query&gt;         # Relevant symbols' source + call paths in one shot (same output as the codegraph_explore MCP tool)
-codegraph node &lt;symbol|file&gt;      # One symbol's source + callers, or read a file with line numbers (same output as codegraph_node)
-codegraph files [path]            # Show file structure (--format, --filter, --max-depth, --json)
-codegraph callers &lt;symbol&gt;        # Find what calls a function/method (--limit, --json)
-codegraph callees &lt;symbol&gt;        # Find what a function/method calls (--limit, --json)
-codegraph impact &lt;symbol&gt;         # Analyze what code is affected by changing a symbol (--depth, --json)
-codegraph affected [files...]     # Find test files affected by changes (see below)
-codegraph daemon                  # Manage background daemons — pick one to stop (alias: daemons)
-codegraph telemetry [on|off]      # Show or change anonymous usage telemetry
-codegraph upgrade [version]       # Update to the latest release (--check, --force)
-codegraph version                 # Print the installed version (also -v, --version)
-codegraph help [command]          # Show help, optionally for one command
-</code></pre>
-<h4><code>codegraph affected</code></h4>
-<p>Traces import dependencies transitively to find which test files are affected by changed source files.</p>
-<pre><code class="language-bash">codegraph affected src/utils.ts src/api.ts         # Pass files as arguments
-git diff --name-only | codegraph affected --stdin   # Pipe from git diff
-codegraph affected src/auth.ts --filter "e2e/*"     # Custom test file pattern
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>--stdin</code></td>
-<td>Read file list from stdin</td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>-d, --depth &lt;n&gt;</code></td>
-<td>Max dependency traversal depth</td>
-<td><code>5</code></td>
-</tr>
-<tr>
-<td><code>-f, --filter &lt;glob&gt;</code></td>
-<td>Custom glob to identify test files</td>
-<td>auto-detect</td>
-</tr>
-<tr>
-<td><code>-j, --json</code></td>
-<td>Output as JSON</td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>-q, --quiet</code></td>
-<td>Output file paths only</td>
-<td><code>false</code></td>
-</tr>
-</tbody></table>
-<p><strong>CI/hook example:</strong></p>
-<pre><code class="language-bash">#!/usr/bin/env bash
-AFFECTED=$(git diff --name-only HEAD | codegraph affected --stdin --quiet)
-if [ -n "$AFFECTED" ]; then
-  npx vitest run $AFFECTED
-fi
-</code></pre>
-<hr>
-<h3>MCP Tools</h3>
-<p>When running as an MCP server, CodeGraph exposes a <strong>single tool</strong> — <code>codegraph_explore</code>. Measured agent behavior showed that one strong tool steers agents better than a menu of narrower ones — fewer mis-picks, and it saves context every session:</p>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>codegraph_explore</code></td>
-<td>Answer almost any question in one call — "how does X work", a flow ("how does X reach Y"), or surveying an area — returning the relevant symbols' verbatim source grouped by file, plus the call paths between them and a blast-radius summary. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can't follow. Name a file or symbol in the query to read its current line-numbered source, the same shape the Read tool gives you.</td>
-</tr>
-</tbody></table>
-<p>The other tools (<code>codegraph_node</code>, <code>codegraph_search</code>, <code>codegraph_callers</code>, <code>codegraph_callees</code>, <code>codegraph_impact</code>, <code>codegraph_files</code>, <code>codegraph_status</code>) stay fully functional but <strong>unlisted by default</strong> — everything they return already arrives inline on <code>codegraph_explore</code> (its blast-radius section, the relationship map, a symbol's body as its callee list). Re-enable any of them for the MCP surface with the <code>CODEGRAPH_MCP_TOOLS</code> environment variable (e.g. <code>CODEGRAPH_MCP_TOOLS=explore,node,search,callers</code>), or use their CLI equivalents (<code>codegraph node</code> / <code>query</code> / <code>callers</code> / <code>callees</code> / <code>impact</code> / <code>files</code> / <code>status</code>).</p>
-<p>Even when the server's own root has no <code>.codegraph/</code> index, the tools stay available: pass <code>projectPath</code> to query any indexed project — a sub-service in a monorepo, or a second repo — in the same session. A path that has no index returns clean guidance to use built-in tools instead, so nothing fails loudly, and indexing stays your decision.</p>
-<hr>
-<h3>Library Usage</h3>
-<p>CodeGraph can be embedded directly. The npm package re-exports its programmatic
-API, so both <code>import</code> and <code>require</code> resolve the <code>CodeGraph</code> class in your own
-process — handy for embedding it in an app (e.g. an Electron main process).</p>
-<pre><code class="language-typescript">import CodeGraph from '@colbymchenry/codegraph';
-// CommonJS works too:
-//   const { CodeGraph } = require('@colbymchenry/codegraph');
+codegraph uninstall               # Remove CodeGraph from your agents AND t
 
-const cg = await CodeGraph.init('/path/to/project');
-// Or: const cg = await CodeGraph.open('/path/to/project');
+---
 
-await cg.indexAll({
-  onProgress: (p) =&gt; console.log(`${p.phase}: ${p.current}/${p.total}`)
-});
-
-const results = cg.searchNodes('UserService');
-const callers = cg.getCallers(results[0].node.id);
-const context = await cg.buildContext('fix login bug', { maxNodes: 20, includeCode: true, format: 'markdown' });
-const impact = cg.getImpactRadius(results[0].node.id, 2);
-
-cg.watch();   // auto-sync on file changes
-cg.unwatch(); // stop watching
-cg.close();
+*README truncated. [Continue reading on GitHub](https://github.com/colbymchenry/codegraph#readme)*
 </code></pre>
-<p>Lower-level building blocks are exported from the same entry point for callers
-that drive the graph directly: <code>DatabaseConnection</code>, <code>QueryBuilder</code>,
-<code>getDatabasePath</code>, <code>initGrammars</code> / <code>loadGrammarsForLanguages</code>, and <code>FileLock</code>.</p>
-<p><strong>Embedding requirements</strong></p>
-<ul>
-<li>Install from npm (<code>npm i @colbymchenry/codegraph</code>) so the matching
-per-platform package — which carries the compiled library and its
-dependencies — is fetched alongside the shim.</li>
-<li>The API runs on <strong>your</strong> runtime, so it needs <strong>Node 22.5+</strong> for the built-in
-<code>node:sqlite</code> (Electron qualifies when its bundled Node is 22.5+). The CLI and
-MCP server are unaffected — they run on the self-contained bundled runtime.</li>
-<li>TypeScript types ship with the package. As with any Node-targeting library,
-keep <code>@types/node</code> available and <code>skipLibCheck: true</code> (the common default).</li>
-</ul>
-<hr>
-<h3>Configuration</h3>
-<p>Next to none — CodeGraph is <strong>zero-config by default</strong>, with nothing to write or
-keep in sync to get started. Language support is automatic from the file
-extension; there's nothing to wire up per language. The one optional file is for
-mapping <a href="#custom-file-extensions">custom file extensions</a>.</p>
-<p>What it skips out of the box:</p>
-<ul>
-<li><strong>Dependency, build, and cache directories</strong> — <code>node_modules</code>, <code>vendor</code>,
-<code>dist</code>, <code>build</code>, <code>target</code>, <code>.venv</code>, <code>Pods</code>, <code>.next</code>, and the like across every
-<a href="#supported-languages">supported stack</a> — so the graph is your code, not
-third-party noise. This holds even with no <code>.gitignore</code>.</li>
-<li><strong>Anything in your <code>.gitignore</code></strong> — honored in git repos via git, and in
-non-git projects by reading <code>.gitignore</code> directly (root and nested).</li>
-<li><strong>Files larger than 1 MB</strong> — generated bundles, minified JS, vendored blobs.</li>
-</ul>
-<p>To keep something else out, add it to <code>.gitignore</code>. To pull a default-excluded
-directory back <strong>in</strong> (say you really do want a vendored dependency indexed),
-add a negation — <code>!vendor/</code>. The defaults apply uniformly, so committing a
-dependency or build directory doesn't force it into the graph; the <code>.gitignore</code>
-negation is the explicit opt-in.</p>
-<p><code>.gitignore</code> can't drop a directory you've <strong>committed</strong>, though. For a vendored
-theme or SDK that's checked into the repo (e.g. a Metronic theme under
-<code>static/</code>), list it under <code>exclude</code> in <code>codegraph.json</code> — gitignore-style
-patterns, matched against repo-root-relative paths, honored on index, sync, and
-watch:</p>
-<pre><code class="language-json">{
-  "exclude": ["static/", "**/vendor/**"]
-}
-</code></pre>
-<p>Conversely, when real source is gitignored on purpose — a project under a second
-VCS (SVN, Perforce) that <code>.gitignore</code>s its own source so it stays out of Git —
-force it back in with <code>include</code> (the opposite of <code>exclude</code>; <code>includeIgnored</code>
-only revives embedded git repos, not plain source):</p>
-<pre><code class="language-json">{
-  "include": ["Tools/", "Local/typescript/"]
-}
-</code></pre>
-<p>CodeGraph discovers those files off disk, overriding <code>.gitignore</code>, on index,
-sync, and watch. An explicit <code>exclude</code> still wins, and built-in skips
-(<code>node_modules</code>, <code>dist</code>, <code>.git</code>) are never re-included.</p>
-<p>Sometimes a directory shouldn't leave the index — you still want to find things
-in it — it just shouldn't <em>outrank</em> your real code. A <code>scripts/</code> or
-<code>optional-skills/</code> tree whose helpers use generic names (<code>usage</code>, <code>status</code>,
-<code>run</code>) can win on an exact name match and crowd out the product code that
-actually answers the query. Name those trees under <code>deprioritize</code>:</p>
-<pre><code class="language-json">{
-  "deprioritize": ["optional-skills/", "scripts/"]
-}
-</code></pre>
-<p>This is the ranking counterpart to <code>exclude</code>: those paths stay indexed and
-findable — searching for them directly still works — they just stop winning
-against first-party code. It applies to <code>query</code> / <code>search</code> and to <code>explore</code>'s
-ranking. It is <em>not</em> a filter: unlike the built-in <code>example/</code>, <code>sample/</code>,
-<code>fixture/</code>, <code>benchmark/</code> and <code>demo/</code> handling — which also drops those files
-from some result sets outright — <code>deprioritize</code> only ever changes rank. Reach
-for <code>exclude</code> when you want something gone.</p>
-<h4>Custom file extensions</h4>
-<p>If your project uses a non-standard extension for a <a href="#supported-languages">supported
-language</a> — say <code>.dota_lua</code> for Lua, or <code>.tpl</code> for PHP —
-those files are skipped by default, because the extension isn't one CodeGraph
-recognizes. Map them with an optional <strong><code>codegraph.json</code></strong> at your project root:</p>
-<pre><code class="language-json">{
-  "extensions": {
-    ".dota_lua": "lua",
-    ".tpl": "php"
-  }
-}
-</code></pre>
-<p>Each value is a supported language id. The mappings merge on top of the built-in
-defaults and win on conflict, so you can also re-point a built-in (e.g.
-<code>".h": "cpp"</code>). Commit the file to share the mapping with your team. A typo'd
-language or a malformed file is warned about and skipped — it never breaks
-indexing — and a project with no <code>codegraph.json</code> behaves exactly as before.
-Re-index (<code>codegraph index</code>) after </p>
-<hr>
-<p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1116,7 +1002,7 @@ Re-index (<code>codegraph index</code>) after </p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 853</div>
+        <div class="stars">★ 857</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
@@ -1132,7 +1018,7 @@ Re-index (<code>codegraph index</code>) after </p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 565</div>
+        <div class="stars">★ 566</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">

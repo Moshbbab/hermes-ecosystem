@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lethe044/hermes-incident-commander — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an…">
+<meta name="description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Lethe044/hermes-incident-commander">
 <meta property="og:title" content="Lethe044/hermes-incident-commander — Hermes Atlas">
-<meta property="og:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an…">
+<meta property="og:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Lethe044/hermes-incident-commander">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Lethe044/hermes-incident-commander — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an…">
+<meta name="twitter:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-incident-commander&amp;subtitle=Autonomous+SRE+agent+that+detects%2C+diagnoses%2C+and+self-heals+production+incidents+-+with+a+standalone+watchdog+that+needs+no+Hermes+install%2C+just+an+Anthropic+API+key.+Memory+%2B+Ski&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander#software",
   "name": "hermes-incident-commander",
-  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an extension of the Hermes Agent framework or as a standalone watchdog that monitors Linux hosts using the Anthropic API and psutil.",
+  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or as an agent that generates post-incident reports and new prevention skills to handle future events.",
   "url": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander",
   "codeRepository": "https://github.com/Lethe044/hermes-incident-commander",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "Lethe044",
     "url": "https://github.com/Lethe044"
   },
-  "dateModified": "2026-08-31T15:51:31.000Z",
+  "dateModified": "2026-08-31T23:07:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an extension of the Hermes Agent framework or as a standalone watchdog that monitors Linux hosts using the Anthropic API and psutil.</p>
+    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or as an agent that generates post-incident reports and new prevention skills to handle future events.</p>
     <ul class="summary-highlights">
-      <li>Supports standalone monitoring of CPU, memory, disk, and systemd units.</li>
-      <li>Integrates with PagerDuty, Discord, and Slack for incident notifications.</li>
-      <li>Generates structured post-incident reports and prevention skills for future incidents.</li>
+      <li>Monitors CPU, memory, disk, and systemd units on Linux hosts.</li>
+      <li>Provides opt-in auto-remediation via an allow-listed configuration.</li>
+      <li>Integrates with PagerDuty, Discord, and Slack for incident alerting.</li>
     </ul>
   </div>
 </section>
@@ -163,24 +163,30 @@
 </blockquote>
 <p>Originally built on <a href="https://hermes-agent.nousresearch.com">Hermes Agent</a> by NousResearch
 for the <em>"Show us what Hermes Agent can do"</em> hackathon. Now also ships a <strong>standalone
-watchdog</strong> that runs on any real Linux host with nothing but an Anthropic API key —
+watchdog</strong> that runs on any real Linux host with nothing but an Anthropic API key -
 no Hermes installation required.</p>
 <hr>
 <h3>What's New</h3>
 <ul>
-<li>📟 <strong>PagerDuty integration</strong> - the notifier can now trigger (and resolve)
+<li>🧪 <strong><code>--dry-run</code> mode</strong> - preview exactly what <code>--auto-remediate</code> would
+restart or delete, without touching anything. See <a href="#standalone-mode-no-hermes-required">Standalone Mode</a>.</li>
+<li>📈 <strong>Prometheus <code>/metrics</code> endpoint</strong> - optional, stdlib-only exporter for
+plugging the watchdog into an existing observability stack.</li>
+<li>🔁 <strong>PagerDuty resolve wiring</strong> - the watchdog now closes PagerDuty
+incidents automatically once a breach recovers, instead of leaving them open.</li>
+<li>📟 <strong>PagerDuty integration</strong> - the notifier can trigger (and resolve)
 PagerDuty incidents via the Events API v2, alongside Discord/Slack, with
-zero new dependencies. See <a href="#standalone-mode-no-hermes-required">Standalone Mode</a>.</li>
+zero new dependencies.</li>
 <li>☸️ <strong>Kubernetes pod crash-loop scenario</strong> - an 8th incident scenario
 (<code>k8s-pod-crashloop</code>), in both the RL environment and the demo.</li>
-<li>🛰️ <strong>Standalone Watchdog</strong> — monitor a real host's CPU/memory/disk and failed
+<li>🛰️ <strong>Standalone Watchdog</strong> - monitor a real host's CPU/memory/disk and failed
 systemd units, get Claude-powered triage, and (opt-in) safe auto-remediation.
 No Hermes install needed.</li>
-<li>📊 <strong>Offline HTML Dashboard</strong> — a single, dependency-free file summarizing your
+<li>📊 <strong>Offline HTML Dashboard</strong> - a single, dependency-free file summarizing your
 incident history. No server, no CDN, works offline. <a href="#standalone-mode-no-hermes-required">See a screenshot.</a></li>
-<li>✅ <strong>CI on every push</strong> — the test suite and smoke test run automatically via
-GitHub Actions across Python 3.10–3.12.</li>
-<li>🔒 <strong>SAFETY.md</strong> — a written threat model for the difference between demo mode
+<li>✅ <strong>CI on every push</strong> - the test suite and smoke test run automatically via
+GitHub Actions across Python 3.10-3.12.</li>
+<li>🔒 <strong>SAFETY.md</strong> - a written threat model for the difference between demo mode
 (full shell access, sandbox only) and the watchdog's allow-listed remediation.</li>
 <li>🗺️ <strong>ROADMAP.md</strong> - a living backlog for where this project goes next.</li>
 </ul>
@@ -232,7 +238,7 @@ shapes, not a captured live session (turn count, timings, and exact tool calls w
 
 <blockquote>
 <p>⚠️ The demo and the RL training environment give the model <strong>full terminal
-access</strong>. Only run them in a disposable sandbox/VM/container — see
+access</strong>. Only run them in a disposable sandbox/VM/container - see
 <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/SAFETY.md">SAFETY.md</a>.</p>
 </blockquote>
 <hr>
@@ -243,28 +249,40 @@ and needs nothing but <code>ANTHROPIC_API_KEY</code>:</p>
 <pre><code class="language-bash">pip install -e .              # or: pip install -r requirements.txt psutil
 
 export ANTHROPIC_API_KEY=sk-ant-...
-# optional, for real-time alerts (any subset — all three can be set at once):
+# optional, for real-time alerts (any subset - all three can be set at once):
 export DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 export PAGERDUTY_ROUTING_KEY=...
 
-# Single check — good for testing or a cron job
+# Single check - good for testing or a cron job
 python -m monitor.watchdog --once
+
+# Preview what --auto-remediate would do, without doing it
+python -m monitor.watchdog --dry-run
 
 # Continuous monitoring (observe-only by default)
 python -m monitor.watchdog --cpu-threshold 85 --interval 30
 
 # Opt in to SAFE, allow-listed auto-remediation (see monitor/watchdog_config.example.yaml)
 python -m monitor.watchdog --config monitor/watchdog_config.yaml --auto-remediate
+
+# Also serve Prometheus-format metrics at http://127.0.0.1:9877/metrics
+python -m monitor.watchdog --metrics-port 9877
 </code></pre>
 <p>Unlike the demo/training environment, the watchdog <strong>never gives the model
 shell access</strong>. It collects real metrics with <code>psutil</code>, sends only numbers to
 Claude, and any remediation is restricted to an explicit allow-list you
 configure (restart <em>this specific</em> service, clean <em>this specific</em> log
-directory). Full threat model in <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/SAFETY.md">SAFETY.md</a>.</p>
-<p><code>monitor/notifier.py</code> fans an alert out to every channel you've configured —
+directory). Full threat model in <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/SAFETY.md">SAFETY.md</a>. <code>--dry-run</code> runs one
+check and prints exactly what would be restarted or deleted (prefixed
+<code>[DRY RUN]</code>) without doing it or notifying anyone - a safe way to validate a
+new <code>watchdog_config.yaml</code> before turning <code>--auto-remediate</code> on for real.</p>
+<p><code>monitor/notifier.py</code> fans an alert out to every channel you've configured -
 Discord, Slack, and/or PagerDuty (via the Events API v2) - so it's safe to
-set all three; nothing extra fires for channels you leave unconfigured.</p>
+set all three; nothing extra fires for channels you leave unconfigured. When
+PagerDuty is configured, the watchdog also tracks which breach types have an
+open incident and calls PagerDuty's resolve endpoint automatically once
+things recover, instead of leaving pages open forever.</p>
 <p>Once you have some incident history, generate a dashboard:</p>
 <pre><code class="language-bash">python -m monitor.dashboard --open
 </code></pre>
@@ -277,6 +295,14 @@ a recent-incidents table.</p>
 
 <p align="center"><sub>Real output of <code>monitor/dashboard.py</code> - rendered from sample incident history, not a mockup.</sub></p>
 
+<p>If you already run Prometheus and Grafana, you can scrape the watchdog
+directly instead of (or alongside) the dashboard - <code>--metrics-port</code> starts a
+tiny, dependency-free <code>/metrics</code> endpoint (<code>monitor/prometheus_exporter.py</code>)
+exposing <code>hermes_watchdog_cpu_percent</code>, <code>hermes_watchdog_mem_percent</code>,
+<code>hermes_watchdog_disk_percent</code>, <code>hermes_watchdog_failed_services_count</code>, and
+a <code>hermes_watchdog_breach{metric="..."}</code> gauge per tracked metric. It binds
+to <code>127.0.0.1</code> by default and is read-only - it cannot be used to control
+the watchdog.</p>
 <hr>
 <h3>How It Uses Every Hermes Feature</h3>
 <p>This project was designed to push every capability of Hermes Agent:</p>
@@ -378,8 +404,9 @@ a recent-incidents table.</p>
     MON --&gt; WATCHDOG["🐍 watchdog.py&lt;br/&gt;← real-host monitor, no Hermes needed"]
     MON --&gt; NOTIFY["🐍 notifier.py&lt;br/&gt;← Discord / Slack / PagerDuty"]
     MON --&gt; DASH["🐍 dashboard.py&lt;br/&gt;← offline HTML dashboard"]
+    MON --&gt; PROM["🐍 prometheus_exporter.py&lt;br/&gt;← optional /metrics endpoint"]
 
-    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 55 pytest cases"]
+    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 66 pytest cases"]
 
     DOCS --&gt; SETUP["📄 SETUP.md"]
     DOCS --&gt; WRITEUP["📄 WRITEUP.md"]
@@ -395,6 +422,7 @@ a recent-incidents table.</p>
     style WATCHDOG fill:#1a4731,color:#fff
     style NOTIFY fill:#1a4731,color:#fff
     style DASH fill:#1a4731,color:#fff
+    style PROM fill:#1a4731,color:#fff
     style CIWORKFLOW fill:#2d2d2d,color:#fff
 </code></pre>
 <hr>
@@ -435,12 +463,12 @@ python environments/incident_env.py serve --config environments/incident_config.
 <h3>Reward Function (for RL Training)</h3>
 <p>The training environment uses a multi-component reward that captures real SRE quality:</p>
 <pre><code class="language-mermaid">pie title Reward Components
-    "Resolution — Did the incident get fixed?" : 50
-    "RCA Quality — Root cause explained?" : 15
-    "Report Quality — Post-mortem written?" : 15
-    "Skill Created — Prevention skill added?" : 10
-    "Response Speed — Fast MTTR?" : 5
-    "Tool Efficiency — Minimal tool calls?" : 5
+    "Resolution - Did the incident get fixed?" : 50
+    "RCA Quality - Root cause explained?" : 15
+    "Report Quality - Post-mortem written?" : 15
+    "Skill Created - Prevention skill added?" : 10
+    "Response Speed - Fast MTTR?" : 5
+    "Tool Efficiency - Minimal tool calls?" : 5
 </code></pre>
 <hr>
 <h3>Incident Scenarios (Training Scenarios)</h3>
@@ -510,8 +538,8 @@ pip install pytest pytest-asyncio psutil
 # Fast sanity check, no dependencies beyond the stdlib + pyyaml
 python environments/incident_env.py --smoke-test
 
-# Run full test suite (55 tests: scenarios, reward function, skill file,
-# demo script, notifier incl. PagerDuty, watchdog, dashboard)
+# Run full test suite (66 tests: scenarios, reward function, skill file,
+# demo script, notifier incl. PagerDuty, watchdog dry-run/resolve wiring, Prometheus exporter, dashboard)
 pytest tests/ -v
 
 # Run specific test classes
@@ -520,7 +548,7 @@ pytest tests/test_incident_env.py::TestRewardFunction -v
 pytest tests/test_monitor.py::TestSafeRemediation -v
 </code></pre>
 <p>CI runs both of the above automatically on every push and PR across Python
-3.10, 3.11, and 3.12 — see the badge at the top of this README or
+3.10, 3.11, and 3.12 - see the badge at the top of this README or
 <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/.github/workflows/ci.yml"><code>.github/workflows/ci.yml</code></a>.</p>
 <hr>
 <h3>Why This Project Is Worth Using</h3>
@@ -533,9 +561,9 @@ pytest tests/test_monitor.py::TestSafeRemediation -v
 </li>
 <li><p><strong>Closes the training loop.</strong> The Atropos RL environment means this isn't just a demo - it's a path to training models that are genuinely better at agentic SRE tasks.</p>
 </li>
-<li><p><strong>Works standalone, today, on a real host.</strong> <code>monitor/watchdog.py</code> doesn't need Hermes at all — just <code>ANTHROPIC_API_KEY</code> — and is built with an explicit, documented safety model instead of giving an LLM raw shell access to your production box.</p>
+<li><p><strong>Works standalone, today, on a real host.</strong> <code>monitor/watchdog.py</code> doesn't need Hermes at all - just <code>ANTHROPIC_API_KEY</code> - and is built with an explicit, documented safety model instead of giving an LLM raw shell access to your production box.</p>
 </li>
-<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 55 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
+<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 66 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
 </li>
 </ol>
 <hr>
@@ -549,16 +577,16 @@ pytest tests/test_monitor.py::TestSafeRemediation -v
 
 <h3>Contributing</h3>
 <p>New incident scenarios, notifier integrations, and dashboard improvements are
-welcome — see <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for how to get set up and
+welcome - see <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for how to get set up and
 what a good PR looks like, and <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/ROADMAP.md">ROADMAP.md</a> if you want ideas.
-This project is meant to keep growing — if you use it and hit a rough edge,
+This project is meant to keep growing - if you use it and hit a rough edge,
 please open an issue even if you don't have time to fix it yourself.</p>
 <h3>Safety</h3>
 <p>Please read <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/SAFETY.md">SAFETY.md</a> before pointing anything in this repo at
-a machine you care about — demo mode and the watchdog have very different
+a machine you care about - demo mode and the watchdog have very different
 risk profiles.</p>
 <h3>License</h3>
-<p>MIT — see <a href="LICENSE">LICENSE</a>.</p>
+<p>MIT - see <a href="LICENSE">LICENSE</a>.</p>
 <hr>
 <p><em>Built with <a href="https://hermes-agent.nousresearch.com">Hermes Agent</a> - the agent that grows with you.</em></p>
 

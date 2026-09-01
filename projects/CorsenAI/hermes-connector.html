@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CorsenAI/hermes-connector — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Hermes Connector is an open-source Chrome extension that enables a local Hermes Agent to read and control specific browser tabs. It embeds a local Hermes…">
+<meta name="description" content="Hermes Connector is an open-source Chrome extension that enables Hermes Agent to read and control specific browser tabs. It uses a local companion application…">
 <link rel="canonical" href="https://hermesatlas.com/projects/CorsenAI/hermes-connector">
 <meta property="og:title" content="CorsenAI/hermes-connector — Hermes Atlas">
-<meta property="og:description" content="Hermes Connector is an open-source Chrome extension that enables a local Hermes Agent to read and control specific browser tabs. It embeds a local Hermes…">
+<meta property="og:description" content="Hermes Connector is an open-source Chrome extension that enables Hermes Agent to read and control specific browser tabs. It uses a local companion application…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/CorsenAI/hermes-connector">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="CorsenAI/hermes-connector — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Connector is an open-source Chrome extension that enables a local Hermes Agent to read and control specific browser tabs. It embeds a local Hermes…">
+<meta name="twitter:description" content="Hermes Connector is an open-source Chrome extension that enables Hermes Agent to read and control specific browser tabs. It uses a local companion application…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-connector&amp;subtitle=Chrome+browser+extension+for+Hermes+Agent+%E2%80%94+exact+sessions%2C+user-selected+tabs%2C+and+local-first+browser+control.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/CorsenAI/hermes-connector#software",
   "name": "hermes-connector",
-  "description": "Hermes Connector is an open-source Chrome extension that enables a local Hermes Agent to read and control specific browser tabs. It embeds a local Hermes dashboard into the Chrome side panel, allowing users to manually attach tabs to exact Hermes profiles and sessions.",
+  "description": "Hermes Connector is an open-source Chrome extension that enables Hermes Agent to read and control specific browser tabs. It uses a local companion application to route requests between a chosen Hermes profile and user-selected tabs within a standard Chrome profile.",
   "url": "https://hermesatlas.com/projects/CorsenAI/hermes-connector",
   "codeRepository": "https://github.com/CorsenAI/hermes-connector",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "CorsenAI",
     "url": "https://github.com/CorsenAI"
   },
-  "dateModified": "2026-08-31T18:54:31.000Z",
+  "dateModified": "2026-09-01T11:50:49.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-31</span>
+    <span><span class="meta-label">updated</span>2026-09-01</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Connector is an open-source Chrome extension that enables a local Hermes Agent to read and control specific browser tabs. It embeds a local Hermes dashboard into the Chrome side panel, allowing users to manually attach tabs to exact Hermes profiles and sessions.</p>
+    <p class="summary-text">Hermes Connector is an open-source Chrome extension that enables Hermes Agent to read and control specific browser tabs. It uses a local companion application to route requests between a chosen Hermes profile and user-selected tabs within a standard Chrome profile.</p>
     <ul class="summary-highlights">
-      <li>Controls tabs via a local companion and authenticated loopback broker.</li>
-      <li>Requires explicit user attachment before Hermes can access a tab.</li>
-      <li>Supports navigation, clicking, typing, scrolling, and taking screenshots.</li>
+      <li>Controls tabs via user-initiated attachment rather than automated browsers.</li>
+      <li>Supports page navigation, text entry, scrolling, and screenshot capture.</li>
+      <li>Requires a version-matched local companion for Windows, macOS, or Linux.</li>
     </ul>
   </div>
 </section>
@@ -170,10 +170,15 @@ automation browser or guessing which tab belongs to which task.</p>
 by Nous Research or Google.</p>
 </blockquote>
 <h3>Current release and compatibility</h3>
-<p>The public Chrome Web Store build is <strong>0.2.2</strong> while <strong>0.2.3</strong> is the candidate
-prepared for review. Install the companion only after checking the extension
-version in <code>chrome://extensions</code>; the Chrome extension and local companion must
-use exactly the same version.</p>
+<p>The public Chrome Web Store build is <strong>0.2.3</strong>. Install the companion only after
+checking the extension version in <code>chrome://extensions</code>; the Chrome extension
+and local companion must use exactly the same version.</p>
+<p>Version <strong>0.2.4</strong> is a GitHub prerelease candidate for Chrome Web Store review.
+It adds automatic Hermes Desktop discovery: the side panel can list Desktop
+sessions and attach tabs without requiring a separately opened web dashboard.
+Its Windows companion also keeps the detached broker outside Hermes' managed
+virtual-environment launcher so the broker cannot block future Hermes updates.
+Do not install companion 0.2.4 until Chrome explicitly shows extension 0.2.4.</p>
 <table>
 <thead>
 <tr>
@@ -184,16 +189,22 @@ use exactly the same version.</p>
 </tr>
 </thead>
 <tbody><tr>
-<td>0.2.2</td>
-<td><a href="https://github.com/CorsenAI/hermes-connector/releases/download/v0.2.2/hermes-connector-0.2.2-companion.zip">Companion 0.2.2</a></td>
-<td>Protocol 4 / <code>127.0.0.1:8766</code></td>
-<td>Current public Store pair</td>
+<td>0.2.4</td>
+<td><a href="https://github.com/CorsenAI/hermes-connector/releases/download/v0.2.4/hermes-connector-0.2.4-companion.zip">Companion 0.2.4</a></td>
+<td>Protocol 5 / <code>127.0.0.1:8767</code> + automatic Hermes Desktop backend discovery</td>
+<td>GitHub prerelease candidate; use only when Chrome explicitly shows 0.2.4</td>
 </tr>
 <tr>
 <td>0.2.3</td>
 <td><a href="https://github.com/CorsenAI/hermes-connector/releases/download/v0.2.3/hermes-connector-0.2.3-companion.zip">Companion 0.2.3</a></td>
 <td>Protocol 4 / <code>127.0.0.1:8766</code></td>
-<td>Store candidate/reviewer pair; use only when Chrome shows 0.2.3</td>
+<td>Current public Store pair</td>
+</tr>
+<tr>
+<td>0.2.2</td>
+<td><a href="https://github.com/CorsenAI/hermes-connector/releases/download/v0.2.2/hermes-connector-0.2.2-companion.zip">Companion 0.2.2</a></td>
+<td>Protocol 4 / <code>127.0.0.1:8766</code></td>
+<td>Legacy released pair; use only while Chrome still shows 0.2.2</td>
 </tr>
 <tr>
 <td>0.2.1</td>
@@ -222,11 +233,15 @@ is available on the <a href="https://corsenai.github.io/hermes-connector/support
 </p>
 
 <h3>Your Hermes session, inside the Chrome you already use</h3>
-<p>Hermes Connector embeds the real local Hermes dashboard in Chrome's side panel.
-You decide which tabs each Hermes session may access, and the connector keeps
-that scope exact even when several projects, sessions, or Chrome profiles are
-running at the same time.</p>
+<p>Hermes Connector keeps session selection and tab attachment in Chrome's side
+panel. The current 0.2.3 Store pair embeds the local Hermes web dashboard. The
+0.2.4 prerelease candidate also discovers Hermes Desktop automatically: choose
+the Desktop session and attach tabs in the panel, then continue the conversation
+in Hermes Desktop. In both modes, the connector keeps the scope exact even when
+several projects, sessions, or Chrome profiles are running at the same time.</p>
 <p><img src="https://raw.githubusercontent.com/CorsenAI/hermes-connector/main/store/screenshot-product-1280x800.png" alt="Hermes Connector controlling an explicitly attached Chrome tab from the side panel" loading="lazy" decoding="async"></p>
+<p>0.2.4 Desktop candidate preview:</p>
+<p><img src="https://raw.githubusercontent.com/CorsenAI/hermes-connector/main/store/screenshot-desktop-1280x800.png" alt="Hermes Connector 0.2.4 connected directly to Hermes Desktop beside an attached Chrome tab" loading="lazy" decoding="async"></p>
 <p>With an attached tab, Hermes can:</p>
 <ul>
 <li>inspect and read the visible page;</li>
@@ -268,9 +283,11 @@ your authenticated websites remain available in your normal Chrome profile,
 while each Hermes task receives only the tabs assigned to it.</p>
 <h3>Quick start</h3>
 <p>You need a local Hermes Agent installation, desktop Chrome 120 or newer, and the
-small Hermes Connector companion. The extension's first-run screen detects your
-operating system, checks whether the companion is already reachable, and shows
-the appropriate Windows, macOS, or Linux instructions.</p>
+small Hermes Connector companion. Version 0.2.3 uses the local Hermes web
+dashboard; the 0.2.4 candidate can use Hermes Desktop directly or the web
+dashboard. The extension's first-run screen detects your operating system,
+checks whether the companion is already reachable, and shows the appropriate
+Windows, macOS, or Linux instructions.</p>
 <h4>1. Install the Chrome extension</h4>
 <p><a href="https://chromewebstore.google.com/detail/hermes-connector-%E2%80%94-by-cor/cdhaldcgafmkcnpanlmmpaebabnlledm">Install Hermes Connector from the Chrome Web Store</a>,
 check the version shown in <code>chrome://extensions</code>, then click its toolbar
@@ -291,10 +308,11 @@ you can copy the pairing code.</p>
 <p><strong>macOS or Linux:</strong> open a terminal in the extracted folder and run:</p>
 <pre><code class="language-sh">./install.sh
 </code></pre>
-<p>Restart any Hermes dashboard, gateway, or chat process that was already
-running. The installer adds the connector plugin to the shared Hermes home and
-existing named profiles, then prints one private pairing code. Re-run the
-installer after creating a new named Hermes profile.</p>
+<p>Fully quit and reopen Hermes Desktop, or restart any Hermes dashboard, gateway,
+or chat process that was already running. The installer adds the connector
+plugin to the shared Hermes home and existing named profiles, then prints one
+private pairing code. Re-run the installer after creating a new named Hermes
+profile.</p>
 <h4>4. Pair Chrome and choose the tabs</h4>
 <p>In the Hermes Connector side panel:</p>
 <ol>
@@ -302,7 +320,9 @@ installer after creating a new named Hermes profile.</p>
 <li>Paste the pairing code printed by the installer and save.</li>
 <li>Select the Hermes profile and session you want to use.</li>
 <li>Choose <strong>Attach active tab</strong> or <strong>Choose tabs</strong>.</li>
-<li>Ask Hermes to work with the selected page.</li>
+<li>Ask Hermes to work with the selected page. In 0.2.4 Desktop mode, continue
+the conversation in Hermes Desktop while the panel keeps the session and tab
+controls visible.</li>
 </ol>
 <p>For example:</p>
 <pre><code class="language-text">Read the release checklist in my attached tab and tell me what remains.
@@ -319,17 +339,18 @@ authenticated loopback broker used by the extension. It is bundled in the
 public release archive and does not create a Corsen AI cloud relay.</p>
 <pre><code class="language-text">Hermes profile and session
   -&gt; Hermes Connector companion
-  -&gt; authenticated broker on 127.0.0.1:8766
+  -&gt; authenticated broker on 127.0.0.1:8767
   -&gt; exact local Chrome profile identity
   -&gt; explicitly attached tabs
   -&gt; requested browser action
 </code></pre>
 <p>Chrome automatically updates the Store extension. It cannot update a local
 companion, so after an extension version change you must install the companion
-with exactly the same version and restart Hermes. If you remove and reinstall
-the extension, or add it to another Chrome profile, the first-run check detects
-an already-running compatible companion and avoids asking you to install it
-again.</p>
+with exactly the same version and fully restart Hermes Desktop or the running
+Hermes services. If you remove and reinstall the extension, or add it to another
+Chrome profile, the first-run check can detect the local broker but cannot prove
+its version before pairing; follow the displayed exact-version installer link.
+Reinstalling the matching companion preserves the existing pairing code.</p>
 <h3>Privacy and security</h3>
 <p>Hermes Connector is designed to keep authority visible and local:</p>
 <ul>
@@ -423,7 +444,7 @@ builds are isolated under <code>dist/dev/</code> and must not be uploaded to the
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
-        <div class="stars">★ 304</div>
+        <div class="stars">★ 305</div>
         <div class="name"><span class="org">stainlu /</span> hermes-labyrinth</div>
       </a>
     </div>
