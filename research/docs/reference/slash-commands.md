@@ -182,7 +182,7 @@ Show current configuration
 
 `/model [model-name]`
 
-Show or change the current model. Supports: `/model claude-sonnet-4`, `/model provider:model` (switch providers), `/model custom:model` (custom endpoint), `/model custom:name:model` (named custom provider), `/model custom` (auto-detect from endpoint), and user-defined aliases (`/model fav`, `/model grok` — see [Custom model aliases](#custom-model-aliases)). Flags: `--global` persists the change to config.yaml; `--session` forces session-only; `--once` applies to the next turn only; `--refresh` re-fetches the provider's model list; `--provider <name>` switches backend (session-only unless `--global`). A plain `/model <name>` is session-only unless `model.persist_switch_by_default: true` is set. **Interactive picker:** running `/model` with no arguments opens the provider→model picker; on the model list you can **type to fuzzy-filter** the models (e.g. type `grok` to narrow to matching models), Backspace to trim the filter, Esc to clear it (or close the picker). Selection always resolves to one concrete model — the filter only narrows the list, it never guesses. **Note:** `/model` can only switch between already-configured providers. To add a new provider, exit the session and run `hermes model` from your terminal. **Cost note:** switching models mid-conversation resets the prompt cache — the cache key includes the model, so your next turn re-reads the entire conversation at full input price instead of the ~75%-discounted cached rate. Expected and unavoidable, but worth knowing on long sessions.
+Show or change the current model. Supports: `/model claude-sonnet-4`, `/model provider:model` (switch providers), `/model custom:model` (custom endpoint), `/model custom:name:model` (named custom provider), `/model custom` (auto-detect from endpoint), and user-defined aliases (`/model fav`, `/model grok` — see [Custom model aliases](#custom-model-aliases)). Flags: `--global` persists the change to config.yaml; `--session` forces session-only; `--once` applies to the next turn only; `--refresh` re-fetches the provider's model list; `--provider <name>` switches backend (session-only unless `--global`). A plain `/model <name>` is session-only unless `model.persist_switch_by_default: true` is set — except when no `model.default`/`model.provider` is configured yet, in which case the first pick persists so the profile gets a real default. The same rule governs the desktop composer picker. **Interactive picker:** running `/model` with no arguments opens the provider→model picker; on the model list you can **type to fuzzy-filter** the models (e.g. type `grok` to narrow to matching models), Backspace to trim the filter, Esc to clear it (or close the picker). Selection always resolves to one concrete model — the filter only narrows the list, it never guesses. **Note:** `/model` can only switch between already-configured providers. To add a new provider, exit the session and run `hermes model` from your terminal. **Cost note:** switching models mid-conversation resets the prompt cache — the cache key includes the model, so your next turn re-reads the entire conversation at full input price instead of the ~75%-discounted cached rate. Expected and unavoidable, but worth knowing on long sessions.
 
 `/codex-runtime [auto|codex_app_server|on|off]`
 
@@ -200,9 +200,9 @@ Cycle tool progress display: off → new → all → verbose. Can be [enabled fo
 
 Toggle **focus view** — a display-only reduced-output mode showing just your prompt and the final response. Composes with `/verbose`: turning it on snaps tool progress to `off` and remembers your previous mode, and `/focus off` restores it. Each turn ends with a dim recovery line (`⋯ 7 tool lines hidden · /focus off to show`) and a persistent `◉ focus` badge sits in the status bar so you always know you're in the reduced view. Nothing is sent differently to the model — detail is hidden, never discarded.
 
-`/fast [normal|fast|status]`
+`/fast [normal|fast|auto|cold|status]`
 
-Toggle fast mode — OpenAI Priority Processing / Anthropic Fast Mode. Options: `normal`, `fast`, `status`.
+Fast mode — OpenAI Priority Processing / Anthropic Fast Mode. `fast` = every request; `auto` = only requests in the first `agent.fast_auto_seconds` (default 60s) of each turn; `cold` = that same window on the first turn of a session only. Default `normal` (off). See [Fast mode](/docs/user-guide/configuration#fast-mode).
 
 `/reasoning [level|show|hide|full|clamp] [--global]`
 
@@ -324,7 +324,7 @@ Drive the multi-profile, multi-project collaboration board without leaving chat.
 
 `/reload-mcp` (alias: `/reload_mcp`)
 
-Reload MCP servers from config.yaml
+Reload MCP servers from config.yaml and re-probe tool availability (credentials/daemons that appeared mid-session)
 
 `/reload-skills` (alias: `/reload_skills`)
 
@@ -463,7 +463,7 @@ String-only prompt shortcuts are not supported as quick commands. Put longer reu
 
 ### Custom model aliases
 
-Define your own short names for models you use often, then reach them with `/model <alias>` in the CLI or any messaging platform. Aliases work identically in both, on session-only (default) and `--global` switches.
+Define your own short names for models you use often, then reach them with `/model <alias>` in a running session, `hermes chat --model <alias>` at startup, or any messaging platform. Aliases work identically in these paths, on session-only (default) and `--global` switches.
 
 Two config formats are supported:
 
@@ -548,9 +548,9 @@ Toggle the optional [Codex app-server runtime](/docs/user-guide/features/codex-a
 
 Set a personality overlay for the session. `/personality none` (or `default` / `neutral`) clears it.
 
-`/fast [normal|fast|status]`
+`/fast [normal|fast|auto|cold|status]`
 
-Toggle fast mode — OpenAI Priority Processing / Anthropic Fast Mode.
+Fast mode — OpenAI Priority Processing / Anthropic Fast Mode. `auto`/`cold` open a bounded fast window per turn / per session.
 
 `/retry`
 
@@ -730,7 +730,7 @@ Operate a running gateway platform right from chat. `/platform list` shows every
 
 `/reload-mcp` (alias: `/reload_mcp`)
 
-Reload MCP servers from config.
+Reload MCP servers from config and re-probe tool availability.
 
 `/verbose`
 

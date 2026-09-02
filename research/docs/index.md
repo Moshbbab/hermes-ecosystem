@@ -1,6 +1,6 @@
 # Hermes Agent
 
-**Source:** https://hermes-agent.nousresearch.com/docs/
+**Source:** https://hermes-agent.nousresearch.com/docs
 
 The self-improving AI agent built by [Nous Research](https://nousresearch.com). The only agent with a built-in learning loop — it creates skills from experience, improves them during use, nudges itself to persist knowledge, and builds a deepening model of who you are across sessions.
 
@@ -152,7 +152,7 @@ Common questions and solutions
 
 Machine-readable entry points to this documentation:
 
--   **[`/llms.txt`](/docs/assets/files/llms-7240021af84660c2a79f9fdaf65e9e8f.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
--   **[`/llms-full.txt`](/docs/assets/files/llms-full-24b1af8f853f53bfc3223973214a1d73.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
+-   **[`/llms.txt`](/docs/assets/files/llms-15fc4c9fea553c1ed3aa0fde70e4ee7a.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
+-   **[`/llms-full.txt`](/docs/assets/files/llms-full-b09b3de609f33e0db25ba67f3939bbd4.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
 
 Both files also resolve at `/docs/llms.txt` and `/docs/llms-full.txt`. Generated fresh on every deploy.
