@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReinaMacCredy/maestro — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It stores work, decisions, sessions, and…">
+<meta name="description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ReinaMacCredy/maestro">
 <meta property="og:title" content="ReinaMacCredy/maestro — Hermes Atlas">
-<meta property="og:description" content="Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It stores work, decisions, sessions, and…">
+<meta property="og:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ReinaMacCredy/maestro">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ReinaMacCredy/maestro — Hermes Atlas">
-<meta name="twitter:description" content="Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It stores work, decisions, sessions, and…">
+<meta name="twitter:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=maestro&amp;subtitle=Local-first+coordination+for+human+and+agent+work%3A+durable+work%2C+decisions%2C+dispatches%2C+evidence%2C+and+prompt-first+methods%2C+powered+by+TypeScript+and+Bun.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ReinaMacCredy/maestro#software",
   "name": "maestro",
-  "description": "Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It stores work, decisions, sessions, and evidence within a repository's shared Git root and does not require a background service.",
+  "description": "Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root. Written in TypeScript and running on Bun, it operates without a background service and uses a mechanism kernel to manage an SQLite store and event log.",
   "url": "https://hermesatlas.com/projects/ReinaMacCredy/maestro",
   "codeRepository": "https://github.com/ReinaMacCredy/maestro",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "ReinaMacCredy",
     "url": "https://github.com/ReinaMacCredy"
   },
-  "dateModified": "2026-09-02T04:54:55.000Z",
+  "dateModified": "2026-09-02T20:06:56.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Maestro is a local-first coordination system for human and agent work written in TypeScript and running on Bun. It stores work, decisions, sessions, and evidence within a repository's shared Git root and does not require a background service.</p>
+    <p class="summary-text">Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root. Written in TypeScript and running on Bun, it operates without a background service and uses a mechanism kernel to manage an SQLite store and event log.</p>
     <ul class="summary-highlights">
-      <li>Uses a three-layer architecture of kernel, plugins, and recipes.</li>
+      <li>Uses a mechanism kernel, plugins, and Markdown-based recipes.</li>
       <li>Implements the SLP cooperative-agent protocol for supervised teams.</li>
-      <li>Manages work lifecycles, durable decisions, and layered proof.</li>
+      <li>Manages work through durable trees, decisions, and layered proof verification.</li>
     </ul>
   </div>
 </section>
@@ -214,11 +214,16 @@ mechanical.</p>
   Lead &lt;--&gt; PeerA
   Lead &lt;--&gt; PeerB
   PeerA &lt;--&gt; PeerB
+  Observer["Observer"] -. nudge .-&gt; Lead
+  Observer -. copy .-&gt; Team
 </code></pre>
 <p>In the supported SLP flow, the Hub Supervisor reaches the team only through
 its Team Supervisor. Inside the team, the Team Supervisor, Lead, and Peers
-communicate directly. There is no Observer, Advisor, sensor, scheduler, or
-background agent role.</p>
+communicate directly. The Observer is a fourth seat with no work: a sentinel
+tab in the team workspace hands it one packet every five minutes, and at once
+when a role pane blocks, and its only mutation is <code>work note --stall</code>, which
+Maestro turns into one fixed nudge to the stuck seat plus a copy to the Team
+Supervisor. There is no Advisor, scheduler, or background agent role.</p>
 <p>SLP is a cooperative-agent protocol, not a shell security sandbox. Maestro
 checks the nine SLP operations at their supported boundaries: Hub operations
 must run from the Hub room, while project role operations require the current
@@ -249,7 +254,9 @@ immutable <code>maestro decide</code> record and explicit replacement.</p>
 <p>The Team Supervisor may open one optional foreground Watch Pane with existing
 Herdr pane control. Watch labels currently available raw output, but is not an
 agent and has no prompt, store write, gate, intervention, or decision
-authority. Its rolling transcript is runtime-only and is deleted at stop.</p>
+authority. Its rolling transcript is runtime-only and is deleted at stop.
+A seat that needs a fact from above records <code>work note --blocked</code>; Maestro
+pushes the <code>BLOCKED</code> line one seat up without changing the work state.</p>
 <p>Normal stop uses one transient foreground non-agent helper pane in the Hub so
 the Team Supervisor can close itself safely. This is internal, not another SLP
 operation: <code>STOPPED</code> is recorded only after the team workspace is absent, and
@@ -315,8 +322,8 @@ are named and skipped. When every registered project is running normally, the
 brief says so in one line. The <code>hm</code> shell function focuses the Supervisor room
 and prints this brief; it does not start an agent.</p>
 <h3>Observer mode</h3>
-<p>This is the read-only store mode for administrative inspection. It is not an
-SLP role and does not create a background observer.</p>
+<p>This is the read-only store mode for administrative inspection. It is not the
+SLP Observer seat and does not create a background observer.</p>
 <p>Set <code>MAESTRO_READ_ONLY=1</code> to run Maestro as an observer. Pure commands such as
 status, search, recipes, and read-only list/show operations remain available.
 Mutating commands fail with <code>READ_ONLY</code>; external plugins are not loaded; and
@@ -384,7 +391,7 @@ Maestro is released under the MIT license; see <a href="LICENSE"><code>LICENSE</
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 365</div>
+        <div class="stars">★ 366</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
@@ -396,7 +403,7 @@ Maestro is released under the MIT license; see <a href="LICENSE"><code>LICENSE</
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 256</div>
+        <div class="stars">★ 257</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">

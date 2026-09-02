@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>jazzyalex/agent-sessions — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Agent Sessions is a local-only macOS application for monitoring and managing coding agent histories. It provides live per-session quota tracking for Codex and…">
+<meta name="description" content="Agent Sessions is a local-only macOS application for monitoring and managing coding agent session histories and quotas. It provides live attribution of model…">
 <link rel="canonical" href="https://hermesatlas.com/projects/jazzyalex/agent-sessions">
 <meta property="og:title" content="jazzyalex/agent-sessions — Hermes Atlas">
-<meta property="og:description" content="Agent Sessions is a local-only macOS application for monitoring and managing coding agent histories. It provides live per-session quota tracking for Codex and…">
+<meta property="og:description" content="Agent Sessions is a local-only macOS application for monitoring and managing coding agent session histories and quotas. It provides live attribution of model…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/jazzyalex/agent-sessions">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="jazzyalex/agent-sessions — Hermes Atlas">
-<meta name="twitter:description" content="Agent Sessions is a local-only macOS application for monitoring and managing coding agent histories. It provides live per-session quota tracking for Codex and…">
+<meta name="twitter:description" content="Agent Sessions is a local-only macOS application for monitoring and managing coding agent session histories and quotas. It provides live attribution of model…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=agent-sessions&amp;subtitle=Local-first+macOS+app+to+browse%2C+search%2C+analyze%2C+and+resume+supported+AI+coding-agent+session+history+across+Codex%2C+Claude+Code%2C+OpenCode%2C+Cursor+Agent%2C+Hermes%2C+OpenClaw%2C+Copilot+&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/jazzyalex/agent-sessions#software",
   "name": "agent-sessions",
-  "description": "Agent Sessions is a local-only macOS application for monitoring and managing coding agent histories. It provides live per-session quota tracking for Codex and Claude, searchable transcripts across multiple agent CLIs, and an image browser for visual outputs.",
+  "description": "Agent Sessions is a local-only macOS application for monitoring and managing coding agent session histories and quotas. It provides live attribution of model burn rates and limits for Codex and Claude, alongside a searchable interface for transcripts and images across multiple supported agent CLIs.",
   "url": "https://hermesatlas.com/projects/jazzyalex/agent-sessions",
   "codeRepository": "https://github.com/jazzyalex/agent-sessions",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,7 +47,7 @@
     "name": "jazzyalex",
     "url": "https://github.com/jazzyalex"
   },
-  "dateModified": "2026-09-01T02:05:40.000Z",
+  "dateModified": "2026-09-02T20:51:12.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Swift</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-01</span>
+    <span><span class="meta-label">updated</span>2026-09-02</span>
   </div>
 
   <div class="actions">
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Agent Sessions is a local-only macOS application for monitoring and managing coding agent histories. It provides live per-session quota tracking for Codex and Claude, searchable transcripts across multiple agent CLIs, and an image browser for visual outputs.</p>
+    <p class="summary-text">Agent Sessions is a local-only macOS application for monitoring and managing coding agent session histories and quotas. It provides live attribution of model burn rates and limits for Codex and Claude, alongside a searchable interface for transcripts and images across multiple supported agent CLIs.</p>
     <ul class="summary-highlights">
-      <li>Attributes live quota burn to individual agent sessions.</li>
-      <li>Supports searchable transcripts for Hermes, Claude, Cursor, and other CLIs.</li>
+      <li>Attributes live quota burn to individual sessions for Codex and Claude.</li>
+      <li>Provides searchable transcripts and image browsing for 14+ agent formats.</li>
       <li>Operates locally with no telemetry or session-history uploads.</li>
     </ul>
   </div>
@@ -294,7 +294,7 @@ no CLI or Full Disk Access needed. Full history in the <a href="https://github.c
 <li><a href="https://jazzyalex.github.io/agent-sessions/guides/openclaw-local-agent-history.html?campaign=github&amp;ref=readme-guide">OpenClaw sessions</a> participate in browsing, search, filtering, image browsing, and deleted-session visibility while ignoring trajectory traces. OpenClaw resume is not supported.</li>
 <li>Pi CLI sessions now participate in browsing, search, filtering, and resume workflows.</li>
 <li>Qwen Code sessions (new in 5.0) participate in browsing, search, filtering, and Analytics, including active-chain tool calls and reasoning recorded in local JSONL history. Active-chat resume actions are implemented from the installed CLI's help and reader behavior, but remain end-to-end untested because authentication blocked a disposable 0.21.13 run; archived Qwen histories remain browse-only. Qwen image extraction is not yet supported.</li>
-<li>Devin CLI sessions (new in 5.1) participate in browsing, search, filtering, Analytics, and resume workflows from the shared SQLite <code>sessions.db</code> under the CLI data directory, with working directories read from the sessions table's <code>working_directory</code> column. Devin keeps only active sessions in that database, so there is no archived-history surface; the records carry inline base64 images, but image extraction is not yet supported. Resume command plans are tested against probe-advertised capabilities, but remain end-to-end untested because authentication blocked a disposable run.</li>
+<li>Devin CLI sessions (new in 5.1) participate in browsing, search, filtering, Analytics, and resume workflows from the shared SQLite <code>sessions.db</code> under the CLI data directory, with working directories read from the sessions table's <code>working_directory</code> column. Devin keeps only active sessions in that database, so there is no archived-history surface; the records carry inline base64 images, but image extraction is not yet supported. Resume was verified end to end on CLI 3000.5.20, while format compatibility is steward-verified through 3000.6.7.</li>
 <li>fx (vercel-labs) sessions (new in 5.1) participate in browsing, search, filtering, Analytics, and resume workflows from the per-session <code>checkpoint.json</code> transcripts under <code>~/.fx/sessions</code>, with working directories read from each session's <code>session.json</code>. Resume command plans are tested against probe-advertised capabilities but remain end-to-end untested against an authenticated run; image extraction is not yet supported.</li>
 <li>Unified browsing across supported agents, with strict filtering, saved sessions, and a single session list.</li>
 <li>Unified Search and Image Browser across sessions, plus in-session Find for fast transcript navigation.</li>

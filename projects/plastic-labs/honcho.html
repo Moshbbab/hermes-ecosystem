@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plastic-labs/honcho — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Honcho is memory infrastructure for building stateful agents that tracks users, agents, and projects as entities that change over time. It stores messages and…">
+<meta name="description" content="Honcho is a memory infrastructure for building stateful agents, designed to track evolving entities such as users, agents, and projects over time. The system…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plastic-labs/honcho">
 <meta property="og:title" content="plastic-labs/honcho — Hermes Atlas">
-<meta property="og:description" content="Honcho is memory infrastructure for building stateful agents that tracks users, agents, and projects as entities that change over time. It stores messages and…">
+<meta property="og:description" content="Honcho is a memory infrastructure for building stateful agents, designed to track evolving entities such as users, agents, and projects over time. The system…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plastic-labs/honcho">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plastic-labs/honcho — Hermes Atlas">
-<meta name="twitter:description" content="Honcho is memory infrastructure for building stateful agents that tracks users, agents, and projects as entities that change over time. It stores messages and…">
+<meta name="twitter:description" content="Honcho is a memory infrastructure for building stateful agents, designed to track evolving entities such as users, agents, and projects over time. The system…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=honcho&amp;subtitle=+Memory+library+for+building+stateful+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plastic-labs/honcho#software",
   "name": "honcho",
-  "description": "Honcho is memory infrastructure for building stateful agents that tracks users, agents, and projects as entities that change over time. It stores messages and events, processes them asynchronously to extract conclusions, and provides context or natural-language insights for injection into LLM calls.",
+  "description": "Honcho is a memory infrastructure for building stateful agents, designed to track evolving entities such as users, agents, and projects over time. The system stores messages and events, performs background reasoning to update peer representations, and provides context or natural-language insights for injection into LLM calls.",
   "url": "https://hermesatlas.com/projects/plastic-labs/honcho",
   "codeRepository": "https://github.com/plastic-labs/honcho",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "plastic-labs",
     "url": "https://github.com/plastic-labs"
   },
-  "dateModified": "2026-09-02T03:03:48.000Z",
+  "dateModified": "2026-09-02T21:05:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 6985
+    "userInteractionCount": 6990
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Honcho is memory infrastructure for building stateful agents that tracks users, agents, and projects as entities that change over time. It stores messages and events, processes them asynchronously to extract conclusions, and provides context or natural-language insights for injection into LLM calls.</p>
+    <p class="summary-text">Honcho is a memory infrastructure for building stateful agents, designed to track evolving entities such as users, agents, and projects over time. The system stores messages and events, performs background reasoning to update peer representations, and provides context or natural-language insights for injection into LLM calls.</p>
     <ul class="summary-highlights">
-      <li>Implemented as a FastAPI server with Python and TypeScript SDKs.</li>
-      <li>Supports managed, local, and self-hosted Docker Compose deployments.</li>
-      <li>Provides reasoning-first memory by extracting conclusions from conversation history.</li>
+      <li>Core service logic implemented as a FastAPI server.</li>
+      <li>Supports managed, local, and self-hosted deployment options.</li>
+      <li>Provides Python and TypeScript SDKs for session and peer management.</li>
     </ul>
   </div>
 </section>
@@ -161,7 +161,7 @@
 
 
 <hr>
-<p><img src="https://img.shields.io/badge/Server-3.1.0-blue" alt="Static Badge" loading="lazy" decoding="async">
+<p><img src="https://img.shields.io/badge/Server-3.1.1-blue" alt="Static Badge" loading="lazy" decoding="async">
 <a href="https://pypi.org/project/honcho-ai/"><img src="https://img.shields.io/pypi/v/honcho-ai.svg" alt="PyPI version" loading="lazy" decoding="async"></a>
 <a href="https://npmjs.org/package/@honcho-ai/sdk"><img src="https://img.shields.io/npm/v/@honcho-ai/sdk.svg" alt="NPM version" loading="lazy" decoding="async"></a>
 <a href="https://pypi.org/project/honcho-cli/"><img src="https://img.shields.io/pypi/v/honcho-cli.svg?label=honcho-cli" alt="CLI" loading="lazy" decoding="async"></a>
@@ -377,6 +377,59 @@ const completion = await openai.chat.completions.create({
 </tbody></table>
 <p>See the full <a href="https://honcho.dev/docs/v3/documentation/reference/sdk">SDK Reference</a> and <a href="https://honcho.dev/docs/v3/api-reference/introduction">API Reference</a>.</p>
 <h3>Integrations</h3>
+<p>Honcho ships a first-party memory plugin for every major coding agent. They all read the same
+<code>~/.honcho/config.json</code>, so one key configures all of them — and pointing two at the same <code>workspace</code>
+gives them one shared memory.</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Install</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Code</td>
+<td><code>/plugin marketplace add plastic-labs/claude-honcho</code></td>
+<td><a href="https://github.com/plastic-labs/claude-honcho">claude-honcho</a></td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><code>npm install -g @honcho-ai/codex-honcho</code></td>
+<td><a href="https://github.com/plastic-labs/codex-honcho">codex-honcho</a></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><code>curl -fsSL .../cursor-honcho/main/install.sh | bash</code></td>
+<td><a href="https://github.com/plastic-labs/cursor-honcho">cursor-honcho</a></td>
+</tr>
+<tr>
+<td>DeepSeek Harness</td>
+<td><code>dsh plugin --profile &lt;name&gt; add @honcho-ai/dsh-honcho</code></td>
+<td><a href="https://github.com/plastic-labs/dsh-honcho">dsh-honcho</a></td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td><code>opencode plugin "@honcho-ai/opencode-honcho" --global</code></td>
+<td><a href="https://github.com/plastic-labs/opencode-honcho">opencode-honcho</a></td>
+</tr>
+<tr>
+<td>OpenClaw</td>
+<td><code>openclaw plugins install @honcho-ai/openclaw-honcho</code></td>
+<td><a href="https://github.com/plastic-labs/openclaw-honcho">openclaw-honcho</a></td>
+</tr>
+<tr>
+<td>Hermes</td>
+<td><code>hermes memory setup</code></td>
+<td>built in upstream</td>
+</tr>
+<tr>
+<td>Any MCP client</td>
+<td><code>claude mcp add honcho --transport http ...</code></td>
+<td><a href="https://honcho.dev/docs/v3/guides/integrations/mcp">MCP guide</a></td>
+</tr>
+</tbody></table>
+<p>Get a key at <a href="https://app.honcho.dev">app.honcho.dev</a>, then <code>honcho init</code> (or <code>uv tool install honcho-cli &amp;&amp; honcho init</code>) writes it to <code>~/.honcho/config.json</code> once for every integration.</p>
 <h4>Claude Code</h4>
 <p>Two ways, depending on how deep you want to go:</p>
 <p><strong>Plugin (richer integration — recommended for Claude Code users):</strong></p>
@@ -390,17 +443,31 @@ const completion = await openai.chat.completions.create({
   --header "Authorization: Bearer hch-your-key-here" \
   --header "X-Honcho-User-Name: YourName"
 </code></pre>
-<p>Details: <a href="https://honcho.dev/docs/v3/guides/integrations/claude-code">Claude Code guide</a> · <a href="https://honcho.dev/docs/v3/guides/integrations/mcp">MCP guide</a>.</p>
+<p>Details: <a href="https://honcho.dev/docs/v3/guides/integrations/claude-code">Claude Code guide</a> · <a href="https://honcho.dev/docs/v3/guides/integrations/mcp">MCP guide</a> · <a href="https://github.com/plastic-labs/claude-honcho">repo</a>.</p>
+<h4>Codex</h4>
+<pre><code class="language-bash">npm install -g @honcho-ai/codex-honcho
+codex-honcho install      # registers hooks + MCP + skill in ~/.codex
+</code></pre>
+<p>Restart Codex to load the hooks. Details: <a href="https://honcho.dev/docs/v3/guides/integrations/codex">Codex guide</a> · <a href="https://github.com/plastic-labs/codex-honcho">repo</a>.</p>
+<h4>Cursor</h4>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/plastic-labs/cursor-honcho/main/install.sh | bash
+</code></pre>
+<p>Windows (PowerShell): <code>irm https://raw.githubusercontent.com/plastic-labs/cursor-honcho/main/install.ps1 | iex</code>. The installer wires global hooks and MCP config. Details: <a href="https://github.com/plastic-labs/cursor-honcho">cursor-honcho</a>.</p>
+<h4>DeepSeek Harness</h4>
+<pre><code class="language-bash">dsh plugin --profile &lt;name&gt; add @honcho-ai/dsh-honcho
+</code></pre>
+<p>A native Cordis plugin. It injects memory into the system prompt and captures new information from the session event feed. The model gets three tools — honcho_search, honcho_chat, and honcho_remember — and you can run /honcho to check status.
+Details: <a href="https://honcho.dev/docs/v3/guides/integrations/deepseek-harness">DeepSeek Harness guide</a> · <a href="https://github.com/plastic-labs/dsh-honcho">repo</a>.</p>
 <h4>OpenCode</h4>
 <pre><code class="language-bash">opencode plugin "@honcho-ai/opencode-honcho" --global
 </code></pre>
-<p>Details: <a href="https://honcho.dev/docs/v3/guides/integrations/opencode">OpenCode guide</a>.</p>
+<p>Details: <a href="https://honcho.dev/docs/v3/guides/integrations/opencode">OpenCode guide</a> · <a href="https://github.com/plastic-labs/opencode-honcho">repo</a>.</p>
 <h4>OpenClaw</h4>
 <pre><code class="language-bash">openclaw plugins install @honcho-ai/openclaw-honcho
 openclaw honcho setup
 openclaw gateway --force
 </code></pre>
-<p><code>openclaw honcho setup</code> prompts for your API key, writes the config, and optionally migrates legacy <code>MEMORY.md</code> / <code>USER.md</code> / <code>IDENTITY.md</code> files into Honcho (non-destructive — originals are never deleted). Details: <a href="https://honcho.dev/docs/v3/guides/integrations/openclaw">OpenClaw guide</a>.</p>
+<p><code>openclaw honcho setup</code> prompts for your API key, writes the config, and optionally migrates legacy <code>MEMORY.md</code> / <code>USER.md</code> / <code>IDENTITY.md</code> files into Honcho (non-destructive — originals are never deleted). Details: <a href="https://honcho.dev/docs/v3/guides/integrations/openclaw">OpenClaw guide</a> · <a href="https://github.com/plastic-labs/openclaw-honcho">repo</a>.</p>
 <h4>Hermes</h4>
 <pre><code class="language-bash">hermes memory setup   # select "honcho", point at api.honcho.dev or your local server
 </code></pre>
@@ -760,7 +827,7 @@ the results.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 22.1K</div>
+        <div class="stars">★ 22.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -776,7 +843,7 @@ the results.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 265</div>
+        <div class="stars">★ 266</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

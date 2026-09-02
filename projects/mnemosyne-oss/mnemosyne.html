@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mnemosyne-oss/mnemosyne — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Mnemosyne is a SQLite-backed AI memory layer designed for agent frameworks and Python applications. It operates as a zero-cloud system with a single…">
+<meta name="description" content="Mnemosyne is a SQLite-backed memory layer for AI agents that operates locally without cloud dependencies. It provides a Python SDK and an MCP server to…">
 <link rel="canonical" href="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta property="og:description" content="Mnemosyne is a SQLite-backed AI memory layer designed for agent frameworks and Python applications. It operates as a zero-cloud system with a single…">
+<meta property="og:description" content="Mnemosyne is a SQLite-backed memory layer for AI agents that operates locally without cloud dependencies. It provides a Python SDK and an MCP server to…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta name="twitter:description" content="Mnemosyne is a SQLite-backed AI memory layer designed for agent frameworks and Python applications. It operates as a zero-cloud system with a single…">
+<meta name="twitter:description" content="Mnemosyne is a SQLite-backed memory layer for AI agents that operates locally without cloud dependencies. It provides a Python SDK and an MCP server to…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=mnemosyne&amp;subtitle=Zero-cloud+AI+memory+that+works+everywhere.+SQLite-backed.+One+pure-Python+dependency.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a SQLite-backed AI memory layer designed for agent frameworks and Python applications. It operates as a zero-cloud system with a single pure-Python dependency, providing memory storage and retrieval without external services.",
+  "description": "Mnemosyne is a SQLite-backed memory layer for AI agents that operates locally without cloud dependencies. It provides a Python SDK and an MCP server to integrate persistent memory into frameworks like Cursor, Claude Code, and OpenWebUI.",
   "url": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne",
   "codeRepository": "https://github.com/mnemosyne-oss/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "mnemosyne-oss",
     "url": "https://github.com/mnemosyne-oss"
   },
-  "dateModified": "2026-09-02T11:25:20.000Z",
+  "dateModified": "2026-09-02T17:56:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2961
+    "userInteractionCount": 2964
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a SQLite-backed AI memory layer designed for agent frameworks and Python applications. It operates as a zero-cloud system with a single pure-Python dependency, providing memory storage and retrieval without external services.</p>
+    <p class="summary-text">Mnemosyne is a SQLite-backed memory layer for AI agents that operates locally without cloud dependencies. It provides a Python SDK and an MCP server to integrate persistent memory into frameworks like Cursor, Claude Code, and OpenWebUI.</p>
     <ul class="summary-highlights">
-      <li>Supports MCP for integration with Cursor, Claude Code, and Windsurf.</li>
-      <li>Utilizes a single SQLite database for local data storage.</li>
-      <li>Provides a Python SDK with simple remember and recall functions.</li>
+      <li>Uses a single SQLite database for local storage.</li>
+      <li>Supports MCP, Python SDK, and OpenWebUI integrations.</li>
+      <li>Requires Python 3.10 or higher and one pure-Python dependency.</li>
     </ul>
   </div>
 </section>
@@ -719,6 +719,11 @@ Mnemosyne Sync supports optional client-side encryption. When disabled, memory c
 <td>Database directory</td>
 </tr>
 <tr>
+<td><code>MNEMOSYNE_JOURNAL_MODE</code></td>
+<td><code>wal</code></td>
+<td>SQLite journal mode for store connections (memory, beam, query cache, veracity consolidator; the sync client rides the beam connection). Valid: <code>delete</code>, <code>truncate</code>, <code>persist</code>, <code>memory</code>, <code>wal</code>, <code>off</code>; the value is trimmed and lower-cased, unset or blank falls back to <code>wal</code>, and non-blank invalid values warn and fall back to <code>wal</code>. Set <code>delete</code> on filesystems where WAL corrupts reads (Linux containers on macOS virtiofs). Only <code>wal</code> persists in the database file; every other mode is per-connection and reverts to SQLite's default (<code>delete</code>) on reopen, so each connection re-applies the mode itself. <code>memory</code> and <code>off</code> remove disk-backed rollback protection and can corrupt the database after a crash.</td>
+</tr>
+<tr>
 <td><code>MNEMOSYNE_VEC_TYPE</code></td>
 <td><code>int8</code></td>
 <td>Vector compression: <code>float32</code>, <code>int8</code>, or <code>bit</code></td>
@@ -939,7 +944,7 @@ mnemosyne sync-status --remote https://my-vps:8765
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 22.1K</div>
+        <div class="stars">★ 22.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -955,7 +960,7 @@ mnemosyne sync-status --remote https://my-vps:8765
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 265</div>
+        <div class="stars">★ 266</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
