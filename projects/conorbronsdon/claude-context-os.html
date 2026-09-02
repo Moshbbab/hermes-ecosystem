@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/claude-context-os — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Context OS is a Git-backed context and workflow layer designed to manage durable project information, decisions, and workflows for coding agents in Markdown.…">
+<meta name="description" content="Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and workflows in Markdown files for use across multiple…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta property="og:description" content="Context OS is a Git-backed context and workflow layer designed to manage durable project information, decisions, and workflows for coding agents in Markdown.…">
+<meta property="og:description" content="Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and workflows in Markdown files for use across multiple…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer designed to manage durable project information, decisions, and workflows for coding agents in Markdown.…">
+<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and workflows in Markdown files for use across multiple…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=claude-context-os&amp;subtitle=Portable%2C+evolving+context+and+workflow+layer+that+works+across+Claude+Code%2C+Codex%2C+Hermes+Agent%2C+and+other+compatible+coding+agents.+All+backed+by+Git.+&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os#software",
   "name": "claude-context-os",
-  "description": "Context OS is a Git-backed context and workflow layer designed to manage durable project information, decisions, and workflows for coding agents in Markdown. It uses a deterministic lifecycle kernel to handle session handoffs, checkpoints, and state transitions across multiple supported agent adapters.",
+  "description": "Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and workflows in Markdown files for use across multiple coding agents. It uses a deterministic lifecycle kernel to manage reviewed proposals and receipts for setup, checkpoints, and session handoffs without relying on native agent memory as the source of truth.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os",
   "codeRepository": "https://github.com/conorbronsdon/claude-context-os",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-01T08:36:20.000Z",
+  "dateModified": "2026-09-02T03:48:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 16
+    "userInteractionCount": 18
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Portable, evolving context and workflow layer that works across Claude Code, Codex, Hermes Agent, and other compatible coding agents. All backed by Git. </p>
 
   <div class="meta-row">
-    <span class="stars">★ 16</span>
+    <span class="stars">★ 18</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-01</span>
+    <span><span class="meta-label">updated</span>2026-09-02</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Context OS is a Git-backed context and workflow layer designed to manage durable project information, decisions, and workflows for coding agents in Markdown. It uses a deterministic lifecycle kernel to handle session handoffs, checkpoints, and state transitions across multiple supported agent adapters.</p>
+    <p class="summary-text">Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and workflows in Markdown files for use across multiple coding agents. It uses a deterministic lifecycle kernel to manage reviewed proposals and receipts for setup, checkpoints, and session handoffs without relying on native agent memory as the source of truth.</p>
     <ul class="summary-highlights">
-      <li>Stores identity, project state, and decision logs in plain Markdown.</li>
-      <li>Provides a deterministic kernel for hash-checked proposals and receipts.</li>
-      <li>Supports selective migration of chat history and project instructions.</li>
+      <li>Supports Claude Code, Codex, OpenClaw, Hermes, Cursor, and Devin.</li>
+      <li>Maintains provider-neutral state, skills, and lifecycle transitions in Markdown.</li>
+      <li>Requires manual opt-in for integrations and selective context imports.</li>
     </ul>
   </div>
 </section>
@@ -229,9 +229,20 @@ active work share one root. A marker-only JSON workspace may use an already-load
 executable package for discovery and reports, but a marker-only root cannot
 apply content or configure runtimes until the trusted product closure is
 materialized there. A containing Git worktree may supply read-only commit
-evidence without gaining context mutation authority. A separate
-application-repository attachment is not yet a supported lifecycle path; see
-the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/root-contract.md">root contract</a>.</p>
+evidence without gaining context mutation authority.</p>
+<p>For a separate application repository, pass exact distinct roots and create a
+reviewable attachment proposal (global role options precede the command):</p>
+<pre><code class="language-bash">bash /path/to/context-os/scripts/contextos.sh \
+  --context-root /path/to/context-repo \
+  --working-root /path/to/application \
+  project attach --id my-app
+</code></pre>
+<p>Apply the returned digest with the same root options and <code>--runtime generic</code>.
+Later start/setup/update/end invocations use those exact roots. Context OS writes
+only ContextRoot; WorkingRoot contributes bounded Git identity, status, and
+history evidence and receives no marker or lifecycle file. A moved application
+requires a reviewed <code>project rebind --id my-app</code> proposal. See the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/root-contract.md">root
+contract</a>.</p>
 <table>
 <thead>
 <tr>
@@ -487,7 +498,11 @@ plugin itself exposes no apply command.</p>
 <h3>Optional integrations</h3>
 <p>The <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/references/integrations.md">optional integrations catalog</a> is generated from <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/integrations/catalog.json"><code>integrations/catalog.json</code></a>. Each entry declares supported hosts, credentials, reads, writes, publish or destructive capabilities, confirmation gates, evidence, a health check, and uninstall behavior.</p>
 <p>Start with the task-based <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/integrations-guide.md">integration chooser</a>, add at most one new trust boundary at a time, then read the selected generated entry in full.</p>
-<p>The current catalog includes portable skill collections and creator tools, plus reviewed paths for MarkItDown MCP, Tolaria MCP, Obsidian CLI, Beads for Gemini CLI, Granola MCP, Google Workspace CLI, Notion MCP, and Substack MCP. <code>listed</code> and <code>experimental</code> entries are leads, not endorsements. Setup never installs, authenticates, or activates them.</p>
+<p>The catalog spans portable skill collections, creator tools, CLIs, and MCP
+servers. Treat the generated catalog and task-based chooser as the current
+inventory rather than relying on a hand-maintained summary. <code>listed</code> and
+<code>experimental</code> entries are leads, not endorsements. Setup never installs,
+authenticates, or activates them.</p>
 <h3>Repository layout</h3>
 <pre><code class="language-text">AGENTS.md                  Portable repository instructions
 CLAUDE.md                  Claude Code root context and adapter index
@@ -662,7 +677,7 @@ behavior of an installed agent version or an external service.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 64.5K</div>
+        <div class="stars">★ 64.6K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -678,7 +693,7 @@ behavior of an installed agent version or an external service.</p>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 206</div>
+        <div class="stars">★ 207</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -686,11 +701,11 @@ behavior of an installed agent version or an external service.</p>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 243</div>
+        <div class="stars">★ 245</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 46</div>
+        <div class="stars">★ 47</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
     </div>

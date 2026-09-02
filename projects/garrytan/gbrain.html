@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a synthesis and memory layer for AI agents that combines graph traversal with gap analysis to provide cited answers from ingested data. It functions as a background daemon for consolidating information across people, companies, and ideas while maintaining scoped access for team environments.",
+  "description": "GBrain is a synthesis and memory layer for AI agents that combines graph traversal with gap analysis to provide cited answers from ingested data. It functions as a persistent daemon that extracts entity relationships without LLM calls and supports multi-user scoped access for institutional memory.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-01T08:38:19.000Z",
+  "dateModified": "2026-09-02T05:54:28.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 29425
+    "userInteractionCount": 29472
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 29.4K</span>
+    <span class="stars">★ 29.5K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-01</span>
+    <span><span class="meta-label">updated</span>2026-09-02</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a synthesis and memory layer for AI agents that combines graph traversal with gap analysis to provide cited answers from ingested data. It functions as a background daemon for consolidating information across people, companies, and ideas while maintaining scoped access for team environments.</p>
+    <p class="summary-text">GBrain is a synthesis and memory layer for AI agents that combines graph traversal with gap analysis to provide cited answers from ingested data. It functions as a persistent daemon that extracts entity relationships without LLM calls and supports multi-user scoped access for institutional memory.</p>
     <ul class="summary-highlights">
-      <li>Generates synthesized prose answers with citations and gap analysis.</li>
-      <li>Extracts typed entity edges for a self-wiring knowledge graph.</li>
-      <li>Supports multi-user scoped access with verified data isolation.</li>
+      <li>Synthesizes cited prose across people, companies, and ideas.</li>
+      <li>Extracts typed knowledge graph edges without LLM calls.</li>
+      <li>Supports PGLite for serverless database deployment.</li>
     </ul>
   </div>
 </section>
@@ -299,6 +299,7 @@ gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard at /admin
                           # (required for Claude Desktop, Cowork, Perplexity, ChatGPT)
 </code></pre>
 <p>The HTTP server includes DCR-style client registration, scope-gated access (<code>read</code> / <code>write</code> / <code>admin</code>), and rate limiting. Deployment guides (ngrok, Railway, Fly.io) live under <a href="docs/mcp/"><code>docs/mcp/</code></a>.</p>
+<p>Running several brains behind one tool catalog? Give each one an identity: <code>gbrain config set mcp.instructions "Team wiki brain — route product and roadmap questions here"</code> rides every transport's initialize response under a <code>Deployment identity:</code> banner, so a connected agent can tell your brains apart. Restart <code>gbrain serve</code> to pick it up; <code>GBRAIN_MCP_INSTRUCTIONS</code> in the serve process's environment overrides it for that process, and <code>gbrain config unset mcp.instructions</code> returns to the bare contract. <strong>Say to your agent:</strong> <em>"Tell connected agents which brain this is"</em> — your agent runs <code>gbrain config set mcp.instructions "&lt;identity&gt;"</code>.</p>
 <h3>Two ways to query your brain</h3>
 <p>Raw retrieval (what most personal-knowledge tools ship) and a synthesis layer that gives you an actual answer. They serve different jobs.</p>
 <pre><code class="language-bash"># raw retrieval: top pages by hybrid score, fast, no LLM cost
@@ -321,6 +322,7 @@ SLUG=$(gbrain capture "..." --quiet)
 </code></pre>
 <p>The page lands in the database and on disk in one move. Default slug <code>inbox/YYYY-MM-DD-&lt;hash8&gt;</code> so captures cluster in a predictable triage location. On thin-client installs the verb routes through MCP to the server: same command, same UX.</p>
 <p><strong>Say to your agent:</strong> <em>"Remember this: ..."</em> — <em>"Save this thought to my brain"</em> — <em>"Capture this."</em> And to fill an empty brain from your existing life: <em>"Fill my brain"</em> (the cold-start skill walks your email, calendar, contacts, and archives one consented step at a time).</p>
+<p><strong>Ambient memory writeback (opt-in, personal brains).</strong> Stop having to say "remember this": once enabled, your agents save durable facts you state in passing — preferences, decisions, commitments — with provenance, and transient facts (a cold, a trip) expire on their own. Off by default; on a personal brain gbrain asks you once at init/upgrade; company brains are never nudged. <strong>Say to your agent:</strong> <em>"Turn on ambient memory writeback"</em> — your agent runs <code>gbrain config set memory.auto_writeback salient</code> and <code>gbrain bootstrap harness --yes</code>. Full mechanics, privacy posture, and per-harness limitations: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/ambient-writeback.md"><code>docs/guides/ambient-writeback.md</code></a>.</p>
 <p>For webhook ingestion (Zapier / IFTTT / Apple Shortcuts):</p>
 <pre><code class="language-bash">curl -X POST https://your-brain/ingest \
   -H "Authorization: Bearer $TOKEN" \
@@ -334,13 +336,18 @@ bring-your-own OAuth end to end (your own free Google Cloud client — you own
 the app and the tokens, which live only in a local credential vault), registers
 a <code>--kind google</code> source, runs a bounded first sync, and ends with the
 open-loop engine's killer output:</p>
-<pre><code class="language-bash">gbrain google setup    # connect Gmail/Calendar/Contacts → first sync → first digest
-gbrain waiting         # who is waiting on you, what you promised, with receipts
+<pre><code class="language-bash">gbrain google setup       # connect Gmail/Calendar/Contacts → first sync → first digest
+gbrain waiting            # who is waiting on you, what you promised, with receipts
+gbrain google calendars   # every calendar the account can read; pass an id to
+                          #   `sources add … --calendar-id &lt;id&gt;` to sync a secondary one
+gbrain loops mute sender &lt;email&gt;     # stop opening loops for a sender (or `thread &lt;id&gt;`)
+gbrain loops unmute sender &lt;email&gt;   # undo it — exact and forward-only
 </code></pre>
+<p><strong>Say to your agent:</strong> <em>"Who is waiting on me?"</em> / <em>"open loops"</em> (routes to the google-loops skill, which also covers muting a sender — your agent runs <code>gbrain loops mute sender &lt;email&gt;</code>, and <code>gbrain loops unmute sender &lt;email&gt;</code> to undo it) — <em>"list the calendars my google account can read"</em> (your agent runs <code>gbrain google calendars</code>).</p>
 <p>Setup + troubleshooting: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/google-connect.md"><code>docs/guides/google-connect.md</code></a>.
 How the open-loop engine decides who's waiting: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/open-loops.md"><code>docs/guides/open-loops.md</code></a>.</p>
 <p>Your other agents' histories import in one command. <code>gbrain transcripts ingest</code>
-parses agent session logs (Claude Code, Codex, OpenClaw, Hermes) and extracted
+parses agent session logs (Claude Code, Codex, OpenClaw, Hermes, Grok Build) and extracted
 consumer chat exports (ChatGPT / Claude.ai <code>conversations.json</code>) into readable
 conversation pages with provenance back to the exact session file. Secrets are
 scrubbed from message bodies, titles, speakers, and session metadata before
@@ -439,33 +446,16 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 <li><strong>Voice</strong>: Phone calls create brain pages via Twilio + OpenAI Realtime (or DIY STT+LLM+TTS). Setup recipe: <a href="https://github.com/garrytan/gbrain/blob/main/recipes/twilio-voice-brain.md"><code>recipes/twilio-voice-brain.md</code></a>.</li>
 <li><strong>Gmail + Calendar + Contacts (native)</strong>: the google source kind syncs threads, events, and contacts through your own OAuth client and runs the open-loop engine on top (<code>gbrain waiting</code>). Setup: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/google-connect.md"><code>docs/guides/google-connect.md</code></a>; recipes: <a href="https://github.com/garrytan/gbrain/blob/main/recipes/email-to-brain.md"><code>recipes/email-to-brain.md</code></a>, <a href="https://github.com/garrytan/gbrain/blob/main/recipes/calendar-to-brain.md"><code>recipes/calendar-to-brain.md</code></a>.</li>
 <li><strong>Email + calendar (webhooks)</strong>: webhook handlers that route to brain signals. <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/meeting-webhooks.md"><code>docs/integrations/meeting-webhooks.md</code></a>.</li>
-<li><strong>Embedding providers</strong>: a dozen providers covered — Voyage (default: <code>voyage-4</code> @ 1024d), OpenAI, OpenRouter, Google Gemini, Azure OpenAI, MiniMax, Alibaba DashScope, Zhipu, Ollama (local), llama.cpp llama-server (local), LiteLLM proxy, plus ZeroEntropy (deprecated — hosted API ends 2026-09-04). Pricing matrix + decision tree in <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/embedding-providers.md"><code>docs/integrations/embedding-providers.md</code></a>.</li>
+<li><strong>Embedding providers</strong>: a dozen providers covered — Voyage (default: <code>voyage-4</code> @ 1024d), OpenAI, OpenRouter, Google Gemini, Azure OpenAI, MiniMax, Alibaba DashScope, Zhipu, Ollama (local), llama.cpp llama-server (local), LM Studio (local — <code>--embedding-model lmstudio:&lt;model-id&gt; --embedding-dimensions &lt;N&gt;</code>; the model is whatever you loaded in the app), LiteLLM proxy, plus ZeroEntropy (deprecated — hosted API ends 2026-09-04). Pricing matrix + decision tree in <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/embedding-providers.md"><code>docs/integrations/embedding-providers.md</code></a>.</li>
 <li><strong>Rerankers</strong>: Voyage <code>rerank-2.5</code> hosted (the new-install default; reranking is on in <code>balanced</code> and <code>tokenmax</code> modes, same <code>VOYAGE_API_KEY</code> as embeddings), ZeroEntropy <code>zerank-2</code> (deprecated — hosted API ends 2026-09-04; still the fallback for brains that never set <code>search.reranker.model</code>), plus the <code>llama-server-reranker</code> recipe for fully-local cross-encoder rerank via llama.cpp — runs Qwen3-Reranker or self-hosted zerank weights against the same <code>gateway.rerank()</code> seam. Setup walkthrough in <a href="https://github.com/garrytan/gbrain/blob/main/docs/ai-providers/llama-server-reranker.md"><code>docs/ai-providers/llama-server-reranker.md</code></a>.</li>
 <li><strong>Credential vault + gateway</strong>: <code>gbrain creds</code> manages OAuth and API credentials in a local vault (<a href="https://github.com/garrytan/gbrain/blob/main/recipes/credential-gateway.md"><code>recipes/credential-gateway.md</code></a>); agent-side vault-aware secret distribution: <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/credential-gateway.md"><code>docs/integrations/credential-gateway.md</code></a>.</li>
 <li><strong>MCP clients</strong>: every major MCP client is supported. <a href="docs/mcp/"><code>docs/mcp/</code></a> per-client setup.</li>
 <li><strong>Memorable (procedural memory)</strong>: optional, off by default. Your brain remembers <em>what</em> happened; Memorable makes your agent remember <em>how</em> — finished sessions become replayable procedures stored on your machine (in a standalone local store, or inside your brain database if you opt in), recalled when a similar task comes back. See the section below, and <a href="https://github.com/garrytan/gbrain/blob/main/docs/memorable-agents.md"><code>docs/memorable-agents.md</code></a> for the agent-facing detail.</li>
 </ul>
 <h4>Memorable — remember how, not just what (optional)</h4>
-<p>The third time your agent fixes the same class of bug, it shouldn't re-diagnose it from scratch. Without procedural memory, every session starts cold: re-explore the codebase, re-find the file, re-discover which command actually verifies the fix. <a href="https://www.memorable.sh">Memorable</a> closes that loop. Once enabled, a finished session's real tool calls — what ran, with what arguments, and (where the harness records it) whether each step succeeded — become an ordered, replayable <em>procedure</em>: steps, trigger signature, preconditions, postconditions. It is stored <strong>on your machine</strong>, in a standalone local store by default or inside your existing brain database if you opt in (the fine print explains the trade-off). Next time a similar task shows up:</p>
-<pre><code class="language-sh">memorable recall "the order-validation tests are failing again"
-# → 0.981  procedures/ab12cd34-fix-failing-order-tests  [lexical]
-memorable show procedures/ab12cd34-fix-failing-order-tests
-# → last time this landed in src/orders/validate.js and
-#   ./test.sh verified it — the steps, in order, with real outcomes
-</code></pre>
-<p>Your agent skips the diagnosis it already did once and goes straight to the fix. That's the whole product: <strong>capture is automatic</strong> (nothing to remember at the end of a session), and <strong>recall is one command</strong> at the start of the next.</p>
-<p><strong>Say to your agent:</strong> <em>"Set up Memorable so you remember how tasks were done"</em> — your agent installs and initializes the CLI (<code>npm i -g memorable-cli</code>, <code>memorable init</code>, <code>memorable enable</code>); you then run the one consent step below yourself. Day to day: <em>"Before you start, check Memorable for how we did this last time"</em> — your agent runs <code>memorable recall "&lt;the task in your words&gt;"</code> — and <em>"What has Memorable stored so far?"</em> — your agent runs <code>memorable list</code>.</p>
-<p><strong>Turn it on (three steps, the last one is yours):</strong></p>
-<pre><code class="language-sh">npm i -g memorable-cli                    # 1. the CLI, published on npm (closed source)
-memorable init &amp;&amp; memorable enable         # 2. standalone local store + let Memorable record sessions
-                                           #    (`memorable init gbrain` stores procedures in your brain DB
-                                           #     instead — trade-off in the fine print's first bullet)
-
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/garrytan/gbrain#readme)*
-</code></pre>
+<p>The third time your agent fixes the same class of bug, it shouldn't re-diagnose it from scratch.</p>
+<hr>
+<p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -478,7 +468,7 @@ memorable init &amp;&amp; memorable enable         # 2. standalone local store +
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 64.5K</div>
+        <div class="stars">★ 64.6K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
@@ -494,7 +484,7 @@ memorable init &amp;&amp; memorable enable         # 2. standalone local store +
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 206</div>
+        <div class="stars">★ 207</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
@@ -502,11 +492,11 @@ memorable init &amp;&amp; memorable enable         # 2. standalone local store +
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 243</div>
+        <div class="stars">★ 245</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
-        <div class="stars">★ 46</div>
+        <div class="stars">★ 47</div>
         <div class="name"><span class="org">amanning3390 /</span> flowstate-qmd</div>
       </a>
     </div>

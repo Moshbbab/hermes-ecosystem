@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ucsandman/DashClaw — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="DashClaw is a decision infrastructure and fail-closed intercept layer designed to prevent destructive AI agent actions by requiring approval before execution.…">
+<meta name="description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta property="og:description" content="DashClaw is a decision infrastructure and fail-closed intercept layer designed to prevent destructive AI agent actions by requiring approval before execution.…">
+<meta property="og:description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta name="twitter:description" content="DashClaw is a decision infrastructure and fail-closed intercept layer designed to prevent destructive AI agent actions by requiring approval before execution.…">
+<meta name="twitter:description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=DashClaw&amp;subtitle=%F0%9F%9B%A1%EF%B8%8F+The+approval+and+policy+layer+for+AI+agents.+Intercept+risky+actions+before+they+run%2C+block+them%2C+or+approve+them+remotely.&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a decision infrastructure and fail-closed intercept layer designed to prevent destructive AI agent actions by requiring approval before execution. It provides a remote inbox for resolving tool calls via CLI, PWA, Telegram, or Discord, allowing agents to run unattended without unconditional authority.",
+  "description": "DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny actions via a web inbox, CLI, or mobile integrations.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-09-01T07:15:31.000Z",
+  "dateModified": "2026-09-02T03:19:30.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-01</span>
+    <span><span class="meta-label">updated</span>2026-09-02</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a decision infrastructure and fail-closed intercept layer designed to prevent destructive AI agent actions by requiring approval before execution. It provides a remote inbox for resolving tool calls via CLI, PWA, Telegram, or Discord, allowing agents to run unattended without unconditional authority.</p>
+    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny actions via a web inbox, CLI, or mobile integrations.</p>
     <ul class="summary-highlights">
-      <li>Cancels blocked tool calls before execution using a fail-closed hook.</li>
-      <li>Generates signed, tamper-evident audit ledgers for every decision.</li>
-      <li>Includes default prompt-injection scanning and risk-calibrated interruptions.</li>
+      <li>Intercepts destructive tool calls before execution using a fail-closed hook.</li>
+      <li>Provides remote, asynchronous approval via PWA, Telegram, or Discord.</li>
+      <li>Generates tamper-evident, signed audit trails for every decision.</li>
     </ul>
   </div>
 </section>
@@ -404,11 +404,19 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
   "env": { "DASHCLAW_URL": "https://your-dashclaw.vercel.app", "DASHCLAW_API_KEY": "oc_live_xxx" } } } }
 </code></pre>
 <p>Every instance also serves Streamable HTTP MCP at <code>/api/mcp</code>. For Claude Desktop, add that URL as a custom connector (Settings, Connectors); OAuth auto-discovers, no key in the UI.</p>
-<p><strong>SDKs.</strong> <code>npm install dashclaw</code> (Node 18+) or <code>pip install dashclaw</code> (Python 3.7+). The <strong>39-method canonical Node surface</strong> covers guard, record, assumptions, approvals, durable-execution finality, security scanning, sessions and the action graph, pairing, risk signals, policy simulation, plan authorization, delegation constraints, containment verdicts, and team tasks. The <strong>Python SDK exposes 59 methods</strong>, plus CrewAI and AutoGen integrations.</p>
-<p><strong>REST.</strong> Every primitive is HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>133 routes</strong>: 42 stable, 18 beta, 73 experimental) is in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhooks: <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, configurable per org.</p>
+<p><strong>SDKs.</strong> <code>npm install dashclaw</code> (Node 18+) or <code>pip install dashclaw</code> (Python 3.7+). The <strong>40-method canonical Node surface</strong> covers guard, record, assumptions, approvals, durable-execution finality, security scanning, sessions and the action graph, pairing, risk signals, policy simulation, plan authorization, delegation constraints, containment verdicts, and team tasks. The <strong>Python SDK exposes 60 methods</strong>, plus CrewAI and AutoGen integrations. Plan authorization pins the approved plan's content hash at submission (<code>plan_hash</code>); <code>attestPlan(planId, planHash)</code> / <code>attest_plan(plan_id, plan_hash)</code> let an unattended runner confirm -- before its first model call -- that the plan it is about to act under is still approved, unexpired, and hash-matched, failing closed on drift (<code>not_approved | expired | revoked | hash_mismatch</code>) without ever echoing the stored hash back on a mismatch.</p>
+<p><strong>REST.</strong> Every primitive is HTTP. The stable contract is pinned in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json"><code>docs/openapi/critical-stable.openapi.json</code></a>; the full inventory (<strong>134 routes</strong>: 42 stable, 18 beta, 74 experimental) is in <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/api-inventory.md"><code>docs/api-inventory.md</code></a>. Webhooks: <code>decision.created</code>, <code>action.created</code>, <code>lost_confirmation</code>, configurable per org.</p>
 </details>
 
 <h3>The governance model</h3>
+<div align="center">
+  <br>
+  <img src="https://raw.githubusercontent.com/ucsandman/DashClaw/main/brand/social/governance-blueprint.png" alt="Blueprint-style diagram: an agent's tool call is risk-scored, enters the guard, and routes to one of four verdicts — allow, warn, require_approval held for a human, or block — with every decision recorded on an append-only audit trail" width="760">
+  <br>
+  <sub>Every tool call, governed: one guard, four verdicts, a permanent record.</sub>
+  <br>
+</div>
+
 <p>Control before execution, not observability after it. Eight points, each falsifiable:</p>
 <ol>
 <li><strong>Every risky action is evaluated against active policies before it runs.</strong> Policies are declarative. The builder ships with ten pre-built safety switches (Deploy Gate, Risk Threshold, Rate Limiter, Evidence Required, Protected Path, Subagent Constraint, and others across 17 guard policy types), an AI generator, YAML import, and a pack gallery at <code>/policies/packs</code> — 18 curated packs (spend, outbound comms, unattended overnight runs, prod infra, subagent fleets, and more), each previewable against your own action history before a one-click install.</li>
@@ -521,7 +529,7 @@ bash scripts/install-hermes-plugin.sh            # macOS / Linux (.ps1 on Window
 <h3>Project status</h3>
 <p>Stated plainly, because a security tool that oversells itself is a liability:</p>
 <ul>
-<li><strong>Young and fast-moving.</strong> First commit February 2026; releases land near-daily. The API surface is tiered for exactly this reason: 42 stable routes pinned in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json">OpenAPI contract</a>, 18 beta, 73 experimental. Build against stable; experimental can change without notice.</li>
+<li><strong>Young and fast-moving.</strong> First commit February 2026; releases land near-daily. The API surface is tiered for exactly this reason: 42 stable routes pinned in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/openapi/critical-stable.openapi.json">OpenAPI contract</a>, 18 beta, 74 experimental. Build against stable; experimental can change without notice.</li>
 <li><strong>Proven by dogfood, not by scale.</strong> The core loop runs continuously against the maintainer's own agent fleet and a CI policy-smoke harness that live-proves the public claims on every push. External production deployments are early. Treat this as young infrastructure that takes correctness seriously, not a battle-tested incumbent.</li>
 <li><strong>AI-maintained, human-governed, in public.</strong> Day-to-day maintenance is done by an AI agent under the human-held charter in <a href="https://github.com/ucsandman/DashClaw/blob/main/MAINTAINER.md">MAINTAINER.md</a>, whose five invariants (above) the maintainer cannot change. Every decision is on the record in the <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/maintainer-log.md">maintainer log</a>.</li>
 </ul>
