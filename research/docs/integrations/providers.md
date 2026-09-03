@@ -196,6 +196,8 @@ Keyless — no API key or account needed (provider: `opencode-free`, aliases: `f
 
 `hermes model` → choose "Custom endpoint" (saved in `config.yaml`)
 
+All three OpenCode providers send an opaque, per-conversation `x-opencode-session` header on every request (main turns on every transport plus auxiliary calls such as compression and titles). OpenCode uses it to pin a conversation to one backend so its prompt cache stays warm; the value is derived from the Hermes session id and carries no personal data.
+
 For the official API-key path, see the dedicated [Google Gemini guide](/docs/guides/google-gemini).
 
 Model key alias
@@ -556,7 +558,7 @@ Base URLs can be overridden with `NOVITA_BASE_URL`, `GLM_BASE_URL`, `KIMI_BASE_U
 
 Meta contributor tier
 
-`muse-spark-1.2-contributor` is Meta's contributor tier — Meta may train on your prompts and completions, so [interactive model selection asks for confirmation](/docs/user-guide/configuring-models) before using it. For current pricing and rate limits, see [Meta Model API pricing and rate limits](https://dev.meta.ai/docs/pricing-rate-limits/). Use `muse-spark-1.2` (standard variant, no training) for confidential work.
+`muse-spark-1.2-contributor` and `muse-spark-1.3-contributor` are Meta's contributor tiers — Meta may train on your prompts and completions, so [interactive model selection asks for confirmation](/docs/user-guide/configuring-models) before using either. For current pricing and rate limits, see [Meta Model API pricing and rate limits](https://dev.meta.ai/docs/pricing-rate-limits/). Use the standard `muse-spark-1.2` / `muse-spark-1.3` (no training) for confidential work.
 
 Z.AI Endpoint Auto-Detection
 

@@ -301,6 +301,8 @@ Diagnostics are **freshness-gated**: a result only counts when the server produc
 
 Servers are kept alive while they're being used and shut down after `lsp.idle_timeout` seconds (default 600) with no file activity — a long-running gateway that touches many worktrees no longer accumulates one language-server process per workspace forever. A reaped server is respawned automatically on the next relevant file operation. Set `idle_timeout: 0` to disable reaping and hold every server's index warm for the life of the process.
 
+Servers that support multi-root workspaces (currently pyright) run as a **single process** per Hermes process: the first Python project spawns it, and every further project root — for example sibling git worktrees edited by parallel subagents — is attached to that same server as an additional workspace folder instead of starting another copy.
+
 ## Disabling
 
 Set `lsp.enabled: false` in `config.yaml` to disable the entire subsystem. The post-write check falls back to the in-process syntax check (`ast.parse` for Python, `json.loads` for JSON, etc.) which ships unchanged from earlier versions.

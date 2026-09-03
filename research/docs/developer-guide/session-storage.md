@@ -204,6 +204,14 @@ Task-dimension usage attribution — rebuild `session_model_usage` so the `task`
 
 FTS storage redesign — external-content FTS tables replacing the v11 inline-mode copies (opt-in transition for existing DBs)
 
+29
+
+Cron sessions leave the trigram (substring/CJK) index; `messages_fts_trigram_src` view + triggers filter on `sessions.source`, one-time rebuild purges historical rows
+
+30
+
+Delegate-child (subagent) sessions leave the trigram index too — `source='subagent'` or the `$._delegate_from` marker (`FTS_TRIGRAM_SESSION_SQL`). Rows stay in `messages` and the standard `messages_fts` word index, so `session_search` still finds them; only the ~2.6× trigram shadow tables shrink. Same one-time rebuild as v29
+
 Versions not listed above were declarative column additions handled by `_reconcile_columns()` (version bump only, no data migration).
 
 Declarative column adds use `ALTER TABLE ADD COLUMN` wrapped in try/except to handle the column-already-exists case (idempotent). The version number is bumped after each successful migration block.
