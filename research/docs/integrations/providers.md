@@ -556,7 +556,7 @@ Base URLs can be overridden with `NOVITA_BASE_URL`, `GLM_BASE_URL`, `KIMI_BASE_U
 
 Meta contributor tier
 
-`muse-spark-1.2-contributor` is Meta's discounted tier — Meta may train on your prompts and completions, so [interactive model selection asks for confirmation](/docs/user-guide/configuring-models) before using it. Use `muse-spark-1.2` (standard pricing, no training) for confidential work.
+`muse-spark-1.2-contributor` is Meta's contributor tier — Meta may train on your prompts and completions, so [interactive model selection asks for confirmation](/docs/user-guide/configuring-models) before using it. For current pricing and rate limits, see [Meta Model API pricing and rate limits](https://dev.meta.ai/docs/pricing-rate-limits/). Use `muse-spark-1.2` (standard variant, no training) for confidential work.
 
 Z.AI Endpoint Auto-Detection
 
