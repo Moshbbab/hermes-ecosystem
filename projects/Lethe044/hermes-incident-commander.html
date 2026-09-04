@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander#software",
   "name": "hermes-incident-commander",
-  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or as an agent that generates post-incident reports and new prevention skills to handle future events.",
+  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or as an agent built on the Hermes framework to perform automated triage and recovery.",
   "url": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander",
   "codeRepository": "https://github.com/Lethe044/hermes-incident-commander",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "Lethe044",
     "url": "https://github.com/Lethe044"
   },
-  "dateModified": "2026-08-31T23:07:31.000Z",
+  "dateModified": "2026-09-03T20:27:30.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">247·repos</span>
+    <span id="meta-count">248·repos</span>
     <span id="meta-version">hermes·v0.21.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-31</span>
+    <span><span class="meta-label">updated</span>2026-09-03</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or as an agent that generates post-incident reports and new prevention skills to handle future events.</p>
+    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or as an agent built on the Hermes framework to perform automated triage and recovery.</p>
     <ul class="summary-highlights">
       <li>Monitors CPU, memory, disk, and systemd units on Linux hosts.</li>
-      <li>Provides opt-in auto-remediation via an allow-listed configuration.</li>
-      <li>Integrates with PagerDuty, Discord, and Slack for incident alerting.</li>
+      <li>Provides opt-in auto-remediation via an explicit allow-list of actions.</li>
+      <li>Integrates with PagerDuty, Slack, and Discord for incident notification.</li>
     </ul>
   </div>
 </section>
@@ -168,6 +168,19 @@ no Hermes installation required.</p>
 <hr>
 <h3>What's New</h3>
 <ul>
+<li>🔍 <strong>Local incident search</strong> - <code>monitor/incident_db.py</code> builds a SQLite +
+full-text-search index over your incident history (<code>--sync</code> / <code>--search</code>),
+auto-updated after every incident. No server, no new dependency.</li>
+<li>📅 <strong>Adaptive, time-of-day-aware thresholds</strong> - <code>--adaptive-thresholds</code>
+learns a per-hour baseline so a predictable nightly batch job doesn't page
+you, while still catching real anomalies. Opt-in; can only raise the bar
+above your configured threshold, never lower it.</li>
+<li>☁️ <strong>2 more cloud-native scenarios</strong> - <code>ecs-task-crashloop</code> and
+<code>lambda-timeout-spike</code>, alongside the existing Docker/Kubernetes ones. 10
+incident scenarios total.</li>
+<li>📈 <strong>Grafana dashboard JSON</strong> - a ready-to-import dashboard
+(<code>docs/assets/grafana-dashboard.json</code>) for the Prometheus <code>/metrics</code>
+endpoint, so <code>--metrics-port</code> users don't have to build panels by hand.</li>
 <li>🧪 <strong><code>--dry-run</code> mode</strong> - preview exactly what <code>--auto-remediate</code> would
 restart or delete, without touching anything. See <a href="#standalone-mode-no-hermes-required">Standalone Mode</a>.</li>
 <li>📈 <strong>Prometheus <code>/metrics</code> endpoint</strong> - optional, stdlib-only exporter for
@@ -177,8 +190,6 @@ incidents automatically once a breach recovers, instead of leaving them open.</l
 <li>📟 <strong>PagerDuty integration</strong> - the notifier can trigger (and resolve)
 PagerDuty incidents via the Events API v2, alongside Discord/Slack, with
 zero new dependencies.</li>
-<li>☸️ <strong>Kubernetes pod crash-loop scenario</strong> - an 8th incident scenario
-(<code>k8s-pod-crashloop</code>), in both the RL environment and the demo.</li>
 <li>🛰️ <strong>Standalone Watchdog</strong> - monitor a real host's CPU/memory/disk and failed
 systemd units, get Claude-powered triage, and (opt-in) safe auto-remediation.
 No Hermes install needed.</li>
@@ -268,6 +279,14 @@ python -m monitor.watchdog --config monitor/watchdog_config.yaml --auto-remediat
 
 # Also serve Prometheus-format metrics at http://127.0.0.1:9877/metrics
 python -m monitor.watchdog --metrics-port 9877
+
+# Learn a per-hour baseline so a predictable nightly batch job doesn't page you
+python -m monitor.watchdog --adaptive-thresholds
+python -m monitor.watchdog --show-baseline
+
+# Search past incidents ("have we seen this before?") - no server, just SQLite
+python -m monitor.incident_db --sync
+python -m monitor.incident_db --search "nginx"
 </code></pre>
 <p>Unlike the demo/training environment, the watchdog <strong>never gives the model
 shell access</strong>. It collects real metrics with <code>psutil</code>, sends only numbers to
@@ -277,12 +296,23 @@ directory). Full threat model in <a href="https://github.com/Lethe044/hermes-inc
 check and prints exactly what would be restarted or deleted (prefixed
 <code>[DRY RUN]</code>) without doing it or notifying anyone - a safe way to validate a
 new <code>watchdog_config.yaml</code> before turning <code>--auto-remediate</code> on for real.</p>
+<p><code>--adaptive-thresholds</code> (<code>monitor/baseline.py</code>) learns a running mean/stddev
+per hour-of-day from the watchdog's own polls. It can only ever <strong>raise</strong>
+the effective threshold above what you configured - never lower it - and is
+capped at 1.5x your static threshold, so a real ongoing incident can't
+slowly train the watchdog into ignoring itself. It's off by default; nothing
+changes unless you opt in.</p>
 <p><code>monitor/notifier.py</code> fans an alert out to every channel you've configured -
 Discord, Slack, and/or PagerDuty (via the Events API v2) - so it's safe to
 set all three; nothing extra fires for channels you leave unconfigured. When
 PagerDuty is configured, the watchdog also tracks which breach types have an
 open incident and calls PagerDuty's resolve endpoint automatically once
 things recover, instead of leaving pages open forever.</p>
+<p>Every incident is also indexed by <code>monitor/incident_db.py</code> (SQLite, with a
+full-text search index when your Python's SQLite has FTS5 - falling back to
+a plain <code>LIKE</code> scan otherwise) so "have we seen this before?" works without
+a full Hermes install. <code>write_incident()</code> keeps it in sync automatically;
+<code>--sync</code>/<code>--search</code> are there for manual use or a cron job.</p>
 <p>Once you have some incident history, generate a dashboard:</p>
 <pre><code class="language-bash">python -m monitor.dashboard --open
 </code></pre>
@@ -302,7 +332,9 @@ exposing <code>hermes_watchdog_cpu_percent</code>, <code>hermes_watchdog_mem_per
 <code>hermes_watchdog_disk_percent</code>, <code>hermes_watchdog_failed_services_count</code>, and
 a <code>hermes_watchdog_breach{metric="..."}</code> gauge per tracked metric. It binds
 to <code>127.0.0.1</code> by default and is read-only - it cannot be used to control
-the watchdog.</p>
+the watchdog. Import <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/docs/assets/grafana-dashboard.json"><code>docs/assets/grafana-dashboard.json</code></a>
+into Grafana to get CPU/memory/disk gauges and a breach timeline without
+building panels by hand.</p>
 <hr>
 <h3>How It Uses Every Hermes Feature</h3>
 <p>This project was designed to push every capability of Hermes Agent:</p>
@@ -396,7 +428,7 @@ the watchdog.</p>
 
     SKILLS --&gt; SKILL_MD["📄 incident-commander/SKILL.md&lt;br/&gt;← install into ~/.hermes/skills/"]
 
-    ENVS --&gt; ENV_PY["🐍 incident_env.py&lt;br/&gt;← Atropos RL environment, 8 scenarios"]
+    ENVS --&gt; ENV_PY["🐍 incident_env.py&lt;br/&gt;← Atropos RL environment, 10 scenarios"]
     ENVS --&gt; ENV_CFG["⚙️ incident_config.yaml&lt;br/&gt;← training configuration"]
 
     DEMO --&gt; DEMO_PY["🐍 demo_incident.py&lt;br/&gt;← standalone sandboxed demo"]
@@ -405,12 +437,14 @@ the watchdog.</p>
     MON --&gt; NOTIFY["🐍 notifier.py&lt;br/&gt;← Discord / Slack / PagerDuty"]
     MON --&gt; DASH["🐍 dashboard.py&lt;br/&gt;← offline HTML dashboard"]
     MON --&gt; PROM["🐍 prometheus_exporter.py&lt;br/&gt;← optional /metrics endpoint"]
+    MON --&gt; IDB["🐍 incident_db.py&lt;br/&gt;← SQLite + full-text search"]
+    MON --&gt; BASE["🐍 baseline.py&lt;br/&gt;← time-of-day-aware thresholds"]
 
-    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 66 pytest cases"]
+    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 80 pytest cases"]
 
     DOCS --&gt; SETUP["📄 SETUP.md"]
     DOCS --&gt; WRITEUP["📄 WRITEUP.md"]
-    DOCS --&gt; ASSETS["🖼️ assets/&lt;br/&gt;← dashboard screenshot, demo mockup"]
+    DOCS --&gt; ASSETS["🖼️ assets/&lt;br/&gt;← dashboard screenshot, demo mockup, Grafana JSON"]
 
     CI --&gt; CIWORKFLOW["⚙️ ci.yml&lt;br/&gt;← tests + smoke test on every push"]
 
@@ -423,6 +457,8 @@ the watchdog.</p>
     style NOTIFY fill:#1a4731,color:#fff
     style DASH fill:#1a4731,color:#fff
     style PROM fill:#1a4731,color:#fff
+    style IDB fill:#1a4731,color:#fff
+    style BASE fill:#1a4731,color:#fff
     style CIWORKFLOW fill:#2d2d2d,color:#fff
 </code></pre>
 <hr>
@@ -512,6 +548,12 @@ python environments/incident_env.py serve --config environments/incident_config.
 <td>Pod stuck in CrashLoopBackOff</td>
 </tr>
 <tr>
+<td><code>ecs-task-crashloop</code></td>
+<td>P1</td>
+<td>ecs</td>
+<td>ECS task stuck in a deploy/rollback loop</td>
+</tr>
+<tr>
 <td><code>network-unreachable</code></td>
 <td>P1</td>
 <td>network</td>
@@ -529,6 +571,12 @@ python environments/incident_env.py serve --config environments/incident_config.
 <td>service</td>
 <td>Custom worker service in failed state</td>
 </tr>
+<tr>
+<td><code>lambda-timeout-spike</code></td>
+<td>P2</td>
+<td>lambda</td>
+<td>Lambda function timing out on cold starts</td>
+</tr>
 </tbody></table>
 <hr>
 <h3>Running Tests</h3>
@@ -538,8 +586,9 @@ pip install pytest pytest-asyncio psutil
 # Fast sanity check, no dependencies beyond the stdlib + pyyaml
 python environments/incident_env.py --smoke-test
 
-# Run full test suite (66 tests: scenarios, reward function, skill file,
-# demo script, notifier incl. PagerDuty, watchdog dry-run/resolve wiring, Prometheus exporter, dashboard)
+# Run full test suite (80 tests: scenarios, reward function, skill file,
+# demo script, notifier incl. PagerDuty, watchdog dry-run/resolve wiring,
+# Prometheus exporter, incident search (SQLite/FTS), adaptive baseline, dashboard)
 pytest tests/ -v
 
 # Run specific test classes
@@ -563,7 +612,7 @@ pytest tests/test_monitor.py::TestSafeRemediation -v
 </li>
 <li><p><strong>Works standalone, today, on a real host.</strong> <code>monitor/watchdog.py</code> doesn't need Hermes at all - just <code>ANTHROPIC_API_KEY</code> - and is built with an explicit, documented safety model instead of giving an LLM raw shell access to your production box.</p>
 </li>
-<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 66 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
+<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 80 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
 </li>
 </ol>
 <hr>
@@ -601,7 +650,7 @@ risk profiles.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/ucsandman/DashClaw">
-        <div class="stars">★ 296</div>
+        <div class="stars">★ 295</div>
         <div class="name"><span class="org">ucsandman /</span> DashClaw</div>
       </a>
       <a class="related-row" href="/projects/Christabel337/job-scout-agent">
@@ -617,7 +666,7 @@ risk profiles.</p>
         <div class="name"><span class="org">JackTheGit /</span> hermes-ai-infrastructure-monitoring-toolkit</div>
       </a>
       <a class="related-row" href="/projects/bigph00t/hermescraft">
-        <div class="stars">★ 65</div>
+        <div class="stars">★ 67</div>
         <div class="name"><span class="org">bigph00t /</span> hermescraft</div>
       </a>
       <a class="related-row" href="/projects/hxsteric/mercury">

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting traces, metrics, and logs to OTLP-compatible backends including Phoenix, Langfuse, and SigNoz.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, SigNoz, and Grafana.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-08-31T23:58:18.000Z",
+  "dateModified": "2026-09-04T01:33:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">247·repos</span>
+    <span id="meta-count">248·repos</span>
     <span id="meta-version">hermes·v0.21.0</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-31</span>
+    <span><span class="meta-label">updated</span>2026-09-04</span>
   </div>
 
   <div class="actions">
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting traces, metrics, and logs to OTLP-compatible backends including Phoenix, Langfuse, and SigNoz.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, SigNoz, and Grafana.</p>
     <ul class="summary-highlights">
       <li>Exports LLM tool calls and model invocations as OTel spans.</li>
-      <li>Compatible with OTLP backends like Phoenix, Langfuse, and Jaeger.</li>
+      <li>Compatible with any OTLP HTTP endpoint for traces and metrics.</li>
       <li>Includes a four-tier test suite for unit, integration, and E2E testing.</li>
     </ul>
   </div>
@@ -490,6 +490,7 @@ llm_input_preview_max_chars: 1200
 llm_output_preview_max_chars: 1200
 capture_previews: true          # false = suppress all input.value / output.value
 capture_sender_id: false        # true = add platform-prefixed user.id to spans
+suppress_mcp_ping_spans: true   # drop successful MCP keepalive "ping" spans (SDK 2.x); failed pings are kept
 project_name: hermes-prod       # supersedes OTEL_PROJECT_NAME
 global_tags:
   team: platform
@@ -552,6 +553,10 @@ headers:                        # merged onto outgoing OTLP requests
 <td><code>HERMES_OTEL_CAPTURE_SENDER_ID</code></td>
 </tr>
 <tr>
+<td><code>suppress_mcp_ping_spans</code></td>
+<td><code>HERMES_OTEL_SUPPRESS_MCP_PING_SPANS</code></td>
+</tr>
+<tr>
 <td><code>project_name</code></td>
 <td><code>HERMES_OTEL_PROJECT_NAME</code></td>
 </tr>
@@ -577,6 +582,8 @@ headers:                        # merged onto outgoing OTLP requests
 </tr>
 </tbody></table>
 <p><code>pyyaml</code> is optional — if not installed, the YAML file is silently skipped and only env vars + defaults apply. Malformed YAML logs a single warning and falls back to defaults.</p>
+<h5>MCP keepalive pings</h5>
+<p>Hermes v0.21.0 moved to MCP Python SDK 2.x, which instruments every outbound MCP request with an OTel span on the global tracer provider — the one this plugin installs. Hermes sends a <code>ping</code> on every idle keepalive interval per MCP connection, so each one used to appear as a standalone one-span <code>MCP send ping</code> trace, burying real agent activity in the Live and Traces views. The plugin now drops successful pings before they reach any backend or the live store (<code>suppress_mcp_ping_spans: true</code>, the default). Pings that fail keep their error status and are always exported, so MCP connectivity problems stay visible. Set <code>suppress_mcp_ping_spans: false</code> (or <code>HERMES_OTEL_SUPPRESS_MCP_PING_SPANS=false</code>) to see every ping while debugging a server. Even then the dashboard's Live and Traces views keep successful <code>MCP send ping</code> traces out of the list (and out of the Live stats) until you tick <strong>show MCP keepalive pings</strong>; failed pings are always listed.</p>
 <h5>Privacy mode</h5>
 <p>Set <code>capture_previews: false</code> (or <code>HERMES_OTEL_CAPTURE_PREVIEWS=false</code>) to suppress every <code>input.value</code> / <code>output.value</code> attribute. Useful for shared deployments where message content can't leave the process. A one-line startup banner confirms the mode is active.</p>
 <p>Set <code>capture_sender_id: true</code> (or <code>HERMES_OTEL_CAPTURE_SENDER_ID=true</code>) to attach gateway sender identity to spans. The plugin emits the raw platform ID as <code>hermes.sender.id</code> and the backend-neutral user key as <code>user.id={platform}:{sender_id}</code>. For example, Slack user <code>U0B074344DP</code> becomes <code>user.id=slack:U0B074344DP</code>. The platform is already available on LLM spans as <code>llm.provider</code>. This is opt-in because IDs from Discord, Telegram, Slack, email, SMS, and similar platforms can identify users. CLI sessions usually omit it.</p>
@@ -972,7 +979,7 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 445</div>
+        <div class="stars">★ 444</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
