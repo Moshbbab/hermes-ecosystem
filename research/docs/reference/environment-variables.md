@@ -548,6 +548,14 @@ Optional Tavily API key for higher search/extract limits. After selecting Tavily
 
 Override the Tavily API endpoint. Useful for corporate proxies and self-hosted Tavily-compatible search backends. Same pattern as `GROQ_BASE_URL`.
 
+`PERPLEXITY_API_KEY`
+
+Perplexity Search API key for the `perplexity` web backend — ranked search results plus query-relevant page snippets for extract ([perplexity.ai/account/api](https://www.perplexity.ai/account/api))
+
+`PERPLEXITY_BASE_URL`
+
+Override the Perplexity API endpoint (default `https://api.perplexity.ai`) for proxies (optional)
+
 `SEARXNG_URL`
 
 SearXNG instance URL for free self-hosted web search — no API key required ([searxng.github.io](https://searxng.github.io/searxng/))

@@ -66,7 +66,7 @@ Cron / scheduled jobs
 
 Session storage
 
-`hermes_state.py`
+`hermes_state.py`, `hermes_state_*.py`
 
 [Session Storage](/docs/developer-guide/session-storage)
 

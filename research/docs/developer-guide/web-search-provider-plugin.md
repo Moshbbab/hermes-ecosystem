@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/developer-guide/web-search-provider-plugin
 
-Web-search provider plugins register a backend that services `web_search`, `web_extract`, and (optionally) deep-crawl tool calls. Built-in providers — Firecrawl, SearXNG, Tavily, Exa, Parallel, Keenable, Brave Search (free tier), xAI, and DDGS — all ship as plugins under `plugins/web/<name>/`. You can add a new one, or override a bundled one, by dropping a directory next to them.
+Web-search provider plugins register a backend that services `web_search`, `web_extract`, and (optionally) deep-crawl tool calls. Built-in providers — Firecrawl, SearXNG, Tavily, Perplexity, Exa, Parallel, Keenable, Brave Search (free tier), xAI, and DDGS — all ship as plugins under `plugins/web/<name>/`. You can add a new one, or override a bundled one, by dropping a directory next to them.
 
 tip
 
@@ -235,7 +235,7 @@ raises
 
 Required when `supports_extract()` returns `True`
 
-Providers can advertise multiple capabilities from a single class — Firecrawl, Tavily, Keenable, Exa, and Parallel all implement both search and extract. Brave Search and DDGS are search-only; SearXNG is search-only with a documented "pair me with an extract provider" workflow.
+Providers can advertise multiple capabilities from a single class — Firecrawl, Tavily, Perplexity, Keenable, Exa, and Parallel all implement both search and extract. Brave Search and DDGS are search-only; SearXNG is search-only with a documented "pair me with an extract provider" workflow.
 
 ## Response shape
 

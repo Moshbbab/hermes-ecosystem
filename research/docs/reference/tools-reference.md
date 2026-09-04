@@ -755,13 +755,13 @@ Requires environment
 
 Search the web for information. Returns up to 5 results by default with titles, URLs, and descriptions. Accepts an optional `limit` (1-100, default 5). The query is passed through to the configured backend, so operators such as `site:domain`, `filetype:pdf`, `intitle:word`, `-term`, and `"exact phrase"` may work when the backend supports them.
 
-EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY or KEENABLE\_API\_KEY
+EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY or PERPLEXITY\_API\_KEY or KEENABLE\_API\_KEY
 
 `web_extract`
 
 Extract content from web page URLs. Returns clean page content in markdown/text (no LLM summarization — fast). Also works with PDF URLs (arxiv papers, documents) — pass the PDF link directly. Pages within the char budget (default 15000) return whole; larger pages return a head+tail window with a footer pointing at the full text saved on disk. Max 5 URLs per call.
 
-EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY or KEENABLE\_API\_KEY
+EXA\_API\_KEY or PARALLEL\_API\_KEY or FIRECRAWL\_API\_KEY or TAVILY\_API\_KEY or PERPLEXITY\_API\_KEY or KEENABLE\_API\_KEY
 
 ## `x_search` toolset
 

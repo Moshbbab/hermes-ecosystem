@@ -91,6 +91,16 @@ Free tier
 
 ✔ Opt-in keyless when selected
 
+**Perplexity**
+
+`PERPLEXITY_API_KEY`
+
+✔
+
+✔ (query-relevant snippets)
+
+Paid (per-request Search API pricing)
+
 **Keenable**
 
 `KEENABLE_API_KEY` (optional)
@@ -111,7 +121,7 @@ Free tier
 
 Paid (SuperGrok or per-token)
 
-Brave Search, DDGS, and xAI are **search-only** — pair any of them with Firecrawl/Tavily/Keenable/Exa/Parallel when you also need `web_extract`. DDGS uses the [`ddgs` Python package](https://pypi.org/project/ddgs/) under the hood; if it isn't already installed, run `pip install ddgs` (or let Hermes lazy-install it on first use). xAI runs Grok's server-side `web_search` tool on the Responses API — results are LLM-generated rather than index-backed, so titles, descriptions, and URL choice are all model output (see the [trust-model caveat](#xai-grok) below).
+Brave Search, DDGS, and xAI are **search-only** — pair any of them with Firecrawl/Tavily/Perplexity/Keenable/Exa/Parallel when you also need `web_extract`. DDGS uses the [`ddgs` Python package](https://pypi.org/project/ddgs/) under the hood; if it isn't already installed, run `pip install ddgs` (or let Hermes lazy-install it on first use). xAI runs Grok's server-side `web_search` tool on the Responses API — results are LLM-generated rather than index-backed, so titles, descriptions, and URL choice are all model output (see the [trust-model caveat](#xai-grok) below).
 
 **Per-capability split:** you can use different providers for search and extract independently — for example SearXNG (free) for search and Firecrawl for extract. See [Per-capability configuration](#per-capability-configuration) below.
 
@@ -371,7 +381,7 @@ SearXNG handles search; you need a separate provider for `web_extract`. Use the 
 # ~/.hermes/config.yaml
 web:
   search_backend: "searxng"
-  extract_backend: "firecrawl"   # or tavily, keenable, exa, parallel
+  extract_backend: "firecrawl"   # or tavily, perplexity, keenable, exa, parallel
 ```
 
 With this config, Hermes uses SearXNG for all search queries and Firecrawl for URL extraction — combining free search with high-quality extraction.
@@ -389,6 +399,19 @@ TAVILY_API_KEY=tvly-your-key-here
 ```
 
 Get a key at [app.tavily.com](https://app.tavily.com/home). See [Tavily keyless](https://docs.tavily.com/documentation/keyless).
+
+* * *
+
+### Perplexity
+
+[Perplexity's Search API](https://docs.perplexity.ai/docs/search/quickstart) returns ranked, date-stamped results from Perplexity's own index (`web_search`). For `web_extract` it uses the same query-relevant _snippets_ route as the official `pplx` CLI: you get the passages of each page that matter, with elisions marked `…`, rather than a verbatim full-page dump — pick Firecrawl / Exa / Parallel as `web.extract_backend` when you need the whole page. Keyed only; there is no anonymous tier.
+
+```
+# ~/.hermes/.env
+PERPLEXITY_API_KEY=pplx-your-key-here
+```
+
+Get a key at [perplexity.ai/account/api](https://www.perplexity.ai/account/api). Set `PERPLEXITY_BASE_URL` to route through a proxy.
 
 * * *
 
@@ -474,7 +497,7 @@ Set one provider for all web capabilities:
 ```
 # ~/.hermes/config.yaml
 web:
-  backend: "searxng"   # firecrawl | searxng | brave-free | ddgs | tavily | keenable | exa | parallel | xai
+  backend: "searxng"   # firecrawl | searxng | brave-free | ddgs | tavily | perplexity | keenable | exa | parallel | xai
 ```
 
 ### Per-capability configuration
@@ -507,6 +530,10 @@ Auto-selected backend
 `TAVILY_API_KEY`
 
 tavily
+
+`PERPLEXITY_API_KEY`
+
+perplexity
 
 `EXA_API_KEY`
 
@@ -584,7 +611,7 @@ SearXNG cannot extract URL content. Set `web.extract_backend` to a provider that
 ```
 web:
   search_backend: "searxng"
-  extract_backend: "firecrawl"  # or tavily / keenable / exa / parallel
+  extract_backend: "firecrawl"  # or tavily / perplexity / keenable / exa / parallel
 ```
 
 ### SearXNG returns 0 results
