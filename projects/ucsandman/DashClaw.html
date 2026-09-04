@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ucsandman/DashClaw — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote…">
+<meta name="description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta property="og:description" content="DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote…">
+<meta property="og:description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ucsandman/DashClaw">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ucsandman/DashClaw — Hermes Atlas">
-<meta name="twitter:description" content="DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote…">
+<meta name="twitter:description" content="DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=DashClaw&amp;subtitle=%F0%9F%9B%A1%EF%B8%8F+The+approval+and+policy+layer+for+AI+agents.+Intercept+risky+actions+before+they+run%2C+block+them%2C+or+approve+them+remotely.&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ucsandman/DashClaw#software",
   "name": "DashClaw",
-  "description": "DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote approval system via CLI, PWA, or messaging platforms, allowing users to review risk-scored actions and manage policy-based grants for unattended agent sessions.",
+  "description": "DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny destructive actions via a web inbox, CLI, or mobile integrations.",
   "url": "https://hermesatlas.com/projects/ucsandman/DashClaw",
   "codeRepository": "https://github.com/ucsandman/DashClaw",
   "applicationCategory": "BusinessApplication",
@@ -47,13 +47,13 @@
     "name": "ucsandman",
     "url": "https://github.com/ucsandman"
   },
-  "dateModified": "2026-09-03T08:18:38.000Z",
+  "dateModified": "2026-09-04T15:05:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 295
+    "userInteractionCount": 296
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">🛡️ The approval and policy layer for AI agents. Intercept risky actions before they run, block them, or approve them remotely.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 295</span>
+    <span class="stars">★ 296</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-03</span>
+    <span><span class="meta-label">updated</span>2026-09-04</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts AI agent tool calls before execution to prevent destructive actions. It provides a remote approval system via CLI, PWA, or messaging platforms, allowing users to review risk-scored actions and manage policy-based grants for unattended agent sessions.</p>
+    <p class="summary-text">DashClaw is a fail-closed decision infrastructure that intercepts and evaluates AI agent tool calls before execution. It provides a remote approval system for unattended agent sessions, allowing users to review, allow, or deny destructive actions via a web inbox, CLI, or mobile integrations.</p>
     <ul class="summary-highlights">
-      <li>Intercepts and cancels tool calls before execution using a fail-closed hook.</li>
-      <li>Records all decisions in a signed, tamper-evident Ed25519 audit ledger.</li>
-      <li>Supports remote approvals via Telegram, Discord, PWA, and CLI.</li>
+      <li>Intercepts tool calls before execution to prevent destructive actions.</li>
+      <li>Provides remote approval via PWA, Telegram, Discord, or CLI.</li>
+      <li>Records all decisions in a signed, tamper-evident audit ledger.</li>
     </ul>
   </div>
 </section>
@@ -266,7 +266,7 @@ catch (err) { await claw.reportActionFailure(action.action_id, err.message); }
     D --&gt; L
     L -.-&gt; P[Liveness probe re-drives&lt;br/&gt;the seam and verdicts by&lt;br/&gt;execution, never the ledger]
 </code></pre>
-<p>The decision lattice is <code>allow &lt; warn &lt; allow_contained &lt; require_approval &lt; block</code>. Join is <code>max</code>; a <code>block</code> is absolute and cannot be downgraded in the ledger. <code>allow_contained</code> only ever reaches a caller that advertised <code>client_capabilities: ['allow_contained']</code>; an older client sees <code>require_approval</code> instead (version skew only tightens).</p>
+<p>The decision lattice is <code>allow &lt; warn &lt; allow_contained &lt; require_approval &lt; block</code>. Join is <code>max</code>; a <code>block</code> is absolute and cannot be downgraded in the ledger. <code>allow_contained</code> only ever reaches a caller that advertised the capability string for the staging medium it would use — <code>client_capabilities: ['allow_contained']</code> for a git worktree, <code>['allow_contained:db']</code> for an ephemeral database branch; an older client sees <code>require_approval</code> instead (version skew only tightens).</p>
 <blockquote>
 <p>[!IMPORTANT]
 <strong>Enforcement is mechanically real only where DashClaw sits in the seam between decide and execute:</strong> the Claude Code, Codex, and Hermes PreToolUse hooks (fail-closed, exit-2 on block), the OpenClaw gateway, and <code>dashclaw_invoke</code>. Everywhere else (bare SDK, API, and MCP callers, desktop chat) governance is <strong>cooperative</strong>: the caller consults guard and honors the decision, every call is still recorded, and a block is never downgraded in the ledger. DashClaw does not claim universal hard enforcement, and this README never will. And even at the mechanical seam, the hook runs at the agent's own privilege level — it is a <strong>seatbelt against accidents, not a cage against intent</strong>. An agent with write access to the hook path can, in principle, disable its governor; DashClaw makes that act blocked-by-policy and loudly visible (control-plane <code>block</code> policy, liveness probe, <code>executed_despite</code> witness), but the tamper-proof boundary belongs to your deployment: a container, a separate OS user, or a read-only mount of the hook path. Per-surface table and full threat model: <a href="https://github.com/ucsandman/DashClaw/blob/main/docs/architecture/enforcement-boundary.md"><code>docs/architecture/enforcement-boundary.md</code></a>.</p>

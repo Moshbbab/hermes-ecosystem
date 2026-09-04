@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides agents with…">
+<meta name="description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot CLI. It enables agents to…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides agents with…">
+<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot CLI. It enables agents to…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides agents with…">
+<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot CLI. It enables agents to…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Memory+for+coding+agents+built+from+the+session+history+already+on+disk%3A+Claude+Code%2C+Codex%2C+Cursor%2C+Copilot+CLI%2C+OpenClaw+and+17+more.+Search+months+of+past+sessions%2C+including+ev&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides agents with retroactive access to past decisions, commands, and file edits through MCP integration or a CLI, enabling cross-agent recall of previous work.",
+  "description": "deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot CLI. It enables agents to retrieve past decisions, command outputs, and file edits through retroactive search and MCP-based recall.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-09-04T11:34:51.000Z",
+  "dateModified": "2026-09-04T15:54:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 770
+    "userInteractionCount": 773
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,7 +120,7 @@
   <p class="project-desc">Memory for coding agents built from the session history already on disk: Claude Code, Codex, Cursor, Copilot CLI, OpenClaw and 17 more. Search months of past sessions, including everything from before you installed it, and recall them in any agent. No LLM, no embeddings, one local Go binary.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 770</span>
+    <span class="stars">★ 773</span>
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides agents with retroactive access to past decisions, commands, and file edits through MCP integration or a CLI, enabling cross-agent recall of previous work.</p>
+    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot CLI. It enables agents to retrieve past decisions, command outputs, and file edits through retroactive search and MCP-based recall.</p>
     <ul class="summary-highlights">
-      <li>Indexes existing local agent history files for retroactive search.</li>
-      <li>Provides MCP tools for natural-language recall and automated context.</li>
+      <li>Indexes existing local session history from 22 supported coding agents.</li>
+      <li>Provides millisecond lookups over gigabytes of historical session data.</li>
       <li>Redacts keys and tokens during the indexing process for safety.</li>
     </ul>
   </div>
@@ -949,7 +949,11 @@ sync all read that one index. Details in <a href="https://github.com/vshulcz/dej
 <p><strong>Does anything leave my machine?</strong> No, unless you ask it to. See the
 <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/SECURITY-MODEL.md#data-flows">data flows</a>.</p>
 <p><strong>What about secrets already in my logs?</strong> They stay in the original harness files, which
-are your agent's data. They do not enter deja's index, digests, shares or sync exports.</p>
+are your agent's data. Known shapes — AWS keys, <code>api_key=</code>/<code>token=</code> assignments, bearer
+tokens and bare JWTs, PEM blocks, provider tokens, high-entropy values — are stripped as
+the index is built, so they do not reach digests, shares or sync exports. Pattern matching
+is not secret detection: a shape it does not know can pass through. See the
+<a href="https://github.com/vshulcz/deja-vu/blob/main/docs/SECURITY-MODEL.md#redaction">security model</a>.</p>
 <p><strong>Will it slow my agent down?</strong> A recall is a lexical lookup against a local index:
 ~0.4 ms median, and nothing waits on a model. A hook adds the process start and a
 freshness check over your stores on top of that — tens of milliseconds on a store of
@@ -1053,7 +1057,7 @@ the <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/ARCHITECTURE.md#s
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 22.4K</div>
+        <div class="stars">★ 22.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

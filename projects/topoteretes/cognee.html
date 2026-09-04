@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>topoteretes/cognee — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Cognee is an open-source AI memory platform that provides agents with persistent long-term memory across sessions by building self-hosted knowledge graphs. The…">
+<meta name="description" content="Cognee is an open-source AI memory platform that provides persistent long-term memory for agents through a self-hosted knowledge graph. It ingests data in…">
 <link rel="canonical" href="https://hermesatlas.com/projects/topoteretes/cognee">
 <meta property="og:title" content="topoteretes/cognee — Hermes Atlas">
-<meta property="og:description" content="Cognee is an open-source AI memory platform that provides agents with persistent long-term memory across sessions by building self-hosted knowledge graphs. The…">
+<meta property="og:description" content="Cognee is an open-source AI memory platform that provides persistent long-term memory for agents through a self-hosted knowledge graph. It ingests data in…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/topoteretes/cognee">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="topoteretes/cognee — Hermes Atlas">
-<meta name="twitter:description" content="Cognee is an open-source AI memory platform that provides agents with persistent long-term memory across sessions by building self-hosted knowledge graphs. The…">
+<meta name="twitter:description" content="Cognee is an open-source AI memory platform that provides persistent long-term memory for agents through a self-hosted knowledge graph. It ingests data in…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=cognee&amp;subtitle=Cognee+is+the+open-source+AI+memory+platform+for+agents.+Give+your+AI+agents+persistent+long-term+memory+across+sessions+with+a+self-hosted+knowledge+graph+engine.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/topoteretes/cognee#software",
   "name": "cognee",
-  "description": "Cognee is an open-source AI memory platform that provides agents with persistent long-term memory across sessions by building self-hosted knowledge graphs. The system combines vector embeddings, graph reasoning, and ontology generation to process data from various formats into searchable and connected relationships.",
+  "description": "Cognee is an open-source AI memory platform that provides persistent long-term memory for agents through a self-hosted knowledge graph. It ingests data in various formats to combine vector embeddings with graph reasoning and cognitive-science-grounded ontology generation.",
   "url": "https://hermesatlas.com/projects/topoteretes/cognee",
   "codeRepository": "https://github.com/topoteretes/cognee",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "topoteretes",
     "url": "https://github.com/topoteretes"
   },
-  "dateModified": "2026-09-04T11:37:07.000Z",
+  "dateModified": "2026-09-04T16:26:29.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30457
+    "userInteractionCount": 30461
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Cognee is an open-source AI memory platform that provides agents with persistent long-term memory across sessions by building self-hosted knowledge graphs. The system combines vector embeddings, graph reasoning, and ontology generation to process data from various formats into searchable and connected relationships.</p>
+    <p class="summary-text">Cognee is an open-source AI memory platform that provides persistent long-term memory for agents through a self-hosted knowledge graph. It ingests data in various formats to combine vector embeddings with graph reasoning and cognitive-science-grounded ontology generation.</p>
     <ul class="summary-highlights">
-      <li>Builds self-hosted knowledge graphs for persistent agent memory.</li>
-      <li>Combines vector embeddings with graph-based reasoning and search.</li>
-      <li>Provides Python, Rust, and TypeScript clients for integration.</li>
+      <li>Builds self-hosted knowledge graphs for cross-session agent memory.</li>
+      <li>Supports unified ingestion, graph/vector search, and multimodal data.</li>
+      <li>Provides Python, Rust, and TypeScript clients with a local UI.</li>
     </ul>
   </div>
 </section>
@@ -245,7 +245,7 @@
 <li>Python 3.10 to 3.14</li>
 </ul>
 <h4>Step 1: Install Cognee</h4>
-<p>You can install Cognee with <strong>pip</strong>, <strong>poetry</strong>, <strong>uv</strong>, or your preferred Python package manager.</p>
+<p>You can install Cognee with <strong>pip</strong>, <strong>uv</strong>, or your preferred Python package manager.</p>
 <pre><code class="language-bash">uv pip install cognee
 </code></pre>
 <h4>Step 2: Configure the LLM</h4>
@@ -314,6 +314,26 @@ it off benchmarks cognee with its memory layer removed.</li>
 <p>A third flag, <code>DATASET_QUEUE_ENABLED=false</code>, removes the per-process concurrency guard
 on datasets; it saves a little latency but risks file-lock leaks and resource
 exhaustion when multiple datasets run in parallel — leave it on for servers.</p>
+<h4>Procedural memory (skills)</h4>
+<p>Beyond facts, cognee stores <strong>skills</strong> — dataset-scoped <code>SKILL.md</code> playbooks that
+agents can discover semantically, load on demand, execute, and improve from run
+history:</p>
+<pre><code class="language-python"># Ingest a folder of SKILL.md files into a dataset
+await cognee.remember("./skills", content_type="skills", dataset_name="ops")
+
+# Discover by meaning — returns name/description/metadata, never the full procedure
+results = await cognee.search("how do I deploy to staging",
+                              query_type=SearchType.SKILLS, datasets=["ops"])
+
+# recall() also runs a deterministic (no-LLM) skill gate: procedural questions
+# automatically get matching skills appended, tagged source="skills"
+results = await cognee.recall("how do I deploy to staging", datasets=["ops"])
+</code></pre>
+<p>Skills are authored as <code>SKILL.md</code> files (one directory per skill, frontmatter for
+description/tools/maintainer), scoped to exactly one dataset at ingest time, and
+executed through <code>SearchType.AGENTIC_COMPLETION</code>, where the agent loads full
+procedure bodies on demand via the <code>load_skill</code> tool. Disable the recall gate with
+<code>SKILL_GATE_ENABLED=false</code>.</p>
 <h3>Run with Docker</h3>
 <p>Prefer containers? Cognee publishes prebuilt images to Docker Hub on every push to <code>main</code>:
 <a href="https://hub.docker.com/r/cognee/cognee"><code>cognee/cognee</code></a> (the API server) and
@@ -331,14 +351,21 @@ copy-pasteable compose file that runs the prebuilt image, no clone or build need
 docker compose up
 
 # Optional profiles (combine as needed):
-docker compose --profile ui up        # + frontend on http://localhost:3000
+docker compose --profile ui up        # + UI on http://localhost:3000
 docker compose --profile mcp up       # + MCP server on http://localhost:8001
 docker compose --profile postgres up  # + Postgres/PGVector
 docker compose --profile neo4j up     # + Neo4j
+
+# Backend, MCP server and UI together
+docker compose --profile mcp --profile ui up
 </code></pre>
 <blockquote>
 <p>The <code>cognee</code> and <code>cognee-mcp</code> services publish different host ports (<code>8000</code> vs <code>8001</code>),
 so you can run both at once.</p>
+</blockquote>
+<blockquote>
+<p>The <code>ui</code> profile runs the published <code>cognee/cognee-ui</code> image. To build the UI from
+your working tree instead, with hot reload, use <code>--profile ui-dev</code>.</p>
 </blockquote>
 <h4>Option B — Pull the prebuilt image (no clone required)</h4>
 <pre><code class="language-bash"># Create a minimal .env in the current directory
@@ -350,7 +377,24 @@ docker run --env-file ./.env -p 8000:8000 --rm -it cognee/cognee:main
 # MCP server (HTTP transport)
 docker pull cognee/cognee-mcp:main
 docker run -e TRANSPORT_MODE=http --env-file ./.env -p 8000:8000 --rm -it cognee/cognee-mcp:main
+
+# UI (http://localhost:3000)
+docker pull cognee/cognee-ui:main
+docker run -p 3000:3000 --rm -it cognee/cognee-ui:main
 </code></pre>
+<p>The UI needs no configuration when the backend is reachable at port 8000 on the same
+host you browse to: it derives the backend address from the page URL. Point it
+somewhere else with <code>COGNEE_BACKEND_URL</code>, which is read when the container starts, so
+one image works against any backend:</p>
+<pre><code class="language-bash">docker run -p 3000:3000 -e COGNEE_BACKEND_URL=https://cognee.example.com \
+  --rm -it cognee/cognee-ui:main
+
+# What backend did this container resolve?
+curl http://localhost:3000/api/runtime-config
+</code></pre>
+<p>The browser talks to the backend directly, so <code>COGNEE_BACKEND_URL</code> must be the address
+as seen from the browser, and the backend must allow the UI's origin through
+<code>CORS_ALLOWED_ORIGINS</code>.</p>
 <p>See the <a href="https://github.com/topoteretes/cognee/blob/main/cognee-mcp/README.md">MCP server README</a> for SSE/stdio transports, optional
 extras, and MCP client configuration.</p>
 <h3>Use with AI Agents</h3>
@@ -376,7 +420,7 @@ export COGNEE_API_KEY="ck_..."
 <p>The plugin hooks into Claude Code's lifecycle — <code>SessionStart</code> selects mode and sets up identity, <code>UserPromptSubmit</code> injects dataset-scoped context, <code>PostToolUse</code> captures tool traces, <code>Stop</code> writes the assistant's answer, <code>PreCompact</code> preserves memory across context resets, and <code>SessionEnd</code> triggers the final sync into the permanent graph.</p>
 <p>See the <a href="https://github.com/topoteretes/cognee-integrations/tree/main/integrations/claude-code">plugin README</a> for sessions, datasets, and full configuration.</p>
 <h4>Connect to Cognee Cloud</h4>
-<p>Point any Python agent at a managed Cognee instance — all SDK calls route to the cloud:</p>
+<p>Point any Python agent at a managed Cognee instance — all SDK calls route to the cloud. Get your instance URL and API key from the <a href="https://www.cognee.ai">Cognee Cloud</a> dashboard, or set the <code>COGNEE_SERVICE_URL</code> and <code>COGNEE_API_KEY</code> environment variables and call <code>serve()</code> with no arguments:</p>
 <pre><code class="language-python">import cognee
 
 await cognee.serve(url="https://your-instance.cognee.ai", api_key="ck_...")
@@ -490,7 +534,7 @@ DB_NAME=cognee_db
 <tbody><tr>
 <td><strong>Cognee Cloud</strong></td>
 <td>Managed service, no infrastructure to maintain</td>
-<td><a href="https://www.cognee.ai">Sign up</a> or <code>await cognee.serve()</code></td>
+<td><a href="https://www.cognee.ai">Sign up</a>, then <code>await cognee.serve(url=..., api_key=...)</code></td>
 </tr>
 <tr>
 <td><strong>Modal</strong></td>
@@ -632,7 +676,7 @@ single-tenant with <code>ENABLE_BACKEND_ACCESS_CONTROL=false</code>.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 22.4K</div>
+        <div class="stars">★ 22.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
