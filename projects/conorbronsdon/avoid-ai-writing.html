@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a structured…">
+<meta name="description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to eliminate detectable AI writing patterns. It utilizes a structured…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a structured…">
+<meta property="og:description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to eliminate detectable AI writing patterns. It utilizes a structured…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a structured…">
+<meta name="twitter:description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to eliminate detectable AI writing patterns. It utilizes a structured…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+Codex%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a structured two-pass detection process and a 112-entry word replacement table to identify and replace specific linguistic tells, such as promotional language and filler phrases.",
+  "description": "avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to eliminate detectable AI writing patterns. It utilizes a structured two-pass detection process and a catalog of 74 pattern categories to identify and replace specific \"AI-isms\" with plainer language.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-05T02:33:37.000Z",
+  "dateModified": "2026-09-05T20:14:41.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4125
+    "userInteractionCount": 4128
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -148,11 +148,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a structured two-pass detection process and a 112-entry word replacement table to identify and replace specific linguistic tells, such as promotional language and filler phrases.</p>
+    <p class="summary-text">avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to eliminate detectable AI writing patterns. It utilizes a structured two-pass detection process and a catalog of 74 pattern categories to identify and replace specific &quot;AI-isms&quot; with plainer language.</p>
     <ul class="summary-highlights">
       <li>Supports rewrite, detect-only, and edit-in-place modes.</li>
-      <li>Features 72 pattern categories for structural and linguistic detection.</li>
-      <li>Compatible with agents like Claude Code, OpenClaw, and Hermes.</li>
+      <li>Features a 112-entry word replacement table across three tiers.</li>
+      <li>Compatible with agentskills.io, Claude Code, OpenClaw, and Hermes.</li>
     </ul>
   </div>
 </section>
@@ -194,33 +194,22 @@
 <ul>
 <li><strong>Structured audit</strong> — returns identified issues with quoted text, the rewrite, a change summary, and a second-pass audit in four discrete sections. You see exactly what changed and why.</li>
 <li><strong>Two-pass detection</strong> — the second pass re-reads the rewrite and catches patterns that survive the first edit: recycled transitions, lingering inflation, copula swaps that snuck through.</li>
-<li><strong>112-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 words always flag, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 1 itself splits into <strong>1A frequency markers</strong> (<code>delve</code>, <code>tapestry</code>) and <strong>1B clarity edits</strong> (<code>in order to</code>, <code>utilize</code>) — same fix, but only 1A is evidence about how a passage was produced, and 1B is weighted lower so a wordiness fix cannot push a document toward an AI classification. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
-<li><strong>72 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/SKILL.md"><code>SKILL.md</code></a>; this count is enforced against it in CI.</li>
+<li><strong>112-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 matches flag unless a listed exception applies, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 1 itself splits into <strong>1A frequency markers</strong> (<code>delve</code>, <code>tapestry</code>) and <strong>1B clarity edits</strong> (<code>in order to</code>, <code>utilize</code>) — same fix, but only 1A is evidence about how a passage was produced, and 1B is weighted lower so a wordiness fix cannot push a document toward an AI classification. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
+<li><strong>74 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/references/patterns.md"><code>references/patterns.md</code></a>; this count is enforced against it in CI.</li>
 <li><strong>Detect mode</strong> — flag patterns without rewriting. See which flags are real problems vs. judgment calls. Useful when patterns might be intentional or you're auditing content you don't want altered.</li>
-<li><strong>Works across platforms</strong> — one <code>SKILL.md</code> runs in Claude Code, Cowork (as a plugin), OpenClaw, Cursor (as a ported rule), and more via <code>npx skills add</code>. See the install paths below.</li>
+<li><strong>Works across platforms</strong> — a directory-based skill runs in Claude Code, Cowork (as a plugin), OpenClaw, Cursor (as a ported rule), and other directory-aware agents. See the install paths below.</li>
 </ul>
 <h3>Installation &amp; Usage</h3>
-<h4>Quick install — any agent</h4>
-<p>The fastest way to install this skill, and later keep it updated, is the community <a href="https://github.com/vercel-labs/skills"><code>skills</code></a> CLI. It auto-detects installed coding agents and supports 75+ of them, including Claude Code, Codex, Cursor, OpenClaw, and Hermes. <code>npx</code> downloads and runs that package from the npm registry. It's third-party code, not something this repo publishes or maintains. The commands below pin <code>skills@1.5.23</code> rather than <code>@latest</code> so the installer version that runs is fixed and visible; the skill payload still follows this repository's current default branch. Bump the pin yourself once you've checked the <a href="https://github.com/vercel-labs/skills/releases">release notes</a>. It requires Node <strong>&gt;=22.20.0</strong>, a higher floor than this repo's own <code>&gt;=18</code>; check with <code>node --version</code> if you're not sure which you have.</p>
-<pre><code class="language-bash">npx skills@1.5.23 add conorbronsdon/avoid-ai-writing
-</code></pre>
-<p>For this public repository, the CLI normally uses its GitHub blob fast path and installs only <code>SKILL.md</code>. If that path is unavailable, it can fall back to cloning and install the full root skill directory. Use <code>git clone</code> when you explicitly want the detector, tests, CI config, and other repository tooling; see the manual steps below.</p>
-<p>Useful flags:</p>
-<pre><code class="language-bash"># Target specific agents instead of everything detected
-npx skills@1.5.23 add conorbronsdon/avoid-ai-writing -a claude-code -a codex
-
-# Install globally (~/.&lt;agent&gt;/skills/) instead of the current project
-npx skills@1.5.23 add conorbronsdon/avoid-ai-writing -g
-</code></pre>
-<p>Later, <code>npx skills@1.5.23 update</code> refreshes installed skills in whichever scope you select. It prompts for project vs. global; pass <code>-g</code> or <code>-p</code> to choose non-interactively. See the <a href="https://github.com/vercel-labs/skills#skills-update"><code>skills update</code> docs</a> for the full command reference.</p>
-<p>Prefer to install by hand, or using an agent not covered above? The sections below are manual, per-platform steps that don't need Node or npx.</p>
+<h4>Install the complete skill directory</h4>
+<p>Use the plugin install below or clone the repository into your agent's skills directory. Keep <code>SKILL.md</code> with <code>references/patterns.md</code>: the entry file loads the catalog before auditing. The bundled <code>scripts/</code>, <code>detector/</code>, and <code>examples/</code> provide optional mechanical verification.</p>
+<p>For a single-file rules field, use <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/dist/avoid-ai-writing.md"><code>dist/avoid-ai-writing.md</code></a>. It includes every rule and profile, with manual fallbacks for commands unavailable outside the bundle. Do not copy the slim entry file alone. Older installers that fetch only root <code>SKILL.md</code> omit its required reference; use a directory install instead.</p>
 <h4>Claude Code</h4>
 <p><strong>Option 1: Clone into skills directory</strong></p>
 <pre><code class="language-bash">git clone https://github.com/conorbronsdon/avoid-ai-writing ~/.claude/skills/avoid-ai-writing
 </code></pre>
-<p><strong>Option 2: Copy the file directly</strong></p>
-<p>Download <code>SKILL.md</code> and place it in any directory that Claude Code can read. Reference it in your <code>CLAUDE.md</code>:</p>
-<pre><code class="language-markdown">- Editing for AI patterns → read `path/to/avoid-ai-writing/SKILL.md`
+<p><strong>Option 2: Copy a self-contained file</strong></p>
+<p>Download <code>dist/avoid-ai-writing.md</code> and place it in any directory that Claude Code can read. Reference it in your <code>CLAUDE.md</code>:</p>
+<pre><code class="language-markdown">- Editing for AI patterns → read `path/to/avoid-ai-writing.md`
 </code></pre>
 <p><strong>Option 3: Use as a slash command</strong></p>
 <p>Create a command file (e.g., <code>~/.claude/commands/clean-ai-writing.md</code>):</p>
@@ -242,7 +231,7 @@ Read and follow the instructions in ~/.claude/skills/avoid-ai-writing/SKILL.md
 <p>In the Cowork desktop app, do the same from <strong>Customize → Plugins → Add marketplace from GitHub</strong> (<code>conorbronsdon/avoid-ai-writing</code>), then install <strong>avoid-ai-writing</strong>. The skill auto-triggers from phrases like "remove AI-isms." New releases arrive when the plugin's version is bumped — run <code>/plugin marketplace update</code> to pull them.</p>
 <p>The same plugin install works in Claude Code if you'd rather have a versioned, updatable plugin than the file clone above.</p>
 <blockquote>
-<p>Prefer not to install a plugin? Copy <code>SKILL.md</code> into a folder connected to your Cowork session and tell the agent to follow <code>./SKILL.md</code> — works as a one-off, no auto-trigger.</p>
+<p>Prefer not to install a plugin? Copy <code>dist/avoid-ai-writing.md</code> into a folder connected to your Cowork session and tell the agent to follow <code>./avoid-ai-writing.md</code> — works as a one-off, no auto-trigger.</p>
 </blockquote>
 <h4>OpenClaw</h4>
 <p><strong>Option 1: <a href="https://clawhub.ai/conorbronsdon/avoid-ai-writing">Install from ClawHub</a></strong></p>
@@ -260,15 +249,11 @@ curl -o .cursor/rules/avoid-ai-writing.mdc \
 <p>See <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/cursor-rules/README.md"><code>cursor-rules/README.md</code></a> for activation globs and trigger phrases. Functionally identical to the Claude Code skill — same tier vocabulary, same context profiles, same modes.</p>
 <h4>Hermes</h4>
 <p>Drop the skill into Hermes's skills directory — it then appears automatically as <code>/avoid-ai-writing</code>, no registration needed:</p>
-<pre><code class="language-bash">mkdir -p ~/.hermes/skills/writing/avoid-ai-writing
-curl -o ~/.hermes/skills/writing/avoid-ai-writing/SKILL.md \
-  https://raw.githubusercontent.com/conorbronsdon/avoid-ai-writing/main/SKILL.md
+<pre><code class="language-bash">git clone https://github.com/conorbronsdon/avoid-ai-writing ~/.hermes/skills/writing/avoid-ai-writing
 </code></pre>
 <h4>OpenAI Codex</h4>
 <p>Codex reads <a href="https://developers.openai.com/codex/skills">Agent Skills</a> in the same <code>SKILL.md</code> format. Put it in <code>.agents/skills/</code> at the repo root, or <code>~/.agents/skills/</code> to use it across all your projects:</p>
-<pre><code class="language-bash">mkdir -p .agents/skills/avoid-ai-writing
-curl -o .agents/skills/avoid-ai-writing/SKILL.md \
-  https://raw.githubusercontent.com/conorbronsdon/avoid-ai-writing/main/SKILL.md
+<pre><code class="language-bash">git clone https://github.com/conorbronsdon/avoid-ai-writing .agents/skills/avoid-ai-writing
 </code></pre>
 <h4>Native ChatGPT and Codex plugin package</h4>
 <p>Published in the <a href="https://chatgpt.com/plugins/plugins_6a9b77b18b8881918efa9c1255868164">OpenAI Plugins Directory</a>; install it there for ChatGPT or Codex.</p>
@@ -287,7 +272,7 @@ curl -o .agents/skills/avoid-ai-writing/SKILL.md \
 python3 scripts/validate-openai-plugin.py . --json
 </code></pre>
 <h4>Other agents</h4>
-<p>The same <code>SKILL.md</code> (or the Cursor <code>.mdc</code> port) drops into most tools' rules/skills location:</p>
+<p>The generated <code>dist/avoid-ai-writing.md</code> (or the Cursor <code>.mdc</code> port) drops into most tools' rules/skills location:</p>
 <table>
 <thead>
 <tr>
@@ -309,11 +294,11 @@ python3 scripts/validate-openai-plugin.py . --json
 </tr>
 <tr>
 <td><strong>Claude.ai Projects</strong></td>
-<td>paste <code>SKILL.md</code> into the project's custom instructions</td>
+<td>paste <code>dist/avoid-ai-writing.md</code> into the project's custom instructions</td>
 </tr>
 <tr>
 <td><strong>ChatGPT Custom GPTs</strong></td>
-<td>paste <code>SKILL.md</code> into the GPT's Instructions field</td>
+<td>paste <code>dist/avoid-ai-writing.md</code> into the GPT's Instructions field</td>
 </tr>
 </tbody></table>
 <h4>Triggering the skill</h4>
@@ -875,6 +860,11 @@ are advisory). <a href="./examples/"><code>examples/</code></a> has the schema. 
 entirely and put your guide in your agent's context alongside a
 <a href="#triggering-the-skill">voice profile</a>, as instructions rather than as a checked
 rule set.</p>
+<p>After a rewrite, <code>node scripts/normalize-quotes.js draft.md --reference original.md</code>
+prints prose marks normalized to the original document's convention; add <code>--write</code>
+to save it. Explicit <code>--quotes straight|curly</code> overrides inference. It shares the
+checker's Markdown protection. See the
+<a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/examples/README.md#normalize-quote-marks-after-a-rewrite">usage and limits</a>.</p>
 <p>If you want Google, Microsoft, Red Hat, or Salesforce style checked in CI,
 <a href="https://github.com/vale-cli/vale">Vale</a> already covers that. Its
 <a href="https://github.com/vale-cli/packages">package registry</a> carries
