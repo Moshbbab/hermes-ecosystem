@@ -836,6 +836,12 @@ No host env vars by default
 
 ✅ Passthrough vars + `docker_forward_env` forwarded via `-e`
 
+**terminal** (SSH)
+
+No host env vars by default
+
+✅ Passthrough vars forwarded via `SendEnv`; the remote `sshd_config` needs a matching `AcceptEnv` (see [SSH backend](/docs/user-guide/configuration#ssh-backend))
+
 **terminal** (Modal)
 
 No host env/files by default
