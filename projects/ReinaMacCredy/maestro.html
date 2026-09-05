@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReinaMacCredy/maestro — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. It…">
+<meta name="description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ReinaMacCredy/maestro">
 <meta property="og:title" content="ReinaMacCredy/maestro — Hermes Atlas">
-<meta property="og:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. It…">
+<meta property="og:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ReinaMacCredy/maestro">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ReinaMacCredy/maestro — Hermes Atlas">
-<meta name="twitter:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. It…">
+<meta name="twitter:description" content="Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=maestro&amp;subtitle=Local-first+coordination+for+human+and+agent+work%3A+durable+work%2C+decisions%2C+dispatches%2C+evidence%2C+and+prompt-first+methods%2C+powered+by+TypeScript+and+Bun.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ReinaMacCredy/maestro#software",
   "name": "maestro",
-  "description": "Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. It utilizes a mechanism kernel with a SQLite store and event log to manage structured workflows through plugins, recipes, and skills.",
+  "description": "Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root. Written in TypeScript and running on Bun, it utilizes a mechanism kernel and a SQLite store to manage workflows without requiring a background service.",
   "url": "https://hermesatlas.com/projects/ReinaMacCredy/maestro",
   "codeRepository": "https://github.com/ReinaMacCredy/maestro",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "ReinaMacCredy",
     "url": "https://github.com/ReinaMacCredy"
   },
-  "dateModified": "2026-09-04T19:02:19.000Z",
+  "dateModified": "2026-09-05T15:14:49.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-04</span>
+    <span><span class="meta-label">updated</span>2026-09-05</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and evidence within a repository's Git root. It utilizes a mechanism kernel with a SQLite store and event log to manage structured workflows through plugins, recipes, and skills.</p>
+    <p class="summary-text">Maestro is a local-first coordination system for human and agent collaboration that stores work, decisions, and sessions within a repository's Git root. Written in TypeScript and running on Bun, it utilizes a mechanism kernel and a SQLite store to manage workflows without requiring a background service.</p>
     <ul class="summary-highlights">
-      <li>Written in TypeScript and runs on Bun without background services.</li>
-      <li>Implements SLP v2 for supervised team coordination and role-based work.</li>
-      <li>Manages work states from open to done using structured command operations.</li>
+      <li>Operates via a mechanism kernel, plugins, and Markdown-based recipes.</li>
+      <li>Implements the SLP cooperative-agent protocol for supervised team generations.</li>
+      <li>Manages work trees, immutable decision records, and cross-role handbacks.</li>
     </ul>
   </div>
 </section>
@@ -190,10 +190,11 @@ older executable, it preserves that executable as <code>maestro-legacy</code> if
 rollback executable already exists.</p>
 <p>Install also scaffolds <code>~/maestro</code>, the Supervisor room, and registers the
 current repository there, and writes the shared method to
-<code>~/maestro/WORKFLOW.md</code>. It materializes nine managed skills under
+<code>~/maestro/WORKFLOW.md</code>. It materializes ten managed skills under
 <code>~/maestro/skills</code>: <code>maestro-bundle</code>, <code>maestro-design</code>, <code>maestro-work</code>,
-<code>maestro-verify</code>, <code>maestro-improve</code>, and the read-only <code>maestro-explore</code>,
-<code>maestro-diagnose</code>, <code>maestro-coach</code>, and <code>maestro-questionnaire</code>. The
+<code>maestro-verify</code>, <code>maestro-improve</code>, <code>maestro-council</code>, and the read-only
+<code>maestro-explore</code>, <code>maestro-diagnose</code>, <code>maestro-coach</code>, and
+<code>maestro-questionnaire</code>. The
 installer links those skills for Claude without overwriting unmanaged skills.</p>
 <p>Use <code>maestro update</code> to fetch the recorded source checkout, accept only a
 fast-forward, and resync the runtime. It refuses dirty, diverged, missing, or
@@ -216,16 +217,15 @@ mechanical.</p>
   Lead &lt;--&gt; PeerA
   Lead &lt;--&gt; PeerB
   PeerA &lt;--&gt; PeerB
-  Observer["Observer"] -. nudge .-&gt; Lead
-  Observer -. copy .-&gt; Team
 </code></pre>
 <p>In the supported SLP flow, the Hub Supervisor reaches the team only through
 its Team Supervisor. Inside the team, the Team Supervisor, Lead, and Peers
-communicate directly. The Observer is a fourth seat with no work: a sentinel
-tab in the team workspace hands it one packet every five minutes, and at once
-when a role pane blocks, and its only mutation is <code>work note --stall</code>, which
-Maestro turns into one fixed nudge to the stuck seat plus a copy to the Team
-Supervisor. There is no Advisor, scheduler, or background agent role.</p>
+communicate directly. Every seat launches as a native harness profile
+(<code>claude --agent maestro-&lt;seat&gt;</code> or <code>codex --profile maestro-&lt;seat&gt;</code>) rendered
+by <code>maestro install</code> from a maestro-owned profile file, so its mandate is its
+system prompt and survives <code>/clear</code>. Attention is the seat's own
+<code>work note --blocked</code>, pushed one seat up; there is no Observer, Advisor,
+scheduler, or background agent role.</p>
 <p>SLP is a cooperative-agent protocol, not a shell security sandbox. Maestro
 checks the nine SLP operations at their supported boundaries: Hub operations
 must run from the Hub room, while project role operations require the current
@@ -253,12 +253,14 @@ maestro decide
 <p>Work moves only through <code>OPEN -&gt; ACTIVE -&gt; RETURNED -&gt; DONE</code>. Lead accepts
 Peer returns; Team Supervisor accepts Lead returns. Settled choices use one
 immutable <code>maestro decide</code> record and explicit replacement.</p>
-<p>The Team Supervisor may open one optional foreground Watch Pane with existing
-Herdr pane control. Watch labels currently available raw output, but is not an
-agent and has no prompt, store write, gate, intervention, or decision
-authority. Its rolling transcript is runtime-only and is deleted at stop.
-A seat that needs a fact from above records <code>work note --blocked</code>; Maestro
-pushes the <code>BLOCKED</code> line one seat up without changing the work state.</p>
+<p><code>team start</code> opens one runtime pane per generation through Maestro's Herdr
+plugin (<code>maestro install</code> links it). The runtime pane is not an agent: it
+holds the generation's Herdr event subscription, renders the team's pane
+output, and records a <code>blocked</code> pane or an idle pane that still holds ACTIVE
+work as a <code>stall:dialog</code> or <code>stall:silence</code> entry by the actor <code>runtime</code>,
+nudging the stuck seat once per item and kind until the store changes. A seat
+that needs a fact from above records <code>work note --blocked</code>; Maestro pushes
+the <code>BLOCKED</code> line one seat up without changing the work state.</p>
 <p>Normal stop uses one transient foreground non-agent helper pane in the Hub so
 the Team Supervisor can close itself safely. This is internal, not another SLP
 operation: <code>STOPPED</code> is recorded only after the team workspace is absent, and
@@ -318,6 +320,10 @@ bundles; <code>import</code> brings a <code>.waymark/</code> tree in with an ite
 and a dry run.</li>
 <li><code>maestro recipe list|show</code> serves methods; <code>maestro plugin list|enable|disable</code>
 manages the configured extension set.</li>
+<li><code>maestro graph run|next|result|show|list|trust</code> drives a pre-known
+multi-agent path from one graph markdown file; maestro executes the
+deterministic nodes and hands the agent nodes back to whichever harness
+is driving.</li>
 <li><code>maestro import rust</code> imports preserved Rust data; <code>maestro legacy show</code>
 reads imported cards and files.</li>
 <li><code>maestro install</code>, <code>maestro update</code>, <code>maestro uninstall</code>, and
@@ -335,8 +341,8 @@ are named and skipped. When every registered project is running normally, the
 brief says so in one line. The <code>hm</code> shell function focuses the Supervisor room
 and prints this brief; it does not start an agent.</p>
 <h3>Observer mode</h3>
-<p>This is the read-only store mode for administrative inspection. It is not the
-SLP Observer seat and does not create a background observer.</p>
+<p>This is the read-only store mode for administrative inspection. It is not an
+SLP seat and does not create a background process.</p>
 <p>Set <code>MAESTRO_READ_ONLY=1</code> to run Maestro as an observer. Pure commands such as
 status, search, recipes, and read-only list/show operations remain available.
 Mutating commands fail with <code>READ_ONLY</code>; external plugins are not loaded; and
