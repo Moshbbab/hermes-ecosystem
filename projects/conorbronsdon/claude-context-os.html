@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/claude-context-os — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Context OS is a Git-backed context and workflow layer designed to maintain durable project state, decisions, and instructions for coding agents in Markdown. It…">
+<meta name="description" content="Context OS is a Git-backed context and workflow layer designed to manage durable project information for coding agents in Markdown. It uses a deterministic…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta property="og:description" content="Context OS is a Git-backed context and workflow layer designed to maintain durable project state, decisions, and instructions for coding agents in Markdown. It…">
+<meta property="og:description" content="Context OS is a Git-backed context and workflow layer designed to manage durable project information for coding agents in Markdown. It uses a deterministic…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/claude-context-os">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/claude-context-os — Hermes Atlas">
-<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer designed to maintain durable project state, decisions, and instructions for coding agents in Markdown. It…">
+<meta name="twitter:description" content="Context OS is a Git-backed context and workflow layer designed to manage durable project information for coding agents in Markdown. It uses a deterministic…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=claude-context-os&amp;subtitle=Portable%2C+evolving+context+and+workflow+layer+that+works+across+Claude+Code%2C+Codex%2C+Hermes+Agent%2C+OpenClaw%2C+Cursor%2C+Devin+and+other+compatible+coding+agents.+All+backed+by+Git.+&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os#software",
   "name": "claude-context-os",
-  "description": "Context OS is a Git-backed context and workflow layer designed to maintain durable project state, decisions, and instructions for coding agents in Markdown. It utilizes a deterministic lifecycle kernel to manage session handoffs, memory proposals, and state transitions across multiple supported adapters.",
+  "description": "Context OS is a Git-backed context and workflow layer designed to manage durable project information for coding agents in Markdown. It uses a deterministic lifecycle kernel to handle setup, checkpoints, and handoffs through reviewed proposals and receipts rather than relying on native agent memory.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os",
   "codeRepository": "https://github.com/conorbronsdon/claude-context-os",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-05T04:40:14.000Z",
+  "dateModified": "2026-09-05T09:22:23.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Context OS is a Git-backed context and workflow layer designed to maintain durable project state, decisions, and instructions for coding agents in Markdown. It utilizes a deterministic lifecycle kernel to manage session handoffs, memory proposals, and state transitions across multiple supported adapters.</p>
+    <p class="summary-text">Context OS is a Git-backed context and workflow layer designed to manage durable project information for coding agents in Markdown. It uses a deterministic lifecycle kernel to handle setup, checkpoints, and handoffs through reviewed proposals and receipts rather than relying on native agent memory.</p>
     <ul class="summary-highlights">
-      <li>Provides first-class support for Claude Code, Codex, and OpenClaw.</li>
-      <li>Uses a Git-backed repository to store reviewable context and decision logs.</li>
-      <li>Employs a deterministic kernel for hash-checked setup and checkpoint proposals.</li>
+      <li>Supports Claude Code, Codex, OpenClaw, and OpenCode as first-class agents.</li>
+      <li>Stores identity, decisions, and workflows in plain Markdown files.</li>
+      <li>Uses a source-neutral migration workflow for chats and documents.</li>
     </ul>
   </div>
 </section>
@@ -156,7 +156,7 @@
     <div align="center">
 
 <h2>Context OS</h2>
-<p>A portable, evolving Git-backed context and workflow layer for coding agents. Claude Code, Codex, and OpenClaw are first-class; Hermes Agent, Cursor, and Devin adapters are experimental.</p>
+<p>A portable, evolving Git-backed context and workflow layer for coding agents. Claude Code, Codex, OpenClaw, and OpenCode are first-class; Hermes Agent, Cursor, and Devin adapters are experimental.</p>
 <p><a href="https://github.com/conorbronsdon/agent-context-os/stargazers"><img src="https://img.shields.io/github/stars/conorbronsdon/agent-context-os?style=social" alt="GitHub stars" loading="lazy" decoding="async"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License: MIT" loading="lazy" decoding="async"></a>
 <a href="https://docs.anthropic.com/en/docs/claude-code"><img src="https://img.shields.io/badge/Claude%20Code-ready-d97757?style=flat-square" alt="Claude Code" loading="lazy" decoding="async"></a>
@@ -166,7 +166,7 @@
 </div>
 
 <p>Chat history, project instructions, and copied prompts drift apart. Context OS puts the durable parts in plain Markdown: who you are, what you are working on, decisions already made, and the workflows you want an agent to follow.</p>
-<p>Claude Code, Codex, and OpenClaw, plus the experimental Hermes, Cursor, and
+<p>Claude Code, Codex, OpenClaw, and OpenCode, plus the experimental Hermes, Cursor, and
 Devin adapters, read the same repository state. A deterministic
 lifecycle kernel turns reviewed setup, checkpoint, and close requests into
 hash-checked proposals and receipts, without treating native memory as the
@@ -196,7 +196,20 @@ source of truth.</p>
 </tr>
 </tbody></table>
 <p>Context OS does not scrape every account, sync product UIs automatically, or install integrations on setup. Imports are selective, browser-project sync is manual, and external capabilities remain opt-in.</p>
+<h3>Experimental starter for one project</h3>
+<p>For a small project, try keeping the objective, decisions, and latest handoff
+in one instruction file. If separate notes help you review that context, the
+<a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/minimal-starter.md">experimental three-file starter</a> provides copyable
+instructions, current work, and a handoff. It needs a file-capable agent and
+manual review, with no installer or runtime registration.</p>
+<p>The starter has not been established as the preferred default. Read the
+<a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/minimal-starter-evidence.md">evidence and limits</a>, then try the
+<a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/minimal-starter.md#evaluate-it-for-one-week">one-week comparison</a>.
+Existing full-template users should keep their current workflow and evaluate
+the starter in a separate project.</p>
 <h3>Quick start</h3>
+<p>Try <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/first-handoff.md">your first reviewed handoff</a> for a small Claude-to-Codex
+example. Then inspect <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/continuity.md">source briefings and change history</a>.</p>
 <p>Personal and business context often belongs in a private repository. Create an empty private repository first if that applies to you, and never commit credentials or a raw account export.</p>
 <pre><code class="language-bash">git clone https://github.com/conorbronsdon/agent-context-os.git my-context
 cd my-context
@@ -209,6 +222,7 @@ git remote add origin &lt;YOUR_PRIVATE_REPO_URL&gt;
 bash scripts/setup.sh --agents claude,codex
 # bash scripts/setup.sh --agents hermes
 # bash scripts/setup.sh --agents openclaw
+# bash scripts/setup.sh --agents opencode
 # bash scripts/setup.sh --agents cursor
 # bash scripts/setup.sh --agents devin
 # bash scripts/setup.sh --agents none  # core-only
@@ -267,6 +281,10 @@ contract</a>.</p>
 <td>Follow the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/openclaw/README.md">OpenClaw adapter</a>, then run <code>/contextos &lt;alias&gt; setup</code> through an authorized operator surface</td>
 </tr>
 <tr>
+<td>New workspace in OpenCode</td>
+<td>Follow the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/opencode/README.md">OpenCode adapter</a>, then run <code>/context-setup</code> from the repository root</td>
+</tr>
+<tr>
 <td>New workspace in Cursor</td>
 <td>Follow the separate <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/cursor/README.md">experimental IDE and CLI paths</a>, then run <code>/context-setup</code></td>
 </tr>
@@ -286,7 +304,7 @@ contract</a>.</p>
 <p>The setup interview fills the identity, first project, workflows, and weekly state files. It can start from your answers or from a migration packet you reviewed first. See the full <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/getting-started.md">getting started guide</a> for prerequisites, privacy choices, and verification.</p>
 <h3>See the loop</h3>
 <p><img src="https://raw.githubusercontent.com/conorbronsdon/claude-context-os/main/docs/assets/start-demo.gif" alt="A start session in Claude Code: state files load and a session briefing comes back, using sample data from the included example musician project" loading="lazy" decoding="async"></p>
-<p><code>/start</code> in Claude Code or Hermes, <code>/context-start</code> in Cursor, <code>$start</code> in Codex,
+<p><code>/start</code> in Claude Code or Hermes, <code>/context-start</code> in Cursor or OpenCode, <code>$start</code> in Codex,
 <code>/contextos &lt;alias&gt; start</code> in OpenClaw, and <code>@skills:context-start</code> in a Devin session read your state,
 priorities, decisions, blockers, and recent handoff. The result is grounded in
 files rather than reconstructed from chat.</p>
@@ -300,6 +318,7 @@ files rather than reconstructed from chat.</p>
 <th>Moment</th>
 <th>Claude Code</th>
 <th>Codex</th>
+<th>OpenCode</th>
 <th>Hermes (experimental)</th>
 <th>OpenClaw</th>
 <th>Cursor IDE/CLI (experimental)</th>
@@ -311,6 +330,7 @@ files rather than reconstructed from chat.</p>
 <td>First run or major refresh</td>
 <td><code>/setup</code></td>
 <td><code>$setup</code></td>
+<td><code>/context-setup</code></td>
 <td><code>/setup</code></td>
 <td><code>/contextos &lt;alias&gt; setup</code></td>
 <td><code>/context-setup</code></td>
@@ -321,6 +341,7 @@ files rather than reconstructed from chat.</p>
 <td>Start work</td>
 <td><code>/start</code></td>
 <td><code>$start</code></td>
+<td><code>/context-start</code></td>
 <td><code>/start</code></td>
 <td><code>/contextos &lt;alias&gt; start</code></td>
 <td><code>/context-start</code></td>
@@ -331,6 +352,7 @@ files rather than reconstructed from chat.</p>
 <td>Save a checkpoint</td>
 <td><code>/update</code></td>
 <td><code>$update</code></td>
+<td><code>/context-update</code></td>
 <td><code>/update</code></td>
 <td><code>/contextos &lt;alias&gt; update</code></td>
 <td><code>/context-update</code></td>
@@ -341,6 +363,7 @@ files rather than reconstructed from chat.</p>
 <td>Finish work</td>
 <td><code>/end</code></td>
 <td><code>$end</code></td>
+<td><code>/context-end</code></td>
 <td><code>/end</code></td>
 <td><code>/contextos &lt;alias&gt; end</code></td>
 <td><code>/context-end</code></td>
@@ -405,6 +428,11 @@ plugin itself exposes no apply command.</p>
 <td>first-class</td>
 <td>External-plugin multi-turn lifecycle with alias-bound lightweight subagents, copied portable skills, separate private memory, and trusted-shell kernel apply</td>
 </tr>
+<tr>
+<td>OpenCode</td>
+<td>first-class</td>
+<td>Repository-native AGENTS.md and Agent Skills discovery with typed lifecycle commands, native permissions, and deterministic proposal/apply safety</td>
+</tr>
 </tbody></table>
 
 
@@ -437,6 +465,7 @@ plugin itself exposes no apply command.</p>
 <th align="right">Shared</th>
 <th align="right">Claude Code</th>
 <th align="right">Codex</th>
+<th align="right">OpenCode</th>
 <th align="right">Hermes (experimental)</th>
 <th align="right">OpenClaw</th>
 <th align="right">Cursor IDE/CLI (experimental)</th>
@@ -452,12 +481,14 @@ plugin itself exposes no apply command.</p>
 <td align="right">Reads</td>
 <td align="right">Reads</td>
 <td align="right">Reads</td>
+<td align="right">Reads</td>
 </tr>
 <tr>
 <td>Deterministic proposal/apply and receipts</td>
 <td align="right">Yes</td>
 <td align="right">Adapter</td>
 <td align="right">Native skill calls</td>
+<td align="right">Typed command + native skill</td>
 <td align="right">Installed skill calls</td>
 <td align="right">Copied skill calls</td>
 <td align="right">Native skill calls</td>
@@ -468,6 +499,7 @@ plugin itself exposes no apply command.</p>
 <td align="right">Semantics</td>
 <td align="right"><code>/setup</code> etc.</td>
 <td align="right"><code>$setup</code> etc.</td>
+<td align="right"><code>/context-setup</code> etc.</td>
 <td align="right"><code>/setup</code> etc.</td>
 <td align="right"><code>/contextos &lt;alias&gt; setup</code> etc.</td>
 <td align="right"><code>/context-setup</code> etc.</td>
@@ -478,6 +510,7 @@ plugin itself exposes no apply command.</p>
 <td align="right">Event contract only</td>
 <td align="right"><code>.claude/</code></td>
 <td align="right"><code>.codex/</code></td>
+<td align="right">Not claimed</td>
 <td align="right">Optional adapter</td>
 <td align="right">Not claimed</td>
 <td align="right">Not claimed</td>
@@ -487,6 +520,7 @@ plugin itself exposes no apply command.</p>
 <td>Native memory</td>
 <td align="right">No</td>
 <td align="right">Claude auto-memory</td>
+<td align="right">Outside contract</td>
 <td align="right">Outside contract</td>
 <td align="right"><code>MEMORY.md</code> / <code>USER.md</code></td>
 <td align="right">Private workspace</td>
@@ -503,6 +537,9 @@ entry declares supported hosts, credentials, reads, writes, publish or
 destructive capabilities, confirmation gates, evidence, a health check, and
 uninstall behavior.</p>
 <p>Start with the task-based <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/integrations-guide.md">integration chooser</a>, add at most one new trust boundary at a time, then read the selected generated entry in full.</p>
+<p>Maintainers can run <code>python3 scripts/integrations.py freshness</code> to see which
+entries are approaching or past their human evidence-review date. Pass
+<code>--as-of YYYY-MM-DD</code> when reproducible output is required.</p>
 <p>The catalog spans portable skill collections, creator tools, CLIs, and MCP
 servers. Treat the generated catalog and task-based chooser as the current
 inventory rather than relying on a hand-maintained summary. <code>listed</code> and
@@ -526,8 +563,10 @@ contextos/                 Deterministic lifecycle kernel
 .claude/skills/            Claude Code-only skills
 .claude/hooks/             Claude Code-only safety and session hooks
 .codex/hooks.json          Codex lifecycle advisory adapter
+.opencode/commands/        OpenCode typed lifecycle adapters
 adapters/hermes/           Hermes installation and optional hook adapter
 adapters/openclaw/         First-class OpenClaw plugin and skills adapter
+adapters/opencode/         First-class OpenCode onboarding and conformance
 adapters/cursor/           Experimental Cursor IDE and CLI adapter
 adapters/devin/            Experimental Devin session and Review adapter
 runtimes/                  Machine-readable capability manifests
@@ -606,6 +645,10 @@ behavior of an installed agent version or an external service.</p>
 <td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/openclaw/README.md">OpenClaw adapter</a></td>
 </tr>
 <tr>
+<td>Use the repository in OpenCode</td>
+<td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/opencode/README.md">OpenCode adapter</a></td>
+</tr>
+<tr>
 <td>Use the repository in Cursor</td>
 <td><a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/cursor/README.md">Experimental Cursor IDE and CLI adapter</a></td>
 </tr>
@@ -661,11 +704,10 @@ behavior of an installed agent version or an external service.</p>
 <h3>Contributing</h3>
 <p>This is a template. Structural contributions, clearer conventions, reusable skills, and integration catalog entries are welcome. Open an issue with the pattern and the problem it solves.</p>
 <p>See <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for setup, the validator, generated files, and conventions, and <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/SECURITY.md">SECURITY.md</a> to report a vulnerability privately. Issues labelled <a href="https://github.com/conorbronsdon/agent-context-os/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><code>good first issue</code></a> need no external account or credential.</p>
-<h3>Used by</h3>
+<h3>Created By</h3>
 <ul>
 <li><a href="https://github.com/conorbronsdon">Conor Bronsdon</a>, host of the <a href="https://chainofthought.show/?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=repo-readme&amp;utm_content=agent-context-os">Chain of Thought podcast</a></li>
 </ul>
-<p>Using the template? Open a PR to add yourself.</p>
 <h3>Disclaimer</h3>
 <p>This is an independent personal project. It is not affiliated with, sponsored by, or endorsed by Anthropic, OpenAI, Google, or another provider.</p>
 <h3>License</h3>
@@ -686,7 +728,7 @@ behavior of an installed agent version or an external service.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 22.6K</div>
+        <div class="stars">★ 22.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
