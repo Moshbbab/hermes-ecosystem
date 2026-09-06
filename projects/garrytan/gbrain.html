@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis. It extracts entity references to build a…">
+<meta name="description" content="GBrain is a memory and synthesis layer for AI agents that combines graph traversal, gap analysis, and automated entity extraction. It functions as a persistent…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis. It extracts entity references to build a…">
+<meta property="og:description" content="GBrain is a memory and synthesis layer for AI agents that combines graph traversal, gap analysis, and automated entity extraction. It functions as a persistent…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis. It extracts entity references to build a…">
+<meta name="twitter:description" content="GBrain is a memory and synthesis layer for AI agents that combines graph traversal, gap analysis, and automated entity extraction. It functions as a persistent…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis. It extracts entity references to build a self-wiring knowledge graph and generates cited prose answers instead of raw search results. The system supports multi-user institutional memory with scoped access controls and runs on local hardware using PGLite.",
+  "description": "GBrain is a memory and synthesis layer for AI agents that combines graph traversal, gap analysis, and automated entity extraction. It functions as a persistent institutional or personal knowledge base, providing cited prose answers and maintaining a self-wiring knowledge graph of people, companies, and events.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-03T08:26:06.000Z",
+  "dateModified": "2026-09-06T19:02:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 29646
+    "userInteractionCount": 29659
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Garry's Opinionated OpenClaw/Hermes Agent Brain</p>
 
   <div class="meta-row">
-    <span class="stars">★ 29.6K</span>
+    <span class="stars">★ 29.7K</span>
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-03</span>
+    <span><span class="meta-label">updated</span>2026-09-06</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory and context layer for AI agents that provides synthesis, graph traversal, and gap analysis. It extracts entity references to build a self-wiring knowledge graph and generates cited prose answers instead of raw search results. The system supports multi-user institutional memory with scoped access controls and runs on local hardware using PGLite.</p>
+    <p class="summary-text">GBrain is a memory and synthesis layer for AI agents that combines graph traversal, gap analysis, and automated entity extraction. It functions as a persistent institutional or personal knowledge base, providing cited prose answers and maintaining a self-wiring knowledge graph of people, companies, and events.</p>
     <ul class="summary-highlights">
-      <li>Generates cited prose answers with explicit gap analysis</li>
-      <li>Builds a knowledge graph using typed edges without LLM calls</li>
-      <li>Supports scoped institutional memory with per-user data isolation</li>
+      <li>Automates entity extraction and typed edge creation without LLM calls.</li>
+      <li>Provides synthesis with citations and explicit gap analysis for missing data.</li>
+      <li>Supports multi-user scoped access and local PGLite database deployment.</li>
     </ul>
   </div>
 </section>
@@ -280,6 +280,12 @@ gbrain query "what themes show up across my notes?"
 <p>Postgres-at-scale, Supabase, and thin-client setup paths live in <a href="https://github.com/garrytan/gbrain/blob/main/docs/INSTALL.md"><code>docs/INSTALL.md</code></a>.</p>
 <h4>Connect GBrain to your AI client (MCP)</h4>
 <p>GBrain exposes nearly all of its 100+ operations as MCP tools (stdio and HTTP; a handful of local-only ops stay CLI-side) — or exactly the seven memory verbs with <code>--surface verbs</code>. The specific snippet depends on which client you use:</p>
+<p><strong>Upgrading an existing brain:</strong> existing search chunks need rebuilding before
+remote chunk retrieval resumes. Semantic result caching is temporarily disabled;
+stored contradiction reports and code-inspection tools have local-only limits.
+Follow the <a href="https://github.com/garrytan/gbrain/blob/main/skills/migrations/v0.48.3.0.md">upgrade recovery guide</a> for rebuild
+commands, embedding costs, and the restrictions that remain after rebuilding.
+<strong>Say to your agent:</strong> <em>"Upgrade gbrain and check whether my search index needs rebuilding."</em></p>
 <ul>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CLAUDE_CODE.md">Claude Code</a></strong> — plugin: <code>/plugin marketplace add garrytan/gbrain</code> + <code>/plugin install gbrain@gbrain</code> (MCP + skills; persona variants <code>gbrain-coding</code> / <code>gbrain-daily</code> install curated subsets — pick exactly one gbrain plugin). Marketplace-free skills: <code>gbrain skillpack scaffold --harness claude-code</code> copies a persona-curated skill set into your user-scope skills dir with a local-edit-respecting update lens. Or local one-liner: <code>claude mcp add gbrain -- gbrain serve</code> (zero server, zero tunnel). Remote with just a bearer token: <code>gbrain connect https://your-host/mcp --token gbrain_xxx</code> prints a paste-ready block (or <code>--install</code> wires it up and smoke-tests the token).</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CODEX.md">Codex</a></strong> — plugin (recommended): <code>codex plugin marketplace add garrytan/gbrain@codex-plugin</code> + <code>codex plugin add gbrain@gbrain</code> installs the MCP server AND the curated skill set. Or connect-only: <code>gbrain connect https://your-host/mcp --token gbrain_xxx --agent codex</code> (or <code>--install</code>); Codex reads the bearer from <code>$GBRAIN_REMOTE_TOKEN</code> at runtime, so the token never lands in Codex config.</li>
@@ -396,7 +402,7 @@ gbrain schema review-candidates     # human gate: promote / rename / ignore
 gbrain schema use my-pack           # activate
 </code></pre>
 <p><strong>Say to your agent:</strong> <em>"My schema isn't matching my notes — propose new types from my corpus"</em> — <em>"Add a page type for lab results to my brain's schema."</em> The schema-author skill runs the detect → suggest → review flow for you.</p>
-<p>The active pack threads through every read + write path: <code>parseMarkdown</code> infers page type from the pack's path prefixes; <code>whoknows</code> scopes expert routing to types declared <code>expert_routing: true</code>; <code>extract_facts</code> runs only on <code>extractable: true</code> types; the search cache folds the pack name + version into its key so cross-pack contamination is structurally impossible. Switch packs and the brain re-interprets itself; switch back and nothing's lost.</p>
+<p>The active pack threads through every read + write path: <code>parseMarkdown</code> infers page type from the pack's path prefixes; <code>whoknows</code> scopes expert routing to types declared <code>expert_routing: true</code>; <code>extract_facts</code> runs only on <code>extractable: true</code> types. The retained search-cache key includes the pack name + version, but semantic result reuse is temporarily disabled. Switch packs and the brain re-interprets itself; switch back and nothing's lost.</p>
 <p>Seven-tier resolution chain (per-call flag → env var → per-source DB key → brain-wide DB key → <code>gbrain.yml</code> → <code>~/.gbrain/config.json</code> → <code>gbrain-base</code> default). Full reference + authoring guide: <a href="https://github.com/garrytan/gbrain/blob/main/docs/architecture/schema-packs.md"><code>docs/architecture/schema-packs.md</code></a>.</p>
 <h3>Tutorials</h3>
 <p>Step-by-step walkthroughs for getting the most out of GBrain. Each one takes you from zero to a working outcome, with concrete commands and real numbers.</p>
@@ -440,9 +446,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 <p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. Measured 2026-09-02 at gbrain v0.48.2.0 on LongMemEval-S (cleaned Sept-2025 revision, 500 questions, 470 scored after the 30 abstention questions are dropped as the official scorer does), hybrid search mode <code>balanced</code> with reranker and autocut pinned off, k=5, single run: strict session-level <code>recall_all@5</code> of <strong>93.19%</strong> (438/470), meaning every gold session landed inside the top-5 distinct retrieved sessions, retrieval only, no reader model. The looser any-hit <code>recall_any@5</code> was 98.72% and is reported as a diagnostic, not a headline. Per-row receipts live in the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> repo. The same run also measured the default path: with the default reranker <code>voyage:rerank-2.5</code> on (what <code>balanced</code> and <code>tokenmax</code> run when <code>VOYAGE_API_KEY</code> is set), hybrid scores <strong>95.32%</strong> <code>recall_all@5</code> (448/470; any-hit 99.79%; paired against reranker-off hybrid it gains 18 questions and loses 8). One warning from the same run: <code>tokenmax</code>'s LLM multi-query expansion is harmful at k=5, 54.89% <code>recall_all@5</code> (258/470, paired +3 / -183 vs hybrid), so small-k recall is worse in that mode until variant weighting is fixed. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution) so a regression in "find the page this query names" fails CI loudly. <code>gbrain eval brainbench</code> runs the cross-harness memory conformance suite: know-to-ask, push precision/recall, write-back fidelity, and cross-session continuity, scored per harness seam (your OpenClaw's production pipeline plus Claude Code and Codex injection contracts) against a committed 141-fixture synthetic corpus — hermetic by default (in-memory PGLite, no keys, seconds), and CI gates every PR against master's committed baseline. Methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/BRAINBENCH.md"><code>docs/eval/BRAINBENCH.md</code></a>; search-mode methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md"><code>docs/eval/SEARCH_MODE_METHODOLOGY.md</code></a>. <strong>Say to your agent:</strong> <em>"Run a regression check on retrieval"</em> (your agent runs <code>gbrain eval brainbench</code>); <em>"Run the public LongMemEval benchmark"</em> (no skill backs this one; your agent runs <code>gbrain eval longmemeval &lt;longmemeval_s_cleaned.json&gt; --retrieval-only --top-k 5 --by-type --no-trajectory</code>; that in-repo command is a self-check at the default, reranker on when <code>VOYAGE_API_KEY</code> is set, and its <code>--by-type</code> summary is any-hit recall. The receipted 93.19% strict number comes from the gbrain-evals runner, <code>bash eval/runner/longmemeval-batch.sh --adapters hybrid --embedding-model openai:text-embedding-3-large --embedding-dims 1536</code>, which pins reranker and autocut off).</p>
 <p><strong>How it measures up.</strong> One distinction decides every memory-benchmark comparison: strict <code>recall_all@5</code> counts a question only when every gold session lands in the top 5, while loose any-hit counts it when a single one does, and 300 of LongMemEval-S's 470 scored questions need two or more sessions. On the strict metric, on this dataset, gbrain scores 93.19% with the reranker off (v0.48.2.0, 2026-09-02, 470 scored) and 95.32% on the default path with <code>voyage:rerank-2.5</code> on (same run, same 470); the k=5 ceiling is 99.4% because 3 questions carry 6 gold sessions. The closest strict comparisons we could find: MemPalace publishes only any-hit (96.6% / 98.4%), but rescoring its committed per-question rankings against the official gold labels gives 85.7% for its raw vector setup and 90.0% with an LLM reranker in the loop (our recomputation, their data); ContextFit publishes an All@5 of 87.45% (411/470) whose rerank layer reads gold labels during the run, so we mark it loosely comparable. The 94 to 96% figures quoted for Mastra, Mem0, MemCog, Supermemory and others are LLM-judged answer accuracy, a different race that scores the reader and judge as much as the memory; gbrain has published no answer-accuracy run yet. Pure vector on the same corpus scored 93.8% (v0.48.0.0 receipt), so the hybrid layer is roughly neutral on this benchmark and earns its keep elsewhere. Full table with sources and our read of each: <a href="https://github.com/garrytan/gbrain-evals/blob/main/docs/comparison-systems.md">gbrain-evals <code>docs/comparison-systems.md</code></a>.</p>
 <p><strong>Brain consistency.</strong> <code>gbrain eval suspected-contradictions</code> samples retrieval pairs, layered date pre-filter, query-conditioned LLM judge, persistent cache. Surfaces conflicts between takes + facts the agent has written. Wired into the daily dream cycle. <strong>Say to your agent:</strong> <em>"Did the dream cycle run — what contradictions did it surface?"</em> — <em>"Fact-check what we have on acme-example"</em> (claim-by-claim live-source verification) — or have your agent run <code>gbrain eval suspected-contradictions</code> directly.</p>
-<p><strong>Agent-authored schema.</strong> Your brain has a shape — what page types exist (<code>person</code>, <code>meeting</code>, <code>paper</code>, <code>case</code>, <code>lab-result</code>), what they link to (<code>attended</code>, <code>authored</code>, <code>prescribed-by</code>), what facts get extracted automatically. The default ships with universal types, but your brain's actual shape is not the default shape. Agents can evolve that shape on your behalf via 14 <code>gbrain schema</code> CLI verbs + a batched MCP op (<code>schema_apply_mutations</code>, admin scope, NOT localOnly so remote agents reach it over HTTPS). Atomic file locks, audit log with the agent's identity, chunked UPDATE backfill in 1000-row batches that never wedge concurrent writers. The brain stops being a pile of notes and becomes something with structure. <strong>Say to your agent:</strong> <em>"Add a page type to my schema for case files"</em> — <em>"My brain has untyped pages — propose new types from my corpus."</em> <strong>Why it matters:</strong> <a href="https://github.com/garrytan/gbrain/blob/main/docs/what-schemas-unlock.md"><code>docs/what-schemas-unlock.md</code></a> — 7 killer use cases (4000 invisible meetings, founder ops brain, research brain, legal brain, team brain, agent-as-co-curator). <strong>5-minute walkthrough:</strong> <a href="https://github.com/garrytan/gbrain/blob/main/docs/schema-author-tutorial.md"><code>docs/schema-author-tutorial.md</code></a>. <strong>Agent skill:</strong> <a href="https://github.com/garrytan/gbrain/blob/main/skills/schema-author/SKILL.md"><code>skills/schema-author/SKILL.md</code></a>.</p>
-<h3>Integrations</h3>
-<p>Data flowing into the brain. Each integration is a recipe — markdown + setup hints — that ships in <code>recipes/</code> and is discovera</p>
+<p><strong>Agent-authored schema.</strong> Your brain has a shape — what page types exist (<code>person</code>, <code>meeting</code>, <code>paper</code>, <code>case</code>, <code>lab-result</code>), what they link to (<code>attended</code>, <code>authored</code>, <code>prescribed-by</code>), what facts get extracted automatically. The default ships with universal types, but your brain's actual shape is not the default shape. Agents can evolve that shape on your behalf via 14 <code>gbrain schema</code> CLI verbs + a batched MCP op (<code>schema_apply_mutations</code>, admin scope, NOT localOnly so remote agents reach it over HTTPS). Atomic file locks, audit log with the agent's identity, chunked UPDATE backfill in 1000-row batches that never wedge concurrent writers. The brain stops being a pile of notes and becomes something with structure. <strong>Say to your agent:</strong> <em>"Add a page type to my schema for case files"</em> — <em>"My brain has untyped pages — propose new types from my corpus."</em> <strong>Why it matters:</strong> [`docs/what-schemas-</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
@@ -461,7 +465,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 22.7K</div>
+        <div class="stars">★ 22.8K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -477,7 +481,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 271</div>
+        <div class="stars">★ 272</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
