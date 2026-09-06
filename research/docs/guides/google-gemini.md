@@ -104,6 +104,12 @@ ID
 
 Notes
 
+Gemini 3.8 Flash
+
+`gemini-3.8-flash`
+
+Most capable Flash model for long-horizon agentic and coding work
+
 Gemini 3.7 Flash
 
 `gemini-3.7-flash`

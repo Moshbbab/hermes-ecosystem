@@ -70,7 +70,7 @@ Resume (re-anchors the timer — no instant stale fire).
 
 Remove the heartbeat.
 
-`/hb` is an alias. Works on the CLI and gateway platforms (on Slack, use `/hermes heartbeat …`).
+`/hb` is an alias. Works on the CLI, the TUI / Desktop app, and gateway platforms (on Slack, use `/hermes heartbeat …`).
 
 ## Behavior details
 
