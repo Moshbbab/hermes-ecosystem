@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Codex, and Cursor. It provides retroactive search…">
+<meta name="description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides millisecond…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Codex, and Cursor. It provides retroactive search…">
+<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides millisecond…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Codex, and Cursor. It provides retroactive search…">
+<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides millisecond…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Memory+for+coding+agents+built+from+the+session+history+already+on+disk%3A+Claude+Code%2C+Codex%2C+Cursor%2C+Copilot+CLI%2C+OpenClaw+and+18+more.+Search+months+of+past+sessions%2C+including+ev&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Codex, and Cursor. It provides retroactive search and cross-agent recall, allowing agents to access past decisions, commands, and file edits through MCP or a CLI.",
+  "description": "deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides millisecond lookups over gigabytes of past sessions, allowing agents to retrieve previous decisions, commands, and file edits via MCP or a CLI.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-09-06T10:39:17.000Z",
+  "dateModified": "2026-09-06T15:30:58.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 780
+    "userInteractionCount": 781
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,7 +120,7 @@
   <p class="project-desc">Memory for coding agents built from the session history already on disk: Claude Code, Codex, Cursor, Copilot CLI, OpenClaw and 18 more. Search months of past sessions, including everything from before you installed it, and recall them in any agent. No LLM, no embeddings, one local Go binary.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 780</span>
+    <span class="stars">★ 781</span>
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Codex, and Cursor. It provides retroactive search and cross-agent recall, allowing agents to access past decisions, commands, and file edits through MCP or a CLI.</p>
+    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes local session history from tools like Claude Code, Cursor, and Copilot. It provides millisecond lookups over gigabytes of past sessions, allowing agents to retrieve previous decisions, commands, and file edits via MCP or a CLI.</p>
     <ul class="summary-highlights">
-      <li>Indexes existing local session history from over 20 coding agents.</li>
-      <li>Provides millisecond lookups over gigabytes of historical data.</li>
+      <li>Indexes existing local history from over 20 different coding agents.</li>
       <li>Redacts keys and tokens during the indexing process for safety.</li>
+      <li>Provides recall hooks before file edits or after command failures.</li>
     </ul>
   </div>
 </section>
@@ -243,7 +243,7 @@ harness supports, aider's read-only context file, and the Windows <code>cmd /c d
 <details>
 <summary>What gets written into each agent's own guidance file</summary>
 
-<p>Install also writes user-level guidance for the harnesses it detects: Claude Code, Codex, opencode, Gemini CLI, Antigravity, Qwen, Kimi Code, pi, Copilot, Cursor, Goose, OpenClaw, Hermes, Roo Code, omp, DeepSeek Harness and Zed each get it in their own guidance file (or under the configured <code>XDG_CONFIG_HOME</code>). Re-run rewrites deja's skill or marked block without changing surrounding user content. Use <code>deja install --all --no-guidance</code> to opt out; Grok Build gets the shared skill in <code>~/.agents/skills</code>, which is what it reads; the <code>~/.grok/GROK.md</code> written beside it is for the unrelated community CLI that shares that directory. Cursor has no user-level instructions file, so it gets a skill at <code>~/.cursor/skills/</code> instead, read only when something looks relevant rather than every session.</p>
+<p>Install also writes user-level guidance for the harnesses it detects: Claude Code, Codex, opencode, Gemini CLI, Antigravity, Qwen, Kimi Code, pi, Copilot, VS Code Copilot Chat, Cursor, Goose, OpenClaw, Hermes, Roo Code, omp, DeepSeek Harness and Zed each get it in their own guidance file (or under the configured <code>XDG_CONFIG_HOME</code>). Re-run rewrites deja's skill or marked block without changing surrounding user content. Use <code>deja install --all --no-guidance</code> to opt out; Grok Build gets the shared skill in <code>~/.agents/skills</code>, which is what it reads; the <code>~/.grok/GROK.md</code> written beside it is for the unrelated community CLI that shares that directory. Cursor has no user-level instructions file, so it gets a skill at <code>~/.cursor/skills/</code> instead, read only when something looks relevant rather than every session.</p>
 </details>
 
 <h3>What you get</h3>
@@ -593,7 +593,7 @@ anything already wired to them.</p>
 <td>VS Code Copilot Chat</td>
 <td align="center">✅</td>
 <td align="center">✕</td>
-<td align="center">—</td>
+<td align="center">✅</td>
 <td align="center">—</td>
 <td align="center">✕</td>
 <td align="center">paste</td>
@@ -1083,7 +1083,7 @@ the <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/ARCHITECTURE.md#s
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 270</div>
+        <div class="stars">★ 271</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
