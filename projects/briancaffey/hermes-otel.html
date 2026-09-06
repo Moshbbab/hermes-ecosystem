@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, SigNoz, and Grafana.",
+  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, and SigNoz.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-09-05T19:28:34.000Z",
+  "dateModified": "2026-09-06T03:07:36.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-05</span>
+    <span><span class="meta-label">updated</span>2026-09-06</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, SigNoz, and Grafana.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, and SigNoz.</p>
     <ul class="summary-highlights">
       <li>Exports LLM tool calls and model invocations as OTel spans.</li>
-      <li>Compatible with any OTLP HTTP endpoint for traces and metrics.</li>
-      <li>Includes a four-tier test suite for unit, integration, and E2E testing.</li>
+      <li>Compatible with any OTLP HTTP endpoint and multiple observability backends.</li>
+      <li>Includes a four-tier test suite covering unit, integration, E2E, and smoke tests.</li>
     </ul>
   </div>
 </section>
@@ -580,6 +580,18 @@ headers:                        # merged onto outgoing OTLP requests
 <td><code>force_flush_on_session_end</code></td>
 <td><code>HERMES_OTEL_FORCE_FLUSH_ON_SESSION_END</code></td>
 </tr>
+<tr>
+<td><code>host_metrics</code></td>
+<td><code>HERMES_OTEL_HOST_METRICS</code></td>
+</tr>
+<tr>
+<td><code>host_metrics_gpu</code></td>
+<td><code>HERMES_OTEL_HOST_METRICS_GPU</code> (<code>auto</code> / <code>amd</code> / <code>nvidia</code> / <code>off</code>)</td>
+</tr>
+<tr>
+<td><code>host_metrics_interval_ms</code></td>
+<td><code>HERMES_OTEL_HOST_METRICS_INTERVAL_MS</code></td>
+</tr>
 </tbody></table>
 <p><code>pyyaml</code> is optional — if not installed, the YAML file is silently skipped and only env vars + defaults apply. Malformed YAML logs a single warning and falls back to defaults.</p>
 <h5>MCP keepalive pings</h5>
@@ -644,6 +656,9 @@ headers:                        # merged onto outgoing OTLP requests
 </tr>
 </tbody></table>
 <p>Zero/empty aggregators are omitted rather than emitted as empty strings.</p>
+<p>Every span in a turn — the root, <code>llm.*</code>, <code>api.*</code> and <code>tool.*</code> — also carries
+<code>hermes.turn.number</code>, the 1-based index of the user prompt within the session,
+so any backend can group or filter a conversation by turn.</p>
 <h4>Tool identity, outcome, skill inference</h4>
 <p>Each <code>tool.*</code> span now also carries:</p>
 <ul>
@@ -664,6 +679,42 @@ headers:                        # merged onto outgoing OTLP requests
 </ul>
 <p><strong>Backpressure:</strong> the queue is bounded by <code>span_batch_max_queue_size</code> (default 2048). If the agent outruns the exporter, the oldest enqueued spans are dropped — hermes keeps running rather than stalling.</p>
 <p><strong>Crash vs. graceful exit:</strong> up to <code>schedule_delay_millis</code> worth of spans may be lost on a hard crash (SIGKILL, OOM). This is the standard OTel trade-off and mirrors every production tracing stack. Graceful shutdown (<code>hermes gateway stop</code>, SIGTERM) triggers the atexit flush.</p>
+<h3>Host and GPU metrics (opt-in)</h3>
+<p>Correlate turns and tool calls with the machine they ran on. When
+<code>host_metrics: true</code>, a single in-process sampler reads the Hermes process
+tree's CPU, whole-host CPU, and any AMD/NVIDIA GPU on a fixed interval and
+exports the readings <strong>through the same OTel pipeline as everything else</strong> —
+no files, no extra process.</p>
+<pre><code class="language-yaml">host_metrics: true
+host_metrics_gpu: auto          # auto | amd | nvidia | off
+host_metrics_interval_ms: 1000
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Where it lands</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>process.cpu.utilization</code>, <code>system.cpu.utilization</code> (by <code>cpu.mode</code>)</td>
+<td>metrics, on every backend with <code>metrics: true</code></td>
+</tr>
+<tr>
+<td><code>hw.gpu.utilization</code>, <code>hw.gpu.memory.usage</code>, <code>hw.power</code> (per <code>hw.id</code>)</td>
+<td>metrics</td>
+</tr>
+<tr>
+<td><code>hermes.tool.cpu.utilization.avg</code> / <code>.peak</code>, <code>hermes.tool.gpu.utilization.avg</code> / <code>.peak</code></td>
+<td>attributes on each <code>tool.*</code> span</td>
+</tr>
+</tbody></table>
+<p>Utilization is a 0..1 ratio normalised by core count, per the OTel semantic
+conventions. CPU is the Hermes process plus its children (tool subprocesses),
+so it is attributable to the tool; GPU is the host's coincident load during the
+tool window. <code>psutil</code> ships with hermes-agent; GPU readings need <code>pynvml</code>
+(NVIDIA) or <code>amdsmi</code> (AMD) in the Hermes venv. Full details, PromQL examples
+and the Collector-based alternative: <a href="https://briancaffey.github.io/hermes-otel/configuration/host-metrics">Host &amp; GPU metrics</a>.</p>
 <h3>How it works</h3>
 <p>Hermes fires lifecycle hooks. This plugin maps them to OTel spans:</p>
 <pre><code>Turn 1:
@@ -798,6 +849,14 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
 <tr>
 <td><code>hooks.py</code></td>
 <td>Hook implementations — maps Hermes events to OTel spans with attributes</td>
+</tr>
+<tr>
+<td><code>host_metrics.py</code></td>
+<td>Opt-in CPU/GPU sampler (one thread per process) behind the <code>process.*</code> / <code>system.*</code> / <code>hw.*</code> observable instruments</td>
+</tr>
+<tr>
+<td><code>gpu_probe.py</code></td>
+<td>AMD (<code>amdsmi</code>) / NVIDIA (<code>pynvml</code>) GPU readings with a <code>rocm-smi</code> fallback</td>
 </tr>
 <tr>
 <td><code>debug_utils.py</code></td>
@@ -979,7 +1038,7 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 446</div>
+        <div class="stars">★ 445</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
