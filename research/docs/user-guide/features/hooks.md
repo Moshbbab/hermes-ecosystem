@@ -30,9 +30,9 @@ Tool interception, metrics, guardrails
 
 **[Shell hooks](#shell-hooks)**
 
-`hooks:` block in `~/.hermes/config.yaml` pointing at shell scripts
+`hooks:` block in profile `config.yaml` pointing at shell scripts
 
-CLI + Gateway
+CLI + Gateway + Desktop/TUI/dashboard chat
 
 Drop-in scripts for blocking, auto-formatting, context injection
 
@@ -2543,7 +2543,9 @@ Five additional observers (RFC #58548) extend the kanban family. All are observe
 
 ## Shell Hooks
 
-Declare shell-script hooks in your `~/.hermes/config.yaml` and Hermes will run them as subprocesses whenever the corresponding plugin-hook event fires — in both CLI and gateway sessions. No Python plugin authoring required.
+Declare shell-script hooks in your profile's `config.yaml` and Hermes will run them as subprocesses whenever the corresponding plugin-hook event fires — in CLI, gateway, Desktop, TUI, and dashboard chat sessions. No Python plugin authoring required.
+
+Desktop, TUI, and dashboard chat register hooks when building an agent, using that session's profile configuration and consent allowlist. Switching profiles does not reuse another profile's hooks. Existing hook consent requirements and safe-mode behavior still apply; unapproved hooks are skipped rather than silently approved.
 
 Use shell hooks when you want a drop-in, single-file script (Bash, Python, anything with a shebang) to:
 

@@ -97,6 +97,8 @@ Every [profile](/docs/user-guide/profiles) on every registered connection is an 
 
 Each `(connection, profile)` pair gets its own backend and socket, pooled with the same idle-reaping as local per-profile backends — background agents keep streaming while you look at another gateway.
 
+Approval buttons route back to the session's owning backend, not whichever profile is currently selected. For a local secondary profile, Desktop can use the socket that delivered the request even when the cached session binding is missing. Saved session ownership still takes precedence, and deleting or renaming that local profile clears this temporary route rather than reconnecting an obsolete backend.
+
 ### Switching and scoping
 
 The sidebar foot follows one hierarchy: **gateway → profile → sessions**. Gateways are machines or hosted backends; profiles are isolated Hermes agents that live on one gateway.
