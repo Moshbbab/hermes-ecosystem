@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that functions as an artifact router for local resources such as skills, scripts, and documentation. It…">
+<meta name="description" content="Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that functions as an artifact router for local resources such as skills, scripts, and documentation. It…">
+<meta property="og:description" content="Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for the Hermes Agent that functions as an artifact router for local resources such as skills, scripts, and documentation. It…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Hermes+Agent+plugin+for+local+knowledge+search+and+artifact+routing%E2%80%94find+the+right+skill%2C+script%2C+runbook%2C+cron+job%2C+MCP+server%2C+or+document.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a plugin for the Hermes Agent that functions as an artifact router for local resources such as skills, scripts, and documentation. It provides tools to index and search curated local directories, using search results as routing hints for the agent to inspect sources before acting.",
+  "description": "Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It provides tools for searching and retrieving routing hints from a curated local directory tree to help agents identify the correct source before taking action.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-09-06T19:17:19.000Z",
+  "dateModified": "2026-09-07T04:43:17.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-06</span>
+    <span><span class="meta-label">updated</span>2026-09-07</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a plugin for the Hermes Agent that functions as an artifact router for local resources such as skills, scripts, and documentation. It provides tools to index and search curated local directories, using search results as routing hints for the agent to inspect sources before acting.</p>
+    <p class="summary-text">Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It provides tools for searching and retrieving routing hints from a curated local directory tree to help agents identify the correct source before taking action.</p>
     <ul class="summary-highlights">
-      <li>Indexes local skills, scripts, runbooks, and MCP server configurations.</li>
-      <li>Provides tools for artifact search, retrieval, and graph neighbor traversal.</li>
-      <li>Supports implicit and explicit feedback to improve local routing hints.</li>
+      <li>Indexes local skills, runbooks, scripts, and MCP server configurations.</li>
+      <li>Provides five native tools for search, retrieval, and feedback.</li>
+      <li>Supports automatic generation of tool routing notes using model calls.</li>
     </ul>
   </div>
 </section>
@@ -463,6 +463,7 @@ okf_index_dirty/
 <p>When implicit feedback is enabled and no explicit route matches, mature same-turn evidence may supply the lower-priority route. Consumption through <code>skill_view</code> and <code>read_file</code> is accepted only from a later model request when a successful call resolves to exactly one caller-visible baseline artifact in the same current index snapshot; same-request parallel calls and route-assisted-only results remain ineligible. It uses the same current-index promotion or one verified typed-retry path, and a matching explicit rejection can veto it.</p>
 <p><code>knowledge_usage_report</code> summarizes recent activity before changing ranking, triggers, source coverage, or graph edges. Its model-facing <code>search_quality</code> section isolates live native searches from the current plugin version while excluding known probe queries. When observed consumption exists, the nested <code>implicit_consumed_rank_lower_bound</code> aggregates where it fell in each search's unassisted <code>baseline_top_ids_json</code>; it is a lower-bound operational diagnostic, never evaluation ground truth. <code>event_cohorts</code> separates current searches, probes, hourly doctor runs, other CLI/native activity, and historical-version searches, while the nested feedback summary distinguishes learned <code>knowledge_get</code>, <code>skill_view</code>, and <code>read_file</code> signals. Empty sections and duplicated aggregate/configuration diagnostics are omitted from the native response; the complete local telemetry report remains available to service, CLI, and evaluation code.</p>
 <p><code>evaluate</code> is read-only and intentionally measures the unassisted index ranking to avoid training/evaluation leakage. It replays positive local feedback against the current index and reports exact Hit@k/MRR plus parent-equivalent metrics. Parent equivalence is deliberately limited to a <code>skill_support_doc</code> and its owning skill; generic graph neighbors are not treated as successful equivalents.</p>
+<p>For a bounded blinded benchmark that requires explicit labels for every reviewed case and item, see <a href="https://github.com/stepanov1975/hermes-local-knowledge/blob/main/docs/lean-human-benchmark.md"><code>docs/lean-human-benchmark.md</code></a>. The finalizer creates private benchmark data only; it does not implement or approve a ranking candidate.</p>
 <p>For historical comparisons from a source checkout:</p>
 <pre><code class="language-bash">python scripts/compare_historical_query_versions.py \
   --usage-db ~/.hermes/local_knowledge/usage.sqlite \
@@ -539,7 +540,7 @@ git diff --check
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 272</div>
+        <div class="stars">★ 273</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

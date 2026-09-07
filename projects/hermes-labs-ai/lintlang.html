@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or LLM calls.",
+  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing termination conditions, and inconsistencies between schemas and directives without making network or API calls.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-09-06T03:20:02.000Z",
+  "dateModified": "2026-09-06T22:15:57.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and conflicting directives without making network or LLM calls.</p>
+    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing termination conditions, and inconsistencies between schemas and directives without making network or API calls.</p>
     <ul class="summary-highlights">
-      <li>Performs local, deterministic checks without API or telemetry calls.</li>
-      <li>Flags ambiguous tool descriptions and missing termination conditions.</li>
-      <li>Supports CI integration via GitHub Actions and SARIF reporting.</li>
+      <li>Flags vague tool descriptions and missing retry budgets.</li>
+      <li>Performs local, deterministic checks without LLM or API calls.</li>
+      <li>Supports CI integration with SARIF output and baseline filtering.</li>
     </ul>
   </div>
 </section>
@@ -265,6 +265,22 @@ not the official tree or GURU; its ebuilds have tracked upstream releases since
 </code></pre>
 <p>Each finding identifies the affected location, the detected pattern, its
 severity, and a suggested review action.</p>
+<h4>Adopt LintLang in an existing repository</h4>
+<p>An existing instruction backlog does not have to delay a CI gate. The
+<a href="https://github.com/hermes-labs-ai/lintlang/blob/main/docs/baselines.md">baseline workflow</a> records reviewed findings and lets the
+same scanner report and gate findings that are not acknowledged. It works in
+the CLI and the first-party GitHub Action, without disabling an entire rule.</p>
+<p>This feature is <strong>unreleased</strong>; use a source checkout containing this change.
+From the root of the project you want to scan:</p>
+<pre><code class="language-bash"># Review the full report before committing the generated baseline.
+lintlang scan AGENTS.md --write-baseline .lintlang-baseline.json
+
+# Keep the known backlog acknowledged while blocking new MEDIUM+ findings.
+lintlang scan AGENTS.md --baseline .lintlang-baseline.json --fail-on review
+</code></pre>
+<p>Baseline matching is exact and count-limited. Changed findings and findings in
+another file remain visible. Invalid inputs still fail; HERM scores are
+unchanged. See the guide for CI configuration, maintenance, and matching limits.</p>
 <h3>Try the bundled example</h3>
 <p>The source repository includes a deliberately broken example:</p>
 <pre><code class="language-bash">git clone --depth 1 https://github.com/hermes-labs-ai/lintlang.git
@@ -594,7 +610,7 @@ inspects one present instruction plus explicit context.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 69.8K</div>
+        <div class="stars">★ 69.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
@@ -614,7 +630,7 @@ inspects one present instruction plus explicit context.</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 576</div>
+        <div class="stars">★ 578</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">

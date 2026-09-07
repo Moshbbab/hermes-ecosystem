@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>junhoyeo/tokscale — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Tokscale is a command-line tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It…">
+<meta name="description" content="Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data files,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta property="og:description" content="Tokscale is a command-line tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It…">
+<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data files,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta name="twitter:description" content="Tokscale is a command-line tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It…">
+<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data files,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=tokscale&amp;subtitle=%F0%9F%9B%B0%EF%B8%8F+Track+token+usage+across+AI+coding+agents+from+your+terminal.+%F0%9F%8F%85+Global+leaderboard+with+trillions+of+tokens+tracked.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a command-line tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It monitors local data files, databases, and session transcripts from multiple clients to provide daily summaries and usage statistics.",
+  "description": "Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data files, databases, and session transcripts to provide daily summaries, model-specific statistics, and a 3D contributions graph.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-09-06T20:32:34.000Z",
+  "dateModified": "2026-09-06T23:53:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5327
+    "userInteractionCount": 5336
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a command-line tool and visualization dashboard designed to track token consumption and associated costs across various AI coding agents. It monitors local data files, databases, and session transcripts from multiple clients to provide daily summaries and usage statistics.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard designed to track token consumption and costs for various AI coding agents. It monitors local data files, databases, and session transcripts to provide daily summaries, model-specific statistics, and a 3D contributions graph.</p>
     <ul class="summary-highlights">
-      <li>Tracks token usage across multiple AI coding agents and IDEs.</li>
-      <li>Provides a CLI-based TUI and a 3D visualization dashboard.</li>
-      <li>Supports data submission to a public leaderboard and profile.</li>
+      <li>Tracks token usage across multiple AI coding agents and CLI tools.</li>
+      <li>Provides a Terminal User Interface (TUI) for usage visualization.</li>
+      <li>Supports data submission to a public leaderboard and profile creation.</li>
     </ul>
   </div>
 </section>
@@ -600,7 +600,7 @@
 <h3>Features</h3>
 <ul>
 <li><strong>Interactive TUI Mode</strong> - Beautiful terminal UI powered by Ratatui (default mode)<ul>
-<li>6 interactive views: Overview, Models, Daily, Hourly, Stats, Agents (plus an optional Minutely view, opt-in via <code>minutelyTabEnabled</code>)</li>
+<li>10 interactive views: Overview, Usage, Models, Daily, Hourly, Monthly, Sessions, Projects, Stats, Agents (plus an optional Minutely view, opt-in via <code>minutelyTabEnabled</code>)</li>
 <li>Keyboard &amp; mouse navigation</li>
 <li>GitHub-style contribution graph with configurable color themes</li>
 <li>Real-time filtering and sorting</li>
@@ -695,7 +695,7 @@ tokscale models --json &gt; report.json   # Save to file
 <h4>TUI Features</h4>
 <p>The interactive TUI mode provides:</p>
 <ul>
-<li><strong>8 Views</strong>: Overview (chart + top models), Usage (subscription quotas), Models, Daily, Hourly, Stats (contribution graph), Agents. A per-minute view (Minutely) is hidden by default and can be enabled with <code>minutelyTabEnabled</code> in <code>settings.json</code> — see <a href="#configuration">Configuration</a></li>
+<li><strong>10 Views</strong>: Overview (chart + top models), Usage (subscription quotas), Models, Daily, Hourly, Monthly, Sessions, Projects (per-workspace rollups), Stats (contribution graph), Agents. In Projects, Codex Desktop's ordinary chat directories (<code>Documents/Codex/YYYY-MM-DD/&lt;chat&gt;</code>) are combined into <strong>Codex Chat</strong>, preserving their session count, tokens, and cost; directories containing a Git repository remain separate. A per-minute view (Minutely) is hidden by default and can be enabled with <code>minutelyTabEnabled</code> in <code>settings.json</code> — see <a href="#configuration">Configuration</a></li>
 <li><strong>Keyboard Navigation</strong>:<ul>
 <li><code>←/→/Tab/BackTab</code>: Switch views</li>
 <li><code>↑/↓</code> or <code>Home/End</code>: Navigate lists</li>
@@ -1181,10 +1181,8 @@ tokscale trae logout --variant solo
 <p><strong>Note on pricing</strong>: Trae cost figures are <strong>vendor-reported</strong> — tokscale surfaces the <code>dollar_float</code> value returned by Trae's own API rather than recomputing cost from token counts through tokscale's pricing engine. Numbers will match what you see on <code>trae.ai/account-setting#usage</code>, not what tokscale would otherwise calculate for the same usage.</p>
 </blockquote>
 <blockquote>
-<p><strong>China variants</strong>: The China editions (<code>trae.com.cn</code>) are intentionally <strong>not</strong> supported. The CN backend does not expose a session-level usage query API. Trae CN / Trae Solo CN support will be added once an official endpoint becomes available upstream.</p>
+<p><strong>China variants</strong>: The Ch</p>
 </blockquote>
-<h4>Warp/Oz Commands</h4>
-<p>Warp/Oz does not expose local token transcripts. Tokscale only syncs the </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
@@ -1199,7 +1197,7 @@ tokscale trae logout --variant solo
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 69.8K</div>
+        <div class="stars">★ 69.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
@@ -1215,7 +1213,7 @@ tokscale trae logout --variant solo
         <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 576</div>
+        <div class="stars">★ 578</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
