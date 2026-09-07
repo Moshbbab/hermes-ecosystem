@@ -194,7 +194,7 @@ Opt-in: compact up front when a session resumes after this many seconds idle (0 
 
 bool
 
-Raise the trigger to 85% for gpt-5.5 on the ChatGPT Codex OAuth route (see below). Set `false` to keep the global `threshold`
+Raise the trigger to 85% for gpt-5.4/5.5/5.6 and gpt-6 Astra on the ChatGPT Codex OAuth route (see below). Set `false` to keep the global `threshold`
 
 `codex_gpt55_autoraise_notice`
 
@@ -269,9 +269,9 @@ Resolution rules:
 
 Plugin context engines can reuse the same resolution logic via `from agent.context_compressor import resolve_model_threshold`; engines that override `update_model()` own their own compaction policy and may ignore the map.
 
-### Codex gpt-5.5 threshold autoraise
+### Codex gpt-5.x / Astra threshold autoraise
 
-The ChatGPT Codex OAuth backend hard-caps gpt-5.5 at a **272K** context window (the same slug exposes 1.05M on OpenAI's direct API and OpenRouter, and 400K on GitHub Copilot). At the default 50% trigger, compaction would fire at ~136K — half the window the model can actually use. When the active route is Codex OAuth (`provider: openai-codex`) and the model is gpt-5.5, Hermes raises the trigger to **85%** (~231K) and shows a notice with the opt-out command. The notice is shown once per profile — a marker under `$HERMES_HOME` (`.codex_gpt55_autoraise_notice`) records that it ran, so repeated agent/session inits (e.g. every inbound gateway message) don't re-emit it; if the raised threshold later changes it re-notifies once. Only this exact route is affected; gpt-5.5 on any other provider keeps your global `threshold`. To opt back down to the global value:
+The ChatGPT Codex OAuth backend hard-caps gpt-5.4/5.5/5.6 and gpt-6 Astra at a **272K** context window (the same slug exposes 1.05M on OpenAI's direct API and OpenRouter, and 400K on GitHub Copilot). At the default 50% trigger, compaction would fire at ~136K — half the window the model can actually use. When the active route is Codex OAuth (`provider: openai-codex`) and the model is one of those families (Astra matches any slug containing `astra`; the opt-in `-900k` picker variants are excluded because they already unlock the wider window), Hermes raises the trigger to **85%** (~231K) and shows a notice with the opt-out command. The notice is shown once per profile — a marker under `$HERMES_HOME` (`.codex_gpt55_autoraise_notice`) records that it ran, so repeated agent/session inits (e.g. every inbound gateway message) don't re-emit it; if the raised threshold later changes it re-notifies once. Only this exact route is affected; the same models on any other provider keep your global `threshold`. To opt back down to the global value:
 
 ```
 hermes config set compression.codex_gpt55_autoraise false
