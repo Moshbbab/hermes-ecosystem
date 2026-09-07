@@ -75,6 +75,8 @@ Without an anchor (first request, rewind/edit-resend) a whole-context rough esti
 
 Opaque provider blobs (`encrypted_content` on Codex reasoning / compaction items) contribute 0 to every local estimate; only real usage ever prices them.
 
+Images are priced at the per-image cost **learned from the provider's usage** (`agent/image_token_cost.py`), not a vendor formula: on a response whose delta since the previous anchor introduced N images, the residual between the real `prompt_tokens` and the text-only projection is N × the provider's price. The value is kept per `model@host` in `~/.hermes/cache/image_token_costs.json` and bound per turn so the trigger estimator, the tail-budget walk and gateway hygiene all use the same figure. Before the first vision turn a flat 1,500 default applies.
+
 #### Failure cooldown and provider-proven overflow
 
 A failed or stalled summary attempt arms a per-session **failure cooldown** (escalating 60s → 300s → 900s, persisted in `state.db`). While it is armed, ordinary threshold-triggered compaction is deferred so a broken summary backend does not re-fire every turn. Two paths run a real attempt anyway:
