@@ -710,7 +710,7 @@ IDs, model/platform, and outcome; canonical payload has no message body.
 
 Observer
 
-CLI/TUI/gateway teardown through `finalize_session`; gateway shutdown or expiry may finalize without a reset. Return ignored.
+CLI/TUI/gateway teardown through `finalize_session`; gateway shutdown may finalize without a reset. Return ignored.
 
 Surface-dependent `session_id`, `platform`, optionally `reason`, `old_session_id`, `new_session_id`
 
@@ -1647,7 +1647,7 @@ def register(ctx):
 
 ### `on_session_finalize`
 
-Fires when the CLI or gateway **tears down** an active session — for example, when the user runs `/new`, the gateway GC'd an idle session, or the CLI quit with an active agent. Use it to flush state tied to the outgoing session ID. On gateway reset, the replacement session already exists before this callback runs.
+Fires when the CLI or gateway **tears down** an active session — for example, when the user runs `/new` or the CLI quits with an active agent. Resource-only idle cache eviction does not finalize the durable conversation. Use it to flush state tied to the outgoing session ID. On gateway reset, the replacement session already exists before this callback runs.
 
 **Callback signature:**
 
@@ -1673,7 +1673,7 @@ The outgoing session ID. May be `None` if no active session existed.
 
 `"cli"` or the messaging platform name (`"telegram"`, `"discord"`, etc.).
 
-**Fires:** In CLI/TUI teardown and in gateway reset, shutdown, or idle-expiry paths. Gateway shutdown and expiry can finalize without a matching `on_session_reset`.
+**Fires:** In CLI/TUI teardown and in gateway reset or shutdown paths. Gateway shutdown can finalize without a matching `on_session_reset`.
 
 **Return value:** Ignored.
 
