@@ -220,6 +220,12 @@ Process exit
 
 Clean up connections
 
+### Oversized prefetch results
+
+External `prefetch()` results above the configured spill threshold are written to a private spill file and replaced with the configured head/tail preview. The preview includes the path so the agent can read the full result when it is actually needed. Results at or below the threshold are returned unchanged.
+
+This uses the shared `hooks.output_spill` settings (`10,000` characters by default); see [Plugins — oversized-context spill](/docs/developer-guide/plugins/#oversized-context-spill).
+
 ## Pre-Compress Checkpoints (fail-closed)
 
 `on_pre_compress()` is best-effort by default: if your provider raises, the host logs the failure and compression proceeds. That is the right default for insight extraction — and the wrong one for a provider whose job is to archive transcript evidence to a durable store _before_ the lossy rewrite. For that case the host offers an opt-in checkpoint contract (API v2):
@@ -234,7 +240,9 @@ class MyArchivingProvider(MemoryProvider):
     # contract: best-effort semantics, raw message list.
     pre_compress_checkpoint_api_version = 2
 
-    def on_pre_compress(self, messages):
+    def on_pre_compress(self, messages, *, require_checkpoint=False):
+        # require_checkpoint mirrors the operator's checkpoint_required
+        # setting: True means a raise here blocks the lossy rewrite.
         ids = self._archive(messages)   # must be durable before returning
         return f"checkpoint: {ids}"     # forwarded into the summary prompt
 ```

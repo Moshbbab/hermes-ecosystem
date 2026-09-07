@@ -1,6 +1,6 @@
 # Build a Hermes Plugin
 
-**Source:** https://hermes-agent.nousresearch.com/docs/developer-guide/plugins
+**Source:** https://hermes-agent.nousresearch.com/docs/developer-guide/plugins/
 
 This guide walks through building a complete Hermes plugin from scratch. By the end you'll have a working plugin with multiple tools, lifecycle hooks, shipped data files, and a bundled skill — everything the plugin system supports.
 

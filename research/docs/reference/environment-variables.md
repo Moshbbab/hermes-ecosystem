@@ -296,7 +296,11 @@ Override the `alibaba-cn` mainland-China DashScope base URL
 
 `ALIBABA_CODING_PLAN_API_KEY`
 
-Qwen Coding Plan API key (`alibaba-coding-plan` / `alibaba-coding-plan-cn` providers)
+Qwen Coding Plan API key (`alibaba-coding-plan`; also a fallback for `alibaba-coding-plan-cn`)
+
+`ALIBABA_CODING_PLAN_CN_API_KEY`
+
+Qwen Coding Plan API key for the mainland-China `alibaba-coding-plan-cn` provider (checked before the shared key, so only the CN row lights up)
 
 `ALIBABA_CODING_PLAN_BASE_URL`
 
@@ -308,7 +312,11 @@ Override the Qwen Coding Plan base URL (mainland China)
 
 `ALIBABA_TOKEN_PLAN_API_KEY`
 
-Alibaba Model Studio Token Plan API key (`alibaba-token-plan` / `alibaba-token-plan-cn` providers)
+Alibaba Model Studio Token Plan API key (`alibaba-token-plan`; also a fallback for `alibaba-token-plan-cn`)
+
+`ALIBABA_TOKEN_PLAN_CN_API_KEY`
+
+Token Plan API key for the mainland-China `alibaba-token-plan-cn` provider (checked before the shared key)
 
 `ALIBABA_TOKEN_PLAN_BASE_URL`
 
@@ -536,13 +544,21 @@ Custom Firecrawl API endpoint for self-hosted instances (optional)
 
 Optional Tavily API key for higher search/extract limits. After selecting Tavily as the web backend, keyless access works without it ([app.tavily.com](https://app.tavily.com/home), [keyless docs](https://docs.tavily.com/documentation/keyless))
 
-`SEARXNG_URL`
-
-SearXNG instance URL for free self-hosted web search — no API key required ([searxng.github.io](https://searxng.github.io/searxng/))
-
 `TAVILY_BASE_URL`
 
 Override the Tavily API endpoint. Useful for corporate proxies and self-hosted Tavily-compatible search backends. Same pattern as `GROQ_BASE_URL`.
+
+`PERPLEXITY_API_KEY`
+
+Perplexity Search API key for the `perplexity` web backend — ranked search results plus query-relevant page snippets for extract ([perplexity.ai/account/api](https://www.perplexity.ai/account/api))
+
+`PERPLEXITY_BASE_URL`
+
+Override the Perplexity API endpoint (default `https://api.perplexity.ai`) for proxies (optional)
+
+`SEARXNG_URL`
+
+SearXNG instance URL for free self-hosted web search — no API key required ([searxng.github.io](https://searxng.github.io/searxng/))
 
 `EXA_API_KEY`
 
@@ -602,7 +618,7 @@ Extra Chromium launch flags (comma- or newline-separated). Hermes auto-injects `
 
 `AGENT_BROWSER_ENGINE`
 
-Browser engine for local mode: `auto` (default — Chromium-family via CDP), or a specific engine override.
+Local browser engine: `auto` (default — Chromium-family via CDP), `lightpanda` (Browser Use mode spawns `lightpanda serve`; the built-in tools pass `--engine lightpanda` to agent-browser), or `chrome`. Same as `browser.engine` in config.yaml.
 
 `FAL_KEY`
 
@@ -2371,6 +2387,10 @@ Send agent replies as markdown — iMessage renders it natively, other Spectrum 
 `PHOTON_REACTIONS`
 
 Tapback 👀/👍/👎 on messages as processing status and route tapbacks on bot messages to the agent (`true`/`false`, default `false`).
+
+`PHOTON_READ_RECEIPTS`
+
+Mark inbound iMessages read after forwarding to Hermes (`true`/`false`, default `true`).
 
 `PHOTON_TELEMETRY`
 

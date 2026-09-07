@@ -67,7 +67,7 @@ A run cap
 
 An evidence-based condition
 
-`--until <condition>` — after each wakeup, the same auxiliary judge that powers `/goal` checks the reply against your condition (fail-open: a broken judge never wedges the loop).
+`--until <condition>` — after each wakeup, the same auxiliary judge that powers `/goal` checks the reply against your condition. If the judge rules the condition unachievable, the loop **pauses** with the reason instead of re-firing until the tick budget (fail-open: a broken judge never wedges the loop).
 
 You
 

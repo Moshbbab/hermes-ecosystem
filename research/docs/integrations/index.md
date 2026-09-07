@@ -74,16 +74,6 @@ _(none)_
 
 —
 
-**Tavily**
-
-`TAVILY_API_KEY` (optional)
-
-✔
-
-✔
-
-—
-
 **Exa**
 
 `EXA_API_KEY`
@@ -118,10 +108,10 @@ Quick setup example:
 
 ```
 web:
-  backend: firecrawl    # firecrawl | searxng | brave-free | ddgs | tavily | exa | parallel | xai
+  backend: firecrawl    # firecrawl | searxng | brave-free | ddgs | tavily | perplexity | keenable | exa | parallel | xai
 ```
 
-If `web.backend` is not set, the backend is auto-detected from whichever API key is available. Self-hosted Firecrawl is also supported via `FIRECRAWL_API_URL`. Selecting Tavily in `hermes tools` works without a key.
+If `web.backend` is not set, the backend is auto-detected from whichever API key is available. Self-hosted Firecrawl is also supported via `FIRECRAWL_API_URL`.
 
 ## Browser Automation
 
