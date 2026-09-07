@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/demo-gif-skill — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="This skill for Claude Code and agentskills.io-compatible agents automates the creation of reproducible demo GIFs for README files. It analyzes a repository to…">
+<meta name="description" content="This project is a skill for Claude Code and agentskills.io-compatible agents that automates the creation of reproducible demo GIFs for repositories. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/demo-gif-skill">
 <meta property="og:title" content="conorbronsdon/demo-gif-skill — Hermes Atlas">
-<meta property="og:description" content="This skill for Claude Code and agentskills.io-compatible agents automates the creation of reproducible demo GIFs for README files. It analyzes a repository to…">
+<meta property="og:description" content="This project is a skill for Claude Code and agentskills.io-compatible agents that automates the creation of reproducible demo GIFs for repositories. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/demo-gif-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/demo-gif-skill — Hermes Atlas">
-<meta name="twitter:description" content="This skill for Claude Code and agentskills.io-compatible agents automates the creation of reproducible demo GIFs for README files. It analyzes a repository to…">
+<meta name="twitter:description" content="This project is a skill for Claude Code and agentskills.io-compatible agents that automates the creation of reproducible demo GIFs for repositories. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=demo-gif-skill&amp;subtitle=Claude+Code+skill%3A+add+a+reproducible+demo+GIF+to+any+repo%27s+README+%28vhs%2C+Playwright%2C+ffmpeg%2C+gifsicle%29&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/demo-gif-skill#software",
   "name": "demo-gif-skill",
-  "description": "This skill for Claude Code and agentskills.io-compatible agents automates the creation of reproducible demo GIFs for README files. It analyzes a repository to generate recording scripts using vhs for terminal interfaces or Playwright for web applications, then renders and optimizes the output.",
+  "description": "This project is a skill for Claude Code and agentskills.io-compatible agents that automates the creation of reproducible demo GIFs for repositories. It analyzes the codebase to generate recording scripts using vhs for terminal interfaces or Playwright for web applications, then optimizes and embeds the resulting GIF into the README.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/demo-gif-skill",
   "codeRepository": "https://github.com/conorbronsdon/demo-gif-skill",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-07-31T21:14:44.000Z",
+  "dateModified": "2026-09-07T20:04:21.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-07-31</span>
+    <span><span class="meta-label">updated</span>2026-09-07</span>
   </div>
 
   <div class="actions">
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This skill for Claude Code and agentskills.io-compatible agents automates the creation of reproducible demo GIFs for README files. It analyzes a repository to generate recording scripts using vhs for terminal interfaces or Playwright for web applications, then renders and optimizes the output.</p>
+    <p class="summary-text">This project is a skill for Claude Code and agentskills.io-compatible agents that automates the creation of reproducible demo GIFs for repositories. It analyzes the codebase to generate recording scripts using vhs for terminal interfaces or Playwright for web applications, then optimizes and embeds the resulting GIF into the README.</p>
     <ul class="summary-highlights">
       <li>Generates reproducible recording scripts using vhs or Playwright.</li>
-      <li>Optimizes GIF files to land under 8 MB.</li>
-      <li>Embeds rendered GIFs directly into the repository's README.</li>
+      <li>Optimizes GIF files to target sizes under 8 MB.</li>
+      <li>Automates rendering, compression, and README markdown embedding.</li>
     </ul>
   </div>
 </section>
@@ -216,6 +216,15 @@
 <h3>Notes on the approach</h3>
 <p>Screen-recording software gets you a GIF once. A <code>.tape</code> file or a Playwright script gets you a GIF you can regenerate every time the tool's output changes, which is the actual problem with demo GIFs going stale in READMEs. That reproducibility is the whole reason this skill defaults to vhs and Playwright instead of "record your screen and trim it in an editor."</p>
 <p>The size targets and flag choices in <code>SKILL.md</code> and the reference docs were checked against the tools' actual documentation (and, where the tool was available locally, against real <code>--help</code> output) rather than assumed. If a flag has since changed in a newer release, <code>vhs validate</code>, <code>ffmpeg -h filter=&lt;name&gt;</code>, and <code>gifsicle --help</code> are the fastest way to confirm current behavior.</p>
+<h3>Codex plugin packaging</h3>
+<p>The repository root is also a Codex plugin: its manifest is
+<a href="https://github.com/conorbronsdon/demo-gif-skill/blob/main/.codex-plugin/plugin.json"><code>.codex-plugin/plugin.json</code></a>, and <code>skills/</code>
+contains the discovery adapter. Keep the whole repository when installing the
+plugin; the adapter reads the canonical root <code>SKILL.md</code> and its bundled
+resources. Existing standalone skill installations still work.</p>
+<p>Run the skill against your target repository, not the plugin installation
+directory. Plugin installation does not install external tools or authorize
+changes to your files.</p>
 <h3>License</h3>
 <p>MIT. See <code>LICENSE</code>.</p>
 <h3>About</h3>
@@ -234,7 +243,7 @@
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 32.3K</div>
+        <div class="stars">★ 32.4K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -258,7 +267,7 @@
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 261</div>
+        <div class="stars">★ 262</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
