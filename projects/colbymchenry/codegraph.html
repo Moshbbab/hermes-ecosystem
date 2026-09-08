@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds a pre-indexed knowledge graph to provide context for coding agents. It features a Rust-powered…">
+<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a project to provide context for AI coding agents. It features a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds a pre-indexed knowledge graph to provide context for coding agents. It features a Rust-powered…">
+<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a project to provide context for AI coding agents. It features a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds a pre-indexed knowledge graph to provide context for coding agents. It features a Rust-powered…">
+<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a project to provide context for AI coding agents. It features a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+CoPilot%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+t&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local semantic code intelligence tool that builds a pre-indexed knowledge graph to provide context for coding agents. It features a Rust-powered kernel and a browser-based UI for viewing symbol callers and source code.",
+  "description": "CodeGraph is a local semantic code intelligence tool that builds a structural graph of a project to provide context for AI coding agents. It features a Rust-powered kernel and an MCP server to integrate with agents such as Claude Code, Cursor, and Hermes Agent.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-09-08T07:22:18.000Z",
+  "dateModified": "2026-09-08T16:45:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 70056
+    "userInteractionCount": 70085
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a pre-indexed knowledge graph to provide context for coding agents. It features a Rust-powered kernel and a browser-based UI for viewing symbol callers and source code.</p>
+    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a structural graph of a project to provide context for AI coding agents. It features a Rust-powered kernel and an MCP server to integrate with agents such as Claude Code, Cursor, and Hermes Agent.</p>
     <ul class="summary-highlights">
       <li>Operates 100% locally with a Rust-powered kernel.</li>
-      <li>Supports automatic graph synchronization on file changes.</li>
-      <li>Connects to agents via an MCP server configuration.</li>
+      <li>Automatically updates the graph index on file changes.</li>
+      <li>Includes a browser-based UI for visualizing code symbols and callers.</li>
     </ul>
   </div>
 </section>
@@ -919,11 +919,13 @@ codegraph init
     "codegraph": {
       "type": "stdio",
       "command": "codegraph",
-      "args": ["serve", "--mcp"]
+      "args": ["serve", "--mcp"],
+      "alwaysLoad": true
     }
   }
 }
 </code></pre>
+<p><code>alwaysLoad</code> keeps <code>codegraph_explore</code> loaded from the first prompt. Claude Code otherwise defers every MCP tool behind a tool-search step, so a fresh session sees only the tool's name until the model searches for it.</p>
 <p><strong>Add to <code>~/.claude/settings.json</code> (optional, for auto-allow):</strong></p>
 <pre><code class="language-json">{
   "permissions": {
@@ -977,19 +979,11 @@ codegraph init
 </li>
 <li><p><strong>Resolution</strong> — After extraction, references are resolved: function calls → definitions, imports → source files, class inheritance, and framework-specific patterns.</p>
 </li>
-<li><p><strong>Auto-Sync</strong> — The MCP server watches your project using native OS file events. Changes are debounced (2-second quiet window), filtered to source files only, and incrementally synced. The graph stays fresh as you code — no configuration needed.</p>
+<li><p><strong>Auto-Sync</strong> — The MCP server watches your project using native OS file events. Changes are debounced (2-second quiet window), filtered to source files only, and incrementally synced. The graph stays fresh as you code — no configu</p>
 </li>
 </ol>
 <hr>
-<h3>CLI Reference</h3>
-<pre><code class="language-bash">codegraph                         # Run interactive installer
-codegraph install                 # Run installer (explicit)
-codegraph uninstall               # Remove CodeGraph from your agents AND t
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/colbymchenry/codegraph#readme)*
-</code></pre>
+<p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
