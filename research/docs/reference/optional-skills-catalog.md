@@ -527,6 +527,10 @@ Publish sites to {slug}.here.now and store files in Drives.
 
 Spaced-repetition flashcards: create, review, quiz, export.
 
+[**property-listings**](/docs/user-guide/skills/optional/productivity/productivity-property-listings)
+
+Present property and rental listings as desktop cards.
+
 [**shop**](/docs/user-guide/skills/optional/productivity/productivity-shop)
 
 Shop catalog search, checkout, order tracking, returns.
@@ -597,6 +601,10 @@ Hybrid local search over notes, docs, and transcripts.
 
 Write ML papers for NeurIPS/ICML/ICLR: design→submit.
 
+[**rss-feeds**](/docs/user-guide/skills/optional/research/research-rss-feeds)
+
+Read RSS, Atom, JSON feeds; discover feeds behind a page.
+
 [**scrapling**](/docs/user-guide/skills/optional/research/research-scrapling)
 
 Scrape sites with stealth browsing and Cloudflare bypass.
@@ -644,6 +652,16 @@ Description
 [**openhue**](/docs/user-guide/skills/optional/smart-home/smart-home-openhue)
 
 Control Philips Hue lights, scenes, rooms via OpenHue CLI.
+
+## social-media
+
+Skill
+
+Description
+
+[**reddit-reading**](/docs/user-guide/skills/optional/social-media/social-media-reddit-reading)
+
+Read Reddit: subreddits, search, threads, users. No browser.
 
 ## software-development
 

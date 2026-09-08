@@ -344,12 +344,6 @@ Karpathy's LLM Wiki: build/query interlinked markdown KB.
 
 `research/llm-wiki`
 
-[`rss-feeds`](/docs/user-guide/skills/bundled/research/research-rss-feeds)
-
-Read RSS, Atom, JSON feeds; discover feeds behind a page.
-
-`research/rss-feeds`
-
 ## social-media
 
 Skill
@@ -357,12 +351,6 @@ Skill
 Description
 
 Path
-
-[`reddit-reading`](/docs/user-guide/skills/bundled/social-media/social-media-reddit-reading)
-
-Read Reddit: subreddits, search, threads, users. No browser.
-
-`social-media/reddit-reading`
 
 [`xurl`](/docs/user-guide/skills/bundled/social-media/social-media-xurl)
 
