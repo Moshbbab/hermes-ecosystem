@@ -1,6 +1,6 @@
 # Hermes Desktop: The Complete Guide — Install, Features, Plugins
 
-The Hermes Desktop guide. Live version: https://hermesatlas.com/guide/desktop/ — facts sourced from the official Hermes Desktop docs. Current release is v0.21.0 (as of 2026-08-31).
+The Hermes Desktop guide. Live version: https://hermesatlas.com/guide/desktop/ — facts sourced from the official Hermes Desktop docs. Current release is v0.21.1 (as of 2026-09-07).
 
 ## TL;DR
 
