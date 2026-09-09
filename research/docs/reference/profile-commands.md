@@ -133,7 +133,7 @@ Copy `config.yaml`, `.env`, `SOUL.md`, and skills from the current profile.
 
 `--clone-all`
 
-Copy everything (config, memories, skills, cron, plugins) from the current profile. Excludes per-profile history: sessions, `state.db`, backups, state-snapshots, checkpoints.
+Copy everything (config, memories, skills, plugins) from the current profile. Excludes per-profile history: sessions, `state.db`, backups, state-snapshots, checkpoints — and cron jobs, which stay bound to the source profile (a clone that inherited them would fire every job twice).
 
 `--clone-from <profile>`
 
