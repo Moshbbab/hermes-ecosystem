@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mnemosyne-oss/mnemosyne — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Mnemosyne is a local AI memory layer that uses a SQLite backend and a single Python dependency to provide persistent storage for agent frameworks. It supports…">
+<meta name="description" content="Mnemosyne is a local AI memory layer that uses a single SQLite database and a pure-Python dependency to store and recall information. It supports integration…">
 <link rel="canonical" href="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta property="og:description" content="Mnemosyne is a local AI memory layer that uses a SQLite backend and a single Python dependency to provide persistent storage for agent frameworks. It supports…">
+<meta property="og:description" content="Mnemosyne is a local AI memory layer that uses a single SQLite database and a pure-Python dependency to store and recall information. It supports integration…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta name="twitter:description" content="Mnemosyne is a local AI memory layer that uses a SQLite backend and a single Python dependency to provide persistent storage for agent frameworks. It supports…">
+<meta name="twitter:description" content="Mnemosyne is a local AI memory layer that uses a single SQLite database and a pure-Python dependency to store and recall information. It supports integration…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=mnemosyne&amp;subtitle=Zero-cloud+AI+memory+that+works+everywhere.+SQLite-backed.+One+pure-Python+dependency.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a local AI memory layer that uses a SQLite backend and a single Python dependency to provide persistent storage for agent frameworks. It supports integration via the Model Context Protocol (MCP), a Python SDK, and a CLI for managing facts and consolidation.",
+  "description": "Mnemosyne is a local AI memory layer that uses a single SQLite database and a pure-Python dependency to store and recall information. It supports integration with various agent frameworks through a Python SDK, a command-line interface, and the Model Context Protocol.",
   "url": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne",
   "codeRepository": "https://github.com/mnemosyne-oss/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "mnemosyne-oss",
     "url": "https://github.com/mnemosyne-oss"
   },
-  "dateModified": "2026-09-08T18:55:57.000Z",
+  "dateModified": "2026-09-09T20:52:17.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 3069
+    "userInteractionCount": 3074
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-08</span>
+    <span><span class="meta-label">updated</span>2026-09-09</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a local AI memory layer that uses a SQLite backend and a single Python dependency to provide persistent storage for agent frameworks. It supports integration via the Model Context Protocol (MCP), a Python SDK, and a CLI for managing facts and consolidation.</p>
+    <p class="summary-text">Mnemosyne is a local AI memory layer that uses a single SQLite database and a pure-Python dependency to store and recall information. It supports integration with various agent frameworks through a Python SDK, a command-line interface, and the Model Context Protocol.</p>
     <ul class="summary-highlights">
-      <li>Uses SQLite for zero-cloud, local-only data storage.</li>
-      <li>Integrates with MCP clients like Cursor, Claude Code, and Windsurf.</li>
-      <li>Provides episodic compression and vector search capabilities.</li>
+      <li>Operates locally using a single SQLite database file.</li>
+      <li>Provides Model Context Protocol support for Cursor and Claude Code.</li>
+      <li>Features episodic compression for sub-linear storage growth.</li>
     </ul>
   </div>
 </section>
@@ -294,41 +294,12 @@ results = recall("user preferences")
 <p><strong>OpenClaw:</strong> Add <code>provider: mnemosyne.integrations.openclaw:create_provider</code> to config.</p>
 <hr>
 <h3>Benchmarks</h3>
-<p>Mnemosyne scores competitively on the two major memory benchmarks, <strong>LongMemEval</strong> (ICLR 2025) and <strong>BEAM</strong> (ICLR 2026), both in one SQLite file with no cloud dependency.</p>
+<p>Mnemosyne is measured on <strong>BEAM</strong> (ICLR 2026), in one SQLite file with no cloud dependency. A <strong>LongMemEval</strong> (ICLR 2025) run is pending.</p>
 <blockquote>
 <p><strong>Read the version labels.</strong> These are point-in-time results, not a claim about the current build. The BEAM numbers were measured on <strong>v3.0.0 (May 2026)</strong> and predate polyphonic recall, enhanced recall, SHMR, and the persona tier. They have not been re-run since. Re-running BEAM and LongMemEval on the current tree is tracked as an open task.</p>
 </blockquote>
-<h4>LongMemEval (retrieval), measured April 2026</h4>
-<table>
-<thead>
-<tr>
-<th>System</th>
-<th>Score</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Mnemosyne (dense)</strong></td>
-<td><strong>98.9% Recall@All@5</strong></td>
-<td>Apr 2026, bge-small-en-v1.5, 100 instances</td>
-</tr>
-<tr>
-<td>Mempalace</td>
-<td>96.6% Recall@5</td>
-<td>AAAK + Palace architecture</td>
-</tr>
-<tr>
-<td>Backboard</td>
-<td>93.4%</td>
-<td>Independent assessment</td>
-</tr>
-<tr>
-<td>Hindsight</td>
-<td>91.4%</td>
-<td>Vectorize.io</td>
-</tr>
-</tbody></table>
-<p>Note that Mnemosyne's row is Recall@All@5 while Mempalace's is Recall@5; the metrics are not identical and the ordering should not be read as a strict ranking.</p>
+<h4>LongMemEval</h4>
+<p>A 98.9% Recall@All@5 figure from an April 2026 run was listed here until September 2026. No methodology or run log for it exists in any of the project repositories, so it has been withdrawn until LongMemEval is re-run on the current tree with a published, reproducible setup (#584).</p>
 <h4>BEAM (end-to-end QA), measured on v3.0.0</h4>
 <table>
 <thead>
@@ -925,15 +896,15 @@ mnemosyne sync-status --remote https://my-vps:8765
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 209</div>
+        <div class="stars">★ 210</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 274</div>
+        <div class="stars">★ 275</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 248</div>
+        <div class="stars">★ 249</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
