@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lethe044/hermes-incident-commander — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It features a standalone…">
+<meta name="description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Lethe044/hermes-incident-commander">
 <meta property="og:title" content="Lethe044/hermes-incident-commander — Hermes Atlas">
-<meta property="og:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It features a standalone…">
+<meta property="og:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Lethe044/hermes-incident-commander">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Lethe044/hermes-incident-commander — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It features a standalone…">
+<meta name="twitter:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-incident-commander&amp;subtitle=Autonomous+SRE+agent+that+detects%2C+diagnoses%2C+and+self-heals+production+incidents+-+with+a+standalone+watchdog+that+needs+no+Hermes+install%2C+just+an+Anthropic+API+key.+Memory+%2B+Ski&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander#software",
   "name": "hermes-incident-commander",
-  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It features a standalone watchdog mode that monitors Linux hosts for resource thresholds and failed systemd units, utilizing the Anthropic API for triage and optional allow-listed auto-remediation.",
+  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an extension of Hermes Agent or as a standalone Linux watchdog that uses the Anthropic API to perform triage and apply allow-listed fixes.",
   "url": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander",
   "codeRepository": "https://github.com/Lethe044/hermes-incident-commander",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "Lethe044",
     "url": "https://github.com/Lethe044"
   },
-  "dateModified": "2026-09-07T20:07:06.000Z",
+  "dateModified": "2026-09-08T23:35:35.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-07</span>
+    <span><span class="meta-label">updated</span>2026-09-08</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It features a standalone watchdog mode that monitors Linux hosts for resource thresholds and failed systemd units, utilizing the Anthropic API for triage and optional allow-listed auto-remediation.</p>
+    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as an extension of Hermes Agent or as a standalone Linux watchdog that uses the Anthropic API to perform triage and apply allow-listed fixes.</p>
     <ul class="summary-highlights">
-      <li>Supports Docker, Kubernetes, ECS, Lambda, and Linux host monitoring.</li>
-      <li>Provides PagerDuty, Discord, and Slack integrations with automated incident resolution.</li>
-      <li>Includes adaptive, time-of-day-aware thresholds to reduce false-positive alerts.</li>
+      <li>Monitors CPU, memory, disk, and systemd units for anomalies.</li>
+      <li>Provides opt-in auto-remediation restricted to user-defined allow-lists.</li>
+      <li>Generates structured incident reports and searchable SQLite-based history.</li>
     </ul>
   </div>
 </section>
@@ -168,6 +168,18 @@ no Hermes installation required.</p>
 <hr>
 <h3>What's New</h3>
 <ul>
+<li>📈 <strong>Trend chart in the offline dashboard</strong> - a 14-day incidents-per-day
+line chart (still a hand-rolled SVG, no chart.js) sits next to the
+severity breakdown so "is this getting better or worse" is visible at a
+glance.</li>
+<li>✅ <strong><code>--validate-config</code></strong> - checks a <code>watchdog_config.yaml</code> for typos
+(unrecognized keys), out-of-range thresholds, and invalid allow-list
+entries, prints the resolved config, and exits - without starting the
+watchdog. Complements <code>--dry-run</code>, which validates behavior against live
+metrics rather than the config file itself.</li>
+<li>📤 <strong>CSV/JSON export from <code>incident_db.py --search</code></strong> - <code>--format json</code>
+or <code>--format csv</code> alongside the default human-readable text, so a search
+can be piped straight into a weekly incident-review report.</li>
 <li>🔎 <strong>Search box in the offline dashboard</strong> - filter incidents by
 severity, category, root cause, or report filename, client-side, no server.</li>
 <li>🔁 <strong>Notifier retry/backoff</strong> - a transient network blip during a real
@@ -282,6 +294,10 @@ python -m monitor.watchdog --show-baseline
 # Search past incidents ("have we seen this before?") - no server, just SQLite
 python -m monitor.incident_db --sync
 python -m monitor.incident_db --search "nginx"
+python -m monitor.incident_db --search "nginx" --format json     # or --format csv
+
+# Check a config file for typos/invalid allow-list entries before using it
+python -m monitor.watchdog --config monitor/watchdog_config.yaml --validate-config
 
 # One-command systemd install (dry-run by default - see exactly what it would do)
 ./scripts/install-watchdog.sh
@@ -319,7 +335,14 @@ threshold tuned too tight for normal load.</p>
 full-text search index when your Python's SQLite has FTS5 - falling back to
 a plain <code>LIKE</code> scan otherwise) so "have we seen this before?" works without
 a full Hermes install. <code>write_incident()</code> keeps it in sync automatically;
-<code>--sync</code>/<code>--search</code> are there for manual use or a cron job.</p>
+<code>--sync</code>/<code>--search</code> are there for manual use or a cron job, and <code>--format json</code>/<code>--format csv</code> let you pipe a search straight into another tool or a
+weekly incident-review report instead of only reading it on screen.</p>
+<p>Before trusting a new <code>watchdog_config.yaml</code>, run <code>--validate-config</code>: it
+flags unrecognized keys (a likely typo), thresholds outside 0-100,
+negative intervals, and allow-list entries that don't actually match
+anything (like a <code>restart_services</code> entry for a service that isn't in
+<code>watched_services</code>) - then prints the fully resolved config and exits,
+without starting the watchdog.</p>
 <p>Want it running on boot without setting up the systemd unit by hand?
 <a href="https://github.com/Lethe044/hermes-incident-commander/blob/main/scripts/install-watchdog.sh"><code>scripts/install-watchdog.sh</code></a> does that in
 one command - dry-run by default, and it writes your API key/secrets to a
@@ -329,13 +352,13 @@ removes it again.</p>
 <pre><code class="language-bash">python -m monitor.dashboard --open
 </code></pre>
 <p>This writes a single, self-contained HTML file (no server, no external
-requests) summarizing incident counts by severity, auto-remediation rate, and
-a recent-incidents table.</p>
+requests) summarizing incident counts by severity, a 14-day incidents-per-day
+trend, auto-remediation rate, and a searchable recent-incidents table.</p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Lethe044/hermes-incident-commander/main/docs/assets/dashboard-screenshot.png" alt="Hermes Incident Commander dashboard, rendered from monitor/dashboard.py with sample data" width="700">
+  <img src="https://raw.githubusercontent.com/Lethe044/hermes-incident-commander/main/docs/assets/dashboard-screenshot.png" alt="Hermes Incident Commander dashboard, rendered from monitor/dashboard.py with sample data, including the incidents-per-day trend chart" width="700">
 </p>
 
-<p align="center"><sub>Real output of <code>monitor/dashboard.py</code> - rendered from sample incident history (including the search box and a flapping badge), not a mockup.</sub></p>
+<p align="center"><sub>Real output of <code>monitor/dashboard.py</code> - rendered from sample incident history (including the 14-day trend chart, search box, and a flapping badge), not a mockup.</sub></p>
 
 <p>If you already run Prometheus and Grafana, you can scrape the watchdog
 directly instead of (or alongside) the dashboard - <code>--metrics-port</code> starts a
@@ -456,7 +479,7 @@ building panels by hand.</p>
 
     SCRIPTS --&gt; INSTALL["🔧 install-watchdog.sh&lt;br/&gt;← one-command systemd install, dry-run by default"]
 
-    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 96 pytest cases"]
+    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 130 pytest cases"]
 
     DOCS --&gt; SETUP["📄 SETUP.md"]
     DOCS --&gt; WRITEUP["📄 WRITEUP.md"]
@@ -604,10 +627,11 @@ pip install pytest pytest-asyncio psutil
 # Fast sanity check, no dependencies beyond the stdlib + pyyaml
 python environments/incident_env.py --smoke-test
 
-# Run full test suite (96 tests: scenarios, reward function, skill file,
+# Run full test suite (130 tests: scenarios, reward function, skill file,
 # demo script, notifier incl. PagerDuty + retry/backoff, watchdog
-# dry-run/resolve wiring, Prometheus exporter, incident search (SQLite/FTS),
-# adaptive baseline, flapping detection, dashboard incl. search box)
+# dry-run/resolve wiring/--validate-config, Prometheus exporter, incident
+# search (SQLite/FTS + CSV/JSON export), adaptive baseline, flapping
+# detection, dashboard incl. search box + trend chart)
 pytest tests/ -v
 
 # Run specific test classes
@@ -631,7 +655,7 @@ pytest tests/test_monitor.py::TestSafeRemediation -v
 </li>
 <li><p><strong>Works standalone, today, on a real host.</strong> <code>monitor/watchdog.py</code> doesn't need Hermes at all - just <code>ANTHROPIC_API_KEY</code> - and is built with an explicit, documented safety model instead of giving an LLM raw shell access to your production box.</p>
 </li>
-<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 96 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
+<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 130 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
 </li>
 </ol>
 <hr>
