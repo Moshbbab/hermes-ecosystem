@@ -580,8 +580,8 @@ Declarative plugins are symlinked with a `nix-managed-` prefix — they coexist 
 ```
 hermes plugins                               # unified interactive UI
 hermes plugins list                          # table: enabled / disabled / not enabled
-hermes plugins search <term>                 # search the community plugin index
-hermes plugins install <name>                # install by index name (resolved to repo @ pinned ref)
+hermes plugins search <term>                 # search the Hermes plugin catalog
+hermes plugins install <name>                # install a catalog entry (repo @ reviewed pinned SHA)
 hermes plugins install user/repo             # install from Git, then prompt Enable? [y/N]
 hermes plugins install user/repo --enable    # install AND enable (no prompt)
 hermes plugins install user/repo --no-enable # install but leave disabled (no prompt)
@@ -703,53 +703,29 @@ Security note
 
 Platform actions are a **messaging-as-the-bot power**: a granted plugin can react and rename threads in any chat the gateway bot can reach, not just the chat that triggered the hook. Grant `gateway.platform_actions` only to plugins you trust, and prefer plugins that document exactly which actions they take. Raw platform SDK payload/handle access is deliberately **not** part of this surface — per the #64176 round-2 design correction it requires its own capability (`gateway.raw_events`) with a "no stability guarantee" label and a separate design, and has not shipped.
 
-### Discovering community plugins
+### Discovering plugins — the Hermes plugin catalog
 
-`hermes plugins search <term>` searches the **community plugin index** — a static, machine-readable JSON catalog of community plugins. Matching is fuzzy across name, description, and tags:
-
-```
-hermes plugins search telegram               # fuzzy search
-hermes plugins search                        # browse the whole index
-hermes plugins search --capability platform  # filter by declared capability
-hermes plugins search media --json           # machine-readable output
-hermes plugins search --refresh              # bypass the 24h local cache
-```
-
-Once you've found a plugin, install it by bare name — the name is resolved through the index to its `owner/repo` plus the index-pinned commit:
+`hermes plugins search <term>` searches the **Hermes plugin catalog** — the curated, SHA-pinned catalog maintained in the hermes-agent repository (`plugin-catalog/`). Matching covers entry names, descriptions, and declared tools:
 
 ```
-hermes plugins install hermes-media-studio
+hermes plugins search telegram    # search the catalog
+hermes plugins browse             # browse every entry
+hermes plugins info <name>        # full details for one entry
 ```
 
-If a name matches more than one entry, the candidates are listed and nothing is installed. Explicit `owner/repo` or Git-URL identifiers never touch the index and keep working exactly as before. An explicit `--ref <sha>` always overrides the index pin.
-
-**How the index is fetched.** The index lives at a canonical URL (`https://raw.githubusercontent.com/NousResearch/hermes-plugin-index/main/index.json`, overridable via `hermes config set plugins.index_url <url>`). Fetches are cached under `~/.hermes/cache/plugin_index.json` for 24 hours; when the remote is unreachable the stale cache is used, and when there is no cache at all a bundled seed copy ships with Hermes — so search works fully offline.
-
-**Index entry format.** Each entry is a JSON object:
+Once you've found a plugin, install it by bare name — the name resolves to the entry's repository at its **pinned commit SHA**, and catalog provenance is recorded so `hermes plugins update` can re-pin when the catalog moves:
 
 ```
-{
-  "name": "hermes-media-studio",
-  "description": "Generative media workspace plugin.",
-  "author": "NousResearch",
-  "tags": ["media", "image-gen"],
-  "repo": "NousResearch/hermes-media-studio",
-  "ref": "<40-char commit SHA>",
-  "subdir": null,
-  "homepage": "https://github.com/NousResearch/hermes-media-studio",
-  "capabilities": ["tools", "dashboard"],
-  "api_version": 1,
-  "added_at": "2026-08-12"
-}
+hermes plugins install <catalog-name>
 ```
 
-`repo` is the `owner/name` GitHub identifier, `ref` pins an immutable commit SHA, and optional `subdir` supports monorepos. The bundled seed file (`hermes_cli/data/plugin_index.json` in the repo) is the format reference.
+Explicit `owner/repo` or Git-URL identifiers never touch the catalog and are flagged as custom (unreviewed) sources. An explicit `--ref <40-char commit SHA>` pins a custom install.
 
-**Submitting a plugin.** The index is maintained as a plain JSON file — submit a pull request to the [hermes-plugin-index](https://github.com/NousResearch/hermes-plugin-index) repository adding your entry (name, description, author, tags, `owner/repo`, and a pinned commit SHA). Review covers the entry's _metadata_ only.
+See [Plugin Catalog](/docs/user-guide/features/plugin-catalog) for the full trust model, admission CI, and submission workflow.
 
-Indexed ≠ audited
+Cataloged ≠ audited
 
-Inclusion in the community index means the entry's metadata was reviewed — **it is not a code audit**. Installing still goes through the normal consent/review flow (plugins install disabled by default, enabling is an explicit step, and tool-override rights require a separate grant). Review a plugin's source before enabling it.
+A catalog entry means the entry's metadata and declared capabilities were reviewed at admission — **it is not a code audit**. Installing still goes through the normal consent flow (plugins install disabled by default, enabling is an explicit step, and tool-override rights require a separate grant). Review a plugin's source before enabling it.
 
 ### Plugin packs
 
@@ -761,8 +737,8 @@ description: STT + streaming TTS + approval relay
 author: hyper
 version: 1.0.0
 plugins:
-  - name: hermes-media-studio            # bare community-index name…
-    ref: e8d59971d2b7901405b39dac7b03bdd616272d0d
+  - name: hermes-telegram-business       # bare plugin-catalog name…
+    ref: e905f3bc5eeaa5a9dab9bc5155601b3ebec75757
   - repo: owner/approval-relay           # …or explicit owner/repo (or git URL)
     ref: 8f3c2d1a9b4e5f6071829304a5b6c7d8e9f00112
     subdir: plugins/relay                # optional monorepo path
@@ -779,7 +755,7 @@ hermes plugins pack export > hermes-pack.yaml   # snapshot the current install
 hermes plugins pack export --enabled-only       # only plugins.enabled
 ```
 
-**Supply-chain posture.** Every entry's `ref` must be an exact 40-character commit SHA — tags and branch names are rejected with an error naming the entry, the same rule as the community index. Pack installs ride the exact same pinned install path as `hermes plugins install --ref <sha>` and record the same provenance in `plugins/.install-metadata.json`, so two installs of the same pack resolve identically. Packs build on the [manifest v2 fields](/docs/developer-guide/plugins) (`manifest_version`, `api_version`, `requires_plugins`) — each plugin's own manifest still validates through the normal install path.
+**Supply-chain posture.** Every entry's `ref` must be an exact 40-character commit SHA — tags and branch names are rejected with an error naming the entry, the same rule as the plugin catalog. Pack installs ride the exact same pinned install path as `hermes plugins install --ref <sha>` and record the same provenance in `plugins/.install-metadata.json`, so two installs of the same pack resolve identically. Packs build on the [manifest v2 fields](/docs/developer-guide/plugins) (`manifest_version`, `api_version`, `requires_plugins`) — each plugin's own manifest still validates through the normal install path.
 
 **Consent is never bulk-granted.** `pack install` shows a mandatory review screen (every plugin, source, pinned ref, and the capabilities it declares), then asks **one** confirmation for the pack contents. After that, each plugin's declared capabilities go through the standard per-plugin capability-consent prompt — identical to a single `hermes plugins install`. There is no `--yes`, and non-interactive sessions cannot install packs.
 

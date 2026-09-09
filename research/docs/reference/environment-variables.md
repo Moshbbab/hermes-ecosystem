@@ -1096,6 +1096,10 @@ JSON array, newline-separated list, or comma-separated list of regex wake-word p
 
 When enabled, explicit `@...bot` mentions in Telegram groups route only to the mentioned bot usernames before reply or wake-word fallbacks run. Default: `true`. Equivalent to `telegram.exclusive_bot_mentions`.
 
+`TELEGRAM_BOTS_REQUIRE_MENTION`
+
+When enabled, a message sent by another bot must explicitly `@thisbot` to trigger a response — a quote-reply alone is ignored, which stops two bots from replying to each other forever. Human replies are unaffected. Default: `false`. Equivalent to `telegram.bots_require_mention`.
+
 `TELEGRAM_REPLY_TO_MODE`
 
 Reply-reference behavior: `off`, `first` (default), or `all`. Matches the Discord pattern.
@@ -2209,6 +2213,10 @@ Reply when an already-delivered postback is tapped again (default: `Already repl
 `LINE_INTERRUPTED_TEXT`
 
 Reply when a `/stop`\-orphaned postback button is tapped (default: `Run was interrupted before completion.`).
+
+`LINE_EXPIRED_TEXT`
+
+Reply when a postback button whose cached answer is gone (expired / lost with process state) is tapped (default: `That request has expired — send your message again.`).
 
 ### ntfy (push notifications)
 

@@ -46,6 +46,10 @@ Matrix uses threaded, editable thinking/tool-activity panes when gateway progres
 
 By default, Hermes isolates session history per user inside the room. Two people talking in the same room do not share one transcript unless you explicitly disable that.
 
+**LaTeX math**
+
+`$...$` (inline) and `$$...$$` (display) in replies are sent as Element `data-mx-maths` markup, so clients with **Settings → Labs → Render LaTeX maths in messages** typeset them with KaTeX. Unpaired dollars (`$5 or $10`) stay literal, and the plain-text `body` keeps the raw TeX for other clients.
+
 tip
 
 The bot automatically joins rooms when invited. Just invite the bot's Matrix user to any room and it will join and start responding.
