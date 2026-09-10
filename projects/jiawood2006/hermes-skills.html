@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>jiawood2006/hermes-skills — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, OCR, and text processing.…">
+<meta name="description" content="Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, document OCR, and text…">
 <link rel="canonical" href="https://hermesatlas.com/projects/jiawood2006/hermes-skills">
 <meta property="og:title" content="jiawood2006/hermes-skills — Hermes Atlas">
-<meta property="og:description" content="Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, OCR, and text processing.…">
+<meta property="og:description" content="Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, document OCR, and text…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/jiawood2006/hermes-skills">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="jiawood2006/hermes-skills — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, OCR, and text processing.…">
+<meta name="twitter:description" content="Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, document OCR, and text…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-skills&amp;subtitle=Hermes+Skills%3A+%E8%A7%86%E9%A2%91%E8%BD%AC%E6%96%87%E5%AD%97+%2F+AI%E6%96%87%E6%A1%88%E5%8E%BB%E5%91%B3+%2F+%E6%96%87%E6%A1%A3OCR+%2F+%E7%94%B5%E5%95%86%E7%B4%A0%E6%9D%90%E5%B7%A5%E5%9D%8A+%28Video-to-text%2C+AI+text+de-humanizer%2C+OCR%2C+E-commerce+Material+Studio%29&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/jiawood2006/hermes-skills#software",
   "name": "hermes-skills",
-  "description": "Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, OCR, and text processing. The project provides utilities for Douyin video-to-text conversion, AI-generated text refinement, and e-commerce image composition.",
+  "description": "Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, document OCR, and text refinement. The project provides scripts for processing Douyin links, converting scanned PDFs into searchable documents, and managing agent memory through token analysis and graph-based tracking.",
   "url": "https://hermesatlas.com/projects/jiawood2006/hermes-skills",
   "codeRepository": "https://github.com/jiawood2006/hermes-skills",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "jiawood2006",
     "url": "https://github.com/jiawood2006"
   },
-  "dateModified": "2026-09-10T02:12:02.000Z",
+  "dateModified": "2026-09-10T05:55:22.000Z",
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
   }
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, OCR, and text processing. The project provides utilities for Douyin video-to-text conversion, AI-generated text refinement, and e-commerce image composition.</p>
+    <p class="summary-text">Hermes Skills is a collection of eight open-source tools designed for Chinese-language agent tasks, including video transcription, document OCR, and text refinement. The project provides scripts for processing Douyin links, converting scanned PDFs into searchable documents, and managing agent memory through token analysis and graph-based tracking.</p>
     <ul class="summary-highlights">
-      <li>Converts Douyin links to structured Markdown and SRT subtitles.</li>
-      <li>Performs OCR on PDFs and images with searchable-PDF output.</li>
-      <li>Removes common Chinese AI writing patterns using local rules.</li>
+      <li>Transcribes Douyin links to Markdown and SRT with local processing.</li>
+      <li>Performs OCR and structured data extraction for Chinese documents on macOS.</li>
+      <li>Removes common Chinese AI writing patterns using a rule-based engine.</li>
     </ul>
   </div>
 </section>
@@ -327,15 +327,15 @@ mkdir -p ~/.hermes/skills/utilities &amp;&amp; cp -r skills/* ~/.hermes/skills/u
 </ul>
 <h4>5️⃣ memory-manager · 记忆健康管理</h4>
 <ul>
-<li><strong>中文</strong>：Agent 记忆健康检查——统计 token 占用、找过期/冗余条目、压缩建议</li>
-<li><strong>English</strong>: Agent memory health check — token cost, stale entries, compaction tips</li>
+<li><strong>中文</strong>：Agent 记忆健康检查——统计 token 占用、找过期/冗余条目、<strong>会话库表级体检</strong>（区分"正文大"还是"索引大"）、<strong>从会话历史挖掘用户纠正</strong>（提示哪些长期偏好还没进记忆）</li>
+<li><strong>English</strong>: Agent memory health check — token cost, stale entries, <strong>table-level session-DB diagnosis</strong>, and <strong>correction mining</strong> from chat history</li>
 <li><strong>适用</strong>：任何 Agent 的记忆维护，防止上下文被挤占</li>
 <li><strong>依赖</strong>：<strong>零依赖</strong>（纯 Python 标准库）</li>
 </ul>
 <h4>6️⃣ memory-graph · 长文记忆图谱</h4>
 <ul>
-<li><strong>中文</strong>：四维图谱（实体网+时间线+因果链+概念库）——小说/连载写作自动提取记忆，<strong>伏笔追踪+一致性检查</strong></li>
-<li><strong>English</strong>: Four-graph memory (entity/timeline/causality/concept) for long-form writing — auto-extract, plot-thread tracking &amp; consistency check</li>
+<li><strong>中文</strong>：四维图谱（实体网+时间线+因果链+概念库）——小说/连载写作自动提取记忆，<strong>多跳关系展开</strong>+<strong>伏笔追踪</strong>+一致性检查+<strong>旧设定弃用/恢复</strong>（改稿不删设定）</li>
+<li><strong>English</strong>: Four-graph memory (entity/timeline/causality/concept) for long-form writing — <strong>multi-hop queries</strong>, plot-thread tracking, consistency checks, and <strong>retire/revive for revised canon</strong></li>
 <li><strong>适用</strong>：小说、连载、剧本、系列教程、世界观设定管理</li>
 <li><strong>依赖</strong>：提取需 LLM key（<code>--no-llm</code> 规则模式可用）</li>
 </ul>
@@ -402,6 +402,11 @@ cp -r skills/* ~/.hermes/skills/utilities/
 </tr>
 </thead>
 <tbody><tr>
+<td align="left">2026-09-10 (3)</td>
+<td align="left"><a href="https://github.com/topoteretes/cognee">cognee ★31k</a> · <a href="https://github.com/microsoft/graphrag">microsoft/graphrag ★36k</a> · <a href="https://github.com/OSU-NLP-Group/HippoRAG">HippoRAG ★4k</a> · <a href="https://github.com/BayramAnnakov/claude-reflect">claude-reflect ★1.4k</a></td>
+<td align="left"><strong>memory-graph</strong>：新增旧设定弃用/恢复（<code>retire</code>/<code>revive</code>，改稿不删设定）、多跳关系展开（<code>query --hops</code>）、弃用仍被引用检查；<strong>memory-manager</strong>：新增从会话历史挖掘纠正（<code>--corrections</code>）、会话库表级体检（实测发现 1.2GB 里 71% 是 FTS 索引）</td>
+</tr>
+<tr>
 <td align="left">2026-09-10 (2)</td>
 <td align="left"><a href="https://github.com/PaddlePaddle/PaddleOCR">PaddleOCR ★89k</a> · <a href="https://github.com/hiroi-sora/Umi-OCR">Umi-OCR ★47k</a> · <a href="https://github.com/ocrmypdf/OCRmyPDF">OCRmyPDF ★35k</a> · <a href="https://github.com/jiji262/douyin-downloader">jiji262/douyin-downloader ★9.8k</a></td>
 <td align="left"><strong>doc-ocr</strong>：新增页眉页脚水印过滤（<code>--ignore-region</code>）、可搜索 PDF（<code>--searchable-pdf</code>）、多语言 <code>--lang</code>；<strong>video-to-text</strong>：新增 SRT/VTT 字幕导出、词级时间戳按句切分、中文默认简体+标点</td>
@@ -417,6 +422,7 @@ cp -r skills/* ~/.hermes/skills/utilities/
 </blockquote>
 <h3>📝 更新日志 / Changelog</h3>
 <ul>
+<li><strong>2026-09-10</strong> — <strong>第三轮对标</strong>（cognee / graphrag / HippoRAG / claude-reflect）：memory-graph <strong>v1.1.0</strong> 新增旧设定弃用恢复 + 多跳关系展开；memory-manager <strong>v1.1.0</strong> 新增从会话历史挖掘纠正 + 会话库表级体检（实测 1.2GB 中 71% 是 FTS 索引）；对标档案 <code>docs/benchmarks/2026-09-10-memory-graph-and-memory-manager.md</code></li>
 <li><strong>2026-09-10</strong> — <strong>第二轮对标</strong>（PaddleOCR / Umi-OCR / OCRmyPDF / douyin-downloader）：doc-ocr <strong>v2.1.0</strong> 新增页眉页脚水印过滤 + 可搜索 PDF + 多语言；video-to-text <strong>v3.1.0</strong> 新增 SRT/VTT 字幕导出 + 词级时间戳按句切分 + 中文默认简体带标点；对标档案 <code>docs/benchmarks/2026-09-10-video-to-text-and-doc-ocr.md</code></li>
 <li><strong>2026-09-10</strong> — de-ai-writer <strong>v2.2.0</strong>：新增 35 条中文 AI 腔模式清单（<code>references/ai-patterns-zh.md</code>）+ 30 秒快检表 + 推荐工作流；仓库新增 <strong>Claude Code 插件市场</strong>安装方式（<code>.claude-plugin/</code>）；新增<strong>技能校验脚本</strong> <code>scripts/validate_skills.py</code>；建立<strong>持续对标机制</strong>与 <code>docs/benchmarks/</code></li>
 <li><strong>2026-09-08</strong> — voice-persona 收录进 buildwithclaude 技能列表（PR #311 已合并）</li>
