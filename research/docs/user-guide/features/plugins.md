@@ -298,6 +298,8 @@ hermes plugins install owner/repo --ref 0123456789abcdef0123456789abcdef01234567
 
 Hermes checks out the commit detached, verifies that `HEAD` exactly matches the requested SHA, and records the canonical source, installed revision, and pin status in the current profile. `hermes plugins update` refuses to move a pinned plugin; choose a new exact commit explicitly with `hermes plugins install <source> --force --ref <new-commit>`. The profile-local install metadata contains no config values, environment values, secrets, or capability grants.
 
+The same pin is available in Hermes Desktop: **Skills → Plugins → Install from Git** has a _Pin to commit_ field that takes the full 40-character SHA, and the plugins list shows a `pinned @ <sha8>` badge on every pinned install so a team can confirm everyone is running the same commit. `hermes plugins list` prints the pin in its Source column (`git pinned@<sha8>`). Pins work for private repositories too, through the same stored credentials described below.
+
 ### Installing from a private repository
 
 `hermes plugins install` clones non-interactively (it never prompts for a username or password), so a private repo needs a credential Hermes can find on its own. For an `https://` source it tries, in order:

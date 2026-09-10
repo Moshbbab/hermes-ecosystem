@@ -87,6 +87,10 @@ Skill
 
 Description
 
+[**archify**](/docs/user-guide/skills/optional/creative/creative-archify)
+
+Validated interactive HTML diagrams, upstream-maintained.
+
 [**ascii-art**](/docs/user-guide/skills/optional/creative/creative-ascii-art)
 
 ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
