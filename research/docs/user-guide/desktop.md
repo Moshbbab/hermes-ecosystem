@@ -204,7 +204,7 @@ The app also surfaces the broader Hermes management surface so you don't have to
 -   **Memory graph (Star Map)** — type `/journey` (aliases `/learning`, `/memory-graph`) in chat to open an interactive constellation of learned skills and memories over time, with a playback scrubber. Nodes can be edited or deleted right from the panel (skills are archived, memories removed). See [Learning Journey](/docs/user-guide/features/memory#learning-journey-journey).
 -   **Cron** — view and manage [scheduled jobs](/docs/reference/cli-commands#hermes-cron).
 -   **Profiles** — switch between [Hermes profiles](/docs/user-guide/profiles) (isolated config/skills/sessions).
--   **Messaging** — set up gateway channels.
+-   **Messaging** — set up gateway channels. Telegram has a **Quick setup** card: click **Create with QR**, scan the code (or open the link) in Telegram, and Hermes creates the bot, detects your user ID for the allowlist, saves the credentials, and restarts the gateway for you. Any credential save, clear, or enable toggle keeps a **Restart now** banner on the page until the gateway has actually restarted; if a restart fails, the banner stays so you can retry or restart manually.
 -   **Agents** and **Command Center** — orchestration surfaces for multi-agent work.
 
 ### Bot Mode (built in)
@@ -219,7 +219,7 @@ Bot Mode's sessions — each bot's canonical Bot Chat and every group-chat membe
 
 Bots you don't use can be tucked away: right-click a bot row → **Hide Bot**. Hidden bots leave the roster but keep working — @mentions still resolve and group-chat membership is untouched. An eye toggle appears in the Bots header whenever at least one bot is hidden; click it to reveal hidden bots dimmed in place (right-click → **Unhide Bot** brings one back), and the eye shows a dot when a hidden bot has unread activity. Hidden state is stored in the bot's profile, so it follows the bot across machines.
 
-Don't want it? Flip it off in **Settings → Plugins → Bots** — the roster, routines pane, and composer middleware unregister live, no restart needed.
+Don't want it? Flip it off in **Capabilities → Plugins → Desktop plugins → Bots** — the roster, routines pane, and composer middleware unregister live, no restart needed.
 
 Full guide — creating agents (including the multi-machine **Create on** picker), the roster across connections, bot-to-bot mentions, and how group chats decide who replies: [Bot Mode: A Roster of Agents](/docs/user-guide/bot-mode).
 
@@ -416,11 +416,16 @@ For the same setup from the web-dashboard angle, see [Web Dashboard → Connecti
 
 ## Extending the desktop app
 
-The desktop app is contribution-driven — panes, pages, sidebar nav, status-bar items, palette commands, keybinds, and themes all register through one SDK, and you can add your own. A plugin is a single ESM file dropped in `$HERMES_HOME/desktop-plugins/<id>/plugin.js`; the app loads it within seconds and hot-reloads every save. Manage installed plugins live in **Settings → Plugins**.
+The desktop app is contribution-driven — panes, pages, sidebar nav, status-bar items, palette commands, keybinds, and themes all register through one SDK, and you can add your own. A plugin is a single ESM file dropped in `$HERMES_HOME/desktop-plugins/<id>/plugin.js`; the app loads it within seconds and hot-reloads every save. Manage installed plugins live in **Capabilities → Plugins**.
 
 See [Desktop Plugin SDK](/docs/developer-guide/desktop-plugin-sdk) for the full reference. (This is separate from the [web dashboard plugin system](/docs/user-guide/features/extending-the-dashboard).)
 
-The **Agent plugins** section on the same Settings → Plugins page manages backend (agent-side) [plugins](/docs/user-guide/features/plugins) you installed — user, git, project, pip, and portable installs. Repo-bundled built-ins (platform adapters, provider plugins, and similar) are not listed there: they ship enabled by default and are configured from their own surfaces, so the section stays focused on what you added yourself. With two or more profiles the section also has its own **Applies to** selector, so you can list and toggle another profile's agent plugins without switching the whole app (the backend `plugins.manage` RPC accepts an optional `profile` parameter for this).
+**Capabilities → Plugins** is the one place for everything that extends Hermes, in two sections on one page:
+
+-   **Agent plugins** — backend (agent-side) [plugins](/docs/user-guide/features/plugins) you installed for the selected profile: user, git, project, pip, and portable installs, with enable/disable toggles and an **Update** chip when a catalog pin moved. The page's profile selector picks which agent you are configuring (the backend `plugins.manage` RPC takes a `profile` parameter). Repo-bundled built-ins (platform adapters, provider plugins) are not listed: they ship enabled and are configured from their own surfaces.
+-   **Desktop plugins** — extensions loaded into this app, the same for every profile. Toggles apply live; the desktop half of a bundled agent+desktop package shows an **agent half missing here** chip when the selected profile's backend does not have its agent half, with a one-click repair.
+
+Discovery sits underneath: the live [Plugin Catalog](/docs/user-guide/features/plugin-catalog) picker installs reviewed entries at their pinned commit into the selected profile, and **Install from Git** takes any other repository through the same review-then-install dialog. Old `Settings → Plugins` links redirect here.
 
 ## Troubleshooting
 
