@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/volcengine/OpenViking#software",
   "name": "OpenViking",
-  "description": "OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0, L1, and L2) to process content into abstracts, overviews, and full details for on-demand retrieval.",
+  "description": "OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0 abstract, L1 overview, L2 details) to retrieve information on demand and provides observable trajectories for debugging context retrieval.",
   "url": "https://hermesatlas.com/projects/volcengine/OpenViking",
   "codeRepository": "https://github.com/volcengine/OpenViking",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "volcengine",
     "url": "https://github.com/volcengine"
   },
-  "dateModified": "2026-09-09T16:13:10.000Z",
+  "dateModified": "2026-09-10T04:41:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 36276
+    "userInteractionCount": 36344
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>AGPL-3.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-09</span>
+    <span><span class="meta-label">updated</span>2026-09-10</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0, L1, and L2) to process content into abstracts, overviews, and full details for on-demand retrieval.</p>
+    <p class="summary-text">OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0 abstract, L1 overview, L2 details) to retrieve information on demand and provides observable trajectories for debugging context retrieval.</p>
     <ul class="summary-highlights">
-      <li>Organizes context as a virtual filesystem using viking:// URIs.</li>
-      <li>Uses three-tier loading to reduce token consumption.</li>
-      <li>Provides observable retrieval trajectories for debugging context paths.</li>
+      <li>Organizes agent context using a viking:// URI virtual filesystem.</li>
+      <li>Utilizes three-tier loading to reduce token consumption.</li>
+      <li>Extracts user preferences and agent experience into long-term memory.</li>
     </ul>
   </div>
 </section>
@@ -252,10 +252,11 @@ openviking-server           # start (background: nohup openviking-server &gt; op
 <p><code>init</code> walks you through provider setup and writes <code>~/.openviking/ov.conf</code>. It supports Volcengine, OpenAI, Codex OAuth, Kimi, GLM, and local Ollama — for Ollama it can detect and install the runtime and pull models suited to your hardware. <code>doctor</code> checks the config file, Python version, provider connectivity, and disk space without a running server. Manual <code>ov.conf</code> templates, per-provider examples, environment variables, and Windows setup: <a href="https://docs.openviking.ai/en/guides/01-configuration">Configuration guide</a> · <a href="https://docs.openviking.ai/en/getting-started/02-quickstart">Quick start docs</a>.</p>
 <p>The install already includes the <code>ov</code> client CLI. With the server running:</p>
 <pre><code class="language-bash">ov status
-ov add-resource https://github.com/volcengine/OpenViking # --wait
+ov add-resource https://github.com/volcengine/OpenViking
+# Replace TASK_ID with the returned task_id; continue after status is completed
+ov task status TASK_ID
 ov ls viking://resources/
 ov tree viking://resources/volcengine -L 2
-# wait some time for semantic processing if not --wait
 ov find "what is openviking"
 ov grep "openviking" --uri viking://resources/volcengine/OpenViking/docs/en
 </code></pre>
@@ -411,7 +412,7 @@ For vulnerability reporting and supported versions, see <a href="https://github.
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 275</div>
+        <div class="stars">★ 277</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">

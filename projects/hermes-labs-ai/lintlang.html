@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>hermes-labs-ai/lintlang — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="LintLang is a static analysis tool for AI agent instructions and tool descriptions that identifies issues such as ambiguous directives, missing stop…">
+<meta name="description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
 <link rel="canonical" href="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta property="og:description" content="LintLang is a static analysis tool for AI agent instructions and tool descriptions that identifies issues such as ambiguous directives, missing stop…">
+<meta property="og:description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta name="twitter:description" content="LintLang is a static analysis tool for AI agent instructions and tool descriptions that identifies issues such as ambiguous directives, missing stop…">
+<meta name="twitter:description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=lintlang&amp;subtitle=Static+analysis+for+AI+agent+configs%2C+tool+descriptions%2C+and+system+prompts+%E2%80%94+catches+vague+tool+descriptions%2C+missing+stop+conditions%2C+and+schema+gaps+before+they+reach+runtime.+Z&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for AI agent instructions and tool descriptions that identifies issues such as ambiguous directives, missing stop conditions, and conflicting output formats. Its deterministic checks run locally without making LLM, API, or network calls, allowing for integration into CI workflows to block findings based on severity.",
+  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and inconsistencies between tool schemas and directives without making network or API calls.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-09-06T22:15:57.000Z",
+  "dateModified": "2026-09-10T04:41:38.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 63
+    "userInteractionCount": 64
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Static analysis for AI agent configs, tool descriptions, and system prompts — catches vague tool descriptions, missing stop conditions, and schema gaps before they reach runtime. Zero-LLM, deterministic checks, built for CI.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 63</span>
+    <span class="stars">★ 64</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-06</span>
+    <span><span class="meta-label">updated</span>2026-09-10</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions and tool descriptions that identifies issues such as ambiguous directives, missing stop conditions, and conflicting output formats. Its deterministic checks run locally without making LLM, API, or network calls, allowing for integration into CI workflows to block findings based on severity.</p>
+    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and inconsistencies between tool schemas and directives without making network or API calls.</p>
     <ul class="summary-highlights">
-      <li>Flags overlapping tool descriptions and missing termination conditions.</li>
-      <li>Performs local, deterministic checks without external API calls.</li>
-      <li>Supports CI integration through SARIF exports and baseline workflows.</li>
+      <li>Performs local, deterministic static analysis without LLM or API calls.</li>
+      <li>Flags ambiguous tool descriptions, missing constraints, and conflicting directives.</li>
+      <li>Supports CI integration with SARIF output and baseline-based finding management.</li>
     </ul>
   </div>
 </section>
@@ -432,6 +432,17 @@ pinned release at run time through MegaLinter's plugin loader. See the
 <a href="https://github.com/hermes-labs-ai/lintlang/blob/main/mega-linter-plugin-lintlang/README.md">MegaLinter plugin guide</a> for the exact
 <code>PLUGINS</code> and <code>ENABLE_LINTERS</code> configuration and the container verification
 steps.</p>
+<h3>Use it with Claude Code</h3>
+<p>The repository root is also a Claude Code marketplace, so the native plugin
+installs without a checkout:</p>
+<pre><code class="language-text">/plugin marketplace add hermes-labs-ai/lintlang
+/plugin install lintlang@lintlang
+</code></pre>
+<p>Its non-blocking <code>PostToolUse</code> hook returns LintLang repair guidance after
+Claude Code changes supported files with <code>Write</code> or <code>Edit</code>. Reverse it with
+<code>claude plugin disable lintlang@lintlang</code> or <code>claude plugin uninstall lintlang@lintlang</code>. See the
+<a href="https://github.com/hermes-labs-ai/lintlang/blob/main/integrations/claude-code/README.md">Claude Code plugin guide</a> for the
+prerequisite LintLang release and the local <code>--plugin-dir</code> route.</p>
 <h3>Use it with Gemini CLI</h3>
 <p>The repository root is also a Gemini CLI extension. Its non-blocking
 <code>AfterTool</code> hook returns LintLang repair guidance after Gemini changes supported
@@ -614,7 +625,7 @@ inspects one present instruction plus explicit context.</p>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
-        <div class="stars">★ 857</div>
+        <div class="stars">★ 858</div>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
