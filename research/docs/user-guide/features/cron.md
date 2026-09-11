@@ -580,7 +580,7 @@ cron:
 Behaviour is **thread-preferred**, scoped to the job's own conversation:
 
 -   **Thread-capable platforms** (Telegram topics, Discord/Slack threads): each delivery opens its own dedicated thread and the brief is seeded into that thread's session, so a reply in-thread continues with full context. A recurring job (e.g. a daily brief) opens a fresh thread per run, keeping each delivery's follow-up discussion isolated.
--   **DM-only platforms** (WhatsApp, Signal, SMS): no threads exist, so the brief is mirrored into the origin DM session instead — the DM itself is the continuation surface.
+-   **DM-only platforms** (WhatsApp, Signal, SMS): no threads exist, so the brief is mirrored into the target DM session instead (the origin DM, or the home DM for fallback and bare-platform jobs) — the DM itself is the continuation surface.
 
 Only the job's **own conversation** is ever touched:
 
@@ -588,7 +588,9 @@ Only the job's **own conversation** is ever touched:
 -   the **home-channel fallback** when `deliver: origin` captured no origin (jobs created by scripts or the API rather than from a live gateway chat) — the user's primary conversation standing in for the origin;
 -   a job's **single explicit `platform:chat` target**, but only when the job itself opts in with `attach_to_session: true` — the job author declares that target a conversation. The global `mirror_delivery` flag alone never makes an explicitly-addressed chat continuable.
 
-Broadcast / fan-out targets (`all`, bare-platform home channels) are never made continuable. The mirror is written as a labelled user turn (`[Cron delivery: <task name>]`), which keeps the conversation history alternation-safe across all model providers.
+Broadcast expansions (`all`) are never made continuable. A user-written bare platform name (`deliver: slack`) addresses that platform's home channel deliberately and follows the same rules as the home-channel fallback above. After upgrading, existing `deliver: <platform>` jobs with `cron.mirror_delivery: true` can open a new thread per run on thread-capable platforms. Set `attach_to_session: false` on a job to opt out of this thread-per-run behaviour.
+
+The mirror is written as a labelled user turn (`[Cron delivery: <task name>]`), which keeps the conversation history alternation-safe across all model providers.
 
 #### Flat, in-channel continuation (Slack)
 

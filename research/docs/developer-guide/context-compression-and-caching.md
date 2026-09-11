@@ -151,7 +151,7 @@ Compression triggers when prompt tokens ≥ `threshold × context_length`
 
 map
 
-Per-model overrides of `threshold`. Keys are substring-matched against the model name (longest match wins). The small-context floor still applies on top (see below)
+Per-model overrides of `threshold`. Keys are substring-matched against the model name (longest match wins); `"<provider>:<substring>"` keys apply only on that provider. The small-context floor still applies on top (see below)
 
 `target_ratio`
 
@@ -275,11 +275,13 @@ compression:
     "glm-5.2": 0.40
     "glm-5.2-1M": 0.25
     "claude-sonnet": 0.35
+    "openai-codex:astra": 0.85   # only on the Codex OAuth route (272K cap)
 ```
 
 Resolution rules:
 
 -   Keys are **substring-matched** against the model name; the **longest matching key wins** (`glm-5.2-1M` beats `glm-5.2` for model `glm-5.2-1M`).
+-   Keys may be **provider-scoped** as `"<provider>:<substring>"` (e.g. `"openai-codex:astra": 0.85`). A scoped key only matches when the session's provider is that route, so the same slug served with a different window elsewhere (OpenRouter, Nous, direct OpenAI) keeps the global `threshold`. Ranking uses the model substring only, so `"astra-900k"` still beats `"openai-codex:astra"` for the 900K picker; a scoped key beats a bare key with the identical substring.
 -   When no key matches (or the map is empty), the global `threshold` applies.
 -   The override is re-resolved on every `/model` switch; switching to a model with no matching key falls back to the global `threshold`.
 -   The **small-context floor still applies on top** of overrides (raise-only): models with context windows below 512K are floored at `0.75`, so an override below the floor is raised to `0.75`, while an override above it (e.g. `0.80`) wins.

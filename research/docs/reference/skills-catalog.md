@@ -240,6 +240,12 @@ Box manages cloud files, sharing, search, and metadata.
 
 `productivity/box`
 
+[`collective-wisdom-install`](/docs/user-guide/skills/bundled/productivity/productivity-collective-wisdom-install)
+
+Browse, install, or share team skills with consent.
+
+`productivity/collective-wisdom-install`
+
 [`document-to-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items)
 
 Extract cited obligations, deadlines, tasks from documents.
