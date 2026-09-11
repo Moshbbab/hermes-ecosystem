@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mnemosyne-oss/mnemosyne — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Mnemosyne is a SQLite-backed AI memory system designed for agent frameworks and Python applications. It operates locally without cloud dependencies and…">
+<meta name="description" content="Mnemosyne is a SQLite-backed AI memory layer for Hermes agents and other frameworks that operates without cloud dependencies. It provides a Python SDK and CLI…">
 <link rel="canonical" href="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta property="og:description" content="Mnemosyne is a SQLite-backed AI memory system designed for agent frameworks and Python applications. It operates locally without cloud dependencies and…">
+<meta property="og:description" content="Mnemosyne is a SQLite-backed AI memory layer for Hermes agents and other frameworks that operates without cloud dependencies. It provides a Python SDK and CLI…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="mnemosyne-oss/mnemosyne — Hermes Atlas">
-<meta name="twitter:description" content="Mnemosyne is a SQLite-backed AI memory system designed for agent frameworks and Python applications. It operates locally without cloud dependencies and…">
+<meta name="twitter:description" content="Mnemosyne is a SQLite-backed AI memory layer for Hermes agents and other frameworks that operates without cloud dependencies. It provides a Python SDK and CLI…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=mnemosyne&amp;subtitle=Zero-cloud+AI+memory+that+works+everywhere.+SQLite-backed.+One+pure-Python+dependency.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne#software",
   "name": "mnemosyne",
-  "description": "Mnemosyne is a SQLite-backed AI memory system designed for agent frameworks and Python applications. It operates locally without cloud dependencies and provides memory storage and retrieval through a Python SDK, CLI, or Model Context Protocol (MCP).",
+  "description": "Mnemosyne is a SQLite-backed AI memory layer for Hermes agents and other frameworks that operates without cloud dependencies. It provides a Python SDK and CLI for storing and recalling facts, supporting integrations via the Model Context Protocol (MCP) and native tools.",
   "url": "https://hermesatlas.com/projects/mnemosyne-oss/mnemosyne",
   "codeRepository": "https://github.com/mnemosyne-oss/mnemosyne",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "mnemosyne-oss",
     "url": "https://github.com/mnemosyne-oss"
   },
-  "dateModified": "2026-09-11T06:56:43.000Z",
+  "dateModified": "2026-09-11T15:47:20.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 3087
+    "userInteractionCount": 3091
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">249·repos</span>
-    <span id="meta-version">hermes·v0.21.1</span>
+    <span id="meta-version">hermes·v0.21.2</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Mnemosyne is a SQLite-backed AI memory system designed for agent frameworks and Python applications. It operates locally without cloud dependencies and provides memory storage and retrieval through a Python SDK, CLI, or Model Context Protocol (MCP).</p>
+    <p class="summary-text">Mnemosyne is a SQLite-backed AI memory layer for Hermes agents and other frameworks that operates without cloud dependencies. It provides a Python SDK and CLI for storing and recalling facts, supporting integrations via the Model Context Protocol (MCP) and native tools.</p>
     <ul class="summary-highlights">
-      <li>Uses SQLite for local storage with zero cloud dependencies.</li>
+      <li>Uses a single SQLite database with one pure-Python dependency.</li>
       <li>Supports MCP for integration with Cursor, Claude Code, and Windsurf.</li>
-      <li>Provides Python SDK for storing facts with importance and expiry.</li>
+      <li>Includes features for temporal recall, importance weighting, and episodic compression.</li>
     </ul>
   </div>
 </section>
@@ -810,9 +810,12 @@ hermes config set memory.provider mnemosyne
 <p>Mnemosyne exposes memory, knowledge-graph, multi-agent-surface, working-note, and operational tools. Treat the runtime list as authoritative. The installer or wrapper registers the plugin manifest under <code>$HERMES_HOME/plugins/mnemosyne</code>, where Hermes discovers it.</p>
 <p><strong>Updating:</strong> For the persistent side-venv wrapper path, use the side venv rather than a bare <code>pip</code>:</p>
 <pre><code class="language-bash">export HERMES_HOME=/opt/data  # Replace with the active Hermes home
-"$HERMES_HOME/.mnemosyne/venv/bin/python" -m pip install --upgrade 'mnemosyne-memory[embeddings]' mnemosyne-hermes
+VENV="$HERMES_HOME/.mnemosyne/venv"
+"$VENV/bin/python" -m pip install --upgrade 'mnemosyne-memory[embeddings]' mnemosyne-hermes
+"$VENV/bin/mnemosyne-hermes" install --mode wrapper --force --python "$VENV/bin/python"
 hermes gateway restart
 </code></pre>
+<p>The forced install regenerates the wrapper plugin files and does not modify the Mnemosyne database.</p>
 <p>For a direct or source install, use <code>pip install --upgrade mnemosyne-hermes &amp;&amp; hermes gateway restart</code> or <code>git pull &amp;&amp; pip install --upgrade integrations/hermes &amp;&amp; hermes gateway restart</code> (source).</p>
 <hr>
 <h3>Mnemosyne Sync</h3>
@@ -887,7 +890,7 @@ mnemosyne sync-status --remote https://my-vps:8765
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 23.4K</div>
+        <div class="stars">★ 23.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -903,11 +906,11 @@ mnemosyne sync-status --remote https://my-vps:8765
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 277</div>
+        <div class="stars">★ 278</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 251</div>
+        <div class="stars">★ 254</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
