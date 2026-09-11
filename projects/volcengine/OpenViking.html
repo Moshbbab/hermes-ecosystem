@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/volcengine/OpenViking#software",
   "name": "OpenViking",
-  "description": "OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0 abstract, L1 overview, L2 details) to retrieve information on demand and provides observable trajectories for debugging context retrieval.",
+  "description": "OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0, L1, and L2) to process content into abstracts, overviews, and full details for on-demand retrieval.",
   "url": "https://hermesatlas.com/projects/volcengine/OpenViking",
   "codeRepository": "https://github.com/volcengine/OpenViking",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "volcengine",
     "url": "https://github.com/volcengine"
   },
-  "dateModified": "2026-09-11T04:44:55.000Z",
+  "dateModified": "2026-09-11T10:54:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 36559
+    "userInteractionCount": 36627
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0 abstract, L1 overview, L2 details) to retrieve information on demand and provides observable trajectories for debugging context retrieval.</p>
+    <p class="summary-text">OpenViking is an open-source context database that organizes AI agent memories, resources, and skills into a virtual filesystem using the viking:// protocol. It employs a tiered loading system (L0, L1, and L2) to process content into abstracts, overviews, and full details for on-demand retrieval.</p>
     <ul class="summary-highlights">
-      <li>Organizes agent context using a viking:// URI virtual filesystem.</li>
-      <li>Utilizes three-tier loading to reduce token consumption.</li>
-      <li>Extracts user preferences and agent experience into long-term memory.</li>
+      <li>Uses a virtual filesystem for context management via viking:// URIs.</li>
+      <li>Implements three-tier loading to reduce token consumption.</li>
+      <li>Provides observable retrieval trajectories for debugging query paths.</li>
     </ul>
   </div>
 </section>
@@ -266,21 +266,68 @@ ov grep "openviking" --uri viking://resources/volcengine/OpenViking/docs/en
 <li>Docker and production deployment: <a href="https://docs.openviking.ai/en/guides/03-deployment">Deployment guide</a></li>
 </ul>
 <h3>Use it with your agent</h3>
-<p>Integrations inject OpenViking recall into your agent's context and auto-commit session memory:</p>
-<ul>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/02-claude-code">Claude Code</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/04-codex">Codex</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/03-openclaw">OpenClaw</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/05-hermes">Hermes</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/12-cursor">Cursor</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/13-trae">TRAE / TRAE CN / TraeCode CLI 2.0</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/10-opencode">OpenCode</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/11-pi">pi</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/15-agent-plugins">Agent Plugins 1.0</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/06-mcp-clients">MCP clients</a></li>
-<li><a href="https://docs.openviking.ai/en/agent-integrations/07-langchain-langgraph">LangChain / LangGraph</a></li>
-</ul>
-<p>Setup instructions for each agent: <a href="https://docs.openviking.ai/en/agent-integrations/01-overview">Agent integrations overview</a>.</p>
+<p>Connect your agent to OpenViking for cross-session memory. Choose a native integration for automatic recall and session capture, or use MCP to give your agent memory and context tools.</p>
+<table>
+<tbody><tr>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/02-claude-code"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/agents/image/claude-code/logo.png" width="32" height="32" alt=""><br><strong>Claude</strong></a><br>
+<sub>Hooks&nbsp;+&nbsp;MCP</sub>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/04-codex"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/codex.png" width="32" height="32" alt=""><br><strong>Codex</strong></a><br>
+<sub>Hooks&nbsp;+&nbsp;MCP</sub>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/12-cursor"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/agents/image/cursor/logo.png" width="32" height="32" alt=""><br><strong>Cursor</strong></a><br>
+<sub>Hooks&nbsp;+&nbsp;MCP</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/13-trae"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/agents/image/trae/logo.png" width="32" height="32" alt=""><br><strong>TRAE</strong></a><br>
+<sub>Hooks&nbsp;+&nbsp;MCP</sub>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/03-openclaw"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/openclaw.jpg" width="24" height="24" alt=""><br><strong>OpenClaw</strong></a><br>
+<sub>Context&nbsp;engine</sub>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/05-hermes"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/hermes-agent.png" width="24" height="24" alt=""><br><strong>Hermes</strong></a><br>
+<sub>Built-in&nbsp;memory</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/10-opencode"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/agents/image/opencode/logo.png" width="32" height="32" alt=""><br><strong>OpenCode</strong></a><br>
+<sub>Plugin&nbsp;+&nbsp;MCP</sub>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/11-pi"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/integrations/pi-dark.svg"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/pi.svg" width="41" height="41" alt=""></picture><br><strong>pi</strong></a><br>
+<sub>Native&nbsp;extension</sub>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="docs/images/agents/en/deerflow-memory-manager.md"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/images/integrations/deerflow-dark.svg"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/deerflow.svg" width="19" height="24" alt=""></picture><br><strong>DeerFlow</strong></a><br>
+<sub>Memory&nbsp;+&nbsp;MCP</sub>
+</td>
+</tr>
+</tbody></table>
+
+<p><strong>General integrations</strong></p>
+<table>
+<tbody><tr>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/15-agent-plugins"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/agent-plugins.svg" width="24" height="23" alt=""><br><strong>Agent&nbsp;Plugins&nbsp;1.0</strong></a>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/06-mcp-clients"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/mcp.svg" width="24" height="24" alt=""><br><strong>MCP&nbsp;clients</strong></a>
+</td>
+<td align="center" valign="bottom" width="33%">
+<a href="https://docs.openviking.ai/en/agent-integrations/07-langchain-langgraph"><img src="https://raw.githubusercontent.com/volcengine/OpenViking/main/docs/images/integrations/langchain.svg" width="24" height="24" alt=""><br><strong>LangChain</strong></a>
+</td>
+</tr>
+</tbody></table>
+
+<p>For setup instructions and integration details, see <a href="https://openviking.ai/integrations">Integrations</a>.</p>
 <h3>OpenViking Helper (Beta)</h3>
 <p>OpenViking Helper is a desktop console, currently in beta for macOS and Windows x64:</p>
 <ul>
@@ -344,12 +391,26 @@ ov chat   # in another terminal
 <p>Just want to run the open-source edition? Go ahead — you don't need to contact anyone. Head to <a href="#quick-start">Quick start</a>.</p>
 </blockquote>
 <h3>Research</h3>
-<p>OpenViking open-sources a subset of the core capabilities described in the VikingMem paper:</p>
+<p><strong>Memory that evolves with your agent.</strong> VikingMem develops an event-driven approach to extracting, updating, and consolidating long-term memory, giving stateful agents a way to retain useful experience as interactions accumulate. OpenViking open-sources a subset of these core capabilities.</p>
 <blockquote>
-<p><strong>VikingMem: A Memory Base Management System for Stateful LLM-based Applications</strong>
-Jiajie Fu, Junwen Chen, Mengzhao Wang, Aoxiang He, Maojia Sheng, Xiangyu Ke, Yifan Zhu, and Yunjun Gao.
-arXiv:2605.29640, 2026. Accepted by VLDB 2026.
-📄 <a href="https://arxiv.org/abs/2605.29640">Read the paper on arXiv</a></p>
+<p><strong>VikingMem: A Memory Base Management System for Stateful LLM-based Applications</strong><br>
+Jiajie Fu, Junwen Chen, Mengzhao Wang, Aoxiang He, Maojia Sheng, Xiangyu Ke, Yifan Zhu, and Yunjun Gao.<br>
+arXiv:2605.29640, 2026. Presented at VLDB 2026 in September.<br>
+📄 <a href="https://arxiv.org/abs/2605.29640">Read the paper on arXiv</a> · <a href="https://arxiv.org/pdf/2605.29640">Read PDF</a></p>
+</blockquote>
+<p><strong>Directory structure as retrieval context.</strong> This paper provides the formal foundations, index design, and experimental evidence behind OpenViking’s directory-aware retrieval. It defines directory-scoped query and maintenance operations and introduces TrieHI, which OpenViking integrates to resolve directory scopes before vector ranking. This connects the filesystem paradigm to retrieval: agents can search a project or memory subtree, retain its surrounding context, and reorganize it as knowledge evolves.</p>
+<blockquote>
+<p><strong>Directory-Aware Query and Maintenance in Vector Databases</strong><br>
+Mengzhao Wang, Zheng Gong, Jingpei Hu, Jiajie Fu, Maojia Sheng, Junwen Chen, and Yifan Zhu.<br>
+arXiv:2606.16903, 2026. Accepted by ICDE.<br>
+📄 <a href="https://arxiv.org/abs/2606.16903">Read the paper on arXiv</a> · <a href="https://arxiv.org/pdf/2606.16903">Read PDF</a></p>
+</blockquote>
+<p><strong>Retrieve the evidence you need with fewer tokens.</strong> VikingRAG combines semantic search with document structure, exposing relevant directory segments as evidence gaps arise. Its core mechanisms are integrated into OpenViking. The paper further explores reusing retrieval traces and escalating to multi-round retrieval only when needed, reducing repeated exploration while preserving answer quality.</p>
+<blockquote>
+<p><strong>VikingRAG: Accurate and Token-efficient Retrieval-augmented Generation over Structured Documents</strong><br>
+Peiyuan Gao, Gaoyuan Zhang, Haojie Qin, Yahui Sun, Qianyi Zhang, Yunhao Zhang, Zeyu Wang, and Wei Lu.<br>
+arXiv:2609.11390, 2026. Submitted.<br>
+📄 <a href="https://arxiv.org/abs/2609.11390">Read the paper on arXiv</a> · <a href="https://arxiv.org/pdf/2609.11390">Read PDF</a></p>
 </blockquote>
 <h3>Partner Projects</h3>
 <p>OpenViking welcomes collaboration with other open-source projects to build the context data ecosystem. Our confirmed partners include:</p>
@@ -396,7 +457,7 @@ For vulnerability reporting and supported versions, see <a href="https://github.
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 23.4K</div>
+        <div class="stars">★ 23.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -416,7 +477,7 @@ For vulnerability reporting and supported versions, see <a href="https://github.
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 249</div>
+        <div class="stars">★ 251</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
