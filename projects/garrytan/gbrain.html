@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources, supporting corrections, withdrawals, and shared access across different…">
+<meta name="description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and shared access across different agents. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources, supporting corrections, withdrawals, and shared access across different…">
+<meta property="og:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and shared access across different agents. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources, supporting corrections, withdrawals, and shared access across different…">
+<meta name="twitter:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and shared access across different agents. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources, supporting corrections, withdrawals, and shared access across different agents. It uses a synthesis layer to provide cited answers and a self-wiring knowledge graph to extract entity relationships without LLM calls.",
+  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and shared access across different agents. It features a synthesis layer for cited prose answers and a self-wiring knowledge graph that extracts entity relationships without LLM calls.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-10T20:25:22.000Z",
+  "dateModified": "2026-09-11T00:27:35.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 29802
+    "userInteractionCount": 29807
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-10</span>
+    <span><span class="meta-label">updated</span>2026-09-11</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources, supporting corrections, withdrawals, and shared access across different agents. It uses a synthesis layer to provide cited answers and a self-wiring knowledge graph to extract entity relationships without LLM calls.</p>
+    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and shared access across different agents. It features a synthesis layer for cited prose answers and a self-wiring knowledge graph that extracts entity relationships without LLM calls.</p>
     <ul class="summary-highlights">
-      <li>Stores explicit facts with provenance and cross-agent availability.</li>
-      <li>Features a synthesis layer for cited prose and gap analysis.</li>
-      <li>Extracts typed entity edges for graph-based knowledge retrieval.</li>
+      <li>Stores facts with provenance, supporting corrections and memory withdrawal.</li>
+      <li>Generates synthesized answers with citations and gap analysis.</li>
+      <li>Builds a knowledge graph with typed edges for entity relationships.</li>
     </ul>
   </div>
 </section>
@@ -210,6 +210,9 @@ catch up before assuming any of this is still current.
 <p>Every claim has a source page behind it. The "heads up" at the end tells you what the brain doesn't know yet, so you can ask Alice about it directly instead of being surprised. The brain just did your meeting prep.</p>
 <p>This is the difference between a search engine and a brain. Search finds the pages. The brain reads them for you and writes the answer.</p>
 <h3>Install</h3>
+<p>Requires <strong>Bun 1.3.11 or newer</strong>. Existing worker installations should follow the
+<a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/authorization-upgrade.md">authorization and queue upgrade guide</a>
+before restarting services with this version.</p>
 <blockquote>
 <p>[!WARNING]
 <strong>GBrain is NOT distributed on npm.</strong> The npm package named <code>gbrain</code> is an unrelated
@@ -462,7 +465,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 <p>The command is idempotent (re-running with the same language is a no-op for vector content) and uses the same recreate-and-backfill primitives as the migration. For accent-insensitive Portuguese (<code>pt_br</code>), see <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/multi-language-fts.md">docs/guides/multi-language-fts.md</a> for the <code>unaccent</code> + portuguese stemmer recipe. <strong>Say to your agent:</strong> <em>"Set my brain's search language to Portuguese and reindex."</em></p>
 <p><strong>50+ curated skills</strong> (the current list lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/manifest.json"><code>skills/manifest.json</code></a>). Routing lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a>. Covers signal capture, ingest (idea / media / meeting), enrichment, querying, brain ops, citation fixing, daily task management, cron scheduling, reports, voice, soul audit, skill creation, eval framework, and migrations. Skills are markdown files (tool-agnostic), packaged as a single skillpack the installer drops into your agent workspace.</p>
 <p><strong>Say to your agent — the phrasebook.</strong> You never invoke a skill by name; you say what you want and your agent routes it. Every skill declares its trigger phrases in its frontmatter, and <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a> is the full human-readable phrasebook — one table of "when you say this, this skill fires." A taste: <em>"Ingest this PDF"</em> (media-ingest) — <em>"What's happening today?"</em> (briefing) — <em>"Fill my brain"</em> (cold-start) — <em>"Brain health"</em> / <em>"check backlinks"</em> (maintain — either phrase routes there) — <em>"Is my brain set up right?"</em> (gbrain-advisor) — <em>"Did the restart break anything?"</em> (smoke-test) — <em>"Run this as a background task"</em> (minion-orchestrator). If you're ever unsure what to say, ask your agent: <em>"What can my brain do?"</em> and have it read the resolver back to you.</p>
-<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. Measured 2026-09-06 at gbrain v0.48.4.0 by this command on LongMemEval-S (cleaned Sept-2025 revision, 500 questions, 470 scored after the 30 abstention questions are dropped as the official scorer does), k=5, single run: on the release default path (<code>balanced</code>: <code>voyage:rerank-2.5</code> on, autocut off) strict session-level <code>recall_all@5</code> of <strong>95.53%</strong> (449/470), meaning every gold session landed inside the top-5 distinct retrieved sessions, retrieval only, no reader model; with the reranker off, the like-for-like row against systems that run no reranker, <strong>93.40%</strong> (439/470). The looser any-hit <code>recall_any@5</code> was 99.79% / 98.72% and is reported as a diagnostic, not a headline. The reranker-off row reproduces the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> runner's 2026-09-02 receipt (438/470; 469 of 470 rows agree per question), where the per-row receipts live. Paired against reranker-off hybrid the reranker gains 18 questions and loses 8; the default that shipped before v0.48.4.0 (reranker on with autocut) scored 379/470, because autocut kept the best session and dropped the rest on multi-part questions, which is why autocut is now off. One warning that the ranker wave re-measured rather than removed: <code>tokenmax</code>'s LLM multi-query expansion is harmful at k=5 — 255/470 <code>recall_all@5</code> (paired +3 / −187 vs hybrid) at the legacy weighting, 394/470 with the new <code>search.expansion_variant_budget</code> knob at its smallest pre-registered value, still 43 questions behind plain hybrid on the held-out decision set — so the bundles keep the legacy weighting, small-k recall stays worse in that mode, and conditional expansion is the filed next step. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution) so a regression in "find the page this query names" fails CI loudly. <code>gbrain eval brainbench</code> runs the cross-harness memory conformance suite: know-to-ask, push precision/recall, write-back fidelity, and cross-session continuity, scored per harness seam (your OpenClaw's production pipeline plus Claude Code and Codex injection contracts) against a committed 141-fixture synthetic corpus — hermetic by default (in-memory PGLite, no keys, seconds), and CI gates every PR against master's committed baseline. Methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/BRAINBENCH.md"><code>docs/eval/BRAINBENCH.md</code></a>; search-mode methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md"><code>docs/eval/SEARCH_MODE_METHODOLOGY.md</code></a>. <strong>Say to your agent:</strong> <em>"Run a regression check on retrieval"</em> (your agent runs <code>gbrain eval brainbench</code>); <em>"Run the public LongMemEval benchmark like-for-like"</em> (no skill backs this one; your agent runs <code>gbrain eval longmemeval &lt;longmemeval_s_cleaned.json&gt; --retrieval-only --top-k 5 --by-type --no-trajectory --mode balanced --reranker off --autocut off</code>. That in-repo command is the reproduction path for the 93.40% row (and the 2026-09-02 receipt's 93.19%): its `--by-t</p>
+<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. Measured 2026-09-06 at gbrain v0.48.4.0 by this command on LongMemEval-S (cleaned Sept-2025 revision, 500 questions, 470 scored after the 30 abstention questions are dropped as the official scorer does), k=5, single run: on the release default path (<code>balanced</code>: <code>voyage:rerank-2.5</code> on, autocut off) strict session-level <code>recall_all@5</code> of <strong>95.53%</strong> (449/470), meaning every gold session landed inside the top-5 distinct retrieved sessions, retrieval only, no reader model; with the reranker off, the like-for-like row against systems that run no reranker, <strong>93.40%</strong> (439/470). The looser any-hit <code>recall_any@5</code> was 99.79% / 98.72% and is reported as a diagnostic, not a headline. The reranker-off row reproduces the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> runner's 2026-09-02 receipt (438/470; 469 of 470 rows agree per question), where the per-row receipts live. Paired against reranker-off hybrid the reranker gains 18 questions and loses 8; the default that shipped before v0.48.4.0 (reranker on with autocut) scored 379/470, because autocut kept the best session and dropped the rest on multi-part questions, which is why autocut is now off. One warning that the ranker wave re-measured rather than removed: <code>tokenmax</code>'s LLM multi-query expansion is harmful at k=5 — 255/470 <code>recall_all@5</code> (paired +3 / −187 vs hybrid) at the legacy weighting, 394/470 with the new <code>search.expansion_variant_budget</code> knob at its smallest pre-registered value, still 43 questions behind plain hybrid on the held-out decision set — so the bundles keep the legacy weighting, small-k recall stays worse in that mode, and conditional expansion is the filed next step. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution) so a regression in "find the page this query names" fails CI loudly. <code>gbrain eval brainbench</code> runs the cross-harness memory conformance suite: know-to-ask, push precision/recall, write-back fidelity, and cross-session continuity, scored per harness seam (your OpenClaw's production pipeline plus Claude Code and Codex injection contracts) against a committed 141-fixture synthetic corpus — hermetic by default (in-memory PGLite, no keys, seconds), and CI gates every PR against master's committed baseline. Methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/BRAINBENCH.md"><code>docs/eval/BRAINBENCH.md</code></a>; search-mode methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md"><code>docs/eval/SEARCH_MODE_METHODOLOGY.md</code></a>. <strong>Say to your agent:</strong> <em>"Run a regression check on retrieval"</em> (your agent runs <code>gbrain eval brainbench</code>); <em>"Run the public LongMemEval benchmark like-for-like"</em> (no skill backs this one; your agent runs `gbrain eval longmemeval &lt;longmemeval_s_cleaned.json&gt; --retrie</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
