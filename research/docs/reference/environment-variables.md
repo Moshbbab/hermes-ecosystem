@@ -148,7 +148,7 @@ Actual Computer inference key (`ac_...`, [actual.inc/user/keys](https://actual.i
 
 `ACTUAL_BASE_URL`
 
-Override Actual Computer base URL (default: `https://api.actual.inc/v1`). Set to `http://127.0.0.1:8080` for the local offline daemon — loopback hosts need no API key.
+Legacy fallback for the Actual base URL. Configure `model.provider: actual` and `model.base_url` in `config.yaml` instead; the YAML URL takes precedence. Defaults to `https://api.actual.inc/v1`.
 
 `MINIMAX_API_KEY`
 
