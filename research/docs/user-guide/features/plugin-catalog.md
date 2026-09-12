@@ -82,6 +82,20 @@ hermes plugins enable <name>
 
 The install prompt shows the entry's capability summary — declared tools, hooks, and required env vars — before anything is cloned.
 
+The catalog name and the plugin's own manifest name can differ; `hermes plugins install` prints the installed name, and `enable` takes that one. For example the `touchdesigner` entry (a portable Agent Plugins v1 package that bundles the twozero MCP server with the `touchdesigner-mcp` skill) installs as `td`, kept short so its generated MCP tool names stay under provider function-name limits:
+
+```
+hermes plugins install touchdesigner
+hermes plugins enable td
+```
+
+Portable packages can also carry a stdio MCP server. The `snyk` entry pins the Snyk CLI (`npx -y snyk@<version> mcp`) and bundles the `snyk-security-scan` skill, so one install gives Hermes code, dependency, container and IaC scanning plus the workflow for using it; the catalog name and manifest name match:
+
+```
+hermes plugins install snyk
+hermes plugins enable snyk
+```
+
 ### Updating a catalog install
 
 `hermes plugins update <name>` never runs `git pull` for catalog installs — it compares your installed pin against the current catalog pin and, when the catalog moved (via a reviewed PR), force-reinstalls at the new SHA. Your enabled/disabled state is preserved. `hermes plugins list` shows catalog installs as `catalog:<tier>@<sha>` so you can see provenance at a glance.

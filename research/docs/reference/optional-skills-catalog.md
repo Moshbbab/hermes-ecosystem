@@ -175,10 +175,6 @@ Plan multi-platform social campaigns: briefs to posting.
 
 Drive and script tldraw offline canvases with an agent.
 
-[**touchdesigner-mcp**](/docs/user-guide/skills/optional/creative/creative-touchdesigner-mcp)
-
-Control TouchDesigner via twozero MCP.
-
 [**unreal-mcp**](/docs/user-guide/skills/optional/creative/creative-unreal-mcp)
 
 Automate Unreal Engine editor scenes, actors, and renders.
