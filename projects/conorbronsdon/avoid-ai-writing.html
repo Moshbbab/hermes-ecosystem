@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite text to eliminate detectable AI writing patterns. It utilizes a catalog of 74…">
+<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to eliminate detectable AI writing patterns. It utilizes a catalog…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite text to eliminate detectable AI writing patterns. It utilizes a catalog of 74…">
+<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to eliminate detectable AI writing patterns. It utilizes a catalog…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite text to eliminate detectable AI writing patterns. It utilizes a catalog of 74…">
+<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to eliminate detectable AI writing patterns. It utilizes a catalog…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+Codex%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite text to eliminate detectable AI writing patterns. It utilizes a catalog of 74 pattern categories and a 112-entry word replacement table to identify and fix structural tells, promotional language, and specific vocabulary markers.",
+  "description": "avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to eliminate detectable AI writing patterns. It utilizes a catalog of 74 pattern categories and a 112-entry word replacement table to identify and fix common machine-generated traits.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-12T15:23:55.000Z",
+  "dateModified": "2026-09-12T20:13:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4326
+    "userInteractionCount": 4332
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -148,10 +148,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite text to eliminate detectable AI writing patterns. It utilizes a catalog of 74 pattern categories and a 112-entry word replacement table to identify and fix structural tells, promotional language, and specific vocabulary markers.</p>
+    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to eliminate detectable AI writing patterns. It utilizes a catalog of 74 pattern categories and a 112-entry word replacement table to identify and fix common machine-generated traits.</p>
     <ul class="summary-highlights">
       <li>Supports rewrite, detect-only, and edit-in-place modes.</li>
-      <li>Features a two-pass detection process to catch surviving patterns.</li>
+      <li>Features a two-pass detection system to catch lingering patterns.</li>
       <li>Compatible with Claude Code, OpenClaw, and agentskills.io agents.</li>
     </ul>
   </div>
@@ -179,6 +179,7 @@
 <li><strong>Detect</strong> — flags AI patterns without rewriting. Shows which flags are real problems vs. judgment calls. Useful when patterns might be intentional, when auditing content you don't want altered, or when you just want a quick scan.</li>
 <li><strong>Edit</strong> — edits a prose file in place (via the Edit tool) with minimal, targeted changes, preserving passages that are already human. Source code, configuration, and generated data are refused because prose rewrites can corrupt structured content. Returns an edits-made + verification report, not the full file.</li>
 </ul>
+<p>Use <code>--iterate N</code> when you want the skill to repeat the audit and rewrite cycle until no patterns remain or the requested pass limit is reached. The limit is capped at 2: the initial rewrite plus one corrective pass. Rewrite mode already includes that corrective second pass; <code>--iterate</code> does not add passes on top of it. The skill reports how many passes it took.</p>
 <p>An optional <strong>voice profile</strong> (casual / professional / technical / warm / blunt) sets how the prose should sound, independent of the audience context profile.</p>
 <h3>Quick demo</h3>
 <p><strong>Input:</strong></p>
@@ -187,9 +188,9 @@
 </blockquote>
 <p><strong>Output:</strong></p>
 <blockquote>
-<p>Acme Analytics raised a $40M Series B led by Sequoia. The Boulder-based startup makes an observability platform that runs queries in under a second and plugs into existing monitoring stacks without custom integration work.</p>
+<p>Acme Analytics, a Boulder-based startup, raised a $40M Series B. Its observability platform has real-time dashboards, runs queries in under a second, and includes an integration layer.</p>
 </blockquote>
-<p><strong>What it caught:</strong> chatbot opener ("Certainly!"), promotional language ("vibrant," "nestled," "thriving"), significance inflation ("watershed moment"), copula avoidance ("serves as," "featuring," "boasting"), 4 word replacements, vague attribution ("experts believe"), filler ("Moreover"), generic conclusion ("the future looks bright"), over-polished uniformity. 15+ AI tells in one paragraph.</p>
+<p><strong>What it caught:</strong> the chatbot opener ("Certainly!"), promotional modifiers, inflated significance, roundabout verbs, vague attribution, and the generic conclusion. The rewrite keeps the funding, location, and three product capabilities. It removes the unsupported market prediction without inventing an investor or an integration mechanism.</p>
 <h3>Why a skill, not just a prompt</h3>
 <p>A one-shot "make this sound human" prompt catches the obvious stuff. This skill is different:</p>
 <ul>
@@ -341,13 +342,13 @@ python3 scripts/validate-openai-plugin.py . --json
 <td>1</td>
 <td><strong>Significance inflation</strong></td>
 <td>"marking a pivotal moment in the evolution of..."</td>
-<td>"was founded in 2019 to solve X"</td>
+<td>State the supported event; do not invent a date or purpose</td>
 </tr>
 <tr>
 <td>2</td>
 <td><strong>Notability name-dropping</strong></td>
 <td>"cited in NYT, BBC, and Wired"</td>
-<td>"In a 2024 NYT interview, she argued..."</td>
+<td>Keep supported citations; remove claims that they prove importance</td>
 </tr>
 <tr>
 <td>3</td>
@@ -359,13 +360,13 @@ python3 scripts/validate-openai-plugin.py . --json
 <td>4</td>
 <td><strong>Promotional language</strong></td>
 <td>"nestled within the breathtaking region"</td>
-<td>"is a town in the Gonder region"</td>
+<td>Keep the supplied location; remove promotional modifiers</td>
 </tr>
 <tr>
 <td>5</td>
 <td><strong>Vague attributions</strong></td>
 <td>"Experts believe it plays a crucial role"</td>
-<td>"according to a 2019 survey by Gartner"</td>
+<td>Request the source, or flag the claim for verification</td>
 </tr>
 <tr>
 <td>6</td>
@@ -377,7 +378,7 @@ python3 scripts/validate-openai-plugin.py . --json
 <td>7</td>
 <td><strong>Novelty inflation</strong></td>
 <td>"He introduced a term I hadn't heard before"</td>
-<td>"He walked through how X works in practice"</td>
+<td>Keep the personal observation if it matters; do not invent an explanation</td>
 </tr>
 </tbody></table>
 <h4>Language Patterns</h4>
@@ -803,11 +804,11 @@ python3 scripts/validate-openai-plugin.py . --json
 </blockquote>
 <p><strong>After (cleaned up):</strong></p>
 <blockquote>
-<p>Acme Analytics raised a $40M Series B led by Sequoia. The Boulder-based startup makes an observability platform that runs queries in under a second and plugs into existing monitoring stacks without custom integration work.</p>
-<p>The pitch is speed. Their median time-to-resolution is 12 minutes, compared to the 45-minute industry average that Datadog reported in 2024. That gap is why 380 companies are paying for it.</p>
-<p>They'll use the money to hire sales reps in EMEA and add log management. The monitoring market is crowded, but Acme's bet is that most teams still stitch together three or four tools and lose time switching between them.</p>
+<p>Acme Analytics, a Boulder-based startup, raised a $40M Series B led by Sequoia, with participation from Andreessen Horowitz, Y Combinator, and Index Ventures.</p>
+<p>Its observability platform gives engineering teams real-time dashboards, queries that run in under a second, and an integration layer. The platform helps engineers resolve incidents faster and supports collaboration across frontend, SRE, platform, and infrastructure teams. Customer adoption is accelerating. Acme has invested in R&amp;D for years and plans to expand its go-to-market work in a crowded monitoring market.</p>
 </blockquote>
-<p><strong>What the skill caught:</strong> chatbot artifacts (Certainly!, Feel free to reach out), 3 em dashes, promotional language (vibrant, nestled, thriving), significance inflation (watershed moment), copula avoidance (serves as, featuring, boasting, presenting), 10 word replacements (landscape, robust, seamless, paradigm, streamline, empower, foster, utilize, ascertain, endeavor), synonym cycling (developers/practitioners/builders/engineers), negative parallelism (It's not just X, it's Y), notability name-dropping (Sequoia, a16z, YC, Index stacked for credibility), vague attributions (Experts believe, Studies show), filler phrases (In order to, Moreover), inline-header list with emoji, superficial -ing analysis (symbolizing... reflecting... highlighting...), formulaic challenges (Despite challenges... continues to thrive), generic conclusion (the future looks bright, only time will tell), false range implied in the adoption bullet.</p>
+<p><strong>Claims needing sources:</strong> The input attributes a prediction about a $15B market to unnamed experts and a 40% improvement in issue identification to unspecified studies. Verify those sources before publishing the claims. The rewrite leaves them out; it does not replace them with invented benchmarks, customers, or plans. The product and adoption statements above also remain supplied claims, not independently verified facts.</p>
+<p><strong>What the skill caught:</strong> chatbot framing, promotional modifiers, inflated significance, roundabout verbs, repeated role synonyms, empty contrast, list decoration, vague attribution, filler, and generic closing language. The rewrite preserves the named investors and supplied capabilities, consolidates the team list, and flags the unsupported market and study claims for verification.</p>
 <p>That's 35+ AI tells.</p>
 <h3>Run the detector</h3>
 <p>The skill ships a deterministic, zero-dependency detection engine in
@@ -995,7 +996,7 @@ guardrails first.</p>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 370</div>
+        <div class="stars">★ 371</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
@@ -1003,11 +1004,11 @@ guardrails first.</p>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
-        <div class="stars">★ 125</div>
+        <div class="stars">★ 126</div>
         <div class="name"><span class="org">smartcontractkit /</span> chainlink-agent-skills</div>
       </a>
       <a class="related-row" href="/projects/tlehman/litprog-skill">
-        <div class="stars">★ 264</div>
+        <div class="stars">★ 265</div>
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
