@@ -76,7 +76,7 @@ Meaning
 
 Busy spinner. Thinking and tool phases use different braille animation sets.
 
-`⚕ 🌀 🤔 ✨ 🍵 🔮`
+`☤ 🌀 🤔 ✨ 🍵 🔮`
 
 Frames of the `emoji` busy-indicator style (`/indicator emoji`). The default style rotates kaomoji faces instead.
 

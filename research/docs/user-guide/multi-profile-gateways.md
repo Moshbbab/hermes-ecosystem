@@ -90,7 +90,7 @@ The default gateway is running as a profile multiplexer and already serves
 profile 'coder'. ...
 ```
 
-The refusal happens in the CLI before any service manager is touched, so a served profile never ends up with a permanently failed systemd unit or a launchd respawn loop. `hermes -p coder gateway stop` refuses the same way (exit 78) when coder has no gateway of its own — there is nothing to stop but the multiplexer, which `hermes gateway stop` on the default profile takes down for every served profile. The dashboard and Desktop app follow the CLI: for a served profile the "Start" and "Stop" gateway actions answer `409` with the same explanation, and "Restart" restarts the multiplexer (the process that actually serves the profile) instead of spawning a `-p coder gateway restart` that could only fail. "Served" is read from the running gateway's own record (`served_profiles` in the default home's `gateway_state.json`), so it stays correct when the multiplexer was enabled only through `GATEWAY_MULTIPLEX_PROFILES` in the default profile's environment, or when profiles were added after the gateway started.
+The refusal happens in the CLI before any service manager is touched, so a served profile never ends up with a permanently failed systemd unit or a launchd respawn loop. `hermes -p coder gateway stop` refuses the same way (exit 78) when coder has no gateway of its own — there is nothing to stop but the multiplexer, which `hermes gateway stop` on the default profile takes down for every served profile. The dashboard and Desktop app follow the CLI: for a served profile the "Start" and "Stop" gateway actions answer `409` with the same explanation (rendered as an inline notice on the System page), and "Restart" restarts the multiplexer (the process that actually serves the profile) instead of spawning a `-p coder gateway restart` that could only fail. Because that restart reconnects every bot on the device, both apps first ask _"Restart the shared gateway? All bots on this device reconnect: default, coder, research"_ (the list is the running gateway's `served_profiles`) and report _"Shared gateway restarted (3 bots)"_ when it completes. A standalone profile keeps the plain restart. `/api/status?profile=coder` carries the same list as `gateway_shared_with` (null for a standalone gateway). "Served" is read from the running gateway's own record (`served_profiles` in the default home's `gateway_state.json`), so it stays correct when the multiplexer was enabled only through `GATEWAY_MULTIPLEX_PROFILES` in the default profile's environment, or when profiles were added after the gateway started.
 
 The multiplexer is the single inbound process; a second profile gateway would double-bind that profile's platforms. Pass `--force` (accepted by `run`, `start`, `install` and `restart`) only if you deliberately want a separate process for that profile (not recommended while the multiplexer is running). The cross-profile lifecycle wrapper script earlier on this page is therefore **not** used in multiplex mode — you only manage the default gateway.
 
@@ -197,7 +197,7 @@ Inbound callback URLs on the shared listener:
   sms: http://127.0.0.1:8642/p/coder/webhooks/twilio
 ```
 
-`hermes gateway status` and `hermes status` on the default profile list the same URLs per served profile, and the dashboard's Channels page shows them as each platform's `ingress_url` when viewing that profile. A per-profile `SMS_WEBHOOK_PORT`, `LINE_PORT`, `TEAMS_PORT`, … in a secondary's `.env` is ignored under the multiplexer (nothing binds); it applies again the moment that profile runs its own standalone gateway.
+`hermes gateway status` and `hermes status` on the default profile list the same URLs per served profile, and the dashboard's Channels page and the Desktop Messaging page show them as each platform's `ingress_url` when viewing that profile. The default's own `api_server` and `webhook` are reported the same way for a served profile — as **connected** with `ingress_url` `http://127.0.0.1:8642/p/coder/v1` (respectively `.../p/coder/webhooks/<route>`) — since the profile has no adapter of its own for them; it is the default's listener answering under the `/p/coder/` prefix. A per-profile `SMS_WEBHOOK_PORT`, `LINE_PORT`, `TEAMS_PORT`, … in a secondary's `.env` is ignored under the multiplexer (nothing binds); it applies again the moment that profile runs its own standalone gateway.
 
 #### 3\. Per-credential platforms still need their own token per profile
 
@@ -373,7 +373,7 @@ What is **shared** by design: the process, its PID/lock and `gateway_state.json`
 
 The served set controls `/p/<profile>/` API and webhook prefixes, runtime status, profile-route eligibility, and which profiles the in-process cron scheduler ticks (the Desktop backend's ticker enumerates the same set and stands down for any profile a running multiplexer or its own gateway already serves). A multiplexer started as `hermes -p <name> gateway run` always ticks its own profile's cron store as well.
 
-One caveat: the served set is a **start-time snapshot**. A profile created while the multiplexer is running is not picked up until `hermes gateway restart` (profiles deleted at runtime are dropped from cron ticking automatically).
+The served set is **live**. A profile created while the multiplexer is running (`hermes profile create`, the dashboard, Desktop or the TUI) is served at once: the creator pings the multiplexer over its control socket, and the multiplexer also rescans `profiles/` every 30 seconds as a safety net. The new profile's adapters are built the moment its `config.yaml`/`.env` carries a bot token (creators usually create first, then add the token), `served_profiles` in the default profile's `gateway_state.json` is updated, and `hermes -p <name> gateway status` reports it as served — no restart, and the other profiles' adapters and in-flight turns are untouched. Deleting a profile stops and unroutes its adapters the same way. The one-credential-one-poller rule still applies: a hot-added profile that reuses another profile's token is parked with a `duplicate_credential` error, never started as a second poller.
 
 ### Routing shared-bot chats to profiles (`profile_routes`)
 
@@ -730,7 +730,7 @@ The profile's own `API_SERVER_KEY` / webhook secret keeps authenticating the pre
 
 ### Profiles created after the migration
 
-The multiplexer snapshots the profile set at startup. `hermes profile create` prints the reminder when a live multiplexer is detected: run `hermes gateway restart` (from the default profile) and the new profile is served.
+A profile created while the multiplexer runs is served without a restart (see above). `hermes profile create` confirms this when the live multiplexer picked the profile up; it prints the `hermes gateway restart` reminder only when it could not reach the multiplexer (for example, a gateway started from an older build).
 
 ### Rollback
 

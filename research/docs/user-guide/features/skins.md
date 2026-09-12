@@ -322,13 +322,13 @@ Welcome message shown at CLI startup
 
 Message shown on exit
 
-`Goodbye! ⚕`
+`Goodbye! ☤`
 
 `response_label`
 
 Label on the response box header
 
-`⚕ Hermes`
+`☤ Hermes`
 
 `prompt_symbol`
 

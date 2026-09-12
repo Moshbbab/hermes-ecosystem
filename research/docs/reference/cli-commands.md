@@ -3055,7 +3055,7 @@ Set a sticky default profile.
 
 `create <name> [--clone] [--clone-all] [--clone-from <source>] [--no-alias]`
 
-Create a new profile. `--clone` copies config, `.env`, `SOUL.md`, and skills from the active profile. `--clone-all` copies all state. `--clone-from` specifies a source profile and implies config clone unless paired with `--clone-all`.
+Create a new profile. `--clone` copies config, `.env`, `SOUL.md`, skills, and the curated `MEMORY.md`/`USER.md` memory files from the active profile. `--clone-all` copies all state. `--clone-from` specifies a source profile and implies config clone unless paired with `--clone-all`.
 
 `delete <name> [-y]`
 

@@ -129,7 +129,7 @@ Name for the new profile. Must be a valid directory name (alphanumeric, hyphens,
 
 `--clone`
 
-Copy `config.yaml`, `.env`, `SOUL.md`, and skills from the current profile.
+Copy `config.yaml`, `.env`, `SOUL.md`, skills, and the curated `memories/MEMORY.md` / `memories/USER.md` from the current profile. Sessions, `state.db` and cron jobs are not copied.
 
 `--clone-all`
 
