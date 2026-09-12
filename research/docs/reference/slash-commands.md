@@ -382,7 +382,7 @@ Show your Nous balance and manage billing on the portal (replaces the old `/cred
 
 `/login`
 
-Sign in with a Nous account. Runs off-turn: the consent link and code arrive in the session, and the sign-in settles when you approve it in the browser. See [Nous free tier](/docs/user-guide/free-tier).
+Sign in with a Nous account. Runs off-turn: the consent link and code arrive in the session, and the sign-in settles when you approve it in the browser.
 
 `/insights`
 
@@ -598,7 +598,7 @@ Show your Nous balance and manage billing on the portal.
 
 `/login`
 
-Sign in with a Nous account. **Paired direct messages only** — in a group, channel, or broadcast-shaped platform Hermes refuses. On Slack use `/hermes login`. See [Nous free tier](/docs/user-guide/free-tier).
+Sign in with a Nous account. **Paired direct messages only** — in a group, channel, or broadcast-shaped platform Hermes refuses. On Slack use `/hermes login`.
 
 `/whoami`
 
