@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-09-11T13:06:05.000Z",
+  "dateModified": "2026-09-12T10:29:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1518
+    "userInteractionCount": 1519
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-11</span>
+    <span><span class="meta-label">updated</span>2026-09-12</span>
   </div>
 
   <div class="actions">
@@ -143,9 +143,9 @@
   <div>
     <p class="summary-text">Hermes Browser Extension is a side panel for Chromium-based browsers that connects to the Hermes Agent runtime via local gateways, Hermes Cloud, or self-hosted remote APIs. It enables users to interact with browser context using configured models, tools, and multi-agent profiles while maintaining manual control over tab inclusion and document access.</p>
     <ul class="summary-highlights">
-      <li>Connects browser context to local, cloud, or remote Hermes Agent runtimes.</li>
-      <li>Features multi-agent switching, group chats, and intelligent tab scoping controls.</li>
-      <li>Includes Hermes Assist for site-aware drafting in 31 writing environments.</li>
+      <li>Connects active web context to local or remote Hermes Agent runtimes.</li>
+      <li>Features multi-agent switching with authenticated profile metadata and session syncing.</li>
+      <li>Provides interactive tab scoping and AI-assisted tab clustering and triage.</li>
     </ul>
   </div>
 </section>
@@ -515,7 +515,9 @@ https://hermes.example.com
 </ul>
 <p>The DOM/context chip should show a non-zero page-context count on normal readable pages. Browser internal pages such as <code>chrome://extensions</code> are intentionally restricted.</p>
 <h4>Context window and compaction</h4>
-<p>Context compression remains owned by Hermes Agent, using each runtime's effective <code>context_length</code> and configured compression threshold. The Browser and Web surfaces display the authoritative persisted/live fields when available: <code>last_prompt_tokens</code>, <code>threshold_tokens</code>, <code>context_length</code>, <code>usage_percent</code>, and <code>compression_count</code>.</p>
+<p>Context compression remains owned by Hermes Agent, using each runtime's effective context window and configured compression threshold.</p>
+<p>The side panel shows the numbers the runtime actually reports rather than a guess: it requests the session context breakdown over the dashboard socket (<code>session.context_breakdown</code>) and follows the live <code>session.usage</code> stream, rendering the runtime's used/limit figures plus its per-category breakdown (system prompt, tool definitions, subagent definitions, memory, conversation). <code>session.usage</code> reports its own provenance (<code>provider_usage</code>, <code>provider_usage_plus_estimate</code>, or <code>local_estimate</code>), and the panel labels which one it is showing. Gateway-reported compression counts are displayed as reported.</p>
+<p>When a gateway exposes only the classic session-row fields (<code>last_prompt_tokens</code>, <code>threshold_tokens</code>, <code>context_length</code>, <code>usage_percent</code>, <code>compression_count</code>), those are used instead, and gateways older still fall back to a clearly labelled local next-request estimate.</p>
 <ul>
 <li>The extension does not hardcode an 85% threshold; it honors the connected user's/runtime's value.</li>
 <li>Reaching the threshold is shown as <strong>Compaction due on the next Hermes turn</strong>. Hermes performs its normal pre-model-call compression and the client refreshes telemetry afterward.</li>

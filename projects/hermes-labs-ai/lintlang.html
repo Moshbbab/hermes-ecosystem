@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>hermes-labs-ai/lintlang — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
+<meta name="description" content="LintLang is a static analysis tool that scans natural-language instructions, tool descriptions, and system prompts for AI agents to identify ambiguities and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta property="og:description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
+<meta property="og:description" content="LintLang is a static analysis tool that scans natural-language instructions, tool descriptions, and system prompts for AI agents to identify ambiguities and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta name="twitter:description" content="LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues…">
+<meta name="twitter:description" content="LintLang is a static analysis tool that scans natural-language instructions, tool descriptions, and system prompts for AI agents to identify ambiguities and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=lintlang&amp;subtitle=Static+analysis+for+AI+agent+configs%2C+tool+descriptions%2C+and+system+prompts+%E2%80%94+catches+vague+tool+descriptions%2C+missing+stop+conditions%2C+and+schema+gaps+before+they+reach+runtime.+Z&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and inconsistencies between tool schemas and directives without making network or API calls.",
+  "description": "LintLang is a static analysis tool that scans natural-language instructions, tool descriptions, and system prompts for AI agents to identify ambiguities and conflicting directives. Its default checks are deterministic and local, requiring no LLM, API, or network calls to flag issues like missing stop conditions or overlapping tool descriptions.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-09-11T00:30:56.000Z",
+  "dateModified": "2026-09-12T02:31:27.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-11</span>
+    <span><span class="meta-label">updated</span>2026-09-12</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts. It uses deterministic, local checks to identify issues such as ambiguous tool descriptions, missing stop conditions, and inconsistencies between tool schemas and directives without making network or API calls.</p>
+    <p class="summary-text">LintLang is a static analysis tool that scans natural-language instructions, tool descriptions, and system prompts for AI agents to identify ambiguities and conflicting directives. Its default checks are deterministic and local, requiring no LLM, API, or network calls to flag issues like missing stop conditions or overlapping tool descriptions.</p>
     <ul class="summary-highlights">
-      <li>Performs local, deterministic static analysis without LLM or API calls.</li>
-      <li>Flags ambiguous tool descriptions, missing constraints, and conflicting directives.</li>
-      <li>Supports CI integration with SARIF output and baseline-based finding management.</li>
+      <li>Performs local, offline static analysis of agent instruction files.</li>
+      <li>Flags vague tool descriptions and conflicting output formats.</li>
+      <li>Supports CI integration via SARIF and baseline reporting.</li>
     </ul>
   </div>
 </section>
@@ -281,6 +281,74 @@ lintlang scan AGENTS.md --baseline .lintlang-baseline.json --fail-on review
 <p>Baseline matching is exact and count-limited. Changed findings and findings in
 another file remain visible. Invalid inputs still fail; HERM scores are
 unchanged. See the guide for CI configuration, maintenance, and matching limits.</p>
+<h3>First run without a checkout</h3>
+<p>No clone, no credential. You write two small files and run three scans.</p>
+<p>Only the install reaches the network — <code>pip</code> resolves and downloads from your
+package index. Every <code>lintlang scan</code> below is offline and deterministic: it
+reads the file you name and nothing else, no credential, no private file, no
+network.</p>
+<pre><code class="language-bash">python -m pip install lintlang==0.5.3
+
+cat &gt; /tmp/agent.yaml &lt;&lt;'YAML'
+system_prompt: |
+  You are a support agent. Use the tools to help the user.
+tools:
+  - name: process_ticket
+    description: ""
+    parameters:
+      type: object
+      properties:
+        ticket_id:
+          type: string
+YAML
+
+lintlang scan /tmp/agent.yaml --fail-on fail
+</code></pre>
+<p>The pin is the release this block was verified against. To take the latest
+release instead, run:</p>
+<pre><code class="language-bash">python -m pip install --upgrade lintlang
+</code></pre>
+<p>and re-read the counts below as approximate — a newer release may report
+different findings.</p>
+<p><code>lintlang 0.5.3</code> reports <code>FAIL — 1 CRITICAL, 1 HIGH, 1 MEDIUM</code> and exits <code>1</code>.
+The <code>CRITICAL</code> is <code>H1.1 tool:process_ticket</code> — "Tool 'process_ticket' has no
+description." Under <code>--fail-on fail</code> that exit <code>1</code> is a successful detection,
+not a broken install. Do not hide it with <code>|| true</code>.</p>
+<p>Give the tool a disambiguating description and add the bounds <code>H2</code> looks for:</p>
+<pre><code class="language-bash">cat &gt; /tmp/agent-fixed.yaml &lt;&lt;'YAML'
+system_prompt: |
+  You are a support agent. Use the tools to help the user.
+  Stop and report the failure once the retry limit is reached.
+tools:
+  - name: process_ticket
+    description: "Apply a resolution action to one existing support ticket. Use this only after the ticket has been read; do NOT use it to look tickets up."
+    parameters:
+      type: object
+      properties:
+        ticket_id:
+          type: string
+          description: "Identifier of the existing ticket to act on"
+      required: [ticket_id]
+constraints:
+  max_iterations: 3
+  timeout_seconds: 30
+YAML
+
+lintlang scan /tmp/agent-fixed.yaml --fail-on fail
+</code></pre>
+<p><code>H1.1</code> is gone. On <code>lintlang 0.5.3</code> the fixed file scans <code>PASS — 0 findings</code>
+and exits <code>0</code>. Only <code>/tmp/agent-fixed.yaml</code> passes: the original
+<code>/tmp/agent.yaml</code> still scans <code>FAIL</code> and still exits <code>1</code>.</p>
+<p>An input that cannot be scanned stays a separate outcome, so CI can tell
+"findings" apart from "the linter never ran":</p>
+<pre><code class="language-bash">lintlang scan /tmp/does-not-exist.yaml --fail-on fail
+</code></pre>
+<p>That prints the verdict <code>ERROR</code> with <code>Input error: File not found</code> and exits
+nonzero. <code>--format json</code> carries the same distinction as <code>verdict</code> plus a
+non-null <code>input_error</code>.</p>
+<p><code>PASS</code> here means the selected checks found nothing above <code>LOW</code> in the content
+lintlang extracted from <code>/tmp/agent-fixed.yaml</code>. It is not evidence that the
+agent is safe or runtime-correct.</p>
 <h3>Try the bundled example</h3>
 <p>The source repository includes a deliberately broken example:</p>
 <pre><code class="language-bash">git clone --depth 1 https://github.com/hermes-labs-ai/lintlang.git
@@ -621,7 +689,7 @@ inspects one present instruction plus explicit context.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 70.5K</div>
+        <div class="stars">★ 70.6K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
@@ -641,7 +709,7 @@ inspects one present instruction plus explicit context.</p>
         <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
       </a>
       <a class="related-row" href="/projects/joeynyc/hermes-skins">
-        <div class="stars">★ 578</div>
+        <div class="stars">★ 579</div>
         <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
       </a>
       <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
