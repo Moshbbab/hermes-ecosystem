@@ -127,6 +127,10 @@ Generate ideas via named methods from creative practice.
 
 Turn a handwriting photo into an installable TTF font.
 
+[**dream-loop**](/docs/user-guide/skills/optional/creative/creative-dream-loop)
+
+Build stunning 3D scenes via a concept-art fidelity loop.
+
 [**excalidraw**](/docs/user-guide/skills/optional/creative/creative-excalidraw)
 
 Hand-drawn Excalidraw JSON diagrams (arch, flow, seq).
@@ -151,6 +155,10 @@ Plan and run multi-agent video production pipelines.
 
 Create meme PNGs from templates with Pillow text overlay.
 
+[**mono-color**](/docs/user-guide/skills/optional/creative/creative-mono-color)
+
+Generate one- or two-ink editorial print poster images.
+
 [**pixel-art**](/docs/user-guide/skills/optional/creative/creative-pixel-art)
 
 Pixel art w/ era palettes (NES, Game Boy, PICO-8).
@@ -170,6 +178,10 @@ Throwaway HTML mockups: 2-3 design variants to compare.
 [**social-media-content-calendar**](/docs/user-guide/skills/optional/creative/creative-social-media-content-calendar)
 
 Plan multi-platform social campaigns: briefs to posting.
+
+[**system-atlas**](/docs/user-guide/skills/optional/creative/creative-system-atlas)
+
+Build explorable isometric architecture atlases as HTML.
 
 [**tldraw-offline**](/docs/user-guide/skills/optional/creative/creative-tldraw-offline)
 
@@ -684,6 +696,10 @@ Generate wiki docs + Mermaid diagrams for any codebase.
 [**grill-me**](/docs/user-guide/skills/optional/software-development/software-development-grill-me)
 
 Adversarial plan interview before implementation.
+
+[**pr-lens**](/docs/user-guide/skills/optional/software-development/software-development-pr-lens)
+
+Draw code changes as animated architecture/data-flow SVGs.
 
 [**rest-graphql-debug**](/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug)
 

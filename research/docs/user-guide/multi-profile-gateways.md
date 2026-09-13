@@ -685,7 +685,13 @@ After a successful update, when the install has two or more profiles, at least o
 -   **Nothing blocks it** → the migration runs automatically (the same code path as `hermes gateway migrate --multiplex --yes`) and prints what it did. This is deterministic and never prompts, so it also runs on headless/cron updates.
 -   **Something blocks it** → a warning block lists each blocker with its exact fix and the one-liner to run later. Nothing is changed.
 
-Single-profile installs are never migrated (there is nothing to gain), and an install that is already multiplexing is left alone.
+Single-profile installs are never migrated (there is nothing to gain), and an install that is already multiplexing is left alone. `hermes update` also does nothing when no secondary profile runs its own gateway — it never flips modes on an install where nothing was running.
+
+The explicit command is different: `hermes gateway migrate --multiplex` with two or more profiles and **no** standalone secondary gateway still applies the one remaining step — it sets `gateway.multiplex_profiles: true`, (re)starts the default gateway and writes the same rollback manifest (with an empty `secondaries` list), so `--standalone` undoes it. You asked for multiplex; you get multiplex.
+
+Clones do not carry channels
+
+`hermes profile create --clone` leaves the source's bot tokens and allowlists behind (see [Profiles → messaging channels are never cloned](/docs/user-guide/profiles#messaging-channels-are-never-cloned---clone-channels-to-opt-in)), so a fleet of clones no longer trips the duplicate-credential blocker below. Older clones that still carry them are flagged by `hermes profile list`.
 
 ### What the migration does
 
