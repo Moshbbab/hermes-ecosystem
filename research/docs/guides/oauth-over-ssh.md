@@ -69,6 +69,12 @@ n/a
 
 No — device code flow
 
+`openrouter` (`hermes auth add openrouter --type oauth`)
+
+OS-assigned, local only
+
+No — over SSH Hermes switches to OpenRouter's headless flow and asks you to paste the code shown in the browser
+
 If your provider isn't in the table, you don't need a tunnel.
 
 ## MCP Servers

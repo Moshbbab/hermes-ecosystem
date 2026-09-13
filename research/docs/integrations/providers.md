@@ -34,7 +34,7 @@ Setup
 
 **OpenRouter**
 
-`OPENROUTER_API_KEY` in `~/.hermes/.env`
+`OPENROUTER_API_KEY` in `~/.hermes/.env`, or `hermes auth add openrouter --type oauth` (browser login via OpenRouter's PKCE flow; stores a key in the credential pool)
 
 **Ramp Router**
 

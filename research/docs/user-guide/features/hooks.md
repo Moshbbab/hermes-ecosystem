@@ -726,6 +726,16 @@ CLI: `session_id`, `platform`, `reason`; TUI: `session_id`, `platform`; gateway:
 
 Session and routing identifiers.
 
+`agent_loop_stopped`
+
+Observer
+
+Immediately after a real running agent is interrupted — gateway `_interrupt_and_clear_session` or TUI/desktop `session.interrupt`; return ignored.
+
+`session_key`, `platform`, `reason`, `invalidation_reason`
+
+Session/routing identifiers and interruption reasons; no message body.
+
 `on_skill_lifecycle`
 
 Observer
@@ -1746,6 +1756,56 @@ Gateway-only replacement session ID.
 * * *
 
 See the **[Build a Plugin guide](/docs/developer-guide/plugins)** for the full walkthrough including tool schemas, handlers, and advanced hook patterns.
+
+* * *
+
+### `agent_loop_stopped`
+
+Fires when the gateway **interrupts a running agent turn** — the user ran `/stop` while the loop was working, or the running-agent fast-path inside `/new` cleared the in-flight run before swapping the session. Unlike `on_session_finalize`, this fires earlier, while a turn is mid-flight, so plugins can drop per-turn external resources the agent loop will never consume (e.g. an outbound RPC that was waiting for a tool result).
+
+Fires on both interruption surfaces: the messaging **gateway** (`/stop`, `/new` fast-path) and the **TUI/desktop** `session.interrupt` path (platform is reported as `"tui"`). Does not fire in the plain CLI; there is no equivalent interruption surface there.
+
+**Callback signature:**
+
+```
+def my_callback(session_key: str, platform: str, reason: str, invalidation_reason: str, **kwargs):
+```
+
+Parameter
+
+Type
+
+Description
+
+`session_key`
+
+`str`
+
+The session whose run was interrupted.
+
+`platform`
+
+`str`
+
+The messaging platform name (`"telegram"`, `"discord"`, etc.); empty string if unknown.
+
+`reason`
+
+`str`
+
+Why the agent was interrupted (e.g. `"user_stop"`, the reset/new reason).
+
+`invalidation_reason`
+
+`str`
+
+Why queued session state was invalidated (e.g. `"stop_command"`, `"stop_command_thread_sibling"`, `"reset_command"`).
+
+**Fires:** In `gateway/run.py::_interrupt_and_clear_session`, immediately after `request_hard_interrupt()` interrupts the running agent. Only when a real agent was running — the pending-sentinel `/stop` path (no agent loop yet started) does **not** fire this hook, since there is no in-flight work to drop. On the slow `/new` reset path, `on_session_finalize` fires later in `_handle_reset_command` instead.
+
+**Return value:** Ignored.
+
+**Use cases:** Cancel external requests blocked on a tool result the loop will never consume, notify a connected voice/realtime client that a tool call was abandoned, release per-turn credentials or locks held only for the duration of an active turn.
 
 * * *
 
