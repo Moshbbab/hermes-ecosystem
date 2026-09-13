@@ -29,7 +29,7 @@ This is the shape that covers the workloads `delegate_task` can't:
 -   **Engineering pipelines** — decompose → implement in parallel worktrees → review → iterate → PR.
 -   **Fleet work** — one specialist managing N subjects (50 social accounts, 12 monitored services).
 
-For the full design rationale, comparative analysis against Cline Kanban / Paperclip / NanoClaw / Google Gemini Enterprise, and the eight canonical collaboration patterns, see `docs/hermes-kanban-v1-spec.pdf` in the repository.
+The eight canonical collaboration patterns are catalogued in [Collaboration patterns](#collaboration-patterns) below.
 
 ## PR completion contracts
 
@@ -1177,8 +1177,6 @@ rough idea → `triage` → `hermes kanban specify` expands body → `todo`
 
 "turn this one-liner into a spec'd task"
 
-For worked examples of each, see `docs/hermes-kanban-v1-spec.pdf`.
-
 ## Handing context to follow-up cards (the parent link)
 
 A parent link is not just a scheduling gate — it is the context handoff channel from a **completed** card to a new one. When you create a card with `--parent <done-card-id>`, two things happen:
@@ -1309,7 +1307,7 @@ A "wake" forges a synthetic inbound message to the destination gateway agent so 
 
 ### Multi-profile setups: delivery is profile-owned
 
-In a one-gateway-per-profile deployment (one dispatcher, separate gateway processes for `writer`, `admin`, etc. — see the [multi-gateway guide](https://github.com/NousResearch/hermes-agent/blob/main/docs/kanban/multi-gateway.md)), dispatch and delivery have separate owners:
+In a one-gateway-per-profile deployment (one dispatcher, separate gateway processes for `writer`, `admin`, etc. — see the [multi-gateway guide](/docs/user-guide/features/kanban-multi-gateway)), dispatch and delivery have separate owners:
 
 -   **Dispatch stays single-owner.** Exactly one gateway keeps `kanban.dispatch_in_gateway: true` and runs the dispatcher; every other gateway sets it to `false`.
 -   **Notification delivery is profile-owned.** Every gateway — including non-dispatch ones — runs the notifier and polls only subscriptions stamped with a profile whose platform adapters it hosts. A task created from the `writer` profile's Telegram gets its `completed`/`blocked` message delivered by the `writer` gateway, even though the `default` gateway did the dispatching.
@@ -1549,7 +1547,3 @@ Circuit breaker fired after N consecutive non-successful attempts. Task auto-blo
 ## Out of scope
 
 Kanban is deliberately single-host. `~/.hermes/kanban.db` is a local SQLite file and the dispatcher spawns workers on the same machine. Running a shared board across two hosts is not supported — there's no coordination primitive for "worker X on host A, worker Y on host B," and the crash-detection path assumes PIDs are host-local. If you need multi-host, run an independent board per host and use `delegate_task` / a message queue to bridge them.
-
-## Design spec
-
-The complete design — architecture, concurrency correctness, comparison with other systems, implementation plan, risks, open questions — lives in `docs/hermes-kanban-v1-spec.pdf`. Read that before filing any behavior-change PR.
