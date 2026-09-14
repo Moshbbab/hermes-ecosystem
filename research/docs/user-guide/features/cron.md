@@ -351,13 +351,15 @@ A recurring job that keeps failing with the _same_ error pings you on every run.
 
 ```
 hermes cron incidents                 # list incidents (newest activity first)
-hermes cron incidents --state alerted # filter: detected | alerted | closed
+hermes cron incidents --state alerted # filter: detected | alerted | resolved | closed
 hermes cron incidents ack <id>        # acknowledge — stop re-pinging
 ```
 
-Acknowledging an incident silences the per-run failure ping for that exact signature only. Nothing else changes: the run history still records every failure, the failure streak keeps counting, and the moment the job starts failing with a _different_ error a new incident is minted and alerts fire again. A successful run doesn't touch incidents — they are per-signature, not per-job.
+Acknowledging an incident silences the per-run failure ping for that exact signature only. Nothing else changes: the run history still records every failure, the failure streak keeps counting, and the moment the job starts failing with a _different_ error a new incident is minted and alerts fire again.
 
-Incident lifecycle: `detected` (failure recorded) → `alerted` (at least one failure ping reached delivery) → `closed` (acknowledged; terminal for that signature). Stored error text is secret-redacted and truncated before it is written.
+A successful run marks every open incident for that job `resolved`, so the list reflects current health rather than every failure the job ever had. If the job later fails with the _same_ error, the resolved incident re-opens as `detected` and you are alerted again. Acknowledged (`closed`) incidents are the exception: a success leaves them alone, and a repeat stays silent.
+
+Incident lifecycle: `detected` (failure recorded) → `alerted` (at least one failure ping reached delivery) → `resolved` (the job ran OK afterwards; re-opens on a repeat) or `closed` (acknowledged; terminal for that signature). Stored error text is secret-redacted and truncated before it is written.
 
 Recording is always on and costs nothing to ignore — no ping is ever suppressed until you explicitly `ack`.
 

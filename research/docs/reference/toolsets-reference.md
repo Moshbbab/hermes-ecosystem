@@ -70,6 +70,12 @@ Ask the user a question when the agent needs clarification.
 
 Run Python scripts that call Hermes tools programmatically.
 
+`connections`
+
+`manage_connections`
+
+Connect the user to apps: managed connector accounts through the Nous gateway, and local MCP servers from the catalog. On the desktop every action is a card that blocks until the user settles it; off the desktop managed actions return a connect link per app.
+
 `coding`
 
 composite (`file` + `terminal` + `search` + `web` + `skills` + `browser` + `todo` + `memory` + `session_search` + `clarify` + `code_execution` + `delegation` + `vision`)
