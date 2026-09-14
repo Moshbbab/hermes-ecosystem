@@ -350,9 +350,11 @@ hooks:
 
 ## Threading Contract
 
-**`sync_turn()` MUST be non-blocking.** If your backend has latency (API calls, LLM processing), run the work in a daemon thread:
+**`sync_turn()` MUST be non-blocking.** If your backend has latency (API calls, LLM processing), run the work in a daemon thread — spawned with `agent.memory_provider.spawn_context_thread`, never a bare `threading.Thread`. Profile isolation (the active `HERMES_HOME`, the per-turn secret scope) lives in `contextvars`, and a plain thread starts with an empty context: under multiplexed profiles it would silently write into the _default_ profile's store, and `get_secret()` fails closed there.
 
 ```
+from agent.memory_provider import spawn_context_thread
+
 def sync_turn(self, user_content, assistant_content, *, session_id="", messages=None):
     def _sync():
         try:
@@ -362,9 +364,11 @@ def sync_turn(self, user_content, assistant_content, *, session_id="", messages=
 
     if self._sync_thread and self._sync_thread.is_alive():
         self._sync_thread.join(timeout=5.0)
-    self._sync_thread = threading.Thread(target=_sync, daemon=True)
+    self._sync_thread = spawn_context_thread(_sync, name="myprovider-sync")
     self._sync_thread.start()
 ```
+
+The same applies to prefetch and writer threads. Small JSON config sidecars (`$HERMES_HOME/<provider>.json`) are read with `utils.read_json_or_empty` and written with `utils.atomic_json_write`; anything under `config.yaml` goes through `hermes_cli.config.save_config(..., merge_existing=True)`.
 
 `messages` is optional OpenAI-style conversation context as of the completed turn. When present, it includes user/assistant messages, assistant tool calls, and tool result messages. Providers that do not need raw turn context can omit the `messages` parameter; Hermes will continue calling them with the legacy signature.
 
@@ -385,7 +389,7 @@ data_dir = Path("~/.hermes/my-provider").expanduser()
 
 ## Testing
 
-See `tests/agent/test_memory_provider.py` and adjacent memory tests (`tests/agent/test_memory_session_switch.py`, `tests/agent/test_memory_user_id.py`, `tests/run_agent/test_memory_provider_init.py`) for end-to-end patterns.
+See `tests/agent/test_memory_provider.py` and adjacent memory tests (`tests/agent/test_memory_session_switch.py`, `tests/agent/test_memory_user_id.py`, `tests/agent/test_memory_provider_init.py`) for end-to-end patterns.
 
 ```
 from agent.memory_manager import MemoryManager

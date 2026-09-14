@@ -41,6 +41,10 @@ Operate the Antigravity CLI (agy): plugins, auth, sandbox.
 
 Delegate coding tasks to the Blackbox AI multi-model CLI.
 
+[**dynamic-workflow**](/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-dynamic-workflow)
+
+Plan-in-code fan-outs, adversarial verification, waves.
+
 [**grok**](/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-grok)
 
 Delegate coding to xAI Grok Build CLI (features, PRs).
@@ -87,6 +91,10 @@ Skill
 
 Description
 
+[**archify**](/docs/user-guide/skills/optional/creative/creative-archify)
+
+Validated interactive HTML diagrams, upstream-maintained.
+
 [**ascii-art**](/docs/user-guide/skills/optional/creative/creative-ascii-art)
 
 ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
@@ -119,6 +127,10 @@ Generate ideas via named methods from creative practice.
 
 Turn a handwriting photo into an installable TTF font.
 
+[**dream-loop**](/docs/user-guide/skills/optional/creative/creative-dream-loop)
+
+Build stunning 3D scenes via a concept-art fidelity loop.
+
 [**excalidraw**](/docs/user-guide/skills/optional/creative/creative-excalidraw)
 
 Hand-drawn Excalidraw JSON diagrams (arch, flow, seq).
@@ -143,6 +155,10 @@ Plan and run multi-agent video production pipelines.
 
 Create meme PNGs from templates with Pillow text overlay.
 
+[**mono-color**](/docs/user-guide/skills/optional/creative/creative-mono-color)
+
+Generate one- or two-ink editorial print poster images.
+
 [**pixel-art**](/docs/user-guide/skills/optional/creative/creative-pixel-art)
 
 Pixel art w/ era palettes (NES, Game Boy, PICO-8).
@@ -163,13 +179,13 @@ Throwaway HTML mockups: 2-3 design variants to compare.
 
 Plan multi-platform social campaigns: briefs to posting.
 
+[**system-atlas**](/docs/user-guide/skills/optional/creative/creative-system-atlas)
+
+Build explorable isometric architecture atlases as HTML.
+
 [**tldraw-offline**](/docs/user-guide/skills/optional/creative/creative-tldraw-offline)
 
 Drive and script tldraw offline canvases with an agent.
-
-[**touchdesigner-mcp**](/docs/user-guide/skills/optional/creative/creative-touchdesigner-mcp)
-
-Control TouchDesigner via twozero MCP.
 
 [**unreal-mcp**](/docs/user-guide/skills/optional/creative/creative-unreal-mcp)
 
@@ -527,6 +543,10 @@ Publish sites to {slug}.here.now and store files in Drives.
 
 Spaced-repetition flashcards: create, review, quiz, export.
 
+[**property-listings**](/docs/user-guide/skills/optional/productivity/productivity-property-listings)
+
+Present property and rental listings as desktop cards.
+
 [**shop**](/docs/user-guide/skills/optional/productivity/productivity-shop)
 
 Shop catalog search, checkout, order tracking, returns.
@@ -597,6 +617,10 @@ Hybrid local search over notes, docs, and transcripts.
 
 Write ML papers for NeurIPS/ICML/ICLR: design→submit.
 
+[**rss-feeds**](/docs/user-guide/skills/optional/research/research-rss-feeds)
+
+Read RSS, Atom, JSON feeds; discover feeds behind a page.
+
 [**scrapling**](/docs/user-guide/skills/optional/research/research-scrapling)
 
 Scrape sites with stealth browsing and Cloudflare bypass.
@@ -645,6 +669,16 @@ Description
 
 Control Philips Hue lights, scenes, rooms via OpenHue CLI.
 
+## social-media
+
+Skill
+
+Description
+
+[**reddit-reading**](/docs/user-guide/skills/optional/social-media/social-media-reddit-reading)
+
+Read Reddit: subreddits, search, threads, users. No browser.
+
 ## software-development
 
 Skill
@@ -662,6 +696,10 @@ Generate wiki docs + Mermaid diagrams for any codebase.
 [**grill-me**](/docs/user-guide/skills/optional/software-development/software-development-grill-me)
 
 Adversarial plan interview before implementation.
+
+[**pr-lens**](/docs/user-guide/skills/optional/software-development/software-development-pr-lens)
+
+Draw code changes as animated architecture/data-flow SVGs.
 
 [**rest-graphql-debug**](/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug)
 

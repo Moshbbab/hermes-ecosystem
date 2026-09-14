@@ -639,7 +639,7 @@ Host stats — OS, CPU, memory, disk, uptime
 
 `GET /api/hermes/update/check`
 
-Report update availability (commits behind, install method) without applying. For git installs that are behind, also returns a `commits` list (`sha`, `summary`, `author`, `at`) of what's changed. `?force=1` busts the 6h cache
+Report update availability (commits behind, install method) without applying. For git installs that are behind, also returns a `commits` list (`sha`, `summary`, `author`, `at`) of what's changed. `?force=1` busts the 24h cache (the check goes through the GitHub API, never `git fetch`)
 
 `GET /api/curator` · `PUT .../paused` · `POST .../run`
 

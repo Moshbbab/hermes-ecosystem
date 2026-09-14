@@ -129,11 +129,11 @@ Name for the new profile. Must be a valid directory name (alphanumeric, hyphens,
 
 `--clone`
 
-Copy `config.yaml`, `.env`, `SOUL.md`, and skills from the current profile.
+Copy `config.yaml`, `.env`, `SOUL.md`, skills, and the curated `memories/MEMORY.md` / `memories/USER.md` from the current profile. Sessions, `state.db` and cron jobs are not copied.
 
 `--clone-all`
 
-Copy everything (config, memories, skills, cron, plugins) from the current profile. Excludes per-profile history: sessions, `state.db`, backups, state-snapshots, checkpoints.
+Copy everything (config, memories, skills, plugins) from the current profile. Excludes per-profile history: sessions, `state.db`, backups, state-snapshots, checkpoints — and cron jobs, which stay bound to the source profile (a clone that inherited them would fire every job twice).
 
 `--clone-from <profile>`
 

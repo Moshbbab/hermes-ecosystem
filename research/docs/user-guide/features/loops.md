@@ -141,7 +141,7 @@ loops:
   self_paced_ceiling_seconds: 900  # self-paced max backoff
 ```
 
-The `--until` judge routes through the `goal_judge` auxiliary task, so `auxiliary.goal_judge.*` overrides (provider, model, max\_tokens) apply to loop conditions too.
+The `--until` judge routes through the `goal_judge` auxiliary task, so `auxiliary.goal_judge.*` routing overrides (provider, model) apply to loop conditions too.
 
 ## `/loop` vs `/goal` vs cron
 

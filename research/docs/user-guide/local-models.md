@@ -33,7 +33,8 @@ Local models live or die by memory placement, so Hermes manages it end-to-end an
 
 -   **Models start at a context window that fully fits your GPU** and grow toward their native maximum as your conversation needs more room. You may see "Context window grown" in the status feed during long sessions — that's the window expanding, not an error.
 -   **Every recommended model gets at least a 64K context window.** When a model is larger than your GPU's memory, Hermes deliberately places the overflow in system RAM in the order that hurts least (expert weights first, never the attention cache), trading some speed to protect the context guarantee.
--   **Conversation compression only kicks in at the model's maximum window** — growth always comes first.
+-   **Memory fit includes the launch configuration**, not just the model file: context state, runtime buffers, the vision projector, and MTP buffers all count. For multi-token prediction (MTP), Hermes uses smaller batches when larger batches would spill at the same context window. MTP stays enabled. The same calculation runs when a grown window is restored after restart.
+-   **Conversation compression follows a growth check.** If a larger window cannot fit, generation is too slow, or the native maximum is reached, Hermes compresses instead of claiming a window the server did not receive.
 -   Idle models are unloaded after 15 minutes to free GPU memory; they reload automatically on the next message.
 
 ## The status bar

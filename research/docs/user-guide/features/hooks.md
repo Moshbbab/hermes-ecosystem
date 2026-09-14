@@ -30,9 +30,9 @@ Tool interception, metrics, guardrails
 
 **[Shell hooks](#shell-hooks)**
 
-`hooks:` block in `~/.hermes/config.yaml` pointing at shell scripts
+`hooks:` block in profile `config.yaml` pointing at shell scripts
 
-CLI + Gateway
+CLI + Gateway + Desktop/TUI/dashboard chat
 
 Drop-in scripts for blocking, auto-formatting, context injection
 
@@ -710,7 +710,7 @@ IDs, model/platform, and outcome; canonical payload has no message body.
 
 Observer
 
-CLI/TUI/gateway teardown through `finalize_session`; gateway shutdown or expiry may finalize without a reset. Return ignored.
+CLI/TUI/gateway teardown through `finalize_session`; gateway shutdown may finalize without a reset. Return ignored.
 
 Surface-dependent `session_id`, `platform`, optionally `reason`, `old_session_id`, `new_session_id`
 
@@ -725,6 +725,16 @@ CLI/TUI session boundary and gateway after the replacement session exists; retur
 CLI: `session_id`, `platform`, `reason`; TUI: `session_id`, `platform`; gateway: those plus `reason`, `old_session_id`, `new_session_id`
 
 Session and routing identifiers.
+
+`agent_loop_stopped`
+
+Observer
+
+Immediately after a real running agent is interrupted — gateway `_interrupt_and_clear_session` or TUI/desktop `session.interrupt`; return ignored.
+
+`session_key`, `platform`, `reason`, `invalidation_reason`
+
+Session/routing identifiers and interruption reasons; no message body.
 
 `on_skill_lifecycle`
 
@@ -805,6 +815,16 @@ After a decision, timeout, or gateway notification failure; return ignored.
 `command`, `description`, `pattern_key`, `pattern_keys`, `session_key`, `surface`, `turn_id`, `tool_call_id`, `choice`; smart path may add `decided_by`
 
 Same command sensitivity plus decision metadata.
+
+`on_room_member_activity`
+
+Observer
+
+While a hosted Group Chat member turn runs on the Bot Mode gateway, once per runtime event the member session emits (tool start/complete, approval request, message/reasoning deltas, errors); queued per consumer off the token path; return ignored.
+
+`room_id`, `thread_id`, `member_id`, `turn_id`, `task_id`, `execution_generation`, `kind`, `seq`, `payload`
+
+`payload` is the client-safe session event body: tool args and results, redacted approval commands, streamed member text.
 
 `kanban_task_claimed`
 
@@ -1647,7 +1667,7 @@ def register(ctx):
 
 ### `on_session_finalize`
 
-Fires when the CLI or gateway **tears down** an active session — for example, when the user runs `/new`, the gateway GC'd an idle session, or the CLI quit with an active agent. Use it to flush state tied to the outgoing session ID. On gateway reset, the replacement session already exists before this callback runs.
+Fires when the CLI or gateway **tears down** an active session — for example, when the user runs `/new` or the CLI quits with an active agent. Resource-only idle cache eviction does not finalize the durable conversation. Use it to flush state tied to the outgoing session ID. On gateway reset, the replacement session already exists before this callback runs.
 
 **Callback signature:**
 
@@ -1673,7 +1693,7 @@ The outgoing session ID. May be `None` if no active session existed.
 
 `"cli"` or the messaging platform name (`"telegram"`, `"discord"`, etc.).
 
-**Fires:** In CLI/TUI teardown and in gateway reset, shutdown, or idle-expiry paths. Gateway shutdown and expiry can finalize without a matching `on_session_reset`.
+**Fires:** In CLI/TUI teardown and in gateway reset or shutdown paths. Gateway shutdown can finalize without a matching `on_session_reset`.
 
 **Return value:** Ignored.
 
@@ -1736,6 +1756,56 @@ Gateway-only replacement session ID.
 * * *
 
 See the **[Build a Plugin guide](/docs/developer-guide/plugins)** for the full walkthrough including tool schemas, handlers, and advanced hook patterns.
+
+* * *
+
+### `agent_loop_stopped`
+
+Fires when the gateway **interrupts a running agent turn** — the user ran `/stop` while the loop was working, or the running-agent fast-path inside `/new` cleared the in-flight run before swapping the session. Unlike `on_session_finalize`, this fires earlier, while a turn is mid-flight, so plugins can drop per-turn external resources the agent loop will never consume (e.g. an outbound RPC that was waiting for a tool result).
+
+Fires on both interruption surfaces: the messaging **gateway** (`/stop`, `/new` fast-path) and the **TUI/desktop** `session.interrupt` path (platform is reported as `"tui"`). Does not fire in the plain CLI; there is no equivalent interruption surface there.
+
+**Callback signature:**
+
+```
+def my_callback(session_key: str, platform: str, reason: str, invalidation_reason: str, **kwargs):
+```
+
+Parameter
+
+Type
+
+Description
+
+`session_key`
+
+`str`
+
+The session whose run was interrupted.
+
+`platform`
+
+`str`
+
+The messaging platform name (`"telegram"`, `"discord"`, etc.); empty string if unknown.
+
+`reason`
+
+`str`
+
+Why the agent was interrupted (e.g. `"user_stop"`, the reset/new reason).
+
+`invalidation_reason`
+
+`str`
+
+Why queued session state was invalidated (e.g. `"stop_command"`, `"stop_command_thread_sibling"`, `"reset_command"`).
+
+**Fires:** In `gateway/run.py::_interrupt_and_clear_session`, immediately after `request_hard_interrupt()` interrupts the running agent. Only when a real agent was running — the pending-sentinel `/stop` path (no agent loop yet started) does **not** fire this hook, since there is no in-flight work to drop. On the slow `/new` reset path, `on_session_finalize` fires later in `_handle_reset_command` instead.
+
+**Return value:** Ignored.
+
+**Use cases:** Cancel external requests blocked on a tool result the loop will never consume, notify a connected voice/realtime client that a tool call was abandoned, release per-turn credentials or locks held only for the duration of an active turn.
 
 * * *
 
@@ -2245,6 +2315,84 @@ def register(ctx):
 
 * * *
 
+### `on_room_member_activity`
+
+Fires while a hosted [Group Chat](/docs/user-guide/bot-mode#groups-and-group-chats) member turn runs. A member executes on a hidden `Group: <room>` session that no client is attached to, so between the room log's `turn.started` and `turn.settled` the turn is a black box. This hook projects the runtime events that session already produces — tool start/complete, approval requests, streamed text and reasoning, errors — stamped with the room coordinates, so a client (Hermes Crew, a dashboard, an audit log) can render tool cards, approval prompts and live member status without inferring anything from text. The Group Chat runtime keeps ownership of execution, scheduling and the durable log; plugins only observe.
+
+**Callback signature:**
+
+```
+def my_callback(
+    room_id: str,
+    thread_id: str,
+    member_id: str,
+    turn_id: str,
+    task_id: str,
+    execution_generation: int,
+    kind: str,
+    seq: int | None,
+    payload: dict,
+    **kwargs,
+):
+```
+
+Parameter
+
+Type
+
+Description
+
+`room_id`, `thread_id`, `turn_id`, `task_id`
+
+`str`
+
+The same coordinates the room log's `turn.*` and `message.member` events carry; join on them.
+
+`member_id`
+
+`str`
+
+The seated member (`members[].member_id` from `groups.state`).
+
+`execution_generation`
+
+`int`
+
+Increments on every retry of the same task; events from a superseded attempt carry the older value.
+
+`kind`
+
+`str`
+
+`tool.started`, `tool.completed`, `tool.output_risk`, `request.opened` (approval), `message.delta`, `message.interim`, `reasoning.delta`, `turn.error`. New kinds are additive.
+
+`seq`
+
+`int | None`
+
+The member session's per-process event sequence (same numbering as `session.events.since`); monotonic within one gateway process, resets on restart.
+
+`payload`
+
+`dict`
+
+The client-safe body of the underlying session event (`tool_id`, `name`, `args`, `result`, `request_id`, `choices`, `text`, ...). Approval commands are already credential-redacted.
+
+**Delivery:** each registered callback gets its own bounded queue and worker thread (the `on_stream_*` mechanism); a slow callback drops its oldest pending event and never delays the member's turn. Nothing is written to the room log — deltas are not durable and do not replay; clients that need durability persist what they receive. Local members only: a member seated from another machine runs on that machine's gateway, whose plugins see it.
+
+**Return value:** ignored.
+
+```
+def on_member_activity(room_id, member_id, turn_id, kind, payload, **kwargs):
+    if kind == "request.opened":
+        notify(f"{member_id} in {room_id} needs approval: {payload['command']}")
+
+def register(ctx):
+    ctx.register_hook("on_room_member_activity", on_member_activity)
+```
+
+* * *
+
 ### `pre_transcription`
 
 Fires inside the STT dispatcher (`tools.transcription_tools.transcribe_audio`) **after** the provider has been resolved and **before** any backend is invoked, whether that backend is built-in, a `type: command` provider, or a plugin-registered provider. Lets a plugin steer the transcription request itself instead of only observing the transcript afterwards.
@@ -2543,7 +2691,9 @@ Five additional observers (RFC #58548) extend the kanban family. All are observe
 
 ## Shell Hooks
 
-Declare shell-script hooks in your `~/.hermes/config.yaml` and Hermes will run them as subprocesses whenever the corresponding plugin-hook event fires — in both CLI and gateway sessions. No Python plugin authoring required.
+Declare shell-script hooks in your profile's `config.yaml` and Hermes will run them as subprocesses whenever the corresponding plugin-hook event fires — in CLI, gateway, Desktop, TUI, and dashboard chat sessions. No Python plugin authoring required.
+
+Desktop, TUI, and dashboard chat register hooks when building an agent, using that session's profile configuration and consent allowlist. Switching profiles does not reuse another profile's hooks. Existing hook consent requirements and safe-mode behavior still apply; unapproved hooks are skipped rather than silently approved.
 
 Use shell hooks when you want a drop-in, single-file script (Bash, Python, anything with a shebang) to:
 
@@ -2665,11 +2815,12 @@ Each time the event fires, Hermes spawns a subprocess for every matching hook (m
   "tool_input":      {"command": "rm -rf /"},
   "session_id":      "sess_abc123",
   "cwd":             "/home/user/project",
+  "profile":         "default",
   "extra":           {"task_id": "...", "tool_call_id": "..."}
 }
 ```
 
-`tool_name` and `tool_input` are `null` for non-tool events (`pre_llm_call`, `subagent_stop`, session lifecycle). The `extra` dict carries all event-specific kwargs (`user_message`, `conversation_history`, `child_role`, `duration_ms`, …). Unserialisable values are stringified rather than omitted.
+`profile` names the Hermes profile that fired the hook (`"default"` outside profiles), so one script can serve every profile behind a multiplexed gateway; the subprocess also runs with that profile's `HERMES_HOME`. `tool_name` and `tool_input` are `null` for non-tool events (`pre_llm_call`, `subagent_stop`, session lifecycle). The `extra` dict carries all event-specific kwargs (`user_message`, `conversation_history`, `child_role`, `duration_ms`, …). Unserialisable values are stringified rather than omitted.
 
 **stdout — optional response:**
 

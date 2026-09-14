@@ -148,7 +148,7 @@ Actual Computer inference key (`ac_...`, [actual.inc/user/keys](https://actual.i
 
 `ACTUAL_BASE_URL`
 
-Override Actual Computer base URL (default: `https://api.actual.inc/v1`). Set to `http://127.0.0.1:8080` for the local offline daemon — loopback hosts need no API key.
+Legacy fallback for the Actual base URL. Configure `model.provider: actual` and `model.base_url` in `config.yaml` instead; the YAML URL takes precedence. Defaults to `https://api.actual.inc/v1`.
 
 `MINIMAX_API_KEY`
 
@@ -1096,6 +1096,10 @@ JSON array, newline-separated list, or comma-separated list of regex wake-word p
 
 When enabled, explicit `@...bot` mentions in Telegram groups route only to the mentioned bot usernames before reply or wake-word fallbacks run. Default: `true`. Equivalent to `telegram.exclusive_bot_mentions`.
 
+`TELEGRAM_BOTS_REQUIRE_MENTION`
+
+When enabled, a message sent by another bot must explicitly `@thisbot` to trigger a response — a quote-reply alone is ignored, which stops two bots from replying to each other forever. Human replies are unaffected. Default: `false`. Equivalent to `telegram.bots_require_mention`.
+
 `TELEGRAM_REPLY_TO_MODE`
 
 Reply-reference behavior: `off`, `first` (default), or `all`. Matches the Discord pattern.
@@ -1856,18 +1860,6 @@ Process inbound Matrix `m.notice` events (default: `false`)
 
 Matrix session scope for project rooms: `auto`, `room`, or `thread` (default: `auto`)
 
-`MATRIX_TOOLS_ALLOW_REDACTION`
-
-Allow Matrix message redaction tool execution (default: `false`)
-
-`MATRIX_TOOLS_ALLOW_INVITES`
-
-Allow Matrix invite tool execution (default: `false`)
-
-`MATRIX_TOOLS_ALLOW_ROOM_CREATE`
-
-Allow Matrix room creation tool execution (default: `false`)
-
 `MATRIX_ALLOW_ROOM_MENTIONS`
 
 Allow outbound `@room` mentions to notify all room members (default: `false`)
@@ -2209,6 +2201,10 @@ Reply when an already-delivered postback is tapped again (default: `Already repl
 `LINE_INTERRUPTED_TEXT`
 
 Reply when a `/stop`\-orphaned postback button is tapped (default: `Run was interrupted before completion.`).
+
+`LINE_EXPIRED_TEXT`
+
+Reply when a postback button whose cached answer is gone (expired / lost with process state) is tapped (default: `That request has expired — send your message again.`).
 
 ### ntfy (push notifications)
 
@@ -2947,14 +2943,6 @@ Force the model for `hermes -z` / `hermes chat` without mutating `config.yaml`. 
 Variable
 
 Description
-
-`SESSION_IDLE_MINUTES`
-
-Reset sessions after N minutes of inactivity (default: 1440)
-
-`SESSION_RESET_HOUR`
-
-Daily reset hour in 24h format (default: 4 = 4am)
 
 `HERMES_SESSION_ID`
 

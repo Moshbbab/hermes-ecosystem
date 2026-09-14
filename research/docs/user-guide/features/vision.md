@@ -277,11 +277,11 @@ Your model
 
 What happens to the image
 
-**Vision-capable** (GPT-4V, Claude with vision, Gemini, Qwen-VL, MiMo-VL, etc.)
+**Vision-capable** (GPT-4V, Claude with vision, Gemini, Qwen-VL, MiMo-VL, DeepSeek Flash / V4.1-Flash, etc.)
 
 Sent as **real pixels** using the provider's native image content format above. No text summary layer.
 
-**Text-only** (DeepSeek V3, smaller open-source models, older chat-only endpoints)
+**Text-only** (DeepSeek V4 Pro, DeepSeek V3, smaller open-source models, older chat-only endpoints)
 
 Routed through the `vision_analyze` auxiliary tool — an auxiliary vision model describes the image, and the text description is injected into the conversation.
 

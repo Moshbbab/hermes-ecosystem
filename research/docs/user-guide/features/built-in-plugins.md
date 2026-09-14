@@ -94,7 +94,7 @@ Join Meet calls, live-caption transcription, optional realtime duplex audio
 
 image backend
 
-OpenAI `gpt-image-2` image generation backend (alternative to FAL)
+OpenAI GPT Image 2 and 2.5 Flare/Sunburst generation and editing (API key)
 
 `image_gen/openai-codex`
 
