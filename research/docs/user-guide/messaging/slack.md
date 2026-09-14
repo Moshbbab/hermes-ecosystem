@@ -565,7 +565,7 @@ Slack user IDs whose **Web-API (user-token) posts count as human**. Such posts c
 
 Delivery surface for [continuable cron jobs](/docs/user-guide/features/cron#flat-in-channel-continuation-slack). `"thread"` opens a dedicated thread per delivery (default); `"in_channel"` delivers flat into the channel timeline. Pair `in_channel` with `reply_in_thread: false` (and `require_mention: false`) so a plain channel reply continues the job.
 
-The equivalent environment variable is `SLACK_ALLOW_BOTS=none|mentions|all`. When both are set, `platforms.slack.extra.allow_bots` takes precedence. Avoid `all` when peer bots can answer each other without an explicit mention, because their own reply policies can still create loops.
+The equivalent environment variable is `SLACK_ALLOW_BOTS=none|mentions|all`. When both are set, the explicit environment variable takes precedence (the same env-over-YAML rule as every other setting). Avoid `all` when peer bots can answer each other without an explicit mention, because their own reply policies can still create loops.
 
 ### Working-State Status Line
 

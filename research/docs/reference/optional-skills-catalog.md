@@ -91,6 +91,10 @@ Skill
 
 Description
 
+[**ai-presenter-video**](/docs/user-guide/skills/optional/creative/creative-ai-presenter-video)
+
+Make a verified AI presenter video from script + image.
+
 [**archify**](/docs/user-guide/skills/optional/creative/creative-archify)
 
 Validated interactive HTML diagrams, upstream-maintained.
@@ -730,6 +734,10 @@ Embed an in-page natural-language GUI copilot in web apps.
 [**publish-site**](/docs/user-guide/skills/optional/web-development/web-development-publish-site)
 
 Versioned site deploys to GitHub/Cloudflare/Netlify Pages.
+
+[**scrollcraft**](/docs/user-guide/skills/optional/web-development/web-development-scrollcraft)
+
+Premium scroll-driven landing pages; scroll = timeline.
 
 ## yuanbao
 

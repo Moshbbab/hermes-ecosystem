@@ -114,7 +114,7 @@ Authentication follows the profile named in the URL. Unprefixed endpoints keep u
 
 -   `/p/coder/...` API-server requests must use `API_SERVER_KEY` from `~/.hermes/profiles/coder/.env`; the default listener key is rejected. Under the multiplexer that key only authenticates the prefix — it does not turn on a second `api_server` listener in the secondary profile, so you do not need to pin `platforms.api_server.enabled: false` in the secondary's `config.yaml`.
 -   A webhook route that targets `coder` must declare `profile: coder` beside its existing route-specific `secret` in the default profile's `config.yaml`. That secret is then accepted only at `/p/coder/webhooks/<route>` and is rejected on every other profile prefix.
--   Webhook routes without `profile` remain default-profile routes and are not reachable through a named profile prefix.
+-   Webhook routes without `profile` remain default-profile routes and are not reachable through a named profile prefix. Dynamic subscriptions bind the same way: `hermes webhook subscribe <name> --route-profile coder` writes `profile: coder` into the default gateway's `webhook_subscriptions.json` and prints the `/p/coder/webhooks/<name>` URL (`hermes webhook ls` shows the binding). Use `--route-profile`, not the global `-p coder`: `-p` would write the subscription into coder's own subscriptions file, which the default gateway's webhook adapter never reads.
 -   Delivery follows the same binding. A `profile: coder` route's reply (or `deliver_only` message) goes out through **coder's** adapter for the `deliver` platform, falls back to **coder's** home channel when `deliver_extra.chat_id` is unset, and a `github_comment` delivery runs `gh` with `GH_TOKEN` / `GITHUB_TOKEN` from `profiles/coder/.env`. If coder has no adapter for that platform the delivery fails (502) rather than posting as another profile's bot; a default route likewise never borrows a platform that is enabled only on a secondary profile.
 -   `/p/coder/api/platforms/<platform>/events` callbacks are verified and dispatched by coder's adapter; when coder has none the callback is a 503.
 
@@ -205,7 +205,7 @@ Polling/connection platforms (Telegram, Discord, Slack, Matrix, Signal, …) wor
 
 #### 4\. Session keys are namespaced by profile
 
-Each profile's sessions live under an `agent:<profile>:…` namespace so two profiles on the same platform/chat never collide in the shared session store. The **default** profile keeps the historical `agent:main:…` namespace byte-for-byte, so existing default-profile sessions are unaffected — no migration, no orphaned history. Every gateway path that reads a key back — delegation completions after a restart, shutdown notices, a per-user-thread `/stop` of a sibling's run, `/undo`, QQ approval buttons — accepts the `agent:<profile>:…` shape too, so secondary profiles get the same behaviour as the default one.
+Each profile's sessions live under an `agent:<profile>:…` namespace so two profiles on the same platform/chat never collide in the shared session store. The **default** profile keeps the historical `agent:main:…` namespace byte-for-byte, so existing default-profile sessions are unaffected — no migration, no orphaned history. Every gateway path that reads a key back — delegation completions after a restart, shutdown notices, a per-user-thread `/stop` of a sibling's run, `/undo`, QQ approval buttons — accepts the `agent:<profile>:…` shape too, so secondary profiles get the same behaviour as the default one. The one profile name that would collide with the default's namespace, a profile literally called `main`, is keyed `agent:main~:…` so it keeps its own sessions and its own `profiles/main/state.db`.
 
 Each profile's rows land in **its own** `state.db`: a named profile's under `profiles/<name>/state.db`, the default profile's under the launch home — even when the write happens inside another profile's routed turn or background tick. The Desktop/TUI backend's own store is likewise pinned to the home it launched under, and a Bot Chat's side agents (`prompt.background`) persist next to their parent conversation.
 
@@ -215,7 +215,7 @@ There is a single process-level PID and lock (the multiplexer, under the default
 
 #### What does **not** change
 
-Per-profile `.env` credential isolation is preserved and, if anything, stricter: a profile's keys are resolved from its own scope and are never unioned into a shared environment. Subprocesses like MCP servers and Kanban workers only ever see their own profile's secrets — including credentials injected by an external secret source (1Password, Bitwarden, …): a stdio MCP server started for profile B receives B's value for such a name, or nothing if B has none, never the default profile's. MCP servers are connected **per profile**: two profiles that both name a server `github` with their own token get two connections and each sees only its own tools; profiles whose `mcp_servers` entry is identical (same route _and_ credentials) share one connection, and an owner's `/reload-mcp` re-registers the sharing profiles' tools without them reloading. Terminal settings (`terminal.backend`, `terminal.cwd`, `terminal.docker_volumes`, `terminal.docker_shared_container_key`, SSH targets, …) are likewise resolved per profile on every routed turn: a profile that omits a terminal key gets the documented default, never the launch profile's value, and a profile whose `config.yaml`/`.env` cannot be parsed has terminal execution refused rather than run under another profile's sandbox policy. The media-delivery credential guard (the denylist behind `MEDIA:` attachments — `.env`, `auth.json`, `config.yaml`, `state.db`, session transcripts, OAuth token stores) covers every profile under `profiles/`, so no profile's turn can attach another profile's secrets or chat history to a reply. Authorization is per profile too: `GATEWAY_ALLOW_ALL_USERS`, `GATEWAY_ALLOWED_USERS` and every platform allowlist or allow-all opt-in are read from the owning profile's `.env` — the default profile opting into open access never opens a secondary profile's bot, and a secondary that opts in only in its own `.env` is honored. The same holds for per-bot behaviour written in a profile's `config.yaml` (`require_mention`, `mention_patterns`, `allow_bots`, `reactions`, `auto_thread`, `dm_policy`, `ignored_channels`, Matrix `session_scope`, …): a secondary profile's YAML never lands in the shared process environment, so it cannot become the default profile's policy, and the default profile's YAML never governs a secondary bot. The `terminal.env_passthrough` allowlist, the Yuanbao auto-designated home channel, and the write guards protecting each profile's own `config.yaml` are resolved per profile as well. Kanban, profile-scoped skills/memory/SOUL, and model routing all behave per-profile exactly as they do with separate gateways.
+Per-profile `.env` credential isolation is preserved and, if anything, stricter: a profile's keys are resolved from its own scope and are never unioned into a shared environment. Subprocesses like MCP servers and Kanban workers only ever see their own profile's secrets — including credentials injected by an external secret source (1Password, Bitwarden, …): a stdio MCP server started for profile B receives B's value for such a name, or nothing if B has none, never the default profile's. MCP servers are connected **per profile**: two profiles that both name a server `github` with their own token get two connections and each sees only its own tools; profiles whose `mcp_servers` entry is identical (same route _and_ credentials, including mTLS `client_cert`/`client_key`) share one connection, and an owner's `/reload-mcp` re-registers the sharing profiles' tools without them reloading. `auth: oauth` servers are never shared across profiles: each profile holds its own token under its own `mcp-tokens/` and opens its own connection. Trust policy stays per profile: a `trust: untrusted` profile sharing a `trust: full` profile's connection is still asked before every write-capable call, and `supports_parallel_tool_calls` applies only to the profile that set it. Terminal settings (`terminal.backend`, `terminal.cwd`, `terminal.docker_volumes`, `terminal.docker_shared_container_key`, SSH targets, …) are likewise resolved per profile on every routed turn: a profile that omits a terminal key gets the documented default, never the launch profile's value, and a profile whose `config.yaml`/`.env` cannot be parsed has terminal execution refused rather than run under another profile's sandbox policy. The media-delivery credential guard (the denylist behind `MEDIA:` attachments — `.env`, `auth.json`, `config.yaml`, `state.db`, session transcripts, OAuth token stores) covers every profile under `profiles/`, so no profile's turn can attach another profile's secrets or chat history to a reply. Authorization is per profile too: `GATEWAY_ALLOW_ALL_USERS`, `GATEWAY_ALLOWED_USERS` and every platform allowlist or allow-all opt-in are read from the owning profile's `.env` — the default profile opting into open access never opens a secondary profile's bot, and a secondary that opts in only in its own `.env` is honored. The same holds for per-bot behaviour written in a profile's `config.yaml` (`require_mention`, `mention_patterns`, `allow_bots`, `reactions`, `auto_thread`, `dm_policy`, `ignored_channels`, Matrix `session_scope`, …): a secondary profile's YAML never lands in the shared process environment, so it cannot become the default profile's policy, and the default profile's YAML never governs a secondary bot. The `terminal.env_passthrough` allowlist, the Yuanbao auto-designated home channel, and the write guards protecting each profile's own `config.yaml` are resolved per profile as well. Kanban, profile-scoped skills/memory/SOUL, and model routing all behave per-profile exactly as they do with separate gateways.
 
 Outbound identity is per profile too. A turn running for profile `P` that calls the `send_message` tool (send, react, media) posts through `P`'s own bot; so do the "Gateway shutting down/restarted" and `/update` notices for `P`'s sessions, `/loop` wakeups set from `P`'s chats, and the Discord unauthorized-slash operator alert of `P`'s Discord bot (to `P`'s home channel). If `P` has no connected bot for that platform the send fails with a clear error — it never falls back to the default profile's bot.
 
@@ -257,11 +257,11 @@ The named profile's own adapter and its secret (Twilio auth token, LINE channel 
 
 `401`/`403` on a wrong secret, `404` when the profile has no such adapter — never the default profile's adapter
 
-Adapter settings (`*_REQUIRE_MENTION`, `*_REACTIONS`, `*_PROXY`, webhook host/port/URL, Matrix thread/session/E2EE policy, Discord backfill/attachment caps, Buzz reply mode, A2A agent card)
+Adapter settings (`*_REQUIRE_MENTION`, `*_REACTIONS`, `*_ALLOW_BOTS`, `*_PROXY`, Discord `allow_mentions`, Matrix `allowed_users` / `ignore_user_patterns`, webhook host/port/URL, Matrix thread/session/E2EE policy, Discord backfill/attachment caps, Buzz reply mode, A2A agent card / public URL, WhatsApp bridge policy, Yuanbao home channel)
 
-The owning profile's `.env` and `config.yaml`
+The owning profile, in this order: explicit `.env` value → its `config.yaml` → the adapter's default
 
-The adapter's documented default — never the default profile's setting
+The adapter's documented default — never the default profile's setting. Single-profile installs keep env-over-YAML exactly as each platform page documents
 
 `MEDIA:` attachment denylist
 
@@ -373,7 +373,7 @@ What is **shared** by design: the process, its PID/lock and `gateway_state.json`
 
 The served set controls `/p/<profile>/` API and webhook prefixes, runtime status, profile-route eligibility, and which profiles the in-process cron scheduler ticks (the Desktop backend's ticker enumerates the same set and stands down for any profile a running multiplexer or its own gateway already serves). A multiplexer started as `hermes -p <name> gateway run` always ticks its own profile's cron store as well.
 
-The served set is **live**. A profile created while the multiplexer is running (`hermes profile create`, the dashboard, Desktop or the TUI) is served at once: the creator pings the multiplexer over its control socket, and the multiplexer also rescans `profiles/` every 30 seconds as a safety net. The new profile's adapters are built the moment its `config.yaml`/`.env` carries a bot token (creators usually create first, then add the token), `served_profiles` in the default profile's `gateway_state.json` is updated, and `hermes -p <name> gateway status` reports it as served — no restart, and the other profiles' adapters and in-flight turns are untouched. Deleting a profile stops and unroutes its adapters the same way. The one-credential-one-poller rule still applies: a hot-added profile that reuses another profile's token is parked with a `duplicate_credential` error, never started as a second poller.
+The served set is **live**. A profile created while the multiplexer is running (`hermes profile create`, the dashboard, Desktop or the TUI) is served at once: the creator pings the multiplexer over its control socket, and the multiplexer also rescans `profiles/` every 30 seconds as a safety net. The new profile's adapters are built the moment its `config.yaml`/`.env` carries a bot token (creators usually create first, then add the token), `served_profiles` in the default profile's `gateway_state.json` is updated, and `hermes -p <name> gateway status` reports it as served — no restart, and the other profiles' adapters and in-flight turns are untouched. Deleting a profile stops and unroutes its adapters the same way, and `hermes profile rename` unroutes the old name before the directory moves and hot-serves the new one (the old name is not resurrected by the adapters or the cron ticker that were still bound to it). The one-credential-one-poller rule still applies: a hot-added profile that reuses another profile's token is parked with a `duplicate_credential` error, never started as a second poller.
 
 ### Routing shared-bot chats to profiles (`profile_routes`)
 
@@ -686,6 +686,38 @@ After a successful update, when the install has two or more profiles, at least o
 -   **Something blocks it** → a warning block lists each blocker with its exact fix and the one-liner to run later. Nothing is changed.
 
 Single-profile installs are never migrated (there is nothing to gain), and an install that is already multiplexing is left alone. `hermes update` also does nothing when no secondary profile runs its own gateway — it never flips modes on an install where nothing was running.
+
+### Boundaries `hermes update` never crosses on its own
+
+The unattended hook only folds profiles that share **one UNIX user, one service domain and one `profiles/` tree** — the shape `hermes profile create` produces. A standalone secondary behind any of these boundaries stops the automatic path:
+
+boundary
+
+example
+
+different service manager or scope
+
+default on user systemd, a secondary on **system** systemd (or launchd), or the default detached with a service-managed secondary
+
+different UNIX user
+
+a system unit with its own `User=`, or a live gateway owned by another uid
+
+`HERMES_HOME` outside `<default home>/profiles/`
+
+a unit pinning `HERMES_HOME=/opt/hermes/profiles/emma`
+
+In that case `hermes update` prints the boundary it found plus `hermes gateway migrate --multiplex`, and changes nothing — no unit is removed and `gateway.multiplex_profiles` stays off. Collapsing such a fleet replaces a kernel-enforced boundary (file ownership, `User=`) with in-process isolation, which is an operator's decision. The explicit command still makes it: the same findings appear as **notices** in `hermes gateway migrate --multiplex --dry-run` so you can read them first, and `--multiplex` proceeds when you confirm.
+
+### Opting out of the automatic migration
+
+Set `gateway.auto_multiplex_migration: false` on the **default** profile to keep the automatic fold from ever running on this install:
+
+```
+hermes config set gateway.auto_multiplex_migration false
+```
+
+`hermes update` then leaves per-profile gateways exactly as they are, with no output and no changes, however eligible the install looks. The setting lives in config, so it survives updates — the decision is made once rather than re-litigated on every release. It governs the **automatic** path only: `hermes gateway migrate --multiplex` is an explicit request and still migrates (and is the supported way to opt back in). Absent or `true` keeps the default behaviour described above.
 
 The explicit command is different: `hermes gateway migrate --multiplex` with two or more profiles and **no** standalone secondary gateway still applies the one remaining step — it sets `gateway.multiplex_profiles: true`, (re)starts the default gateway and writes the same rollback manifest (with an empty `secondaries` list), so `--standalone` undoes it. You asked for multiplex; you get multiplex.
 

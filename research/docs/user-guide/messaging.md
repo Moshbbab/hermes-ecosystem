@@ -936,15 +936,15 @@ One-line status message on completion; failures append a short output tail (defa
 
 `all`
 
-Running-output updates **and** the final raw-output message
+Running-output updates **and** the final status message with the output tail
 
 `result`
 
-Only the final raw-output completion message (regardless of exit code)
+Only the final status message with the output tail (regardless of exit code)
 
 `error`
 
-Only the final raw-output message when the exit code is non-zero
+Only the final status message with the output tail when the exit code is non-zero
 
 `off`
 
