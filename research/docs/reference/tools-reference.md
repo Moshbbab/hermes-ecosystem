@@ -142,7 +142,7 @@ Managed actions: `status`, `connect`, `reconnect` (repairs only what is not conn
 
 —
 
-The deadline for one call is five minutes, fixed by the backend when the call starts; reopening the chat or restarting the desktop never extends it. Managed actions additionally need the portal sign-in the managed tools use; MCP approvals do not.
+The deadline for one call is five minutes, fixed by the backend when the call starts; reopening the chat or restarting the desktop never extends it. The tool is present only when the Nous Portal has enabled connectors for the signed-in account (the `managed_tools` claim on its token). Other sessions do not see it.
 
 ## `code_execution` toolset
 

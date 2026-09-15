@@ -14,6 +14,10 @@ For the full platform support matrix (which OSes, distribution methods, and plat
 
 To easily install the command-line and desktop applications, [download the Hermes Desktop installer](https://hermes-agent.nousresearch.com/) from our website and run it.
 
+note
+
+The macOS installer is **Apple Silicon only**. macOS on x86 (Intel) processors is [not a supported platform](/docs/getting-started/platform-support#unsupported).
+
 ### Without Hermes Desktop:
 
 For a command-line only install without Hermes Desktop, run:
