@@ -2116,9 +2116,9 @@ Show current config values.
 
 Open `config.yaml` in your editor.
 
-`get <key> [--json]`
+`get <key> [--json] [--raw]`
 
-Print a single config value by dotted key (e.g. `hermes config get model.default`). `--json` emits machine-readable output.
+Print a single config value by dotted key (e.g. `hermes config get model.default`). `--json` emits machine-readable output. Credential-shaped values (`api_key`, `*_TOKEN`, `*_SECRET`, `password`, …) are masked (`sk-o...7890`) because the agent runs this from sessions whose transcripts persist; `--raw` prints the real value (or set `security.redact_secrets: false`).
 
 `set <key> <value>`
 

@@ -33,7 +33,7 @@ Sites that ask for a code after the password are handled the same way:
 
 ## Already using 1Password or Bitwarden?
 
-Nothing to enable. If the `op` or `bw` command-line tool is installed and signed in, Hermes picks it up automatically and its website logins become fillable alongside the local ones. The first time the agent needs one of those logins it asks you to unlock the manager with your master password (masked prompt; once per session, 30 minutes idle). Hermes hands the master password to the manager's CLI through its non-interactive channel (`op signin` on stdin, `bw unlock --passwordenv` in the child's environment) and keeps only the session token in memory. The agent never sees the master password, the token, or any login.
+Nothing to enable. If the `op` or `bw` command-line tool is installed and signed in, Hermes picks it up automatically and its website logins become fillable alongside the local ones. The first time the agent needs one of those logins it asks you to unlock the manager with your master password (masked prompt; once per session, 30 minutes idle). Hermes hands the master password to the manager's CLI through its non-interactive channel (`op signin` on stdin, `bw unlock --passwordenv` in the child's environment) and keeps only the session token in memory. The agent never sees the master password, the token, or any login. A manager item that lists several websites (say `amazon.co.uk`, `www.amazon.co.uk` and `eu.account.amazon.com`) fills on each of those exact origins; nothing is inferred beyond the URLs saved on the item.
 
 Prefer not to use a detected manager? `hermes vault sources --disable bitwarden`, or the switch in **Settings → Passwords & Logins**.
 

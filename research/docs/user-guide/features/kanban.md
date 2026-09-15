@@ -101,6 +101,10 @@ Peer — any profile reads/writes any task
 
 **One-sentence distinction:** `delegate_task` is a function call; Kanban is a work queue where every handoff is a row any profile (or human) can see and edit.
 
+Don't link a support card to the card it is meant to unblock
+
+A worker that is blocked on `t_parent` and creates a support card for the missing piece must **not** `kanban_link(t_parent, t_support)`: the link makes the support card a _child_ of the blocked parent, so it is gated behind the parent it exists to unblock and neither card ever runs. Reference the parent id in the support card's body instead. `link`/`kanban_link` report `gated: true` and record a `dependency_wait` event when they demote a `ready` child (and `kanban_create` with `parents` does the same when it parks the new card), so the deadlock is visible on the board; `hermes kanban unlink <parent> <child>` releases it.
+
 **Use `delegate_task` when** the parent agent needs a short reasoning answer before continuing, no humans involved, result goes back into the parent's context.
 
 **Use Kanban when** work crosses agent boundaries, needs to survive restarts, might need human input, might be picked up by a different role, or needs to be discoverable after the fact.
@@ -366,13 +370,13 @@ List a task's attachments.
 
 `kanban_create`
 
-(Orchestrators) fan out into child tasks with an `assignee`, optional `parents`, `skills`, etc.
+(Orchestrators) fan out into child tasks with an `assignee`, optional `parents`, `skills`, etc. Returns `gated: true` + `gated_by` when an open parent parked the new card in `todo`.
 
 `title`, `assignee`
 
 `kanban_link`
 
-(Orchestrators) add a `parent_id → child_id` dependency edge after the fact.
+(Orchestrators) add a `parent_id → child_id` dependency edge after the fact. Returns `gated: true` when the child was `ready` and got demoted back to `todo` because the parent is not done — the child will only run after the parent completes.
 
 `parent_id`, `child_id`
 
@@ -473,6 +477,8 @@ That final `kanban_complete` / `kanban_block` call is part of the worker protoco
 **Dispatcher-side recovery:** If the nudges are exhausted or the worker crashes before reaching the nudge, the dispatcher gives the violation a **bounded retry** (up to `_PROTOCOL_VIOLATION_FAILURE_LIMIT` consecutive violations, default 3) before auto-blocking the task instead of respawning it into the same loop. The budget counts only _consecutive_ clean-exit protocol violations — interleaved rate-limited requeues are neutral, and any other failure kind resets the streak — and a per-task `max_retries` overrides the bound. This usually means the model wrote a plain-text answer and exited without using the Kanban tool surface.
 
 The lifecycle plus the load-bearing reference details (workspace kinds, deliverable `artifacts`, claiming created cards) ship in that system-prompt block, so every worker has them regardless of which profile it runs under — no per-profile skill setup required.
+
+**Worker session names.** A worker's session is titled after its card (`Fix the swap modal`, or `Kanban task <id>` when the board row can't be read) at spawn, so `hermes sessions` and session search show the card, not a model's guess. Workers never make the auxiliary `title_generation` model call that names interactive sessions; a manual `/title` in a worker session still wins.
 
 ### Pinning extra skills to a specific task
 
@@ -1445,9 +1451,9 @@ Worker or human flipped the task to `blocked`. `kind` is the typed block reason 
 
 `dependency_wait`
 
-`{reason, kind}`
+`{reason, kind}` or `{reason: parent_not_done, demoted: true, parent}`
 
-Worker blocked with `kind=dependency` — the task is only waiting on another task, so it routes to `todo` (parent-gated, auto-promoted) instead of `blocked`. No human needed.
+Worker blocked with `kind=dependency` — the task is only waiting on another task, so it routes to `todo` (parent-gated, auto-promoted) instead of `blocked`. No human needed. Also emitted when `link`/`kanban_link` puts a `ready` child under a parent that is not `done`: the child drops back to `todo` and this event records why (the `ready → running` claim re-checks parents, so nothing can run it until the parent completes or the link is removed with `hermes kanban unlink`).
 
 `block_loop_detected`
 
@@ -1523,7 +1529,7 @@ Worker called `hermes kanban heartbeat $TASK` to signal liveness during long ope
 
 `{stale_lock}`
 
-Claim TTL expired without a completion; task goes back to `ready`.
+Claim TTL expired without a completion; task goes back to `ready`. An automatic reclaim counts as one non-successful attempt toward the `gave_up` breaker (a claim that never spawned a worker would otherwise loop claim → reclaim → claim forever); an operator `reclaim` resets the counter instead.
 
 `crashed`
 

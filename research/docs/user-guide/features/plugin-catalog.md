@@ -126,7 +126,7 @@ Use the git-URL path for your own plugins and repos you already trust; use the c
 
 Submissions are pull requests that add one `plugin-catalog/<name>.yaml` file. The full checklist lives in the [plugin-catalog README](https://github.com/NousResearch/hermes-agent/tree/main/plugin-catalog); in short, an entry must be:
 
-1.  **Owner-submitted** — the PR author owns or maintains the plugin repo.
+1.  **Owner-submitted** — the PR author owns or maintains the plugin repo. Maintainers also add batches of community plugins from a reviewed sweep (each pin validated and scanned at the pinned commit); if yours was swept in and you want it changed or removed, open a PR on your entry.
 2.  **A public repository** — the `repo` URL is publicly cloneable.
 3.  **Released** — the repo has real releases/tags, not just a default branch.
 4.  **Passing validation** — the catalog validation GitHub Action is green on the PR (schema, SHA format, reachability).

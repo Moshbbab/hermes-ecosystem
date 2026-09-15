@@ -15,7 +15,7 @@ You want this setup when you have two or more Hermes agents that should all be o
 -   Sandbox + production instances of the same configuration
 -   A research agent + a writing agent + a cron-driven bot — each with isolated memory and skills
 
-Every profile already gets its own per-platform LaunchAgent (`ai.hermes.gateway-<name>.plist`) or systemd user service (`hermes-gateway-<name>.service`). This guide adds the patterns for managing them collectively.
+Every profile already gets its own per-platform supervisor entry: a LaunchAgent (`ai.hermes.gateway-<name>.plist`), a systemd user service (`hermes-gateway-<name>.service`), a systemd **system** service when installed with `sudo hermes gateway install --system` (runs as the invoking user via `User=`), a Windows Scheduled Task, or an s6/Docker service — and the Desktop app spawns its own per-profile `hermes serve` backend. This guide adds the patterns for managing them collectively.
 
 ## Quick start
 
@@ -341,6 +341,12 @@ MCP discovery in the Desktop/dashboard backend
 Once per served profile home
 
 A profile selected after another has already built an agent still discovers its own `mcp_servers`
+
+MCP connections in the Desktop/dashboard backend and the per-profile cron ticker
+
+Keyed per served profile even with `gateway.multiplex_profiles` off — same rule as the multiplexer
+
+A same-named `mcp_servers` entry with other credentials is its own connection; a served profile never calls a server as another profile
 
 Dashboard actions (`hermes -p <name> …` spawned by the Desktop/dashboard)
 
