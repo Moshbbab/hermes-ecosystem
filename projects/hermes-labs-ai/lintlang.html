@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>hermes-labs-ai/lintlang — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="LintLang is a static analysis tool for natural-language AI agent instructions, tool descriptions, and system prompts. It performs local, deterministic checks…">
+<meta name="description" content="LintLang is a static analysis tool that scans natural-language instructions for AI agents to identify issues such as ambiguous tool descriptions, conflicting…">
 <link rel="canonical" href="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta property="og:description" content="LintLang is a static analysis tool for natural-language AI agent instructions, tool descriptions, and system prompts. It performs local, deterministic checks…">
+<meta property="og:description" content="LintLang is a static analysis tool that scans natural-language instructions for AI agents to identify issues such as ambiguous tool descriptions, conflicting…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/hermes-labs-ai/lintlang">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="hermes-labs-ai/lintlang — Hermes Atlas">
-<meta name="twitter:description" content="LintLang is a static analysis tool for natural-language AI agent instructions, tool descriptions, and system prompts. It performs local, deterministic checks…">
+<meta name="twitter:description" content="LintLang is a static analysis tool that scans natural-language instructions for AI agents to identify issues such as ambiguous tool descriptions, conflicting…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=lintlang&amp;subtitle=Static+analysis+for+AI+agent+configs%2C+tool+descriptions%2C+and+system+prompts+%E2%80%94+catches+vague+tool+descriptions%2C+missing+stop+conditions%2C+and+schema+gaps+before+they+reach+runtime.+Z&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for natural-language AI agent instructions, tool descriptions, and system prompts. It performs local, deterministic checks to identify issues such as ambiguous tool descriptions, conflicting directives, and missing stop conditions without making API or model calls.",
+  "description": "LintLang is a static analysis tool that scans natural-language instructions for AI agents to identify issues such as ambiguous tool descriptions, conflicting directives, and missing stop conditions. Its default checks are deterministic and local, requiring no LLM calls, API keys, or network access to perform scans.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-09-15T08:58:40.000Z",
+  "dateModified": "2026-09-15T20:16:57.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for natural-language AI agent instructions, tool descriptions, and system prompts. It performs local, deterministic checks to identify issues such as ambiguous tool descriptions, conflicting directives, and missing stop conditions without making API or model calls.</p>
+    <p class="summary-text">LintLang is a static analysis tool that scans natural-language instructions for AI agents to identify issues such as ambiguous tool descriptions, conflicting directives, and missing stop conditions. Its default checks are deterministic and local, requiring no LLM calls, API keys, or network access to perform scans.</p>
     <ul class="summary-highlights">
-      <li>Statically analyzes agent instructions for ambiguities and conflicting directives.</li>
-      <li>Operates locally without LLM, API, or network calls.</li>
-      <li>Supports CI integration with SARIF output and baseline management.</li>
+      <li>Flags overlapping tool descriptions and inconsistent schemas.</li>
+      <li>Performs local, zero-LLM static analysis of agent configurations.</li>
+      <li>Supports Python 3.10+ and integrates with CI via SARIF output.</li>
     </ul>
   </div>
 </section>
@@ -176,6 +176,43 @@ before runtime.</strong></p>
 </ul>
 <p>LintLang's default static checks are deterministic and local. They make no LLM,
 API, telemetry, or network calls.</p>
+<pre><code class="language-bash">python -m pip install lintlang
+lintlang scan AGENTS.md
+</code></pre>
+<p>Or run it once without installing, using <a href="https://docs.astral.sh/uv/">uv</a>:
+<code>uvx lintlang scan AGENTS.md</code>.</p>
+<p>Example run against this repo's <code>samples/bad_tool_descriptions.yaml</code>, a fixture
+with two tools (<code>get_user_info</code>, <code>fetch_user_data</code>) that carry no distinguishing
+term:</p>
+<pre><code>$ lintlang scan samples/bad_tool_descriptions.yaml
+LINTLANG v0.6.0
+  samples/bad_tool_descriptions.yaml
+  ──────────────────────────────────────────────────
+
+  ❌ FAIL — 1 CRITICAL, 2 HIGH, 7 MEDIUM, 3 LOW
+
+  H1: Tool Description Ambiguity
+
+    !! [CRITICAL] H1.1 tool:process_ticket
+      Tool 'process_ticket' has no description.
+      → Add a specific, disambiguating description that explains WHEN to use this tool, not just WHAT it does.
+
+    ! [HIGH] H1.2 tool:get_user_info
+      Tool 'get_user_info' has a very short description (13 chars): "Get user info"
+      Evidence: "Get user info"
+      → Expand description to include: purpose, when to use vs alternatives, expected input shape, output behavior.
+
+    ~ [MEDIUM] H1.6 tool:get_user_info vs tool:fetch_user_data
+      Tools 'get_user_info' and 'fetch_user_data' carry no differentia — every meaning-bearing term in one is present, or has a synonym, in the other. Both descriptions may be accurate and still give a model nothing to choose between them.
+      Evidence: "'Get user info' vs 'Get user data from the system'"
+      → Name a condition that selects one over the other. State what each tool is for that the other is NOT for — e.g. 'use X for orders already placed, use Y for carts not yet submitted'.
+
+  ──────────────────────────────────────────────────
+  lintlang v0.6.0 | H1-H7 structural analysis | Zero LLM calls
+</code></pre>
+<p>(Full output has 13 findings across H1, H2, and H3; the block above is
+truncated for length. See the Quick start section below for <code>pipx</code> and other
+install options.)</p>
 <p>LintLang was developed as the engineering offshoot of
 <a href="https://doi.org/10.5281/zenodo.19042468">A Taxonomy of Epistemic Failure Modes in Large Language Models</a>,
 but its bounded detectors do not claim to implement or validate every failure
@@ -697,6 +734,13 @@ inspects one present instruction plus explicit context.</p>
 <li><a href="https://github.com/hermes-labs-ai/lintlang/issues">Report an issue or disputed finding</a></li>
 <li><a href="https://github.com/hermes-labs-ai/lintlang/blob/main/SECURITY.md">Security policy</a></li>
 </ul>
+<h3>Also from Hermes Labs</h3>
+<ul>
+<li><a href="https://github.com/hermes-labs-ai/zer0dex">zer0dex</a> — a local dual-layer memory pattern for AI agents: a compact, human-readable markdown index paired with semantic retrieval from a local vector store, queried before each message.</li>
+<li><a href="https://github.com/hermes-labs-ai/little-canary">little-canary</a> — detects prompt injection by its effect on a sacrificial canary model: untrusted input hits a powerless model first, a behavioral check reads the residue, and it returns block, flag, or pass.</li>
+<li><a href="https://github.com/hermes-labs-ai/fidelis">fidelis</a> — zero-LLM agent memory using local-first BM25, dense-vector, and reciprocal-rank-fusion retrieval, returning original passages verbatim by default. Available on PyPI as <code>fidelis-memory</code>.</li>
+<li><a href="https://github.com/hermes-labs-ai/quick-gate-js">quick-gate-js</a> — a deterministic JS/TS CI quality gate unifying ESLint, TypeScript, build, and Lighthouse checks into one fail-fast result, with bounded auto-repair and structured escalation evidence. npm: <code>quick-gate</code>. Python counterpart: <a href="https://github.com/hermes-labs-ai/quick-gate-python">quick-gate-python</a> (PyPI: <code>pygate-ci</code>), the same pattern for Ruff, Pyright, and pytest.</li>
+</ul>
 <h3>License</h3>
 <p><a href="LICENSE">Apache License 2.0</a></p>
 <p>LintLang is maintained by <a href="https://hermes-labs.ai">Hermes Labs</a>.</p>
@@ -712,7 +756,7 @@ inspects one present instruction plus explicit context.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 70.9K</div>
+        <div class="stars">★ 71.0K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
