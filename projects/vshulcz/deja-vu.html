@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It allows agents to retrieve past decisions, command outcomes,…">
+<meta name="description" content="deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It enables cross-agent recall by retrieving past decisions,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It allows agents to retrieve past decisions, command outcomes,…">
+<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It enables cross-agent recall by retrieving past decisions,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It allows agents to retrieve past decisions, command outcomes,…">
+<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It enables cross-agent recall by retrieving past decisions,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=One+memory+shared+by+Claude+Code%2C+Codex%2C+Cursor%2C+Copilot+CLI%2C+OpenClaw+and+20+more+coding+agents%2C+built+from+the+session+history+already+on+disk.+A+fix+found+in+one+agent+comes+bac&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It allows agents to retrieve past decisions, command outcomes, and file edits from previous sessions across different tools using an MCP recall tool or CLI commands.",
+  "description": "deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It enables cross-agent recall by retrieving past decisions, file edits, and command results from previous sessions to inform current agent prompts.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-09-15T04:33:53.000Z",
+  "dateModified": "2026-09-15T11:39:02.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 813
+    "userInteractionCount": 816
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,7 +120,7 @@
   <p class="project-desc">One memory shared by Claude Code, Codex, Cursor, Copilot CLI, OpenClaw and 20 more coding agents, built from the session history already on disk. A fix found in one agent comes back in any of them, including months of sessions from before you installed it. No LLM, no embeddings, one local Go binary.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 813</span>
+    <span class="stars">★ 816</span>
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It allows agents to retrieve past decisions, command outcomes, and file edits from previous sessions across different tools using an MCP recall tool or CLI commands.</p>
+    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes session history stored on local disks. It enables cross-agent recall by retrieving past decisions, file edits, and command results from previous sessions to inform current agent prompts.</p>
     <ul class="summary-highlights">
-      <li>Indexes existing local history from over twenty coding agents.</li>
-      <li>Redacts keys and tokens during the indexing process.</li>
-      <li>Provides millisecond lookups over gigabytes of session history.</li>
+      <li>Indexes existing local history from over 20 coding agents.</li>
+      <li>Provides millisecond lookups over gigabytes of session data.</li>
+      <li>Automatically strips keys and tokens during the indexing process.</li>
     </ul>
   </div>
 </section>
@@ -324,7 +324,9 @@ URLs, and high-entropy values for shapes no pattern knows. The value becomes
 <code>deja sync export</code> re-apply redaction on the way out.</p>
 <p><code>deja forget</code> removes sessions from a rebuilt index and writes tombstones, so a later
 <code>deja index</code> cannot restore them from the source history. <code>--unforget</code> lifts a tombstone.
-Project exclusions are one pattern per line in <code>~/.config/deja/exclude</code>.</p>
+Project exclusions are one pattern per line in <code>~/.config/deja/exclude</code>; a line prefixed
+<code>harness:</code> names a store instead — <code>harness:opencode</code> — and deja neither walks it nor asks
+for the tool that would read it.</p>
 <p>The <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/SECURITY-MODEL.md">security model</a> documents data flows, redaction limits, trust
 assumptions and release verification.</p>
 <h3>CLI</h3>
@@ -1103,7 +1105,7 @@ the <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/ARCHITECTURE.md#s
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 23.6K</div>
+        <div class="stars">★ 23.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1123,7 +1125,7 @@ the <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/ARCHITECTURE.md#s
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 285</div>
+        <div class="stars">★ 286</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
