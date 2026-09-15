@@ -107,6 +107,10 @@ ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
 
 AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.
 
+[**auteur**](/docs/user-guide/skills/optional/creative/creative-auteur)
+
+Design and build cinematic, award-level web pages.
+
 [**baoyu-article-illustrator**](/docs/user-guide/skills/optional/creative/creative-baoyu-article-illustrator)
 
 Article illustrations: type × style × palette consistency.
@@ -150,6 +154,10 @@ Render MP4/WebM videos from HTML compositions.
 [**impeccable**](/docs/user-guide/skills/optional/creative/creative-impeccable)
 
 Frontend design guidance, upstream-maintained (impeccable).
+
+[**ip-as-logo**](/docs/user-guide/skills/optional/creative/creative-ip-as-logo)
+
+Design minimal cute IP mascot marks readable at 32px.
 
 [**kanban-video-orchestrator**](/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator)
 
@@ -542,6 +550,10 @@ Turn an unanswerable decision into a questionnaire doc.
 [**here-now**](/docs/user-guide/skills/optional/productivity/productivity-here-now)
 
 Publish sites to {slug}.here.now and store files in Drives.
+
+[**live-dashboard**](/docs/user-guide/skills/optional/productivity/productivity-live-dashboard)
+
+Build self-updating dashboards from live sources.
 
 [**memento-flashcards**](/docs/user-guide/skills/optional/productivity/productivity-memento-flashcards)
 

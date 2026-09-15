@@ -496,11 +496,11 @@ Description
 
 `HERMES_PORTAL_BASE_URL`
 
-Override Nous Portal URL (for development/testing)
+Override Nous Portal URL (for development/testing). Per-profile under multiplexing: set it in the served profile's `.env`.
 
 `NOUS_INFERENCE_BASE_URL`
 
-Override Nous inference API URL
+Override Nous inference API URL. Also the only non-production host a Portal response may name: when the Portal's returned inference URL matches this override it is accepted and persisted instead of being healed to production. Per-profile under multiplexing.
 
 `HERMES_NOUS_MIN_KEY_TTL_SECONDS`
 
@@ -1962,7 +1962,7 @@ Comma-separated user IDs allowed across all platforms
 
 `GATEWAY_ALLOW_ALL_USERS`
 
-Allow all users without allowlists (`true`/`false`, default: `false`)
+Allow all users without allowlists (`true`/`false`, default: `false`). Also configurable via `gateway.allow_all_users` in `config.yaml`; the env var wins when both are set.
 
 ### Web Dashboard & Hermes Desktop
 
@@ -2692,7 +2692,7 @@ Description
 
 `HERMES_NEMO_RELAY_PLUGINS_TOML`
 
-Explicit path to the standard NeMo Relay `plugins.toml` loaded process-wide by Hermes core. When unset, Hermes does not initialize Relay middleware, dynamic plugins, or exporters. The removed `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables are ignored; configure those outputs in the selected file instead. See [NeMo Relay observability configuration](https://docs.nvidia.com/nemo/relay/configure-plugins/observability/about).
+Explicit path to the standard NeMo Relay `plugins.toml` loaded process-wide by Hermes core. When unset, Hermes does not initialize Relay middleware, dynamic plugins, or exporters. The removed `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables are ignored (a `.env` that still carries them exports nothing); `hermes update` / `hermes migrate relay` converts them into `<hermes home>/relay-plugins.toml` and sets this variable — see the [migration note and full example](/docs/user-guide/features/built-in-plugins#nemo-relay-native-integration-migration-note). See [NeMo Relay observability configuration](https://docs.nvidia.com/nemo/relay/configure-plugins/observability/about).
 
 ## Agent Behavior
 
@@ -2803,6 +2803,14 @@ Respawn-storm circuit breaker: maximum gateway (re)starts allowed within the win
 `HERMES_GATEWAY_START_WINDOW_S`
 
 Respawn-storm breaker window in seconds (default: `120`). Also configurable via `gateway.respawn_storm.window_seconds` in `config.yaml`.
+
+`HERMES_STARTUP_WATCHDOG`
+
+Startup-liveness watchdog for `hermes gateway run`: if the process does not reach a live event loop within the timeout, holds no progress lease and shows no CPU progress, it dumps every thread's stack to `logs/gateway-startup-watchdog.log` and exits with code `75` so the service supervisor (systemd, s6, Windows task) restarts it. Set to `0` to opt out. Env-only because `config.yaml` parsing is itself inside the watched window; `gateway.startup_watchdog: false` in `config.yaml` is bridged into this variable when unset.
+
+`HERMES_STARTUP_WATCHDOG_TIMEOUT_S`
+
+Startup watchdog timeout in seconds (default: `300`). Slow-but-alive phases (state.db schema migrations, repair, construction-time archive/prune/VACUUM) hold their own progress leases, so raise this only when a large install's startup is legitimately longer than five minutes _outside_ those phases (many multiplexed profiles, thousands of skills on a slow disk). Bridged from `gateway.startup_watchdog_timeout_seconds` in `config.yaml` when unset.
 
 `HERMES_AGENT_TIMEOUT_WARNING`
 

@@ -156,6 +156,10 @@ Show agent, auth, and platform status.
 
 Inspect and tick the cron scheduler.
 
+`hermes pause` / `hermes resume`
+
+Global emergency stop: no new cron fires (built-in ticker, managed-cron webhook, misfire catch-up), kanban dispatch or gateway turns start until resumed; in-flight work is never killed.
+
 `hermes kanban`
 
 Multi-profile collaboration board (tasks, links, dispatcher).
@@ -372,6 +376,10 @@ Verbose output.
 
 Programmatic mode: suppress banner/spinner/tool previews.
 
+`--format stream-json`
+
+Emit structured JSONL for a `-q` / `--query` invocation. Implies `--quiet`; cannot be combined with `--tui`.
+
 `--image <path>`
 
 Attach a local image to a single query.
@@ -425,10 +433,47 @@ hermes chat --oneshot -q "Summarize the latest PRs"  # answer and exit
 hermes chat --provider openrouter --model anthropic/claude-sonnet-4.6
 hermes chat --toolsets web,terminal,skills
 hermes chat --quiet -q "Return only JSON"
+hermes chat -q "Inspect this repository" --format stream-json
 hermes chat --worktree -q "Review this repo and open a PR"
 hermes chat --ignore-user-config --ignore-rules -q "Repro without my personal setup"
 hermes chat --safe-mode -q "Is this bug mine or Hermes'?"
 ```
+
+### `--format stream-json` — structured JSONL output
+
+Use `--format stream-json` when a program needs to consume progress without scraping terminal output. It requires `-q` / `--query` (or `--query-file`), implies quiet non-interactive CLI mode, and rejects an explicit `--tui` request. Every stdout line is one JSON object; diagnostics and the `session_id:` line stay on stderr.
+
+```
+hermes chat -q "Summarize this repository" --format stream-json
+```
+
+Every event carries `timestamp` (Unix epoch milliseconds).
+
+Event `type`
+
+Fields
+
+`system`
+
+`subtype: "init"`, `model`, `session_id`
+
+`text`
+
+`text` — a streamed assistant text delta
+
+`tool_use`
+
+`name`; `input` when the tool arguments are available
+
+`tool_result`
+
+`name`, `output` (capped at 5000 chars), `duration_ms`, `is_error`
+
+`result`
+
+`session_id`, `exit_code`, `text`, `tokens` (`input`, `output`, `total`, `cache_read`, `cache_write`), `duration_ms`; `error` when the turn failed
+
+Once a conversation starts, its terminal record is always `result` — including `exit_code: 130` when it is interrupted with Ctrl-C. Treat that record as the completion signal; the process exit code matches its `exit_code`.
 
 #### Delegation in finite chat runs
 
@@ -624,7 +669,7 @@ On `run`: inside the s6-overlay Docker image, opt out of auto-supervision and us
 
 On `run`: declare that a wrapper-provided process manager owns the foreground gateway. Use this when `sudo`, `env -i`, or another wrapper strips launchd/systemd's native environment marker. In-chat restarts and updates exit back to that manager instead of spawning a detached replacement.
 
-`--external-supervisor` is a restart-policy contract: an in-chat restart or service-restart update exits with status `75`, so the wrapper's supervisor must relaunch the gateway after that nonzero exit. For systemd, use `Restart=on-failure` or `Restart=always` and do not include `75` in `RestartPreventExitStatus`; for launchd, configure `KeepAlive` to relaunch after unsuccessful exits. Without that policy, a requested restart leaves the gateway stopped.
+`--external-supervisor` is a restart-policy contract: an in-chat restart, `hermes gateway restart`, or service-restart update exits with status `75` (the CLI then waits for the supervisor's fresh PID instead of running a foreground gateway of its own), so the wrapper's supervisor must relaunch the gateway after that nonzero exit. For systemd, use `Restart=on-failure` or `Restart=always` and do not include `75` in `RestartPreventExitStatus`; for launchd, configure `KeepAlive` to relaunch after unsuccessful exits. Without that policy, a requested restart leaves the gateway stopped.
 
 `hermes gateway enroll` accepts `--token`, `--connector-url`, `--gateway-id`, and `--wake-url`. It exchanges the enrollment token with the connector and writes the resulting `GATEWAY_RELAY_ID`, `GATEWAY_RELAY_SECRET`, `GATEWAY_RELAY_DELIVERY_KEY`, optional `GATEWAY_RELAY_URL`, and (when `--wake-url` is given) `GATEWAY_RELAY_WAKE_URL` values to the active profile's `.env`.
 
@@ -2932,7 +2977,11 @@ Replace conflicting MCP servers / skills (default: skip).
 
 Skip confirmation prompts.
 
-See the **[import guide](/docs/user-guide/import-from-other-agents)** for the full mapping tables.
+`--sync`
+
+Re-import every previously imported source whose files changed since the last import. Prompt-free; combine with `--dry-run` to preview.
+
+Every successful import registers its source in `~/.hermes/import-sync.json`; `hermes import-agent --sync` then re-imports any registered source whose files changed (a cron-friendly way to keep an imported Claude Code / Codex setup current). See the **[import guide](/docs/user-guide/import-from-other-agents)** for the full mapping tables.
 
 ## `hermes serve`
 
@@ -3103,6 +3152,7 @@ Examples:
 ```
 hermes profile list
 hermes profile create work --clone
+hermes profile create work --clone --sync-imports   # also carry over the import-agent sync manifest
 hermes profile use work
 hermes profile alias work --name h-work
 hermes profile export work -o work-backup.tar.gz
