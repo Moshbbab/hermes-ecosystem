@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Kindly Web Search is an MCP server designed for AI coding agents to retrieve structured web content and documentation. It provides full conversations from…">
+<meta name="description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta property="og:description" content="Kindly Web Search is an MCP server designed for AI coding agents to retrieve structured web content and documentation. It provides full conversations from…">
+<meta property="og:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta name="twitter:description" content="Kindly Web Search is an MCP server designed for AI coding agents to retrieve structured web content and documentation. It provides full conversations from…">
+<meta name="twitter:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=kindly-web-search-mcp-server&amp;subtitle=Kindly+Web+Search+MCP+Server%3A+Web+search+%2B+robust+content+retrieval+for+AI+coding+tools+%28Claude+Code%2C+Codex%2C+Cursor%2C+GitHub+Copilot%2C+Gemini%2C+etc.%29+and+AI+agents+%28Claude+Desktop%2C+Op&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server#software",
   "name": "kindly-web-search-mcp-server",
-  "description": "Kindly Web Search is an MCP server designed for AI coding agents to retrieve structured web content and documentation. It provides full conversations from platforms like StackOverflow and GitHub Issues in a single call, using specialized API handlers and a headless browser to deliver LLM-optimized Markdown.",
+  "description": "Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from StackExchange and GitHub, arXiv papers, and Wikipedia entries using specialized API handlers and a headless browser fallback.",
   "url": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "codeRepository": "https://github.com/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Shelpuk-AI-Technology-Consulting",
     "url": "https://github.com/Shelpuk-AI-Technology-Consulting"
   },
-  "dateModified": "2026-09-16T14:25:06.000Z",
+  "dateModified": "2026-09-16T17:40:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Kindly Web Search is an MCP server designed for AI coding agents to retrieve structured web content and documentation. It provides full conversations from platforms like StackOverflow and GitHub Issues in a single call, using specialized API handlers and a headless browser to deliver LLM-optimized Markdown.</p>
+    <p class="summary-text">Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from StackExchange and GitHub, arXiv papers, and Wikipedia entries using specialized API handlers and a headless browser fallback.</p>
     <ul class="summary-highlights">
-      <li>Integrates StackExchange, GitHub, arXiv, and Wikipedia APIs for structured retrieval.</li>
-      <li>Uses headless Chromium to parse webpages into Markdown format.</li>
-      <li>Supports multiple search providers including Serper, Tavily, and SearXNG.</li>
+      <li>Returns full conversations, code snippets, and metadata in one call.</li>
+      <li>Integrates StackExchange, GitHub, arXiv, and Wikipedia APIs.</li>
+      <li>Uses a headless Chromium browser for real-time webpage parsing.</li>
     </ul>
   </div>
 </section>
@@ -315,7 +315,7 @@
 <p>Both probes validate the response (<code>text/markdown</code>, ≥1 KB, non-empty after sanitize) and apply the same output cap as the browser path, so the returned markdown is consistent across paths. See <code>.env.example</code> for the full entries.</p>
 <h3>Requirements</h3>
 <ul>
-<li>A search provider (priority order): <code>SERPER_API_KEY</code> (recommended) → <code>SERPBASE_API_KEY</code> (SerpBase, Google results) → <code>TAVILY_API_KEY</code> → <code>SEARXNG_BASE_URL</code> (self-hosted SearXNG) → <code>SOFYA_API_KEY</code> → <code>YDC_API_KEY</code> (You.com) → <code>SERPLY_API_KEY</code> (Serply)</li>
+<li>A search provider (priority order): <code>SERPER_API_KEY</code> (recommended) → <code>SERPBASE_API_KEY</code> (SerpBase, Google results) → <code>TAVILY_API_KEY</code> → <code>SEARXNG_BASE_URL</code> (self-hosted SearXNG) → <code>SOFYA_API_KEY</code> → <code>YDC_API_KEY</code> (You.com) → <code>SERPLY_API_KEY</code> (Serply) → <code>APIFARE_TOKEN</code> (apifare, prepaid balance)</li>
 <li>A Chromium-based browser installed on the same machine running the MCP client (Chrome/Chromium/Edge/Brave)<ul>
 <li>Without a browser: specialized sources (StackExchange, GitHub Issues/Discussions, Wikipedia, arXiv) still work well, but universal HTML <code>page_content</code> extraction may fail for other sites.</li>
 </ul>
@@ -372,6 +372,8 @@ export TAVILY_API_KEY="..."
 export YDC_API_KEY="..."
 # or (Serply, key at https://serply.io):
 export SERPLY_API_KEY="..."
+# or
+export APIFARE_TOKEN="..."
 # or (self-hosted SearXNG):
 export SEARXNG_BASE_URL="https://searx.example.org"
 </code></pre>
@@ -383,6 +385,8 @@ $env:TAVILY_API_KEY="..."
 $env:YDC_API_KEY="..."
 # or (Serply, key at https://serply.io):
 $env:SERPLY_API_KEY="..."
+# or
+$env:APIFARE_TOKEN="..."
 # or (self-hosted SearXNG):
 $env:SEARXNG_BASE_URL="https://searx.example.org"
 </code></pre>
@@ -407,7 +411,7 @@ $env:SEARXNG_USER_AGENT="Mozilla/5.0 ..."
 Make sure your API keys are set in the same shell/OS environment that launches the MCP client (unless you paste them directly into the client config).</p>
 <h3>Client setup</h3>
 <h4>Codex</h4>
-<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.</p>
+<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.</p>
 <p>CLI (no file editing) — add a local stdio MCP server:</p>
 <p>macOS / Linux (Serper):</p>
 <pre><code class="language-bash">codex mcp add kindly-web-search \
@@ -455,11 +459,11 @@ args = [
   "start-mcp-server",
 ]
 # Forward variables from your shell/OS environment:
-env_vars = ["SERPER_API_KEY", "SERPBASE_API_KEY", "TAVILY_API_KEY", "SEARXNG_BASE_URL", "SOFYA_API_KEY", "YDC_API_KEY", "SERPLY_API_KEY", "GITHUB_TOKEN", "KINDLY_BROWSER_EXECUTABLE_PATH"]
+env_vars = ["SERPER_API_KEY", "SERPBASE_API_KEY", "TAVILY_API_KEY", "SEARXNG_BASE_URL", "SOFYA_API_KEY", "YDC_API_KEY", "SERPLY_API_KEY", "APIFARE_TOKEN", "GITHUB_TOKEN", "KINDLY_BROWSER_EXECUTABLE_PATH"]
 startup_timeout_sec = 120.0
 </code></pre>
 <h4>Claude Code</h4>
-<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.</p>
+<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.</p>
 <p>CLI (no file editing) — add a local stdio MCP server:</p>
 <p>macOS / Linux (Serper):</p>
 <pre><code class="language-bash">claude mcp add --transport stdio kindly-web-search \
@@ -528,7 +532,7 @@ Create/edit <code>.mcp.json</code> (project scope; recommended for teams):</p>
 }
 </code></pre>
 <h4>Gemini CLI</h4>
-<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.
+<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.
 Edit <code>~/.gemini/settings.json</code> (or <code>.gemini/settings.json</code> in a project):</p>
 <pre><code class="language-json">{
   "mcpServers": {
@@ -553,7 +557,7 @@ Edit <code>~/.gemini/settings.json</code> (or <code>.gemini/settings.json</code>
 }
 </code></pre>
 <h4>OpenClaw</h4>
-<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.
+<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.
 If <code>mcporter</code> is not installed yet: <code>npm i -g mcporter</code>.
 mcporter docs: <a href="https://github.com/steipete/mcporter/blob/main/docs/config.md">https://github.com/steipete/mcporter/blob/main/docs/config.md</a></p>
 <p>CLI (no file editing) — <code>mcporter</code> (recommended):</p>
@@ -600,7 +604,7 @@ Edit mcporter config (<code>~/.mcporter/mcporter.json</code>, or <code>config/mc
 <pre><code class="language-bash">openclaw gateway restart
 </code></pre>
 <h4>Antigravity (Google IDE)</h4>
-<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.</p>
+<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.</p>
 <p>In Antigravity, open the MCP store, then:</p>
 <ol>
 <li>Click <strong>Manage MCP Servers</strong></li>
@@ -628,11 +632,11 @@ Edit mcporter config (<code>~/.mcporter/mcporter.json</code>, or <code>config/mc
 }
 </code></pre>
 <p>If Antigravity can’t find <code>uvx</code>, replace <code>"uvx"</code> with the absolute path (<code>which uvx</code> on macOS/Linux, <code>where uvx</code> on Windows).
-Make sure at least one of <code>SERPER_API_KEY</code> / <code>SERPBASE_API_KEY</code> / <code>TAVILY_API_KEY</code> / <code>SEARXNG_BASE_URL</code> / <code>SOFYA_API_KEY</code> / <code>YDC_API_KEY</code> / <code>SERPLY_API_KEY</code> is non-empty.
+Make sure at least one of <code>SERPER_API_KEY</code> / <code>SERPBASE_API_KEY</code> / <code>TAVILY_API_KEY</code> / <code>SEARXNG_BASE_URL</code> / <code>SOFYA_API_KEY</code> / <code>YDC_API_KEY</code> / <code>SERPLY_API_KEY</code> / <code>APIFARE_TOKEN</code> is non-empty.
 If the first start is slow, run the <code>uvx</code> command from Quickstart once in a terminal to prebuild the environment, then click <strong>Refresh</strong>.
 Don’t commit/share <code>mcp_config.json</code> if it contains API keys.</p>
 <h4>Cursor</h4>
-<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.
+<p>Set one of <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.
 Startup timeout: Cursor does not currently expose a per-server startup timeout setting. If the first run is slow, run the <code>uvx</code> command from Quickstart once in a terminal to prebuild the tool environment, then restart Cursor.
 Create <code>.cursor/mcp.json</code>:</p>
 <pre><code class="language-json">{
@@ -783,7 +787,7 @@ Create <code>.vscode/mcp.json</code>:</p>
 </code></pre>
 <ul>
 <li>MCP endpoint: <code>http://&lt;server-host&gt;:8000/mcp</code></li>
-<li>Make sure at least one of <code>SERPER_API_KEY</code> / <code>SERPBASE_API_KEY</code> / <code>TAVILY_API_KEY</code> / <code>SEARXNG_BASE_URL</code> / <code>SOFYA_API_KEY</code> / <code>YDC_API_KEY</code> / <code>SERPLY_API_KEY</code> is set.</li>
+<li>Make sure at least one of <code>SERPER_API_KEY</code> / <code>SERPBASE_API_KEY</code> / <code>TAVILY_API_KEY</code> / <code>SEARXNG_BASE_URL</code> / <code>SOFYA_API_KEY</code> / <code>YDC_API_KEY</code> / <code>SERPLY_API_KEY</code> / <code>APIFARE_TOKEN</code> is set.</li>
 <li><code>page_content</code> extraction runs on the server machine/container (this Docker image includes Chromium).</li>
 <li>Remote HTTP is typically <strong>unauthenticated</strong> and <strong>unencrypted</strong> by default; don’t expose this port publicly. Use VPN/firewall rules or a reverse proxy with TLS + auth.</li>
 <li>Don’t bake API keys into the image; pass them via env vars at runtime.</li>
@@ -909,7 +913,7 @@ Compose network, or put a reverse proxy with TLS + auth in front.</p>
 </ul>
 </li>
 <li><code>OSError: [Errno 39] Directory not empty: '/tmp/kindly-nodriver-.../Default'</code>: update to the latest server revision (uv may cache tool envs; <code>uv cache clean</code> can help).</li>
-<li>“web_search fails: no provider key”: set <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, or <code>SERPLY_API_KEY</code>.</li>
+<li>“web_search fails: no provider key”: set <code>SERPER_API_KEY</code>, <code>SERPBASE_API_KEY</code>, <code>TAVILY_API_KEY</code>, <code>SEARXNG_BASE_URL</code>, <code>SOFYA_API_KEY</code>, <code>YDC_API_KEY</code>, <code>SERPLY_API_KEY</code>, or <code>APIFARE_TOKEN</code>.</li>
 </ul>
 <h3>Security</h3>
 <ul>
@@ -932,7 +936,7 @@ Compose network, or put a reverse proxy with TLS + auth in front.</p>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 456</div>
+        <div class="stars">★ 457</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">

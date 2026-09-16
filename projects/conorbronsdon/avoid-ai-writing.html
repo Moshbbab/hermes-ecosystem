@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to remove detectable AI writing patterns. It utilizes a structured…">
+<meta name="description" content="This tool audits and rewrites content to eliminate detectable AI writing patterns, or &quot;AI-isms,&quot; using a portable skill format compatible with agents like…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to remove detectable AI writing patterns. It utilizes a structured…">
+<meta property="og:description" content="This tool audits and rewrites content to eliminate detectable AI writing patterns, or &quot;AI-isms,&quot; using a portable skill format compatible with agents like…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to remove detectable AI writing patterns. It utilizes a structured…">
+<meta name="twitter:description" content="This tool audits and rewrites content to eliminate detectable AI writing patterns, or &quot;AI-isms,&quot; using a portable skill format compatible with agents like…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+Codex%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to remove detectable AI writing patterns. It utilizes a structured catalog of 74 pattern categories and a 112-entry word replacement table to identify and replace common LLM-generated phrases and structural tells.",
+  "description": "This tool audits and rewrites content to eliminate detectable AI writing patterns, or \"AI-isms,\" using a portable skill format compatible with agents like Claude Code and OpenClaw. It utilizes a catalog of 74 pattern categories and a 112-entry word replacement table to provide detect-only, rewrite, or in-place editing modes.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-16T17:10:14.000Z",
+  "dateModified": "2026-09-16T21:32:23.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4416
+    "userInteractionCount": 4420
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -148,11 +148,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable skill for AI agents designed to audit and rewrite content to remove detectable AI writing patterns. It utilizes a structured catalog of 74 pattern categories and a 112-entry word replacement table to identify and replace common LLM-generated phrases and structural tells.</p>
+    <p class="summary-text">This tool audits and rewrites content to eliminate detectable AI writing patterns, or &quot;AI-isms,&quot; using a portable skill format compatible with agents like Claude Code and OpenClaw. It utilizes a catalog of 74 pattern categories and a 112-entry word replacement table to provide detect-only, rewrite, or in-place editing modes.</p>
     <ul class="summary-highlights">
-      <li>Supports rewrite, detect-only, and edit-in-place modes.</li>
-      <li>Features a two-pass detection process to catch lingering patterns.</li>
-      <li>Includes optional voice profiles for casual, professional, or technical tones.</li>
+      <li>Supports detect-only, rewrite, and edit-in-place modes.</li>
+      <li>Uses a 112-entry word replacement table across three tiers.</li>
+      <li>Identifies 74 pattern categories including structural and conversational tells.</li>
     </ul>
   </div>
 </section>
@@ -175,27 +175,28 @@
 <p>A portable writing skill for <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>, <a href="https://github.com/openclaw/openclaw">OpenClaw</a>, <a href="https://github.com/NousResearch/hermes-agent">Hermes</a>, and any other <a href="https://agentskills.io">agentskills.io</a>-compatible agent. Audits and rewrites content to remove AI writing patterns ("AI-isms").</p>
 <p><strong>Three modes:</strong></p>
 <ul>
-<li><strong>Rewrite</strong> (default) — flags AI patterns and rewrites the text to fix them. A built-in second pass catches patterns that survived the first edit.</li>
+<li><strong>Rewrite</strong> (default) — flags AI patterns, applies up to two editing passes, verifies the result when possible, and returns one final version.</li>
 <li><strong>Detect</strong> — flags AI patterns without rewriting. Shows which flags are real problems vs. judgment calls. Useful when patterns might be intentional, when auditing content you don't want altered, or when you just want a quick scan.</li>
 <li><strong>Edit</strong> — edits a prose file in place (via the Edit tool) with minimal, targeted changes, preserving passages that are already human. Source code, configuration, and generated data are refused because prose rewrites can corrupt structured content. Returns an edits-made + verification report, not the full file.</li>
 </ul>
-<p>Use <code>--iterate N</code> when you want the skill to repeat the audit and rewrite cycle until no patterns remain or the requested pass limit is reached. The limit is capped at 2: the initial rewrite plus one corrective pass. Rewrite mode already includes that corrective second pass; <code>--iterate</code> does not add passes on top of it. The skill reports how many passes it took.</p>
+<p>Use <code>--iterate 1|2</code> to set the editing-pass ceiling. <code>--iterate 1</code> allows the initial rewrite only. <code>--iterate 2</code> uses the default maximum of an initial rewrite plus one correction or preservation repair, and stops early when no justified in-scope edit remains. Checks do not consume a pass, but any change they prompt does. The skill reports how many editing passes it used and any intentional, protected, or unresolved finding.</p>
 <p>An optional <strong>voice profile</strong> (casual / professional / technical / warm / blunt) sets how the prose should sound, independent of the audience context profile.</p>
 <h3>Quick demo</h3>
 <p><strong>Input:</strong></p>
 <blockquote>
 <p>Certainly! Acme Analytics, a vibrant startup nestled in the heart of Boulder's thriving tech ecosystem, has secured $40M in Series B funding — marking a watershed moment for the observability landscape. The platform serves as a unified hub, featuring real-time dashboards, boasting sub-second queries, and presenting a seamless integration layer. Moreover, experts believe Acme is poised to disrupt the market. In conclusion, the future looks bright!</p>
 </blockquote>
-<p><strong>Output:</strong></p>
+<p><strong>Final rewrite:</strong></p>
 <blockquote>
 <p>Acme Analytics, a Boulder-based startup, raised a $40M Series B. Its observability platform has real-time dashboards, runs queries in under a second, and includes an integration layer.</p>
 </blockquote>
+<p><strong>Verification:</strong> One editing pass. Review found no further justified in-scope edit; no deterministic preservation check ran in this prose-only demo.</p>
 <p><strong>What it caught:</strong> the chatbot opener ("Certainly!"), promotional modifiers, inflated significance, roundabout verbs, vague attribution, and the generic conclusion. The rewrite keeps the funding, location, and three product capabilities. It removes the unsupported market prediction without inventing an investor or an integration mechanism.</p>
 <h3>Why a skill, not just a prompt</h3>
 <p>A one-shot "make this sound human" prompt catches the obvious stuff. This skill is different:</p>
 <ul>
-<li><strong>Structured audit</strong> — returns identified issues with quoted text, the rewrite, a change summary, and a second-pass audit in four discrete sections. You see exactly what changed and why.</li>
-<li><strong>Two-pass detection</strong> — the second pass re-reads the rewrite and catches patterns that survive the first edit: recycled transitions, lingering inflation, copula swaps that snuck through.</li>
+<li><strong>Single final rewrite</strong> — completes its audit, correction, and available verification before returning one full version. A short change summary follows when useful; a detailed audit remains available on request without adding a competing draft.</li>
+<li><strong>Two-pass editing</strong> — review can catch patterns that survive the first edit, while one shared limit covers both corrective edits and preservation repairs.</li>
 <li><strong>112-entry word replacement table across 3 tiers + 10 Tier 3 phrases</strong> — not vibes-based. Every flagged word has a specific, plainer alternative. "Leverage" → "use." "Commence" → "start." Tier 1 matches flag unless a listed exception applies, Tier 2 words flag when they cluster, Tier 3 words flag only at high density. Tier 1 itself splits into <strong>1A frequency markers</strong> (<code>delve</code>, <code>tapestry</code>) and <strong>1B clarity edits</strong> (<code>in order to</code>, <code>utilize</code>) — same fix, but only 1A is evidence about how a passage was produced, and 1B is weighted lower so a wordiness fix cannot push a document toward an AI classification. Tier 3 <em>phrases</em> (multi-word boilerplate like "the integration of," "decentralized compute") flag on per-phrase repetition or when 3+ distinct phrases stack in one piece — the LLM-self-varies-boilerplate shape.</li>
 <li><strong>74 pattern categories</strong> — representative examples below, each with before/after. Includes structural detection (hashtag stuffing, bare-NP bullet lists, hedge-stacked predictions), AI-tool fingerprints (placeholders, citation markup, UTM params), rhythm/uniformity checks, conversational-register tells, and writer-side tests. The full catalog lives in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/references/patterns.md"><code>references/patterns.md</code></a>; this count is enforced against it in CI.</li>
 <li><strong>Detect mode</strong> — flag patterns without rewriting. See which flags are real problems vs. judgment calls. Useful when patterns might be intentional or you're auditing content you don't want altered.</li>
@@ -311,13 +312,13 @@ python3 scripts/validate-openai-plugin.py . --json
 <li>"Make this sound less like AI"</li>
 <li>"Clean up AI writing in this paragraph"</li>
 </ul>
-<p>In <strong>rewrite mode</strong> (default), the skill returns four sections:</p>
+<p>In <strong>rewrite mode</strong> (default), the skill completes its review and available verification before returning the rewritten text exactly once:</p>
 <ol>
-<li><strong>Issues found</strong> — every AI-ism identified, with the text quoted</li>
-<li><strong>Rewritten version</strong> — clean version with all AI-isms removed</li>
-<li><strong>What changed</strong> — summary of the major edits</li>
-<li><strong>Second-pass audit</strong> — re-reads the rewrite and catches any surviving tells</li>
+<li><strong>Final rewrite</strong> — the verified or honestly qualified final version</li>
+<li><strong>Changes</strong> — a short summary when edits were made and the summary is useful</li>
+<li><strong>Verification</strong> — editing passes used, checks that ran, stop reason, and any intentional, protected, source-blocked, or unresolved findings</li>
 </ol>
+<p>Ask for a detailed or exhaustive audit to add quoted findings before the final rewrite. The response still contains one full version. Clean input can be returned unchanged with zero editing passes.</p>
 <p>In <strong>detect mode</strong>, the skill returns two sections:</p>
 <ol>
 <li><strong>Issues found</strong> — every AI-ism identified, grouped by severity (P0/P1/P2)</li>
