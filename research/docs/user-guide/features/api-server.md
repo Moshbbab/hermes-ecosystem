@@ -106,6 +106,8 @@ Uploaded files (`file` / `input_file` / `file_id`) and non-image `data:` URLs re
 
 **Streaming** (`"stream": true`): Returns Server-Sent Events (SSE) with token-by-token response chunks. For **Chat Completions**, the stream uses standard `chat.completion.chunk` events plus Hermes' custom `hermes.tool.progress` event for tool-start UX. For **Responses**, the stream uses OpenAI Responses event types such as `response.created`, `response.output_text.delta`, `response.output_item.added`, `response.output_item.done`, and `response.completed`.
 
+All SSE streams (Chat Completions, Responses, `/api/sessions/{id}/chat/stream`, `/v1/runs/{id}/events`) emit a `: keepalive` comment line whenever no event has been sent for 10 seconds, so long tool calls do not trip client idle timeouts. Standard SSE clients ignore comment lines; custom parsers must skip lines that start with `:`.
+
 **Tool progress in streams**:
 
 -   **Chat Completions**: Hermes emits `event: hermes.tool.progress` for tool-start visibility without polluting persisted assistant text.
@@ -401,6 +403,8 @@ Statuses are retained briefly after terminal states (`completed`, `failed`, or `
 
 Server-Sent Events stream of the run's tool-call progress, token deltas, and lifecycle events. Designed for dashboards and thick clients that want to attach/detach without losing state.
 
+Tool lifecycle events carry `tool.started` (`tool`, `preview` of the arguments) and `tool.completed` (`tool`, `duration` in seconds, `error`, and a `preview` of the result). The `error` flag reflects the tool's own outcome — a non-zero terminal `exit_code`, a structured `{"error": ...}` result, a denied approval — whether the result arrives as a JSON string or an already-parsed object. The completion `preview` is the result text (structured results are JSON-encoded), passed through forced secret redaction and then truncated to 500 characters, so a client can tell an approval refusal (`BLOCKED: ...`) from an ordinary failure without receiving the unbounded tool payload.
+
 When the agent delegates work to background subagents, the stream also carries `subagent.start` and `subagent.complete` lifecycle events, so clients can observe delegation outcomes — including timeouts and failures — instead of the run going silent while a child works. The `subagent.complete` payload carries the child's status, summary, duration, token/cost figures, a `child_session_id` for correlation, and the `delegation_id` of the batch it belongs to (so concurrent or nested fan-outs stay distinguishable); free-text fields pass forced secret redaction before leaving the process. Per-tool child events (`subagent.tool`, progress ticks) are intentionally **not** forwarded — they are high-volume UI noise; use the per-child live transcript files for play-by-play. These events are available while the parent stream is open; a late detached completion does not reopen a finished run's SSE stream or change its terminal status.
 
 #### Detached results and session history
@@ -420,6 +424,8 @@ Interrupt a running agent turn. The endpoint returns immediately with `{"status"
 ### POST /v1/runs/{run\_id}/approval
 
 Resolve a pending approval for a run that is waiting on a human decision (for example, a tool call gated behind an approval policy). The body carries the approval decision; the run resumes once the decision is recorded. This endpoint is advertised in `/v1/capabilities` as the `run_approval` feature so external UIs can detect support before surfacing an approval prompt.
+
+MCP trust-gate consent — a write-capable tool on a server configured `trust: untrusted` — surfaces the same way: the run emits an `approval.request` event and parks in `waiting_for_approval` until this endpoint resolves it (`once` runs the tool, `deny` blocks it).
 
 ## Jobs API (background scheduled work)
 
@@ -519,7 +525,7 @@ Run one synchronous agent turn
 
 `/api/sessions/{id}/chat/stream`
 
-SSE wrapper over a single turn — emits `assistant.delta`, `tool.started`, `tool.completed`, `run.completed` events
+SSE wrapper over a single turn — emits `assistant.delta`, `tool.started`, `tool.completed`, then a terminal `run.completed` / `run.failed` / `run.cancelled` event that matches how the turn ended (see [Terminal run status](/docs/developer-guide/programmatic-integration#terminal-run-status))
 
 `/v1/capabilities` advertises the full surface via `session_*` feature flags and `endpoints.session_*` entries so external UIs can detect support and fall back safely. Inline images are supported in `chat` and `chat/stream` payloads (multimodal-aware path).
 

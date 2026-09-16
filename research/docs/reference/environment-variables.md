@@ -3056,4 +3056,4 @@ Only use providers supporting all request params (`true`/`false`)
 
 tip
 
-Use `hermes config set` to set environment variables — it automatically saves them to the right file (`.env` for secrets, `config.yaml` for everything else).
+Use `hermes config set` to set environment variables — API keys, the optional variables Hermes registers, and any platform `*_HOME_CHANNEL` / `*_ALLOWED_USERS`\-style setting are saved to `.env`, the same file the setup flows write; dotted `config.yaml` settings go to `config.yaml`.

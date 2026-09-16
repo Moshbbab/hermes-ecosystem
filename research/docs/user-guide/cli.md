@@ -76,6 +76,7 @@ Safety guarantees (all modes, any age):
 
 -   Uncommitted **tracked** changes are never deleted.
 -   **Unique unpushed commits** are never deleted — commits that were rebase/squash-merged upstream are detected via `git cherry` patch-equivalence and count as merged, which is what lets the dominant "merged PR, tree preserved forever" leak finally reclaim.
+-   **Repositories without a remote** are judged against the local trunk (`main`/`master`, else the branch checked out in the main worktree): only trees and branches whose commits are reachable from — or patch-equivalent to — that trunk are reclaimed. With no trunk to compare against, every tree and branch is preserved.
 -   **Pushed open-PR lanes free their disk without losing anything**: when a clean tree's branch head exactly matches what `origin` holds (checked with one `git ls-remote` per sweep), the checkout is redundant — the tree is removed but its **branch ref is kept**, so the lane is one `git worktree add .worktrees/<name> <branch>` away from restored. If the remote can't be reached, the tree is preserved.
 -   Trees **in use by a running hermes session** are never touched.
 -   **Untracked-only scratch** (PR body drafts, notes) is archived to `~/.hermes/archive/worktree-prune/` before its tree is removed — never destroyed.

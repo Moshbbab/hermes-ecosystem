@@ -1849,7 +1849,7 @@ Delete the entire checkpoint base. Irreversible; asks for confirmation unless `-
 
 `clear-legacy`
 
-Delete only the `legacy-<timestamp>/` archives produced by the v1→v2 migration.
+Delete only the `legacy-<timestamp>/` archives produced by the v1→v2 migration. Exits `2` (after printing `Could not delete N archive(s)`) when any archive could not be removed, e.g. read-only git objects on Windows.
 
 ### Options
 
@@ -2120,13 +2120,13 @@ Open `config.yaml` in your editor.
 
 Print a single config value by dotted key (e.g. `hermes config get model.default`). `--json` emits machine-readable output. Credential-shaped values (`api_key`, `*_TOKEN`, `*_SECRET`, `password`, …) are masked (`sk-o...7890`) because the agent runs this from sessions whose transcripts persist; `--raw` prints the real value (or set `security.redact_secrets: false`).
 
-`set <key> <value>`
+`set <key> <value> [--force]`
 
-Set a config value.
+Set a config value. Dotted paths go to `config.yaml`; API keys and the environment settings Hermes registers (`OPENROUTER_API_KEY`, `DISCORD_HOME_CHANNEL`, `*_ALLOWED_USERS` and the other platform `*_HOME_CHANNEL` / `*_ALLOWED_USERS`\-style names) go to `.env` — the same file the platform setup flows and `/sethome` write. An unknown path under a known section (`gateway.discord.foo`) is refused with a did-you-mean and nothing is written; an unknown _top-level_ key is written with a notice (top-level scalars are bridged into the environment for skills). `--force` writes either.
 
 `unset <key>`
 
-Remove a config key, reverting it to the built-in default.
+Remove a config key, reverting it to the built-in default. For `.env`\-routed names this also drops a stale top-level `config.yaml` copy.
 
 `path`
 

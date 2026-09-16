@@ -2264,7 +2264,7 @@ def register(ctx):
 
 ### `post_approval_response`
 
-Fires after a prompted or smart approval decision, after a prompt times out, or when the gateway cannot deliver the approval notification. Notification failure emits `choice="notify_failed"` before any approval decision exists.
+Fires after a prompted or smart approval decision, after a prompt times out or is withdrawn (turn interrupted or ended before an answer), or when the gateway cannot deliver the approval notification. Notification failure emits `choice="notify_failed"` before any approval decision exists.
 
 **Callback signature:**
 
@@ -2293,7 +2293,7 @@ Description
 
 `str`
 
-Prompted surfaces use `"once"`, `"session"`, `"always"`, `"deny"`, `"timeout"`, or `"notify_failed"`; smart decisions use `"smart_approve"` or `"smart_deny"`
+Prompted surfaces use `"once"`, `"session"`, `"always"`, `"deny"`, `"timeout"`, `"cancelled"` (the prompt was withdrawn before anyone answered — turn interrupted or ended; the command did not run), or `"notify_failed"`; smart decisions use `"smart_approve"` or `"smart_deny"`
 
 `decided_by`
 

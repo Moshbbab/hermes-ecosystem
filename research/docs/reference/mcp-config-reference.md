@@ -176,6 +176,14 @@ both
 
 Liveness ping cadence in seconds (default: `180`, floored at 5s). Set below the server's session TTL for servers that GC idle sessions quickly
 
+`lazy`
+
+bool
+
+both
+
+Register the server's tools from the on-disk schema cache at startup and only spawn/connect it on the first tool call (default: `false`). Needs one prior live connect to fill the cache; a missing or stale entry falls back to the normal eager connect. Status surfaces show the server as `lazy` with its cached tool count until first use
+
 `idle_timeout_seconds`
 
 number
@@ -554,7 +562,7 @@ For an authorization server advertising `device_authorization_endpoint`, explici
 hermes mcp login protected_api --flow device
 ```
 
-Open the printed verification URL on any device and enter the displayed user code. Hermes polls for approval, respects `authorization_pending` and `slow_down`, and stops on denial or expiry. No browser is launched and no callback listener is needed. `oauth.timeout` bounds the approval wait (default 300 seconds), also limited by the code's lifetime.
+Open the printed verification URL on any device and enter the displayed user code. Hermes polls for approval, respects `authorization_pending` and `slow_down`, and stops on denial or expiry. No browser is launched and no callback listener is needed. `oauth.timeout` bounds the approval wait (default 300 seconds), also limited by the code's lifetime. When the server's protected-resource metadata lists several authorization servers, device login scans them in order and uses the first one whose metadata issuer matches its advertised URL and that offers the `device_code` grant (a browser-only server listed first is skipped); issuer validation is never relaxed.
 
 Set `oauth.flow: device` on the server to make `hermes mcp login` and `hermes mcp reauth` (including `reauth --all`) use device authorization. `login --flow browser` overrides that setting for one login; browser PKCE remains the default. Unsupported metadata produces an actionable error rather than silently falling back to a different flow.
 

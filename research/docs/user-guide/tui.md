@@ -333,6 +333,11 @@ You may see a `HERMES_TUI_GATEWAY_URL` env var referenced in the codebase or log
 
 There is no general "point any TUI at any standalone gateway port" mode. In particular, the OpenAI-compatible API server (`hermes gateway` / the `api_server` platform) does **not** serve `/api/ws` — it's the model-backend surface (`/v1/chat/completions`, `/v1/models`, …) and deliberately does not expose the TUI's JSON-RPC control channel. Setting `HERMES_TUI_GATEWAY_URL` to that port will 404.
 
+### If the connection drops
+
+-   **Spawned gateway (default):** when the gateway process dies mid-session the TUI says _Hermes stopped unexpectedly — restarting and reopening your chat_, respawns it (bounded to a few attempts per minute) and reopens the same saved session. The reply that was in flight is lost with the process.
+-   **Attached gateway (dashboard chat):** when only the WebSocket drops the TUI says _Connection to Hermes lost — reconnecting and reopening your chat…_, reconnects with growing backoff and reattaches to the same session — including a reply that is still streaming on the backend. Nothing is resubmitted.
+
 If you want multiple surfaces to share one set of sessions, use the shared `~/.hermes/state.db` (see [Sessions](/docs/user-guide/sessions)) or the web dashboard's embedded chat (see [Web Dashboard](/docs/user-guide/features/web-dashboard#chat)) — not a hand-set gateway URL.
 
 ## Reverting to the classic CLI
