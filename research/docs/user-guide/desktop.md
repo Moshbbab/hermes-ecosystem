@@ -93,6 +93,8 @@ Changing any of these values invalidates only that profile's disk-discovery cach
 
 The model picker lives in the **composer**, just left of the microphone. Click it to switch the model; hover a model row for its options (thinking, effort, fast). Next to it, a **reasoning pill** shows the active model's effort level (`Med`, `High`, …) and opens the same options directly, so you can change effort without finding the model's row. The pill is hidden for models whose catalog reports no reasoning control.
 
+The **microphone** is dictation; hover it and the other voice toggles fan out above it — **Read replies aloud** and the **wake word** ear. A toggle that is on shows as a solid disc. Starting a full voice conversation stays on the primary button to the right. In the HUD and in narrow tiles the same controls fold into one menu behind the mic instead.
+
 -   **The composer picker is sticky UI state and never touches your default.** It's remembered locally (per device) and **follows** across new chats and restarts instead of snapping back to the default — pick a model once and the next `Cmd/Ctrl+N` opens on it. With a live chat, switching models scopes the change to that **current chat**; either way the selection rides along when the session is created/switched and is **never** written to the profile default — with one exception: on a fresh profile that has no `model.default`/`model.provider` configured yet, the first pick is persisted so the app has a real default instead of falling through to a stray API-key env var on restart. Persistence follows the same rule as `/model` (`model.persist_switch_by_default`); use **Settings → Model** to change the default deliberately. (Switching [profiles](#sessions--profiles) reseeds to that profile's own default.)
 -   **Set the default in Settings → Model.** That "main" model is your **per-profile global default** — it's what new chats, crons, subagents, and auxiliary tasks start from, and it's the only place that writes it. Each [profile](#sessions--profiles) keeps its own default.
 -   **Per-model effort/fast presets.** Each model remembers its own reasoning effort and fast-mode choice in the desktop app, re-applied to the session whenever you pick that model. These presets are a desktop convenience and don't change crons or subagents.
@@ -208,12 +210,39 @@ When you have two or more [profiles](/docs/user-guide/profiles), the config-back
 
 The app also surfaces the broader Hermes management surface so you don't have to drop to a terminal:
 
--   **Skills** — browse, install, and manage [skills](/docs/user-guide/features/skills). The Skills tab lists your installed skills with enable/disable toggles, and below them the full built-in optional-skills catalog that ships with Hermes — each entry has a one-click **Install** button that flips the row into the installed list once it finishes.
+-   **Skills** — open **Capabilities → Skills** to manage [skills](/docs/user-guide/features/skills). **Installed** shows the selected profile's actual skills and enable/disable state. **Browse** searches the same full published catalog as the public Skills Hub, with native list and detail views.
+-   **Plugins** — **Capabilities → Plugins** uses the same **Installed / Browse** layout. Installed combines actual app-level desktop plugins with agent plugins from the selected profile; Browse shows the public [Plugin Catalog](/docs/user-guide/features/plugin-catalog). Search stays at the top, and the tab switch and actions share one row on both pages.
 -   **Memory graph (Star Map)** — type `/journey` (aliases `/learning`, `/memory-graph`) in chat to open an interactive constellation of learned skills and memories over time, with a playback scrubber. Nodes can be edited or deleted right from the panel (skills are archived, memories removed). See [Learning Journey](/docs/user-guide/features/memory#learning-journey-journey).
 -   **Cron** — view and manage [scheduled jobs](/docs/reference/cli-commands#hermes-cron).
 -   **Profiles** — switch between [Hermes profiles](/docs/user-guide/profiles) (isolated config/skills/sessions).
 -   **Messaging** — set up gateway channels. Telegram has a **Quick setup** card: click **Create with QR**, scan the code (or open the link) in Telegram, and Hermes creates the bot, detects your user ID for the allowlist, saves the credentials, and restarts the gateway for you. Any credential save, clear, or enable toggle keeps a **Restart now** banner on the page until the gateway has actually restarted; if a restart fails, the banner stays so you can retry or restart manually.
 -   **Agents** and **Command Center** — orchestration surfaces for multi-agent work.
+
+#### Where Browse gets its data
+
+These are native Desktop views, **not embedded website pages**. Desktop and the public website consume the same generated CDN snapshots:
+
+Catalog
+
+Public docs alias
+
+Desktop fetch URL
+
+Skills
+
+[`/docs/api/skills.json`](https://hermes-agent.nousresearch.com/docs/api/skills.json)
+
+`https://nousresearch.github.io/hermes-agent/docs/api/skills.json`
+
+Plugins
+
+[`/docs/api/plugins.json`](https://hermes-agent.nousresearch.com/docs/api/plugins.json)
+
+`https://nousresearch.github.io/hermes-agent/docs/api/plugins.json`
+
+The skills snapshot combines `skills/`, `optional-skills/`, and the centralized skills index. The plugin snapshot comes from `plugin-catalog/*.yaml` and cached star counts; the same publish supplies the installer's removed-entry list. Browsing does not make live GitHub API calls or fetch plugin/skill source repositories. **Installed** is separate: its state comes from the selected profile's backend and the app's desktop-plugin registry, not those public snapshots.
+
+The public hubs' **Install in Hermes** buttons open `hermes://skill/install` or `hermes://plugin/install` links and require confirmation in Desktop. Use an updated Desktop build for the skill route and plugin catalog parameters; the cards retain copyable CLI commands if the app is missing or too old. See [skill links](/docs/user-guide/features/skills#install-from-the-website) and [plugin links](/docs/user-guide/features/plugins#one-click-install-links-desktop) for the parameters and review flow.
 
 ### Bot Mode (built in)
 
@@ -431,14 +460,14 @@ The desktop app is contribution-driven — panes, pages, sidebar nav, status-bar
 
 See [Desktop Plugin SDK](/docs/developer-guide/desktop-plugin-sdk) for the full reference. (This is separate from the [web dashboard plugin system](/docs/user-guide/features/extending-the-dashboard).)
 
-**Capabilities → Plugins** is the one place for everything that extends Hermes: **one row per plugin**, with two switch columns.
+**Capabilities → Plugins → Installed** shows the actual installed state: **one list entry per plugin**, with Desktop and Agent controls in its detail pane.
 
 -   A plugin can extend **this app**, **the agent**, or **both** — the badge on each row says which, inferred from what the package contains (`plugin.yaml` → agent half, `plugin.js` → desktop half). A plugin with both halves is one row, never two.
 -   **Desktop column** — the half loaded into this app. It is app-level: the same switch, the same value, whichever profile, gateway, or remote machine the window is looking at. Desktop code loads from exactly one place, `~/.hermes/desktop-plugins/`; the desktop half of a unified agent+desktop package is copied there by the app when the package is installed (and follows its updates and uninstall), so switching profiles never loads, unloads, or re-scopes a pane. Toggles apply live.
 -   **Agent column** — the half installed in the selected profile's backend ([agent plugins](/docs/user-guide/features/plugins): user, git, project, pip and portable installs), with an **Update** chip when a catalog pin moved. The profile selector lives in this column's header because it governs only this column; with a single profile there is no selector at all. Repo-bundled built-ins (platform adapters, provider plugins) are not listed: they ship enabled and are configured from their own surfaces.
 -   A half the plugin does not ship shows a dash. A desktop half whose agent half is **not** installed in the selected profile shows **Install here**, which pre-fills the install dialog from the package's origin (catalog entry or git remote) for that profile only. Optional extras such as the [Accent Picker](https://github.com/NousResearch/hermes-desktop-accent-picker) install from their own repos via **Install from Git**.
 
-Discovery sits underneath: the live [Plugin Catalog](/docs/user-guide/features/plugin-catalog) picker installs reviewed entries at their pinned commit into the selected profile, and **Install from Git** takes any other repository through the same review-then-install dialog; its optional **Pin to commit** field installs one exact 40-character commit SHA (private repos included), and pinned plugins carry a `pinned @ <sha8>` badge in the list. Old `Settings → Plugins` links redirect here.
+Switch to **Browse** for the native [Plugin Catalog](/docs/user-guide/features/plugin-catalog). Both Browse and **Install from Git** open the review-then-install dialog. For an agent-plugin catalog install, the backend resolves the catalog name to its reviewed pin; a link's `sha` is display metadata, not an override. This does not guarantee a pinned standalone desktop-plugin install. **Install from Git** also offers **Pin to commit** for agent-plugin installs (a full 40-character SHA, including private repositories); pinned agent plugins show a `pinned @ <sha8>` badge. Old `Settings → Plugins` links redirect here.
 
 ## Troubleshooting
 

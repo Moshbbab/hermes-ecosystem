@@ -470,7 +470,7 @@ Every profile that works kanban tasks automatically gets the worker lifecycle �
 3.  Call `kanban_heartbeat(note="...")` every few minutes during long operations. **If your work may run longer than 1 hour, call `kanban_heartbeat` at least once an hour** — the dispatcher reclaims tasks that have been running past `kanban.dispatch_stale_timeout_seconds` (default 4 h) with no heartbeat in the last hour, on the assumption the worker crashed without cleanup. A reclaim is benign (the task goes back to `ready` for re-dispatch without a failure-counter tick) but you lose your current run's progress.
 4.  Complete with `kanban_complete(summary="...", metadata={...})`, or `kanban_block(reason="...")` if stuck.
 
-That final `kanban_complete` / `kanban_block` call is part of the worker protocol. If the worker process exits with status 0 while the task is still `running`, the dispatcher treats that as a protocol violation and emits a `protocol_violation` event. A dispatcher-spawned worker whose turn failed therefore exits non-zero: `1` for an ordinary failure, and `75` (`EX_TEMPFAIL`) when the provider rate-limited it or the account hit a billing/quota wall — the dispatcher records that run as `rate_limited` and requeues the task without counting a failure, so a quota window is never booked as a protocol violation.
+That final `kanban_complete` / `kanban_block` call is part of the worker protocol. If the worker process exits with status 0 while the task is still `running`, the dispatcher treats that as a protocol violation and emits a `protocol_violation` event. A dispatcher-spawned worker whose turn failed therefore exits non-zero: `1` for an ordinary failure, and `75` (`EX_TEMPFAIL`) when the provider was rate-limited, overloaded, returning 5xx or timing out, or the account hit a billing/quota wall — the dispatcher records that run as `rate_limited` and requeues the task without counting a failure, so a quota window is never booked as a protocol violation.
 
 **Agent-side prevention:** Before the worker exits, Hermes injects up to two synthetic nudges when it detects the model is about to stop without a terminal board tool call. This catches the common case where the model narrates the next step ("Let me write the report") and stops with `finish_reason=stop`. The nudge reminds the model to call `kanban_complete` or `kanban_block` immediately. This guard is active only for the dispatcher-spawned worker itself (`HERMES_KANBAN_TASK` is set and the run owns that task) — `delegate_task` children and cron jobs run inside the worker inherit the variable but are never nudged, since they have no board tools — and can be disabled with `HERMES_KANBAN_STOP_NUDGE=0`.
 
@@ -1537,9 +1537,9 @@ Claim TTL expired without a completion; task goes back to `ready`. An automatic 
 
 `crashed`
 
-`{pid, claimer}`
+`{pid, claimer, exit_kind?, exit_code?, worker_output?}`
 
-Worker PID no longer alive but TTL hadn't expired yet.
+Worker PID no longer alive but TTL hadn't expired yet. `worker_output` is the tail of the worker's own log (its final response or the rendered provider error, chrome stripped, ≤ 400 chars) and is also appended to the task's `last_failure_error`, so the board shows _why_ instead of only the exit code.
 
 `timed_out`
 
@@ -1573,9 +1573,9 @@ One spawn attempt failed (missing PATH, workspace unmountable, …). Counter inc
 
 `protocol_violation`
 
-`{pid, claimer, exit_code, protocol_violation}`
+`{pid, claimer, exit_code, protocol_violation, worker_output?}`
 
-Worker exited successfully while the task was still `running`, usually because it answered without calling `kanban_complete` or `kanban_block`. Emitted on every violation (the payload's `protocol_violation: true` marker is copied into the run metadata and feeds the violation-only retry budget). Below the budget — up to `_PROTOCOL_VIOLATION_FAILURE_LIMIT` (default 3) _consecutive_ violations, per-task `max_retries` overriding — the task simply returns to `ready` for another attempt; when the streak reaches the bound the dispatcher also emits `gave_up` and auto-blocks.
+Worker exited successfully while the task was still `running`, usually because it answered without calling `kanban_complete` or `kanban_block`. Emitted on every violation (the payload's `protocol_violation: true` marker is copied into the run metadata and feeds the violation-only retry budget). Below the budget — up to `_PROTOCOL_VIOLATION_FAILURE_LIMIT` (default 3) _consecutive_ violations, per-task `max_retries` overriding — the task simply returns to `ready` for another attempt; when the streak reaches the bound the dispatcher also emits `gave_up` and auto-blocks. `worker_output` carries the worker's own last printed text (usually its explanation of why it stopped), also folded into `last_failure_error` and shown to the retry worker as the prior-attempt error.
 
 `gave_up`
 

@@ -298,7 +298,7 @@ hermes plugins install owner/repo --ref 0123456789abcdef0123456789abcdef01234567
 
 Hermes checks out the commit detached, verifies that `HEAD` exactly matches the requested SHA, and records the canonical source, installed revision, and pin status in the current profile. `hermes plugins update` refuses to move a pinned plugin; choose a new exact commit explicitly with `hermes plugins install <source> --force --ref <new-commit>`. The profile-local install metadata contains no config values, environment values, secrets, or capability grants.
 
-The same pin is available in Hermes Desktop: **Skills → Plugins → Install from Git** has a _Pin to commit_ field that takes the full 40-character SHA, and the plugins list shows a `pinned @ <sha8>` badge on every pinned install so a team can confirm everyone is running the same commit. `hermes plugins list` prints the pin in its Source column (`git pinned@<sha8>`). Pins work for private repositories too, through the same stored credentials described below.
+The same agent-plugin pin is available in Hermes Desktop: **Capabilities → Plugins → Install from Git** has a _Pin to commit_ field that takes the full 40-character SHA, and **Installed** shows a `pinned @ <sha8>` badge on pinned agent plugins. This does not guarantee a pinned standalone desktop-plugin install. `hermes plugins list` prints the pin in its Source column (`git pinned@<sha8>`). Pins work for private repositories too, through the same stored credentials described below.
 
 ### Installing from a private repository
 
@@ -604,6 +604,12 @@ hermes plugins disable my-plugin             # remove from allow-list + add to d
 hermes plugins capabilities [my-plugin]      # declared vs granted capabilities
 ```
 
+### Installed and Browse in Desktop
+
+Open **Capabilities → Plugins**. **Installed** reads the app's desktop-plugin registry and the selected profile's actual agent-plugin state, combining both halves in one row where appropriate. It is not a list of catalog entries assumed to be installed. **Browse** is a native catalog view, not an embedded website; it uses the same **Installed / Browse** tabs as Skills, with search at the top and the tab switch and actions on one row.
+
+Desktop and the public [Plugin Catalog](/docs/plugins) consume the same CDN snapshot, [`/docs/api/plugins.json`](https://hermes-agent.nousresearch.com/docs/api/plugins.json). The public alias serves the same data as Desktop's fetch URL, `https://nousresearch.github.io/hermes-agent/docs/api/plugins.json`. The docs build generates it from `plugin-catalog/*.yaml` and cached star counts. The same publish also supplies the removed-entry list used by the installer. Browsing does not query GitHub live or fetch source repos; the installer retrieves code only as part of the separate install flow.
+
 ### One-click install links (Desktop)
 
 Hermes Desktop registers the `hermes://` URL scheme, so a website, README, or chat message can link straight to a plugin install:
@@ -617,6 +623,14 @@ hermes://plugin/install?repo=owner/repo&force=1    # replace an existing install
 Clicking one opens Hermes and shows a **confirmation dialog** — the repo id, a "Before you install" note, and GitHub browse + clone links — then shallow-clones the repo to detect what it ships (an **agent plugin** — backend Python, a **desktop plugin** — app UI, or both). You pick the components with checkboxes and confirm. Nothing is installed until you do; deep links never auto-install, and agent-plugin installs go through the same [install-time security scanning](#install-time-security-scanning) as `hermes plugins install`.
 
 Hybrid repos (agent + desktop halves in one repo) use one link and one dialog. The same modal is reachable without a link via **Capabilities → Plugins → Install from Git**. Legacy `hermes://plugin-agent/…` and `hermes://plugin-desktop/…` URLs route into the same dialog. In dev builds (`npm run dev`) the scheme is `hermes-dev://`.
+
+The public [Plugin Catalog](/docs/plugins) includes **Install in Hermes** on every card. Catalog links carry `catalog_name`, a URL-encoded `repo` (including `#subdir` when present), and `sha`:
+
+```
+hermes://plugin/install?repo=owner%2Frepo&catalog_name=example-plugin&sha=0123456789abcdef0123456789abcdef01234567
+```
+
+The SHA parameter is display metadata only. For the agent-plugin install, the backend resolves `catalog_name` to its reviewed pin when you confirm; the link cannot override that pin. Do not treat the displayed SHA as a pin guarantee for a standalone desktop plugin. These catalog parameters require an updated Desktop build; older builds may only understand the repository link. If the app is missing or too old, update Desktop or use the copyable `hermes plugins install <catalog-name>` command in the expanded card to retain catalog resolution.
 
 Websites need no SDK — a normal anchor works:
 
