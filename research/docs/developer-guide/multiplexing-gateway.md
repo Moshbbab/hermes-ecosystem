@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/developer-guide/multiplexing-gateway
 
-One gateway process can serve every profile in the install. The mode is opt-in (`gateway.multiplex_profiles`, default `false`), and everything it changes reverts the moment the flag is off. This document is the design rationale referenced from `agent/secret_scope.py` ("Workstream A"): what is isolated per profile, the mechanism that isolates it, and what deliberately stays process-global.
+One gateway process can serve every profile in the install. The mode is on by default (`gateway.multiplex_profiles`, default `true`), and everything it changes reverts the moment the flag is off. An _unset_ flag is settled at boot by `hermes_cli/gateway_multiplex_mode.py::resolve_multiplex_mode`, which runs the `hermes gateway migrate` preflight and keeps the gateway standalone when a secondary still runs its own gateway, a blocker exists, or the host cannot be migrated (see "The mode flag"). This document is the design rationale referenced from `agent/secret_scope.py` ("Workstream A"): what is isolated per profile, the mechanism that isolates it, and what deliberately stays process-global.
 
 ## Overview
 
@@ -12,7 +12,8 @@ The design constraint that shapes everything below: **profile A's turns must nev
 
 ## The mode flag
 
--   Config: `gateway.multiplex_profiles: true` (also accepted at top level). Parsed in `gateway/config.py` with precedence env > config > default.
+-   Config: `gateway.multiplex_profiles` (also accepted at top level). Parsed in `gateway/config.py` with precedence env > config > unset. `GatewayConfig` keeps an unset flag as `None` (readers test truthiness, so it reads as off); `load_gateway_config_for_runner` then calls `resolve_multiplex_mode`, which writes the boot verdict — `True` on a quiet multi-profile default install, `False` with a logged reason otherwise. Explicit values pass through verbatim; a config injected into `GatewayRunner(config=...)` is not resolved.
+-   Other processes read the LIVE gateway's `served_profiles` record first and the explicit flag second (`gateway_multiplex_mode.default_gateway_multiplexes` / `explicit_multiplex_flag`), never the merged default: `named_profile_served_ by_running_multiplexer`, the enroll warning, the dashboard's listener guard, the cron-fire port resolver, container boot, and the migration plan (`_read_multiplex_flag`, so an unset default reads as "not yet multiplexed" and the fold proceeds).
 -   Env override: `GATEWAY_MULTIPLEX_PROFILES` accepts explicit truthy/falsy tokens only; a blank or unrecognized value returns "no override" so an empty deployment secret cannot shadow a config opt-in.
 -   At startup, `GatewayRunner.__init__` calls `agent.secret_scope.set_multiplex_active(...)` once. `_MULTIPLEX_ACTIVE` is a plain module global, not a contextvar: it describes the deployment mode, not a per-task value. Its only job is to arm the fail-closed behavior in `get_secret()`.
 
