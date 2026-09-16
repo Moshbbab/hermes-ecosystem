@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It features a self-wiring knowledge graph that extracts entity references and typed edges to provide cited answers and gap analysis across shared or personal data.",
+  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It features a self-wiring knowledge graph that extracts entity references and typed edges to provide cited answers across people, companies, and ideas.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-15T21:09:28.000Z",
+  "dateModified": "2026-09-16T04:50:20.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 29968
+    "userInteractionCount": 29976
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-15</span>
+    <span><span class="meta-label">updated</span>2026-09-16</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It features a self-wiring knowledge graph that extracts entity references and typed edges to provide cited answers and gap analysis across shared or personal data.</p>
+    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It features a self-wiring knowledge graph that extracts entity references and typed edges to provide cited answers across people, companies, and ideas.</p>
     <ul class="summary-highlights">
-      <li>Stores explicit facts with provenance across multiple AI agents.</li>
-      <li>Generates synthesized answers with citations and knowledge gap analysis.</li>
-      <li>Creates a self-wiring knowledge graph without using LLM calls.</li>
+      <li>Supports explicit fact storage with provenance and corrections.</li>
+      <li>Provides a synthesis layer for cited prose and gap analysis.</li>
+      <li>Uses a knowledge graph to track entity relationships without LLM calls.</li>
     </ul>
   </div>
 </section>
@@ -348,7 +348,7 @@ gbrain capture --file ./notes/today.md
 echo "from a pipe" | gbrain capture --stdin
 SLUG=$(gbrain capture "..." --quiet)
 </code></pre>
-<p>The page lands in the database and on disk in one move. Default slug <code>inbox/YYYY-MM-DD-&lt;hash8&gt;</code> so captures cluster in a predictable triage location. On thin-client installs the verb routes through MCP to the server: same command, same UX.</p>
+<p>For a file-backed source, the page is saved to the database and canonical Markdown before optional embedding. Ordinary file-write failures roll back the database revision; this is not a crash-atomic transaction across files and the database. A source without a configured repository can hold DB-only pages, which need a database backup. See the <a href="https://github.com/garrytan/gbrain/blob/main/docs/architecture/system-of-record.md#page-write-persistence-boundary">persistence boundary</a>. Default slug <code>inbox/YYYY-MM-DD-&lt;hash8&gt;</code> so captures cluster in a predictable triage location. On thin-client installs the verb routes through MCP to the server.</p>
 <p><strong>Say to your agent:</strong> <em>"Remember this: ..."</em> — <em>"Save this thought to my brain"</em> — <em>"Capture this."</em> And to fill an empty brain from your existing life: <em>"Fill my brain"</em> (the cold-start skill walks your email, calendar, contacts, and archives one consented step at a time).</p>
 <p><strong>Ambient memory writeback (opt-in, personal brains).</strong> Stop having to say "remember this": once enabled, your agents save durable facts you state in passing — preferences, decisions, commitments — with provenance, and transient facts (a cold, a trip) expire on their own. Off by default; on a personal brain gbrain asks you once at init/upgrade; company brains are never nudged. <strong>Say to your agent:</strong> <em>"Turn on ambient memory writeback"</em> — your agent runs <code>gbrain config set memory.auto_writeback salient</code> and <code>gbrain bootstrap harness --yes</code>. Full mechanics, privacy posture, and per-harness limitations: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/ambient-writeback.md"><code>docs/guides/ambient-writeback.md</code></a>.</p>
 <p>For webhook ingestion (Zapier / IFTTT / Apple Shortcuts):</p>
@@ -377,10 +377,14 @@ How the open-loop engine decides who's waiting: <a href="https://github.com/garr
 <p>Your other agents' histories import in one command. <code>gbrain transcripts ingest</code>
 parses agent session logs (Claude Code, Codex, OpenClaw, Hermes, Grok Build) and extracted
 consumer chat exports (ChatGPT / Claude.ai <code>conversations.json</code>) into readable
-conversation pages with provenance back to the exact session file. Secrets are
-scrubbed from message bodies, titles, speakers, and session metadata before
-anything is written, embedding is off by default for bulk backfills, and
-re-runs are free — unchanged sessions skip on content hash:</p>
+conversation pages with provenance back to the exact session file. Pattern-based redaction runs over message bodies, titles, speakers, and session
+metadata before anything is written — vendor key prefixes, JWTs, cloud/API key
+shapes, <code>Bearer</code> headers, connection-string credentials, and high-entropy
+<code>KEY=</code>/<code>TOKEN=</code> assignments become <code>&lt;REDACTED:…&gt;</code> placeholders (preview with
+<code>--dry-run</code>; no pattern set is complete, so if a secret still lands see
+<a href="https://github.com/garrytan/gbrain/blob/main/SECURITY.md#if-a-secret-reached-the-brain">"If a secret reached the brain"</a>:
+rotate it, then <code>gbrain delete &lt;slug&gt; --purge</code>). Embedding is off by default
+for bulk backfills, and re-runs are free — unchanged sessions skip on content hash:</p>
 <pre><code class="language-bash">gbrain transcripts ingest                    # discover importable session logs
 gbrain transcripts ingest --all              # import everything discovered
 gbrain transcripts ingest ~/Downloads/conversations.json  # consumer export (unzip first)
@@ -443,7 +447,7 @@ gbrain schema use my-pack           # activate
 <ul>
 <li><strong>Signal detector</strong>, after you opt in, captures durable ideas and entity mentions from substantive messages. Explicit remembering works without automatic capture; paid enrichment is a separate choice.</li>
 <li><strong>Brain-first lookup</strong> before any external API call. The cheapest, fastest, most personal information source you have.</li>
-<li><strong>Auto-link</strong> fires on every page write. No LLM calls; pure pattern matching on <code>[[wiki/people/bob]]</code> style references. New entity → new page stub → graph grows.</li>
+<li><strong>Auto-link</strong> extracts graph links for trusted local page writes. No LLM calls; pure pattern matching on page references such as <code>[[people/alice-example]]</code>. Unresolved extracted facts keep their provenance without inventing a backing page.</li>
 <li><strong>Cron-driven enrichment</strong> runs while you sleep: dedup people pages, fix citations, score salience, find contradictions, prep tomorrow's tasks.</li>
 </ul>
 <p>The whole loop is described in <a href="https://github.com/garrytan/gbrain/blob/main/docs/architecture/topologies.md"><code>docs/architecture/topologies.md</code></a> with diagrams.</p>
@@ -465,7 +469,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 <p>The command is idempotent (re-running with the same language is a no-op for vector content) and uses the same recreate-and-backfill primitives as the migration. For accent-insensitive Portuguese (<code>pt_br</code>), see <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/multi-language-fts.md">docs/guides/multi-language-fts.md</a> for the <code>unaccent</code> + portuguese stemmer recipe. <strong>Say to your agent:</strong> <em>"Set my brain's search language to Portuguese and reindex."</em></p>
 <p><strong>50+ curated skills</strong> (the current list lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/manifest.json"><code>skills/manifest.json</code></a>). Routing lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a>. Covers signal capture, ingest (idea / media / meeting), enrichment, querying, brain ops, citation fixing, daily task management, cron scheduling, reports, voice, soul audit, skill creation, eval framework, and migrations. Skills are markdown files (tool-agnostic), packaged as a single skillpack the installer drops into your agent workspace.</p>
 <p><strong>Say to your agent — the phrasebook.</strong> You never invoke a skill by name; you say what you want and your agent routes it. Every skill declares its trigger phrases in its frontmatter, and <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a> is the full human-readable phrasebook — one table of "when you say this, this skill fires." A taste: <em>"Ingest this PDF"</em> (media-ingest) — <em>"What's happening today?"</em> (briefing) — <em>"Fill my brain"</em> (cold-start) — <em>"Brain health"</em> / <em>"check backlinks"</em> (maintain — either phrase routes there) — <em>"Is my brain set up right?"</em> (gbrain-advisor) — <em>"Did the restart break anything?"</em> (smoke-test) — <em>"Run this as a background task"</em> (minion-orchestrator). If you're ever unsure what to say, ask your agent: <em>"What can my brain do?"</em> and have it read the resolver back to you.</p>
-<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. Measured 2026-09-06 at gbrain v0.48.4.0 by this command on LongMemEval-S (cleaned Sept-2025 revision, 500 questions, 470 scored after the 30 abstention questions are dropped as the official scorer does), k=5, single run: on the release default path (<code>balanced</code>: <code>voyage:rerank-2.5</code> on, autocut off) strict session-level <code>recall_all@5</code> of <strong>95.53%</strong> (449/470), meaning every gold session landed inside the top-5 distinct retrieved sessions, retrieval only, no reader model; with the reranker off, the like-for-like row against systems that run no reranker, <strong>93.40%</strong> (439/470). The looser any-hit <code>recall_any@5</code> was 99.79% / 98.72% and is reported as a diagnostic, not a headline. The reranker-off row reproduces the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> runner's 2026-09-02 receipt (438/470; 469 of 470 rows agree per question), where the per-row receipts live. Paired against reranker-off hybrid the reranker gains 18 questions and loses 8; the default that shipped before v0.48.4.0 (reranker on with autocut) scored 379/470, because autocut kept the best session and dropped the rest on multi-part questions, which is why autocut is now off. One warning that the ranker wave re-measured rather than removed: <code>tokenmax</code>'s LLM multi-query expansion is harmful at k=5 — 255/470 <code>recall_all@5</code> (paired +3 / −187 vs hybrid) at the legacy weighting, 394/470 with the new <code>search.expansion_variant_budget</code> knob at its smallest pre-registered value, still 43 questions behind plain hybrid on the held-out decision set — so the bundles keep the legacy weighting, small-k recall stays worse in that mode, and conditional expansion is the filed next step. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution) so a regression in "find the page this query names" fails CI loudly. <code>gbrain eval brainbench</code> runs the cross-harness memory conformance suite: know-to-ask, push precision/recall, write-back fidelity, and cross-session continuity, scored per harness seam (your OpenClaw's production pipeline plus Claude Code and Codex injection contracts) against a committed 141-fixture synthetic corpus — hermetic by default (in-memory PGLite, no keys, seconds), and CI gates every PR against master's committed baseline. Methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/BRAINBENCH.md"><code>docs/eval/BRAINBENCH.md</code></a>; search-mode methodology in <a href="https://github.com/garrytan/gbrain/blob/main/docs/eval/SEARCH_MODE_METHODOLOGY.md"><code>docs/eval/SEARCH_MODE_METHODOLOGY.md</code></a>. <strong>Say to your agent:</strong> <em>"Run a regression check on retrieval"</em> (your agent runs <code>gbrain eval brainbench</code>); *"Run the public LongMemEval benchmark like-for-</p>
+<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. Measured 2026-09-06 at gbrain v0.48.4.0 by this command on LongMemEval-S (cleaned Sept-2025 revision, 500 questions, 470 scored after the 30 abstention questions are dropped as the official scorer does), k=5, single run: on the release default path (<code>balanced</code>: <code>voyage:rerank-2.5</code> on, autocut off) strict session-level <code>recall_all@5</code> of <strong>95.53%</strong> (449/470), meaning every gold session landed inside the top-5 distinct retrieved sessions, retrieval only, no reader model; with the reranker off, the like-for-like row against systems that run no reranker, <strong>93.40%</strong> (439/470). The looser any-hit <code>recall_any@5</code> was 99.79% / 98.72% and is reported as a diagnostic, not a headline. The reranker-off row reproduces the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> runner's 2026-09-02 receipt (438/470; 469 of 470 rows agree per question), where the per-row receipts live. Paired against reranker-off hybrid the reranker gains 18 questions and loses 8; the default that shipped before v0.48.4.0 (reranker on with autocut) scored 379/470, because autocut kept the best session and dropped the rest on multi-part questions, which is why autocut is now off. One warning that the ranker wave re-measured rather than removed: <code>tokenmax</code>'s LLM multi-query expansion is harmful at k=5 — 255/470 <code>recall_all@5</code> (paired +3 / −187 vs hybrid) at the legacy weighting, 394/470 with the new <code>search.expansion_variant_budget</code> knob at its smallest pre-registered value, still 43 questions behind plain hybrid on the held-out decision set — so the bundles keep the legacy weighting, small-k recall stays worse in that mode, and conditional expansion is the filed next step. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. <code>gbrain eval retrieval-quality</code> runs NamedThingBench, which hard-gates the named-thing retrieval families (title-substring, alias-synonym, generic-to-named, multi-chunk-dilution)</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
@@ -480,11 +484,11 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 65.3K</div>
+        <div class="stars">★ 65.4K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 23.7K</div>
+        <div class="stars">★ 23.8K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
