@@ -520,7 +520,7 @@ Path to a JSON file of ephemeral prefill messages injected at API-call time
 
 `HERMES_TIMEZONE`
 
-IANA timezone override (for example `America/New_York`)
+IANA timezone override (for example `America/New_York`). On Linux/macOS it is also exported as `TZ` to `execute_code` children; on Windows those children keep the OS zone instead, because the Windows C runtime only understands POSIX-form `TZ` strings and mis-parses an IANA name into a wrong offset
 
 ## Tool APIs
 
@@ -658,7 +658,7 @@ Override the OpenAI-compatible STT endpoint
 
 `GITHUB_TOKEN`
 
-GitHub token for Skills Hub (higher API rate limits, skill publish)
+GitHub token for Skills Hub (higher API rate limits, skill publish) and the desktop app's update check (`GH_TOKEN` also honoured)
 
 `HONCHO_API_KEY`
 
@@ -2878,7 +2878,7 @@ Comma-separated list of optional-skill names to auto-install on first run.
 
 `HERMES_DEBUG_INTERRUPT`
 
-Set to `1` to log detailed interrupt/cancel tracing to `agent.log`.
+Set to `1`/`true` to log detailed interrupt/cancel tracing to `agent.log`; `0`/`false`/`off` (or unset) keep it off.
 
 `HERMES_DUMP_REQUESTS`
 

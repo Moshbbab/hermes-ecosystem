@@ -82,6 +82,7 @@ The Hermes Cloud panel also lists **Saved Cloud gateways** when portal discovery
             -   **OAuth** — sign in through the Nous Portal browser flow; no token to paste.
     -   _SSH only:_
         -   **SSH host** — one composite field in `user@host:22` form (user and port optional). Your SSH key is used; the app adopts a dashboard token over the tunnel. Remote probes run under the account's login shell; on a `zsh` login shell the probe watchdog cannot kill the whole process group, so a hung probe's grandchildren may linger on the remote (bash/sh remotes reap them).
+        -   **Hermes path (optional)** — full path to the `hermes` executable on the remote (for example `/opt/hermes/bin/hermes`). Leave blank to auto-detect. Set it when the remote's non-interactive shell does not have `hermes` on its `PATH` and **Test** reports _"Hermes is not installed on the remote host"_; clearing the field restores auto-detection.
 5.  Click **Save connection** (or **Cancel**).
 6.  Click **Test** on the new row and wait for _"Reachable"_.
 
@@ -122,7 +123,7 @@ The sidebar foot follows one hierarchy: **gateway → profile → sessions**. Ga
 -   **This device** remains a first-class gateway even when a remote connection is Primary. It can keep local sessions available during a remote outage, but the app does not call it "offline mode": the selected model or tools may still require internet access.
 -   The session list, messaging channels, cron jobs, settings, files, and memory are all scoped to the active `(gateway, profile)`. Switching from a Telegram gateway to a Signal gateway cannot leave the previous gateway's channel groups or sessions in the sidebar.
 -   Merely displaying the switcher reads Electron's local connection registry. Remote gateways are opened only when selected; there is no periodic fleet polling.
--   Hovering an agent pre-warms its backend so the switch doesn't pay a cold boot.
+-   Hovering an agent pre-warms its backend so the switch doesn't pay a cold boot. SSH agents are the exception: hovering never dials the tunnel or starts a remote backend — only opening one does.
 -   The **Capabilities** page (Skills / Tools / MCP) has a matching scope: its **Configuring** selector lists every `(profile, device)` agent from the union roster, and picking one reads and writes **that machine's** skills, toolsets, and MCP servers without switching the Sessions workspace. Hub installs, env keys, and MCP setup all land on the selected agent's backend. The MCP tab's _hot-reload into a live session_ button appears only for agents on the gateway the window is connected to; edits on other machines apply on their next session.
 
 Add, test, rename, or remove gateways in **Settings → Gateways**. The plug button beside the profile actions is a shortcut to that single management home, not a second add flow.

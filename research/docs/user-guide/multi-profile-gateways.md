@@ -250,6 +250,12 @@ The profile's own `.env` (its secret scope)
 
 Unresolved / no adapter — never the default profile's value
 
+Provider logins and the credential pool (`auth.json`: OAuth tokens, `hermes auth add` keys)
+
+The profile's own `auth.json`
+
+"Not connected to any AI provider" with the `hermes -p <name> model` hint — never the default profile's login, and a refresh never writes to the root store
+
 Authorization (`GATEWAY_ALLOW_ALL_USERS`, `GATEWAY_ALLOWED_USERS`, per-platform allowlists and allow-all opt-ins)
 
 The owning profile's `.env` and `config.yaml`

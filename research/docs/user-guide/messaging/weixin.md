@@ -529,6 +529,10 @@ Session expired (`errcode=-14`)
 
 Your login session has expired. Re-run `hermes gateway setup` to scan a new QR code
 
+Proactive send (cron / notification) fails with `ret=-2 errmsg=prepare failed` or `unknown error`
+
+The peer's `context_token` went stale (no recent inbound message from them). The adapter treats this as a stale session — not a rate limit — and re-sends once without the token, so the message still arrives. Only other `-2` responses trigger the rate-limit backoff/cooldown
+
 QR code expired during setup
 
 The QR auto-refreshes up to 3 times. If it keeps expiring, check your network connection

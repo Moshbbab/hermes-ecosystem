@@ -124,7 +124,7 @@ Run a single prompt through the default [Mixture of Agents](/docs/user-guide/fea
 
 `/resume [name]`
 
-Resume a previously-named session
+Resume a previously-named session. In the classic CLI this (and `/sessions <id>`) is refused while a turn is running — the CLI shares one agent across sessions, so switching mid-turn would file the rest of the running turn under the other session.
 
 `/sessions` (TUI alias: `/switch`)
 
@@ -160,7 +160,7 @@ Ask a quick side question **about the current conversation** without interruptin
 
 `/branch [name]` (alias: `/fork`)
 
-Branch the current session (explore a different path)
+Branch the current session (explore a different path). Classic CLI: refused mid-turn like `/handoff` — wait for the current response to finish, then retry.
 
 `/worktree [new [name]|list]`
 
@@ -168,7 +168,7 @@ Branch the current session (explore a different path)
 
 `/handoff <platform>`
 
-**CLI only.** Hand the current session off to a messaging platform (Telegram, Discord, Slack, WhatsApp, Signal, Matrix). The gateway picks it up immediately, creates a fresh thread on platforms that support threads (Telegram topics, Discord text-channel threads, Slack message-anchored threads), re-binds the destination to your CLI session\_id so the full role-aware transcript replays, and forges a synthetic user turn so the agent confirms it's working in the new place. Your CLI exits cleanly on success with a `/resume` hint; resume locally any time with `/resume <title>`. Refused mid-turn. Requires the gateway to be running and a home channel configured for the target platform (`/sethome` from the destination chat). See [Cross-Platform Handoff](/docs/user-guide/sessions#cross-platform-handoff).
+**CLI only.** Hand the current session off to a messaging platform (Telegram, Discord, Slack, WhatsApp, Signal, Matrix). The gateway picks it up immediately, creates a fresh thread on platforms that support threads (Telegram topics, Discord text-channel threads, Slack and Matrix message-anchored threads), re-binds the destination to your CLI session\_id so the full role-aware transcript replays, and forges a synthetic user turn so the agent confirms it's working in the new place. Your CLI exits cleanly on success with a `/resume` hint; resume locally any time with `/resume <title>`. Refused mid-turn. Requires the gateway to be running and a home channel configured for the target platform (`/sethome` from the destination chat). See [Cross-Platform Handoff](/docs/user-guide/sessions#cross-platform-handoff).
 
 `/journey [list|delete <id>|edit <id>]` (aliases: `/learning`, `/memory-graph`)
 

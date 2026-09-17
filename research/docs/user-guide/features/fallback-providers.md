@@ -306,6 +306,12 @@ Custom endpoint
 
 `base_url` + `key_env` (see below)
 
+Mixture of Agents preset
+
+`moa` (`model` = preset name)
+
+A configured MoA preset whose aggregator has credentials — the fallback runs the whole preset (references + aggregator), not the aggregator alone
+
 ### Custom Endpoint Fallback
 
 For a custom OpenAI-compatible endpoint, add `base_url` and optionally `key_env`:

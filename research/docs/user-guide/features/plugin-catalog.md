@@ -68,12 +68,21 @@ OS restrictions, empty = all (optional)
 
 External documentation link (optional)
 
+`version`
+
+Human-readable label for the pinned sha, e.g. `"1.4.0"`; shown as `1.4.0 @ abcd1234` in the CLI, on the catalog card and on the Desktop **Update to** button (optional, cosmetic)
+
+`image`
+
+Banner image for the catalog card, shown at 2:1 (1200×600 works; other shapes are centre-cropped); an `https` URL on `raw.githubusercontent.com`, `github.com` or `*.githubusercontent.com` (optional). Pin it to the entry's commit (`raw.githubusercontent.com/owner/repo/<sha>/...`) so it never changes under the review
+
 ## Trust model
 
 The catalog is designed so you know exactly what you're installing:
 
 -   **Human-merged admission.** Every entry (and every pin update) lands via a pull request reviewed by a maintainer. Nothing enters the catalog automatically.
 -   **Exact SHA pins.** Entries pin a specific commit, not a branch. A plugin author pushing new code to their repo does **not** change what the catalog installs — updating the pin requires another reviewed PR.
+-   **Scanned at admission, trusted at install.** Admission CI runs the same security scanner the installer runs (`hermes plugins validate` includes a `security scan` check): a `dangerous` verdict fails the entry, `caution` findings are listed for the reviewer. Because the reviewer saw them, a catalog install checked out at exactly the pinned SHA does not stop to ask about `caution` again; `dangerous` still blocks, and anything installed from a raw URL or at another revision gets the normal prompt.
 -   **Capability declarations.** Entries state up front which tools, hooks, and middleware the plugin provides and which environment variables (API keys etc.) it needs, so you can judge its blast radius before installing.
 -   **Removed list.** Plugins pulled from the catalog (for example after a security incident) go on `plugin-catalog/removed.yaml` with a reason and date. The installer refuses to install anything on the removed list.
 -   **Installed ≠ enabled.** Installing a catalog plugin puts it on disk; like any plugin it must still be enabled before it loads. See [Plugins → Enabling and disabling](/docs/user-guide/features/plugins).
@@ -150,7 +159,7 @@ Submissions are pull requests that add one `plugin-catalog/<name>.yaml` file. Th
 4.  **Passing validation** — the catalog validation GitHub Action is green on the PR (schema, SHA format, reachability).
 5.  **Not self-updating** — the catalog build must not download and replace its own files; the pinned SHA is the only update path (a SHA-bump PR plus `hermes plugins update <name>`).
 
-Pin updates (bumping `sha` to a newer commit) follow the same PR + review process.
+Pin updates (bumping `sha` to a newer commit) follow the same PR + review process; bump `version` in the same PR so the label users see matches the code. Installed plugins compare their recorded sha against the live pin: `hermes plugins list --json` reports `update_available`, the Desktop Plugins tab shows an **Update to 1.4.0** button, and `hermes plugins update <name>` checks out exactly the new pin.
 
 ## See also
 
