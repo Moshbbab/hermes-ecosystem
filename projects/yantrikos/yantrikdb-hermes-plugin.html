@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yantrikos/yantrikdb-hermes-plugin — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that offers self-maintaining storage with explainable retrieval. It features an embedded,…">
+<meta name="description" content="yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that uses an in-process YantrikDB engine by default. It provides tools for canonicalizing…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta property="og:description" content="yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that offers self-maintaining storage with explainable retrieval. It features an embedded,…">
+<meta property="og:description" content="yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that uses an in-process YantrikDB engine by default. It provides tools for canonicalizing…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yantrikos/yantrikdb-hermes-plugin — Hermes Atlas">
-<meta name="twitter:description" content="yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that offers self-maintaining storage with explainable retrieval. It features an embedded,…">
+<meta name="twitter:description" content="yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that uses an in-process YantrikDB engine by default. It provides tools for canonicalizing…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=yantrikdb-hermes-plugin&amp;subtitle=YantrikDB+memory+provider+for+NousResearch%2Fhermes-agent+%E2%80%94+self-maintaining+memory+with+benchmarked+recall%2C+self-tuning+ranking%2C+contradiction+tracking%2C+proactive+hygiene%2C+and+expla&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin#software",
   "name": "yantrikdb-hermes-plugin",
-  "description": "yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that offers self-maintaining storage with explainable retrieval. It features an embedded, in-process backend by default and includes tools for tracking contradictions, canonicalizing duplicates, and ranking results by recency.",
+  "description": "yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that uses an in-process YantrikDB engine by default. It provides tools for canonicalizing duplicates, tracking contradictions, and attaching retrieval reasons to recalled information. The plugin includes a self-directing loop that identifies knowledge gaps, manages tasks, and generates agendas for the agent.",
   "url": "https://hermesatlas.com/projects/yantrikos/yantrikdb-hermes-plugin",
   "codeRepository": "https://github.com/yantrikos/yantrikdb-hermes-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yantrikos",
     "url": "https://github.com/yantrikos"
   },
-  "dateModified": "2026-09-17T21:16:43.000Z",
+  "dateModified": "2026-09-18T14:13:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-17</span>
+    <span><span class="meta-label">updated</span>2026-09-18</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that offers self-maintaining storage with explainable retrieval. It features an embedded, in-process backend by default and includes tools for tracking contradictions, canonicalizing duplicates, and ranking results by recency.</p>
+    <p class="summary-text">yantrikdb-hermes-plugin is a memory provider for the Hermes Agent that uses an in-process YantrikDB engine by default. It provides tools for canonicalizing duplicates, tracking contradictions, and attaching retrieval reasons to recalled information. The plugin includes a self-directing loop that identifies knowledge gaps, manages tasks, and generates agendas for the agent.</p>
     <ul class="summary-highlights">
       <li>Provides explainable recall with why_retrieved tags for every result.</li>
-      <li>Tracks contradictions and manages memory lifecycles via consolidation and hygiene.</li>
-      <li>Supports embedded in-process execution or HTTP backends for clusters.</li>
+      <li>Tracks contradictions and manages memory lifecycle through consolidation and hygiene passes.</li>
+      <li>Supports embedded in-process execution or an HTTP backend for clusters.</li>
     </ul>
   </div>
 </section>
@@ -175,6 +175,7 @@ yantrikdb-hermes install              # registers the plugin with Hermes
 hermes memory setup                   # → select "yantrikdb"
 </code></pre>
 <p>No server, no token, no GPU. From here the agent remembers and recalls on its own — tell it "I prefer dark mode in VS Code" in one session, ask "what editor theme do I like?" in the next, and it answers from <code>yantrikdb_recall</code> with a <code>why_retrieved</code> reason attached. Full install options — including <code>hermes plugins install</code>, <code>uv</code>/<code>pipx</code> environments, and the HTTP backend for HA clusters — are under <a href="#install-default--embedded-backend">Install</a> below.</p>
+<p>Not using Hermes? The same engine ships as an MCP server (<a href="https://github.com/yantrikos/yantrikdb-mcp">yantrikdb-mcp</a>) for Claude Code, Cursor, and other MCP-capable agents, or as a plain Python import (<a href="https://github.com/yantrikos/yantrikdb">yantrikdb</a>) for anything else — same <code>recall</code>/<code>remember</code>/<code>conflicts()</code> primitives, different transport.</p>
 <h3>Why this exists</h3>
 <p>Two recurring observations from the Hermes community map directly to what yantrikdb does:</p>
 <blockquote>
@@ -880,7 +881,7 @@ YANTRIKDB_INTEGRATION_TOKEN=ydb_... \
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 291</div>
+        <div class="stars">★ 290</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
