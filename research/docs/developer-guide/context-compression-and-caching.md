@@ -279,6 +279,8 @@ Set `in_place: false` to restore the legacy rotating path, where each compaction
 
 A smaller auxiliary compression model can lower the live compression trigger without changing the selected tail policy. In `lean` mode the selection budget remains based on the **main model's context window**: 2.5%, clamped to 10K–25K tokens. For example, a 1M main model with a 512K auxiliary model retains a 25K selection budget even when feasibility lowers its trigger from 850K to 512K. Explicit `legacy` mode instead recomputes `threshold_tokens × target_ratio` (102,400 tokens at 512K × 0.20). These are tail-selection budgets, not strict limits on the entire compacted context: protected messages, boundary alignment, summaries, and anchors can add tokens.
 
+The lowered trigger is a durable ceiling on the compressor, so window corrections for the same model (a provider-reported limit, a grown local window) keep it. Whenever the main runtime changes — `/model`, fallback activation, or the restore back to the primary — the auxiliary model is re-probed immediately: the trigger is clamped again before the first compaction on the new window, or restored to the main model's own value when the auxiliary model now fits.
+
 ### Per-model threshold overrides
 
 `compression.model_thresholds` lets you trigger compaction at different points depending on the active model — useful when you swap between models with very different context windows (e.g. a 1M-context model can compress later while a 128K model should compress earlier):

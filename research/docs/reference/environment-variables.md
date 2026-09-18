@@ -456,7 +456,7 @@ Default language hint for STT. Used by the `local` (faster-whisper) provider, `H
 
 `HERMES_HOME`
 
-Override Hermes config directory (default: `~/.hermes`). Also scopes the gateway PID file and systemd service name, so multiple installations can run concurrently
+Override Hermes config directory (default: `~/.hermes`). A literal `~` or `$VAR` in the value is expanded (fish does not expand `~` inside `VAR=~/…`), so it never resolves relative to the current directory. Also scopes the gateway PID file and systemd service name, so multiple installations can run concurrently
 
 `HERMES_GIT_BASH_PATH`
 
@@ -1199,6 +1199,30 @@ Allow the bot to ping individual `@user` mentions (default: `true`).
 `DISCORD_ALLOW_MENTION_REPLIED_USER`
 
 Ping the author when replying to their message (default: `true`).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL`
+
+Env fallback for `discord.missed_message_backfill.enabled`: replay messages missed while disconnected (default: `false`). See [Missed message backfill](/docs/user-guide/messaging/discord#discordmissed_message_backfill).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_CHANNELS`
+
+Comma-separated channel IDs to scan (fallback for `discord.missed_message_backfill.channels`; empty = `discord.free_response_channels`, `*` = every reachable text channel).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_WINDOW_SECONDS`
+
+How far back a scan may look (fallback for `window_seconds`, default `21600`, minimum `60`).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_LIMIT`
+
+Maximum messages fetched per channel per scan (fallback for `limit`, default `100`, 1–500).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_MAX_DISPATCHES`
+
+Maximum messages re-dispatched per scan (fallback for `max_dispatches`, default `10`, 1–100).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_MAX_ATTEMPTS`
+
+Lifetime re-dispatch ceiling for a single message across reconnects (fallback for `max_attempts`, default `3`, 1–100).
 
 `SLACK_BOT_TOKEN`
 

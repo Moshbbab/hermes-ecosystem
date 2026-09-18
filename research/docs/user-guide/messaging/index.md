@@ -543,6 +543,12 @@ hermes gateway status --system         # Linux only: inspect the system service 
 
 On Linux and macOS, `kill -USR2 <gateway pid>` appends a dump of every thread's stack to `~/.hermes/logs/gateway_faulthandler.log` and the gateway keeps running — use it to see what a stalled or misbehaving gateway is doing without restarting it.
 
+### Built-in event-loop liveness watchdog
+
+On every platform the gateway runs an out-of-loop watchdog thread that probes the asyncio loop (`gateway.loop_watchdog_probe_interval_s`, default 30 s). When the loop stops dispatching for `gateway.loop_watchdog_max_strikes` consecutive probes (default 3), housekeeping, the cron scheduler and the embedded kanban dispatcher have all frozen with it, so the watchdog dumps every thread's stack to the log, stamps `gateway_state.json` with `gateway_state: degraded` and `exit_reason: loop_liveness_watchdog`, and exits with code `75` so the service supervisor restarts the process. `hermes gateway status` renders that record as `⚠ Gateway exited degraded: event loop stopped dispatching …` until a new gateway process overwrites it, and the dashboard's gateway badge shows **Degraded** with the same reason. Set `gateway.loop_watchdog: false` in `config.yaml` to disable the watchdog.
+
+Housekeeping also re-stamps `gateway_state.json`'s `updated_at` every tick (60 s), so it doubles as a heartbeat: when the process is still alive but that stamp is more than 120 s old, `hermes gateway status` prints `⚠ Gateway heartbeat stale: housekeeping has not refreshed gateway_state.json for N s …` and the dashboard badge reads **Heartbeat stale** — the "looks running but nothing is scheduled" case. Restart the gateway.
+
 ### Optional Linux event-loop watchdog
 
 A systemd-managed gateway can opt into process recovery when Python's asyncio event loop stops receiving scheduling time. This covers whole-process stalls that also prevent platform-specific liveness tasks from running:
@@ -695,6 +701,7 @@ Semantics are honest at-least-once:
 -   A response whose send **never started** is redelivered as-is.
 -   A response that was **mid-send** when the gateway died (the platform may or may not have received it) is redelivered with a visible "♻️ Recovered reply — … may be a duplicate" prefix. Ambiguity is labeled, never silently resent.
 -   A final send refused by **flood control** (such as Telegram rate limits) is retried automatically after the recorded penalty expires, without requiring a reconnect or restart. A restart during the penalty adopts the stored reply without spending a retry attempt or re-running the agent. Retries retain the original bot profile, chat and thread. A rate-limit recovery prefix warns that earlier chunks may already have arrived; the ledger cannot infer partial delivery from message length.
+-   Any other rejected final send (a platform 5xx, an unclassified error) is retried the same way after a growing backoff (30 s, then 2 min); the last budgeted attempt is left for the next gateway start, so an outage that outlasts the timer never strands the reply. A permanently unreachable chat (blocked bot, deleted group) is not retried.
 -   Redelivery is bounded: 3 attempts, 24-hour freshness, then the row is abandoned. Delivered rows are pruned after 7 days.
 
 Disable with `gateway.delivery_ledger: false` in `config.yaml` (restores the old behavior: in-flight responses are lost on crash).
@@ -1051,6 +1058,30 @@ launchd plists are static — if you install new tools (e.g. a new Node.js versi
 Multiple installations
 
 Like the Linux systemd service, each `HERMES_HOME` directory gets its own launchd label. The default `~/.hermes` uses `ai.hermes.gateway`; other installations use `ai.hermes.gateway-<suffix>`.
+
+### Windows (Task Scheduler)
+
+```
+hermes gateway install               # Register the Hermes_Gateway Scheduled Task (runs at logon)
+hermes gateway start                 # Start the gateway hidden, without a console window
+hermes gateway stop                  # Drain and stop the service
+hermes gateway status                # Check status, including registration drift
+```
+
+The Scheduled Task runs `wscript.exe` on a generated `.vbs` launcher under `%USERPROFILE%\.hermes\gateway-service\`. The launcher starts `python.exe -m hermes_cli.main gateway run` with a hidden window and **exits immediately** — by design: `wscript.exe` has no console, so at logon it never receives the `CTRL_CLOSE_EVENT` that kills a `cmd.exe`\-hosted gateway, and the gateway inherits one hidden console instead of every subprocess flashing its own (see `hermes_cli/gateway_windows.py::_build_gateway_vbs_script`).
+
+RestartOnFailure covers the launcher, not the gateway
+
+Because the launcher returns as soon as the gateway is spawned, Task Scheduler only ever sees the launcher's exit code. The `<RestartOnFailure>` policy in the registered task therefore fires only when `wscript.exe` itself fails to start the gateway — it does **not** restart a gateway that crashes or is killed later. Gateway auto-restart on Windows relies on the gateway's own in-process restart path (`/restart`, updates, and the `hermes gateway restart` command); a gateway killed from outside stays down until `hermes gateway start` or `schtasks /Run /TN <task>`.
+
+`hermes gateway install` writes the task from the current template; a task registered by an older build would otherwise keep its old settings (no `RestartOnFailure`, no logon `Delay`, an older launcher command line) indefinitely. `hermes gateway status` compares the registered task with the current template and warns when it predates it:
+
+```
+⚠ Scheduled Task registration predates the current template (missing: RestartOnFailure, LogonTrigger Delay; version 1.3 vs 1.4)
+  Repair: hermes gateway start  (or: hermes gateway install)
+```
+
+`hermes gateway start` and `hermes update` run the same comparison and re-register a drifted task from the current template automatically (like the systemd unit refresh on Linux); when `schtasks` refuses without elevation, re-run `hermes gateway install`, which can request administrator approval. The check is silent when the task cannot be queried, and it only inspects a few settings Hermes owns (task version, `RestartOnFailure`, the logon trigger delay and the launcher arguments), so deliberate local edits elsewhere in the task are not flagged.
 
 ## Platform-Specific Toolsets
 

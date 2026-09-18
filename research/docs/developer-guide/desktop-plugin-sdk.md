@@ -215,6 +215,12 @@ Title bar
 
 `data` as `TitlebarTool`, or a mount-scoped `<Contribute>`
 
+Page header
+
+`WORKSPACE_PAGE_HEADER_AREA`
+
+`render` via a mount-scoped `<Contribute>` inside your page
+
 ⌘K palette
 
 `PALETTE_AREA`
@@ -308,6 +314,10 @@ ctx.register({
 ```
 
 Title-bar tools live in `TITLEBAR_AREAS.left | .center | .right` as `TitlebarTool` data (`{ id, label, icon, active?, onSelect? }`).
+
+Title-bar slots are **permanent mount points**: a component you register there stays mounted while the user moves between the chat and full pages (Capabilities, Messaging, Artifacts, contributed routes), so a `useEffect` that injects global side effects (a `<style>` tag, `html[data-*]` attributes, a `MutationObserver`) runs its setup once per registration and its cleanup once at dispose — never mid-navigation.
+
+Controls that belong to ONE page (the Kanban board switcher) go in `WORKSPACE_PAGE_HEADER_AREA` instead: it renders in the workspace panel's tab-header row while that page is on screen and is empty otherwise. Register it with a mount-scoped `<Contribute>` (below) so it leaves with the page.
 
 ### Palette commands and keybinds
 
@@ -416,13 +426,13 @@ Previewed widgets can also **talk back**. Inside the frame, `window.hermes.send(
 
 ### Mount-scoped chrome (`Contribute`)
 
-`ctx.register` is for **permanent** contributions. When chrome should live and die with a component that's already on screen (a page's own title-bar control leaves when the page unmounts), render `<Contribute>` inside it instead:
+`ctx.register` is for **permanent** contributions. When chrome should live and die with a component that's already on screen (a page's own header control leaves when the page unmounts), render `<Contribute>` inside it instead:
 
 ```
-import { Contribute, TITLEBAR_AREAS } from '@hermes/plugin-sdk'
+import { Contribute, WORKSPACE_PAGE_HEADER_AREA } from '@hermes/plugin-sdk'
 
 jsx(Contribute, {
-  area: TITLEBAR_AREAS.center,
+  area: WORKSPACE_PAGE_HEADER_AREA,
   id: 'my-page:switcher', // namespace with your slug
   children: jsx(MySwitcher, {})
 })
@@ -586,7 +596,7 @@ Two enable switches still apply, on purpose, and both default to **off**: the de
 
 note
 
-The copy is local to the machine the desktop app runs on. Against a remote backend, the remote box's `~/.hermes/plugins` is not reachable as a filesystem — only locally installed packages contribute a desktop half this way. For a remote backend the install dialog clones the desktop half separately into `desktop-plugins/`, the same as a desktop-only repo.
+The copy is local to the machine the desktop app runs on. Against a remote backend, the remote box's `~/.hermes/plugins` is not reachable as a filesystem — only locally installed packages contribute a desktop half this way. For a remote backend the install dialog clones the desktop half separately into `desktop-plugins/`, the same as a desktop-only repo. A package whose agent half was installed on the remote host without that clone shows its Desktop half as **unavailable (remote backend)** on the Plugins page — not as a pending copy — and the tooltip points at **Install from Git** with the Desktop target checked.
 
 ### Distributing with an install link
 
@@ -710,7 +720,7 @@ Plugin contract
 
 Area constants
 
-`PANES_AREA`, `ROUTES_AREA`, `SIDEBAR_NAV_AREA`, `STATUSBAR_AREAS`, `TITLEBAR_AREAS`, `PALETTE_AREA`, `KEYBINDS_AREA`, `THEMES_AREA`, `COMPOSER_AREAS`
+`PANES_AREA`, `ROUTES_AREA`, `SIDEBAR_NAV_AREA`, `STATUSBAR_AREAS`, `TITLEBAR_AREAS`, `WORKSPACE_PAGE_HEADER_AREA`, `PALETTE_AREA`, `KEYBINDS_AREA`, `THEMES_AREA`, `COMPOSER_AREAS`
 
 Area payloads
 

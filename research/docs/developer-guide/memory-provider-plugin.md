@@ -146,7 +146,7 @@ Active profile name, when available.
 
 `agent_workspace`, `agent_context`
 
-Runtime agent scope (`hermes` and `primary` for the main agent).
+Runtime agent scope. `agent_workspace` is `hermes`; `agent_context` is `cron` for scheduler runs, `subagent` for `delegate_task` children, else `primary` — skip automatic writes for the non-primary values.
 
 Do not assume `os.getcwd()` identifies the conversation's workspace: one Desktop or gateway backend can serve several sessions. If `cwd` is absent and directory routing is needed, `agent.runtime_cwd.resolve_agent_cwd()` honors the session cwd context, then scoped `terminal.cwd` (carried internally as `TERMINAL_CWD`), then the launch directory. Construction-time workspace metadata does not require changing the process cwd or rebuilding an existing conversation's system prompt.
 

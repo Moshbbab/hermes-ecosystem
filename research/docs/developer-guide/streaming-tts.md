@@ -74,7 +74,7 @@ WebSocket (`wss://api.x.ai/v1/tts`)
 
 yes
 
-xAI OAuth or `XAI_API_KEY`
+`XAI_API_KEY` preferred, else xAI OAuth (the subscription bearer 403s on metered TTS)
 
 edge, piper, kitten, neutts, mistral, minimax, deepinfra, …
 

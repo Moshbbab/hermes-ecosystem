@@ -28,7 +28,7 @@ MIT
 
 Platforms
 
-linux, macos, windows
+linux, macos
 
 Tags
 
