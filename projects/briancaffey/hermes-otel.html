@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, and SigNoz.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending traces, metrics, and logs to OTLP-compatible backends such as Phoenix, Langfuse, and SigNoz.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-09-09T23:47:44.000Z",
+  "dateModified": "2026-09-18T00:13:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-09</span>
+    <span><span class="meta-label">updated</span>2026-09-18</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for the Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, and SigNoz.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending traces, metrics, and logs to OTLP-compatible backends such as Phoenix, Langfuse, and SigNoz.</p>
     <ul class="summary-highlights">
       <li>Exports LLM tool calls and model invocations as OTel spans.</li>
-      <li>Compatible with any OTLP HTTP endpoint and multiple observability backends.</li>
-      <li>Includes a four-tier test suite covering unit, integration, E2E, and smoke tests.</li>
+      <li>Compatible with any OTLP HTTP endpoint and various observability backends.</li>
+      <li>Includes a four-tier test suite for unit, integration, and E2E testing.</li>
     </ul>
   </div>
 </section>
@@ -664,8 +664,8 @@ so any backend can group or filter a conversation by turn.</p>
 <ul>
 <li><code>hermes.tool.target</code> — first non-empty value under args.<code>path</code> / <code>file_path</code> / <code>target</code> / <code>url</code> / <code>uri</code>.</li>
 <li><code>hermes.tool.command</code> — first non-empty value under args.<code>command</code> / <code>cmd</code>.</li>
-<li><code>hermes.tool.outcome</code> — one of <code>completed</code> · <code>error</code> · <code>timeout</code> · <code>blocked</code> · (explicit <code>status</code> field from the result, lowercased). Only <code>error</code> maps the span <code>StatusCode</code> to <code>ERROR</code>; timeouts/blocked stay <code>OK</code> so dashboards don't count them as failures.</li>
-<li><code>hermes.skill.name</code> — inferred from args paths matching <code>/skills/&lt;name&gt;/</code>. Does <strong>not</strong> match <code>/optional-skills/&lt;name&gt;/references/</code>. Also increments a <code>hermes.skill.inferred{skill_name, source}</code> counter so ops can audit hit rates.</li>
+<li><code>hermes.tool.outcome</code> — one of <code>completed</code> · <code>error</code> · <code>timeout</code> · <code>blocked</code> · <code>cancelled</code> · (explicit <code>status</code> field from the result, lowercased). Hermes' own <code>post_tool_call</code> lifecycle <code>status</code> is authoritative for non-success outcomes (<code>timeout</code>, <code>blocked</code>, <code>cancelled</code>, <code>error</code> — the result may be plain text there); for <code>ok</code> the result's own status is kept, else <code>completed</code>. Only <code>error</code> maps the span <code>StatusCode</code> to <code>ERROR</code>; timeouts/blocked/cancelled stay <code>OK</code> so dashboards don't count them as failures.</li>
+<li><code>hermes.skill.name</code> — the bare skill name Hermes uses, inferred from <code>skill_view</code> args (<code>name</code>, <code>plugin:name</code>, <code>category:name</code>) or from args paths under <code>/skills/</code> (<code>skills/&lt;category&gt;/&lt;name&gt;/SKILL.md</code> → <code>&lt;name&gt;</code>; other files inside a skill resolve to the nearest directory holding a <code>SKILL.md</code>). Does <strong>not</strong> match <code>/optional-skills/&lt;name&gt;/references/</code>. Also increments a <code>hermes.skill.inferred{skill_name, source}</code> counter so ops can audit hit rates.</li>
 </ul>
 <h4>Orphan-span sweep</h4>
 <p>If a session never fires <code>on_session_end</code> (e.g. host crash mid-turn), it would otherwise leak active-span state. A TTL-based sweeper (default 10 min, configurable via <code>root_span_ttl_ms</code>) runs at the top of every <code>pre_*</code> hook; sessions older than the TTL are finalized with <code>hermes.turn.final_status=timed_out</code> and span status <code>OK</code> (not <code>ERROR</code> — timeouts should not pollute error rates).</p>
@@ -715,6 +715,48 @@ so it is attributable to the tool; GPU is the host's coincident load during the
 tool window. <code>psutil</code> ships with hermes-agent; GPU readings need <code>pynvml</code>
 (NVIDIA) or <code>amdsmi</code> (AMD) in the Hermes venv. Full details, PromQL examples
 and the Collector-based alternative: <a href="https://briancaffey.github.io/hermes-otel/configuration/host-metrics">Host &amp; GPU metrics</a>.</p>
+<h3>Prompt-cache metrics</h3>
+<p>Every <code>post_api_request</code> records provider-reported prompt-cache usage as two
+low-cardinality counters. Labels are <code>model</code>, <code>provider</code>, <code>api_mode</code> and
+<code>cache_result</code> — never a session id.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hermes.prompt_cache.tokens{cache_result="hit"}</code></td>
+<td>prompt tokens served from the provider cache (cache reads)</td>
+</tr>
+<tr>
+<td><code>hermes.prompt_cache.tokens{cache_result="miss"}</code></td>
+<td>the rest of the prompt: uncached input <strong>and</strong> cache-write tokens</td>
+</tr>
+<tr>
+<td><code>hermes.prompt_cache.observations{cache_result}</code></td>
+<td>API requests with cache accounting, split by whether they read from the cache (<code>hit</code>) or not (<code>miss</code>)</td>
+</tr>
+</tbody></table>
+<p><code>hit + miss</code> is the request's whole prompt (Hermes' <code>prompt_tokens</code> is uncached
+input + cache reads + cache writes), so the weighted token hit rate is:</p>
+<pre><code class="language-promql">sum(rate(hermes_prompt_cache_tokens_total{cache_result="hit"}[5m]))
+/
+sum(rate(hermes_prompt_cache_tokens_total[5m]))
+</code></pre>
+<p>Divide counter rates (or deltas) — never average per-request percentages.
+(Prometheus/LGTM append <code>_total</code> to counters; OpenObserve keeps the bare name.)</p>
+<p>A request is counted when the provider reported <em>any</em> cache accounting — a
+cache read or a cache write. Requests with neither are skipped rather than
+counted as a 0 % hit: Hermes collapses "field absent" and "explicit zero" to
+<code>0</code>, so they cannot be told apart today. Once Hermes ships
+<code>usage.available_fields</code> (proposed in
+<a href="https://github.com/NousResearch/hermes-agent/pull/108249">NousResearch/hermes-agent#108249</a>)
+an explicit-zero cache read is counted as a miss automatically.</p>
+<p>The pre-existing <code>hermes.token.usage</code> counter carries the same buckets
+(<code>token_type=input|cacheRead|cacheCreation</code>) with a <code>session_id</code> label;
+<code>cacheRead / input</code> on it gives the same rate at higher cardinality.</p>
 <h3>How it works</h3>
 <p>Hermes fires lifecycle hooks. This plugin maps them to OTel spans:</p>
 <pre><code>Turn 1:
@@ -774,7 +816,7 @@ and the Collector-based alternative: <a href="https://briancaffey.github.io/herm
 </tbody></table>
 <p><strong>Human-in-the-loop approvals:</strong> when a tool trips a dangerous-command approval rule, the agent blocks waiting for a human (often the dominant chunk of a turn's wall-clock, previously invisible). The plugin opens an <code>approval.*</code> span (via the <code>pre_approval_request</code> / <code>post_approval_response</code> hooks) capturing the wait time and the decision (approve/deny/timeout) — works on CLI and gateway surfaces (Telegram, Discord, …), and feeds <code>hermes.approval.count</code> / <code>hermes.approval.duration</code> metrics for deny/timeout-rate tracking. Observer-only: telemetry never alters an approval. See <a href="https://github.com/briancaffey/hermes-otel/blob/main/website/docs/architecture/span-hierarchy.md#approval">Span hierarchy → <code>approval.*</code></a>.</p>
 <p><strong>Sub-agent delegation:</strong> when the agent calls <code>delegate_task</code>, the plugin opens a <code>subagent.{role}</code> span in the parent trace (via the <code>subagent_start</code> / <code>subagent_stop</code> hooks) and rejoins the delegated child's own root span underneath it. Without this, child agents export as dozens of disconnected traces. See <a href="https://github.com/briancaffey/hermes-otel/blob/main/website/docs/architecture/span-hierarchy.md">Span hierarchy → <code>subagent.*</code></a> and the <code>hermes.subagent.count</code> / <code>hermes.subagent.duration</code> metrics.</p>
-<p><strong>Skill execution windows:</strong> when the agent loads a skill (the <code>skill_view</code> tool, or a read of a <code>/skills/&lt;name&gt;/</code> file), the plugin opens a <code>skill.{name}</code> span that runs until the turn ends — so a trace shows <em>which skills were active and for how long</em>, with overlaps. Controlled by <code>skill_spans</code> (default on). The plugin also ships a companion Hermes skill, <code>hermes_otel:observability</code> (load it with <code>skill_view</code>), which explains how to turn on and read this telemetry — and because skill loads are instrumented, opening it emits its own <code>skill.observability</code> span. See <a href="https://github.com/briancaffey/hermes-otel/blob/main/website/docs/architecture/span-hierarchy.md#skill">Span hierarchy → <code>skill.*</code></a>.</p>
+<p><strong>Skill execution windows:</strong> when the agent successfully loads a skill (the <code>skill_view</code> tool, or a read of a file under <code>/skills/</code>), the plugin opens a <code>skill.{name}</code> span that runs from the end of the loading call until the turn ends — so a trace shows <em>which skills were active and for how long</em>, with overlaps. Controlled by <code>skill_spans</code> (default on). The plugin also ships a companion Hermes skill, <code>hermes_otel:observability</code> (load it with <code>skill_view</code>), which explains how to turn on and read this telemetry — and because skill loads are instrumented, opening it emits its own <code>skill.observability</code> span. See <a href="https://github.com/briancaffey/hermes-otel/blob/main/website/docs/architecture/span-hierarchy.md#skill">Span hierarchy → <code>skill.*</code></a>.</p>
 <p><strong>API errors &amp; retries:</strong> failed provider requests (rate limits, timeouts, 5xx, network errors) close the <code>api.{model}</code> span as <code>ERROR</code> with an <code>exception</code> event and retry metadata (<code>error.type</code>, status code, <code>hermes.retry.count</code>, <code>hermes.retryable</code>), via the <code>api_request_error</code> hook — previously these ended <code>OK</code> and were invisible. Emits <code>hermes.api.error.count{error_type,status_class,retryable}</code> and <code>hermes.retry.count</code>.</p>
 <h4>Attribute conventions</h4>
 <p>The plugin emits <strong>dual-convention</strong> attributes so both backends work:</p>
@@ -1034,11 +1076,11 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 405</div>
+        <div class="stars">★ 407</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 461</div>
+        <div class="stars">★ 488</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -1058,7 +1100,7 @@ traceparent = get_current_traceparent(session_id)   # "00-&lt;trace&gt;-&lt;span
         <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 387</div>
+        <div class="stars">★ 388</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
