@@ -658,7 +658,7 @@ Override the OpenAI-compatible STT endpoint
 
 `GITHUB_TOKEN`
 
-GitHub token for Skills Hub (higher API rate limits, skill publish) and the desktop app's update check (`GH_TOKEN` also honoured)
+GitHub token for Skills Hub (higher API rate limits, skill publish) and the desktop app's update check (`GH_TOKEN` also honoured; without either, the desktop falls back to the `gh` CLI login, then anonymous)
 
 `HONCHO_API_KEY`
 

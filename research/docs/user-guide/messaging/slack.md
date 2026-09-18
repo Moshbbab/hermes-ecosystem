@@ -658,6 +658,7 @@ platforms:
 -   Concurrent calls to the same tool are correlated by real tool-call ID, so parallel `web_search` calls each get their own row with the right status.
 -   Hermes checks thread eligibility before attempting publication, so a disconnect or timeout cannot turn an unthreaded destination into text fallback.
 -   On a supported threaded destination, if the native stream fails for a recoverable reason (API error, rate limit), Hermes falls back to a single continuously edited text message so progress stays live for the turn. A relay egress refusal of the destination is not recoverable and suppresses progress for the turn.
+-   If Slack closes a stream during a long turn, Hermes opens a fresh card in the same thread with the current task list and keeps updating there. The previous card remains visible.
 -   The card stream is stopped exactly once when the turn finalizes, including on interrupt/disconnect, so no dangling live indicator is left behind.
 
 ### Session Isolation

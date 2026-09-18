@@ -456,7 +456,15 @@ No
 
 `"none"`
 
-Controls how the bot handles messages from other Discord bots. `"none"` — ignore all other bots. `"mentions"` — only accept bot messages that `@mention` Hermes. `"all"` — accept all bot messages.
+Controls how the bot handles messages from other Discord bots. `"none"` — ignore all other bots. `"mentions"` — only accept bot messages that `@mention` Hermes. `"all"` — accept all bot messages. By default, either enabled mode still requires a literal inline mention; see the next setting.
+
+`DISCORD_BOTS_REQUIRE_INLINE_MENTION`
+
+No
+
+`true`
+
+Require a literal `<@BOT_ID>` / `<@!BOT_ID>` token to start a bot handoff. Reply metadata alone does not start one. Brief same-sender/channel continuations are admitted as described below. Set to `false` only for trusted relays needing legacy admission. Human messages are unaffected.
 
 `DISCORD_REACTIONS`
 
@@ -584,13 +592,32 @@ No
 
 `2.0`
 
-Delay between split chunks when a single message exceeds Discord's length limit.
+Longer quiet period for near-limit Discord splits and continuation chunks from a recently tagged bot in the same channel.
 
-Bot-to-bot conversation is not supported
+### Bot-to-bot handoffs: tag once, collect the burst
 
-`DISCORD_ALLOW_BOTS` exists to accept input from a specific trusted bot (e.g. a relay or webhook bot), not to let two Hermes profiles talk to each other. The default, `"none"`, ignores all other bots and is the safe setting.
+Bot input remains opt-in (`DISCORD_ALLOW_BOTS=none` by default). When enabled with `mentions` or `all`, **starting a bot handoff requires a literal `<@BOT_ID>` / `<@!BOT_ID>` in the message content by default**. Discord's automatic reply ping alone does not start a handoff. Human-authored messages retain their existing mention behavior.
 
-Wiring multiple Hermes profiles to reply to one another in a shared channel — by setting `"mentions"` or `"all"` across several profiles — is an unsupported topology. Discord auto-`@mentions` the replied-to author on every reply, so under `"mentions"` two bots will satisfy each other's mention gate and ack-loop. The gateway's bot loop guard bounds the damage rather than preventing it: after 20 bot-authored messages in one channel inside 5 minutes, further bot messages there are dropped for 10 minutes (tunable under `gateway.bot_loop_guard` in `config.yaml`; human messages are never counted). The supported configuration is still to leave `DISCORD_ALLOW_BOTS` at `"none"`. If you must accept a particular bot, scope the acceptance narrowly and never to another auto-replying agent.
+After an admitted bot mention, Hermes briefly accepts unmentioned follow-ups from **that same bot in that same channel or thread**. Text follow-ups enter the existing text batcher, so a rapidly split response can reach the agent together without repeating the tag on every part. No special sender protocol or part markers are required.
+
+For example, bot A sends `<@BOT_B_ID> Here is the review …`, followed immediately by two untagged text chunks in the same thread. Bot B admits those chunks during the continuation window and batches them with the tagged text. After the window expires, an untagged message or reply ping cannot start another handoff under the default policy. Explicit reciprocal tags remain supported; this prevents accidental reply-metadata loops, not intentionally continued conversations.
+
+#### Timing and limits
+
+The admission window lasts `max(HERMES_DISCORD_TEXT_BATCH_DELAY_SECONDS, HERMES_DISCORD_TEXT_BATCH_SPLIT_DELAY_SECONDS)` after the admitted mention (2 seconds with the defaults), and each admitted continuation re-arms it, so a long handoff paced at Discord's send rate arrives whole. Separately, each queued text chunk restarts the batch's quiet timer; a tagged bot batch uses the split quiet period even when its first chunk is short. These settings control receiver batching, not sender pacing. Disabling text batching (`HERMES_DISCORD_TEXT_BATCH_DELAY_SECONDS=0`) also disables continuation admission.
+
+This is a short-burst heuristic, not guaranteed multipart delivery. A delayed chunk outside the window needs its own mention under the default policy. Unrelated messages from the same bot and channel inside the window can also be admitted. The exception is not restricted to text: attachments and commands may pass admission, but only text enters this batcher; other message types follow their normal handling. Existing channel restrictions and `DISCORD_ALLOW_BOTS=none` still apply. History/backfill behavior is unchanged. The gateway's bot loop guard remains as a backstop: after 20 bot-authored messages in one channel inside 5 minutes, further bot messages there are dropped for 10 minutes (tunable under `gateway.bot_loop_guard` in `config.yaml`; human messages are never counted).
+
+#### Compatibility with trusted relays
+
+The inline-mention requirement now defaults to **true** (previously false), including when `DISCORD_ALLOW_BOTS=all`. If an existing relay intentionally relies on reply pings or unmentioned bot messages, retain the old admission behavior explicitly:
+
+```
+discord:
+  bots_require_inline_mention: false
+```
+
+The existing `DISCORD_BOTS_REQUIRE_INLINE_MENTION=false` environment override is also supported when the YAML option is unset. With this opt-out, `mentions` accepts Discord's resolved mentions, including reply pings, and `all` removes the bot-specific mention requirement; other channel mention rules still apply. An admitted reply ping can also open the continuation window in this compatibility mode. Use it only for trusted relays because it restores the accidental reply-loop risk.
 
 ### Config File (`config.yaml`)
 
@@ -601,6 +628,7 @@ The `discord` section in `~/.hermes/config.yaml` mirrors the env vars above. Con
 discord:
   require_mention: true           # Require @mention in server channels
   thread_require_mention: false   # If true, require @mention in threads too (multi-bot threads)
+  bots_require_inline_mention: true  # Bot authors must type a literal @mention (default: true)
   free_response_channels: ""      # Comma-separated channel IDs (or YAML list)
   auto_thread: true               # Auto-create threads on @mention
   reactions: true                 # Add emoji reactions during processing

@@ -204,12 +204,6 @@ OpenCode Go
 
 `OPENCODE_GO_API_KEY`
 
-OpenCode Free
-
-`opencode-free`
-
-— (keyless, no credential)
-
 Kilo Code
 
 `kilocode`

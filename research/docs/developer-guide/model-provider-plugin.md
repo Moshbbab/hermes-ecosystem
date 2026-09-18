@@ -222,6 +222,12 @@ Any
 
 Provider-level max\_tokens cap (Nvidia: 16384)
 
+`unsupported_response_formats`
+
+`tuple`
+
+`response_format` types the API rejects outright; auxiliary requests omit them instead of paying a guaranteed 400 (DeepSeek: `("json_schema",)`)
+
 `default_aux_model`
 
 str
