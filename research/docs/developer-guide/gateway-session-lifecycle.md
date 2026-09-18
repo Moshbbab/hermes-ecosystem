@@ -459,9 +459,9 @@ Lightweight metadata update after an interaction. Bumps `updated_at`, optionally
 
 Explicit reset (from `/new` or `/reset`). Creates new `session_id`, sets `is_fresh_reset=True`. Ends old SQLite session, creates new one.
 
-`switch_session(session_key, target_session_id)`
+`switch_session(session_key, target_session_id, *, expected_session_id=None)`
 
-Switch to a different existing session ID (from `/resume`). Ends current SQLite session, reopens target.
+Switch to a different existing session ID (from `/resume`). Ends current SQLite session, reopens target. With `expected_session_id=` the repoint is a compare-and-swap: returns `None` without switching when the key no longer points at that session, so a caller that resolved against a snapshot across an `await` (async-delegation re-pin, Telegram topic-binding heal) cannot overwrite a concurrent `/new` or `/resume`.
 
 `suspend_session(session_key)`
 
