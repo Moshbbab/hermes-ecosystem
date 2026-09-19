@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pdalinis/incise — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
+<meta name="description" content="Incise is a CLI and agent-tool backend designed for precise, semantic updates to Markdown files. It enables targeted modifications to tables, lists, sections,…">
+<link rel="canonical" href="https://hermesatlas.com/projects/pdalinis/incise">
+<meta property="og:title" content="pdalinis/incise — Hermes Atlas">
+<meta property="og:description" content="Incise is a CLI and agent-tool backend designed for precise, semantic updates to Markdown files. It enables targeted modifications to tables, lists, sections,…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/pdalinis/incise">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=incise&amp;subtitle=Make+small+AI+models+reliable+at+editing+Markdown.+Incise+provides+safe%2C+semantic%2C+byte-preserving+edits+for+AI+agents.&amp;kind=project+%C2%B7+plugins">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="pdalinis/incise — Hermes Atlas">
+<meta name="twitter:description" content="Incise is a CLI and agent-tool backend designed for precise, semantic updates to Markdown files. It enables targeted modifications to tables, lists, sections,…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=incise&amp;subtitle=Make+small+AI+models+reliable+at+editing+Markdown.+Incise+provides+safe%2C+semantic%2C+byte-preserving+edits+for+AI+agents.&amp;kind=project+%C2%B7+plugins">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "home", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "plugins &amp; extensions", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 3, "name": "incise" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/pdalinis/incise#software",
+  "name": "incise",
+  "description": "Incise is a CLI and agent-tool backend designed for precise, semantic updates to Markdown files. It enables targeted modifications to tables, lists, sections, and YAML frontmatter by addressing content rather than line numbers, ensuring unrelated bytes remain unchanged.",
+  "url": "https://hermesatlas.com/projects/pdalinis/incise",
+  "codeRepository": "https://github.com/pdalinis/incise",
+  "applicationCategory": "BrowserApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "author": {
+    "@type": "Organization",
+    "name": "pdalinis",
+    "url": "https://github.com/pdalinis"
+  },
+  "dateModified": "2026-09-19T01:43:32.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 1
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script src="/assets/js/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span id="meta-count">252·repos</span>
+    <span id="meta-version">hermes·v0.21.3</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/">home</a>
+    <a href="/ecosystem/" class="active">ecosystem</a>
+    <a href="/lists/">lists</a>
+    <a href="/skills/">skills</a>
+    <a href="/use-cases/">use cases</a>
+    <a href="/guide/">handbook</a>
+    <a href="/masterclass/">masterclass</a>
+    <a href="/dev/">dev</a>
+    <a href="/reports/">reports</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-icon tt-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2.25M12 19.75V22M4.93 4.93l1.59 1.59M17.48 17.48l1.59 1.59M2 12h2.25M19.75 12H22M4.93 19.07l1.59-1.59M17.48 6.52l1.59-1.59"/></svg>
+    </span>
+    <span class="tt-icon tt-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M20.2 15.1A8.4 8.4 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+    </span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">home</a><span class="sep">/</span><a href="/">plugins &amp; extensions</a><span class="sep">/</span>incise
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">pdalinis</span><span class="slash">/</span>incise
+  </h1>
+  <p class="project-desc">Make small AI models reliable at editing Markdown. Incise provides safe, semantic, byte-preserving edits for AI agents.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 1</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    <span><span class="meta-label">license</span>MIT</span>
+    
+    <span><span class="meta-label">updated</span>2026-09-19</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/pdalinis/incise" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://pdalinis.github.io/incise/" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">Incise is a CLI and agent-tool backend designed for precise, semantic updates to Markdown files. It enables targeted modifications to tables, lists, sections, and YAML frontmatter by addressing content rather than line numbers, ensuring unrelated bytes remain unchanged.</p>
+    <ul class="summary-highlights">
+      <li>Performs byte-preserving edits to specific Markdown structural ranges.</li>
+      <li>Provides deterministic tools for AI agents to modify documentation.</li>
+      <li>Supports semantic addressing for headings, rows, items, and keys.</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <h2>Incise — semantic Markdown editing for AI agents</h2>
+<p><a href="https://github.com/pdalinis/incise/actions/workflows/ci.yml"><img src="https://github.com/pdalinis/incise/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" decoding="async"></a>
+<a href="https://crates.io/crates/incise-cli"><img src="https://img.shields.io/crates/v/incise-cli.svg" alt="crates.io" loading="lazy" decoding="async"></a>
+<a href="https://www.npmjs.com/package/pi-incise"><img src="https://img.shields.io/npm/v/pi-incise.svg" alt="npm" loading="lazy" decoding="async"></a>
+<a href="https://docs.rs/incise-core"><img src="https://img.shields.io/docsrs/incise-core.svg" alt="docs.rs" loading="lazy" decoding="async"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-76e0b5.svg" alt="license" loading="lazy" decoding="async"></a></p>
+<p><strong>Safe, semantic, byte-preserving Markdown edits for AI agents and automation.</strong></p>
+<p>Incise is a CLI and agent-tool backend for precise updates to Markdown tables, lists, sections, and YAML frontmatter. The caller expresses what should change; deterministic code handles formatting, boundaries, and the smallest possible splice.</p>
+<pre><code class="language-text">Model intent:  In the Projects table, set Launch to done.
+Incise:        Address the table, row, and column by content.
+Result:        One targeted edit; unrelated bytes stay unchanged.
+</code></pre>
+<p><a href="https://pdalinis.github.io/incise/">Documentation</a> · <a href="#quick-start">Install</a> · <a href="#measured-with-small-models">Benchmarks</a> · <a href="https://github.com/pdalinis/incise/releases">Releases</a></p>
+<h3>Why Incise?</h3>
+<p>Language models can identify the change a document needs but are less reliable at reproducing surrounding Markdown exactly. A one-cell table update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.</p>
+<p>Incise separates intent from mechanics:</p>
+<ul>
+<li><strong>Semantic addresses:</strong> select headings, rows, items, and keys by content rather than line number.</li>
+<li><strong>Minimal edits:</strong> change only the targeted structural range.</li>
+<li><strong>Actionable refusals:</strong> ambiguous or unsafe requests fail loudly instead of choosing a plausible target.</li>
+</ul>
+<p>It is built for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context. Incise is not a WYSIWYG editor, knowledge graph, or vault index; it is the deterministic mutation layer used after an agent decides which file and fact to change.</p>
+<h3>Quick start</h3>
+<h4>Install from crates.io</h4>
+<p>Install <a href="https://crates.io/crates/incise-cli"><code>incise-cli</code> from crates.io</a>:</p>
+<pre><code class="language-bash">cargo install incise-cli --locked
+incise --version
+</code></pre>
+<p>Prebuilt Linux and macOS archives are available from <a href="https://github.com/pdalinis/incise/releases">GitHub Releases</a>.</p>
+<h4>Build from source</h4>
+<pre><code class="language-bash">git clone https://github.com/pdalinis/incise.git
+cd incise
+cargo install --locked --path crates/incise-cli
+</code></pre>
+<h4>Inspect a Markdown file</h4>
+<p>Before modifying a document, inspect only the structure the agent needs:</p>
+<pre><code class="language-bash">incise tables vault/Projects.md
+incise outline vault/Projects.md
+</code></pre>
+<h4>Make a semantic edit</h4>
+<pre><code class="language-bash">incise table-update-cell vault/Projects.md \
+  --table Projects \
+  --where Note=Launch \
+  --column Status \
+  --value done
+</code></pre>
+<p>The row is selected by <strong>content</strong>, not by a line number.</p>
+<p>If the new value requires the table to widen, Incise re-pads the table correctly while leaving the rest of the file untouched.</p>
+<hr>
+<h3>What Incise can edit</h3>
+<table>
+<thead>
+<tr>
+<th>Markdown structure</th>
+<th>Operations</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tables</strong></td>
+<td>Add rows, update cells, delete rows, realign columns, query rows</td>
+</tr>
+<tr>
+<td><strong>Lists &amp; tasks</strong></td>
+<td>Add/remove items, toggle checkboxes</td>
+</tr>
+<tr>
+<td><strong>Sections</strong></td>
+<td>Append, replace, insert, delete, rename, change heading levels</td>
+</tr>
+<tr>
+<td><strong>YAML frontmatter</strong></td>
+<td>Read, set, and delete nested keys</td>
+</tr>
+<tr>
+<td><strong>Structure</strong></td>
+<td>Discover headings, tables, lists, frontmatter, rows, keys, and hashes</td>
+</tr>
+</tbody></table>
+<h3>Use Incise with an AI agent</h3>
+<p>Incise publishes the function schemas an agent should receive:</p>
+<pre><code class="language-bash">incise schema
+</code></pre>
+<p>Or inspect an individual tool:</p>
+<pre><code class="language-bash">incise schema --tool table_edit
+</code></pre>
+<p>These schemas are measured artifacts rather than handwritten approximations. A function-calling harness can pass the model's argument object to the corresponding Incise command and return stdout or stderr directly.</p>
+<h4>Hermes Agent</h4>
+<p>Incise includes a Hermes adapter under <a href="plugins/hermes/"><code>plugins/hermes/</code></a>.</p>
+<p>For Markdown structures represented by Incise, give the agent an explicit preference for structured editing:</p>
+<pre><code class="language-markdown">## Editing Markdown
+
+For Markdown tables, lists, sections, and frontmatter, prefer Incise tools over
+generic patch, write, or shell tools.
+
+Inspect structure first with `md_tables`, `md_lists`, or `md_outline`. Use
+`table_get` when current table rows are needed. Make changes with `table_edit`,
+`list_edit`, `section_edit`, or `frontmatter_edit`.
+
+If Incise refuses an operation, follow the remedy in its response rather than
+rewriting the document. Use raw editing only for prose changes that Incise does
+not represent.
+</code></pre>
+<p>The Hermes adapter exposes the measured edit and table-read schemas together with structural reads. See <a href="https://github.com/pdalinis/incise/blob/main/plugins/hermes/README.md"><code>plugins/hermes/README.md</code></a> for installation and safety details.</p>
+<p>Incise is deliberately scoped to Markdown structures it understands. Generic editing remains appropriate for ordinary prose and for creating the initial contents of a new document.</p>
+<hr>
+<h3>Use with Pi</h3>
+<p>Install the published <a href="https://www.npmjs.com/package/pi-incise"><code>pi-incise</code> package from npm</a>:</p>
+<pre><code class="language-bash">pi install npm:pi-incise
+pi
+</code></pre>
+<p>The package provides native binaries for macOS arm64/x64 and glibc Linux arm64/x64. It registers the three structural readers, <code>table_get</code>, and all four structured edit tools. Run <code>/incise-doctor</code> inside Pi to inspect the selected binary and schema status.</p>
+<h3>Safety model</h3>
+<p>Incise is designed around five guarantees:</p>
+<ul>
+<li><strong>Semantic addressing:</strong> targets use heading paths, cell values, item text, keys, and ordinals—never line numbers.</li>
+<li><strong>Byte-preserving splices:</strong> unrelated document bytes remain identical.</li>
+<li><strong>Loud ambiguity:</strong> malformed, unsupported, or non-unique targets produce an actionable refusal.</li>
+<li><strong>Safe writes:</strong> the CLI supports dry runs, atomic replacement, no-op detection, and content-hash preconditions.</li>
+<li><strong>Token-frugal results:</strong> successful writes describe the change instead of returning the whole document.</li>
+</ul>
+<h3>Measured with small models</h3>
+<p>The recorded benchmark compares direct <code>patch</code> calls with Incise operations on the same tasks, model, seeds, and grader.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th align="right">Direct <code>patch</code></th>
+<th align="right">Incise</th>
+<th align="right">Mean Incise output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tables</td>
+<td align="right">60.0% (36/60)</td>
+<td align="right">100% (60/60)</td>
+<td align="right">66 tokens</td>
+</tr>
+<tr>
+<td>Lists</td>
+<td align="right">63.0% (63/100)</td>
+<td align="right">91.0% (91/100)</td>
+<td align="right">58 tokens</td>
+</tr>
+<tr>
+<td>Sections</td>
+<td align="right">19.0% (19/100)</td>
+<td align="right">74.0% (74/100)</td>
+<td align="right">60 tokens</td>
+</tr>
+</tbody></table>
+<p>These results describe one small local model under recorded conditions, not every model. The useful result is the class of failure removed: character arithmetic, structural-boundary mistakes, and byte-for-byte reconstruction.</p>
+<p>Read the <a href="https://pdalinis.github.io/incise/benchmarks/">benchmark summary</a>, the complete <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md"><code>bench/FINDINGS.md</code></a>, or jump to the source findings for <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md#f1--alignment-maintenance-is-the-failure-isolated">tables</a>, <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md#lists--the-second-op-family">lists</a>, <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md#s7--the-sections-arm-a-baseline-19-correct-28-data-loss">sections</a>, and <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md#f-frontmatter--the-fourth-family-and-the-verb-that-deleted-the-version">frontmatter</a>.</p>
+<p>The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across <strong>110,406 generated cases over 54 fixtures</strong>. Property invariants and 212 injected mutations provide additional evidence that preservation failures are detected.</p>
+<h3>Frequently asked questions</h3>
+<h4>What is byte-preserving Markdown editing?</h4>
+<p>Incise changes the smallest structural range required by an operation. Bytes outside that range remain identical, so an agent does not have to reproduce the rest of the document.</p>
+<h4>Can Incise edit an Obsidian vault?</h4>
+<p>Yes. Incise works directly on Markdown files and leaves unrelated wikilinks, callouts, block IDs, embeds, comments, and prose untouched. It does not index or search the vault; another tool chooses the file to edit.</p>
+<h4>How does an AI agent use Incise?</h4>
+<p>The agent first inspects document structure, then calls a semantic editor with a content-based address. Use <code>incise schema</code> for the function definitions or install the Hermes or Pi integration.</p>
+<h4>How do I update YAML frontmatter without reformatting?</h4>
+<p>Inspect keys with <code>incise keys FILE</code>, then call <code>incise frontmatter-set FILE --key PATH --value VALUE</code>. Incise preserves unrelated key order, comments, scalar formatting, and document content. See the <a href="https://pdalinis.github.io/incise/yaml-frontmatter-cli/">frontmatter guide</a>.</p>
+<h3>Documentation</h3>
+<p>The <a href="https://pdalinis.github.io/incise/">Incise documentation site</a> covers installation and the core workflow, with focused guides for <a href="https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/">Markdown tables</a>, <a href="https://pdalinis.github.io/incise/yaml-frontmatter-cli/">YAML frontmatter</a>, and <a href="https://pdalinis.github.io/incise/obsidian-ai-agent-editing/">Obsidian vaults</a>.</p>
+<p>Run <code>incise --help</code> for every command or <code>incise &lt;command&gt; --help</code> for its arguments. Integration details live in the <a href="https://github.com/pdalinis/incise/blob/main/plugins/hermes/README.md">Hermes guide</a> and <a href="https://github.com/pdalinis/incise/blob/main/plugins/pi/README.md">Pi package guide</a>.</p>
+<h3>Project status</h3>
+<p>Incise uses 0.x versioning and is under active development. It currently supports tables, lists, sections, YAML frontmatter, structural reads, semantic addressing, dry runs, atomic writes, stale-read protection, and agent-tool schemas.</p>
+<p>Linux and macOS are supported. Windows is not currently supported or tested. Scoped search and replace and multi-operation transactions remain planned.</p>
+<p>Behavioral claims stay tied to the model, prompts, schemas, tasks, and executor that produced them. A tool-description or refusal change may require remeasurement even when deterministic tests still pass.</p>
+<h3>Development</h3>
+<p>Run the deterministic test suite before submitting a code change:</p>
+<pre><code class="language-bash">cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo test --workspace --locked
+python3 bench/test_incise_ops.py
+python3 bench/difftest.py
+python3 bench/schematest.py
+python3 bench/replaycheck.py
+python3 plugins/hermes/test_plugin.py
+</code></pre>
+<p>The benchmark corpus is frozen because published findings refer to its exact bytes.</p>
+<p>Purpose-built coverage inputs belong under:</p>
+<pre><code class="language-text">bench/synthetic/
+</code></pre>
+<p>Experiments should run on copies of the corpus.</p>
+<p>See <a href="https://github.com/pdalinis/incise/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> for the benchmark-impact policy and pull-request expectations.</p>
+<p>Release maintainers should also see <a href="https://github.com/pdalinis/incise/blob/main/RELEASING.md"><code>RELEASING.md</code></a> for crate-publication order, tag checks, and post-release smoke tests.</p>
+<hr>
+<h3>Contributing and security</h3>
+<p>Contributions are welcome.</p>
+<p>Read <a href="https://github.com/pdalinis/incise/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> before changing measured behavior or benchmark artifacts.</p>
+<p>Report ordinary bugs and feature ideas through GitHub issues.</p>
+<p>Report potential vulnerabilities through GitHub private vulnerability reporting as described in <a href="https://github.com/pdalinis/incise/blob/main/SECURITY.md"><code>SECURITY.md</code></a>.</p>
+<hr>
+<h3>License</h3>
+<p>Incise is available under the MIT License. See <a href="LICENSE"><code>LICENSE</code></a>.</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in plugins &amp; extensions</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
+        <div class="stars">★ 410</div>
+        <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
+      </a>
+      <a class="related-row" href="/projects/42-evey/hermes-plugins">
+        <div class="stars">★ 515</div>
+        <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
+      </a>
+      <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
+        <div class="stars">★ 51</div>
+        <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
+      </a>
+      <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
+        <div class="stars">★ 17</div>
+        <div class="name"><span class="org">42-evey /</span> evey-bridge-plugin</div>
+      </a>
+      <a class="related-row" href="/projects/nativ3ai/hermes-payguard">
+        <div class="stars">★ 14</div>
+        <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
+      </a>
+      <a class="related-row" href="/projects/raulvidis/hermes-cloudflare">
+        <div class="stars">★ 52</div>
+        <div class="name"><span class="org">raulvidis /</span> hermes-cloudflare</div>
+      </a>
+      <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
+        <div class="stars">★ 388</div>
+        <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
+      </a>
+      <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
+        <div class="stars">★ 304</div>
+        <div class="name"><span class="org">stainlu /</span> hermes-labyrinth</div>
+      </a>
+    </div>
+    
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

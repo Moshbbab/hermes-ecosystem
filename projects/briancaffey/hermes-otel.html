@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending traces, metrics, and logs to OTLP-compatible backends such as Phoenix, Langfuse, and SigNoz.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting traces, metrics, and logs to OTLP-compatible backends including Phoenix, Langfuse, and SigNoz.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-09-18T00:13:59.000Z",
+  "dateModified": "2026-09-19T13:12:41.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">251·repos</span>
+    <span id="meta-count">252·repos</span>
     <span id="meta-version">hermes·v0.21.3</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-18</span>
+    <span><span class="meta-label">updated</span>2026-09-19</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports sending traces, metrics, and logs to OTLP-compatible backends such as Phoenix, Langfuse, and SigNoz.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting traces, metrics, and logs to OTLP-compatible backends including Phoenix, Langfuse, and SigNoz.</p>
     <ul class="summary-highlights">
       <li>Exports LLM tool calls and model invocations as OTel spans.</li>
-      <li>Compatible with any OTLP HTTP endpoint and various observability backends.</li>
-      <li>Includes a four-tier test suite for unit, integration, and E2E testing.</li>
+      <li>Compatible with OTLP HTTP endpoints and various observability backends.</li>
+      <li>Tracks parent-child nesting for sessions, LLMs, APIs, and tools.</li>
     </ul>
   </div>
 </section>
@@ -664,7 +664,7 @@ so any backend can group or filter a conversation by turn.</p>
 <ul>
 <li><code>hermes.tool.target</code> — first non-empty value under args.<code>path</code> / <code>file_path</code> / <code>target</code> / <code>url</code> / <code>uri</code>.</li>
 <li><code>hermes.tool.command</code> — first non-empty value under args.<code>command</code> / <code>cmd</code>.</li>
-<li><code>hermes.tool.outcome</code> — one of <code>completed</code> · <code>error</code> · <code>timeout</code> · <code>blocked</code> · <code>cancelled</code> · (explicit <code>status</code> field from the result, lowercased). Hermes' own <code>post_tool_call</code> lifecycle <code>status</code> is authoritative for non-success outcomes (<code>timeout</code>, <code>blocked</code>, <code>cancelled</code>, <code>error</code> — the result may be plain text there); for <code>ok</code> the result's own status is kept, else <code>completed</code>. Only <code>error</code> maps the span <code>StatusCode</code> to <code>ERROR</code>; timeouts/blocked/cancelled stay <code>OK</code> so dashboards don't count them as failures.</li>
+<li><code>hermes.tool.outcome</code> — one of <code>completed</code> · <code>error</code> · <code>timeout</code> · <code>blocked</code> · <code>cancelled</code> · (explicit <code>status</code> field from the result, lowercased). Hermes' own <code>post_tool_call</code> lifecycle <code>status</code> is authoritative when it is specific (<code>timeout</code>, <code>blocked</code>, <code>cancelled</code> — the result may be plain text there); a coarse <code>error</code> yields to an explicit <code>blocked</code> / <code>timeout</code> / <code>cancelled</code> the tool reported in its result (Hermes' terminal tool returns every governance block that way), and for <code>ok</code> the result's own status is kept, else <code>completed</code>. Only <code>error</code> maps the span <code>StatusCode</code> to <code>ERROR</code>; timeouts/blocked/cancelled stay <code>OK</code> so dashboards don't count them as failures.</li>
 <li><code>hermes.skill.name</code> — the bare skill name Hermes uses, inferred from <code>skill_view</code> args (<code>name</code>, <code>plugin:name</code>, <code>category:name</code>) or from args paths under <code>/skills/</code> (<code>skills/&lt;category&gt;/&lt;name&gt;/SKILL.md</code> → <code>&lt;name&gt;</code>; other files inside a skill resolve to the nearest directory holding a <code>SKILL.md</code>). Does <strong>not</strong> match <code>/optional-skills/&lt;name&gt;/references/</code>. Also increments a <code>hermes.skill.inferred{skill_name, source}</code> counter so ops can audit hit rates.</li>
 </ul>
 <h4>Orphan-span sweep</h4>
@@ -806,7 +806,7 @@ an explicit-zero cache read is counted as a miss automatically.</p>
 <tr>
 <td><code>approval.{pattern}</code></td>
 <td>APPROVAL</td>
-<td>Human-in-the-loop approval prompt — the <strong>human-decision wait time</strong>, <code>hermes.approval.choice</code> (<code>once</code>/<code>session</code>/<code>always</code>/<code>deny</code>/<code>timeout</code>), correlated to the gated tool via <code>gen_ai.tool.call.id</code></td>
+<td>Human-in-the-loop approval prompt — the <strong>human-decision wait time</strong>, <code>hermes.approval.choice</code> (<code>once</code>/<code>session</code>/<code>always</code>/<code>deny</code>/<code>timeout</code>, or <code>smart_approve</code>/<code>smart_deny</code> from the smart guardian, with <code>hermes.approval.decided_by=aux_llm</code>), correlated to the gated tool via <code>gen_ai.tool.call.id</code></td>
 </tr>
 <tr>
 <td><code>subagent.{role}</code></td>
