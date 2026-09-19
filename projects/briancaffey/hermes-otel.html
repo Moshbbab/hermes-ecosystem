@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting traces, metrics, and logs to OTLP-compatible backends including Phoenix, Langfuse, and SigNoz.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, SigNoz, and Grafana.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-09-19T13:12:41.000Z",
+  "dateModified": "2026-09-19T15:21:45.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as OTel spans. It supports exporting traces, metrics, and logs to OTLP-compatible backends including Phoenix, Langfuse, and SigNoz.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports LLM tool calls, model invocations, and API requests as spans to OTLP-compatible backends. It supports tracing, metrics, and logs across various platforms including Phoenix, Langfuse, SigNoz, and Grafana.</p>
     <ul class="summary-highlights">
-      <li>Exports LLM tool calls and model invocations as OTel spans.</li>
-      <li>Compatible with OTLP HTTP endpoints and various observability backends.</li>
-      <li>Tracks parent-child nesting for sessions, LLMs, APIs, and tools.</li>
+      <li>Exports spans to any OTLP-compatible HTTP endpoint.</li>
+      <li>Tracks session lifecycles, token aggregation, and parent-child span nesting.</li>
+      <li>Tested with backends like Phoenix, Langfuse, SigNoz, and Jaeger.</li>
     </ul>
   </div>
 </section>
@@ -755,7 +755,7 @@ counted as a 0 % hit: Hermes collapses "field absent" and "explicit zero" to
 <a href="https://github.com/NousResearch/hermes-agent/pull/108249">NousResearch/hermes-agent#108249</a>)
 an explicit-zero cache read is counted as a miss automatically.</p>
 <p>The pre-existing <code>hermes.token.usage</code> counter carries the same buckets
-(<code>token_type=input|cacheRead|cacheCreation</code>) with a <code>session_id</code> label;
+(<code>token_type=input|cacheRead|cacheCreation</code>);
 <code>cacheRead / input</code> on it gives the same rate at higher cardinality.</p>
 <h3>How it works</h3>
 <p>Hermes fires lifecycle hooks. This plugin maps them to OTel spans:</p>
