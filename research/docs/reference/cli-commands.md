@@ -2586,7 +2586,7 @@ List Nous-approved MCPs (plain text, scriptable).
 
 `install <name>`
 
-Install a catalog entry (e.g. `hermes mcp install n8n`).
+Install a catalog entry (e.g. `hermes mcp install deepwiki`).
 
 `serve [-v|--verbose]`
 
