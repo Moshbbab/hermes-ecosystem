@@ -360,6 +360,12 @@ Once per served profile home
 
 A profile selected after another has already built an agent still discovers its own `mcp_servers`
 
+Settings changed from a Desktop / TUI session (`/busy`, `/verbose`, `/approval`, `/cwd`, theme and display toggles)
+
+The `config.yaml` of the profile that owns the session, even when the RPC carries only the session id
+
+The session's own profile is written; the launch profile's `config.yaml` and its `TERMINAL_CWD` are never touched
+
 MCP connections in the Desktop/dashboard backend and the per-profile cron ticker
 
 Keyed per served profile even with `gateway.multiplex_profiles` off — same rule as the multiplexer
@@ -377,6 +383,12 @@ Every child that acts for a served profile (slash worker, Bot Chat delivery, A2A
 That profile's own `.env` + secret sources over a credential-scrubbed base — with or without `gateway.multiplex_profiles` (the Desktop/dashboard `?profile=` route counts)
 
 Absent from the child — a key that reached the launch process only through systemd / Compose / the shell is never inherited by another profile's child
+
+Authorization gates in a child spawned for another profile (`*_ALLOWED_USERS` / `*_ALLOWED_CHANNELS` / `*_IGNORED_CHANNELS` / `*_ALLOW_ALL_USERS` / `*_ALLOW_BOTS`, `GATEWAY_ALLOW*`) — dashboard `hermes -p <name>` actions, kanban workers, Bot Chat delivery, the post-update per-profile `gateway restart`
+
+The child's own `.env` / `config.yaml`, loaded by the child itself
+
+Closed (the adapter's documented default) — a gate exported into the spawning process by a unit file or the shell is dropped before the child starts, so profile B never enforces profile A's channel or user list; a same-profile child keeps it
 
 The launch (default) profile's own credentials in a `hermes serve` / dashboard process that also serves another profile
 

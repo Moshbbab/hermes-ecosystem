@@ -1328,6 +1328,14 @@ Comma-separated phone numbers (with country code, no `+`), or `*` to allow all s
 
 Allow all WhatsApp senders without an allowlist (`true`/`false`)
 
+`WHATSAPP_GROUP_POLICY`
+
+Group intake: `pairing` (default, forwards nothing from groups), `allowlist` (group JIDs below), `open` (every group; participants still need `WHATSAPP_ALLOWED_USERS`, pairing, or `WHATSAPP_ALLOW_ALL_USERS`), or `disabled`
+
+`WHATSAPP_GROUP_ALLOWED_USERS`
+
+Comma-separated group JIDs (e.g. `120363001234567890@g.us`) admitted under `WHATSAPP_GROUP_POLICY=allowlist`
+
 `WHATSAPP_HOME_CHANNEL`
 
 Default chat ID for cron / notification delivery.

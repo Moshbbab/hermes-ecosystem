@@ -1602,4 +1602,4 @@ Always set `TELEGRAM_ALLOWED_USERS` to restrict who can interact with your bot. 
 
 Never share your bot token publicly. If compromised, revoke it immediately via BotFather's `/revoke` command.
 
-For more details, see the [Security documentation](/docs/user-guide/security). You can also use [DM pairing](/docs/user-guide/messaging#dm-pairing-alternative-to-allowlists) for a more dynamic approach to user authorization.
+For more details, see the [Security documentation](/docs/user-guide/security). You can also use [DM pairing](/docs/user-guide/messaging/#dm-pairing-alternative-to-allowlists) for a more dynamic approach to user authorization.

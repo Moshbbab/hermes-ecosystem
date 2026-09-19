@@ -376,4 +376,4 @@ Secret reads fail closed (`agent.secret_scope.get_secret` raises `UnscopedSecret
 -   [Cron Internals](/docs/developer-guide/cron-internals)
 -   [ACP Internals](/docs/developer-guide/acp-internals)
 -   [Agent Loop Internals](/docs/developer-guide/agent-loop)
--   [Messaging Gateway (User Guide)](/docs/user-guide/messaging)
+-   [Messaging Gateway (User Guide)](/docs/user-guide/messaging/)

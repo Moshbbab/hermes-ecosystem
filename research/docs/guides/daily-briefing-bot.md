@@ -267,7 +267,7 @@ You've built a working daily briefing bot. Here are some directions to explore n
 
 -   **[Scheduled Tasks (Cron)](/docs/user-guide/features/cron)** — Full reference for schedule formats, repeat limits, and delivery options
 -   **[Delegation](/docs/user-guide/features/delegation)** — Deep dive into parallel sub-agent workflows
--   **[Messaging Platforms](/docs/user-guide/messaging)** — Set up Telegram, Discord, or other delivery targets
+-   **[Messaging Platforms](/docs/user-guide/messaging/)** — Set up Telegram, Discord, or other delivery targets
 -   **[Memory](/docs/user-guide/features/memory)** — Persistent context across sessions
 -   **[Tips & Best Practices](/docs/guides/tips)** — More prompt engineering advice
 

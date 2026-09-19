@@ -79,6 +79,8 @@ worker dashboard
 # → not running:     starts the machine dashboard with "worker" preselected
 ```
 
+A dashboard started this way keeps `worker` as its fallback scope for the whole server lifetime: a deep link that omits `?profile=` (for example a `/chat?resume=<id>` link) still opens under `worker`, so the embedded chat sees that profile's MCP servers, model and skills. An explicit `?profile=` in the URL always wins.
+
 Pass `--isolated` to opt out and run a dedicated server scoped to that profile (the pre-unification behavior — useful if you deliberately expose different profiles' dashboards with different auth).
 
 The **Chat** tab follows the switcher too: a scoped chat spawns its PTY child with the selected profile's `HERMES_HOME`, so the conversation runs with that profile's model, skills, memory, and session history. Switching profiles starts a fresh terminal session.

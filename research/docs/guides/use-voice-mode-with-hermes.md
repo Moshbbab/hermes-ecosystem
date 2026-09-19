@@ -506,7 +506,7 @@ That progression keeps the debugging surface small.
 ## Where to read next
 
 -   [Voice Mode feature reference](/docs/user-guide/features/voice-mode)
--   [Messaging Gateway](/docs/user-guide/messaging)
+-   [Messaging Gateway](/docs/user-guide/messaging/)
 -   [Discord setup](/docs/user-guide/messaging/discord)
 -   [Telegram setup](/docs/user-guide/messaging/telegram)
 -   [Configuration](/docs/user-guide/configuration)

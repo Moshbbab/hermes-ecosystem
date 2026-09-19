@@ -466,7 +466,7 @@ Session history
 You've got a working team Telegram assistant. Here are some next steps:
 
 -   **[Security Guide](/docs/user-guide/security)** — deep dive into authorization, container isolation, and command approval
--   **[Messaging Gateway](/docs/user-guide/messaging)** — full reference for gateway architecture, session management, and chat commands
+-   **[Messaging Gateway](/docs/user-guide/messaging/)** — full reference for gateway architecture, session management, and chat commands
 -   **[Telegram Setup](/docs/user-guide/messaging/telegram)** — platform-specific details including voice messages and TTS
 -   **[Scheduled Tasks](/docs/user-guide/features/cron)** — advanced cron scheduling with delivery options and cron expressions
 -   **[Context Files](/docs/user-guide/features/context-files)** — AGENTS.md, SOUL.md, and .cursorrules for project knowledge

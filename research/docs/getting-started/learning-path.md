@@ -40,7 +40,7 @@ Get up and running, have basic conversations, use built-in tools
 
 Set up messaging bots, use advanced features like memory, cron jobs, and skills
 
-[Sessions](/docs/user-guide/sessions) → [Messaging](/docs/user-guide/messaging) → [Tools](/docs/user-guide/features/tools) → [Skills](/docs/user-guide/features/skills) → [Memory](/docs/user-guide/features/memory) → [Cron](/docs/user-guide/features/cron)
+[Sessions](/docs/user-guide/sessions) → [Messaging](/docs/user-guide/messaging/) → [Tools](/docs/user-guide/features/tools) → [Skills](/docs/user-guide/features/skills) → [Memory](/docs/user-guide/features/memory) → [Cron](/docs/user-guide/features/cron)
 
 ~2–3 hours
 
@@ -77,7 +77,7 @@ Deploy Hermes Agent as a bot on your favorite messaging platform.
 
 1.  [Installation](/docs/getting-started/installation)
 2.  [Configuration](/docs/user-guide/configuration)
-3.  [Messaging Overview](/docs/user-guide/messaging)
+3.  [Messaging Overview](/docs/user-guide/messaging/)
 4.  [Telegram Setup](/docs/user-guide/messaging/telegram)
 5.  [Discord Setup](/docs/user-guide/messaging/discord)
 6.  [Voice Mode](/docs/user-guide/features/voice-mode)
