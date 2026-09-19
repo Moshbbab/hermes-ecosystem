@@ -617,7 +617,7 @@ node --version
 npx --version
 
 # Test the server manually
-npx -y @modelcontextprotocol/server-filesystem /tmp
+npx -y @modelcontextprotocol/server-filesystem /path/to/allowed/dir
 ```
 
 Verify your `~/.hermes/config.yaml` MCP configuration:

@@ -54,6 +54,10 @@ API key for custom OpenAI-compatible endpoints (used with `OPENAI_BASE_URL`)
 
 Base URL for custom endpoint (VLLM, SGLang, etc.)
 
+`HERMES_CODEX_BASE_URL`
+
+Route the `openai-codex` (ChatGPT subscription) provider through a proxy instead of the default Codex backend. Applies everywhere the credential is used: pool resolution, auxiliary/raw clients, and 401/429 credential rotation. `model.base_url` under `model.provider: openai-codex` is the secondary override when this is unset.
+
 `LM_API_KEY`
 
 API key for LM Studio (`lmstudio` provider). Often a placeholder for local servers
@@ -1167,6 +1171,10 @@ When `true`, accept attachments of any file type (not just the built-in PDF/text
 `DISCORD_MAX_ATTACHMENT_BYTES`
 
 Maximum bytes per attachment the gateway will cache. Default `33554432` (32 MiB). Set to `0` for no cap (attachments are held in memory while being written).
+
+`DISCORD_FREE_RESPONSE_AUTO_THREAD`
+
+When `true`, free-response channels (listed in `DISCORD_FREE_RESPONSE_CHANNELS`) also auto-create a thread per top-level message. Default `false` — free-response channels reply inline. Requires `DISCORD_AUTO_THREAD=true`; `DISCORD_NO_THREAD_CHANNELS` still wins.
 
 `DISCORD_REACTIONS`
 

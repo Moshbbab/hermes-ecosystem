@@ -244,12 +244,12 @@ By default, Ollama uses a 2048-token context. Hermes requires at least 64,000 to
 
 ```
 # Create a Modelfile that extends context
-cat > /tmp/Modelfile << 'EOF'
+cat > ~/.hermes/cache/scratch/Modelfile << 'EOF'
 FROM gemma4:31b
 PARAMETER num_ctx 64000
 EOF
 
-ollama create gemma4-64k -f /tmp/Modelfile
+ollama create gemma4-64k -f ~/.hermes/cache/scratch/Modelfile
 ```
 
 Then update your Hermes config to use `gemma4-64k` as the model name.

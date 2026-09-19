@@ -69,7 +69,7 @@ You can invoke several skills in a single message by chaining slash commands at 
 Parsing stops at the first token that isn't an installed skill, so arguments that happen to start with `/` (like file paths) are never swallowed:
 
 ```
-/ocr-and-documents /tmp/scan.pdf extract the tables   # loads one skill; /tmp/scan.pdf is the argument
+/ocr-and-documents ~/.hermes/cache/scratch/scan.pdf extract the tables   # loads one skill; ~/.hermes/cache/scratch/scan.pdf is the argument
 ```
 
 For combinations you use repeatedly, prefer a [skill bundle](#skill-bundles) — same effect under one short command.

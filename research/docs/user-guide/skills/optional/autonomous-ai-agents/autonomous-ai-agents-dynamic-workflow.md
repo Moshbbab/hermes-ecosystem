@@ -55,7 +55,8 @@ Reach for it when the unit of work is clear (a file, an endpoint, a record) and 
 ## Prerequisites
 
 -   `delegate_task` available and `delegation.max_concurrent_children` sized for the wave (default 10; the runtime rejects a `tasks=[]` larger than that with a clear error rather than queueing). `delegation.max_spawn_depth >= 2` only if children must fan out themselves.
--   A writable run directory resolved from the terminal environment's temp dir (`$TMPDIR`, else the platform temp dir). Never a literal `/tmp`: Termux has no `/tmp`, native Windows breaks on it. Use `<tmp>/wf_<name>_<uuid>/`, unique per run, so an interrupted earlier run cannot leave stale outputs to be misread.
+
+-   A writable run directory resolved from the terminal environment's temp dir (`$TMPDIR`, else the platform temp dir). Never a literal `/tmp`: Termux has no such directory and native Windows breaks on it. Use `<tmp>/wf_<name>_<uuid>/`, unique per run, so an interrupted earlier run cannot leave stale outputs to be misread.
 -   `execute_code` for the deterministic layer (only `web_search`, `web_extract`, `read_file`, `write_file`, `search_files`, `terminal`, `patch` exist inside it).
 
 ## How to Run

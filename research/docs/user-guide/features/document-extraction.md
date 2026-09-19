@@ -111,7 +111,7 @@ The warning lists the exact page ranges and the recovery paths:
 1.  **A few pages — render + vision.** Convert the pages to images and read them with the vision tool:
     
     ```
-    pdftoppm -jpeg -r 150 -f 92 -l 94 document.pdf /tmp/page
+    pdftoppm -jpeg -r 150 -f 92 -l 94 document.pdf $TMPDIR/page
     ```
     
     Then inspect each image with `vision_analyze`. Zero extra dependencies (poppler is required for the detection itself).

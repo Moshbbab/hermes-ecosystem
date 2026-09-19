@@ -373,7 +373,7 @@ When the agent needs to ask you a multiple-choice question (the `clarify` tool),
 If you maintain your Slack manifest by hand and just want the slash command list:
 
 ```
-hermes slack manifest --slashes-only > /tmp/slashes.json
+hermes slack manifest --slashes-only > ~/.hermes/cache/scratch/slashes.json
 ```
 
 Paste that array into the `features.slash_commands` key of your existing manifest.

@@ -105,11 +105,12 @@ Images are priced at the per-image cost **learned from the provider's usage** (`
 
 #### Failure cooldown and provider-proven overflow
 
-A failed or stalled summary attempt arms a per-session **failure cooldown** (escalating 60s → 300s → 900s, never shorter than `compression.context_timeout_seconds`, persisted in `state.db`). While it is armed, ordinary threshold-triggered compaction is deferred so a broken summary backend does not re-fire every turn. Three paths run a real attempt anyway:
+A failed or stalled summary attempt arms a per-session **failure cooldown** (escalating 60s → 300s → 900s, never shorter than `compression.context_timeout_seconds`, persisted in `state.db`). While it is armed, ordinary threshold-triggered compaction is deferred so a broken summary backend does not re-fire every turn. Timeouts and stalls escalate on one counter; a summary that ends in `finish_reason=length` (output cap hit, the transcript is preserved) escalates on its own counter along the same 60s → 300s → 900s rungs, so a later turn — such as an async delegation completion arriving after the cooldown lapsed — cannot re-issue the same capped request every 30 seconds (#69637). JSON-decode, closed-stream and empty-content failures stay on a flat 30 s cooldown. Three paths run a real attempt anyway:
 
 -   Manual `/compress` (`force=True`) — clears the cooldown and retries.
 -   The same-turn `fallback_chain` retry after a stalled primary route — the cancelled primary's own stall cooldown must not suppress it (`bypass_cooldown`). If that pinned route's summary call fails, compress() still commits its deterministic fallback summary (default `abort_on_summary_failure: false`); the log then says "committed a deterministic fallback summary", not "recovered".
 -   **Repeated stall → deterministic fallback.** A first stall keeps the transcript, arms the cooldown and lets the LLM route retry after it lapses. When the route stalls _again_ while a stall-class failure is still on the ladder (`_consecutive_timeout_failures >= 1`), the retry ladder ends with a deterministic rung: the worker is re-run with the summary LLM skipped (`DETERMINISTIC_SUMMARY_ROUTE` pin) and commits the static fallback summary through the ordinary lease/fence/watermark pipeline — the same degrade a failed summary call gets — instead of "continuing without compression" and re-entering the same silent stream every turn (#112420). `abort_on_summary_failure: true` still aborts (nothing dropped). A committed compaction rebinds the compressor and resets the ladder count, so each compaction cycle grants the LLM route one stall before escalating; the persisted cooldown row still paces attempts across turns and restarts.
+-   **Summary provider overloaded → abort, transcript kept.** When the summary call fails with a provider-overload error (`overloaded`, `at capacity`, HTTP 529) and the one-shot main-model retry also fails, compress() aborts and preserves the transcript unchanged instead of committing the deterministic fallback; the warning names the overload (`failure_class=summary_overload_failure`) and `/compress` retries once capacity recovers. Auth/quota, network and empty-content failures already abort the same way.
 -   **Provider-proven overflow** — when the provider itself rejects the request with a context-length error, the recovery pass ignores the cooldown for one bounded attempt (`max_compression_attempts`) without clearing it. Deferring here would wedge the session: every turn would bounce off the provider and the next failure would extend the ladder (#100661). If that attempt fails, the cooldown is recorded normally.
 
 ## Configuration
@@ -130,8 +131,8 @@ compression:
   codex_gpt55_autoraise: true  # gpt-5.5 on Codex OAuth: raise trigger to 85% (default: true)
   codex_gpt55_autoraise_notice: true  # Show the one-time autoraise notice (default: true)
   codex_app_server_auto: native  # native|hermes|off for Codex app-server thread compaction
-  codex_responses_native: false  # gpt-5.6 on direct OpenAI/Codex: server-side compaction (opt-in)
-  codex_responses_compact_threshold: null  # Automatic server compaction trigger
+  codex_responses_native: false  # Opt-in server compaction: gpt-5.6 on OpenAI/Codex; Astra on Codex OAuth
+  codex_responses_compact_threshold: null  # Server compaction trigger; only used when codex_responses_native: true
   in_place: true             # Compact on the same session id, no rotation (default: true)
 
 # Summarization model/provider configured under auxiliary:
@@ -254,7 +255,7 @@ Thread-compaction mode for Codex app-server sessions (see below)
 
 bool
 
-Opt in to OpenAI's server-side compaction on the Responses API. Engages only for gpt-5.6-family models on the direct OpenAI API or a ChatGPT Codex subscription (see below)
+Opt in to OpenAI's server-side compaction on the Responses API. Engages for gpt-5.6-family models on the direct OpenAI API or a ChatGPT Codex subscription, and exact `gpt-6-astra` on official Codex OAuth (see below)
 
 `codex_responses_compact_threshold`
 
@@ -262,7 +263,7 @@ Opt in to OpenAI's server-side compaction on the Responses API. Engages only for
 
 `null` or positive integer
 
-`null` follows the resolved local compression trigger with an 8,192 token safety margin. A positive integer remains absolute and only clamps downward when required. Invalid values use automatic behavior. Automatic mode falls back to `200000` when no usable local trigger exists
+Server-side compaction trigger, read **only when `codex_responses_native: true`** — it never changes when local compression fires; the local trigger is `threshold` (ratio) capped by `threshold_tokens`. `null` follows the resolved local compression trigger with an 8,192 token safety margin. A positive integer remains absolute and only clamps downward when required. Invalid values use automatic behavior. Automatic mode falls back to `200000` when no usable local trigger exists
 
 `in_place`
 
@@ -331,7 +332,7 @@ hermes config set compression.codex_gpt55_autoraise_notice false
 
 The ChatGPT Codex backend _advertises_ a 272K window for the gpt-5.4 and gpt-5.6 (Sol/Terra/Luna) families, but actually accepts ~911K input tokens for ChatGPT-subscription accounts (live-verified Aug 2026). Hermes keeps the **advertised 272K as the default** for the base slugs — a bigger window means more tokens per request and much faster subscription-usage burn, so the large window is strictly opt-in.
 
-To use the large window, pick the explicit `-900k` variant in `/model` (e.g. `gpt-5.6-sol-900k`, `gpt-5.6-terra-900k`, `gpt-5.6-luna-900k`, `gpt-5.4-900k`). These are Hermes-side aliases: the suffix is stripped before the model id is sent to the backend, and pricing/usage accounting treats them as the base model. Slugs that genuinely enforce 272K (gpt-5.5, gpt-5.4-mini) have no `-900k` variant.
+To use the large window, pick the explicit `-900k` variant in `/model` (e.g. `gpt-5.6-sol-900k`, `gpt-5.6-terra-900k`, `gpt-5.6-luna-900k`, `gpt-5.4-900k`). These are Hermes-side aliases: the suffix is stripped before the model id is sent to the backend, and pricing/usage accounting treats them as the base model. Slugs that genuinely enforce 272K (gpt-5.5, gpt-5.4-mini) have no `-900k` variant. When the authenticated Codex catalog publishes a `max_context_window` below 900K for the base slug (e.g. 872K), the `-900k` variant resolves to that live maximum instead; 900K remains the offline fallback and a published maximum above 900K does not raise it.
 
 Compaction thresholds follow the window: base slugs (272K) get the **85% autoraise** described above, while `-900k` variants keep your global `compression.threshold` (default 50%, ~450K) — the autoraise exists to stop wasting a small window, which a 900K window doesn't need.
 
@@ -344,18 +345,20 @@ Codex app-server sessions (`api_mode: codex_app_server` — the codex CLI/agent 
 
 Hermes' local transcript is never rewritten on this runtime — state.db records the compaction boundary while the visible transcript stays intact. All other routes (including Codex OAuth chat sessions) keep Hermes' summary compressor.
 
-### Native Responses compaction (gpt-5.6 on direct OpenAI / Codex subscription)
+### Native Responses compaction (gpt-5.6 and Astra on supported routes)
 
 OpenAI's Responses API supports server-side compaction: when a request includes `context_management: [{type: "compaction", compact_threshold: N}]` and the rendered input crosses N tokens, the server prunes older context into an opaque encrypted `compaction` output item. Hermes captures that item into the assistant message's existing replay sidecar and sends it back on subsequent turns, standing in for the pruned history — long-horizon recall without a client-side summary pass, and ZDR-friendly (`store: false`, no `previous_response_id`).
 
 Opt in with `compression.codex_responses_native: true`. The gate is deliberately narrow, re-checked on every request:
 
--   **Models:** the gpt-5.6 family only. Other models fail server-side when the field is present (gpt-5.1/5.2 return HTTP 500 or stall the stream — there is no structured rejection to downgrade on, verified live Aug 2026).
+-   **Models:** the gpt-5.6 family, plus exact `gpt-6-astra` on official Codex subscription OAuth. Astra on the direct API, Astra variants and other GPT-6 models are excluded. gpt-5.1/5.2 return HTTP 500 or stall the stream when the field is present (no structured rejection to downgrade on, verified live Aug 2026).
 -   **Routes:** `api.openai.com` (OpenAI API key) or the ChatGPT Codex backend (Codex subscription OAuth) only. xAI, GitHub/Copilot, OpenRouter, relays, and local servers never see the field.
+
+For Astra, both the resolved `openai-codex` provider and an official HTTPS `chatgpt.com/backend-api/codex` endpoint are required. A trusted proxy override does not enable Astra compaction. This uses the existing automatic `context_management` path and does not add `configuration_update` history.
 
 Everything else about compression is unchanged: the local compressor stays armed as the fallback owner (the native threshold is clamped ~8K tokens below the local trigger so the server compacts first), and a structured provider rejection of the field disables native compaction for the session and retries the request without it. Switching the session to a non-eligible model or route simply stops the field from being sent — captured checkpoints are dropped from replay by the existing cross-issuer guard when the endpoint changes.
 
-By default, `compression.codex_responses_compact_threshold: null` derives the native threshold from the resolved local trigger. For example, a local trigger of 765,000 selects 756,808. Set a positive integer to preserve an absolute threshold such as 200,000. Invalid values select automatic behavior. If no usable local trigger exists, automatic mode uses 200,000. The provider minimum is 1,024 tokens, so an unusually small local trigger at or below that floor cannot preserve strict native first ordering.
+`compression.codex_responses_compact_threshold` is consulted only while `codex_responses_native: true` is in effect; with native compaction off (the default) it is ignored and local compression triggers on `threshold` / `threshold_tokens` alone. By default, `codex_responses_compact_threshold: null` derives the native threshold from the resolved local trigger. For example, a local trigger of 765,000 selects 756,808. Set a positive integer to preserve an absolute threshold such as 200,000. Invalid values select automatic behavior. If no usable local trigger exists, automatic mode uses 200,000. The provider minimum is 1,024 tokens, so an unusually small local trigger at or below that floor cannot preserve strict native first ordering.
 
 ### Computed Values (for a 200K context model at defaults)
 

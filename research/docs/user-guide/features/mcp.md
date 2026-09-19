@@ -462,7 +462,7 @@ Per-server tool filtering and utility policy
 mcp_servers:
   filesystem:
     command: "npx"
-    args: ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed/dir"]
 ```
 
 ### Recycling memory-heavy stdio servers

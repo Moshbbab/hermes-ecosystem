@@ -190,7 +190,7 @@ Show or change the current model. Supports: `/model claude-sonnet-4`, `/model pr
 
 `/codex-runtime [auto|codex_app_server|on|off]`
 
-Toggle the optional [Codex app-server runtime](/docs/user-guide/features/codex-app-server-runtime) for OpenAI/Codex models. `auto` (default) uses Hermes' standard chat completions; `codex_app_server` hands turns to a `codex app-server` subprocess for native shell, apply\_patch, ChatGPT subscription auth, and migrated Codex plugins. Effective on next session.
+Toggle the optional [Codex app-server runtime](/docs/user-guide/features/codex-app-server-runtime) for OpenAI/Codex models and named custom providers that are also defined in `~/.codex/config.toml`. `auto` (default) uses Hermes' standard chat completions; `codex_app_server` hands eligible turns to a `codex app-server` subprocess for native shell, apply\_patch, ChatGPT subscription auth, and migrated Codex plugins. Effective on next session.
 
 `/personality`
 
@@ -546,7 +546,7 @@ Kill all running background processes and interrupt the running agent.
 
 `/model [provider:model]`
 
-Show or change the model. Supports provider switches (`/model zai:glm-5`), custom endpoints (`/model custom:model`), named custom providers (`/model custom:local:qwen`), auto-detect (`/model custom`), OpenRouter account presets (`/model @preset/<slug>` — account-scoped, skips the public model-listing check), and user-defined aliases (`/model fav`, `/model grok` — see [Custom model aliases](#custom-model-aliases)). Use `--global` to persist the change to config.yaml. **Note:** `/model` can only switch between already-configured providers. To add a new provider or set up API keys, use `hermes model` from your terminal (outside the chat session). **Cost note:** a mid-session model switch resets the prompt cache (the cache key includes the model), so the next message re-reads the whole conversation at full input price.
+Show or change the model. Supports provider switches (`/model zai:glm-5`), custom endpoints (`/model custom:model`), named custom providers (`/model custom:local:qwen`), auto-detect (`/model custom`), OpenRouter account presets (`/model @preset/<slug>` — account-scoped, skips the public model-listing check), and user-defined aliases (`/model fav`, `/model grok` — see [Custom model aliases](#custom-model-aliases)). Use `--global` to persist the change to config.yaml; a successful `--global` pick (typed or picker) also drops this chat's session-only override, so config.yaml alone decides the model after a gateway restart (a chat with a `channel_overrides` model keeps the override, since the channel setting would otherwise outrank config.yaml; the CLI/TUI deliberately keep their per-session pin so resume restores the model that chat used). **Note:** `/model` can only switch between already-configured providers. To add a new provider or set up API keys, use `hermes model` from your terminal (outside the chat session). **Cost note:** a mid-session model switch resets the prompt cache (the cache key includes the model), so the next message re-reads the whole conversation at full input price.
 
 `/codex-runtime [auto|codex_app_server|on|off]`
 

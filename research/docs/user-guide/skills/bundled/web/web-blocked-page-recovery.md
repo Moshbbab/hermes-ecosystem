@@ -122,7 +122,7 @@ User-submitted archives — often has paywalled news articles Wayback lacks. Rat
 
 ```
 for d in archive.ph archive.md archive.li archive.is; do
-  curl -sL --max-time 20 "https://$d/newest/{URL}" -o /tmp/page.html \
+  curl -sL --max-time 20 "https://$d/newest/{URL}" -o ~/.hermes/cache/scratch/page.html \
     -w "%{http_code}" && break
 done
 ```
