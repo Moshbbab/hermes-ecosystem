@@ -72,7 +72,7 @@ Key design decisions:
 
 ### Sessions Table
 
-Abridged — see `SCHEMA_SQL` in `hermes_state_common.py` (applied by `hermes_state_schema.py`) for the full current column list (which also includes gateway routing metadata such as `session_key`, `chat_id`, `chat_type`, `thread_id`, `display_name`, `origin_json`, `expiry_finalized`, workspace fields `cwd` / `git_branch` / `git_repo_root`, handoff and compression-failure fields, `profile_name`, `rewind_count`, `archived`, and `pinned`):
+Abridged — see `SCHEMA_SQL` in `hermes_state_common.py` (applied by `hermes_state_schema.py`) for the full current column list (which also includes gateway routing metadata such as `session_key`, `chat_id`, `chat_type`, `thread_id`, `display_name`, `origin_json`, `expiry_finalized`, workspace fields `cwd` / `git_branch` / `git_repo_root`, handoff and compression-failure fields, `profile_name`, `transport_profile` (the multiplex bot that received the lane, nullable), `rewind_count`, `archived`, and `pinned`):
 
 ```
 CREATE TABLE IF NOT EXISTS sessions (

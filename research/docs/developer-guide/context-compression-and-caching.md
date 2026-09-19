@@ -17,7 +17,7 @@ Bedrock context resolution in `agent/model_metadata.py` uses this precedence:
 
 The cache remains at `context_length_cache.yaml` under the active Hermes home. `context_lengths` retains scalar values for older readers. An additive `bedrock_confirmed_v1` map binds each confirmed key to its exact value in the same atomic write. Generic writes clear that key's provenance. Older writers may drop the additive map, which causes revalidation after upgrading again. Downgrading remains readable but restores the older runtime's resolution rules.
 
-The static fallback for `xai.grok-4.6` (including `global.` and `us.` inference profiles) is 500,000 tokens, per the [AWS model card](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-xai-grok-4-6.html). This is Bedrock-specific, not the direct xAI API window. Existing compression rules still apply: without output reservation or an explicit token cap, the small-window 75% threshold floor yields a 375,000-token trigger at this window.
+The static fallback for `xai.grok-4.6` (including `global.` and `us.` inference profiles) is 500,000 tokens, per the [AWS model card](https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-xai-grok-4-6.html). This is Bedrock-specific, not the direct xAI API window. Existing compression rules still apply: without output reservation, the small-window 75% threshold floor yields 375,000 at this window, which the default `threshold_tokens` cap (256,000) then lowers.
 
 ## Pluggable Context Engine
 
@@ -158,7 +158,15 @@ Description
 
 0.0-1.0
 
-Compression triggers when prompt tokens ≥ `threshold × context_length`
+Compression triggers when prompt tokens ≥ `threshold × context_length` (floored at 0.75 below 512K windows)
+
+`threshold_tokens`
+
+`256000`
+
+int or `null`
+
+Absolute cap on the trigger: compaction fires at the lower of the ratio trigger and this count, so a 1M window compacts at 256K instead of 500K. `null` = ratio-only
 
 `model_thresholds`
 
@@ -182,7 +190,7 @@ Controls tail protection token budget: `threshold_tokens × target_ratio` (legac
 
 `lean`, `legacy`
 
-Tail retention policy. `legacy` keeps a `target_ratio`\-sized verbatim tail (~100K+ tokens on big-window models). `lean` keeps a clamped tail of `2.5% × context window` (10K floor, 25K cap) and instead carries continuity in the summary: a detailed identifier-preserving session log (produced by the same single summary request — lean compaction makes exactly one auxiliary LLM call per attempt), a mechanically extracted anchor index (PR numbers, SHAs, paths, error strings — regex, never paraphrased), every real user message quoted verbatim (newest-first budget), and a `session_search` recovery pointer so the agent can re-access anything summarized away. Oversized regions are evenly sampled into the summarizer input (with explicit elision markers) rather than triggering extra calls. Result on 500K-token real sessions: ~49K retained vs ~162K, with higher recall when paired with recovery (see `evals/compaction/results/`). Old tool results inside the lean tail are demoted to one-line stubs carrying a recovery pointer
+Tail retention policy. `legacy` keeps a `target_ratio`\-sized verbatim tail (~100K+ tokens on big-window models without the `threshold_tokens` cap). `lean` keeps a clamped tail of `2.5% × context window` (10K floor, 25K cap) and instead carries continuity in the summary: a detailed identifier-preserving session log (produced by the same single summary request — lean compaction makes exactly one auxiliary LLM call per attempt), a mechanically extracted anchor index (PR numbers, SHAs, paths, error strings — regex, never paraphrased), every real user message quoted verbatim (newest-first budget), and a `session_search` recovery pointer so the agent can re-access anything summarized away. Oversized regions are evenly sampled into the summarizer input (with explicit elision markers) rather than triggering extra calls. Result on 500K-token real sessions: ~49K retained vs ~162K, with higher recall when paired with recovery (see `evals/compaction/results/`). Old tool results inside the lean tail are demoted to one-line stubs carrying a recovery pointer
 
 `protect_last_n`
 
@@ -277,7 +285,7 @@ Set `in_place: false` to restore the legacy rotating path, where each compaction
 
 ### Auxiliary feasibility and tail retention
 
-A smaller auxiliary compression model can lower the live compression trigger without changing the selected tail policy. In `lean` mode the selection budget remains based on the **main model's context window**: 2.5%, clamped to 10K–25K tokens. For example, a 1M main model with a 512K auxiliary model retains a 25K selection budget even when feasibility lowers its trigger from 850K to 512K. Explicit `legacy` mode instead recomputes `threshold_tokens × target_ratio` (102,400 tokens at 512K × 0.20). These are tail-selection budgets, not strict limits on the entire compacted context: protected messages, boundary alignment, summaries, and anchors can add tokens.
+A smaller auxiliary compression model can lower the live compression trigger without changing the selected tail policy. In `lean` mode the selection budget remains based on the **main model's context window**: 2.5%, clamped to 10K–25K tokens. For example, a 1M main model (`threshold_tokens: null`) with a 512K auxiliary model retains a 25K selection budget even when feasibility lowers its trigger from 850K to 512K. Explicit `legacy` mode instead recomputes `threshold_tokens × target_ratio` (102,400 tokens at 512K × 0.20). These are tail-selection budgets, not strict limits on the entire compacted context: protected messages, boundary alignment, summaries, and anchors can add tokens.
 
 The lowered trigger is a durable ceiling on the compressor, so window corrections for the same model (a provider-reported limit, a grown local window) keep it. Whenever the main runtime changes — `/model`, fallback activation, or the restore back to the primary — the auxiliary model is re-probed immediately: the trigger is clamped again before the first compaction on the new window, or restored to the main model's own value when the auxiliary model now fits.
 
@@ -360,7 +368,7 @@ max_summary_tokens   = min(200,000 × 0.05, 12,000) = 10,000
 
 Threshold is derived from the MAIN model's context window
 
-`threshold_tokens` is always `threshold × context_length`, where `context_length` is the **main agent model's** context window — never the auxiliary/summary model's. On a 262,144-token model at the default `0.50`, the threshold is `262,144 × 0.50 = 131,072`. That number being close to a common "128K context" is a coincidence of the percentage, not a sign that the auxiliary model's window is the trigger. The auxiliary model's context window is a separate concern — see the "Summary model context length" warning below for how it affects whether a summary can be produced, not when compression fires.
+`threshold_tokens` is `threshold × context_length` (then capped by `compression.threshold_tokens`), where `context_length` is the **main agent model's** context window — never the auxiliary/summary model's. On a 262,144-token model at the default `0.50`, the threshold is `262,144 × 0.50 = 131,072`. That number being close to a common "128K context" is a coincidence of the percentage, not a sign that the auxiliary model's window is the trigger. The auxiliary model's context window is a separate concern — see the "Summary model context length" warning below for how it affects whether a summary can be produced, not when compression fires.
 
 ## Compression Algorithm
 

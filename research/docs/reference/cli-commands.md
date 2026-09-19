@@ -2858,6 +2858,10 @@ Repair a malformed `state.db` schema (e.g. `table messages_fts already exists`) 
 
 Re-attach gateway conversations stranded in session rows that lost their routing identity (a chat "jumping back in time" after a restart). Dry-run by default; `--apply` performs the adoptions (stop the gateway first); `--max-gap-seconds N` tunes the contiguity window. Only unambiguous cases are repaired. See [Sessions → Repair Stranded Gateway Sessions](/docs/user-guide/sessions#repair-stranded-gateway-sessions).
 
+`repair-profiles`
+
+Settle session, routing, Telegram-topic and voice-mode state that landed under the wrong profile (rows in another profile's store, labels disagreeing with the session key, parent links crossing profiles, index rows for deleted profiles). Dry-run by default; `--apply` performs the repairs after snapshotting every store (stop the gateway first); `--legacy-main rekey|move` decides what `agent:main` rows inside a named profile's store are; `--json` for automation. See [Sessions → Repair State Crossed Between Profiles](/docs/user-guide/sessions#repair-state-crossed-between-profiles).
+
 `recover`
 
 Offline, non-destructive recovery of a damaged `state.db` into a separate clean database.
