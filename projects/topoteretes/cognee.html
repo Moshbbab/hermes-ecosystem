@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>topoteretes/cognee — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions. It ingests data in various formats to…">
+<meta name="description" content="Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions using a self-hosted knowledge graph. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/topoteretes/cognee">
 <meta property="og:title" content="topoteretes/cognee — Hermes Atlas">
-<meta property="og:description" content="Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions. It ingests data in various formats to…">
+<meta property="og:description" content="Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions using a self-hosted knowledge graph. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/topoteretes/cognee">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="topoteretes/cognee — Hermes Atlas">
-<meta name="twitter:description" content="Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions. It ingests data in various formats to…">
+<meta name="twitter:description" content="Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions using a self-hosted knowledge graph. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=cognee&amp;subtitle=Cognee+is+the+open-source+AI+memory+platform+for+agents.+Give+your+AI+agents+persistent+long-term+memory+across+sessions+with+a+self-hosted+knowledge+graph+engine.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/topoteretes/cognee#software",
   "name": "cognee",
-  "description": "Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions. It ingests data in various formats to build a self-hosted knowledge graph, allowing agents to recall and connect information using custom ontologies and data models.",
+  "description": "Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions using a self-hosted knowledge graph. It ingests data in various formats to build structured memory around entities and relationships, allowing for retrieval of graph, vector, and code context.",
   "url": "https://hermesatlas.com/projects/topoteretes/cognee",
   "codeRepository": "https://github.com/topoteretes/cognee",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "topoteretes",
     "url": "https://github.com/topoteretes"
   },
-  "dateModified": "2026-09-18T20:35:29.000Z",
+  "dateModified": "2026-09-18T22:45:00.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30812
+    "userInteractionCount": 30821
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions. It ingests data in various formats to build a self-hosted knowledge graph, allowing agents to recall and connect information using custom ontologies and data models.</p>
+    <p class="summary-text">Cognee is an open-source AI memory platform designed to provide agents with persistent long-term memory across sessions using a self-hosted knowledge graph. It ingests data in various formats to build structured memory around entities and relationships, allowing for retrieval of graph, vector, and code context.</p>
     <ul class="summary-highlights">
-      <li>Builds self-hosted knowledge graphs from text and code</li>
-      <li>Provides persistent memory across multiple agent sessions</li>
-      <li>Supports automatic routing for graph, vector, and code retrieval</li>
+      <li>Builds self-hosted knowledge graphs from text and code.</li>
+      <li>Provides persistent long-term memory across multiple agent sessions.</li>
+      <li>Supports custom data models and ontologies for domain-specific grounding.</li>
     </ul>
   </div>
 </section>
@@ -258,8 +258,18 @@
 <h4>Try it without an API key</h4>
 <pre><code class="language-bash">cognee-cli demo
 </code></pre>
+<p>With no <code>LLM_API_KEY</code> set at all, <code>remember</code> and <code>cognify</code> build the graph with the local
+GLiNER demo extractor and embed with a local model (<code>pip install "cognee[gliner]"</code>), and
+<code>recall</code> answers with the matching chunks.</p>
+<blockquote>
+<p><strong>Demo:</strong> The GLiNER extractor shipped in open source is a demo of cognee's enterprise
+GLiNER extraction. It is free to use, but the production-grade version — higher accuracy
+and broader label coverage — is available as a licensed product. Write to us at
+<a href="mailto:social@cognee.ai">social@cognee.ai</a> to explore the options.</p>
+</blockquote>
 <h4>Step 2: Configure the LLM</h4>
 <pre><code class="language-python">import os
+
 os.environ["LLM_API_KEY"] = "YOUR OPENAI_API_KEY"
 </code></pre>
 <p>Alternatively, create a <code>.env</code> file using our <a href="https://github.com/topoteretes/cognee/blob/main/.env.template">template</a>.</p>
@@ -289,7 +299,7 @@ async def main():
     await cognee.forget(dataset="main_dataset")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     asyncio.run(main())
 </code></pre>
 <h3>How Cognee works</h3>
@@ -391,7 +401,7 @@ codex plugin add cognee@cognee
 <p>The UI launcher requires Node.js/npm; Docker is needed for its MCP service. See <a href="https://docs.cognee.ai/cognee-cli/overview">local UI setup</a>.</p>
 <h3>Explore examples</h3>
 <ul>
-<li><a href="https://github.com/topoteretes/cognee/blob/main/examples/demos/company_brain_demo.py">Build a small Company Brain from text, code, and session lessons</a>.</li>
+<li><a href="https://github.com/topoteretes/cognee/blob/main/examples/demos/company_brain/company_brain_demo.py">Build a small Company Brain from text, code, and session lessons</a>.</li>
 <li><a href="https://docs.cognee.ai/examples/migrate-memory-systems">Import memory from Mem0, Letta, Zep, or Graphiti</a> using the COGX exchange format.</li>
 <li><a href="https://docs.cognee.ai/guides/local-ollama">Run with local Ollama models</a>, including a local embedding model.</li>
 <li><a href="https://docs.cognee.ai/guides/graph-visualization">Visualize your knowledge graph</a> and inspect its connections.</li>
