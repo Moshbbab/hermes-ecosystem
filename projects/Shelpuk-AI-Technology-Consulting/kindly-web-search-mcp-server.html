@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
+<meta name="description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta property="og:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
+<meta property="og:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta name="twitter:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
+<meta name="twitter:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=kindly-web-search-mcp-server&amp;subtitle=Kindly+Web+Search+MCP+Server%3A+Web+search+%2B+robust+content+retrieval+for+AI+coding+tools+%28Claude+Code%2C+Codex%2C+Cursor%2C+GitHub+Copilot%2C+Gemini%2C+etc.%29+and+AI+agents+%28Claude+Desktop%2C+Op&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server#software",
   "name": "kindly-web-search-mcp-server",
-  "description": "Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from StackExchange and GitHub, arXiv papers, and Wikipedia entries using specialized API handlers and a headless browser fallback.",
+  "description": "Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub Issues. It retrieves search results and page content in LLM-optimized Markdown format using specialized API handlers or a headless Chromium browser.",
   "url": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "codeRepository": "https://github.com/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Shelpuk-AI-Technology-Consulting",
     "url": "https://github.com/Shelpuk-AI-Technology-Consulting"
   },
-  "dateModified": "2026-09-18T21:50:20.000Z",
+  "dateModified": "2026-09-19T19:29:37.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-18</span>
+    <span><span class="meta-label">updated</span>2026-09-19</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from StackExchange and GitHub, arXiv papers, and Wikipedia entries using specialized API handlers and a headless browser fallback.</p>
+    <p class="summary-text">Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub Issues. It retrieves search results and page content in LLM-optimized Markdown format using specialized API handlers or a headless Chromium browser.</p>
     <ul class="summary-highlights">
-      <li>Returns full conversations, code snippets, and metadata in one call.</li>
-      <li>Integrates StackExchange, GitHub, arXiv, and Wikipedia APIs.</li>
-      <li>Uses a headless Chromium browser for real-time webpage parsing.</li>
+      <li>Integrates StackExchange, GitHub, arXiv, and Wikipedia APIs for structured retrieval.</li>
+      <li>Uses a headless browser to parse webpages into Markdown format.</li>
+      <li>Supports multiple search providers including Serper, Tavily, and SearXNG.</li>
     </ul>
   </div>
 </section>
@@ -763,8 +763,38 @@ Create <code>.vscode/mcp.json</code>:</p>
 <li><strong>Stdio / command-based clients</strong> (config uses <code>command</code> + <code>args</code> to spawn the server): the server must run on the same machine (or at least somewhere the client can run the command). You can still use Docker, but locally (the client launches <code>docker run ...</code>).</li>
 <li><strong>HTTP-capable clients</strong> (can connect to a server URL): you can run Kindly remotely in Docker using <strong>Streamable HTTP</strong>.</li>
 </ul>
+<h4>Prebuilt image (GHCR)</h4>
+<p>Pull the image instead of building it. It is published for Intel/AMD
+(<code>linux/amd64</code>) and ARM (<code>linux/arm64</code>) — so it runs on ordinary servers and PCs,
+on an Apple Silicon Mac, and on ARM cloud instances:</p>
+<pre><code class="language-bash"># Newest build of the default branch:
+docker pull ghcr.io/shelpuk-ai-technology-consulting/kindly-web-search-mcp-server:latest
+
+# Or one build that never changes, using its digest from the package page:
+docker pull ghcr.io/shelpuk-ai-technology-consulting/kindly-web-search-mcp-server@sha256:&lt;digest&gt;
+</code></pre>
+<blockquote>
+<p><strong>If <code>docker pull</code> says <code>denied</code> or <code>unauthorized</code></strong>, the package is still
+private. GitHub creates a new container package as private even under a public
+repository — a package inherits the repository's permissions but not its
+visibility, and there is no API for it. A maintainer has to open the package's
+<strong>Package settings</strong> once and set visibility to Public.</p>
+</blockquote>
+<p>Two tags track the newest build of the default branch and therefore <strong>move</strong>:
+<code>latest</code>, and the package version the image contains (the <code>version</code> in
+<code>pyproject.toml</code>). Pin the <code>@sha256:</code> digest when you need a build that never
+changes.</p>
+<p>Run it the same way as a locally built image — just use the full name:</p>
+<pre><code class="language-bash">docker run --rm -p 8000:8000 \
+  -e SERPER_API_KEY="..." \
+  -e GITHUB_TOKEN="..." \
+  ghcr.io/shelpuk-ai-technology-consulting/kindly-web-search-mcp-server \
+  --http --host 0.0.0.0 --port 8000
+</code></pre>
+<p>See the section below for the other environment variables and the allowlist
+caveats — they apply identically to the prebuilt image.</p>
 <h4>Docker (Streamable HTTP)</h4>
-<p>Build the image:</p>
+<p>Or build the image yourself:</p>
 <pre><code class="language-bash">docker build -t kindly-web-search-mcp-server .
 </code></pre>
 <p>Run the server (port <code>8000</code>):</p>
@@ -863,7 +893,10 @@ An unrecognised value logs a warning and falls back to stdio.</p>
 <p>Run with:</p>
 <pre><code class="language-bash">docker compose up -d
 </code></pre>
-<p>Container will be built at the first run. To rebuild it, append <code>--build</code> to the command above.</p>
+<p>Container will be built at the first run. To rebuild it, append <code>--build</code> to the command above.
+To use the prebuilt image instead of building, replace the <code>build:</code> and <code>context:</code> lines with:</p>
+<pre><code class="language-yaml">    image: ghcr.io/shelpuk-ai-technology-consulting/kindly-web-search-mcp-server:latest
+</code></pre>
 <blockquote>
 <p><strong>Warning:</strong> <code>ports: - "8000:8000"</code> publishes the server on <strong>all</strong> host interfaces. As with
 <code>docker run</code> above, remote HTTP here is <strong>unauthenticated</strong> and <strong>unencrypted</strong> — don’t expose
@@ -936,7 +969,7 @@ Compose network, or put a reverse proxy with TLS + auth in front.</p>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 515</div>
+        <div class="stars">★ 516</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
