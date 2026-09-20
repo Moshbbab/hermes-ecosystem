@@ -79,7 +79,7 @@ From that point on every tick is free: the scheduler runs the script, pipes its 
 
 ### What the agent decides for you
 
-When you phrase a request like "alert me when X" or "every N minutes check Y and tell me if Z", Hermes' `cronjob` tool description tells it to reach for `no_agent=True` whenever the message content is fully determined by the script. It falls back to the normal LLM-driven path when the request needs reasoning (_"summarize the new issues"_, _"pick the most interesting headlines"_, _"draft a friendly reminder"_).
+When you phrase a request like "alert me when X" or "every N minutes check Y and tell me if Z", Hermes' `cronjob_manage` tool description tells it to reach for `no_agent=True` whenever the message content is fully determined by the script. It falls back to the normal LLM-driven path when the request needs reasoning (_"summarize the new issues"_, _"pick the most interesting headlines"_, _"draft a friendly reminder"_).
 
 You don't have to specify `--no-agent` yourself. Just describe the behavior.
 
@@ -259,7 +259,7 @@ Your script on Hermes' schedule
 
 Recurring watchdogs / alerts / metrics that don't need reasoning
 
-`cronjob` (default, LLM)
+`cronjob_manage` (default, LLM)
 
 Agent with optional pre-check script
 

@@ -4,7 +4,7 @@
 
 This page documents Hermes' built-in tools, grouped by toolset. Availability varies by platform, credentials, and enabled toolsets.
 
-**Quick counts (current registry):** ~86 tools — 10 browser tools (core) + 2 CDP-gated browser tools, 4 file tools, 4 Home Assistant tools, 2 terminal tools (`terminal`, `process`), 12 desktop-GUI tools (`read_terminal`, `close_terminal`, `open_preview`, `close_preview`, `read_preview`, `drive_preview`, `annotate_preview`, `read_window_below`, `focus_pane`, `react_to_message`, `tour`, `tip` — desktop-app sessions only), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 12 kanban tools (registered when the kanban dispatcher spawns the agent), 3 project tools (desktop/GUI sessions), 2 Discord tools, 3 video tools (`video_generate`, `xai_video_edit`, `xai_video_extend`), and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `vision_analyze`, `video_analyze`, `todo`, `computer_use`, `x_search`).
+**Quick counts (current registry):** ~100 tools — 10 browser tools (core) + 2 CDP-gated browser tools + 5 browser-vault tools + `browser_exec`, 4 file tools, 4 Home Assistant tools, 2 terminal tools (`terminal`, `process_manage`), 11 desktop-GUI tools (`read_terminal`, `close_terminal`, `desktop_preview`, `drive_preview`, `annotate_preview`, `read_window_below`, `focus_pane`, `react_to_message`, `gui_tour`, `show_tip`, `apply_layout` — desktop-app sessions only), 2 web tools, 5 Feishu tools, 7 Spotify tools (registered by the bundled `spotify` plugin), 5 Yuanbao tools, 14 kanban tools (registered when the kanban dispatcher spawns the agent), 1 project tool (`desktop_project`; desktop/GUI sessions), 2 Discord tools, 3 video tools (`video_generate`, `xai_video_edit`, `xai_video_extend`), and a handful of standalone tools (`memory`, `clarify`, `delegate_task`, `execute_code`, `cronjob_manage`, `session_search`, `skill_view`/`skill_manage`/`skills_list`, `text_to_speech`, `image_generate`, `vision_analyze`, `video_analyze`, `todo_list`, `computer_use`, `x_search`).
 
 MCP Tools
 
@@ -166,7 +166,7 @@ Description
 
 Requires environment
 
-`cronjob`
+`cronjob_manage`
 
 Unified scheduled-task manager. Use `action="create"`, `"list"`, `"update"`, `"pause"`, `"resume"`, `"run"`, or `"remove"` to manage jobs. Supports skill-backed jobs with one or more attached skills, and `skills=[]` on update clears attached skills. Cron runs happen in fresh sessions with no current-chat context.
 
@@ -436,21 +436,9 @@ Description
 
 Requires environment
 
-`project_create`
+`desktop_project`
 
-Create a desktop Project (a named workspace) and switch this chat into it. Pass `path` to anchor it to a repo/folder.
-
-—
-
-`project_list`
-
-List the desktop Projects and which one is active.
-
-—
-
-`project_switch`
-
-Switch this chat into an existing Project (by name, slug, or id); moves the session workspace to the project's primary folder.
+One action enum for the three Project verbs: `create` makes a desktop Project (a named workspace) and switches this chat into it — pass `path` to anchor it to a repo/folder; `list` shows the desktop Projects and which one is active; `switch` moves this chat into an existing Project (by name, slug, or id), moving the session workspace to the project's primary folder.
 
 —
 
@@ -516,7 +504,7 @@ Description
 
 Requires environment
 
-`process`
+`process_manage`
 
 Manage background processes started with terminal(background=true). Actions: 'list' (show all), 'poll' (check status + new output), 'log' (full output with pagination), 'wait' (block until done or timeout), 'kill' (terminate), 'write' (sen…
 
@@ -546,25 +534,13 @@ Read what's currently shown in the in-app terminal pane of the Hermes desktop GU
 
 `close_terminal`
 
-Close the read-only terminal tab for a background process in the Hermes desktop GUI. Does NOT kill the process — only drops the tab/view; use process(action='kill') to stop it.
+Close the read-only terminal tab for a background process in the Hermes desktop GUI. Does NOT kill the process — only drops the tab/view; use process\_manage(action='kill') to stop it.
 
 —
 
-`open_preview`
+`desktop_preview`
 
-Open a web URL, localhost dev-server URL, or file path in the preview pane beside the chat in the Hermes desktop app.
-
-—
-
-`close_preview`
-
-Close the preview pane beside the chat, or one tab inside it. Omit `url` to close the whole pane; pass a URL or file path to close that tab.
-
-—
-
-`read_preview`
-
-Read what's currently shown in the preview pane of the Hermes desktop GUI — the in-app Browser's page text (URL + title + rendered text, pageable with `start`/`count`), or a file/artifact tab's identity.
+Drive the preview pane beside the chat in the Hermes desktop app: `open` a web URL, localhost dev-server URL, or file path (HTML renders live); `close` the whole pane (omit `url`) or one tab inside it (pass the URL or file path); `read` what the pane currently shows — the in-app Browser's page text (URL + title + rendered text, pageable with `start`/`count`) or a file/artifact tab's identity.
 
 —
 
@@ -598,21 +574,27 @@ React to a message with a single emoji, iMessage-tapback style. Opt-in via Setti
 
 —
 
-`tour`
+`gui_tour`
 
 Give a live guided tour: dim the screen, highlight an element, and attach a narrated popover (driver.js). Works on the Hermes app's own UI and on any page open in the preview pane; `targets` discovers what's on screen, `show` narrates step-by-step, `start` hands the user Next/Prev controls.
 
 —
 
-`tip`
+`show_tip`
 
-Point at one element with a small accent bubble and an arrow — the quiet sibling of `tour`, with no dimming, no spotlight, and no Next/Prev. Same `data-tour` handles and the same `tour(action='targets')` discovery call.
+Point at one element with a small accent bubble and an arrow — the quiet sibling of `gui_tour`, with no dimming, no spotlight, and no Next/Prev. Same `data-tour` handles and the same `tour(action='targets')` discovery call.
+
+—
+
+`apply_layout`
+
+Apply a saved layout preset to the Hermes desktop app when the user asks to rearrange the workspace. Built-ins: default (chat + sidebars), focus (chat only), terminal-deck, quad; plugin/user presets by id. To reveal ONE pane, use `focus_pane` instead.
 
 —
 
 ### Tours
 
-The `tour` tool discovers its own targets — call `action='targets'` and it returns every addressable element on screen with a selector, a label, and a `stable` flag. Stable selectors key off identity (`data-tour`, `id`, `data-testid`, `aria-label`) and survive a re-render; positional `nth-child` paths don't, so stable ones sort first and should be preferred.
+The `gui_tour` tool discovers its own targets — call `action='targets'` and it returns every addressable element on screen with a selector, a label, and a `stable` flag. Stable selectors key off identity (`data-tour`, `id`, `data-testid`, `aria-label`) and survive a re-render; positional `nth-child` paths don't, so stable ones sort first and should be preferred.
 
 To give an element a durable handle of your own, mark it up:
 
@@ -676,7 +658,7 @@ Pass `'preview'` as the second argument to run against the page in the preview p
 
 A tip is a tour step without the production: one bubble, one arrow, no scrim and nothing to page through. It's the right weight for a sentence that would be clearer with a finger on the thing it's about — "the model name is a button" — where dimming the whole app would not be.
 
-The `tip` tool takes the same selectors `tour(action='targets')` reports, so discovery is one call for both, and the durable `data-tour` handles above name targets for either. One tip is on screen at a time; a new one replaces the last.
+The `show_tip` tool takes the same selectors `gui_tour(action='targets')` reports, so discovery is one call for both, and the durable `data-tour` handles above name targets for either. One tip is on screen at a time; a new one replaces the last.
 
 The app can also show its own, walking a built-in catalog of app features in order, paced like a game's loading-screen tips rather than a notification: a few minutes into a launch at the earliest, then at most one every six hours, and only at a genuinely idle moment. A tip from Hermes shares that cooldown, so it also buys the user six hours of quiet from the rotation. The rotation is a single lap: each catalog tip shows once, whether it timed out or was closed with the ✕, and once every tip has had its turn the app goes quiet. The settings row starts the lap over.
 
@@ -690,7 +672,7 @@ Description
 
 Requires environment
 
-`todo`
+`todo_list`
 
 Manage your task list for the current session. Use for complex tasks with 3+ steps or when the user provides multiple tasks. Call with no parameters to read the current list. Items may nest: an item's optional `parent` field points at another item's id, making it a subtask — surfaces render the tree indented.
 

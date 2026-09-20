@@ -158,9 +158,9 @@ Run a prompt in a separate background session. The agent processes your prompt i
 
 Ask a quick side question **about the current conversation** without interrupting it. A one-shot auxiliary LLM call answers from a read-only snapshot of the transcript — the live session's history and prompt cache are untouched, and the current turn keeps running. For independent work with a fresh context, use `/bg`.
 
-`/branch [name]` (alias: `/fork`)
+`/branch [--here] [name]` (alias: `/fork`)
 
-Branch the current session (explore a different path). Classic CLI: refused mid-turn like `/handoff` — wait for the current response to finish, then retry.
+Branch the current session into an independent copy (explore a different path). On Discord, Telegram, Slack and Matrix the branch opens in a **new sibling thread** and the current chat stays on the original session; `--here` switches the current chat onto the branch instead (the pre-#66023 behaviour). The CLI and platforms without threads always branch in place. Classic CLI: refused mid-turn like `/handoff` — wait for the current response to finish, then retry.
 
 `/worktree [new [name]|list]`
 
@@ -672,9 +672,9 @@ Spawn an independent reviewer subagent for the work just discussed (PR, code, do
 
 Run one prompt through the default [Mixture of Agents](/docs/user-guide/features/mixture-of-agents) preset, then restore the session model.
 
-`/branch [name]` (alias: `/fork`)
+`/branch [--here] [name]` (alias: `/fork`)
 
-Branch the current session (explore a different path).
+Branch the current session. Thread-capable platforms (Discord, Telegram, Slack, Matrix) open the branch in a new sibling thread and keep this chat on the original; `--here` switches this chat onto the branch.
 
 `/agents` (alias: `/tasks`)
 

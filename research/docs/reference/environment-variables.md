@@ -1862,7 +1862,7 @@ Display name for the Matrix home room.
 
 `MATRIX_ALLOWED_ROOMS`
 
-Comma-separated Matrix room IDs allowed to trigger bot responses
+Comma-separated Matrix room IDs allowed to trigger bot responses. Does not apply to rooms auto-classified as DMs (any room with 2 or fewer joined members, regardless of name) — those always respond.
 
 `MATRIX_HOME_ROOM`
 
@@ -1886,11 +1886,11 @@ Enable processing-lifecycle emoji reactions on inbound messages (default: `true`
 
 `MATRIX_REQUIRE_MENTION`
 
-Require `@mention` in rooms (default: `true`). Set to `false` to respond to all messages.
+Require `@mention` in rooms (default: `true`). Set to `false` to respond to all messages. A room with 2 or fewer joined members is auto-classified as a DM and never requires a mention, regardless of this setting — add a third member if you need a deliberately-2-person room to behave like a regular room.
 
 `MATRIX_FREE_RESPONSE_ROOMS`
 
-Comma-separated room IDs where bot responds without `@mention`
+Comma-separated room IDs where bot responds without `@mention`. Rooms auto-classified as DMs (2 or fewer joined members) already respond without a mention and ignore this list.
 
 `MATRIX_IGNORE_USER_PATTERNS`
 
@@ -1910,7 +1910,7 @@ Allow outbound `@room` mentions to notify all room members (default: `false`)
 
 `MATRIX_AUTO_THREAD`
 
-Auto-create threads for room messages (default: `true`)
+Auto-create threads for room messages (default: `true`). Does not apply to rooms auto-classified as DMs (2 or fewer joined members) — those follow `MATRIX_DM_AUTO_THREAD` instead.
 
 `MATRIX_DM_AUTO_THREAD`
 
@@ -2041,6 +2041,10 @@ Access-token lifetime for the basic provider (default 12h). Overrides `dashboard
 `HERMES_DASHBOARD_OAUTH_CLIENT_ID`
 
 OAuth client id (`agent:{instance_id}`) for the gated/public dashboard, activating the Nous (`plugins/dashboard_auth/nous`) provider. Overrides `dashboard.oauth.client_id`. Provision it with `hermes dashboard register`.
+
+`HERMES_DASHBOARD_SESSION_TOKEN`
+
+Per-process session token for the dashboard's sensitive `/api` routes, minted by the launcher that spawns `hermes dashboard` (Desktop shell, link-style integrations). A value injected by the parent process is kept as-is: a `HERMES_DASHBOARD_SESSION_TOKEN` line in `~/.hermes/.env` does not replace it. Unset, the server mints a fresh token per start.
 
 `HERMES_DASHBOARD_PUBLIC_URL`
 

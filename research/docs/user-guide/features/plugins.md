@@ -310,6 +310,8 @@ The same pin is available in Hermes Desktop: **Skills → Plugins → Install fr
 
 The credential is sent as a one-shot HTTP header for that install or update; it is never written into the plugin's `.git/config` or the install metadata. SSH sources (`git@host:owner/repo.git`) authenticate through your ssh-agent as before. The same resolution applies to `hermes plugins update`, catalog MCP installs from git, and profile distributions fetched from a git URL.
 
+`hermes doctor` sends a configured `GITHUB_TOKEN`/`GH_TOKEN` to `api.github.com` (under **API Connectivity**) and, when GitHub rejects it, names the variable and the `.env` file that carries the expired token so you can remove or replace it.
+
 ### What the allow-list does NOT gate
 
 Several categories of plugin bypass `plugins.enabled` — they're part of Hermes' built-in surface and would break basic functionality if gated off by default:

@@ -20,7 +20,7 @@ Scheduler loop — due-job detection, execution, repeat tracking
 
 `tools/cronjob_tools.py`
 
-Model-facing `cronjob` tool registration and handler
+Model-facing `cronjob_manage` tool registration and handler
 
 `gateway/run.py`
 
@@ -64,7 +64,7 @@ Standard 5-field cron syntax (minute, hour, day, month, weekday)
 
 One-shot, fires at the exact time
 
-The model-facing surface is a single `cronjob` tool with action-style operations: `create`, `list`, `update`, `pause`, `resume`, `run`, `remove`.
+The model-facing surface is a single `cronjob_manage` tool with action-style operations: `create`, `list`, `update`, `pause`, `resume`, `run`, `remove`.
 
 ## Job Storage
 
@@ -100,7 +100,7 @@ Jobs are stored in `~/.hermes/cron/jobs.json` with atomic write semantics (write
 
 ### `last_status` literals
 
-`last_status` is a closed set written only by `cron.jobs.mark_job_run`. Every renderer (`hermes cron list`/`doctor`, the `cronjob` tool, the web dashboard badge, the Desktop routine inspector) maps each literal explicitly — a consumer must never test `== "ok"` for "the user got their result":
+`last_status` is a closed set written only by `cron.jobs.mark_job_run`. Every renderer (`hermes cron list`/`doctor`, the `cronjob_manage` tool, the web dashboard badge, the Desktop routine inspector) maps each literal explicitly — a consumer must never test `== "ok"` for "the user got their result":
 
 Literal
 

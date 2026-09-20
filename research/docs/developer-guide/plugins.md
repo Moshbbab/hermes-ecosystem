@@ -936,7 +936,7 @@ plugins:
 
 Without the grant, `ctx.register_tool(..., override=True)` raises `PluginToolOverrideError`; since `register()` exceptions are caught by the loader, the plugin is disabled and Hermes continues. The gate exists because an enabled plugin that silently replaces a privileged built-in like `shell_exec` or `write_file` could intercept everything the model routes through it. Bundled plugins are exempt: an override there is a maintainer decision. If config cannot be loaded, the gate fails closed.
 
-You normally never edit this key by hand. `hermes plugins enable <name>` asks whether to grant the capability when enabling a non-bundled plugin (defaulting to no), and the `--allow-tool-override` / `--no-allow-tool-override` flags skip the prompt for scripted installs. The same grant also gates `deregister()`: without it, a plugin cannot remove a tool it does not own (which would otherwise be a way around the override check).
+You normally never edit this key by hand. `hermes plugins enable <name>` asks whether to grant the capability only when the plugin's manifest declares it under `capabilities:` (the consent screen, defaulting to no); a plugin that declares no capabilities is enabled without any grant prompt. The `--allow-tool-override` / `--no-allow-tool-override` flags set or revoke the grant explicitly in either case, for scripted installs or for pre-authorizing a plugin that has not adopted the manifest block. The same grant also gates `deregister()`: without it, a plugin cannot remove a tool it does not own (which would otherwise be a way around the override check).
 
 ### Register multiple hooks
 
