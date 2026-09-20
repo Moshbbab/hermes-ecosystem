@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lethe044/hermes-incident-commander — Hermes Agent Domain Applications | Hermes Atlas</title>
-<meta name="description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a…">
+<meta name="description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates as a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Lethe044/hermes-incident-commander">
 <meta property="og:title" content="Lethe044/hermes-incident-commander — Hermes Atlas">
-<meta property="og:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a…">
+<meta property="og:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates as a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Lethe044/hermes-incident-commander">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Lethe044/hermes-incident-commander — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a…">
+<meta name="twitter:description" content="Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates as a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-incident-commander&amp;subtitle=Autonomous+SRE+agent+that+detects%2C+diagnoses%2C+and+self-heals+production+incidents+-+with+a+standalone+watchdog+that+needs+no+Hermes+install%2C+just+an+Anthropic+API+key.+Memory+%2B+Ski&amp;kind=project+%C2%B7+domain+applications">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander#software",
   "name": "hermes-incident-commander",
-  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or integrated with Hermes Agent to perform diagnostics, apply fixes, and generate post-incident reports.",
+  "description": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates as a standalone watchdog on Linux hosts using the Anthropic API to perform triage and suggest or apply fixes based on system metrics and logs.",
   "url": "https://hermesatlas.com/projects/Lethe044/hermes-incident-commander",
   "codeRepository": "https://github.com/Lethe044/hermes-incident-commander",
   "applicationCategory": "BusinessApplication",
@@ -47,7 +47,7 @@
     "name": "Lethe044",
     "url": "https://github.com/Lethe044"
   },
-  "dateModified": "2026-09-13T09:18:03.000Z",
+  "dateModified": "2026-09-19T22:08:24.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-13</span>
+    <span><span class="meta-label">updated</span>2026-09-19</span>
   </div>
 
   <div class="actions">
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates either as a standalone Linux watchdog using the Anthropic API or integrated with Hermes Agent to perform diagnostics, apply fixes, and generate post-incident reports.</p>
+    <p class="summary-text">Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates as a standalone watchdog on Linux hosts using the Anthropic API to perform triage and suggest or apply fixes based on system metrics and logs.</p>
     <ul class="summary-highlights">
-      <li>Detects and auto-remediates CPU, memory, disk, and service incidents.</li>
-      <li>Provides PagerDuty, Slack, Discord, and generic webhook notifications.</li>
+      <li>Detects incidents across CPU, memory, disk, and systemd units.</li>
+      <li>Provides automated remediation, flapping detection, and adaptive time-of-day thresholds.</li>
       <li>Includes an offline HTML dashboard and SQLite-based incident search.</li>
     </ul>
   </div>
@@ -168,6 +168,22 @@ no Hermes installation required.</p>
 <hr>
 <h3>What's New</h3>
 <ul>
+<li>🧹 <strong><code>incident_db.py --prune</code></strong> - removes incidents older than
+<code>--older-than-days</code> (report file, SQLite row, and <code>history.jsonl</code> line),
+dry-run by default, <code>--yes</code> to actually delete - keeps disk usage bounded
+on long-running installs.</li>
+<li>⏳ <strong>"Still ongoing" notification after quiet hours end</strong> - if a breach
+starts during a quiet-hours window and is still active once the window
+closes, the very next poll sends one notification noting how long it's
+been running, instead of staying silent until an unrelated later poll
+happens to notice.</li>
+<li>🧩 <strong>Configurable generic-webhook payload template</strong> - <code>GENERIC_WEBHOOK_TEMPLATE</code>
+lets the generic webhook match any target JSON shape (Discord embeds, a
+custom internal schema, ...) via <code>{source}</code>/<code>{title}</code>/<code>{message}</code>/<code>{severity}</code>
+placeholders, with no brace-escaping needed even for deeply nested JSON.</li>
+<li>⬇️ <strong>Download CSV button in the offline dashboard</strong> - exports exactly
+what's currently visible in the incidents table (respects an active
+search or category-chart filter), client-side, no server.</li>
 <li>🔕 <strong>Quiet hours / maintenance windows</strong> - configure recurring daily UTC
 windows (e.g. a known nightly batch job) during which breaches are still
 detected, reported, and indexed as normal, but the outbound notification
@@ -304,6 +320,7 @@ export DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/...
 export SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 export PAGERDUTY_ROUTING_KEY=...
 export GENERIC_WEBHOOK_URL=...        # any endpoint that accepts a JSON POST
+export GENERIC_WEBHOOK_TEMPLATE='{"text": {message}}'   # optional - match a specific target's schema
 
 # Single check - good for testing or a cron job
 python -m monitor.watchdog --once
@@ -329,6 +346,8 @@ python -m monitor.incident_db --sync
 python -m monitor.incident_db --search "nginx"
 python -m monitor.incident_db --search "nginx" --format json     # or --format csv
 python -m monitor.incident_db --stats                            # or --format json/csv
+python -m monitor.incident_db --prune --older-than-days 90       # dry run
+python -m monitor.incident_db --prune --older-than-days 90 --yes # actually remove
 
 # Check a config file for typos/invalid allow-list entries before using it
 python -m monitor.watchdog --config monitor/watchdog_config.yaml --validate-config
@@ -385,16 +404,22 @@ a recurring daily UTC time range (e.g. a known nightly batch job) set via
 <p>Breaches inside a quiet-hours window are still detected, written to the
 report, and indexed as normal - only the outbound notification is
 suppressed, which is different from <code>--dry-run</code> (which also skips
-auto-remediation and PagerDuty bookkeeping entirely).</p>
+auto-remediation and PagerDuty bookkeeping entirely). If a breach is still
+active once the window closes, the next poll sends one notification
+noting how long it's been running - "silent during quiet hours" doesn't
+mean "silent forever" if the problem outlasts the maintenance window.</p>
 <p>Every incident is also indexed by <code>monitor/incident_db.py</code> (SQLite, with a
 full-text search index when your Python's SQLite has FTS5 - falling back to
 a plain <code>LIKE</code> scan otherwise) so "have we seen this before?" works without
 a full Hermes install. <code>write_incident()</code> keeps it in sync automatically;
 <code>--sync</code>/<code>--search</code> are there for manual use or a cron job, <code>--format json</code>/<code>--format csv</code> let you pipe a search straight into another tool or a
-weekly incident-review report instead of only reading it on screen, and
+weekly incident-review report instead of only reading it on screen,
 <code>--stats</code> (also <code>--format json</code>/<code>--format csv</code>) prints a quick summary
 (totals, by severity/category, auto-remediation rate, last 7/30 days,
-busiest category).</p>
+busiest category), and <code>--prune --older-than-days N</code> (dry-run unless
+<code>--yes</code>) removes old incidents - their report file, SQLite row, and
+<code>history.jsonl</code> line - so a long-running install doesn't grow <code>INCIDENT_DIR</code>
+forever.</p>
 <p>Before trusting a new <code>watchdog_config.yaml</code>, run <code>--validate-config</code>: it
 flags unrecognized keys (a likely typo), thresholds outside 0-100,
 negative intervals, malformed <code>quiet_hours</code> windows, and allow-list entries
@@ -412,12 +437,15 @@ removes it again.</p>
 <p>This writes a single, self-contained HTML file (no server, no external
 requests) summarizing incident counts by severity and category (click a
 category bar to filter the table below to it), a 14-day incidents-per-day
-trend, auto-remediation rate, and a searchable recent-incidents table.</p>
+trend, auto-remediation rate, and a searchable recent-incidents table with
+a "Download CSV" button that exports exactly what's currently visible
+(respects an active search or category filter), client-side, no server
+round-trip.</p>
 <p align="center">
   <img src="https://raw.githubusercontent.com/Lethe044/hermes-incident-commander/main/docs/assets/dashboard-screenshot.png" alt="Hermes Incident Commander dashboard, rendered from monitor/dashboard.py with sample data, including the incidents-per-day trend chart" width="700">
 </p>
 
-<p align="center"><sub>Real output of <code>monitor/dashboard.py</code> - rendered from sample incident history (including the category breakdown, 14-day trend chart, search box, and a flapping badge), not a mockup.</sub></p>
+<p align="center"><sub>Real output of <code>monitor/dashboard.py</code> - rendered from sample incident history (including the category breakdown, 14-day trend chart, search box with CSV export, and a flapping badge), not a mockup.</sub></p>
 
 <p>If you already run Prometheus and Grafana, you can scrape the watchdog
 directly instead of (or alongside) the dashboard - <code>--metrics-port</code> starts a
@@ -538,7 +566,7 @@ building panels by hand.</p>
 
     SCRIPTS --&gt; INSTALL["🔧 install-watchdog.sh&lt;br/&gt;← one-command systemd install, dry-run by default"]
 
-    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 186 pytest cases"]
+    TESTS --&gt; TEST_PY["🐍 test_incident_env.py + test_monitor.py&lt;br/&gt;← 207 pytest cases"]
 
     DOCS --&gt; SETUP["📄 SETUP.md"]
     DOCS --&gt; WRITEUP["📄 WRITEUP.md"]
@@ -686,13 +714,14 @@ pip install pytest pytest-asyncio psutil
 # Fast sanity check, no dependencies beyond the stdlib + pyyaml
 python environments/incident_env.py --smoke-test
 
-# Run full test suite (186 tests: scenarios, reward function, skill file,
-# demo script, notifier incl. PagerDuty + retry/backoff + generic webhook,
-# watchdog dry-run/resolve wiring/--validate-config/notification
-# throttling/quiet hours, Prometheus exporter, incident search + stats
-# (SQLite/FTS + CSV/JSON export), adaptive baseline, flapping detection +
-# threshold suggestion, dashboard incl. search box + trend + clickable
-# category charts)
+# Run full test suite (207 tests: scenarios, reward function, skill file,
+# demo script, notifier incl. PagerDuty + retry/backoff + generic webhook
+# w/ custom templates, watchdog dry-run/resolve wiring/--validate-config/
+# notification throttling/quiet hours + still-ongoing notice, Prometheus
+# exporter, incident search + stats + prune (SQLite/FTS + CSV/JSON
+# export), adaptive baseline, flapping detection + threshold suggestion,
+# dashboard incl. search box + trend + clickable category charts + CSV
+# download)
 pytest tests/ -v
 
 # Run specific test classes
@@ -716,7 +745,7 @@ pytest tests/test_monitor.py::TestSafeRemediation -v
 </li>
 <li><p><strong>Works standalone, today, on a real host.</strong> <code>monitor/watchdog.py</code> doesn't need Hermes at all - just <code>ANTHROPIC_API_KEY</code> - and is built with an explicit, documented safety model instead of giving an LLM raw shell access to your production box.</p>
 </li>
-<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 186 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
+<li><p><strong>Ships with working code and CI.</strong> The demo runs standalone, 207 tests pass, GitHub Actions verifies every push, and the skill file installs in one command.</p>
 </li>
 </ol>
 <hr>
