@@ -818,6 +818,10 @@ SDK sampling rate 0.0–1.0 (default: `1.0`)
 
 Per-field truncation for serialized payloads (default: `12000`)
 
+`HERMES_LANGFUSE_MAX_DEPTH`
+
+Nesting depth kept in captured tool inputs/outputs before values become `<max-depth>` (default: `4`; invalid values warn and keep the default)
+
 `HERMES_LANGFUSE_DEBUG`
 
 `true` enables verbose plugin logging to `agent.log`
