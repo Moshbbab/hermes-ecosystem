@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>stepanov1975/hermes-local-knowledge — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Hermes Local Knowledge is a plugin for Hermes Agents that serves as an artifact router for local skills, documentation, scripts, and MCP servers. It provides…">
+<meta name="description" content="Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta property="og:description" content="Hermes Local Knowledge is a plugin for Hermes Agents that serves as an artifact router for local skills, documentation, scripts, and MCP servers. It provides…">
+<meta property="og:description" content="Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="stepanov1975/hermes-local-knowledge — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for Hermes Agents that serves as an artifact router for local skills, documentation, scripts, and MCP servers. It provides…">
+<meta name="twitter:description" content="Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-local-knowledge&amp;subtitle=Hermes+Agent+plugin+for+local+knowledge+search+and+artifact+routing%E2%80%94find+the+right+skill%2C+script%2C+runbook%2C+cron+job%2C+MCP+server%2C+or+document.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge#software",
   "name": "hermes-local-knowledge",
-  "description": "Hermes Local Knowledge is a plugin for Hermes Agents that serves as an artifact router for local skills, documentation, scripts, and MCP servers. It provides tools for searching and retrieving routing hints from a curated local index to help agents identify the correct source before performing actions.",
+  "description": "Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It provides tools for searching and retrieving specific local artifacts to help agents identify the correct source to inspect before taking action.",
   "url": "https://hermesatlas.com/projects/stepanov1975/hermes-local-knowledge",
   "codeRepository": "https://github.com/stepanov1975/hermes-local-knowledge",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "stepanov1975",
     "url": "https://github.com/stepanov1975"
   },
-  "dateModified": "2026-09-20T11:25:14.000Z",
+  "dateModified": "2026-09-20T15:25:02.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Local Knowledge is a plugin for Hermes Agents that serves as an artifact router for local skills, documentation, scripts, and MCP servers. It provides tools for searching and retrieving routing hints from a curated local index to help agents identify the correct source before performing actions.</p>
+    <p class="summary-text">Hermes Local Knowledge is a plugin for Hermes Agents that functions as an artifact router for local skills, documentation, scripts, and MCP servers. It provides tools for searching and retrieving specific local artifacts to help agents identify the correct source to inspect before taking action.</p>
     <ul class="summary-highlights">
-      <li>Indexes local skills, runbooks, scripts, and MCP server configurations.</li>
-      <li>Provides native tools for knowledge search, retrieval, and graph navigation.</li>
-      <li>Supports automatic generation of tool routing notes using model calls.</li>
+      <li>Routes queries to local skills, runbooks, scripts, and MCP servers.</li>
+      <li>Provides native tools for knowledge search, retrieval, and neighbor traversal.</li>
+      <li>Supports automatic generation of routing notes using model calls.</li>
     </ul>
   </div>
 </section>
@@ -231,7 +231,7 @@
 </tr>
 </tbody></table>
 <p>Native tool responses are intentionally model-facing and concise. Search, get, and neighbor calls return only routing metadata needed to choose or inspect the next artifact, plus actionable warnings or rebuild state when present. Internal trigger vocabularies, index/configuration diagnostics, hashes, counts, and local database paths remain available to the service, CLI doctor, and local telemetry but are not serialized into routine agent context. The usage-report tool similarly returns a compact improvement-oriented projection rather than the complete telemetry schema.</p>
-<p>The plugin also registers <code>pre_llm_call</code>, <code>post_tool_call</code>, <code>on_session_end</code>, and <code>on_session_finalize</code> hooks. When the configured source is available, Hermes hosts with cache-safe plugin prompt sections add one concise system-prompt hint for each new session: use <code>knowledge_search</code> before broad file search for local Hermes/homelab artifacts, then verify live state directly. Older hosts use the same hint through a deduplicated <code>pre_llm_call</code> compatibility fallback. In either case, <code>pre_llm_call</code> continues to bind optional same-turn implicit search-result feedback; the remaining lifecycle hooks support exact successful consumption through <code>knowledge_get</code>, <code>skill_view</code>, or <code>read_file</code> plus tool-OKF capture/generation while keeping correlation inside the plugin when Hermes dispatches local-knowledge tools through its deferred-tool bridge.</p>
+<p>The plugin registers <code>pre_llm_call</code>, <code>on_session_end</code>, and <code>on_session_finalize</code> hooks. On official Hermes v2026.9.14 and newer, public <code>tool_execution</code> middleware captures tool completions into a bounded plugin-owned serial observer while tools remain parallel. Older hosts retain a warned, best-effort <code>post_tool_call</code> fallback; the two transports are never registered together. See <a href="https://github.com/stepanov1975/hermes-local-knowledge/blob/main/docs/observer-transport.md">observer transport, lifecycle fences, privacy and loss limits</a>. When the configured source is available, Hermes hosts with cache-safe plugin prompt sections add one concise system-prompt hint for each new session: use <code>knowledge_search</code> before broad file search for local Hermes/homelab artifacts, then verify live state directly. Older hosts use the same hint through a deduplicated <code>pre_llm_call</code> compatibility fallback. In either case, <code>pre_llm_call</code> continues to bind optional same-turn implicit search-result feedback; the remaining lifecycle hooks support exact successful consumption through <code>knowledge_get</code>, <code>skill_view</code>, or <code>read_file</code> plus tool-OKF capture/generation while keeping correlation inside the plugin when Hermes dispatches local-knowledge tools through its deferred-tool bridge.</p>
 <p>Implicit feedback is enabled by default. It learns a local routing hint when the same artifact is consumed after distinct matching searches, with each supported consumer tied to that search's unassisted baseline in the same Hermes session, task, and turn:</p>
 <pre><code class="language-yaml">local_knowledge:
   implicit_feedback:
@@ -365,6 +365,11 @@ hermes plugins enable local_knowledge
 <td><code>[]</code>, merged with built-in exclusions</td>
 </tr>
 <tr>
+<td><code>index_max_age_seconds</code></td>
+<td>—</td>
+<td><code>3600</code>; <code>0</code> disables activity-driven age refresh</td>
+</tr>
+<tr>
 <td><code>okf.enabled</code></td>
 <td>flat <code>okf_enabled</code></td>
 <td><code>true</code></td>
@@ -431,7 +436,9 @@ hermes local-knowledge doctor --rebuild --query 'backup runbook'
 <p>The host also uses an internal bounded worker subcommand for automatic OKF generation.</p>
 <h4>Index freshness</h4>
 <p>Managed native lookups, and CLI <code>search</code>/<code>get</code>/<code>neighbors</code> with <code>--from-hermes-config</code> and no explicit <code>--db</code>, rebuild when the index is missing, corrupt, older than format 4, or marked dirty by completed OKF publication. A newer index format is rejected rather than overwritten.</p>
-<p>Ordinary source-file, cron-registry, or MCP-config changes are <strong>not</strong> detected automatically. After those changes, either:</p>
+<p>Ordinary source-file, cron-registry and MCP-config changes are picked up by <strong>opportunistic age refresh</strong>, enabled by default (<code>index_max_age_seconds: 3600</code>; <code>0</code> disables it; values clamp to 0–604800 seconds). Pre-LLM activity and managed lookups cheaply read successful-build metadata and schedule background maintenance when stale. No source scan or model call runs on the trigger path, and idle installations do no work. The initiating lookup can return the old valid index. This is not a fixed freshness deadline or a filesystem watcher.</p>
+<p>A daemon thread captures the resolved profile configuration, independently of the tool observer queue. One thread per process/index is admitted; both existing build locks serialize builders across processes, and freshness is checked again inside those locks. Healthy managed reads do not wait for build locks. During the JSONL-before-SQLite publication window, a busy compatibility gate plus full validation against the existing hash-matched rollback companion permits old-index reads; a busy gate alone never bypasses validation. Missing/corrupt/older-format and OKF-dirty repair remains synchronous. Failed builds retain the prior valid pair and write an error-class-only <code>index_refresh.json</code> receipt with a five-minute retry cooldown, shared across processes; doctor JSON exposes the receipt, and failures are logged. If launching or recording a receipt fails, logging and a process-local cooldown remain best-effort fallbacks. Existing atomic publication/recovery rules remain unchanged.</p>
+<p>Short-lived CLI processes or host shutdown may interrupt daemon maintenance: there is no exit drain or completion guarantee. Older hosts use the supported pre-LLM hook on a best-effort basis; managed lookups are an independent trigger. For immediate freshness, either:</p>
 <ul>
 <li>pass <code>rebuild=true</code> to <code>knowledge_search</code>, <code>knowledge_get</code>, or <code>knowledge_neighbors</code>; or</li>
 <li>run <code>python -m hermes_local_knowledge.cli build --from-hermes-config</code> (or <code>doctor --rebuild</code>).</li>
@@ -447,6 +454,7 @@ okfs/tools/*.md
 okf_worker.log
 index_build.lock
 index_build.sqlite
+index_refresh.json
 okf_index_dirty/
 </code></pre>
 <p><code>index_build.lock</code> is the regular-file compatibility gate shared with v0.3.12 builders. New builders hold it and the SQLite transaction lock in <code>index_build.sqlite</code> for collection, validation, and publication. SQLite metadata binds <code>index.sqlite</code> to the exact <code>index.jsonl</code> bytes: a caught publication failure restores the prior pair, and a crash-split pair is classified as corrupt and rebuilt by the next managed lookup. <code>okf_index_dirty/</code> contains tokens that make the next managed lookup rebuild; a successful build removes only the tokens it covered.</p>
@@ -454,8 +462,8 @@ okf_index_dirty/
 <h3>OKF lifecycle</h3>
 <p>Tool OKFs are compact routing notes for tools Hermes has actually used. They are hints, not authoritative tool documentation.</p>
 <ol>
-<li>When <code>okf.enabled</code> is true, <code>post_tool_call</code> records only a bounded structural projection: tool identity/toolset, a sanitized schema shape, argument shape, counters, and a redacted error class. It does not persist raw argument values, tool output, transcripts, emails, OCR text, private documents, schema descriptions/examples/defaults, or secret values.</li>
-<li>When <code>okf.auto_generate</code> is true, <code>on_session_finalize</code> performs a read-only, tightly bounded queue check and launches a detached worker only when work is available.</li>
+<li>When <code>okf.enabled</code> is true, the observer (or legacy <code>post_tool_call</code> fallback) records only a bounded structural projection: tool identity/toolset, a sanitized schema shape, argument shape, counters, and a redacted error class. It does not persist raw argument values, tool output, transcripts, emails, OCR text, private documents, schema descriptions/examples/defaults, or secret values.</li>
+<li>When <code>okf.auto_generate</code> is true, accepted <code>on_session_finalize</code> work follows already-admitted observations, performs a read-only, tightly bounded durable-queue check and launches a detached worker only when work is available. Legacy hosts run this check inline without an observer fence.</li>
 <li>The worker acquires one fixed lease of <code>max(300, 2 * max_generation_seconds + 120)</code> seconds and claims at most <code>max_candidates_per_session</code> rows. Lease and claim ownership are checked again before publication.</li>
 <li>If rows were claimed, the worker makes exactly one <code>ctx.llm.complete_structured</code> batch call with the privacy-safe routing projection and a bounded same-toolset related-tool allowlist. The model receives no terminal or file tools.</li>
 <li>Each result is identity-checked, rendered to a worker-unique temporary file, prevalidated, and published inside a short token/lease-fenced transaction. A stale worker cannot publish. Successful publication marks the managed index dirty.</li>
