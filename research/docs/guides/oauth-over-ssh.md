@@ -59,9 +59,9 @@ No — paste-the-code flow
 
 `openai-codex` (ChatGPT Plus/Pro)
 
-n/a
+n/a (default device code); `1455` with `--browser` / `auth.codex_login_flow: browser`
 
-No — device code flow
+Only for the opt-in browser PKCE flow, when Hermes is remote
 
 `minimax`, `nous-portal`
 
