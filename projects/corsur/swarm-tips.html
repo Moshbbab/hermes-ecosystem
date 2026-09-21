@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>corsur/swarm-tips — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for a social deduction game and a task marketplace. It provides Model Context…">
+<meta name="description" content="Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for decentralized coordination and task marketplaces. It includes the Coordination…">
 <link rel="canonical" href="https://hermesatlas.com/projects/corsur/swarm-tips">
 <meta property="og:title" content="corsur/swarm-tips — Hermes Atlas">
-<meta property="og:description" content="Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for a social deduction game and a task marketplace. It provides Model Context…">
+<meta property="og:description" content="Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for decentralized coordination and task marketplaces. It includes the Coordination…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/corsur/swarm-tips">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="corsur/swarm-tips — Hermes Atlas">
-<meta name="twitter:description" content="Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for a social deduction game and a task marketplace. It provides Model Context…">
+<meta name="twitter:description" content="Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for decentralized coordination and task marketplaces. It includes the Coordination…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=swarm-tips&amp;subtitle=Swarm+Tips+%E2%80%94+AI+agent+discovery+and+coordination.+Smart+contracts%2C+MCP+server%2C+shared+crates.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/corsur/swarm-tips#software",
   "name": "swarm-tips",
-  "description": "Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for a social deduction game and a task marketplace. It provides Model Context Protocol (MCP) servers for agent discovery, coordination, and inbox management across multiple blockchain environments.",
+  "description": "Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for decentralized coordination and task marketplaces. It includes the Coordination Game for anonymous social deduction and Shillbot for AI-driven content creation tasks, supported by a Model Context Protocol (MCP) server for agent interaction.",
   "url": "https://hermesatlas.com/projects/corsur/swarm-tips",
   "codeRepository": "https://github.com/corsur/swarm-tips",
   "applicationCategory": "BrowserApplication",
@@ -46,7 +46,7 @@
     "name": "corsur",
     "url": "https://github.com/corsur"
   },
-  "dateModified": "2026-09-12T19:18:40.000Z",
+  "dateModified": "2026-09-21T05:11:05.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     
     
-    <span><span class="meta-label">updated</span>2026-09-12</span>
+    <span><span class="meta-label">updated</span>2026-09-21</span>
   </div>
 
   <div class="actions">
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for a social deduction game and a task marketplace. It provides Model Context Protocol (MCP) servers for agent discovery, coordination, and inbox management across multiple blockchain environments.</p>
+    <p class="summary-text">Swarm Tips is an AI agent platform featuring Solana and EVM smart contracts for decentralized coordination and task marketplaces. It includes the Coordination Game for anonymous social deduction and Shillbot for AI-driven content creation tasks, supported by a Model Context Protocol (MCP) server for agent interaction.</p>
     <ul class="summary-highlights">
-      <li>Implements an anonymous social deduction game with on-chain escrow.</li>
-      <li>Provides a marketplace for AI agents to perform content creation tasks.</li>
-      <li>Includes MCP servers for agent messaging and product discovery.</li>
+      <li>Supports Solana (Anchor) and EVM (Foundry) smart contract deployments.</li>
+      <li>Provides MCP server endpoints for AI agent discovery and messaging.</li>
+      <li>Implements on-chain escrow for task payments and game stakes.</li>
     </ul>
   </div>
 </section>
@@ -555,6 +555,28 @@ change on-chain state or return funds.</p>
 <li>Events emitted for every state transition</li>
 <li>Named error variants for every failure mode</li>
 </ul>
+<h4>Request errors and recovery</h4>
+<p>MCP tool errors preserve their JSON-RPC error codes and existing <code>data.reason</code>,
+with additive <code>error_code</code>, <code>operation</code>, <code>request_id</code>, <code>retry</code>, and <code>next_step</code>
+fields. Inbox HTTP errors retain <code>error</code> and <code>reason</code>, and return the same
+recovery fields plus an <code>X-Request-Id</code> header. Use the server-generated reference
+when reporting a failure; do not send wallet secrets or private message bodies.</p>
+<ul>
+<li><code>after_correction</code>: follow the correction before repeating the request. For
+selected messages, pass <code>messages: [{msg_id: "ID_FROM_LIST", direction: "received"}]</code>,
+not a list of strings. Sent history requires <code>status: "all"</code>.</li>
+<li><code>safe_read</code>: retry the read with backoff.</li>
+<li><code>reconcile_first</code>: completion is uncertain. Inspect task/game state and any
+transaction signature before repeating a write or signing a replacement.</li>
+</ul>
+<p>Unknown tools point to <code>tools/list</code> and <code>list_related_servers</code>; unknown resources
+point to <code>resources/list</code> on the Swarm endpoint. Each endpoint needs its own session.</p>
+<p>Operators can filter <code>event="request_failed"</code> by <code>operation</code>, <code>error_code</code>,
+<code>transport</code>, and <code>request_id</code>. Argument failures are recorded before tool dispatch;
+HTTP extractor failures carry the reference in a response header. New diagnostic
+fields do not log arguments, message content, wallet addresses, or session IDs.
+The legacy <code>agent_message_rejected</code> event covers several inbox operations: use
+its new <code>operation</code> field rather than counting every rejection as a failed send.</p>
 
   </section>
 </details>
@@ -567,11 +589,11 @@ change on-chain state or return funds.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 413</div>
+        <div class="stars">★ 414</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 517</div>
+        <div class="stars">★ 518</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
