@@ -65,7 +65,7 @@ Prereqs
 
 **macOS**
 
-System Settings → Privacy & Security → **Accessibility** + **Screen Recording**. Grant the identity named by `hermes computer-use doctor`. Standard mode uses CuaDriver.app; bounded and unrestricted modes use the Hermes host identity.
+System Settings → Privacy & Security → **Accessibility** + **Screen Recording**. Grant the identity named by `hermes computer-use doctor` (CuaDriver, `com.trycua.driver`, in every permission mode — the driver daemon always launches through `CuaDriver.app`).
 
 **Windows**
 
@@ -134,7 +134,7 @@ computer_use:
   allow_unsigned_driver: true   # local driver development only
 ```
 
-Each MCP transport owns a private lifecycle session inside its runtime. A public session name is only a label for cursor identity and session-scoped state. It does not select, share, or keep a runtime alive. Turning `/yolo` off, resetting or closing the Hermes session, cancellation cleanup, or process exit closes that transport session. Hermes also stops private runtimes that it launched for bounded or unrestricted access. One Hermes conversation cannot change another runtime's mode or grants. Bounded and unrestricted modes use a private embedded service under the Hermes host identity.
+Each MCP transport owns a private lifecycle session inside its runtime. A public session name is only a label for cursor identity and session-scoped state. It does not select, share, or keep a runtime alive. Turning `/yolo` off, resetting or closing the Hermes session, cancellation cleanup, or process exit closes that transport session. Hermes also stops private runtimes that it launched for bounded or unrestricted access. One Hermes conversation cannot change another runtime's mode or grants. Bounded and unrestricted modes use a private embedded daemon, launched through `CuaDriver.app` on macOS (see above).
 
 `smart` approval remains `standard`: an LLM classification cannot stand in for a reviewed manifest.
 
@@ -462,6 +462,14 @@ Specific failure modes the doctor doesn't catch:
 **`computer_use backend unavailable: cua-driver is not installed`** — Run `hermes computer-use install` to fetch the cua-driver binary, or run `hermes tools` and enable the Computer Use toolset.
 
 **Clicks seem to have no effect** — Capture and verify. A modal you didn't see may be blocking input. Dismiss it with `escape` or the close button.
+
+**macOS: System Settings shows CuaDriver ON, but `hermes computer-use permissions status` / `doctor` report Accessibility or Screen Recording as not granted** — the stored grant is stale. macOS keys each permission row to the app's code-signing requirement; a row written for an earlier CuaDriver build stops matching after a driver update, and flipping the toggle does not rewrite it. Reset the affected rows and re-grant:
+
+```
+tccutil reset Accessibility com.trycua.driver
+tccutil reset ScreenCapture com.trycua.driver
+hermes computer-use permissions grant
+```
 
 **Element indices are stale** — SOM indices are only valid until the next `capture`. Re-capture after any state-changing action. The wrapper carries opaque `element_token`s for stale detection — you'll see an explicit error rather than a wrong click.
 

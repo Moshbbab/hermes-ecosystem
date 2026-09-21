@@ -76,7 +76,7 @@ Up to 6 images shown as a gallery on the plugin page, same host rule as `image` 
 
 `readme`
 
-`true` renders the repository README (the entry's `subdir` first, else the repo root) on the plugin page. It is fetched **from the pinned commit** at docs build time — never from a branch — so the page shows the README the reviewer read and changes only when the pin does. GitHub and GitLab repos (optional, default `false`)
+The plugin page renders the repository README (the entry's `subdir` first, else the repo root) by default. It is fetched **from the pinned commit** at docs build time — never from a branch — so the page shows the README the reviewer read and changes only when the pin does. Set `false` to hide it. GitHub and GitLab repos (optional, default `true`)
 
 ## Trust model
 
@@ -152,7 +152,7 @@ Submissions are pull requests that add one `plugin-catalog/<name>.yaml` file. Th
 4.  **Passing validation** — the catalog validation GitHub Action is green on the PR (schema, SHA format, reachability).
 5.  **Not self-updating** — the catalog build must not download and replace its own files; the pinned SHA is the only update path (a SHA-bump PR plus `hermes plugins update <name>`).
 
-Pin updates (bumping `sha` to a newer commit) follow the same PR + review process; bump `version` in the same PR so the label users see matches the code, and re-pin any `image` / `screenshots` URLs that embed the sha. Your plugin page (`/docs/plugins/<name>`) is built from the same file: add `screenshots:` and `readme: true` there to fill it out — there is no separate listing to maintain. Installed plugins compare their recorded sha against the live pin: `hermes plugins list --json` reports `update_available`, the Desktop Plugins tab shows an **Update to 1.4.0** button, and `hermes plugins update <name>` checks out exactly the new pin.
+Pin updates (bumping `sha` to a newer commit) follow the same PR + review process; bump `version` in the same PR so the label users see matches the code, and re-pin any `image` / `screenshots` URLs that embed the sha. Your plugin page (`/docs/plugins/<name>`) is built from the same file: add `screenshots:` there to fill it out (the README renders by default) — there is no separate listing to maintain. Installed plugins compare their recorded sha against the live pin: `hermes plugins list --json` reports `update_available`, the Desktop Plugins tab shows an **Update to 1.4.0** button, and `hermes plugins update <name>` checks out exactly the new pin.
 
 ## See also
 

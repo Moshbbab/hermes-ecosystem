@@ -193,7 +193,7 @@ Recurring jobs are **at-most-once per occurrence, and every occurrence is accoun
 5.  **Past grace → collapse the backlog, fire once** (`kind = catch_up`), or skip with a logged reason when the operator set `cron.catch_up_missed: false` (planned downtime). One-shots past their 120 s grace are retired with a diagnostic, never resurrected.
 6.  **Paused / disabled / terminal jobs never fire**; the due scan drops them before any of the above, and pause/resume clears any pending slot. A recurring occurrence that came due _while paused_ is not lost, though: `resume_job` keeps a past stored `next_run_at` as the due instant instead of re-anchoring from now (and logs that it did), so the first tick after resume applies rules 3–5 to it — one late/catch-up run, or a logged skip. One-shots and future instants recompute from now on resume.
 
-The same store fields drive every topology: a standalone `hermes -p X gateway run` and a profile served by the default multiplexer (`_start_multiplex` ticks each home under `_profile_cron_scope`) evaluate the identical record.
+The same store fields drive every topology: a standalone `hermes -p X gateway run` and a profile served by the host gateway (`_start_multiplex` ticks each home under `_profile_cron_scope`) evaluate the identical record. One gateway process per host ticks _every_ profile's store — `gateway.multiplex_profiles` gates adapters, not cron — and per-run bookkeeping (in-flight claims, the parallel worker pool, the stale-code yield decision) is keyed by profile home, so two profiles may carry identically named jobs without colliding. A profile that runs its own gateway is skipped per tick, so the two processes never race its store and its deliveries always leave through its own live adapters.
 
 **Fire-claim lease during a run.** A firing run holds `fire_claim = {at, by}` and a heartbeat thread refreshes `at` every 60 s (the lease is 300 s). A heartbeat sample that reads the claim as someone else's is re-sampled once before it counts: only a confirmed loss cancels the in-flight run. Even then the run's outcome is decided against the store at completion, not against that latch — a claim the store still validates records the run's real result (`ok`, or the real error), while a genuinely re-owned claim discards the stale result and never writes over the new owner. `Interrupted by shutdown before terminal completion.` is therefore recorded only when a real transport cancel (gateway drain) stops a run that still holds its claim.
 
@@ -474,6 +474,10 @@ Cron-run sessions have the `cronjob` toolset disabled. This prevents:
 ## Locking
 
 The scheduler uses cross-process file-based locking (`fcntl.flock` on Unix, `msvcrt.locking` on Windows) to prevent overlapping ticks from executing the same due-job batch twice — even between the gateway's in-process ticker and a standalone `hermes cron` / manual `tick()` call. If the lock cannot be acquired, `tick()` returns 0 immediately.
+
+### Stale-code yield
+
+Before the tick lock, a gateway whose checkout was updated under it (boot revision ≠ disk revision) yields the tick when another process holds the gateway runtime lock — a fresher gateway's ticker dispatches instead, and the stale one must not race it with mixed `sys.modules`. The yield is raised (`CronTickYielded`) and persisted as the ticker's last error, so `hermes cron status` reports **"Gateway is running STALE code — its cron ticker yields every tick and fires NOTHING"** with both revisions and the restart command, even though the liveness heartbeat keeps refreshing. `hermes update` closes the loop: a gateway the post-update fleet version matrix proves stale is handed to the drain-first `request_restart` path (SIGUSR1) instead of being left running; a supervised gateway respawns on the new code, a bare `gateway run` is stopped and listed under "Restart manually".
 
 ## CLI Interface
 
