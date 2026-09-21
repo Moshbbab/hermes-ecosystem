@@ -245,11 +245,11 @@ Interrupt agent (double-press within 2s to force exit)
 
 `Ctrl+T` / `F6`
 
-Open the full-screen live subagent monitor without losing the composer draft. The live dock appears automatically above the status bar; arrows select a worker, `Enter` shows its recent log, `s` steers, and `x` requests stop with confirmation. See [Monitoring subagents](/docs/user-guide/features/delegation#monitoring-running-subagents-agents).
+Open the full-screen live work monitor (subagents and background processes) without losing the composer draft. The live dock appears automatically above the status bar; arrows select a worker or process, `Enter` shows its recent log, `s` steers a worker, and `x` requests stop with confirmation. See [Monitoring subagents](/docs/user-guide/features/delegation#monitoring-running-subagents-agents).
 
 `F7`
 
-Toggle the live subagent dock between its multi-row preview and a single summary line without moving composer focus.
+Toggle the live work dock (subagents + background processes) between its multi-row preview and a single summary line without moving composer focus.
 
 `Ctrl+D`
 

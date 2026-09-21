@@ -170,6 +170,8 @@ Useful flags:
 
 The check matrix is platform-aware: `bundle_identity` / `tcc_*` are `skip` on Windows + Linux because those concepts don't apply. `ax_capability` checks AX on macOS, UIA on Windows, AT-SPI on Linux — each with the right diagnostic hint when it can't reach.
 
+On Linux, where the daemon is a hand-written systemd user unit or XDG autostart entry rather than a managed autostart, doctor also reads those units: a `cua-driver` `ExecStart` pointing at a pruned `packages/releases/<version>/` directory is reported as a failing `daemon unit (...)` check (point it at `~/.cua-driver/packages/current/cua-driver`), and a unit that runs `cua-driver serve` gets a `daemon (...)` check that connects to its socket — `fail` when nothing is listening (crash loop, stopped, never started), `pass` when the daemon answers. Reinstalling the driver does not start a daemon; `systemctl --user status <unit>` does. `hermes computer-use status` prints the same dead-daemon line and exits 1.
+
 ## The agent cursor and sessions
 
 When the agent acts, you'll see a **tinted overlay cursor** glide across the screen to where each click / type / scroll lands. The real OS cursor never moves. The overlay shows where the agent is acting. Each Hermes run declares a public cua-driver **session name** (something like `hermes-3a7b9c14d2e8`). The name labels cursor identity and related state, so concurrent runs and subagents get distinct cursors. The MCP transport owns the private lifecycle session inside the runtime; the public name does not.

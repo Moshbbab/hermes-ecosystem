@@ -2094,6 +2094,10 @@ Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g
 
 Overrides the Chrome DevTools Protocol port the renderer exposes on `127.0.0.1` for DOM/CSS inspection tooling (default `9222`). Dev-server runs (`npm run dev`, `hgui`) open it automatically; a packaged app never does, and no value here changes that. Set to `off` to disable it on a dev run. Anything that can reach the port can execute code in the renderer.
 
+`HTTPS_PROXY` / `HTTP_PROXY` / `NO_PROXY`
+
+(Desktop side) The in-app update check (`Help → Check for Updates…` and the passive update banner) reaches `api.github.com` through the proxy these standard variables name, with `NO_PROXY` exemptions honoured — the same convention `curl`, `npm` and `git` follow. Unset, the check connects directly.
+
 ### Microsoft Graph (Teams Meetings)
 
 App-only credentials for the Microsoft Graph REST client used by the upcoming Teams meeting summary pipeline. See [Register a Microsoft Graph application](/docs/guides/microsoft-graph-app-registration) for the Azure portal walkthrough and the exact API permissions required.
@@ -2784,17 +2788,9 @@ Unsupported since the config-v12 support floor — the variable is ignored. Use 
 
 Deprecated compatibility variable for tool progress mode (still read by the gateway as a fallback). Prefer `display.tool_progress` in `config.yaml`.
 
-`HERMES_HUMAN_DELAY_MODE`
+`HERMES_HUMAN_DELAY_MODE` / `HERMES_HUMAN_DELAY_MIN_MS` / `HERMES_HUMAN_DELAY_MAX_MS`
 
-Response pacing: `off`/`natural`/`custom`
-
-`HERMES_HUMAN_DELAY_MIN_MS`
-
-Custom delay range minimum (ms)
-
-`HERMES_HUMAN_DELAY_MAX_MS`
-
-Custom delay range maximum (ms)
+No longer read. Response pacing is the `human_delay` section of each profile's `config.yaml` (`mode`, `min_ms`, `max_ms`), so multiplexed profiles keep independent pacing.
 
 `HERMES_QUIET`
 

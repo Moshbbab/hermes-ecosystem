@@ -567,6 +567,8 @@ Import the app's real components directly so your UI is native by default:
 
 > `Button`, `Input`, `Textarea`, `Select*`, `Switch`, `Checkbox`, `SegmentedControl`, `Tabs*`, `Dialog*`, `ConfirmDialog`, `DropdownMenu*`, `ContextMenu*`, `Popover*`, `Tip`/`Tooltip*`, `Badge`, `Kbd`/`KbdGroup`, `SearchField`, `ScrollArea`, `Separator`, `Skeleton`, `GlyphSpinner`, `Loader`, `EmptyState`, `ErrorState`, `CopyButton`, `StatusDot`, `LogView`, `Codicon`, `DecodeText`.
 
+`DecodeText`'s `loop` is opt-in as of this change — it decodes once and holds by default, so pass `loop` explicitly on progress surfaces that should keep scrambling.
+
 Plus helpers: `cn` (class merge), `icons.*` (the app's lucide set), `haptic`, `profileColor` / `profileColorSoft` (deterministic identity colors), the time formatters `relativeTime` / `fmtDateTime` / `fmtDayTime` / `coarseElapsed`, `useI18n` (localized copy — your plugin stays translatable), and `evaluateRuntimeReadiness`.
 
 **Style with theme variables, never hardcoded colors.** Panes already sit on the app's editor background — leave the background alone and use vars for everything else: `var(--ui-text-secondary)`, `var(--ui-text-tertiary)`, `var(--ui-text-quaternary)`, `var(--ui-stroke-secondary)`, `var(--ui-accent)`. For canvas drawing, resolve them once with `getComputedStyle(canvas).getPropertyValue('--ui-accent')`. This is what makes a plugin reskin automatically with every theme.
