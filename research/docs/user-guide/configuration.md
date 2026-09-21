@@ -88,8 +88,8 @@ database:
   # live-downgraded — Hermes keeps WAL and logs an error telling you the
   # configured delete did not apply (or that the WAL database sits on a
   # cross-VM mount). To convert an existing database, stop
-  # every process using it and run a one-time offline
-  # `PRAGMA journal_mode=DELETE` on the file.
+  # every process using it and run
+  # `hermes sessions set-journal-mode delete` (see Sessions).
   journal_mode: wal
 
   # Durability level for every state.db connection: OFF, NORMAL, FULL,
@@ -104,7 +104,7 @@ database:
   # journal_size_limit: 67108864 # cap the WAL/journal size in bytes
 ```
 
-Hermes also warns (once per process per database) when an existing database's on-disk journal mode is silently flipped to WAL on open — for example a database an operator had manually converted to `delete` — and names `database.journal_mode` as the setting that makes the choice stick. The reverse never happens automatically: a database that is already in WAL mode is not live-downgraded when you set `journal_mode: delete` (a downgrade under open connections can corrupt it). `hermes doctor` warns `<db> is in WAL mode despite database.journal_mode=delete` until you stop every Hermes process for the profile and run a one-time offline `PRAGMA journal_mode=DELETE` on the file. Under that warning it names the processes currently holding the database (`<db> is held by PID <n> (<command>)`) so you know what to stop; when the holder scan is partial or unavailable it says `cannot prove the database is quiet` instead of giving an all-clear.
+Hermes also warns (once per process per database) when an existing database's on-disk journal mode is silently flipped to WAL on open — for example a database an operator had manually converted to `delete` — and names `database.journal_mode` as the setting that makes the choice stick. The reverse never happens automatically: a database that is already in WAL mode is not live-downgraded when you set `journal_mode: delete` (a downgrade under open connections can corrupt it). `hermes doctor` warns `<db> is in WAL mode despite database.journal_mode=delete` until you stop every Hermes process for the profile and run `hermes sessions set-journal-mode delete` (it refuses while anything still holds the file and verifies the converted header). Under that warning it names the processes currently holding the database (`<db> is held by PID <n> (<command>)`) so you know what to stop; when the holder scan is partial or unavailable it says `cannot prove the database is quiet` instead of giving an all-clear.
 
 ## Environment Variable Substitution
 
