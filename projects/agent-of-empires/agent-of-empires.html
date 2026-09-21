@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>agent-of-empires/agent-of-empires — Hermes Agent Multi-Agent &amp; Orchestration | Hermes Atlas</title>
-<meta name="description" content="Agent of Empires is a session manager for AI coding agents on Linux and macOS that provides TUI, web, and CLI interfaces. It uses tmux to maintain persistent…">
+<meta name="description" content="Agent of Empires is a session manager for AI coding agents on Linux and macOS that utilizes tmux to maintain persistent background processes. It provides TUI,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/agent-of-empires/agent-of-empires">
 <meta property="og:title" content="agent-of-empires/agent-of-empires — Hermes Atlas">
-<meta property="og:description" content="Agent of Empires is a session manager for AI coding agents on Linux and macOS that provides TUI, web, and CLI interfaces. It uses tmux to maintain persistent…">
+<meta property="og:description" content="Agent of Empires is a session manager for AI coding agents on Linux and macOS that utilizes tmux to maintain persistent background processes. It provides TUI,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/agent-of-empires/agent-of-empires">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="agent-of-empires/agent-of-empires — Hermes Atlas">
-<meta name="twitter:description" content="Agent of Empires is a session manager for AI coding agents on Linux and macOS that provides TUI, web, and CLI interfaces. It uses tmux to maintain persistent…">
+<meta name="twitter:description" content="Agent of Empires is a session manager for AI coding agents on Linux and macOS that utilizes tmux to maintain persistent background processes. It provides TUI,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=agent-of-empires&amp;subtitle=Manage+multiple+Claude+Code%2C+OpenCode+agents+from+either+TUI+or+Web+for+easy+access+on+mobile.+Also+supports+Mistral+Vibe%2C+Codex+CLI%2C+Gemini+CLI%2C+Pi.dev%2C+Copilot+CLI%2C+Factory+Droid&amp;kind=project+%C2%B7+multi-agent">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/agent-of-empires/agent-of-empires#software",
   "name": "agent-of-empires",
-  "description": "Agent of Empires is a session manager for AI coding agents on Linux and macOS that provides TUI, web, and CLI interfaces. It uses tmux to maintain persistent background sessions, allowing agents to run in parallel across branches with optional sandboxing via Docker, Podman, or Apple Containers.",
+  "description": "Agent of Empires is a session manager for AI coding agents on Linux and macOS that utilizes tmux to maintain persistent background processes. It provides TUI, web, CLI, and HTTP API interfaces for monitoring agents running in parallel across git worktrees and isolated containers.",
   "url": "https://hermesatlas.com/projects/agent-of-empires/agent-of-empires",
   "codeRepository": "https://github.com/agent-of-empires/agent-of-empires",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "agent-of-empires",
     "url": "https://github.com/agent-of-empires"
   },
-  "dateModified": "2026-09-21T14:21:24.000Z",
+  "dateModified": "2026-09-21T20:39:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 3277
+    "userInteractionCount": 3281
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">252·repos</span>
-    <span id="meta-version">hermes·v0.21.3</span>
+    <span id="meta-version">hermes·v0.21.4</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Agent of Empires is a session manager for AI coding agents on Linux and macOS that provides TUI, web, and CLI interfaces. It uses tmux to maintain persistent background sessions, allowing agents to run in parallel across branches with optional sandboxing via Docker, Podman, or Apple Containers.</p>
+    <p class="summary-text">Agent of Empires is a session manager for AI coding agents on Linux and macOS that utilizes tmux to maintain persistent background processes. It provides TUI, web, CLI, and HTTP API interfaces for monitoring agents running in parallel across git worktrees and isolated containers.</p>
     <ul class="summary-highlights">
-      <li>Supports persistent sessions via tmux for background agent execution.</li>
-      <li>Provides TUI, web dashboard, and HTTP API control surfaces.</li>
-      <li>Includes Git worktree management and container-based isolation.</li>
+      <li>Maintains persistent agent sessions using tmux for background execution.</li>
+      <li>Supports sandboxing via Docker, Podman, and Apple Containers.</li>
+      <li>Provides TUI and web-based dashboards with diff review capabilities.</li>
     </ul>
   </div>
 </section>
@@ -215,8 +215,7 @@ one in a persistent session with optional worktree and container isolation.</p>
 <p>Want merch? Visit the <a href="https://brake.printful.me/">store</a>.</p>
 </blockquote>
 <h3>How It Works</h3>
-<p>Each agent runs in its own <a href="https://github.com/tmux/tmux/wiki">tmux</a> session, so your agents keep running when you close the TUI, disconnect SSH, or your terminal crashes. Reopen <code>aoe</code> and everything is exactly where you left it.</p>
-<p>The key tmux shortcut to know: <strong><code>Ctrl+b d</code></strong> detaches from a session and returns to the TUI.</p>
+<p>Each agent runs in its own <a href="https://github.com/tmux/tmux/wiki">tmux</a> session, so your agents keep running when you close the TUI, disconnect SSH, or your terminal crashes. Reopen <code>aoe</code> and everything is where you left it. The key shortcut to know: <strong><code>Ctrl+b d</code></strong> detaches from a session and returns to the TUI.</p>
 <h3>Installation</h3>
 <p><strong>Prerequisites:</strong> <a href="https://github.com/tmux/tmux/wiki">tmux</a> (required), <a href="https://www.docker.com/">Docker</a> (optional, for sandboxing)</p>
 <pre><code class="language-bash"># Quick install (Linux &amp; macOS)
@@ -239,7 +238,7 @@ cd agent-of-empires &amp;&amp; cargo build --release
 aoe add --cmd claude         # Create a session running Claude Code
 aoe serve                    # Start the web dashboard
 </code></pre>
-<p>In the TUI, press <code>?</code> for help. The bottom information bar shows all available keybindings in context.</p>
+<p>In the TUI, press <code>?</code> for help. The bottom information bar shows the keybindings available in context.</p>
 <h3>Documentation</h3>
 <ul>
 <li><a href="https://www.agent-of-empires.com/docs/installation/">Installation</a> and
@@ -247,29 +246,17 @@ aoe serve                    # Start the web dashboard
 <li><a href="https://www.agent-of-empires.com/guides/">Guides</a></li>
 <li><a href="https://www.agent-of-empires.com/docs/cli/reference/">CLI</a> and
 <a href="https://www.agent-of-empires.com/docs/api/">HTTP API</a> references</li>
-<li><a href="https://www.agent-of-empires.com/docs/development/">Development</a></li>
+<li><a href="https://www.agent-of-empires.com/docs/development/">Development</a> and
+<a href="https://github.com/agent-of-empires/agent-of-empires/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a></li>
 </ul>
 <h3>Roadmap</h3>
 <p>The AoE roadmap is public: see the <a href="https://github.com/orgs/agent-of-empires/projects/1">project board</a> for what's planned, in progress, and recently shipped. Issues and PRs welcome.</p>
 <h3>FAQ</h3>
-<h4>What happens when I close aoe?</h4>
-<p>Nothing. Sessions are tmux sessions running in the background. Open and close <code>aoe</code> as often as you like. Sessions only get removed when you explicitly delete them.</p>
-<h4>Which AI tools are supported?</h4>
-<p>Run <code>aoe agents</code> for the current list and availability on your machine.</p>
-<h4>Can I use AoE over SSH?</h4>
-<p>Yes. Sessions persist across disconnects; reconnect and run <code>aoe</code> again.</p>
-<h4>Does it work on Windows?</h4>
-<p>Only through WSL2. AoE depends on tmux and POSIX process handling, so native Windows is not supported.</p>
-<h4>How is this different from just using tmux directly?</h4>
-<p>tmux gives you persistent sessions. AoE adds agent-aware status detection (running, waiting, idle, error), git worktree management, Docker sandboxing, a web dashboard, remote phone access, and a diff viewer, all wrapped around your existing tmux workflow. You can still <code>tmux attach</code> to any AoE session directly.</p>
-<h3>Development</h3>
-<pre><code class="language-bash">cargo build
-cargo test
-cargo fmt
-cargo clippy
-cargo build --features web
-</code></pre>
-<p>See <a href="https://github.com/agent-of-empires/agent-of-empires/blob/main/docs/development.md">Development</a> for the full reference.</p>
+<p><strong>What happens when I close aoe?</strong> Nothing. Sessions are tmux sessions running in the background; they are removed only when you delete them.</p>
+<p><strong>Which AI tools are supported?</strong> Run <code>aoe agents</code> for the current list and availability on your machine.</p>
+<p><strong>Can I use AoE over SSH?</strong> Yes. Sessions persist across disconnects; reconnect and run <code>aoe</code> again.</p>
+<p><strong>Does it work on Windows?</strong> Only through WSL2. AoE depends on tmux and POSIX process handling.</p>
+<p><strong>How is this different from plain tmux?</strong> tmux gives you persistent sessions. AoE adds agent-aware status detection, git worktree management, container sandboxing, a web dashboard with phone access, and a diff viewer around them. You can still <code>tmux attach</code> to any AoE session directly.</p>
 <h3>Acknowledgments</h3>
 <p>Inspired by <a href="https://github.com/asheshgoplani/agent-deck">agent-deck</a> (Go + Bubble Tea).</p>
 <h3>Maintainers</h3>
@@ -292,11 +279,11 @@ cargo build --features web
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/builderz-labs/mission-control">
-        <div class="stars">★ 6.2K</div>
+        <div class="stars">★ 6.3K</div>
         <div class="name"><span class="org">builderz-labs /</span> mission-control</div>
       </a>
       <a class="related-row" href="/projects/swarmclawai/swarmclaw">
-        <div class="stars">★ 679</div>
+        <div class="stars">★ 680</div>
         <div class="name"><span class="org">swarmclawai /</span> swarmclaw</div>
       </a>
       <a class="related-row" href="/projects/howdymary/hermes-agent-metaharness">

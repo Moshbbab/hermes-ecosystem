@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a portable memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis.…">
+<meta name="description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a portable memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis.…">
+<meta property="og:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a portable memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis.…">
+<meta name="twitter:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a portable memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It functions as a background daemon to ingest and consolidate data from meetings, emails, and other sources into a self-wiring knowledge graph.",
+  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer for generating cited prose and a self-wiring knowledge graph that extracts entity relationships without LLM calls.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-20T21:23:37.000Z",
+  "dateModified": "2026-09-21T21:53:23.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30205
+    "userInteractionCount": 30209
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">252·repos</span>
-    <span id="meta-version">hermes·v0.21.3</span>
+    <span id="meta-version">hermes·v0.21.4</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-20</span>
+    <span><span class="meta-label">updated</span>2026-09-21</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a portable memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It functions as a background daemon to ingest and consolidate data from meetings, emails, and other sources into a self-wiring knowledge graph.</p>
+    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer for generating cited prose and a self-wiring knowledge graph that extracts entity relationships without LLM calls.</p>
     <ul class="summary-highlights">
-      <li>Provides synthesized answers with citations and gap analysis.</li>
-      <li>Creates a knowledge graph with typed edges without LLM calls.</li>
-      <li>Supports multi-user company setups with scoped data access.</li>
+      <li>Supports keyword retrieval, semantic search, and automated background enrichment.</li>
+      <li>Exposes memory to agents via MCP on Tailscale tailnets.</li>
+      <li>Provides scoped access for team-based institutional memory.</li>
     </ul>
   </div>
 </section>
@@ -158,6 +158,7 @@
 <h3>Choose your setup</h3>
 <ol>
 <li><strong>Add GBrain to my existing agent — recommended.</strong> Keep your agent's identity and save memory inside its environment. No new personal-agent identity or private repository is required. Start with the guide for <strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/grok-bot.md">Grok Bot</a></strong>, <strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/muse.md">Muse</a></strong>, or <strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/tutorials/connect-coding-agent.md">Codex / Claude Code</a></strong>. <a href="#connect-gbrain-to-your-ai-client-mcp">Other harnesses</a>.</li>
+<li><strong>Use the brain on my own computer from everywhere.</strong> One command publishes it over MCP on your Tailscale tailnet and keeps it running: <code>gbrain mcp expose</code> (add <code>--funnel</code> for cloud agents such as Grok Bot, Muse and ChatGPT). Follow <strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/remote-mcp.md">use your brain from anywhere over MCP</a></strong>. <strong>Say to your agent:</strong> <em>"use my brain over mcp"</em> — <em>"put my brain on tailscale"</em>.</li>
 <li><strong>Connect my existing hosted brain.</strong> Grant access on the brain host, then install the private connection inside the intended harness. Follow <strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/hosted-harness-access.md">hosted harness access</a></strong>. The default profile can read and write memory; delegation is an explicit choice.</li>
 </ol>
 <p>Grok <strong>Bot</strong> and Grok <strong>Build</strong> are different products. Muse's personal agent and <strong>Muse Code</strong> are different products too. Muse already has native editable memory; GBrain adds an explicit, portable record with provenance and shared access. See each guide's dated evidence and remaining verification steps.</p>
@@ -311,8 +312,8 @@ commands, embedding costs, and the restrictions that remain after rebuilding.
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CODEX.md">Codex</a></strong> — plugin (recommended): <code>codex plugin marketplace add garrytan/gbrain@codex-plugin</code> + <code>codex plugin add gbrain@gbrain</code> installs the MCP server AND the curated skill set. Or connect-only: <code>gbrain connect https://your-host/mcp --token gbrain_xxx --agent codex</code> (or <code>--install</code>); That legacy path reads <code>$GBRAIN_REMOTE_TOKEN</code> at runtime. The new private-handoff installer writes a private managed HTTP header so the connection survives a new shell.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/CLAUDE_CODE.md">Cursor / Windsurf / any stdio MCP client</a></strong> — same shape, add <code>{"command": "gbrain", "args": ["serve"]}</code> to your MCP config.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/HERMES.md">Hermes</a></strong> — <code>printf 'Y\n' | hermes mcp add gbrain --env GBRAIN_HOME=$HOME --connect-timeout 60 --command $(which gbrain) --args serve</code>. Keep <code>--args</code> last, and verify with <code>hermes mcp test gbrain</code> (the add exits 0 even on failure).</li>
-<li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/grok-bot.md">Grok Bot</a></strong> — install memory inside the Bot computer at <code>/workspace/gbrain</code>, or connect a hosted brain through an isolated CLI. Bots share local files and credentials; sources organize memory without isolating Bots.</li>
-<li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/muse.md">Muse personal agent</a></strong> — first verify its durable user-files location, then install the local CLI. Native MCP configuration and skill activation are not assumed.</li>
+<li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/grok-bot.md">Grok Bot</a></strong> — recommended: keep the brain on your computer, publish it with <code>gbrain mcp expose --funnel</code>, grant the Bot a <code>memory-writer</code> client and install the thin CLI at <code>/workspace/gbrain</code>; or install memory inside the Bot computer when no machine of yours stays online. Bots share local files and credentials; sources organize memory without isolating Bots. <strong>Say to your agent:</strong> <em>"connect grok bot to my brain"</em>.</li>
+<li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/muse.md">Muse personal agent</a></strong> — first verify its durable user-files location; then either connect it to your published brain (<code>gbrain mcp expose --funnel</code> + thin CLI) or install the local CLI there. Native MCP configuration and skill activation are not assumed. <strong>Say to your agent:</strong> <em>"connect muse to my brain"</em>.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/GROK.md">Grok Build</a></strong> — <code>grok mcp add gbrain -e "GBRAIN_HOME=$HOME" -- gbrain serve --surface verbs</code>. The add is lazy (exit 0 without connecting) — verify with <code>grok mcp doctor gbrain</code>, which spawns the server and reports <code>7 tools discovered</code>. Verified against Grok Build v1.0.4.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/OPENCODE.md">opencode</a></strong> (opencode.ai / SST — not OpenClaw) — <code>opencode mcp add gbrain --env GBRAIN_HOME=$HOME -- gbrain serve --surface verbs</code>, or let <code>gbrain bootstrap hooks --harness opencode</code> write the config for you (opencode is a bootstrap-supported harness — it reads AGENTS.md natively). The add is lazy — verify with <code>opencode mcp list</code>, which spawns the server (<code>✓ gbrain connected</code>). Remote: <code>gbrain connect https://your-host/mcp --token gbrain_xxx --agent opencode [--install]</code> — the config stores only the <code>{env:GBRAIN_REMOTE_TOKEN}</code> interpolation. Verified against opencode v1.18.18.</li>
 <li><strong><a href="https://github.com/garrytan/gbrain/blob/main/docs/mcp/OPENCLAW.md">OpenClaw</a></strong> — the ClawHub bundle plugin registers gbrain automatically (<code>openclaw.plugin.json</code> ships in this repo), or register the stdio server with <code>openclaw mcp add gbrain --command "$(command -v gbrain)" --arg serve --env GBRAIN_HOME=$HOME</code> (absolute path: the launchd gateway PATH lacks <code>~/.bun/bin</code>); verify with <code>openclaw mcp list</code>.</li>
@@ -325,8 +326,11 @@ commands, embedding costs, and the restrictions that remain after rebuilding.
 <pre><code class="language-bash">gbrain serve              # stdio MCP (local subprocess; for Claude Code, Cursor, Windsurf)
 gbrain serve --http       # HTTP MCP with OAuth 2.1 + admin dashboard at /admin
                           # (required for Claude Desktop, Cowork, Perplexity, ChatGPT)
+gbrain mcp expose         # publish serve --http on your Tailscale tailnet with HTTPS + a user service
+gbrain mcp expose --funnel  # same name, public HTTPS — for agents that run in a vendor's cloud
 </code></pre>
-<p>The HTTP server includes optional dynamic client registration, scope-gated access (<code>read</code> / <code>write</code> / <code>admin</code> / <code>agent</code>), owner-approved OAuth authorization, and rate limiting. Dynamic registration cannot grant delegation; <code>admin</code> does not imply <code>agent</code>. Deployment guides (ngrok, Railway, Fly.io) live under <a href="docs/mcp/"><code>docs/mcp/</code></a>.</p>
+<p><code>gbrain mcp expose</code> is the recommended way to run the server from your own computer: it installs Tailscale if needed (after a consent prompt), signs in, publishes the server on <code>https://your-machine.your-tailnet.ts.net/mcp</code>, keeps the admin token in a private file, installs a launchd / systemd user service, and prints the grant command for each client (<code>--status</code> re-checks, <code>--remove</code> undoes only its own changes). Local coding agents on the same machine: <code>gbrain bootstrap harness --yes --port 3131</code> on a Postgres brain; on PGLite mint a token before the service runs (<code>gbrain auth create local-agents --scopes read,write</code>) and pass <code>--token</code>, or grant a scoped client through the running server (<code>gbrain mcp grant … --admin-token-file ~/.gbrain/serve/admin-token</code>). Tailnet-only by default; <code>--funnel</code> is the explicit opt-in for cloud agents. <strong>Say to your agent:</strong> <em>"use my brain over mcp"</em> — <em>"reach my brain from my phone"</em>. Guide: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/remote-mcp.md">use your brain from anywhere over MCP</a>.</p>
+<p>The HTTP server includes optional dynamic client registration, scope-gated access (<code>read</code> / <code>write</code> / <code>admin</code> / <code>agent</code>), owner-approved OAuth authorization, and rate limiting. Dynamic registration cannot grant delegation; <code>admin</code> does not imply <code>agent</code>. Alternatives to Tailscale (ngrok, Railway, Fly.io) live under <a href="docs/mcp/"><code>docs/mcp/</code></a>.</p>
 <p>Running several brains behind one tool catalog? Give each one an identity: <code>gbrain config set mcp.instructions "Team wiki brain — route product and roadmap questions here"</code> rides every transport's initialize response under a <code>Deployment identity:</code> banner, so a connected agent can tell your brains apart. Restart <code>gbrain serve</code> to pick it up; <code>GBRAIN_MCP_INSTRUCTIONS</code> in the serve process's environment overrides it for that process, and <code>gbrain config unset mcp.instructions</code> returns to the bare contract. <strong>Say to your agent:</strong> <em>"Tell connected agents which brain this is"</em> — your agent runs <code>gbrain config set mcp.instructions "&lt;identity&gt;"</code>.</p>
 <h3>Two ways to query your brain</h3>
 <p>Raw retrieval (what most personal-knowledge tools ship) and a synthesis layer that gives you an actual answer. They serve different jobs.</p>
@@ -469,7 +473,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 <p>The command is idempotent (re-running with the same language is a no-op for vector content) and uses the same recreate-and-backfill primitives as the migration. For accent-insensitive Portuguese (<code>pt_br</code>), see <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/multi-language-fts.md">docs/guides/multi-language-fts.md</a> for the <code>unaccent</code> + portuguese stemmer recipe. <strong>Say to your agent:</strong> <em>"Set my brain's search language to Portuguese and reindex."</em></p>
 <p><strong>50+ curated skills</strong> (the current list lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/manifest.json"><code>skills/manifest.json</code></a>). Routing lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a>. Covers signal capture, ingest (idea / media / meeting), enrichment, querying, brain ops, citation fixing, daily task management, cron scheduling, reports, voice, soul audit, skill creation, eval framework, and migrations. Skills are markdown files (tool-agnostic), packaged as a single skillpack the installer drops into your agent workspace.</p>
 <p><strong>Say to your agent — the phrasebook.</strong> You never invoke a skill by name; you say what you want and your agent routes it. Every skill declares its trigger phrases in its frontmatter, and <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a> is the full human-readable phrasebook — one table of "when you say this, this skill fires." A taste: <em>"Ingest this PDF"</em> (media-ingest) — <em>"What's happening today?"</em> (briefing) — <em>"Fill my brain"</em> (cold-start) — <em>"Brain health"</em> / <em>"check backlinks"</em> (maintain — either phrase routes there) — <em>"Is my brain set up right?"</em> (gbrain-advisor) — <em>"Did the restart break anything?"</em> (smoke-test) — <em>"Run this as a background task"</em> (minion-orchestrator). If you're ever unsure what to say, ask your agent: <em>"What can my brain do?"</em> and have it read the resolver back to you.</p>
-<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark against your hybrid retrieval. Measured 2026-09-06 at gbrain v0.48.4.0 by this command on LongMemEval-S (cleaned Sept-2025 revision, 500 questions, 470 scored after the 30 abstention questions are dropped as the official scorer does), k=5, single run: on the release default path (<code>balanced</code>: <code>voyage:rerank-2.5</code> on, autocut off) strict session-level <code>recall_all@5</code> of <strong>95.53%</strong> (449/470), meaning every gold session landed inside the top-5 distinct retrieved sessions, retrieval only, no reader model; with the reranker off, the like-for-like row against systems that run no reranker, <strong>93.40%</strong> (439/470). The looser any-hit <code>recall_any@5</code> was 99.79% / 98.72% and is reported as a diagnostic, not a headline. The reranker-off row reproduces the sibling <a href="https://github.com/garrytan/gbrain-evals">gbrain-evals</a> runner's 2026-09-02 receipt (438/470; 469 of 470 rows agree per question), where the per-row receipts live. Paired against reranker-off hybrid the reranker gains 18 questions and loses 8; the default that shipped before v0.48.4.0 (reranker on with autocut) scored 379/470, because autocut kept the best session and dropped the rest on multi-part questions, which is why autocut is now off. One warning that the ranker wave re-measured rather than removed: <code>tokenmax</code>'s LLM multi-query expansion is harmful at k=5 — 255/470 <code>recall_all@5</code> (paired +3 / −187 vs hybrid) at the legacy weighting, 394/470 with the new <code>search.expansion_variant_budget</code> knob at its smallest pre-registered value, still 43 questions behind plain hybrid on the held-out decision set — so the bundles keep the legacy weighting, small-k recall stays worse in that mode, and conditional expansion is the filed next step. <code>gbrain eval export</code> + <code>gbrain eval replay</code> capture real queries and replay them against code changes (set <code>GBRAIN_CONTRIBUTOR_MODE=1</code>). <code>gbrain eval cross-modal</code> cross-checks an output against the task using three different-provider frontier models. `</p>
+<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark ag</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
@@ -488,7 +492,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 24.2K</div>
+        <div class="stars">★ 24.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
