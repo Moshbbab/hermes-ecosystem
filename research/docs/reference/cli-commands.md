@@ -656,7 +656,7 @@ Interactive messaging-platform setup.
 
 `migrate`
 
-Move per-profile standalone gateways onto one multiplexed default gateway (`--multiplex`, the default) or roll back from the recorded manifest (`--standalone`). Runs a preflight (duplicate bot tokens, secondary port-binders without a `/p/<profile>/` ingress) and changes nothing when blocked. Flags: `--dry-run`, `-y`/`--yes`. See [Migrating from per-profile gateways](/docs/user-guide/multi-profile-gateways#migrating-from-per-profile-gateways).
+Fold per-profile standalone gateways onto the one host gateway (`--multiplex`, the only mode — `hermes update` runs it automatically unless a real boundary blocks it). Re-running it converges a half-migrated host; a manifest on disk is the resume record, never a rollback (there is no `--standalone`). Runs a preflight (duplicate bot tokens, secondary port-binders without a `/p/<profile>/` ingress) and changes nothing when blocked. Flags: `--dry-run`, `-y`/`--yes`. See [Migrating from per-profile gateways](/docs/user-guide/multi-profile-gateways#migrating-from-per-profile-gateways).
 
 `migrate-legacy`
 
