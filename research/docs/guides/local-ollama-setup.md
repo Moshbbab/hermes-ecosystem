@@ -244,12 +244,12 @@ By default, Ollama uses a 2048-token context. Hermes requires at least 64,000 to
 
 ```
 # Create a Modelfile that extends context
-cat > /tmp/Modelfile << 'EOF'
+cat > ~/.hermes/cache/scratch/Modelfile << 'EOF'
 FROM gemma4:31b
 PARAMETER num_ctx 64000
 EOF
 
-ollama create gemma4-64k -f /tmp/Modelfile
+ollama create gemma4-64k -f ~/.hermes/cache/scratch/Modelfile
 ```
 
 Then update your Hermes config to use `gemma4-64k` as the model name.
@@ -343,6 +343,16 @@ fallback_providers:
 This way, 90% of your usage is free (local), and only the hard tasks hit the paid API.
 
 ## Troubleshooting
+
+### "provider 'ollama' has no endpoint configured"
+
+`hermes chat --provider ollama` (or `vllm`) stops with this error when no endpoint is configured for that alias anywhere — no `providers.ollama.base_url`, no `model.base_url`. Hermes refuses to send the request rather than fall back to OpenRouter with a cloud key (`OPENROUTER_API_KEY` / `OPENAI_API_KEY`) that happens to be set. Add the endpoint:
+
+```
+providers:
+  ollama:
+    base_url: "http://localhost:11434/v1"
+```
 
 ### "Connection refused" on startup
 

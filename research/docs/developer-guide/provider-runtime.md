@@ -27,6 +27,8 @@ If you are trying to add a new first-class inference provider, read [Adding Prov
 
 OpenAI-compatible relays can return `reasoning` or `reasoning_content` as strings, text-part dictionaries, or lists of text parts and string fragments. Hermes flattens these fields before string operations in the main stream, Relay recording, synchronous and asynchronous auxiliary streams, and completed-response reasoning extraction. Fragments retain their explicit whitespace; normalization adds no intra-field separator. Main-stream and Relay recording retain the existing paragraph breaks between complete bold reasoning headings. Reasoning stays separate from the visible answer.
 
+`delta.reasoning_details` is a list of opaque provider records. Both the main stream and Relay recording append these records in arrival order without flattening, merging, or rewriting their contents. Providers can emit complete records on the final delta or across multiple deltas; omit the field on chunks without new records. The collected records pass through response normalization and assistant-message storage into session replay, including nested signed payloads.
+
 ## Resolution precedence
 
 At a high level, provider resolution uses:
@@ -142,6 +144,7 @@ Codex uses a separate Responses API path:
 
 -   `api_mode = codex_responses`
 -   dedicated credential resolution and auth store support
+-   a resumed session whose lingering Codex reasoning items (`encrypted_content`) are rejected — as a 400 `invalid_encrypted_content` or as a 401 `token_expired` — self-heals by stripping the cached items and replaying once, before any credential refresh or pool rotation
 
 ## Auxiliary model routing
 

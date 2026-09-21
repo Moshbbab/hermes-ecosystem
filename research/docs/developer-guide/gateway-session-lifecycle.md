@@ -139,7 +139,7 @@ Parent channel when `chat_id` refers to a thread.
 
 `None`
 
-ID of the triggering message. Used for pin/reply/react operations and Discord ID injection.
+ID of the triggering message. Used for pin/reply/react operations and Discord ID injection (the injected `[Triggering message id: …]` note rides the API-bound message only; the persisted user row keeps the authored text).
 
 `role_authorized`
 
@@ -459,9 +459,9 @@ Lightweight metadata update after an interaction. Bumps `updated_at`, optionally
 
 Explicit reset (from `/new` or `/reset`). Creates new `session_id`, sets `is_fresh_reset=True`. Ends old SQLite session, creates new one.
 
-`switch_session(session_key, target_session_id)`
+`switch_session(session_key, target_session_id, *, expected_session_id=None)`
 
-Switch to a different existing session ID (from `/resume`). Ends current SQLite session, reopens target.
+Switch to a different existing session ID (from `/resume`). Ends current SQLite session, reopens target. With `expected_session_id=` the repoint is a compare-and-swap: returns `None` without switching when the key no longer points at that session, so a caller that resolved against a snapshot across an `await` (async-delegation re-pin, Telegram topic-binding heal) cannot overwrite a concurrent `/new` or `/resume`.
 
 `suspend_session(session_key)`
 
@@ -804,7 +804,9 @@ Called at the drain site after the slot was consumed. If there's an overflow ite
 
 ### Clearing
 
-Queued events for a session are cleared on `/new` and `/reset` (via `_handle_reset_command`).
+Queued events for a session are cleared on `/new` and `/reset` (via `_handle_reset_command`). `/stop` drops the single-slot follow-up the user sent during the interrupted turn. An **internal** wake parked in either store (an async-delegation completion notice, a kanban/cron `notify+wake`) survives all three commands: `_interrupt_and_clear_session` leaves it in the slot (promoting it out of the overflow when a discarded human follow-up held the slot) so the post-command drain starts it right away instead of the session idling until the next user message. Whether a wake pinned to a session that `/new` just closed may still run is decided at processing time (`_resolve_async_delegation_session`, fail-closed).
+
+Both commands also end the session's **background delegations** (`tools.async_delegation. interrupt_for_session`, selected by routing key and by the spawner's durable session id): `_interrupt_and_clear_session` fans the stop out for the busy path, and `_handle_stop_command` does the same for an idle session whose dispatching turn already ended (replying "Stopped" rather than "No active task to stop"). The turn's own hard interrupt never reaches those units — they are detached from `_active_children` at dispatch — so without the fan-out they run to completion and wake the chat minutes later. Each stopped unit still finalizes normally and re-enters as its completion notice with `status="interrupted"` and the child's partial output. `/new` and `/reset` already did this in `_handle_reset_command`; the shared helper's earlier call is idempotent there (a hard interrupt requested twice is one stop).
 
 ### FIFO Invariant
 
@@ -868,7 +870,7 @@ The gateway maintains an LRU cache of `AIAgent` instances keyed by `session_key`
 
 A cached agent pins `_session_messages`, the full live transcript including tool outputs — tens of MB on a session with 100+ tool calls. The entry cap and the idle TTL are both blind to that: a gateway serving many chats keeps every warm transcript resident (agents that took a turn within the TTL are never idle-swept), so RSS climbs until the cgroup throttles and SIGTERM can no longer flush inside systemd's stop timeout (#80764).
 
-`_sweep_agent_cache_under_pressure()` is the valve. Each watcher tick it compares the process's anonymous RSS against `memory_high_mb`; over budget, it evicts LRU agents through the same soft path the cap enforcer uses (`_commit_then_release_soft`), then runs `malloc_trim` so the freed arenas actually return to the OS. Evicted sessions rebuild their transcript from the persisted session on the next turn.
+`_sweep_agent_cache_under_pressure()` is the valve. Each watcher tick it compares anonymous memory against `memory_high_mb` — the cgroup's own `memory.stat` `anon` when the gateway runs under a cgroup limit (the scope the budget is charged against, so same-unit children such as `execute_code` kernels count; #110549), otherwise the process's own anonymous RSS; over budget, it evicts LRU agents through the same soft path the cap enforcer uses (`_commit_then_release_soft`), then runs `malloc_trim` so the freed arenas actually return to the OS. Evicted sessions rebuild their transcript from the persisted session on the next turn.
 
 Three classes of session are never shed:
 

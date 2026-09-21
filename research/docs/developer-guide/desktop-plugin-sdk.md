@@ -149,6 +149,8 @@ interface PluginContext {
   rest: <T>(path: string, opts?: PluginRestOptions) => Promise<T>
   /** Live WebSocket to this plugin's own namespace. Returns a disposer. */
   socket: (path: string, onMessage: (data: unknown) => void) => () => void
+  /** Gateway event stream by type (`'*'` = all). Tracked: removed on unload/reload/disable. */
+  onEvent: (type: string, listener: (event: GatewayEvent) => void) => () => void
   /** The curated OS door: native notification, open-external, reveal-in-file-manager, clipboard. */
   os: PluginOs
   /** Plugin-scoped JSON persistence (keys live under `hermes.plugin.<id>.`). */
@@ -212,6 +214,12 @@ Title bar
 `TITLEBAR_AREAS.left` / `.center` / `.right`
 
 `data` as `TitlebarTool`, or a mount-scoped `<Contribute>`
+
+Page header
+
+`WORKSPACE_PAGE_HEADER_AREA`
+
+`render` via a mount-scoped `<Contribute>` inside your page
 
 ⌘K palette
 
@@ -306,6 +314,10 @@ ctx.register({
 ```
 
 Title-bar tools live in `TITLEBAR_AREAS.left | .center | .right` as `TitlebarTool` data (`{ id, label, icon, active?, onSelect? }`).
+
+Title-bar slots are **permanent mount points**: a component you register there stays mounted while the user moves between the chat and full pages (Capabilities, Messaging, Artifacts, contributed routes), so a `useEffect` that injects global side effects (a `<style>` tag, `html[data-*]` attributes, a `MutationObserver`) runs its setup once per registration and its cleanup once at dispose — never mid-navigation.
+
+Controls that belong to ONE page (the Kanban board switcher) go in `WORKSPACE_PAGE_HEADER_AREA` instead: it renders in the workspace panel's tab-header row while that page is on screen and is empty otherwise. Register it with a mount-scoped `<Contribute>` (below) so it leaves with the page.
 
 ### Palette commands and keybinds
 
@@ -414,13 +426,13 @@ Previewed widgets can also **talk back**. Inside the frame, `window.hermes.send(
 
 ### Mount-scoped chrome (`Contribute`)
 
-`ctx.register` is for **permanent** contributions. When chrome should live and die with a component that's already on screen (a page's own title-bar control leaves when the page unmounts), render `<Contribute>` inside it instead:
+`ctx.register` is for **permanent** contributions. When chrome should live and die with a component that's already on screen (a page's own header control leaves when the page unmounts), render `<Contribute>` inside it instead:
 
 ```
-import { Contribute, TITLEBAR_AREAS } from '@hermes/plugin-sdk'
+import { Contribute, WORKSPACE_PAGE_HEADER_AREA } from '@hermes/plugin-sdk'
 
 jsx(Contribute, {
-  area: TITLEBAR_AREAS.center,
+  area: WORKSPACE_PAGE_HEADER_AREA,
   id: 'my-page:switcher', // namespace with your slug
   children: jsx(MySwitcher, {})
 })
@@ -468,7 +480,9 @@ host.openWorkspace(id, { render, title?, minWidth?, onClose? })
                                            //   workspace zone and reveal it; returns a disposer
 host.paneVisibility(paneId)                // ReadableAtom<boolean> — is a contributed pane
                                            //   actually on screen (its zone's active tab)?
-host.onEvent(type, fn)                     // gateway event stream ('*' = all); returns disposer
+host.onEvent(type, fn)                     // gateway event stream ('*' = all); returns disposer.
+                                           //   Calls made during register() are retired with the
+                                           //   plugin; elsewhere prefer ctx.onEvent (always tracked)
 host.logs(...)                             // tail an app log file
 host.status()                              // one-shot system status snapshot
 host.restartGateway()                      // restart the backend gateway
@@ -576,13 +590,13 @@ A feature that needs a desktop UI **and** agent-side code (a Python plugin, its 
     └── plugin.js                 # the desktop half: panes, commands, ctx.rest
 ```
 
-The `desktop/plugin.js` half is an ordinary disk plugin — same contract, same imports, same `ctx.rest('/…')` reaching the `plugin_api.py` sitting beside it. Installing, sharing, or removing the feature is one folder: the app-root copy is refreshed when the source `plugin.js` changes (`hermes plugins update`, or **Rescan**) and removed when the package folder disappears. The copy is what makes the desktop half **app-level**: it exists once, however many profiles carry the package, and it never appears or disappears when the user switches the Capabilities profile selector. The renderer never scans `plugins/` itself. The marker records the package name and its origin (catalog sidecar or git remote), which is what the **Install here** button on the Plugins page uses to install the agent half into another profile.
+The `desktop/plugin.js` half is an ordinary disk plugin — same contract, same imports, same `ctx.rest('/…')` reaching the `plugin_api.py` sitting beside it. Installing, sharing, or removing the feature is one folder: the app-root copy is refreshed when the source `plugin.js` changes (`hermes plugins update`, or **Rescan**) and removed when the package folder disappears. The copy is what makes the desktop half **app-level**: it exists once, however many profiles carry the package, and it never appears or disappears when the user switches the Capabilities profile selector. The renderer never scans `plugins/` itself. The marker records the package name and its origin (catalog sidecar or git remote), which is what the **Install here** button on the Plugins page uses to install the agent half into another profile. The copy is staged beside the target and renamed into place, so an interrupted copy (a transient file lock, a crash mid-copy) never leaves a half-written folder behind; a leftover `desktop-plugins/<id>/` that has no marker and no `plugin.js` is treated as such damage and replaced on the next **Rescan**, while a marker-less folder that _does_ hold a `plugin.js` is a standalone plugin you installed by hand and is never overwritten.
 
 Two enable switches still apply, on purpose, and both default to **off**: the desktop half ships opt-in — it inventories in **Capabilities → Plugins** but stays disabled until the user toggles it — matching the Python half's `plugins.enabled` gate in `config.yaml` (the security boundary below). Dropping a package into `~/.hermes/plugins` is inert on every surface until the user says otherwise. The desktop half degrades gracefully when the backend half is off — `ctx.rest` returns errors, not crashes.
 
 note
 
-The copy is local to the machine the desktop app runs on. Against a remote backend, the remote box's `~/.hermes/plugins` is not reachable as a filesystem — only locally installed packages contribute a desktop half this way. For a remote backend the install dialog clones the desktop half separately into `desktop-plugins/`, the same as a desktop-only repo.
+The copy is local to the machine the desktop app runs on. Against a remote backend, the remote box's `~/.hermes/plugins` is not reachable as a filesystem — only locally installed packages contribute a desktop half this way. For a remote backend the install dialog clones the desktop half separately into `desktop-plugins/`, the same as a desktop-only repo. A package whose agent half was installed on the remote host without that clone shows its Desktop half as **unavailable (remote backend)** on the Plugins page — not as a pending copy — and the tooltip points at **Install from Git** with the Desktop target checked.
 
 ### Distributing with an install link
 
@@ -706,7 +720,7 @@ Plugin contract
 
 Area constants
 
-`PANES_AREA`, `ROUTES_AREA`, `SIDEBAR_NAV_AREA`, `STATUSBAR_AREAS`, `TITLEBAR_AREAS`, `PALETTE_AREA`, `KEYBINDS_AREA`, `THEMES_AREA`, `COMPOSER_AREAS`
+`PANES_AREA`, `ROUTES_AREA`, `SIDEBAR_NAV_AREA`, `STATUSBAR_AREAS`, `TITLEBAR_AREAS`, `WORKSPACE_PAGE_HEADER_AREA`, `PALETTE_AREA`, `KEYBINDS_AREA`, `THEMES_AREA`, `COMPOSER_AREAS`
 
 Area payloads
 

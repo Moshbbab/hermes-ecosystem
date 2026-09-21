@@ -186,9 +186,9 @@ for p in r.json()["pages"]:
 End-to-end proof against a live site with no API key:
 
 ```
-python3 scripts/har_capture.py "https://en.wikipedia.org/wiki/Main_Page" /tmp/wiki.har \
+python3 scripts/har_capture.py "https://en.wikipedia.org/wiki/Main_Page" ~/.hermes/cache/scratch/wiki.har \
   --action "fill:input[name=search]:dune messiah" --action "sleep:3" --wait 2
-python3 scripts/har_to_client.py /tmp/wiki.har --host wikipedia.org --max-body 200
+python3 scripts/har_to_client.py ~/.hermes/cache/scratch/wiki.har --host wikipedia.org --max-body 200
 ```
 
 Expect the derivation to print `GET https://en.wikipedia.org/w/rest.php/v1/search/title` with `q` and `limit` params and a JSON `pages` response — then replay it with the Procedure snippet and confirm matching titles come back over plain HTTP.

@@ -20,7 +20,7 @@ Tool
 
 Runs on a cadence (hourly, nightly, weekly)
 
-`cronjob` tool or `/cron` slash command
+`cronjob_manage` tool or `/cron` slash command
 
 **GitHub Event**
 

@@ -54,6 +54,10 @@ API key for custom OpenAI-compatible endpoints (used with `OPENAI_BASE_URL`)
 
 Base URL for custom endpoint (VLLM, SGLang, etc.)
 
+`HERMES_CODEX_BASE_URL`
+
+Route the `openai-codex` (ChatGPT subscription) provider through a proxy instead of the default Codex backend. Applies everywhere the credential is used: pool resolution, auxiliary/raw clients, and 401/429 credential rotation. `model.base_url` under `model.provider: openai-codex` is the secondary override when this is unset.
+
 `LM_API_KEY`
 
 API key for LM Studio (`lmstudio` provider). Often a placeholder for local servers
@@ -456,7 +460,7 @@ Default language hint for STT. Used by the `local` (faster-whisper) provider, `H
 
 `HERMES_HOME`
 
-Override Hermes config directory (default: `~/.hermes`). Also scopes the gateway PID file and systemd service name, so multiple installations can run concurrently
+Override Hermes config directory (default: `~/.hermes`). A literal `~` or `$VAR` in the value is expanded (fish does not expand `~` inside `VAR=~/…`), so it never resolves relative to the current directory. Also scopes the gateway PID file and systemd service name, so multiple installations can run concurrently
 
 `HERMES_GIT_BASH_PATH`
 
@@ -496,11 +500,11 @@ Description
 
 `HERMES_PORTAL_BASE_URL`
 
-Override Nous Portal URL (for development/testing)
+Override Nous Portal URL (for development/testing). Per-profile under multiplexing: set it in the served profile's `.env`.
 
 `NOUS_INFERENCE_BASE_URL`
 
-Override Nous inference API URL
+Override Nous inference API URL. Also the only non-production host a Portal response may name: when the Portal's returned inference URL matches this override it is accepted and persisted instead of being healed to production. Per-profile under multiplexing.
 
 `HERMES_NOUS_MIN_KEY_TTL_SECONDS`
 
@@ -520,7 +524,7 @@ Path to a JSON file of ephemeral prefill messages injected at API-call time
 
 `HERMES_TIMEZONE`
 
-IANA timezone override (for example `America/New_York`)
+IANA timezone override (for example `America/New_York`). On Linux/macOS it is also exported as `TZ` to `execute_code` children; on Windows those children keep the OS zone instead, because the Windows C runtime only understands POSIX-form `TZ` strings and mis-parses an IANA name into a wrong offset
 
 ## Tool APIs
 
@@ -658,7 +662,7 @@ Override the OpenAI-compatible STT endpoint
 
 `GITHUB_TOKEN`
 
-GitHub token for Skills Hub (higher API rate limits, skill publish)
+GitHub token for Skills Hub (higher API rate limits, skill publish) and the desktop app's update check (`GH_TOKEN` also honoured; without either, the desktop falls back to the `gh` CLI login, then anonymous)
 
 `HONCHO_API_KEY`
 
@@ -813,6 +817,10 @@ SDK sampling rate 0.0–1.0 (default: `1.0`)
 `HERMES_LANGFUSE_MAX_CHARS`
 
 Per-field truncation for serialized payloads (default: `12000`)
+
+`HERMES_LANGFUSE_MAX_DEPTH`
+
+Nesting depth kept in captured tool inputs/outputs before values become `<max-depth>` (default: `4`; invalid values warn and keep the default)
 
 `HERMES_LANGFUSE_DEBUG`
 
@@ -1168,6 +1176,10 @@ When `true`, accept attachments of any file type (not just the built-in PDF/text
 
 Maximum bytes per attachment the gateway will cache. Default `33554432` (32 MiB). Set to `0` for no cap (attachments are held in memory while being written).
 
+`DISCORD_FREE_RESPONSE_AUTO_THREAD`
+
+When `true`, free-response channels (listed in `DISCORD_FREE_RESPONSE_CHANNELS`) also auto-create a thread per top-level message. Default `false` — free-response channels reply inline. Requires `DISCORD_AUTO_THREAD=true`; `DISCORD_NO_THREAD_CHANNELS` still wins.
+
 `DISCORD_REACTIONS`
 
 Enable emoji reactions on messages during processing (default: `true`)
@@ -1199,6 +1211,30 @@ Allow the bot to ping individual `@user` mentions (default: `true`).
 `DISCORD_ALLOW_MENTION_REPLIED_USER`
 
 Ping the author when replying to their message (default: `true`).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL`
+
+Env fallback for `discord.missed_message_backfill.enabled`: replay messages missed while disconnected (default: `false`). See [Missed message backfill](/docs/user-guide/messaging/discord#discordmissed_message_backfill).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_CHANNELS`
+
+Comma-separated channel IDs to scan (fallback for `discord.missed_message_backfill.channels`; empty = `discord.free_response_channels`, `*` = every reachable text channel).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_WINDOW_SECONDS`
+
+How far back a scan may look (fallback for `window_seconds`, default `21600`, minimum `60`).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_LIMIT`
+
+Maximum messages fetched per channel per scan (fallback for `limit`, default `100`, 1–500).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_MAX_DISPATCHES`
+
+Maximum messages re-dispatched per scan (fallback for `max_dispatches`, default `10`, 1–100).
+
+`DISCORD_MISSED_MESSAGE_BACKFILL_MAX_ATTEMPTS`
+
+Lifetime re-dispatch ceiling for a single message across reconnects (fallback for `max_attempts`, default `3`, 1–100).
 
 `SLACK_BOT_TOKEN`
 
@@ -1303,6 +1339,14 @@ Comma-separated phone numbers (with country code, no `+`), or `*` to allow all s
 `WHATSAPP_ALLOW_ALL_USERS`
 
 Allow all WhatsApp senders without an allowlist (`true`/`false`)
+
+`WHATSAPP_GROUP_POLICY`
+
+Group intake: `pairing` (default, forwards nothing from groups), `allowlist` (group JIDs below), `open` (every group; participants still need `WHATSAPP_ALLOWED_USERS`, pairing, or `WHATSAPP_ALLOW_ALL_USERS`), or `disabled`
+
+`WHATSAPP_GROUP_ALLOWED_USERS`
+
+Comma-separated group JIDs (e.g. `120363001234567890@g.us`) admitted under `WHATSAPP_GROUP_POLICY=allowlist`
 
 `WHATSAPP_HOME_CHANNEL`
 
@@ -1818,7 +1862,7 @@ Display name for the Matrix home room.
 
 `MATRIX_ALLOWED_ROOMS`
 
-Comma-separated Matrix room IDs allowed to trigger bot responses
+Comma-separated Matrix room IDs allowed to trigger bot responses. Does not apply to rooms auto-classified as DMs (any room with 2 or fewer joined members, regardless of name) — those always respond.
 
 `MATRIX_HOME_ROOM`
 
@@ -1842,11 +1886,11 @@ Enable processing-lifecycle emoji reactions on inbound messages (default: `true`
 
 `MATRIX_REQUIRE_MENTION`
 
-Require `@mention` in rooms (default: `true`). Set to `false` to respond to all messages.
+Require `@mention` in rooms (default: `true`). Set to `false` to respond to all messages. A room with 2 or fewer joined members is auto-classified as a DM and never requires a mention, regardless of this setting — add a third member if you need a deliberately-2-person room to behave like a regular room.
 
 `MATRIX_FREE_RESPONSE_ROOMS`
 
-Comma-separated room IDs where bot responds without `@mention`
+Comma-separated room IDs where bot responds without `@mention`. Rooms auto-classified as DMs (2 or fewer joined members) already respond without a mention and ignore this list.
 
 `MATRIX_IGNORE_USER_PATTERNS`
 
@@ -1866,7 +1910,7 @@ Allow outbound `@room` mentions to notify all room members (default: `false`)
 
 `MATRIX_AUTO_THREAD`
 
-Auto-create threads for room messages (default: `true`)
+Auto-create threads for room messages (default: `true`). Does not apply to rooms auto-classified as DMs (2 or fewer joined members) — those follow `MATRIX_DM_AUTO_THREAD` instead.
 
 `MATRIX_DM_AUTO_THREAD`
 
@@ -1962,7 +2006,7 @@ Comma-separated user IDs allowed across all platforms
 
 `GATEWAY_ALLOW_ALL_USERS`
 
-Allow all users without allowlists (`true`/`false`, default: `false`)
+Allow all users without allowlists (`true`/`false`, default: `false`). Also configurable via `gateway.allow_all_users` in `config.yaml`; the env var wins when both are set.
 
 ### Web Dashboard & Hermes Desktop
 
@@ -1997,6 +2041,10 @@ Access-token lifetime for the basic provider (default 12h). Overrides `dashboard
 `HERMES_DASHBOARD_OAUTH_CLIENT_ID`
 
 OAuth client id (`agent:{instance_id}`) for the gated/public dashboard, activating the Nous (`plugins/dashboard_auth/nous`) provider. Overrides `dashboard.oauth.client_id`. Provision it with `hermes dashboard register`.
+
+`HERMES_DASHBOARD_SESSION_TOKEN`
+
+Per-process session token for the dashboard's sensitive `/api` routes, minted by the launcher that spawns `hermes dashboard` (Desktop shell, link-style integrations). A value injected by the parent process is kept as-is: a `HERMES_DASHBOARD_SESSION_TOKEN` line in `~/.hermes/.env` does not replace it. Unset, the server mints a fresh token per start.
 
 `HERMES_DASHBOARD_PUBLIC_URL`
 
@@ -2045,6 +2093,10 @@ Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g
 `HERMES_DESKTOP_CDP_PORT`
 
 Overrides the Chrome DevTools Protocol port the renderer exposes on `127.0.0.1` for DOM/CSS inspection tooling (default `9222`). Dev-server runs (`npm run dev`, `hgui`) open it automatically; a packaged app never does, and no value here changes that. Set to `off` to disable it on a dev run. Anything that can reach the port can execute code in the renderer.
+
+`HTTPS_PROXY` / `HTTP_PROXY` / `NO_PROXY`
+
+(Desktop side) The in-app update check (`Help → Check for Updates…` and the passive update banner) reaches `api.github.com` through the proxy these standard variables name, with `NO_PROXY` exemptions honoured — the same convention `curl`, `npm` and `git` follow. Unset, the check connects directly.
 
 ### Microsoft Graph (Teams Meetings)
 
@@ -2692,7 +2744,7 @@ Description
 
 `HERMES_NEMO_RELAY_PLUGINS_TOML`
 
-Explicit path to the standard NeMo Relay `plugins.toml` loaded process-wide by Hermes core. When unset, Hermes does not initialize Relay middleware, dynamic plugins, or exporters. The removed `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables are ignored; configure those outputs in the selected file instead. See [NeMo Relay observability configuration](https://docs.nvidia.com/nemo/relay/configure-plugins/observability/about).
+Explicit path to the standard NeMo Relay `plugins.toml` loaded process-wide by Hermes core. When unset, Hermes does not initialize Relay middleware, dynamic plugins, or exporters. The removed `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables are ignored (a `.env` that still carries them exports nothing); `hermes update` / `hermes migrate relay` converts them into `<hermes home>/relay-plugins.toml` and sets this variable — see the [migration note and full example](/docs/user-guide/features/built-in-plugins#nemo-relay-native-integration-migration-note). See [NeMo Relay observability configuration](https://docs.nvidia.com/nemo/relay/configure-plugins/observability/about).
 
 ## Agent Behavior
 
@@ -2736,17 +2788,9 @@ Unsupported since the config-v12 support floor — the variable is ignored. Use 
 
 Deprecated compatibility variable for tool progress mode (still read by the gateway as a fallback). Prefer `display.tool_progress` in `config.yaml`.
 
-`HERMES_HUMAN_DELAY_MODE`
+`HERMES_HUMAN_DELAY_MODE` / `HERMES_HUMAN_DELAY_MIN_MS` / `HERMES_HUMAN_DELAY_MAX_MS`
 
-Response pacing: `off`/`natural`/`custom`
-
-`HERMES_HUMAN_DELAY_MIN_MS`
-
-Custom delay range minimum (ms)
-
-`HERMES_HUMAN_DELAY_MAX_MS`
-
-Custom delay range maximum (ms)
+No longer read. Response pacing is the `human_delay` section of each profile's `config.yaml` (`mode`, `min_ms`, `max_ms`), so multiplexed profiles keep independent pacing.
 
 `HERMES_QUIET`
 
@@ -2803,6 +2847,14 @@ Respawn-storm circuit breaker: maximum gateway (re)starts allowed within the win
 `HERMES_GATEWAY_START_WINDOW_S`
 
 Respawn-storm breaker window in seconds (default: `120`). Also configurable via `gateway.respawn_storm.window_seconds` in `config.yaml`.
+
+`HERMES_STARTUP_WATCHDOG`
+
+Startup-liveness watchdog for `hermes gateway run`: if the process does not reach a live event loop within the timeout, holds no progress lease and shows no CPU progress, it dumps every thread's stack to `logs/gateway-startup-watchdog.log` and exits with code `75` so the service supervisor (systemd, s6, Windows task) restarts it. Set to `0` to opt out. Env-only because `config.yaml` parsing is itself inside the watched window; `gateway.startup_watchdog: false` in `config.yaml` is bridged into this variable when unset.
+
+`HERMES_STARTUP_WATCHDOG_TIMEOUT_S`
+
+Startup watchdog timeout in seconds (default: `300`). Slow-but-alive phases (state.db schema migrations, repair, construction-time archive/prune/VACUUM) hold their own progress leases, so raise this only when a large install's startup is legitimately longer than five minutes _outside_ those phases (many multiplexed profiles, thousands of skills on a slow disk). Bridged from `gateway.startup_watchdog_timeout_seconds` in `config.yaml` when unset.
 
 `HERMES_AGENT_TIMEOUT_WARNING`
 
@@ -2870,7 +2922,7 @@ Comma-separated list of optional-skill names to auto-install on first run.
 
 `HERMES_DEBUG_INTERRUPT`
 
-Set to `1` to log detailed interrupt/cancel tracing to `agent.log`.
+Set to `1`/`true` to log detailed interrupt/cancel tracing to `agent.log`; `0`/`false`/`off` (or unset) keep it off.
 
 `HERMES_DUMP_REQUESTS`
 
@@ -3048,4 +3100,4 @@ Only use providers supporting all request params (`true`/`false`)
 
 tip
 
-Use `hermes config set` to set environment variables — it automatically saves them to the right file (`.env` for secrets, `config.yaml` for everything else).
+Use `hermes config set` to set environment variables — every `UPPER_SNAKE` name on this page (and any other environment-shaped name) is saved to `.env`, the same file the setup flows write and the one the runtime reads; it is never written into `config.yaml`. Names on the env writer's denylist (`HERMES_HOME`, `HERMES_YOLO_MODE`, `PATH`, …) are refused. Dotted `config.yaml` settings go to `config.yaml`.

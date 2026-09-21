@@ -91,6 +91,10 @@ Skill
 
 Description
 
+[**ai-presenter-video**](/docs/user-guide/skills/optional/creative/creative-ai-presenter-video)
+
+Make a verified AI presenter video from script + image.
+
 [**archify**](/docs/user-guide/skills/optional/creative/creative-archify)
 
 Validated interactive HTML diagrams, upstream-maintained.
@@ -102,6 +106,10 @@ ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
 [**audiocraft-audio-generation**](/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation)
 
 AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.
+
+[**auteur**](/docs/user-guide/skills/optional/creative/creative-auteur)
+
+Design and build cinematic, award-level web pages.
 
 [**baoyu-article-illustrator**](/docs/user-guide/skills/optional/creative/creative-baoyu-article-illustrator)
 
@@ -146,6 +154,10 @@ Render MP4/WebM videos from HTML compositions.
 [**impeccable**](/docs/user-guide/skills/optional/creative/creative-impeccable)
 
 Frontend design guidance, upstream-maintained (impeccable).
+
+[**ip-as-logo**](/docs/user-guide/skills/optional/creative/creative-ip-as-logo)
+
+Design minimal cute IP mascot marks readable at 32px.
 
 [**kanban-video-orchestrator**](/docs/user-guide/skills/optional/creative/creative-kanban-video-orchestrator)
 
@@ -539,6 +551,10 @@ Turn an unanswerable decision into a questionnaire doc.
 
 Publish sites to {slug}.here.now and store files in Drives.
 
+[**live-dashboard**](/docs/user-guide/skills/optional/productivity/productivity-live-dashboard)
+
+Build self-updating dashboards from live sources.
+
 [**memento-flashcards**](/docs/user-guide/skills/optional/productivity/productivity-memento-flashcards)
 
 Spaced-repetition flashcards: create, review, quiz, export.
@@ -730,6 +746,10 @@ Embed an in-page natural-language GUI copilot in web apps.
 [**publish-site**](/docs/user-guide/skills/optional/web-development/web-development-publish-site)
 
 Versioned site deploys to GitHub/Cloudflare/Netlify Pages.
+
+[**scrollcraft**](/docs/user-guide/skills/optional/web-development/web-development-scrollcraft)
+
+Premium scroll-driven landing pages; scroll = timeline.
 
 ## yuanbao
 

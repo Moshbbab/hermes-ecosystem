@@ -79,6 +79,8 @@ worker dashboard
 # → not running:     starts the machine dashboard with "worker" preselected
 ```
 
+A dashboard started this way keeps `worker` as its fallback scope for the whole server lifetime: a deep link that omits `?profile=` (for example a `/chat?resume=<id>` link) still opens under `worker`, so the embedded chat sees that profile's MCP servers, model and skills. An explicit `?profile=` in the URL always wins.
+
 Pass `--isolated` to opt out and run a dedicated server scoped to that profile (the pre-unification behavior — useful if you deliberately expose different profiles' dashboards with different auth).
 
 The **Chat** tab follows the switcher too: a scoped chat spawns its PTY child with the selected profile's `HERMES_HOME`, so the conversation runs with that profile's model, skills, memory, and session history. Switching profiles starts a fresh terminal session.
@@ -133,6 +135,7 @@ The **Chat** tab embeds the full Hermes TUI (the same interface you get from `he
 -   Keystrokes travel to the PTY; ANSI output streams back to the browser
 -   xterm.js's WebGL renderer paints each cell to an integer-pixel grid; mouse tracking (SGR 1006), wide characters (Unicode 11), and box-drawing glyphs all render natively
 -   Resizing the browser window resizes the TUI via the `@xterm/addon-fit` addon
+-   A quiet PTY socket sends a small resize keepalive every 20 seconds, so reverse proxies with idle timeouts (nginx, Caddy) don't drop a chat that is merely waiting; proxies that cap a connection's total lifetime (some tunnels close a socket after ~30 seconds regardless of traffic) still close it, and the chat reattaches to the same session automatically; automatic reconnects pause while the browser tab is hidden or you are on another dashboard page, and resume when you come back
 
 **Resume an existing session:** from the **Sessions** tab, click the play icon (▶) next to any session. That jumps to `/chat?resume=<id>` and launches the TUI with `--resume`, loading the full history.
 
@@ -359,7 +362,7 @@ Connect Hermes to any messaging platform from the browser — full parity with `
 -   **Configure** — open a per-platform form with exactly the fields that channel needs (bot token, app token, server URL, allowlist, etc.). Secrets render as password inputs and are stored redacted; leaving a field blank keeps the existing value. Required fields are marked and validated. A "Setup guide" link points to the platform's credential docs.
 -   **Enable / disable** — toggle a channel on or off. The credential stays on disk; only the active state changes.
 -   **Test** — check whether the channel is configured, enabled, and reporting a live connection from the gateway.
--   **Restart gateway** — credentials are written to `~/.hermes/.env` and the enabled flag to `config.yaml`; the gateway connects each enabled channel on its next restart, which you can trigger right from the page.
+-   **Restart gateway** — credentials are written to `~/.hermes/.env` and the enabled flag to `config.yaml`; the gateway connects each enabled channel on its next restart, which you can trigger right from the page. On a system-scope install (`hermes gateway install --system`) the dashboard runs the restart under `sudo -n`, so the dashboard user needs passwordless sudo; without it the request fails immediately instead of reporting a restart that the CLI then refuses.
 
 ![Channels admin page — every messaging platform with status, enable toggles, and per-platform setup forms](/docs/assets/images/admin-channels-a24702ec3e46c4e3f857f5f416e48ffd.png)
 

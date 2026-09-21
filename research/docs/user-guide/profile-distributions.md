@@ -307,7 +307,7 @@ On update
 
 `SOUL.md`, `config.yaml`, `mcp.json`, `skills/`, `cron/`, `distribution.yaml`
 
-Replaced from the new clone
+Files are replaced from the new clone. Directories are merged per entry: each skill or cron job the new clone ships replaces its counterpart wholesale (files the author retired disappear), while skills or cron jobs you added yourself stay in place.
 
 **Config override**
 
@@ -455,7 +455,7 @@ hermes profile update research-bot
 What happens:
 
 1.  Re-clones the repo from the recorded source URL.
-2.  Replaces distribution-owned files (SOUL, skills, cron, mcp.json).
+2.  Replaces distribution-owned files (SOUL, mcp.json) and every skill or cron job the distribution ships; skills and cron jobs you added to the profile yourself are left alone.
 3.  **Preserves** your `config.yaml` — you may have tuned the model, temperature, or other settings. Pass `--force-config` to overwrite.
 4.  **Never touches** user data: memories, sessions, auth, `.env`, logs, state.
 

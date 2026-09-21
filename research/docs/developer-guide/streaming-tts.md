@@ -29,6 +29,7 @@ tts:
   provider: gemini
   streaming:
     provider: gemini      # or "auto"
+    min_len: 20           # shortest first sentence (chars) spoken on its own; CJK setups use ~6
   gemini:
     model: gemini-2.5-flash-preview-tts
     voice: Kore
@@ -74,7 +75,7 @@ WebSocket (`wss://api.x.ai/v1/tts`)
 
 yes
 
-xAI OAuth or `XAI_API_KEY`
+`XAI_API_KEY` preferred, else xAI OAuth (the subscription bearer 403s on metered TTS)
 
 edge, piper, kitten, neutts, mistral, minimax, deepinfra, …
 

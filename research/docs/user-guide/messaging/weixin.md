@@ -170,15 +170,15 @@ When `true`, split multi-line replies into multiple chat messages (legacy behavi
 
 `text_batch_delay_seconds`
 
-`3.0`
+`0.3`
 
-Quiet period (seconds) before a buffered burst of rapid text messages is flushed as one combined request. iLink delivers messages individually, so this debounce avoids one agent invocation per fragment. Set `0` to dispatch each message immediately.
+Quiet period (seconds, max `2.0`) before a buffered burst of rapid text messages is flushed as one combined request. iLink delivers messages individually, so this debounce avoids one agent invocation per fragment. Set `0` to dispatch each message immediately.
 
 `text_batch_split_delay_seconds`
 
-`5.0`
+`1.0`
 
-Extended flush delay used when the latest fragment is near the split threshold (long messages iLink may have chunked).
+Extended flush delay (max `4.0`; never below `text_batch_delay_seconds`) used when the latest fragment is near the split threshold (long messages iLink may have chunked).
 
 ## Access Policies
 
@@ -528,6 +528,10 @@ Stop the other gateway instance first — only one poller per token is allowed
 Session expired (`errcode=-14`)
 
 Your login session has expired. Re-run `hermes gateway setup` to scan a new QR code
+
+Proactive send (cron / notification) fails with `ret=-2 errmsg=prepare failed` or `unknown error`
+
+The peer's `context_token` went stale (no recent inbound message from them). The adapter treats this as a stale session — not a rate limit — and re-sends once without the token, so the message still arrives. If iLink still answers `prepare failed` (or there was no token to drop — a freshly paired bot), the send (text or media) fails with `iLink sendmessage session not ready … the user must send the bot a message first (or re-pair)`; the rate-limit cooldown never opens for it. Only other `-2` responses trigger the rate-limit backoff/cooldown, and that cooldown error carries the raw `ret`/`errcode`/`errmsg`
 
 QR code expired during setup
 

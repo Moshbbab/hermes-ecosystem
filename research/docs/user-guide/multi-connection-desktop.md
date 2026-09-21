@@ -64,7 +64,7 @@ Switch gateways from the **Sessions** sidebar. Profiles, chats, messaging, and c
 
 In the Sessions sidebar's view menu, choose **Gateway & profile** while viewing all profiles. Each gateway gets its own collapsible section, with profile subsections containing their sessions. Two gateways with a `default` profile stay separate. Gateway headers start with the saved connection name; profile headers show the profile name.
 
-Use a gateway or profile section's menu to **Rename group**, **Reset name**, **Move up**, or **Move down**. Renaming changes only the sidebar label, not the gateway or profile. Gateways reorder as complete sections, and profiles reorder within their own gateway. Drag the section's leading icon to reorder it, or focus that handle and use Space, arrow keys, then Space to place it. Names, order, and collapsed sections are remembered on this desktop. Collapsing a gateway preserves its profiles' individual collapse states. Each profile's new-session action targets that profile on its owning gateway.
+Use a gateway or profile section's menu to **Rename group**, **Reset name**, **Move up**, or **Move down**. Renaming changes only the sidebar label, not the gateway or profile. Gateways reorder as complete sections, and profiles reorder within their own gateway. Drag the section header anywhere (its icon, its name, or the empty space) to reorder it, or focus the header and use Space, arrow keys, then Space to place it. Names, order, and collapsed sections are remembered on this desktop. Collapsing a gateway preserves its profiles' individual collapse states. Each profile's new-session action targets that profile on its owning gateway.
 
 The Hermes Cloud panel also lists **Saved Cloud gateways** when portal discovery is signed out. **Use gateway** selects an existing saved connection without changing the default gateway; **Active in this window** identifies the current one. Adding a new instance uses its friendly Cloud name, while existing custom connection names are preserved. Saved connections still need valid gateway authentication; manage sign-in from the registered connection controls.
 
@@ -81,7 +81,8 @@ The Hermes Cloud panel also lists **Saved Cloud gateways** when portal discovery
             -   **Session token** — paste the dashboard session token from the remote gateway. When editing, _"Leave blank to keep the saved token."_
             -   **OAuth** — sign in through the Nous Portal browser flow; no token to paste.
     -   _SSH only:_
-        -   **SSH host** — one composite field in `user@host:22` form (user and port optional). Your SSH key is used; the app adopts a dashboard token over the tunnel.
+        -   **SSH host** — one composite field in `user@host:22` form (user and port optional). Your SSH key is used; the app adopts a dashboard token over the tunnel. Remote probes run under the account's login shell; on a `zsh` login shell the probe watchdog cannot kill the whole process group, so a hung probe's grandchildren may linger on the remote (bash/sh remotes reap them).
+        -   **Hermes path (optional)** — full path to the `hermes` executable on the remote (for example `/opt/hermes/bin/hermes`). Leave blank to auto-detect. Set it when the remote's non-interactive shell does not have `hermes` on its `PATH` and **Test** reports _"Hermes is not installed on the remote host"_; clearing the field restores auto-detection.
 5.  Click **Save connection** (or **Cancel**).
 6.  Click **Test** on the new row and wait for _"Reachable"_.
 
@@ -122,7 +123,7 @@ The sidebar foot follows one hierarchy: **gateway → profile → sessions**. Ga
 -   **This device** remains a first-class gateway even when a remote connection is Primary. It can keep local sessions available during a remote outage, but the app does not call it "offline mode": the selected model or tools may still require internet access.
 -   The session list, messaging channels, cron jobs, settings, files, and memory are all scoped to the active `(gateway, profile)`. Switching from a Telegram gateway to a Signal gateway cannot leave the previous gateway's channel groups or sessions in the sidebar.
 -   Merely displaying the switcher reads Electron's local connection registry. Remote gateways are opened only when selected; there is no periodic fleet polling.
--   Hovering an agent pre-warms its backend so the switch doesn't pay a cold boot.
+-   Hovering an agent pre-warms its backend so the switch doesn't pay a cold boot. SSH agents are the exception: hovering never dials the tunnel or starts a remote backend — only opening one does.
 -   The **Capabilities** page (Skills / Tools / MCP) has a matching scope: its **Configuring** selector lists every `(profile, device)` agent from the union roster, and picking one reads and writes **that machine's** skills, toolsets, and MCP servers without switching the Sessions workspace. Hub installs, env keys, and MCP setup all land on the selected agent's backend. The MCP tab's _hot-reload into a live session_ button appears only for agents on the gateway the window is connected to; edits on other machines apply on their next session.
 
 Add, test, rename, or remove gateways in **Settings → Gateways**. The plug button beside the profile actions is a shortcut to that single management home, not a second add flow.

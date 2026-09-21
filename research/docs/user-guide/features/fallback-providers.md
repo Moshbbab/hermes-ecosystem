@@ -34,6 +34,25 @@ fallback_providers:
 
 Each entry requires both `provider` and `model`. Entries missing either field are ignored.
 
+When a rate-limit response names its reset time, the primary is benched until exactly then (a provider that says nothing gets the exponential 60 s → 4 h backoff). Optionally, skip the switch when the primary reopens soon:
+
+```
+fallback:
+  min_switch_reset_seconds: 120   # 0 (default) = always switch
+```
+
+Key
+
+Default
+
+Effect
+
+`fallback.min_switch_reset_seconds`
+
+`0` (off)
+
+A rate-limited primary whose declared reset is sooner than this many seconds is not swapped for a fallback; the retry backoff waits out the window instead.
+
 Gemini fallback entries accept `gemini`, `google`, `google-gemini`, and `google-ai-studio`. On Google's native API endpoint, all use the native Gemini client, including its `generationConfig.thinkingConfig` translation. A custom OpenAI-compatible base URL continues to use the compatible client instead.
 
 `fallback_model` vs `fallback_providers`
@@ -204,12 +223,6 @@ OpenCode Go
 
 `OPENCODE_GO_API_KEY`
 
-OpenCode Free
-
-`opencode-free`
-
-— (keyless, no credential)
-
 Kilo Code
 
 `kilocode`
@@ -306,6 +319,12 @@ Custom endpoint
 
 `base_url` + `key_env` (see below)
 
+Mixture of Agents preset
+
+`moa` (`model` = preset name)
+
+A configured MoA preset whose aggregator has credentials — the fallback runs the whole preset (references + aggregator), not the aggregator alone
+
 ### Custom Endpoint Fallback
 
 For a custom OpenAI-compatible endpoint, add `base_url` and optionally `key_env`:
@@ -326,16 +345,19 @@ The fallback activates automatically when the primary model fails with:
 -   **Server errors** (HTTP 500, 502, 503) — after exhausting retry attempts
 -   **Auth failures** (HTTP 401, 403) — immediately (no point retrying)
 -   **Not found** (HTTP 404) — immediately
--   **Invalid responses** — when the API returns malformed or empty responses repeatedly
+-   **Invalid responses** — when the API returns malformed or empty responses repeatedly. An HTTP-200 body whose only assistant text is a router's `Connect timeout, please try again later.` with zero completion tokens counts as invalid too (streamed or not, in the main loop, the iteration-limit summary and auxiliary calls), so it is retried instead of shown as the answer. A streamed refusal (the model declining with an explanation on the refusal channel) is a terminal `content_filter` result, not an empty response, so it is surfaced rather than retried. On the native Anthropic wire a `stop_reason: refusal` arrives with an empty body; Hermes reports the reason from the response's `stop_details` (category and, when present, explanation) in the refusal message and in the log line (`native_stop_reason=… stop_details=…`).
 
 When triggered, Hermes:
 
 1.  Resolves credentials for the fallback provider (including named custom providers using `key_cmd`)
 2.  Builds a new API client, preserving a dynamic credential source across timeout and request-client rebuilds
 3.  Swaps the model, provider, and client in-place
-4.  Resets the retry counter and continues the conversation
+4.  Re-resolves the reasoning effort for the fallback model (its `agent.reasoning_overrides` entry, else the global `agent.reasoning_effort`)
+5.  Resets the retry counter and continues the conversation
 
 The switch is seamless — your conversation history, tool calls, and context are preserved. The agent continues from exactly where it left off, just using a different model.
+
+The same re-resolution happens when the CLI falls back at **startup** because the primary provider's auth fails before the first request: the fallback model is sent its own configured effort, not the primary's. An explicit `hermes chat --reasoning <level>` is kept across that startup switch — it is your intent for the run.
 
 Fallback resets the prompt cache
 
@@ -390,7 +412,7 @@ fallback_providers:
 ```
 fallback_providers:
   - provider: openai-codex
-    model: gpt-5.3-codex
+    model: gpt-5.4
 ```
 
 ### Where Fallback Works
@@ -399,13 +421,17 @@ Context
 
 Fallback Supported
 
-CLI sessions
+CLI sessions (interactive and `hermes -z` one-shot)
 
-✔
+✔ (at startup when the primary's credentials/quota fail, mid-session, and a chain added or edited while a chat is open applies from its next turn)
 
 Messaging gateway (Telegram, Discord, etc.)
 
 ✔
+
+Desktop app / TUI chats
+
+✔ (a chain added or edited while a chat is open applies from its next turn)
 
 Subagent delegation
 
@@ -638,6 +664,8 @@ When you set an explicit auxiliary provider (e.g. `auxiliary.vision.provider: gl
 
 Transient HTTP 429 rate limits (`Retry-After: ...`) are treated as request constraints, not capacity problems — they respect your explicit provider choice and do **not** trigger the fallback ladder. Only daily/monthly quota exhaustion, payment errors, and connection failures bypass the explicit-provider gate.
 
+**Auth errors (HTTP 401) on an explicit provider** walk only step 2: if you wrote `auxiliary.<task>.fallback_chain`, its entries are tried in order (and a chain entry that dies mid-request hands off to the next one); the main agent model and the auto-detection chain are never consulted, because you did not opt that task into them. Without a chain the task fails on the auth error as before. Auth is credential-wide, so chain entries on the same provider label are skipped — point the spare at a different provider (a separate `providers:` entry counts).
+
 For users on `provider: auto` (no explicit aux provider), the existing auto-detection chain runs in place of steps 2–3. Its first step is already the main agent model, so `auto` users get the same outcome with zero config.
 
 ### Optional: per-task fallback chain
@@ -754,7 +782,7 @@ Full auto-detection chain (main agent model first, then provider chain) on capac
 
 Auxiliary tasks (any) — explicit provider
 
-`fallback_chain` (if set) → main agent model → warn + raise, on capacity errors only
+`fallback_chain` (if set) → main agent model → warn + raise, on capacity errors; auth errors (401) walk `fallback_chain` only
 
 `auxiliary.<task>.fallback_chain`
 
