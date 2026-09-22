@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer…">
+<meta name="description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It uses a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer…">
+<meta property="og:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It uses a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer…">
+<meta name="twitter:description" content="GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It uses a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer for generating cited prose and a self-wiring knowledge graph that extracts entity relationships without LLM calls.",
+  "description": "GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It uses a self-wiring knowledge graph to extract entity relationships and provides a synthesis layer that generates cited prose and gap analysis.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-22T02:53:09.000Z",
+  "dateModified": "2026-09-22T19:44:19.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30231
+    "userInteractionCount": 30236
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports corrections and withdrawals. It features a synthesis layer for generating cited prose and a self-wiring knowledge graph that extracts entity relationships without LLM calls.</p>
+    <p class="summary-text">GBrain is a memory layer for AI agents that stores explicit facts with their sources and supports keyword retrieval, semantic search, and synthesis. It uses a self-wiring knowledge graph to extract entity relationships and provides a synthesis layer that generates cited prose and gap analysis.</p>
     <ul class="summary-highlights">
-      <li>Supports keyword retrieval, semantic search, and automated background enrichment.</li>
-      <li>Exposes memory to agents via MCP on Tailscale tailnets.</li>
-      <li>Provides scoped access for team-based institutional memory.</li>
+      <li>Stores portable, explicit facts with provenance across multiple agents.</li>
+      <li>Extracts typed entity edges without requiring LLM calls.</li>
+      <li>Supports multi-user institutional memory with scoped access controls.</li>
     </ul>
   </div>
 </section>
@@ -341,11 +341,22 @@ gbrain search "who's working on AI agents at portfolio companies?"
 gbrain think "who's working on AI agents at portfolio companies?"
 </code></pre>
 <p><strong><code>gbrain search</code></strong> returns the top retrieved pages, ranked by hybrid scoring (vector + keyword + RRF + source-tier boost + reranker). Use it when you want raw material to skim: agent context windows, citation lookups, finding a specific quote.</p>
+<p>Search also tells you when its results are incomplete because projections are
+still rebuilding or a bounded vector scan ran short. Ask your agent <em>"Check
+whether my search index is ready"</em>; see <a href="https://github.com/garrytan/gbrain/blob/main/docs/architecture/RETRIEVAL.md#chunk-rebuilds-after-upgrading">search readiness and recovery</a>
+before treating an empty result as proof that a page is missing.</p>
 <p><strong><code>gbrain think</code></strong> runs the same retrieval, then composes a synthesized answer across the results with explicit citations to the source pages AND an honest note on what the brain doesn't know yet. The gap analysis is the differentiator: the answer tells you when a page is stale, when a claim is uncited, when two pages contradict each other, when there's a hole you should fill.</p>
 <p><strong>Say to your agent:</strong> <em>"What do we know about acme-example?"</em> — <em>"Tell me about alice-example before my meeting tomorrow"</em> — <em>"Search for who's working on AI agents."</em> Your agent routes these to the brain automatically; you never type the commands yourself.</p>
 <p><strong>Why it compounds.</strong> Pair the brain layer with <code>find_trajectory</code> and you get answers like <em>"how have the company's metrics changed AND what does the team look like right now AND what did they promise / share AND when did we last meet AND what's the value-add I can offer here"</em>: well-scored, well-cited, in one shot. That's the strategic moat. That's why building a 150K-page brain is worth the effort.</p>
 <p><code>gbrain agent run "..."</code> exposes the same surface to a sub-agent through the Minions queue, with crash-safe two-phase persistence. Same answers, durable.</p>
 <h3>How to get data in</h3>
+<p><strong>Already have a company knowledge repository?</strong> Say to your agent: <em>“Connect our
+existing company brain, preserve its files, and show me the import plan first.”</em>
+Try <code>gbrain sources demo company-brain</code> without keys or private data, then inspect
+your committed Markdown with <code>gbrain sources inspect &lt;path&gt; --profile company-brain</code>.
+The <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/company-brain-ingestion.md">company-brain ingestion guide</a> covers
+explicit destination approval, typed relationships, and resumable verification.
+It does not enable embeddings, sharing, schedules, or curation automatically.</p>
 <p>One command, local or hosted, synchronous receipt:</p>
 <pre><code class="language-bash">gbrain capture "the thought I want to remember"
 gbrain capture --file ./notes/today.md
@@ -472,8 +483,7 @@ gbrain reindex-search-vector --yes        # recreate triggers + backfill
 </code></pre>
 <p>The command is idempotent (re-running with the same language is a no-op for vector content) and uses the same recreate-and-backfill primitives as the migration. For accent-insensitive Portuguese (<code>pt_br</code>), see <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/multi-language-fts.md">docs/guides/multi-language-fts.md</a> for the <code>unaccent</code> + portuguese stemmer recipe. <strong>Say to your agent:</strong> <em>"Set my brain's search language to Portuguese and reindex."</em></p>
 <p><strong>50+ curated skills</strong> (the current list lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/manifest.json"><code>skills/manifest.json</code></a>). Routing lives in <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a>. Covers signal capture, ingest (idea / media / meeting), enrichment, querying, brain ops, citation fixing, daily task management, cron scheduling, reports, voice, soul audit, skill creation, eval framework, and migrations. Skills are markdown files (tool-agnostic), packaged as a single skillpack the installer drops into your agent workspace.</p>
-<p><strong>Say to your agent — the phrasebook.</strong> You never invoke a skill by name; you say what you want and your agent routes it. Every skill declares its trigger phrases in its frontmatter, and <a href="https://github.com/garrytan/gbrain/blob/main/skills/RESOLVER.md"><code>skills/RESOLVER.md</code></a> is the full human-readable phrasebook — one table of "when you say this, this skill fires." A taste: <em>"Ingest this PDF"</em> (media-ingest) — <em>"What's happening today?"</em> (briefing) — <em>"Fill my brain"</em> (cold-start) — <em>"Brain health"</em> / <em>"check backlinks"</em> (maintain — either phrase routes there) — <em>"Is my brain set up right?"</em> (gbrain-advisor) — <em>"Did the restart break anything?"</em> (smoke-test) — <em>"Run this as a background task"</em> (minion-orchestrator). If you're ever unsure what to say, ask your agent: <em>"What can my brain do?"</em> and have it read the resolver back to you.</p>
-<p><strong>Eval framework.</strong> <code>gbrain eval longmemeval</code> runs the public <a href="https://huggingface.co/datasets/xiaowu0162/longmemeval">LongMemEval</a> benchmark ag</p>
+<p>**Say to your ag</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/garrytan/gbrain#readme">Continue reading on GitHub</a></em></p>
 
