@@ -2626,7 +2626,7 @@ Compatibility/manual override for `discord.websocket_liveness_interval_seconds`.
 
 `HERMES_DISCORD_LIVENESS_FAILURE_THRESHOLD`
 
-Compatibility/manual override for `discord.websocket_liveness_failure_threshold`. Consecutive unhealthy WebSocket samples before forcing a reconnect (default: `2`). Prefer the `config.yaml` key.
+Compatibility/manual override for `discord.websocket_liveness_failure_threshold`. Consecutive unhealthy WebSocket samples before forcing a reconnect (default: `2`). Applies to soft signals only — a closed transport (`socket_closed` / `client_closed`) forces the reconnect on the first sample (#118487). Prefer the `config.yaml` key.
 
 `HERMES_MATRIX_TEXT_BATCH_DELAY_SECONDS` / `_SPLIT_DELAY_SECONDS`
 
