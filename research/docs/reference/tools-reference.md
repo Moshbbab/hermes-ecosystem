@@ -268,6 +268,8 @@ Write content to a file, completely replacing existing content. Use this instead
 
 —
 
+For local files, a full unredacted read (including all pages of the same file version) or a successful `write_file` supplies a whole-file baseline. Reading a smaller region afterward does not discard that baseline while the bytes remain unchanged. A changed file, an unread file, or a view with hidden/redacted or clamped content still needs a full current read before replacement; `patch` remains available for targeted edits. Writes made through terminal commands or `execute_code` do not establish a `write_file` baseline.
+
 ## `homeassistant` toolset
 
 Tool
@@ -512,7 +514,7 @@ Manage background processes started with terminal(background=true). Actions: 'li
 
 `terminal`
 
-Execute shell commands on a Linux environment. Filesystem persists between calls. Set `background=true` for long-running servers. Set `notify_on_complete=true` (with `background=true`) to get an automatic notification when the process finishes — no polling needed. Do NOT use cat/head/tail — use read\_file. Do NOT use grep/rg/find — use search\_files.
+Execute shell commands on a Linux environment. Filesystem persists between calls. Set `background=true` for long-running servers. Set `notify_on_complete=true` (with `background=true`) to get an automatic notification when the process finishes — no polling needed. Add `heartbeat=N` (seconds, min 60) to also receive a periodic notification carrying the output produced since the previous one — for long bounded jobs such as a merge train or a full test suite, so a failure is seen within N seconds instead of at exit. Do NOT use cat/head/tail — use read\_file. Do NOT use grep/rg/find — use search\_files.
 
 —
 
