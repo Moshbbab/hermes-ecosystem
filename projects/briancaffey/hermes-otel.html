@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that converts agent turns into OTLP traces. It captures model calls, tool executions, and sub-agent interactions, exporting token usage, cost, and latency metrics to OTLP/HTTP backends.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that converts agent turns into OTLP traces. It captures model calls, tool executions, and sub-agent delegations, exporting token usage, cost, and latency metrics to OTLP/HTTP backends.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-09-21T00:59:07.000Z",
+  "dateModified": "2026-09-22T00:06:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 67
+    "userInteractionCount": 68
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">OTel Plugin for Hermes Agent</p>
 
   <div class="meta-row">
-    <span class="stars">★ 67</span>
+    <span class="stars">★ 68</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-21</span>
+    <span><span class="meta-label">updated</span>2026-09-22</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that converts agent turns into OTLP traces. It captures model calls, tool executions, and sub-agent interactions, exporting token usage, cost, and latency metrics to OTLP/HTTP backends.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that converts agent turns into OTLP traces. It captures model calls, tool executions, and sub-agent delegations, exporting token usage, cost, and latency metrics to OTLP/HTTP backends.</p>
     <ul class="summary-highlights">
-      <li>Converts model calls and tool executions into OTLP traces.</li>
-      <li>Exports metrics for token counts, costs, and latency.</li>
+      <li>Exports traces and metrics to any OTLP/HTTP backend.</li>
       <li>Supports OpenInference and OTel GenAI attribute conventions.</li>
+      <li>Captures tool outcomes, token counts, and multi-agent nested traces.</li>
     </ul>
   </div>
 </section>
@@ -273,7 +273,25 @@ backends:
 capture_logs: true
 </code></pre>
 <p><a href="https://github.com/briancaffey/hermes-otel/blob/main/config.yaml.example"><code>config.yaml.example</code></a> in this repository documents every knob; every scalar knob is also a <code>HERMES_OTEL_*</code> environment variable. See the <a href="https://briancaffey.github.io/hermes-otel/reference/config-schema">config schema</a>, the <a href="https://briancaffey.github.io/hermes-otel/reference/env-vars">env var reference</a>, and the guides on <a href="https://briancaffey.github.io/hermes-otel/configuration/privacy">privacy</a>, <a href="https://briancaffey.github.io/hermes-otel/configuration/sampling">sampling</a>, <a href="https://briancaffey.github.io/hermes-otel/configuration/logs">logs</a> and <a href="https://briancaffey.github.io/hermes-otel/configuration/host-metrics">host &amp; GPU metrics</a>.</p>
-<p>Not seeing data? <code>HERMES_OTEL_DEBUG=true</code> writes a per-span log — see <a href="https://briancaffey.github.io/hermes-otel/development/debug-logging">debug logging</a>. The plugin also ships a Hermes skill, <code>hermes_otel:observability</code>, that walks the agent itself through setup and querying.</p>
+<p>Not seeing data? <code>HERMES_OTEL_DEBUG=true</code> writes a per-span log — see <a href="https://briancaffey.github.io/hermes-otel/development/debug-logging">debug logging</a>.</p>
+<h3>Ask the agent</h3>
+<p>The plugin ships a Hermes skill, <code>hermes_otel:observability</code>, with a terminal query tool the agent runs from the chat. Ask "why was my last turn slow?", "what did this session cost?" or "how often was the deployer skill loaded this week?" and it lists turns, draws one as the span tree above, totals tokens and cost per model, tool or session, and reads metrics and logs, from the local live store (no backend needed) or from any configured backend with a dashboard adapter.</p>
+<pre><code class="language-text">$ python3 ~/.hermes/plugins/hermes_otel/skills/observability/scripts/otel.py trace last
+trace 856433c66e23d0b8a0ef10d9ba2c1c53 · source live · 2026-09-21 23:53:22 UTC · session 20260921_195321_b18e68 · model openai/gpt-4o-mini
+
+agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇  turn 1 · 2 tools · 3 api calls · 39,919 tok · completed · cli
+├── llm.openai/gpt-4o-mini        13.19 s  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇   openrouter
+│   ├── api.openai/gpt-4o-mini     2.01 s  ▇▇                10,695 → 20 tok · tool_calls · 1 tool calls
+│   ├── tool.skill_view             37 ms    ▇               completed
+│   ├── api.openai/gpt-4o-mini     2.67 s    ▇▇▇             13,810 → 254 tok · 10,624 cached · tool_calls · 3 tool calls
+│   ├── tool.terminal              3.81 s        ▇▇▇▇        completed · python3 /private/tmp/claude-501/-Users-brian-gi…
+│   ├── tool.terminal              869 ms            ▇       completed · python3 /private/tmp/claude-501/-Users-brian-gi…
+│   ├── tool.terminal              315 ms             ▇      completed · python3 /private/tmp/claude-501/-Users-brian-gi…
+│   └── api.openai/gpt-4o-mini     3.09 s              ▇▇▇   14,832 → 308 tok · 13,952 cached · stop
+└── skill.observability           10.97 s    ▇▇▇▇▇▇▇▇▇▇▇▇▇   skill_view · completed
+── 10 spans · 13.22 s · 39,919 tokens
+</code></pre>
+<p><code>status</code>, <code>traces</code>, <code>trace</code>, <code>span</code>, <code>sessions</code>, <code>stats</code>, <code>metrics</code>, <code>logs</code> and read-only <code>sql</code>, each with <code>--json</code>, <code>--since</code> and <code>--source &lt;backend&gt;</code>: see <a href="https://briancaffey.github.io/hermes-otel/skill">The observability skill</a>.</p>
 <h3>How it works</h3>
 <p>Hermes fires lifecycle hooks; the plugin maps them onto spans, metrics and logs through one <code>TracerProvider</code> fanned out to every configured backend, and never blocks the agent: span end is a non-blocking enqueue, exporters run on their own threads, hooks fail open. The turn summary, tool identity inference, orphan sweep and batch export are described under <a href="https://briancaffey.github.io/hermes-otel/architecture/overview">Architecture</a>; known gaps under <a href="https://briancaffey.github.io/hermes-otel/reference/limitations">Limitations</a>. Linking MCP-server spans into the agent's trace is implemented on the plugin side but waits on Hermes, see <a href="https://briancaffey.github.io/hermes-otel/configuration/mcp-trace-propagation">MCP trace propagation</a>.</p>
 <h3>How this relates to Hermes' built-in telemetry</h3>
