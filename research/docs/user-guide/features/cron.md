@@ -74,7 +74,7 @@ Hermes will use the unified `cronjob_manage` tool internally.
 
 Before constructing any agent machinery for a scheduled run, the scheduler validates that the job's configuration can actually produce a successful run:
 
--   the provider API key resolves (skipped when a `fallback_providers` chain is configured, since the fallback path may rescue a missing primary key),
+-   the provider API key resolves (skipped for an unpinned job when a `fallback_providers` chain is configured, since the fallback path may rescue a missing primary key; a pinned job does not use that chain, so it is always checked),
 -   attached skills are ready (no missing required environment variables, commands, or credential files),
 -   delivery platform targets are known and have gateway credentials configured (`local`/`origin` targets are never checked),
 -   every MCP server the job names in its own `enabled_toolsets` resolved to at least one tool for this profile. A server that connected earlier in this gateway and is only reconnecting after a network blip (router reboot, DNS failure) does **not** block: the job runs with the tools that did resolve and the gateway log notes which servers were skipped (once per outage). A server that never connected for this profile (wrong URL or credentials, or a server another profile owns under a multiplexer), or one parked on a permanent error such as revoked credentials, blocks the run.
@@ -906,12 +906,16 @@ From the CLI: `hermes cron create "every 6h" "Scan for news" --continuity`, and 
 
 ## Provider recovery
 
-Cron jobs inherit your configured fallback providers and credential pool rotation. If the primary API key is rate-limited or the provider returns an error, the cron agent can:
+If the primary API key is rate-limited or the provider returns an error, the cron agent can:
 
--   **Fall back to an alternate provider** if you have `fallback_providers` (or the legacy `fallback_model`) configured in `config.yaml`
--   **Rotate to the next credential** in your [credential pool](/docs/user-guide/configuration#credential-pool-strategies) for the same provider
+-   **Rotate to the next credential** in your [credential pool](/docs/user-guide/configuration#credential-pool-strategies) for the same provider. This applies to every job, pinned or not.
+-   **Fall back to an alternate provider** from `fallback_providers` (or the legacy `fallback_model`) in `config.yaml` — **unpinned jobs only**. That covers a failure while resolving credentials before the run starts and a provider error mid-run.
 
-This means cron jobs that run at high frequency or during peak hours are more resilient — a single rate-limited key won't fail the entire run.
+A job with its own `provider`, `model` or `base_url` (set with `--provider` / `--model`, `--pin`, the dashboard, or `jobs.json`) never falls back to the global chain. The pin says which route the job runs on, and a fallback entry is a different provider and usually a different model, so when the pinned route fails the run fails and the failure alert says so. This is the same rule [subagent delegation](/docs/user-guide/features/delegation) applies to a pinned child. To keep fallback for a job, leave it unpinned: it follows `cron.model` / `cron.model_provider` (or the main model) and walks the chain like any other unpinned job.
+
+Before this rule, a pinned job whose provider failed could run on the first working `fallback_providers` entry instead, with a one-line notice in its output. If you relied on that, unpin the job (`hermes cron edit <job_id> --unpin`) and set the model through `cron.model` instead.
+
+A single rate-limited key therefore does not fail a run that has another credential for the same provider, and unpinned jobs still survive a provider outage when a chain is configured.
 
 ## Run failures (`last_error`)
 

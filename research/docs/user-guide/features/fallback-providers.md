@@ -439,7 +439,7 @@ Subagent delegation
 
 Cron jobs
 
-✔ (cron agents inherit configured fallback providers)
+✔ (unpinned jobs inherit the configured chain; a job with its own provider/model/base\_url never falls back to it)
 
 Auxiliary tasks on `provider: auto`
 
@@ -744,7 +744,7 @@ See [Subagent Delegation](/docs/user-guide/features/delegation) for full configu
 
 ## Cron Job Providers
 
-Cron jobs inherit your configured `fallback_providers` chain (or legacy `fallback_model`) when they create an agent. To use a different primary provider for a cron job, configure `provider` and `model` overrides on the cron job itself:
+Unpinned cron jobs inherit your configured `fallback_providers` chain (or legacy `fallback_model`), both when the primary's credentials fail to resolve before the run and when the provider errors mid-run. A job pinned to its own provider, model or endpoint does **not**: if that route fails, the run fails (same-provider [credential pool](/docs/user-guide/configuration#credential-pool-strategies) rotation still applies). This matches how a pinned [delegation](/docs/user-guide/features/delegation) child behaves. Pin a cron job with `provider` and `model` overrides on the job itself:
 
 ```
 cronjob(
@@ -756,7 +756,7 @@ cronjob(
 )
 ```
 
-See [Scheduled Tasks (Cron)](/docs/user-guide/features/cron) for full configuration details.
+To keep fallback for a job, leave it unpinned and choose its model with `cron.model` / `cron.model_provider` instead. See [Scheduled Tasks (Cron)](/docs/user-guide/features/cron#provider-recovery) for details.
 
 * * *
 
@@ -836,6 +836,6 @@ Uses `delegation.fallback_providers` when declared; otherwise only unpinned chil
 
 Cron jobs
 
-Inherit the configured `fallback_providers` chain; optional per-job provider override
+Unpinned jobs inherit the configured `fallback_providers` chain; a job with its own `provider` / `model` / `base_url` never falls back to it
 
-Per-job `provider` / `model`
+Per-job `provider` / `model`, or `cron.model` / `cron.model_provider`

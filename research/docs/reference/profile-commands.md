@@ -129,7 +129,7 @@ Name for the new profile. Must be a valid directory name (alphanumeric, hyphens,
 
 `--clone`
 
-Copy `config.yaml`, `.env`, `SOUL.md`, skills, and the curated `memories/MEMORY.md` / `memories/USER.md` from the current profile. Sessions, `state.db` and cron jobs are not copied.
+Copy `config.yaml`, `.env`, `SOUL.md`, skills, the curated `memories/MEMORY.md` / `memories/USER.md`, and the active `memory.provider`'s own config (`<provider>/` or `<provider>.json`, e.g. `hindsight/config.json`) from the current profile. Sessions, `state.db` and cron jobs are not copied.
 
 `--clone-all`
 

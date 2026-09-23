@@ -135,7 +135,7 @@ Visual fill indicator with color-coded thresholds
 
 Cost
 
-Estimated session cost (or `n/a` for unknown/zero-priced models)
+Estimated session cost (or `n/a` for unknown/zero-priced models). Rates come from Hermes' bundled official price table, then the provider's `/models` listing; on a direct first-party API (OpenAI, xAI, Anthropic, Google, DeepSeek, Xiaomi) a model missing from both is priced at the vendor's list price from models.dev. Proxies, relays and custom endpoints serving the same model id stay `n/a` rather than inherit that price.
 
 🗜️ N
 
@@ -249,7 +249,7 @@ Open the full-screen live work monitor (subagents and background processes) with
 
 `F7`
 
-Toggle the live work dock (subagents + background processes) between its multi-row preview and a single summary line without moving composer focus.
+Toggle the live work dock between its multi-row preview and a single summary line without moving composer focus. Besides subagents and background processes, the dock shows a standing `/goal` (active, parked or paused, with turns used) on its top row and the prompts waiting in `/queue` on its bottom rows.
 
 `Ctrl+D`
 
@@ -538,6 +538,8 @@ display:
 `"queue"` mode prepares a separate follow-up turn. `"steer"` always waits for the next tool-result boundary. The default `"interrupt"` mode responds sooner during model generation while avoiding cancellation of a running tool; a long foreground `terminal` command (a build, a poller) is handed to the background so the agent sees your message right away instead of after the command exits. Use `/stop` when you want to cancel the turn and its foreground work. Unknown values fall back to `"interrupt"`.
 
 `"steer"` has two automatic fallbacks: if the agent hasn't started yet, or if images are attached, the message falls back to `"queue"` behavior so nothing is lost.
+
+Whatever the mode, `/queue <prompt>` queues a follow-up turn explicitly, and `/queue list`, `/queue rm N`, `/queue edit N …` and `/queue move A B` act on the pending queue immediately, even mid-run. The live work dock lists what is waiting.
 
 You can also change it inside the CLI:
 

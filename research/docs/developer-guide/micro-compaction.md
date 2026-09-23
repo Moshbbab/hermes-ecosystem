@@ -59,6 +59,8 @@ Rather than keeping a pile of per-exchange summaries, there is exactly one runni
 
 Because that summary is cumulative, only the newest marker is kept in the transcript. Earlier markers are strictly redundant — the current summary already contains everything they held — so they're dropped as they're superseded. This matters more than it sounds: leaving them in place stacks near-duplicate copies of the same text, each with its own heading and end-marker scaffolding, and the transcript grows on every turn instead of shrinking.
 
+Dropping a marker leaves the user turns on either side of it adjacent, so they are joined into one user message for the model. That joined row is flagged `display_metadata.model_only`: the originals stay in display history as compacted rows, and every display projection (resume, paged history, prompt timeline) skips the join, so a resumed session shows each input exactly once.
+
 ### Defrag
 
 Merge into a summary often enough and it gets baggy — repetitive, and larger than the material justifies. When the running summary crosses a token threshold (2000 by default), the next pass **defrags**: one auxiliary call re-summarizes the running summary _itself_ into a fresh compact version, and the summary marker in the transcript is rewritten in place.

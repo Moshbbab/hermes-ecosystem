@@ -493,12 +493,14 @@ host.logs(...)                             // tail an app log file
 host.status()                              // one-shot system status snapshot
 host.restartGateway()                      // restart the backend gateway
 host.profileRoutes()                       // [{ profile, targetProfile, connectionId, mode }]
-host.requestProfile<T>(route, method, params?)   // registry-routed RPC; no foreground swap
+host.requestProfile<T>(route, method, params?, timeoutMs?, { spawnPriority? })   // registry-routed RPC; no foreground swap
 host.requestProfile<T>(profile, method, params?) // legacy v1/local overload
 host.request<T>(method, params?)           // active-gateway JSON-RPC — the real power
 ```
 
 `host.request` is the same JSON-RPC the app itself uses (sessions, config, skills, cron, kanban, …). `host.requestProfile` accepts a descriptor from `host.profileRoutes()` and routes that RPC through its exact registry source and profile without changing the active chat or gateway. The profile-only overload is retained only for the sole-local/legacy topology; registry-aware plugins should pass the descriptor so two sources exposing the same profile name cannot collide.
+
+A call that may cold-start a pooled profile backend dials at background priority by default, and background dials never get the slot the pool keeps free for user actions. When the call IS a user action (a save, a button press, a dialog opening), pass `host.requestProfile(route, method, params, undefined, { spawnPriority: 'foreground' })`; otherwise, with the pool full of warm backends, it waits out the 30-second slot timeout and fails. Keep the background default for polling and roster warming.
 
 `host.openWorkspace(id, { render, title?, minWidth?, onClose? })` docks a plugin-rendered view into the **main workspace zone** — the same center area session tiles and previews use — as a tab, and reveals it. Re-calling it with the same `id` refreshes the content in place and re-fronts the tab instead of opening a duplicate. Closing the tab (the tab's Close control or ⌘W) tears the registration down and fires your `onClose`; the returned disposer closes it programmatically. Feature-detect it (`typeof host.openWorkspace === 'function'`) and fall back to a regular contributed pane on older desktop builds — Bot Mode's group-chat rooms are the reference consumer (main-window takeover when available, in-panel view otherwise).
 
