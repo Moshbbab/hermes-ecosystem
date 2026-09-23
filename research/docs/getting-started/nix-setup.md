@@ -1044,8 +1044,8 @@ services.hermes-agent.extraDependencyGroups = [ "messaging" ];
 ```
 # Enable a memory provider
 services.hermes-agent = {
-  extraDependencyGroups = [ "hindsight" ];
-  settings.memory.provider = "hindsight";
+  extraDependencyGroups = [ "honcho" ];
+  settings.memory.provider = "honcho";
 };
 ```
 
@@ -1099,10 +1099,6 @@ Azure Entra ID auth
 
 Honcho memory provider
 
-`hindsight`
-
-Hindsight memory provider
-
 `modal`
 
 Modal terminal backend
@@ -1122,6 +1118,8 @@ Firecrawl web search
 `fal`
 
 FAL image generation
+
+Memory providers that live in the [plugin catalog](/docs/user-guide/features/plugins) rather than in the Hermes tree (e.g. Hindsight) are not extras. Install them like any catalog plugin with `hermes plugins install hindsight`, or declaratively via [`extraPlugins`](#directory-plugins-extraplugins) pointing at the plugin's source tree.
 
 Or use the pre-built `#messaging` or `#full` flake packages instead of per-extra configuration (see [Quick Start](#quick-start-any-nix-user)).
 
@@ -1170,7 +1168,7 @@ External flakes can override the package directly:
     nixpkgs.overlays = [ hermes-agent.overlays.default ];
     # Then:
     #   pkgs.hermes-agent.override { extraPythonPackages = [...]; }
-    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "hindsight" ]; }
+    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "honcho" ]; }
   };
 }
 ```
@@ -1594,7 +1592,7 @@ Python packages added to PYTHONPATH for entry-point plugin discovery. Build with
 
 `[]`
 
-pyproject.toml optional extras to include in the sealed venv (e.g. `["hindsight"]`). Resolved by uv — no collisions
+pyproject.toml optional extras to include in the sealed venv (e.g. `["honcho"]`). Resolved by uv — no collisions
 
 `restart`
 

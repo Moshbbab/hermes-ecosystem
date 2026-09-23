@@ -60,6 +60,14 @@ Minimum Hermes version, e.g. `>=0.19` (optional)
 
 OS restrictions, empty = all (optional)
 
+`title`
+
+Human name shown on cards, e.g. `NVIDIA App` (optional; defaults to `name`)
+
+`onboarding`
+
+`true` offers the plugin on the desktop onboarding card, beside the hosted connectors, on the platforms it lists. Curated: official entries only (optional, default `false`)
+
 `docs_url`
 
 External documentation link (optional)
