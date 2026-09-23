@@ -14,6 +14,8 @@ Every entry also has its own page at `/docs/plugins/<name>` (click a card): the 
 
 The catalog complements — it does not replace — the existing [plugin system](/docs/user-guide/features/plugins). Anything you can install from the catalog is a normal plugin under the hood; the catalog just adds discovery and a review layer on top.
 
+During desktop onboarding, the setup guide can also offer catalog plugins and skills through an approval card. Each row installs into your `default` profile only when you click Install, at the same reviewed commit this page describes.
+
 ## What's in an entry
 
 Each catalog entry is a small YAML file in the [`plugin-catalog/`](https://github.com/NousResearch/hermes-agent/tree/main/plugin-catalog) directory of the hermes-agent repository, declaring:

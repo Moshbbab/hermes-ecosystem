@@ -204,9 +204,9 @@ Search past conversation sessions.
 
 `setup`
 
-(none yet)
+`manage_catalog`
 
-Onboarding-only surface of the desktop setup profile (catalog install requests through the approval card). Granted by the backend to sessions whose profile carries `role: setup` in its `profile.yaml`; stripped from every other profile even when a config list, `HERMES_TUI_TOOLSETS`, or `all` names it. Not configurable and not listed by `hermes tools`.
+Onboarding-only surface of the desktop setup profile: search the plugin catalog and skills hub, and install items through the approval card. Granted by the backend to sessions whose profile carries `role: setup` in its `profile.yaml`; stripped from every other profile even when a config list, `HERMES_TUI_TOOLSETS`, or `all` names it. Not configurable and not listed by `hermes tools`.
 
 `skills`
 
