@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang#software",
   "name": "lintlang",
-  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts that operates locally without LLM calls or network access. It identifies defects such as ambiguous tool descriptions, missing operational limits, and schema mismatches before model execution.",
+  "description": "LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts that operates locally without LLM calls or network access. It identifies defects such as ambiguous tool descriptions, missing operational bounds, and schema mismatches before model runtime.",
   "url": "https://hermesatlas.com/projects/hermes-labs-ai/lintlang",
   "codeRepository": "https://github.com/hermes-labs-ai/lintlang",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "hermes-labs-ai",
     "url": "https://github.com/hermes-labs-ai"
   },
-  "dateModified": "2026-09-21T23:40:47.000Z",
+  "dateModified": "2026-09-23T09:28:56.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-09-21</span>
+    <span><span class="meta-label">updated</span>2026-09-23</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts that operates locally without LLM calls or network access. It identifies defects such as ambiguous tool descriptions, missing operational limits, and schema mismatches before model execution.</p>
+    <p class="summary-text">LintLang is a static analysis tool for AI agent instructions, tool descriptions, and system prompts that operates locally without LLM calls or network access. It identifies defects such as ambiguous tool descriptions, missing operational bounds, and schema mismatches before model runtime.</p>
     <ul class="summary-highlights">
-      <li>Performs deterministic analysis of prompts, tool definitions, and agent configurations.</li>
-      <li>Supports GitHub Actions, pre-commit hooks, and SARIF output for CI integration.</li>
-      <li>Requires Python 3.10+ and scans Markdown, JSON, YAML, and Python files.</li>
+      <li>Performs deterministic static analysis with zero LLM calls.</li>
+      <li>Detects ambiguous tools, missing bounds, and contract mismatches.</li>
+      <li>Supports Markdown, JSON, YAML, and specific Python prompt patterns.</li>
     </ul>
   </div>
 </section>
@@ -206,6 +206,32 @@ lintlang scan AGENTS.md
 Inspected: 18 tools (18 described, 18 with a schema)
 </code></pre>
 <p>A file LintLang could read nothing from is reported <code>SKIPPED</code>, never <code>PASS</code>.</p>
+<p>Reports also explain the separate HERM confidence label using its current
+coverage proxies: whether prompt-like framing and input-boundary language were
+detected. The guidance is conditional on the document's purpose; reference
+material can naturally receive lower confidence. This label is not a
+statistical probability, a finding-certainty estimate, or the structural
+PASS/REVIEW/FAIL verdict. The current coverage bands are high at 90% or more,
+medium at 75% or more, and low below 75%.</p>
+<h4>Conservative automatic rewrite</h4>
+<p><code>scan --fix</code> currently handles one exact case: a direct, standalone
+<code>Don't be verbose</code> instruction (with or without a final period; curly
+apostrophe is also accepted). It prints the unified diff before writing. Use
+<code>--dry-run</code> to preview without writing, or <code>--backup</code> to preserve the exact
+original bytes as <code>FILE.lintlang.bak</code> before the write; an existing backup is
+never overwritten.</p>
+<pre><code class="language-bash">lintlang scan AGENTS.md --fix --dry-run
+lintlang scan AGENTS.md --fix --backup
+</code></pre>
+<p>The file must start with a top-level <code># Instructions</code> heading, followed only
+by blank lines and the supported instruction as its first body line. Other
+headings, preambles, quoted, commented, code, and ambiguous contexts are left
+untouched; malformed lexical scope fails closed. Only one explicit <code>.md</code>, <code>.txt</code>, or <code>.prompt</code> file is
+accepted. H1/H2 suggestions that would
+invent tool behavior, output formats, or scope; security negatives; other
+priority rules; and cross-file conflicts remain manual. This is a narrow
+syntactic rewrite, not an automatic-fix score or a claim that other
+suggestions are safe to apply.</p>
 <p>LintLang does not decide whether arbitrary prose is true, predict runtime model behavior, or certify an agent as safe.</p>
 <h3>What it can scan</h3>
 <table>
@@ -284,6 +310,10 @@ lintlang scan AGENTS.md \
 <td>Optional non-blocking guidance after supported edits</td>
 </tr>
 <tr>
+<td>GitHub Copilot CLI</td>
+<td>On-demand audit of a named instruction or tool-definition file</td>
+</tr>
+<tr>
 <td>Gemini CLI</td>
 <td>Optional non-blocking guidance after supported edits</td>
 </tr>
@@ -300,7 +330,7 @@ lintlang scan AGENTS.md \
 <td>Opt-in external plugin for existing MegaLinter users</td>
 </tr>
 </tbody></table>
-<p>See the <a href="https://github.com/hermes-labs-ai/lintlang/blob/main/docs/integrations.md">integrations and ecosystem guide</a> for setup instructions and public ecosystem references.</p>
+<p>See the <a href="https://github.com/hermes-labs-ai/lintlang/blob/main/docs/integrations.md">integrations and ecosystem guide</a> for setup instructions and public ecosystem references. The <a href="https://github.com/hermes-labs-ai/lintlang/blob/main/integrations/copilot-cli/README.md">GitHub Copilot CLI plugin guide</a> gives the direct install command.</p>
 <h3>Results and exit behavior</h3>
 <table>
 <thead>
