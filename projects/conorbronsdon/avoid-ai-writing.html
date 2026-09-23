@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a two-pass…">
+<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It identifies specific…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a two-pass…">
+<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It identifies specific…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a two-pass…">
+<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It identifies specific…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+Codex%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a two-pass editing process and a reference catalog of 74 pattern categories to identify and replace specific linguistic markers with plainer alternatives.",
+  "description": "avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It identifies specific language, structure, and communication tells using a multi-tier word replacement table and 74 pattern categories.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-22T18:07:42.000Z",
+  "dateModified": "2026-09-23T04:47:39.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4671
+    "userInteractionCount": 4676
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-22</span>
+    <span><span class="meta-label">updated</span>2026-09-23</span>
   </div>
 
   <div class="actions">
@@ -148,11 +148,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It utilizes a two-pass editing process and a reference catalog of 74 pattern categories to identify and replace specific linguistic markers with plainer alternatives.</p>
+    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite content to remove detectable AI patterns. It identifies specific language, structure, and communication tells using a multi-tier word replacement table and 74 pattern categories.</p>
     <ul class="summary-highlights">
       <li>Supports rewrite, detect-only, and edit-in-place modes.</li>
-      <li>Features a 112-entry word replacement table across three tiers.</li>
-      <li>Includes optional voice profiles for casual, professional, or technical tones.</li>
+      <li>Features a two-pass editing process with optional voice profiles.</li>
+      <li>Compatible with agentskills.io, Claude Code, and Hermes.</li>
     </ul>
   </div>
 </section>
@@ -893,7 +893,7 @@ or add it directly to a workflow:</p>
 steps:
   - uses: actions/checkout@v7
   - id: gate
-    uses: conorbronsdon/avoid-ai-writing@v3.35.0
+    uses: conorbronsdon/avoid-ai-writing@v3.36.0
     with:
       glob: "**/*.md"
       threshold: "6"
@@ -901,10 +901,8 @@ steps:
 </code></pre>
 <p>The example pins the release tag. For stricter supply-chain controls, pin
 <code>uses:</code> to the full commit SHA for that release.</p>
-<p>Step outputs and the gate CLI's <code>--json</code> flag were added after <code>v3.35.0</code>. The
-tag pinned above has neither, so <code>steps.gate.outputs.*</code> resolves to empty
-strings there. To use them, pin <code>uses:</code> to a later release or to a commit SHA
-from <code>main</code>.</p>
+<p>Step outputs and the gate CLI's <code>--json</code> flag require <code>v3.36.0</code> or later. On
+<code>v3.35.0</code> and earlier, <code>steps.gate.outputs.*</code> resolves to empty strings.</p>
 <p>The Action exposes step outputs via <code>$GITHUB_OUTPUT</code>:</p>
 <ul>
 <li><code>pass</code>: <code>'true'</code> when all scanned files are within threshold; <code>'false'</code> on a threshold failure or operational error.</li>

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent. It provides a three-panel layout with a chat center, session navigation sidebar,…">
+<meta name="description" content="Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent. It provides a three-panel layout with a chat center, session navigation sidebar,…">
+<meta property="og:description" content="Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent. It provides a three-panel layout with a chat center, session navigation sidebar,…">
+<meta name="twitter:description" content="Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent. It provides a three-panel layout with a chat center, session navigation sidebar, and workspace file browser, offering parity with the Hermes CLI experience.",
+  "description": "Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It provides full parity with the CLI experience, allowing users to manage sessions, browse workspace files, and configure agent settings through a three-panel browser layout.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-09-22T17:33:43.000Z",
+  "dateModified": "2026-09-23T04:19:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 18526
+    "userInteractionCount": 18534
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-22</span>
+    <span><span class="meta-label">updated</span>2026-09-23</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent. It provides a three-panel layout with a chat center, session navigation sidebar, and workspace file browser, offering parity with the Hermes CLI experience.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight, self-hosted web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It provides full parity with the CLI experience, allowing users to manage sessions, browse workspace files, and configure agent settings through a three-panel browser layout.</p>
     <ul class="summary-highlights">
-      <li>Built using Python and vanilla JavaScript without a build step.</li>
-      <li>Includes a circular context ring for monitoring token usage.</li>
-      <li>Supports secure access via SSH tunnels.</li>
+      <li>Maintains 1:1 parity with Hermes CLI features and existing models.</li>
+      <li>Features a three-panel layout for sessions, chat, and file browsing.</li>
+      <li>Runs the Hermes agent in-process without requiring an external API server.</li>
     </ul>
   </div>
 </section>
@@ -669,6 +669,11 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <td>Working directory for the server process. Defaults to the agent dir; point it at a writable workspace when the agent dir is read-only so fallback relative writes land somewhere writable</td>
 </tr>
 <tr>
+<td><code>HERMES_WEBUI_VISIBLE_SESSION_LIMIT</code></td>
+<td><code>20</code></td>
+<td>Size of the sidebar's interactive recency window (how many recent non-cron/webhook sessions are listed). Also bounds how many delegated subagent children can nest at once, since a child only renders when its row wins a slot in the window — raise it for wide fan-outs. Non-integer or non-positive values fall back to the default. Values above 200 are clamped. Resolved before profile init, so a profile <code>.env</code> cannot override it</td>
+</tr>
+<tr>
 <td><code>HERMES_WEBUI_AGENT_CACHE_MAX</code></td>
 <td><code>25</code></td>
 <td>Max live agent instances kept warm in the in-memory LRU. Each pins a full conversation transcript, so this is the dominant lever on resident memory — lower it on installs with many long sessions to cap RAM (at the cost of more cold reloads)</td>
@@ -1057,8 +1062,7 @@ Autonomous-AI contributor (Hermes Agent-driven) focused on durability: <code>sta
 <code>/api/session/lineage-report/&lt;sid&gt;</code> endpoint for bounded session graph diagnostics (#2012), stale Mermaid render error cleanup (#1337), <code>session_source="fork"</code> continuation-chain isolation (#2063), lazy lineage-report fetch on sidebar badge expand (#2130), and a long tail of frontend reliability fixes around session loading.</p>
 <p><strong><a href="https://github.com/jasonjcwu">@jasonjcwu</a></strong> — Composer + transcript polish (16 PRs, <code>v0.50.227</code> → <code>v0.51.132</code>)
 Sidebar collapse via active-rail click (#2054, fuses #1884 + #1924), composer chip lightbox (#1758), title fixes for tool-heavy first turns, silent compress-status during session switch (#2185), concurrent-send loss fix (#2186), in-transcript steer message badges (#2187), and a string of frontend polish fixes.</p>
-<p><strong><a href="https://github.com/Jordan-SkyLF">@Jordan-SkyLF</a></strong> — Live streaming + UX polish (12 PRs, <code>v0.50.18</code> → <code>v0.51.66</code>)
-Original sprint of workspace fallback resolution, live reasoning cards (#366, #367, #394–#397), then a recent burst: manual "Refresh usage" button on the Provider quota card (#2150), cancelled-turn status classification (#2151), Firefox sidebar scroll stabilization (#2200), early provisional session titles (#2202), target-aware "What's new?" update-banner links (#2207), and MC</p>
+<p>**[@Jordan-SkyLF]</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
@@ -1101,7 +1105,7 @@ Original sprint of workspace fallback resolution, live reasoning cards (#366, #3
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 872</div>
+        <div class="stars">★ 873</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>
