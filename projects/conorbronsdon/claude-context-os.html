@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os#software",
   "name": "claude-context-os",
-  "description": "Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and handoffs in Markdown files for coding agents. It uses a deterministic lifecycle kernel to manage state across different runtimes without relying on an agent's native memory as the source of truth.",
+  "description": "Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and handoffs in Markdown files for coding agents. It uses a deterministic lifecycle kernel to manage state transitions and context proposals across multiple supported runtimes.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/claude-context-os",
   "codeRepository": "https://github.com/conorbronsdon/claude-context-os",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-24T04:59:01.000Z",
+  "dateModified": "2026-09-24T06:34:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -82,7 +82,7 @@
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
     <span id="meta-count">252·repos</span>
-    <span id="meta-version">hermes·v0.21.4</span>
+    <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
   <nav class="mast-nav" aria-label="Primary">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and handoffs in Markdown files for coding agents. It uses a deterministic lifecycle kernel to manage state across different runtimes without relying on an agent's native memory as the source of truth.</p>
+    <p class="summary-text">Context OS is a Git-backed context and workflow layer that stores project instructions, decisions, and handoffs in Markdown files for coding agents. It uses a deterministic lifecycle kernel to manage state transitions and context proposals across multiple supported runtimes.</p>
     <ul class="summary-highlights">
       <li>Supports Claude Code, Codex, OpenClaw, and OpenCode as first-class agents.</li>
+      <li>Stores durable context in plain Markdown instead of native agent memory.</li>
       <li>Uses hash-checked proposals and receipts for reviewed context updates.</li>
-      <li>Provides a source-neutral migration workflow for chat and document exports.</li>
     </ul>
   </div>
 </section>
@@ -275,7 +275,7 @@ contract</a>.</p>
 </tr>
 <tr>
 <td>New workspace in experimental Hermes support</td>
-<td>Read the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/hermes/README.md">evidence limit</a>, then run <code>/setup</code> after exposing the repository skills</td>
+<td>Read the <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/adapters/hermes/README.md">evidence limit</a>, then run <code>/context-setup</code> after exposing the repository skills</td>
 </tr>
 <tr>
 <td>New workspace in OpenClaw</td>
@@ -305,7 +305,7 @@ contract</a>.</p>
 <p>The setup interview fills the identity, first project, workflows, and weekly state files. It can start from your answers or from a migration packet you reviewed first. See the full <a href="https://github.com/conorbronsdon/claude-context-os/blob/main/docs/getting-started.md">getting started guide</a> for prerequisites, privacy choices, and verification.</p>
 <h3>See the loop</h3>
 <p><img src="https://raw.githubusercontent.com/conorbronsdon/claude-context-os/main/docs/assets/start-demo.gif" alt="A start session in Claude Code: state files load and a session briefing comes back, using sample data from the included example musician project" loading="lazy" decoding="async"></p>
-<p><code>/start</code> in Claude Code or Hermes, <code>/context-start</code> in Cursor or OpenCode, <code>$start</code> in Codex,
+<p><code>/start</code> in Claude Code, <code>/context-start</code> in Hermes, Cursor, or OpenCode, <code>$start</code> in Codex,
 <code>/contextos &lt;alias&gt; start</code> in OpenClaw, and <code>@skills:context-start</code> in a Devin session read your state,
 priorities, decisions, blockers, and recent handoff. The result is grounded in
 files rather than reconstructed from chat.</p>
@@ -332,7 +332,7 @@ files rather than reconstructed from chat.</p>
 <td><code>/setup</code></td>
 <td><code>$setup</code></td>
 <td><code>/context-setup</code></td>
-<td><code>/setup</code></td>
+<td><code>/context-setup</code></td>
 <td><code>/contextos &lt;alias&gt; setup</code></td>
 <td><code>/context-setup</code></td>
 <td><code>@skills:context-setup</code></td>
@@ -343,7 +343,7 @@ files rather than reconstructed from chat.</p>
 <td><code>/start</code></td>
 <td><code>$start</code></td>
 <td><code>/context-start</code></td>
-<td><code>/start</code></td>
+<td><code>/context-start</code></td>
 <td><code>/contextos &lt;alias&gt; start</code></td>
 <td><code>/context-start</code></td>
 <td><code>@skills:context-start</code></td>
@@ -354,7 +354,7 @@ files rather than reconstructed from chat.</p>
 <td><code>/update</code></td>
 <td><code>$update</code></td>
 <td><code>/context-update</code></td>
-<td><code>/update</code></td>
+<td><code>/context-update</code></td>
 <td><code>/contextos &lt;alias&gt; update</code></td>
 <td><code>/context-update</code></td>
 <td><code>@skills:context-update</code></td>
@@ -365,7 +365,7 @@ files rather than reconstructed from chat.</p>
 <td><code>/end</code></td>
 <td><code>$end</code></td>
 <td><code>/context-end</code></td>
-<td><code>/end</code></td>
+<td><code>/context-end</code></td>
 <td><code>/contextos &lt;alias&gt; end</code></td>
 <td><code>/context-end</code></td>
 <td><code>@skills:context-end</code></td>
@@ -501,7 +501,7 @@ plugin itself exposes no apply command.</p>
 <td align="right"><code>/setup</code> etc.</td>
 <td align="right"><code>$setup</code> etc.</td>
 <td align="right"><code>/context-setup</code> etc.</td>
-<td align="right"><code>/setup</code> etc.</td>
+<td align="right"><code>/context-setup</code> etc.</td>
 <td align="right"><code>/contextos &lt;alias&gt; setup</code> etc.</td>
 <td align="right"><code>/context-setup</code> etc.</td>
 <td align="right"><code>@skills:context-setup</code> etc.</td>
@@ -729,7 +729,7 @@ behavior of an installed agent version or an external service.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 26.7K</div>
+        <div class="stars">★ 26.9K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -745,7 +745,7 @@ behavior of an installed agent version or an external service.</p>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 289</div>
+        <div class="stars">★ 288</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
