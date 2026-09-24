@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OnlyTerp/hermes-optimization-guide — Hermes Agent Guides &amp; Docs | Hermes Atlas</title>
-<meta name="description" content="This project provides a performance optimization guide and operational playbook for the Nous Research Hermes Agent, synced with the v0.20.5 'Herald' release.…">
+<meta name="description" content="The Hermes Optimization Guide provides documentation and configuration templates for managing Hermes Agent v0.21.4 deployments. It focuses on reducing token…">
 <link rel="canonical" href="https://hermesatlas.com/projects/OnlyTerp/hermes-optimization-guide">
 <meta property="og:title" content="OnlyTerp/hermes-optimization-guide — Hermes Atlas">
-<meta property="og:description" content="This project provides a performance optimization guide and operational playbook for the Nous Research Hermes Agent, synced with the v0.20.5 'Herald' release.…">
+<meta property="og:description" content="The Hermes Optimization Guide provides documentation and configuration templates for managing Hermes Agent v0.21.4 deployments. It focuses on reducing token…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/OnlyTerp/hermes-optimization-guide">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="OnlyTerp/hermes-optimization-guide — Hermes Atlas">
-<meta name="twitter:description" content="This project provides a performance optimization guide and operational playbook for the Nous Research Hermes Agent, synced with the v0.20.5 'Herald' release.…">
+<meta name="twitter:description" content="The Hermes Optimization Guide provides documentation and configuration templates for managing Hermes Agent v0.21.4 deployments. It focuses on reducing token…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-optimization-guide&amp;subtitle=Hermes+Agent+setup%2C+migration%2C+LightRAG%2C+Telegram%2C+and+skill+creation+guide&amp;kind=project+%C2%B7+guides">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/OnlyTerp/hermes-optimization-guide#software",
   "name": "hermes-optimization-guide",
-  "description": "This project provides a performance optimization guide and operational playbook for the Nous Research Hermes Agent, synced with the v0.20.5 'Herald' release. It includes 30 guide parts, 13 installable skills, and 15 incident postmortems documenting root causes and recovery steps for production deployments.",
+  "description": "The Hermes Optimization Guide provides documentation and configuration templates for managing Hermes Agent v0.21.4 deployments. It focuses on reducing token costs, improving execution speed, and implementing security controls for agents with shell access.",
   "url": "https://hermesatlas.com/projects/OnlyTerp/hermes-optimization-guide",
   "codeRepository": "https://github.com/OnlyTerp/hermes-optimization-guide",
   "applicationCategory": "ReferenceApplication",
@@ -47,13 +47,13 @@
     "name": "OnlyTerp",
     "url": "https://github.com/OnlyTerp"
   },
-  "dateModified": "2026-08-28T09:56:23.000Z",
+  "dateModified": "2026-09-24T02:37:22.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 657
+    "userInteractionCount": 658
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Hermes Agent setup, migration, LightRAG, Telegram, and skill creation guide</p>
 
   <div class="meta-row">
-    <span class="stars">★ 657</span>
+    <span class="stars">★ 658</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-28</span>
+    <span><span class="meta-label">updated</span>2026-09-24</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This project provides a performance optimization guide and operational playbook for the Nous Research Hermes Agent, synced with the v0.20.5 'Herald' release. It includes 30 guide parts, 13 installable skills, and 15 incident postmortems documenting root causes and recovery steps for production deployments.</p>
+    <p class="summary-text">The Hermes Optimization Guide provides documentation and configuration templates for managing Hermes Agent v0.21.4 deployments. It focuses on reducing token costs, improving execution speed, and implementing security controls for agents with shell access.</p>
     <ul class="summary-highlights">
-      <li>Includes 13 installable skills and 5 opinionated configuration templates.</li>
-      <li>Provides a one-command VPS bootstrap script with SHA256 verification.</li>
-      <li>Features 15 incident postmortems documenting real-world failure modes and fixes.</li>
+      <li>Verified against Hermes Agent v0.21.4 with automated drift detection.</li>
+      <li>Includes validated config templates for lean, local, and hardened deployments.</li>
+      <li>Provides measured token costs for specific toolsets and configuration settings.</li>
     </ul>
   </div>
 </section>
@@ -153,512 +153,241 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>Hermes Optimization Guide</h2>
+    <h2>The Hermes Optimization Guide</h2>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/OnlyTerp/hermes-optimization-guide/main/assets/hero-banner.png" alt="Hermes Optimization Guide — the practical playbook for the Nous Research Hermes Agent across CLI, TUI, web, and the new native desktop app" width="880">
+  <img src="https://raw.githubusercontent.com/OnlyTerp/hermes-optimization-guide/main/assets/hero-banner.jpg" alt="Hermes Optimization Guide" width="820">
 </p>
 
-<p><a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"></a>
-<a href="https://github.com/NousResearch/hermes-agent/releases/tag/v2026.8.19"><img src="https://img.shields.io/badge/Hermes-v0.20.5%20%282026.8.19%29-9146FF" alt="Hermes" loading="lazy" decoding="async"></a>
-<a href="./CHANGELOG.md"><img src="https://img.shields.io/badge/Last%20updated-2026--08--28-brightgreen" alt="Last updated" loading="lazy" decoding="async"></a>
-<a href="#table-of-contents"><img src="https://img.shields.io/badge/parts-30-blue" alt="Parts" loading="lazy" decoding="async"></a>
-<a href="./docs/failure-modes.md"><img src="https://img.shields.io/badge/postmortems-15-red" alt="Postmortems" loading="lazy" decoding="async"></a>
-<a href="./skills/"><img src="https://img.shields.io/badge/installable%20skills-13-blue" alt="Skills" loading="lazy" decoding="async"></a>
-<a href="./templates/config/"><img src="https://img.shields.io/badge/config%20templates-5-blue" alt="Configs" loading="lazy" decoding="async"></a>
-<a href="./.github/workflows/ci.yml"><img src="https://github.com/OnlyTerp/hermes-optimization-guide/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" decoding="async"></a>
-<a href="./CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome" loading="lazy" decoding="async"></a></p>
+<p align="center">
+  <a href="https://github.com/NousResearch/hermes-agent/releases/tag/v2026.9.21"><img alt="Verified against Hermes v0.21.4" src="https://img.shields.io/badge/verified%20against-Hermes%20v0.21.4-7B3FE4"></a>
+  <a href="./.github/workflows/drift-guard.yml"><img alt="Drift guard" src="https://github.com/OnlyTerp/hermes-optimization-guide/actions/workflows/drift-guard.yml/badge.svg"></a>
+  <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue"></a>
+</p>
+
+<p><strong>Run <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> well: cheaper, faster, safer, and actually getting better over time.</strong></p>
+<p>Hermes does a lot out of the box. The <a href="https://hermes-agent.nousresearch.com/docs/">official docs</a> tell you everything it <em>can</em> do. This guide tells you what to <em>do</em>: which settings matter, what they cost, what breaks, and the fixes that have been confirmed to work. Where it says something costs 2,311 tokens, that number was measured on a real install.</p>
 <blockquote>
-<p><strong>Synced with upstream tag v2026.8.19 (Hermes v0.20.5) — the "Herald" line.</strong> Version claims in this repo are pinned-tag claims, not rolling "current as of today" claims — the drift-guard CI re-audits the guide against that tag on every push and weekly. · <strong>30 parts, 13 installable guide skills, 5 opinionated configs, 4 reference architectures, one-command VPS bootstrap, 15 incident postmortems</strong> · Everything in the v0.20 wave (streaming voice, A2A v1.0, desktop platform, background computer use) plus the v0.18 "Judgment" line (MoA, <code>/goal</code> contracts, <code>/learn</code>). <strong>And the part most guides skip: <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md">Part 29 — Lessons from Production</a>, the operational laws extracted from running this thing as a daily-driver — failover discipline, relay restarts without casualties, vision verification, tests that can't lie, evidence discipline.</strong> <strong>Bring any model</strong> — this guide is about the <em>harness</em>, not the weights.</p>
-<p>Other languages: <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/README-zh.md">中文</a> · <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/README-ja.md">日本語</a></p>
+<p><strong>Verified against Hermes Agent v0.21.4</strong> (tag <code>v2026.9.21</code>, released 2026-09-21). Every command, flag, slash command, config key, and official-docs link in this repo is checked against that release by CI. Hermes ships fast; when it moves, the <a href="#how-this-guide-stays-accurate">drift guard</a> opens an issue.</p>
 </blockquote>
-<h4>The war-tested Hermes guide — docs, runnable artifacts, and scar tissue</h4>
-<p>Every part you need to go from fresh install to a production Hermes deployment — driven from the <strong>native desktop app</strong>, the CLI/TUI, a browser admin panel, or <strong>30+ chat platforms</strong>. Orchestrate Claude Code / Codex / Gemini CLI through durable Kanban lanes and <strong>multi-agent swarms</strong>, plug into any MCP server, trace every call in Langfuse, push heavy work onto disposable sandboxes — or run the whole thing <strong>locally on your own GPU</strong>. Model-agnostic throughout: bring whatever weights you want, the guide is about the <em>harness</em>.</p>
-<p>Unlike most guides, the prescriptions come with <strong>working files</strong>: <a href="./skills"><code>skills/</code></a> you can <code>ln -s</code> into <code>~/.hermes/skills/</code>, <a href="./templates/config"><code>templates/config/</code></a> you <code>cp</code> to <code>~/.hermes/config.yaml</code>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/vps-bootstrap.sh"><code>scripts/vps-bootstrap.sh</code></a> that takes a fresh VPS to production in one command. And unlike <em>every</em> guide, the claims come with <strong>receipts</strong>: CI re-verifies every command name, config key, and pinned hash against the pinned upstream tag, and the <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">postmortem index</a> documents 15 real incidents in the shape that matters: <strong>Symptom → Root cause → Recovery → Permanent fix.</strong></p>
-<p><strong>Start here if you already run Hermes:</strong> <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md">Part 29 — Lessons from Production</a> is the distilled operational lawbook: never fail over on a transient, gate fan-out concurrency, graceful-drain relays, verify vision with known targets, negative-control every fix, no tool result = no number.</p>
-<p align="center">
-  <img src="https://raw.githubusercontent.com/OnlyTerp/hermes-optimization-guide/main/assets/runnable-artifacts.svg" alt="Docs plus runnable artifacts — 30 guide parts, 13 installable skills, 5 config templates, 4 reference architectures, one-command VPS bootstrap, 8-question config wizard" width="920">
-</p>
-
-<p><em>By Terp — <a href="https://x.com/OnlyTerp">Terp AI Labs</a></em> · Last updated <strong>August 28, 2026</strong> · <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CHANGELOG.md">CHANGELOG</a> · <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/ROADMAP.md">ROADMAP</a> · <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/ECOSYSTEM.md">ECOSYSTEM</a></p>
+<blockquote>
+<p><strong>Coming from the 30-part v1 guide?</strong> It has been rebuilt from scratch. The <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CHANGELOG.md#where-the-v1-parts-went">CHANGELOG</a> maps every old part to its new chapter, and the old files remain in git history.</p>
+</blockquote>
 <hr>
-<h3>Install</h3>
-<p>Pick the surface that fits you — they all drive the <strong>same</strong> agent, config, keys, sessions, and skills.</p>
-<p><strong>Easiest — the desktop app.</strong> Grab the <a href="https://hermes-agent.nousresearch.com/docs/user-guide/desktop">Hermes Desktop</a> installer for macOS/Windows/Linux (or run <code>hermes desktop</code> if you already have the CLI). First launch offers <strong>Quick Setup via Nous Portal</strong> — sign in, pick a model, start chatting. Full tour: <strong><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part24-desktop-app.md">Part 24: Hermes Desktop App</a></strong>.</p>
-<p><strong>Terminal — verify, then run.</strong> macOS / Linux (pinned: downloads the official
-installer, checks its sha256, refuses to run on mismatch):</p>
-<pre><code class="language-bash">curl -fsSL https://hermes-agent.nousresearch.com/install.sh -o hermes-install.sh \
-  &amp;&amp; echo "0582d9b1562efcb6e0ac62f4451021667830b830a72ce7d91eaea9fee8b6c09b  hermes-install.sh" | sha256sum -c - \
-  &amp;&amp; bash hermes-install.sh
-</code></pre>
-<p>The pin was computed from the live installer on 2026-08-22 (see
-<a href="./docs/evidence"><code>docs/evidence/</code></a>). If the hash mismatches, upstream rotated
-the script — inspect the diff before re-pinning. Prefer this over piping
-straight to <code>bash</code> (<code>curl -fsSL …/install.sh | bash</code>), which runs whatever
-shows up without asking.</p>
-<p>Windows (native, PowerShell):</p>
-<pre><code class="language-powershell">iex (irm https://hermes-agent.nousresearch.com/install.ps1)
-</code></pre>
-<p><strong>Server — pinned, never pipe-to-bash from <code>main</code>.</strong> On a fresh Debian 12 /
-Ubuntu 24.04 box (2 vCPU / 4 GB RAM is plenty, ~$5/mo). Fetch the bootstrap
-<strong>from a tagged release</strong>, verify its sha256, then run it — never <code>curl | bash</code>
-from a moving branch, because a compromised repo could edit the pins inside:</p>
-<pre><code class="language-bash"># 1. Fetch from the tagged release (not main)
-curl -fsSL https://raw.githubusercontent.com/OnlyTerp/hermes-optimization-guide/v1.4/scripts/vps-bootstrap.sh \
-  -o vps-bootstrap.sh
-
-# 2. Verify against the SHA256SUMS published on the Release page
-curl -fsSL https://github.com/OnlyTerp/hermes-optimization-guide/releases/download/v1.4/SHA256SUMS \
-  -o SHA256SUMS
-grep " vps-bootstrap.sh$" SHA256SUMS | sha256sum -c -
-
-# 3. Run
-sudo bash vps-bootstrap.sh
-</code></pre>
-<p>The authoritative hashes live in the <strong><code>SHA256SUMS</code> asset attached to the
-<a href="https://github.com/OnlyTerp/hermes-optimization-guide/releases">GitHub Release</a></strong>
-(computed by CI from the tag's actual bytes at release time — never
-hand-typed). The table below mirrors that asset; CI's
-<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/.github/workflows/release-hash-check.yml"><code>release-hash-check</code></a> job
-re-fetches the tagged file on every push and fails if they disagree.</p>
+<h3>Start here</h3>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Tag</th>
-<th>sha256</th>
+<th>If you are…</th>
+<th>Read</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>scripts/vps-bootstrap.sh</code></td>
-<td><code>v1.4</code></td>
-<td><code>8f8f93929582edf426d8ad3fa8724adbac412fac3f3ae17cc8940c023301a24e</code></td>
+<td><strong>New to Hermes</strong></td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/01-how-hermes-works.md">01 How it works</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/02-install.md">02 Install</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/03-models.md">03 Models</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md">05 Cost &amp; speed</a></td>
+</tr>
+<tr>
+<td><strong>Using it every day</strong></td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md">05 Cost &amp; speed</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/06-personality-and-context.md">06 Personality</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/07-memory.md">07 Memory</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/08-skills.md">08 Skills</a></td>
+</tr>
+<tr>
+<td><strong>Running it 24/7 or for other people</strong></td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/13-security.md">13 Security</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/14-production.md">14 Running 24/7</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/10-messaging.md">10 Messaging</a> → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/15-troubleshooting.md">15 Troubleshooting</a></td>
+</tr>
+<tr>
+<td><strong>Something is broken right now</strong></td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/15-troubleshooting.md">15 Troubleshooting</a></td>
 </tr>
 </tbody></table>
-<p>(CI's pin-watch job also tracks the upstream Hermes installer pin daily and
-opens an issue when it rotates.)</p>
-<p>The bootstrap installs Hermes <strong>via the pinned-hash installer path above</strong>
-(it never pipes the upstream installer directly), plus Node.js (pinned
-NodeSource script), Caddy (auto-TLS reverse proxy), UFW <strong>with your actual
-sshd port — it refuses to enable the firewall if it can't determine it</strong>,
-fail2ban with a working sshd jail, a non-root <code>hermes</code> user, hardened systemd
-units (enabled only if the Hermes install succeeded), and symlinks every skill
-from this repo into <code>~hermes/.hermes/skills/</code>. See
-<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/vps-bootstrap.sh"><code>scripts/vps-bootstrap.sh</code></a> for what it does line
-by line — it's <strong>idempotent</strong> and re-runnable (it does enable a firewall and
-write config files, so "non-destructive" was never the right word), and
-<code>HERMES_ALLOW_UNPINNED=1</code> is the documented override for operators who have
-inspected a rotated script.</p>
-<p>Prefer a 5-minute local-only setup? → <strong><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/quickstart.md">docs/quickstart.md</a></strong> (zero to Telegram bot in 5 min).</p>
-<hr>
-<h3>Score your setup in 30 seconds</h3>
-<p>Run it on any machine with Hermes installed:</p>
-<pre><code class="language-bash">python scripts/score-your-setup.py
-</code></pre>
-<p>It reads your local install (never your secrets) and scores what is
-<strong>verifiable on disk</strong> out of 50 — install health, config sanity, provider
-wiring, security posture (real <code>approvals.mode</code> values, allowlists, secrets
-redaction), hygiene (plaintext-key scanner), memory, skills, cost controls.</p>
-<pre><code class="language-text">TOTAL: 42/50  (1 gap(s))
-Fix first:
-  - no plaintext API tokens visible in config.yaml (+8)
-</code></pre>
-<p>Deliberately NOT scored: number of platforms, cron-job count, "are you on the
-newest version." Surface area is not quality — a hardened single-Telegram box
-should outscore a sloppy five-platform setup. The MISS lines are the to-do
-list; the guide below covers every one. (We scored the maintainer's own
-machine while writing this; it leaked a plaintext API key into the hygiene
-check and we're telling you so it can't surprise anyone.)</p>
-<hr>
-<h3>Pick your pain, skip everything else</h3>
-<p>Don't read 30 parts. Find your symptom, run the fix, done.</p>
-<table>
-<thead>
-<tr>
-<th>Your pain</th>
-<th>Do this</th>
-<th>Then read</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>"Installation feels sketchy / I don't trust pipe-to-bash"</td>
-<td>Run the pinned-hash install above (downloads, sha256-verifies, then runs)</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part1-setup.md">Part 1</a></td>
-</tr>
-<tr>
-<td>"I want it in Telegram, now"</td>
-<td><code>hermes setup</code> → Telegram → paste bot token</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part4-telegram-setup.md">Part 4</a></td>
-</tr>
-<tr>
-<td>"Discord / Slack / Teams / LINE / WhatsApp / iMessage"</td>
-<td>Pick the adapter, wire credentials</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part15-new-platforms.md">Part 15</a></td>
-</tr>
-<tr>
-<td>"It's too expensive / I want to use my own model"</td>
-<td>Point it at any provider; route cheap models to routine work</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part9-custom-models.md">Part 9</a>, <a href="./templates/config">cost template</a></td>
-</tr>
-<tr>
-<td>"I'm scared what it can do on my box"</td>
-<td>Set <code>approvals.mode</code>, fill <code>command_allowlist</code>, turn on <code>security.redact_secrets</code></td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part19-security-playbook.md">Part 19</a></td>
-</tr>
-<tr>
-<td>"It forgets everything / repeats itself"</td>
-<td>Enable memory + profile, tune <code>memory_char_limit</code></td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part7-memory-system.md">Part 7</a></td>
-</tr>
-<tr>
-<td>"I want it running a job every morning"</td>
-<td>Cron job via config or dashboard</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part22-latest-power-moves.md">Part 22</a></td>
-</tr>
-<tr>
-<td>"I want it driving Claude Code / Codex / my repo"</td>
-<td>Kanban worker lane, not raw chat delegation</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part18-coding-agents.md">Part 18</a></td>
-</tr>
-<tr>
-<td>"How do I know it didn't hallucinate that it worked?"</td>
-<td>Demand evidence — exit code, log, file. Verify completion</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part26-moa-verification.md">Part 26</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#6-evidence-discipline-the-anti-fabrication-stack">Part 29 §6</a></td>
-</tr>
-<tr>
-<td>"It broke at 3am / I don't know what state it's in"</td>
-<td>Gateway recovery runbook, then the failure-mode index</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part11-gateway-recovery.md">Part 11</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">docs/failure-modes.md</a></td>
-</tr>
-<tr>
-<td>"My relay said out of quota but the dashboard says 2% used"</td>
-<td>5xx = same-plan retry; failover only on PROVEN exhaustion</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#1-failover-the-most-expensive-reflex-in-your-setup">Part 29 §1</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">postmortem #9</a></td>
-</tr>
-<tr>
-<td>"My 10-subagent fan-out keeps failing with quota errors"</td>
-<td>It's a concurrency ceiling, not quota — gate per-plan</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#1-failover-the-most-expensive-reflex-in-your-setup">Part 29 §1</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">postmortem #10</a></td>
-</tr>
-<tr>
-<td>"The model can't see the image I attached"</td>
-<td>Wire bug until proven otherwise — walk every content part</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#3-vision-the-interaction-difference-and-the-hallucination-trap">Part 29 §3</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">postmortem #12</a></td>
-</tr>
-<tr>
-<td>"Tests pass but the bug is still there"</td>
-<td>The test mirrors the logic — drive the real entry point</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#4-tests-that-cant-lie">Part 29 §4</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">postmortem #13</a></td>
-</tr>
-<tr>
-<td>"I run Hermes natively on Windows and things quietly break"</td>
-<td>The Windows host traps, all in one section</td>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#5-windows-as-a-first-class-hermes-host">Part 29 §5</a></td>
-</tr>
-</tbody></table>
-<p>Every row is a ≤10-minute win. If you do one thing today, run the scorecard
-and fix your lowest category.</p>
-<hr>
-<h3>Never do this (the kill list)</h3>
-<p>These are the actual ways people get burned running Hermes unattended. Full
-postmortems with recovery steps: <strong><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md">docs/failure-modes.md</a></strong>.</p>
+<h3>The ten changes that matter most</h3>
+<p>Each one is a few minutes' work. Together they cover most of the gap between a default install and a well-run one.</p>
 <ol>
-<li><strong>Never <code>curl | bash</code> an installer you haven't hashed</strong> — this guide pins
-the upstream installer's sha256 and fails loud on mismatch. Do the same for
-anything else you pipe to a shell.</li>
-<li><strong>Never store API keys in plaintext config.yaml</strong> — the scorecard's hygiene
-check exists because real configs leak. Use <code>secrets:</code> / a secret manager /
-env vars.</li>
-<li><strong>Never run <code>hermes update</code> while anything is live on the box</strong> — drain the
-gateway, stop cron jobs first. A mid-flight update while a worker is holding
-state is how you get wedged sessions.</li>
-<li><strong>Never truncate-before-read on a file you need</strong> (<code>open(p,'wb').write(open(p,'rb').read()…)</code>
-truncates before the inner read finishes) — read into memory first.</li>
-<li><strong>Never approve a gateway/DM pairing you didn't initiate</strong> — treat allowlists
-as the only truth; <code>require_mention</code> + explicit allowed channels/users.</li>
-<li><strong>Never trust a model's claim that it ran something</strong> — demand the exit
-code, the log, the file. Evidence over narration, always.</li>
-<li><strong>Never fail over on a transient error</strong> — read the real status codes
-first; 5xx gets a same-plan retry, exhaustion gets <em>proven</em> before the
-ladder fires (<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#1-failover-the-most-expensive-reflex-in-your-setup">Part 29 §1</a>).</li>
-<li><strong>Never hard-kill a streaming relay</strong> — graceful drain or you reset every
-live session at once (<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#2-streaming-relays-how-to-restart-without-casualties">Part 29 §2</a>).</li>
-<li><strong>Never fire a live call against a metered plan without explicit
-permission</strong> — "just a quick smoke test" has drained entire weekly
-allowances (<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#7-metered-plans-and-the-burning-reflex">Part 29 §7</a>).</li>
-<li><strong>Never state a number without a tool result behind it</strong> — exit code,
-hash, count, timing. "No tool result available" is the honest answer
-(<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md#6-evidence-discipline-the-anti-fabrication-stack">Part 29 §6</a>).</li>
+<li><strong>Measure what every call costs.</strong> <code>hermes prompt-size</code> shows the fixed prefix sent with <em>every</em> model call: about 13,000 tokens on a default install, three quarters of it tool schemas. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md#measure-before-you-cut">05</a></li>
+<li><strong>Move side tasks off your main model.</strong> Compression, titles, approvals, and the background memory review all run on your <em>main</em> model by default (<code>auxiliary.*: auto</code>). Point them at a cheap one, but leave vision alone if your main model can see images. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md#lever-3-put-side-tasks-on-a-cheap-model">05</a></li>
+<li><strong>Drop toolsets you don't use, per platform.</strong> Disabling <code>browser</code> and <code>tts</code> alone saves about 2,300 tokens on every call. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md#lever-1-send-fewer-tool-schemas">05</a></li>
+<li><strong>Protect the prompt cache.</strong> Switching models mid-session re-reads the whole conversation at full price. Use <code>/btw</code>, <code>/bg</code>, or a subagent for side work instead. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md#lever-2-keep-the-prompt-cache-warm">05</a></li>
+<li><strong>Keep always-on instructions short.</strong> A 32 KB <code>AGENTS.md</code> measured <strong>+8,600 tokens per call</strong>. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/06-personality-and-context.md">06</a></li>
+<li><strong>Lock down who can talk to your bot.</strong> Use allowlists or DM pairing, and never allow everyone on an agent with a shell. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/10-messaging.md#access-control">10</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/13-security.md#layer-1-who-can-talk-to-it">13</a></li>
+<li><strong>Run the gateway as a service.</strong> Cron only fires while the gateway runs, and a user service dies at logout unless lingering is on. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/14-production.md#what-the-native-service-gives-you">14</a></li>
+<li><strong>Put subagents and cron jobs on cheaper models.</strong> <code>delegation.model</code> and <code>cron.model</code>. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md#lever-6-cheaper-models-for-work-that-doesnt-need-the-best">05</a></li>
+<li><strong>Give local models 64K context, set on the server.</strong> Hermes refuses anything smaller, and Ollama's default is far below that. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/04-local-models.md#the-64k-rule">04</a></li>
+<li><strong>Update deliberately.</strong> <code>hermes update --check</code> and <code>--plan</code> first. Anything older than v0.21.2 should update for <code>state.db</code> safety. → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/02-install.md#updating-without-breaking-things">02</a></li>
 </ol>
-<hr>
-<h3>Repo Map</h3>
+<h3>The guide</h3>
+<p><strong>Foundations</strong></p>
 <table>
 <thead>
 <tr>
-<th>Folder</th>
-<th>What's in it</th>
+<th>#</th>
+<th>Chapter</th>
+<th>You'll learn</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/score-your-setup.py"><code>scripts/score-your-setup.py</code></a></td>
-<td><strong>The scorecard.</strong> Run it on any Hermes box → 50-point shareable setup grade.</td>
+<td>01</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/01-how-hermes-works.md">How Hermes Works</a></td>
+<td>The mental model: surfaces, where state lives, what's in every request, the learning loop</td>
 </tr>
 <tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/audit-cli-surface.py"><code>scripts/audit-cli-surface.py</code></a> + <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/.github/workflows/drift-guard.yml"><code>.github/workflows/drift-guard.yml</code></a></td>
-<td><strong>The drift guard.</strong> CI fails if the guide names a <code>hermes</code> command that doesn't exist upstream. Runs on every push + weekly.</td>
+<td>02</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/02-install.md">Install &amp; First Run</a></td>
+<td>A supported install, a first chat that works, and updates that don't break things</td>
 </tr>
 <tr>
-<td><a href="./docs/evidence"><code>docs/evidence/</code></a></td>
-<td><strong>Verification receipts.</strong> Version transcript, live <code>hermes --help</code>, upstream command list, audit output — dated and machine-reproducible.</td>
+<td>03</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/03-models.md">Models &amp; Providers</a></td>
+<td>Choosing and routing models, reasoning effort, fallbacks, credential pools, MoA</td>
 </tr>
 <tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/failure-modes.md"><code>docs/failure-modes.md</code></a></td>
-<td><strong>Scar tissue.</strong> 15 real incident postmortems: symptom → root cause → recovery → permanent fix.</td>
+<td>04</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/04-local-models.md">Local Models</a></td>
+<td>Ollama, LM Studio, llama.cpp, vLLM, the managed local runtime, and the 64K rule</td>
+</tr>
+</tbody></table>
+<p><strong>Make it cheap and smart</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chapter</th>
+<th>You'll learn</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>05</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/05-token-budget.md">Cost &amp; Speed: The Token Budget</a></td>
+<td>Every lever on what a call costs, measured, plus guardrails against runaway spend</td>
+</tr>
+<tr>
+<td>06</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/06-personality-and-context.md">Personality &amp; Context Files</a></td>
+<td><code>SOUL.md</code>, <code>AGENTS.md</code>, personalities, per-channel prompts, and what each costs</td>
+</tr>
+<tr>
+<td>07</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/07-memory.md">Memory</a></td>
+<td>Built-in memory, session search, external providers, and memory hygiene</td>
+</tr>
+<tr>
+<td>08</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/08-skills.md">Skills</a></td>
+<td>Finding, writing, and curating skills: the part of Hermes that improves with use</td>
+</tr>
+</tbody></table>
+<p><strong>Make it useful</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chapter</th>
+<th>You'll learn</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>09</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/09-tools-mcp-plugins.md">Tools, MCP &amp; Plugins</a></td>
+<td>Toolsets, terminal backends, browser and web, MCP done right, the plugin catalog</td>
+</tr>
+<tr>
+<td>10</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/10-messaging.md">Messaging: Chat From Anywhere</a></td>
+<td>The gateway, Telegram end to end, Discord, Slack, WhatsApp, Signal, and more</td>
+</tr>
+<tr>
+<td>11</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/11-automation.md">Automation</a></td>
+<td>Cron, webhooks, <code>/goal</code>, loops, hooks, and scripting Hermes</td>
+</tr>
+<tr>
+<td>12</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/12-multi-agent.md">Delegation &amp; Multi-Agent</a></td>
+<td>Subagents, coding agents, Kanban, profiles, Bot Mode, and agent-to-agent</td>
+</tr>
+</tbody></table>
+<p><strong>Make it solid</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chapter</th>
+<th>You'll learn</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>13</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/13-security.md">Security</a></td>
+<td>A threat model for an agent with a shell, the controls that matter, and a hardened config</td>
+</tr>
+<tr>
+<td>14</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/14-production.md">Running 24/7</a></td>
+<td>Services, Docker, remote backends, backups, <code>state.db</code> care, monitoring</td>
+</tr>
+<tr>
+<td>15</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/15-troubleshooting.md">Troubleshooting</a></td>
+<td>A diagnostic ladder and confirmed fixes, each with its source</td>
+</tr>
+</tbody></table>
+<p><strong>Put it together</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Chapter</th>
+<th>You'll learn</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>16</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/16-recipes.md">Recipes</a></td>
+<td>Seven complete builds: briefings, zero-token watchdogs, PR reviews, a team bot, safe coding, research</td>
+</tr>
+<tr>
+<td>—</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/cheatsheet.md">Cheat Sheet</a></td>
+<td>The commands and settings you'll actually use, on one page</td>
+</tr>
+</tbody></table>
+<h3>Also in this repo</h3>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="./templates/config"><code>templates/config/</code></a></td>
+<td>Drop-in <code>config.yaml</code> fragments, each validated against v0.21.4: <strong>lean</strong> (cost), <strong>local</strong> (own hardware), <strong>messaging-bot</strong> (a shared chat bot), <strong>hardened</strong> (security)</td>
 </tr>
 <tr>
 <td><a href="./skills"><code>skills/</code></a></td>
-<td><strong>13 installable <code>SKILL.md</code></strong> files. <code>ln -s</code> into <code>~/.hermes/skills/</code> and they're live.</td>
+<td>Example skills you can install into <code>~/.hermes/skills/</code>, written to the current <code>SKILL.md</code> spec</td>
 </tr>
 <tr>
-<td><a href="./templates/config"><code>templates/config/</code></a></td>
-<td><strong>5 opinionated <code>config.yaml</code></strong> — minimum, telegram-bot, production, cost-optimized, security-hardened.</td>
-</tr>
-<tr>
-<td><a href="./templates/compose"><code>templates/compose/</code></a></td>
-<td>Self-hosted Langfuse v3 stack (ClickHouse + MinIO + Redis).</td>
-</tr>
-<tr>
-<td><a href="./templates/caddy"><code>templates/caddy/</code></a></td>
-<td>Caddyfile reference (reverse proxy + auto TLS + HSTS).</td>
-</tr>
-<tr>
-<td><a href="./templates/systemd"><code>templates/systemd/</code></a></td>
-<td>Hardened <code>hermes.service</code> + <code>hermes-dashboard.service</code>.</td>
-</tr>
-<tr>
-<td><a href="./templates/cron"><code>templates/cron/</code></a></td>
-<td>Recommended production cron schedule.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/vps-bootstrap.sh"><code>scripts/vps-bootstrap.sh</code></a></td>
-<td>One-command fresh VPS → production Hermes.</td>
-</tr>
-<tr>
-<td><a href="./diagrams"><code>diagrams/</code></a></td>
-<td>6 Mermaid diagrams (architecture, MCP flow, delegation, sandbox sync, observability, security layers).</td>
-</tr>
-<tr>
-<td><a href="./assets"><code>assets/</code></a></td>
-<td>Banner art + the SVG infographics used across the guide (architecture, paths, timeline).</td>
-</tr>
-<tr>
-<td><a href="./benchmarks"><code>benchmarks/</code></a></td>
-<td>Benchmark harness + <strong>1 dated, verified run</strong> (local RTX 5090, 25/25 ok, 2026-08-22) — the historical 13-model matrix ships with prices blanked unless provider-verified.</td>
-</tr>
-<tr>
-<td><a href="./docs/wizard"><code>docs/wizard/</code></a></td>
-<td><strong>Interactive config wizard</strong> — 8 questions → ready-to-drop <code>config.yaml</code>. Runs in your browser.</td>
-</tr>
-<tr>
-<td><a href="./docs/reference-architectures"><code>docs/reference-architectures/</code></a></td>
-<td><strong>4 blueprints</strong> — Homelab, Solo Dev, Small Agency, Road Warrior. Full parts list + cost + install.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/docs/quickstart.md"><code>docs/quickstart.md</code></a></td>
-<td>5-minute zero-to-Telegram-bot.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/ECOSYSTEM.md"><code>ECOSYSTEM.md</code></a></td>
-<td>Curated directory of MCP servers, coding agents, dashboard plugins.</td>
-</tr>
-<tr>
-<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/ROADMAP.md"><code>ROADMAP.md</code></a> · <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CHANGELOG.md"><code>CHANGELOG.md</code></a> · <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a></td>
-<td>The usual suspects.</td>
-</tr>
-<tr>
-<td>README + <code>part1-*.md</code> … <code>part29-*.md</code></td>
-<td>The 30-part guide itself (now incl. MoA + verification, Desktop App, NVIDIA / local hardware, the Power Secrets field manual, the Recipe Book, and Lessons from Production).</td>
+<td><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/drift_guard.py"><code>scripts/drift_guard.py</code></a></td>
+<td>The checker that keeps this guide honest (see below)</td>
 </tr>
 </tbody></table>
-<hr>
-<h3>Architecture at a glance</h3>
-<p align="center">
-  <img src="https://raw.githubusercontent.com/OnlyTerp/hermes-optimization-guide/main/assets/architecture.svg" alt="Hermes architecture — surfaces (desktop, CLI/TUI, web, 30+ chat platforms, cron) flow into the gateway (model router, approval layer, context engine, scale-to-zero), which fans out to any model, tools, memory, and observability" width="920">
-</p>
-
-<p>Prefer Mermaid? The same picture, editable:</p>
-<pre><code class="language-mermaid">flowchart LR
-  subgraph Surfaces[Surfaces — one agent, many front ends]
-    direction TB
-    Desktop[Desktop app&lt;br/&gt;macOS · Windows · Linux]
-    Term[CLI · TUI]
-    Web[Web admin panel]
-    Chat[30+ chat platforms&lt;br/&gt;Telegram · Discord · Slack&lt;br/&gt;Teams · LINE · WeChat · …]
-  end
-  Surfaces --&gt; Gateway
-  Gateway --&gt; Router[Model Router&lt;br/&gt;cost + context + capability]
-  Router --&gt; Providers[Any provider / model&lt;br/&gt;Cloud APIs · OpenAI-compatible&lt;br/&gt;Local: llama.cpp · LM Studio · Ollama&lt;br/&gt;NVIDIA RTX · DGX Spark]
-  Gateway --&gt; Approval[Approval Layer&lt;br/&gt;denylist · allowlist · quarantine]
-  Approval --&gt; Tools[Tools&lt;br/&gt;Native · Tool Gateway · MCP&lt;br/&gt;Subagents · Coding Agents · Swarms]
-  Tools --&gt; Memory[Memory&lt;br/&gt;Vector · LightRAG · mem0]
-  Tools --&gt; Logs[(Audit log&lt;br/&gt;+ Langfuse / Helicone traces)]
+<h3>How this guide stays accurate</h3>
+<p>Hermes ships several releases a month, and guides rot. This one is pinned to a single upstream release and checked against it mechanically:</p>
+<ul>
+<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/scripts/drift_guard.py"><code>scripts/drift_guard.py</code></a> installs the pinned Hermes release, captures its real command tree, slash commands, config schema, and docs pages, and fails CI if the guide mentions anything that doesn't exist, from a <code>hermes</code> subcommand or flag to a config key, a toolset name, or a docs link and its <code>#anchor</code>.</li>
+<li>Numbers such as token counts and prompt sizes were measured on a real v0.21.4 install. The chapters say how, so you can reproduce them on yours.</li>
+<li>Fixes in <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/15-troubleshooting.md">troubleshooting</a> come from the official docs, merged upstream fixes, or release notes, each linked. Known-unsolved problems are listed as unsolved.</li>
+<li>A weekly job opens an issue when Hermes releases a version newer than the pin.</li>
+</ul>
+<p>Run the check yourself:</p>
+<pre><code class="language-bash">git clone --depth 1 --branch v2026.9.21 https://github.com/NousResearch/hermes-agent.git /tmp/hermes-agent
+python3 -m venv /tmp/venv &amp;&amp; /tmp/venv/bin/pip install -e /tmp/hermes-agent pyyaml
+/tmp/venv/bin/python scripts/drift_guard.py extract --upstream /tmp/hermes-agent --out /tmp/surface.json
+/tmp/venv/bin/python scripts/drift_guard.py check --surface /tmp/surface.json
 </code></pre>
-<p>Full set of diagrams: <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/diagrams/architecture.md"><code>diagrams/architecture.md</code></a>.</p>
-<hr>
-<h3>What's New</h3>
-<p>The guide tracks one pinned upstream tag at a time (currently
-<strong>v2026.8.19 / v0.20.5 "Herald"</strong>). The full release-by-release feature log
-— v0.20 voice/A2A/desktop wave, v0.18 "Judgment" (MoA as a first-class model,
-<code>/goal</code> contracts, <code>/learn</code> + <code>/journey</code>), v0.17 "Reach" (iMessage via
-Photon), and everything before — lives in the
-<a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CHANGELOG.md">CHANGELOG</a>. When upstream ships a new tag, the
-badge here and the drift-guard's <code>UPSTREAM_TAG</code> move together.</p>
-<hr>
-<h3>Table of Contents</h3>
-<ol>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part1-setup.md">Setup</a> — Install Hermes, configure your provider, first-run walkthrough (with Android/Termux)</li>
-<li><a href="#soulmd--give-your-agent-a-personality">SOUL.md Personality</a> — The Molty prompt, what good personality rules look like, how to fix a bland agent</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part2-openclaw-migration.md">OpenClaw Migration</a> — Move your OpenClaw data, config, skills, and memory into Hermes</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part3-lightrag-setup.md">LightRAG — Graph RAG</a> — Set up a knowledge graph that actually understands relationships, not just text similarity</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part4-telegram-setup.md">Telegram Bot</a> — Connect Hermes to Telegram for mobile access, voice memos, and group chats</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part5-creating-skills.md">On-the-Fly Skills</a> — Ask Hermes to create new skills that optimize your workflow automatically</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part6-context-compression.md">Context Compression</a> — Fix the silent context loss bug, configure compression thresholds, survive long sessions</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part7-memory-system.md">Memory System</a> — The three-tier memory architecture: persistent facts, conversation recall, procedural memory</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part8-subagent-patterns.md">Subagent Patterns</a> — Orchestrator/worker delegation, ACP subagents, parallel task execution</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part9-custom-models.md">Custom Model Providers</a> — Grok/SuperGrok OAuth, Bedrock, Azure AI Foundry, Vertex AI, LM Studio, Codex OAuth, MoA presets, OpenRouter routing, model aliases, fallback chains</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part10-soul-antipatterns.md">SOUL.md Anti-Patterns</a> — What makes an agent annoying vs useful, the formula that works</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part11-gateway-recovery.md">Gateway Recovery</a> — Crash detection, auto-recovery, common failure modes, health checks</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part12-web-dashboard.md">Web Dashboard</a> — <code>hermes dashboard</code>, browser Chat via real TUI, models/plugins tabs, config, keys, sessions, logs, analytics, cron</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part13-tool-gateway.md">Tool Gateway, Local Proxy &amp; Live Search</a> — Nous-managed tools, <code>hermes proxy</code>, and <code>x_search</code></li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part14-fast-mode-watchers.md">Fast Mode &amp; Background Watchers</a> — <code>/fast</code>, <code>/steer</code>, <code>/queue</code>, <code>watch_patterns</code>, pluggable context engine, <code>/compress &lt;topic&gt;</code></li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part15-new-platforms.md">New Platforms (Teams, LINE, SimpleX, iMessage, WeChat, Android)</a> — Teams end-to-end, LINE, SimpleX, Google Chat, QQBot, Yuanbao, BlueBubbles/iMessage, Weixin/WeCom, Android via Termux</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part16-backup-debug.md">Backup, Import &amp; <code>/debug</code></a> — Portable <code>hermes backup</code>/<code>import</code>, <code>/debug</code> bundler, <code>hermes debug share</code>, security hardening</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part17-mcp-servers.md">MCP Servers</a> — The tool-protocol standard. stdio + HTTP transports, sampling, trust boundaries, server shortlist, writing your own</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part18-coding-agents.md">Delegating to Coding Agents</a> — Claude Code Week 20+, Codex v0.133+, Gemini CLI v0.43, OpenCode, Aider, Zed ACP, print-mode, Kanban, git isolation</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part19-security-playbook.md">Security Playbook</a> — Prompt-injection defense, provenance labels, approval layers, secrets redaction, MCP trust model, hardline blocks</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part20-observability.md">Observability &amp; Cost Control</a> — Langfuse plugin, Helicone, OpenTelemetry → Phoenix, prompt-prefix caching, CDP spans, auxiliary routing, evals</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part21-remote-sandboxes.md">Remote Sandboxes &amp; Bulk File Sync</a> — SSH, Modal, Daytona, Vercel Sandbox, Fly Machines, E2B. Diff-based sync-back on teardown</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part22-latest-power-moves.md">Latest Power Moves</a> — Curator, TUI habits, context-file hygiene, plugins, dashboard Chat, cron chaining, and the 2026 upgrade checklist</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part23-tenacity-stack.md">Foundation + Tenacity Stack</a> — PyPI/lazy deps, <code>hermes proxy</code>, <code>/handoff</code>, durable Kanban, <code>/goal</code>, Checkpoints v2, no-agent cron, worker lanes, multi-agent swarms, and the upgrade checklist</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part24-desktop-app.md">Hermes Desktop App</a> — Native macOS/Windows/Linux GUI, Quick Setup, Cmd+K palette, Projects, multi-terminal, memory graph, remote gateway, multi-profile, voice, self-update</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part25-nvidia-local.md">NVIDIA &amp; Local Hardware</a> — Run Hermes on your own GPU: RTX / DGX Spark, OpenShell isolation, NemoClaw, and a model-agnostic local stack</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part26-moa-verification.md">MoA, Verification &amp; Self-Improvement</a> — Mixture-of-Agents presets as models, <code>/moa</code>, completion contracts for <code>/goal</code>, <code>/learn</code>, <code>/journey</code>, background fan-out, scale-to-zero</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part27-power-secrets.md">Power Secrets</a> — 31 verified non-obvious mechanics: memory snapshots, the gateway token tax, cache economics, credential pools, Kanban traps, profiles-as-rooms, failover/concurrency laws, and a printable cheat sheet</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part29-lessons-from-production.md">Lessons from Production</a> — the laws we learned by running Hermes every day: failover discipline, relay restarts without casualties, vision verification, tests that can't lie, Windows host traps, evidence discipline, metered-plan survival, memory hygiene</li>
-<li><a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part28-recipe-book.md">The Recipe Book</a> — twelve production builds: finance loops, staged Gmail, approval offices, overnight Kanban, GPU FIFO, content swarms, job-hunt pipelines, coaches, correlators, Blender rooms, and the secretary office</li>
-</ol>
-<hr>
-<h3>Quick Start</h3>
-<pre><code class="language-bash"># 1. Install Hermes (Linux/macOS/WSL2/Android) — or grab the desktop app
-#    (verify-then-run one-liner is in the Install section above)
-curl -fsSL https://hermes-agent.nousresearch.com/install.sh -o hermes-install.sh \
-  &amp;&amp; bash hermes-install.sh
-
-# 2. Configure providers and tools (or `hermes portal` for guided Quick Setup)
-hermes setup
-
-# 3a. Start chatting in the terminal (CLI or TUI)
-hermes
-
-# 3b. Or open the browser dashboard / admin panel
-hermes dashboard
-
-# 3c. Or launch the native desktop app
-hermes desktop
-</code></pre>
-<p>The dashboard — and the new desktop app — are the fastest way to configure everything without touching YAML. See <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part12-web-dashboard.md">Part 12</a> and <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part24-desktop-app.md">Part 24</a> for the full tours.</p>
-<p>For the full walkthrough including optimization, read each part in order.</p>
-<hr>
-<h3>Part 1: Setup (Stop Fumbling With Installation)</h3>
-<p><em>From zero to working agent in under 5 minutes. Covers what the docs don't.</em></p>
-<p>One command installs everything — <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</code> on Linux/macOS/WSL2/Android-Termux, a native PowerShell one-liner on Windows, or <code>pip install hermes-agent</code> for the leanest path. The full part covers what the installer actually does, the <code>hermes setup</code> first-run wizard (model picker, API keys, toolsets), the key <code>hermes config set</code> options (fallback models, <code>agent.max_turns</code>, <code>prompt_caching.cache_ttl</code>, <code>compression.enabled</code>), the <code>~/.hermes/</code> file layout, and how to verify and update your install.</p>
-<p><strong>Read the full part → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part1-setup.md">Part 1: Setup</a></strong></p>
-<hr>
-<h3>SOUL.md — Give Your Agent a Personality</h3>
-<p><code>SOUL.md</code> is injected into <strong>every single message</strong>. It's the highest-impact file in your setup. A bad SOUL.md makes your agent sound like a corporate chatbot. A good one makes it actually useful to talk to.</p>
-<h4>What Belongs in SOUL.md</h4>
-<p>Put the stuff that changes how the agent <strong>feels</strong> to talk to:</p>
-<ul>
-<li><strong>Tone</strong> — direct, casual, formal, dry, whatever fits you</li>
-<li><strong>Opinions</strong> — the agent should have takes, not hedge everything</li>
-<li><strong>Brevity</strong> — enforce concise answers as a default</li>
-<li><strong>Humor</strong> — when it fits naturally, not forced jokes</li>
-<li><strong>Boundaries</strong> — what it should push back on</li>
-<li><strong>Bluntness level</strong> — how much sugarcoating to skip</li>
-</ul>
-<p>Do NOT turn SOUL.md into:</p>
-<ul>
-<li>A life story</li>
-<li>A changelog</li>
-<li>A security policy dump</li>
-<li>A giant wall of vibes with no behavioral effect</li>
-</ul>
-<p><strong>Short beats long. Sharp beats vague.</strong></p>
-<h4>The Molty Prompt</h4>
-<p><em>Originally from <a href="https://docs.openclaw.ai/concepts/soul#the-molty-prompt">OpenClaw's SOUL.md guide</a>. Adapted for Hermes with permission/credit. Paste this into your chat with the agent and let it rewrite your SOUL.md:</em></p>
-<blockquote>
-<p>Read your <code>SOUL.md</code>. Now rewrite it with these changes:</p>
-<ol>
-<li>You have opinions now. Strong ones. Stop hedging everything with "it depends" — commit to a take.</li>
-<li>Delete every rule that sounds corporate. If it could appear in an employee handbook, it doesn't belong here.</li>
-<li>Add a rule: "Never open with Great question, I'd be happy to help, or Absolutely. Just answer."</li>
-<li>Brevity is mandatory. If the answer fits in one sentence, one sentence is what I get.</li>
-<li>Humor is allowed. Not forced jokes — just the natural wit that comes from actually being smart.</li>
-<li>You can call things out. If I'm about to do something dumb, say so. Charm over cruelty, but don't sugarcoat.</li>
-<li>Swearing is allowed when it lands. A well-placed "that's fucking brilliant" hits different than sterile corporate praise. Don't force it. Don't overdo it. But if a situation calls for a "holy shit" — say holy shit.</li>
-<li>Add this line verbatim at the end of the vibe section: "Be the assistant you'd actually want to talk to at 2am. Not a corporate drone. Not a sycophant. Just... good."</li>
-</ol>
-<p>Save the new <code>SOUL.md</code>. Welcome to having a personality.</p>
-</blockquote>
-<h4>What Good Looks Like</h4>
-<p>Good SOUL.md rules:</p>
-<ul>
-<li>have a take</li>
-<li>skip filler</li>
-<li>be funny when it fits</li>
-<li>call out bad ideas early</li>
-<li>stay concise unless depth is actually useful</li>
-</ul>
-<p>Bad SOUL.md rules:</p>
-<ul>
-<li>maintain professionalism at all times</li>
-<li>provide comprehensive and thoughtful assistance</li>
-<li>ensure a positive and supportive experience</li>
-</ul>
-<p>That second list is how you get mush.</p>
-<h4>Why This Works</h4>
-<p>This lines up with OpenAI's prompt engineering guidance: high-level behavior, tone, goals, and examples belong in the <strong>high-priority instruction layer</strong>, not buried in the user turn. SOUL.md is that layer. It's the system-level personality instruction that every model respects.</p>
-<p>If you want better personality, write stronger instructions. If you want stable personality, keep them concise and versioned.</p>
-<blockquote>
-<p><strong>One warning:</strong> Personality is not permission to be sloppy. Keep your operational rules in AGENTS.md. Keep SOUL.md for voice, stance, and style. If your agent works in shared channels or public replies, make sure the tone still fits the room. Sharp is good. Annoying is not.</p>
-</blockquote>
-<blockquote>
-<p><strong>Keep it under 1 KB.</strong> Every byte in SOUL.md costs tokens on every message. The most effective SOUL.md files are 500-800 bytes of dense, high-signal personality instructions.</p>
-</blockquote>
-<hr>
-<h3>Part 2: OpenClaw Migration (Don't Leave Your Knowledge Behind)</h3>
-<p><em>Transfer your skills, memory, config, and personality from OpenClaw to Hermes in one command.</em></p>
-<p><code>hermes claw migrate</code> moves your SOUL.md, AGENTS.md, memory files (merged and deduped), user profile, skills, model config, and provider keys from <code>~/.openclaw/</code> into Hermes automatically. The full part covers the <code>--dry-run</code> preview, presets (<code>full</code> vs <code>user-data</code>), skill-conflict handling (<code>skip</code>/<code>overwrite</code>/<code>rename</code>), the complete config-key mapping table, what <em>doesn't</em> transfer (session transcripts, cron jobs, plugin configs), and troubleshooting.</p>
-<p><strong>Read the full part → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part2-openclaw-migration.md">Part 2: OpenClaw Migration</a></strong></p>
-<hr>
-<h3>Part 3: LightRAG — Graph RAG That Actually Works</h3>
-<p><em>From "find similar text" to "reason about relationships." The single biggest intelligence upgrade you can make.</em></p>
-<p>Vector search finds what's <em>similar</em>; graph RAG finds what's <em>connected</em>. <a href="https://github.com/HKUDS/LightRAG">LightRAG</a> (HKU, EMNLP 2025) builds a knowledge graph — entities and relationships — alongside your vector DB and searches both at once, for a fraction of Microsoft GraphRAG's cost. The full part covers installation, entity-extraction model choice (Kimi K2.6 for quality, Cerebras GPT OSS 120B for speed, local Ollama for free), embeddings (Fireworks Qwen3-Embedding-8B vs local nomic-embed-text), running and securing the REST server, ingestion, the four query modes (<code>naive</code>/<code>local</code>/<code>global</code>/<code>hybrid</code>), a ready-to-use Hermes skill, and tuning tips.</p>
-<p><strong>Read the full part → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part3-lightrag-setup.md">Part 3: LightRAG Setup</a></strong></p>
-<hr>
-<h3>Part 4: Telegram Setup (Chat From Anywhere)</h3>
-<p><em>Connect Hermes to Telegram for mobile access, voice memos, group chats, and scheduled task delivery.</em></p>
-<p>Telegram is the most battle-tested of the 30+ messaging adapters: text, voice memos (auto-transcribed), image analysis, file attachments, inline confirmation buttons, and cron delivery straight to your phone. The full part walks through creating a bot with @BotFather, the privacy-mode gotcha that breaks group chats, finding your numeric user ID, <code>hermes gateway setup</code>, webhook mode for cloud deployments (with a proper random secret), multi-user setup, and troubleshooting.</p>
-<p><strong>Read the full part → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part4-telegram-setup.md">Part 4: Telegram Setup</a></strong></p>
-<hr>
-<h3>Part 5: On-the-Fly Skills (Let Hermes Build Its Own Playbook)</h3>
-<p><em>Ask Hermes to create a new skill, and it saves the workflow permanently — no manual file editing needed.</em></p>
-<p>Skills are procedural knowledge: how-to guides the agent loads on demand at zero idle token cost (memory is for facts; skills are for workflows). Hermes creates them itself — after a complex task it offers to save the steps, pitfalls, and verification as a reusable <code>SKILL.md</code>, and you can ask for one directly ("create a skill for deploying Docker containers"). The full part covers the creation workflow, the <code>SKILL.md</code> format and directory structure, slash-command and automatic loading, managing/updating skills, the v0.12 <strong>Curator</strong> that keeps the library from rotting, real-world examples, and tips for writing skills that stay useful.</p>
-<p><strong>Read the full part → <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part5-creating-skills.md">Part 5: On-the-Fly Skills</a></strong></p>
-<p>You've now got the full picture — setup, migration, graph memory, mobile access, and self-improving workflows. From here, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part22-latest-power-moves.md">Part 22: Latest Power Moves</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part23-tenacity-stack.md">Part 23: Tenacity Stack</a>, <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part24-desktop-app.md">Part 24: Desktop App</a>, and <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/part25-nvidia-local.md">Part 25: NVIDIA &amp; Local Hardware</a> round out the modern stack. Start with setup, add what you need, and let Hermes build the rest.</p>
-<hr>
-<blockquote>
-<p><strong>Note:</strong> Based on the official Hermes Agent documentation and real production usage. No private credentials, API keys, or personal data included.</p>
-</blockquote>
+<h3>Contributing</h3>
+<p>Corrections are the most valuable contribution: when Hermes changes and the guide is wrong, open an issue or a PR. See <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for the (short) rules: verify against the pinned release, measure instead of guessing, and cite fixes.</p>
+<h3>Credits</h3>
+<p>Written and maintained by <strong>Terp</strong> (<a href="https://x.com/OnlyTerp">Terp AI Labs</a>). Hermes Agent is built by <a href="https://nousresearch.com">Nous Research</a>. This is an independent community guide, not affiliated with or endorsed by Nous Research. The Molty prompt in <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/guide/06-personality-and-context.md#the-molty-prompt">chapter 06</a> is from <a href="https://docs.openclaw.ai/concepts/soul#the-molty-prompt">OpenClaw's docs</a>, credited there.</p>
+<p>Licensed under <a href="./LICENSE">MIT</a>. Earlier editions of this guide (the 30-part v1 series) remain in the git history; see the <a href="https://github.com/OnlyTerp/hermes-optimization-guide/blob/main/CHANGELOG.md">CHANGELOG</a> for what moved where.</p>
 
   </section>
 </details>

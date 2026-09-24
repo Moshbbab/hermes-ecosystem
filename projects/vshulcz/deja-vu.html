@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu is a memory layer for coding agents that indexes session history stored locally on disk. It enables cross-agent recall by allowing different tools to…">
+<meta name="description" content="deja-vu is a memory layer for coding agents that indexes local session history files from 34 different tools. It provides cross-agent recall and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes session history stored locally on disk. It enables cross-agent recall by allowing different tools to…">
+<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes local session history files from 34 different tools. It provides cross-agent recall and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes session history stored locally on disk. It enables cross-agent recall by allowing different tools to…">
+<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes local session history files from 34 different tools. It provides cross-agent recall and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=One+memory+shared+by+Claude+Code%2C+Codex%2C+Cursor%2C+Copilot+CLI%2C+OpenClaw+and+29+more+coding+agents%2C+built+from+the+session+history+already+on+disk.+A+fix+found+in+one+agent+comes+bac&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu is a memory layer for coding agents that indexes session history stored locally on disk. It enables cross-agent recall by allowing different tools to search and retrieve past conversation data, including history created before the software was installed.",
+  "description": "deja-vu is a memory layer for coding agents that indexes local session history files from 34 different tools. It provides cross-agent recall and natural-language search over past conversations, including data generated before the tool was installed.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-09-23T18:55:42.000Z",
+  "dateModified": "2026-09-24T04:56:12.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 930
+    "userInteractionCount": 935
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">One memory shared by Claude Code, Codex, Cursor, Copilot CLI, OpenClaw and 29 more coding agents, built from the session history already on disk. A fix found in one agent comes back in any of them, including months of sessions from before you installed it. No LLM, no embeddings, one local Go binary.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 930</span>
+    <span class="stars">★ 935</span>
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-23</span>
+    <span><span class="meta-label">updated</span>2026-09-24</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes session history stored locally on disk. It enables cross-agent recall by allowing different tools to search and retrieve past conversation data, including history created before the software was installed.</p>
+    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes local session history files from 34 different tools. It provides cross-agent recall and natural-language search over past conversations, including data generated before the tool was installed.</p>
     <ul class="summary-highlights">
-      <li>Indexes local session history from 34 different coding agents.</li>
-      <li>Provides millisecond lookups over gigabytes of historical data.</li>
-      <li>Automatically strips keys and tokens during the indexing process.</li>
+      <li>Indexes local session history from 34 different coding agents</li>
+      <li>Provides millisecond lookups and cross-agent recall via MCP</li>
+      <li>Strips keys and tokens during the indexing process</li>
     </ul>
   </div>
 </section>
@@ -472,46 +472,62 @@ anything already wired to them.</p>
 </thead>
 <tbody><tr>
 <td><code>deja</code></td>
-<td><code>mode</code>, plus <code>query</code>, <code>path</code>, <code>error</code>, <code>what</code>, <code>text</code>, <code>tags?</code>, <code>harness?</code>, <code>project?</code>, <code>since?</code>, <code>limit?</code>, <code>offset?</code>, <code>all?</code></td>
+<td><code>mode</code>, <code>q</code>, <code>harness?</code>, <code>project?</code>, <code>limit?</code></td>
 <td>Depends on the mode, below.</td>
 </tr>
 </tbody></table>
+<p><code>q</code> carries whatever the mode asks about. The per-mode names below are still
+accepted; they are no longer declared, because the schema is read every turn
+whether or not the tool is called.</p>
 <table>
 <thead>
 <tr>
 <th>Mode</th>
-<th>Arguments it reads</th>
+<th><code>q</code> is</th>
+<th>Also reads</th>
 <th>Returns</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>recall</code></td>
-<td><code>query</code>, <code>harness?</code>, <code>limit?</code>, <code>offset?</code></td>
+<td>the question, or an exact error string, name or flag</td>
+<td><code>harness?</code>, <code>limit?</code>, <code>offset?</code></td>
 <td>Dense matching snippets, capped at 4KB.</td>
 </tr>
 <tr>
 <td><code>context</code></td>
-<td><code>query</code>, <code>harness?</code></td>
+<td>the same as recall</td>
+<td><code>harness?</code></td>
 <td>Markdown digest of the best-matching session.</td>
 </tr>
 <tr>
 <td><code>blame</code></td>
-<td><code>path</code>, <code>harness?</code>, <code>project?</code>, <code>since?</code>, <code>limit?</code>, <code>all?</code></td>
+<td>a file path</td>
+<td><code>harness?</code>, <code>project?</code>, <code>since?</code>, <code>limit?</code>, <code>all?</code></td>
 <td>Sessions that discussed a file.</td>
 </tr>
 <tr>
 <td><code>fix</code></td>
-<td><code>error</code>, <code>project?</code>, <code>limit?</code></td>
+<td>the failing output, verbatim</td>
+<td><code>project?</code>, <code>limit?</code></td>
 <td>What this machine ran, or changed, after that same error before.</td>
 </tr>
 <tr>
 <td><code>how</code></td>
-<td><code>what</code>, <code>project?</code>, <code>limit?</code></td>
+<td>the tool or target, e.g. <code>go test</code></td>
+<td><code>project?</code>, <code>limit?</code></td>
 <td>The real invocation, from what agents ran here.</td>
 </tr>
 <tr>
+<td><code>orient</code></td>
+<td>nothing — it asks about the project</td>
+<td><code>project?</code>, <code>limit?</code></td>
+<td>The commands past sessions ran here and the files they worked in.</td>
+</tr>
+<tr>
 <td><code>remember</code></td>
-<td><code>text</code>, <code>project?</code>, <code>tags?</code></td>
+<td>one durable fact or decision</td>
+<td><code>project?</code>, <code>tags?</code></td>
 <td>Stores a durable decision for later recall.</td>
 </tr>
 </tbody></table>
@@ -1217,7 +1233,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 26.5K</div>
+        <div class="stars">★ 26.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1237,7 +1253,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 293</div>
+        <div class="stars">★ 294</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
