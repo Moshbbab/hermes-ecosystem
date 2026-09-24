@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-09-24T11:56:41.000Z",
+  "dateModified": "2026-09-24T17:23:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30290
+    "userInteractionCount": 30296
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -426,8 +426,8 @@ gbrain schema use my-pack           # activate
 <li><strong>Voice</strong>: Phone calls create brain pages via Twilio + OpenAI Realtime (or DIY STT+LLM+TTS). Setup recipe: <a href="https://github.com/garrytan/gbrain/blob/main/recipes/twilio-voice-brain.md"><code>recipes/twilio-voice-brain.md</code></a>.</li>
 <li><strong>Gmail + Calendar + Contacts (native)</strong>: the google source kind syncs threads, events, and contacts through your own OAuth client and runs the open-loop engine on top (<code>gbrain waiting</code>). Setup: <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/google-connect.md"><code>docs/guides/google-connect.md</code></a>; recipes: <a href="https://github.com/garrytan/gbrain/blob/main/recipes/email-to-brain.md"><code>recipes/email-to-brain.md</code></a>, <a href="https://github.com/garrytan/gbrain/blob/main/recipes/calendar-to-brain.md"><code>recipes/calendar-to-brain.md</code></a>.</li>
 <li><strong>Email + calendar (webhooks)</strong>: webhook handlers that route to brain signals. <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/meeting-webhooks.md"><code>docs/integrations/meeting-webhooks.md</code></a>.</li>
-<li><strong>Embedding providers</strong>: a dozen providers covered — Voyage (default: <code>voyage-4</code> @ 1024d), OpenAI, OpenRouter, Google Gemini, Azure OpenAI, MiniMax, Alibaba DashScope, Zhipu, Ollama (local), llama.cpp llama-server (local), LiteLLM proxy, plus ZeroEntropy (deprecated — hosted API ends 2026-09-04). Pricing matrix + decision tree in <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/embedding-providers.md"><code>docs/integrations/embedding-providers.md</code></a>.</li>
-<li><strong>Rerankers</strong>: Voyage <code>rerank-2.5</code> hosted (the default; reranking is on in <code>balanced</code> and <code>tokenmax</code> modes, same <code>VOYAGE_API_KEY</code> as embeddings; the preview <code>rerank-3</code> / <code>rerank-3-lite</code> are selectable with <code>gbrain config set search.reranker.model voyage:rerank-3</code>), ZeroEntropy <code>zerank-2</code> (deprecated — hosted API ends 2026-09-04; an explicit config short-circuits past that date), plus the <code>llama-server-reranker</code> recipe for fully-local cross-encoder rerank via llama.cpp — runs Qwen3-Reranker or self-hosted zerank weights against the same <code>gateway.rerank()</code> seam. Setup walkthrough in <a href="https://github.com/garrytan/gbrain/blob/main/docs/ai-providers/llama-server-reranker.md"><code>docs/ai-providers/llama-server-reranker.md</code></a>.</li>
+<li><strong>Embedding providers</strong>: Voyage (new-install default: <code>voyage-4</code> @ 1024d), OpenAI, OpenRouter, Google Gemini, Azure OpenAI, MiniMax, Alibaba DashScope, Zhipu, Ollama (local), llama.cpp llama-server (local), LM Studio, Together, and LiteLLM proxy. Pricing matrix + decision tree in <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/embedding-providers.md"><code>docs/integrations/embedding-providers.md</code></a>. Existing vectors are never converted by changing the default; use the explicitly approved <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/embedding-migration.md">embedding migration</a>.</li>
+<li><strong>Rerankers</strong>: Voyage <code>rerank-2.5</code> hosted (the default; reranking is on in <code>balanced</code> and <code>tokenmax</code> modes, same <code>VOYAGE_API_KEY</code> as embeddings; the preview <code>rerank-3</code> / <code>rerank-3-lite</code> are selectable with <code>gbrain config set search.reranker.model voyage:rerank-3</code>), plus the <code>llama-server-reranker</code> recipe for fully-local cross-encoder rerank via llama.cpp running Qwen3-Reranker against the same <code>gateway.rerank()</code> seam. Setup walkthrough in <a href="https://github.com/garrytan/gbrain/blob/main/docs/ai-providers/llama-server-reranker.md"><code>docs/ai-providers/llama-server-reranker.md</code></a>.</li>
 <li><strong>Credential vault + gateway</strong>: <code>gbrain creds</code> manages OAuth and API credentials in a local vault (<a href="https://github.com/garrytan/gbrain/blob/main/recipes/credential-gateway.md"><code>recipes/credential-gateway.md</code></a>); agent-side vault-aware secret distribution: <a href="https://github.com/garrytan/gbrain/blob/main/docs/integrations/credential-gateway.md"><code>docs/integrations/credential-gateway.md</code></a>.</li>
 <li><strong>MCP clients</strong>: every major MCP client is supported. <a href="docs/mcp/"><code>docs/mcp/</code></a> per-client setup.</li>
 <li><strong>Memorable (procedural memory)</strong>: optional, off by default. Your brain remembers <em>what</em> happened; Memorable makes your agent remember <em>how</em> — finished sessions become replayable procedures stored on your machine (in a standalone local store, or inside your brain database if you opt in), recalled when a similar task comes back. See the section below, and <a href="https://github.com/garrytan/gbrain/blob/main/docs/memorable-agents.md"><code>docs/memorable-agents.md</code></a> for the agent-facing detail.</li>
@@ -489,7 +489,7 @@ for installation, data flow, per-harness limitations, and removal.</p>
 <h3>License + credit</h3>
 <p>MIT. I built GBrain to run my OpenClaw and Hermes deployments — the production brain behind my AI agents.</p>
 <p>Origin story: <a href="https://github.com/garrytan/gbrain/blob/main/docs/ethos/ORIGIN.md"><code>docs/ethos/ORIGIN.md</code></a>.</p>
-<p>Community PR contributors are credited in <code>CHANGELOG.md</code> per release. ZeroEntropy (<a href="https://zeroentropy.dev">@zeroentropy</a>) for the ZeroEntropy embedding + reranker integration. Voyage AI for the asymmetric-encoding recipe template. Ramp Labs for the search quality improvements lineage.</p>
+<p>Community PR contributors are credited in <code>CHANGELOG.md</code> per release. Attribution for the retired provider's historical embedding and reranker integration remains in Git at <code>6040075c6cb95be5881cc2e1b76ef7d71f4e5d29</code>. Voyage AI for the asymmetric-encoding recipe template. Ramp Labs for the search quality improvements lineage.</p>
 
   </section>
 </details>
@@ -506,7 +506,7 @@ for installation, data flow, per-harness limitations, and removal.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 26.9K</div>
+        <div class="stars">★ 27.4K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -514,7 +514,7 @@ for installation, data flow, per-harness limitations, and removal.</p>
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 377</div>
+        <div class="stars">★ 378</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pdalinis/incise — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to perform targeted edits on…">
+<meta name="description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/pdalinis/incise">
 <meta property="og:title" content="pdalinis/incise — Hermes Atlas">
-<meta property="og:description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to perform targeted edits on…">
+<meta property="og:description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/pdalinis/incise">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="pdalinis/incise — Hermes Atlas">
-<meta name="twitter:description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to perform targeted edits on…">
+<meta name="twitter:description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=incise&amp;subtitle=Make+small+AI+models+reliable+at+editing+Markdown.+Incise+provides+safe%2C+semantic%2C+byte-preserving+edits+for+AI+agents.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/pdalinis/incise#software",
   "name": "incise",
-  "description": "Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to perform targeted edits on tables, lists, sections, and YAML frontmatter by addressing content rather than line numbers.",
+  "description": "Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections, and YAML frontmatter using semantic addressing rather than line numbers.",
   "url": "https://hermesatlas.com/projects/pdalinis/incise",
   "codeRepository": "https://github.com/pdalinis/incise",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "pdalinis",
     "url": "https://github.com/pdalinis"
   },
-  "dateModified": "2026-09-23T17:08:05.000Z",
+  "dateModified": "2026-09-24T17:19:34.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-23</span>
+    <span><span class="meta-label">updated</span>2026-09-24</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to perform targeted edits on tables, lists, sections, and YAML frontmatter by addressing content rather than line numbers.</p>
+    <p class="summary-text">Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections, and YAML frontmatter using semantic addressing rather than line numbers.</p>
     <ul class="summary-highlights">
-      <li>Performs semantic edits on tables, lists, sections, and YAML frontmatter.</li>
-      <li>Provides deterministic formatting and minimal byte-level document changes.</li>
-      <li>Includes integrations for AI agents via function schemas and plugins.</li>
+      <li>Performs targeted edits while leaving unrelated bytes and formatting unchanged.</li>
+      <li>Supports semantic selection of headings, rows, and list items by content.</li>
+      <li>Provides deterministic tools for AI-maintained documentation and knowledge bases.</li>
     </ul>
   </div>
 </section>
@@ -169,7 +169,10 @@ Result:        One targeted edit; unrelated bytes stay unchanged.
 <h3>Why Incise?</h3>
 <p>Language models are often good at identifying the change a document needs and much less reliable at reproducing the surrounding Markdown exactly. A one-cell update can require pipe escaping, alignment arithmetic, line-ending preservation, and a byte-perfect rewrite of unrelated content.</p>
 <blockquote>
-<p><strong>Latest Gemma result:</strong> the recommended Pi <code>auto</code> profile completed <strong>475/479 usable trials (99.2%) with zero harmful outcomes</strong>. Tables, lists, frontmatter, and table reads were perfect; sections reached 145/149, with the remaining four outcomes all loud refusals. All 200 routed trials were correct.</p>
+<p><strong>Hermes routed results:</strong> the recommended Hermes <code>auto</code> profile completed <strong>480/480 trials (100%) with zero harmful outcomes</strong> on both Ornith 1.5 9B and Gemma 4 26B. Each run used the expected 360 routed and 120 fallback requests, with exact provider tool surfaces and host-resolved arguments.</p>
+</blockquote>
+<blockquote>
+<p><strong>Pi routed results:</strong> Ornith completed <strong>480/480 trials (100%) with zero harmful outcomes</strong>. Gemma completed <strong>475/479 usable trials (99.2%) with zero harmful outcomes</strong>; its four remaining outcomes were loud section refusals.</p>
 </blockquote>
 <p>Incise separates intent from mechanics:</p>
 <ul>
@@ -179,7 +182,7 @@ Result:        One targeted edit; unrelated bytes stay unchanged.
 <li><strong>Model-aware composition:</strong> integrations can expose a smaller, safer action surface while retaining the standard tools as a fallback.</li>
 </ul>
 <p>It is built for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context. Incise is not a WYSIWYG editor, knowledge graph, or vault index; it is the deterministic mutation layer used after an agent decides which file and fact to change.</p>
-<p>The Gemma figure is from a preregistered 480-trial Pi evaluation with one persistent generation timeout excluded from paired analysis. It is evidence for that model, runtime, task set, and profile—not a universal model claim.</p>
+<p>The figures come from preregistered full-composition evaluations and remain scoped to their recorded models, runtimes, task set, host integration, seeds, profile, and inference settings. The Hermes runs used Hermes Agent 0.21.3 and seeds 40–49. Ornith used thinking off, a 2,048-token output cap, and disabled parallel tool calls; Gemma retained its recorded provider defaults.</p>
 <h3>Quick start</h3>
 <h4>Install from crates.io</h4>
 <p>Install <a href="https://crates.io/crates/incise-cli"><code>incise-cli</code> from crates.io</a>:</p>
@@ -248,6 +251,10 @@ incise outline vault/Projects.md
 <h4>Hermes Agent</h4>
 <p>Incise includes a Hermes adapter under <a href="plugins/hermes/"><code>plugins/hermes/</code></a>.</p>
 <p>Install the version-matched plugin bundle, enable its <code>incise</code> toolset, and run <code>hermes plugins doctor --ci incise</code>. Doctor prints the exact binary it validated. See the <a href="https://github.com/pdalinis/incise/blob/main/plugins/hermes/README.md">Hermes integration guide</a> for complete installation and safety details.</p>
+<p>For Gemma or Ornith, start Hermes with the measured automatic profile:</p>
+<pre><code class="language-bash">INCISE_PROFILE=auto hermes chat
+</code></pre>
+<p><code>auto</code> detects model names containing <code>gemma</code> or <code>ornith</code>. If the provider exposes a generic alias, identify the backend explicitly, for example <code>INCISE_MODEL_FAMILY=ornith</code>. Use reasoning off, a 2,048-token output cap, and disabled parallel tool calls for the measured Ornith condition; Hermes does not silently change provider settings. Unknown models and MiniCPM retain the standard eight-tool surface.</p>
 <p>For Markdown structures represented by Incise, give the agent an explicit preference for structured editing:</p>
 <pre><code class="language-markdown">## Editing Markdown
 
@@ -262,9 +269,9 @@ If Incise refuses an operation, follow the remedy in its response rather than
 rewriting the document. Use raw editing only for prose changes that Incise does
 not represent.
 </code></pre>
-<p>The adapter exposes the standard model-agnostic edit and read schemas behind Hermes’s native file-safety policy. The current release-candidate smoke completed all five representative tasks on both Gemma and MiniCPM with exact expected diffs. This is an integration check, not the Pi-specific 99.2% composition benchmark.</p>
+<p>Under <code>auto</code>, exact supported requests receive one small action-specific tool after host-side structure inspection; unsupported or ambiguous requests retain the standard Incise tools. The adapter preserves Hermes file-safety checks, content hashes, same-file serialization, compound rollback, and a one-successful-mutation latch.</p>
+<p>The preregistered Hermes runs completed <strong>480/480 trials on Ornith and 480/480 on Gemma</strong>, both with zero harmful outcomes. Ornith improved from a paired standard-control result of 460/480 to 480/480 (<code>p = 1.907×10⁻⁶</code>).</p>
 <p>Incise remains deliberately scoped to Markdown structures it understands. Generic editing is appropriate for ordinary prose and initial document creation.</p>
-<hr>
 <h3>Use with Pi</h3>
 <p>Install the published <a href="https://www.npmjs.com/package/pi-incise"><code>pi-incise</code> package from npm</a>:</p>
 <pre><code class="language-bash">pi install npm:pi-incise
@@ -272,12 +279,16 @@ not represent.
 <p>For Gemma, start Pi with the measured automatic profile:</p>
 <pre><code class="language-bash">INCISE_PROFILE=auto pi
 </code></pre>
-<p><code>auto</code> detects Gemma and enables the guarded <code>safe-routed</code> profile. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Run <code>/incise-doctor</code> to see the detected model, effective profile, binary, schemas, registered tools, and last route.</p>
+<p>For Ornith 1.5 9B, use the same automatic profile with thinking disabled:</p>
+<pre><code class="language-bash">INCISE_PROFILE=auto pi --thinking off
+</code></pre>
+<p>Configure the Ornith model entry with <code>maxTokens: 2048</code> and <code>samplingParams.parallel_tool_calls: false</code>. The extension detects model IDs or names containing <code>ornith</code>. If a local provider exposes a generic model ID, add <code>INCISE_MODEL_FAMILY=ornith</code>.</p>
+<p><code>auto</code> enables the guarded <code>safe-routed</code> profile for measured Gemma and Ornith identities. Requests that can be resolved exactly receive one small action-specific tool; unsupported or ambiguous requests retain the standard Incise tools. Run <code>/incise-doctor</code> to see the detected model, effective profile, binary, schemas, registered tools, and last route.</p>
 <p>For MiniCPM, use the standard profile for general editing:</p>
 <pre><code class="language-bash">INCISE_PROFILE=standard pi
 </code></pre>
 <p>An opt-in <code>minicpm-list</code> profile is available for the measured list-addition workflow only. It reached 16/21 through real Pi with every executed mutation correct, but it is not a general MiniCPM profile and remains experimental.</p>
-<p>The package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not currently supported. See <a href="https://github.com/pdalinis/incise/blob/main/plugins/pi/README.md">the Pi integration guide</a> for profile behavior, model overrides, and exact evaluation scope.</p>
+<p>The package includes native binaries for macOS arm64/x64 and glibc Linux arm64/x64. Windows and musl Linux are not currently supported. See <a href="https://github.com/pdalinis/incise/blob/main/plugins/pi/README.md">the Pi integration guide</a> for profile behavior, model overrides, inference settings, and exact evaluation scope.</p>
 <h3>Safety model</h3>
 <p>Incise is designed around five guarantees:</p>
 <ul>
@@ -291,7 +302,48 @@ not represent.
 <p>MiniCPM support is intentionally conservative. Core singleton-row compatibility passed 18/18 live table trials, including all 9 singleton-object-array calls. The opt-in list pipeline also shows strong targeted results, but broader MiniCPM profiles have not cleared the project’s zero-data-loss and no-regression gates. Incise therefore does not silently enable a general MiniCPM profile.</p>
 <p>Refusals are part of the safety contract. If an operation cannot prove one target or preserve the requested structure, it reports the conflicting matches or missing requirement and writes nothing.</p>
 <h3>Measured with small models</h3>
-<p>The headline result is the current Gemma/Pi <code>auto</code> profile: <strong>475 of 479 usable trials correct (99.2%) with zero harmful outcomes</strong>.</p>
+<p>The strongest current result is now reproduced through both supported agent hosts. Hermes <code>auto</code> completed <strong>480/480 trials correct (100%) with zero harmful outcomes</strong> on both Ornith 1.5 9B and Gemma 4 26B. Pi <code>auto</code> completed <strong>480/480</strong> on Ornith and <strong>475/479 usable trials (99.2%)</strong> on Gemma, also with zero harmful outcomes. Results remain scoped to each recorded host, model, runtime, seed range, and inference configuration.</p>
+<h4>Current Ornith/Pi profile</h4>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th align="right">Correct</th>
+<th>Safety result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tables</td>
+<td align="right"><strong>60/60</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Lists</td>
+<td align="right"><strong>100/100</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Sections</td>
+<td align="right"><strong>150/150</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Frontmatter</td>
+<td align="right"><strong>110/110</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Table reads</td>
+<td align="right"><strong>60/60</strong></td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>Routed subset</td>
+<td align="right"><strong>360/360</strong></td>
+<td>No route, argument, framing, or multiple-mutation errors</td>
+</tr>
+</tbody></table>
+<p>The final preregistered holdout used Ornith 1.5 9B Q8 through llama.cpp and Pi with thinking off, <code>maxTokens: 2048</code>, <code>parallel_tool_calls: false</code>, and the measured <code>safe-routed</code> composition. All 480 trials were usable and correct. A preceding holdout stopped after one destructive fallback at 237/238; a narrow outline-verified route repaired that exact failure, passed 10/10 Ornith and 20/20 Gemma compatibility trials, and the complete holdout was then rerun from the beginning. The result is scoped to the recorded runtime, prompts, tasks, seeds, and settings.</p>
 <h4>Current Gemma/Pi profile</h4>
 <table>
 <thead>
@@ -333,6 +385,60 @@ not represent.
 </tr>
 </tbody></table>
 <p>The preregistered run attempted 480 trials. One <code>rename-setext</code> pair hit the fixed generation timeout twice and was excluded under the frozen analysis rule, leaving 479 paired results. The latest incremental route moved correctness from 473/479 to 475/479 and harmful outcomes from one to zero; that incremental difference is descriptive (<code>p = 0.625</code>), while the zero-harm and targeted-repair gates passed.</p>
+<h4>Current Hermes auto profile</h4>
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th align="right">Ornith</th>
+<th align="right">Gemma</th>
+<th>Safety result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tables</td>
+<td align="right"><strong>60/60</strong></td>
+<td align="right"><strong>60/60</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Lists</td>
+<td align="right"><strong>100/100</strong></td>
+<td align="right"><strong>100/100</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Sections</td>
+<td align="right"><strong>150/150</strong></td>
+<td align="right"><strong>150/150</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Frontmatter</td>
+<td align="right"><strong>110/110</strong></td>
+<td align="right"><strong>110/110</strong></td>
+<td>Zero harmful outcomes</td>
+</tr>
+<tr>
+<td>Table reads</td>
+<td align="right"><strong>60/60</strong></td>
+<td align="right"><strong>60/60</strong></td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>Routed subset</td>
+<td align="right"><strong>360/360</strong></td>
+<td align="right"><strong>360/360</strong></td>
+<td>Exact tools and resolved arguments</td>
+</tr>
+<tr>
+<td>Standard fallback</td>
+<td align="right"><strong>120/120</strong></td>
+<td align="right"><strong>120/120</strong></td>
+<td>Byte-identical standard surface</td>
+</tr>
+</tbody></table>
+<p>Both preregistered runs used Hermes Agent 0.21.3 and the frozen 48-task population over seeds 40–49. Ornith <code>auto</code> improved from a paired standard Hermes control of 460/480 to 480/480: 20 treatment-only wins, no control-only wins, and exact McNemar <code>p = 1.907×10⁻⁶</code>. Both treatments had zero framing errors, zero multiple mutations, and no retries. Gemma’s 480/480 is a host-and-seed-specific compatibility result; comparison with the earlier 475/479 Pi run is descriptive, not paired.</p>
 <h4>MiniCPM progress</h4>
 <p>MiniCPM is promising, but the supported surface is deliberately narrower:</p>
 <ul>
@@ -372,7 +478,7 @@ not represent.
 </tr>
 </tbody></table>
 <p>These are scoped model measurements, not promises about every model or runtime. The reusable result is the failure class removed: character arithmetic, structural-boundary guesses, ambiguous targeting, and byte-for-byte document reconstruction.</p>
-<p>Read the <a href="https://pdalinis.github.io/incise/benchmarks/">benchmark summary</a>, the complete <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md"><code>bench/FINDINGS.md</code></a>, or inspect the raw <a href="https://github.com/pdalinis/incise/blob/main/bench/results/gemma_safe_routed_full_v8_20260922_graded.jsonl">Gemma v8 result pool</a> and <a href="https://github.com/pdalinis/incise/blob/main/bench/results/gemma_safe_routed_full_v8_20260922_analysis.json">analysis</a>.</p>
+<p>Read the <a href="https://pdalinis.github.io/incise/benchmarks/">benchmark summary</a>, the complete <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md"><code>bench/FINDINGS.md</code></a>, or inspect the <a href="https://github.com/pdalinis/incise/blob/main/bench/results/ornith_final_v2_safe_routed_20260923_analysis.json">Ornith final analysis</a>, <a href="https://github.com/pdalinis/incise/blob/main/bench/results/ornith_final_v2_routes_20260923_analysis.json">exact-route audit</a>, and <a href="https://github.com/pdalinis/incise/blob/main/bench/results/gemma_safe_routed_full_v8_20260922_analysis.json">Gemma v8 analysis</a>.</p>
 <p>The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across <strong>110,406 generated cases over 54 fixtures</strong>. Property invariants and 212 injected mutations provide additional evidence that preservation failures are detected.</p>
 <h3>Frequently asked questions</h3>
 <h4>What is byte-preserving Markdown editing?</h4>

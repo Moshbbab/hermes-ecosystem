@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu is a memory layer for coding agents that indexes session histories stored locally on disk. It enables cross-agent recall by allowing tools like Claude…">
+<meta name="description" content="deja-vu is a memory layer for coding agents that indexes session histories stored on local disks. It enables cross-agent recall by allowing different tools to…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes session histories stored locally on disk. It enables cross-agent recall by allowing tools like Claude…">
+<meta property="og:description" content="deja-vu is a memory layer for coding agents that indexes session histories stored on local disks. It enables cross-agent recall by allowing different tools to…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes session histories stored locally on disk. It enables cross-agent recall by allowing tools like Claude…">
+<meta name="twitter:description" content="deja-vu is a memory layer for coding agents that indexes session histories stored on local disks. It enables cross-agent recall by allowing different tools to…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=One+memory+shared+by+Claude+Code%2C+Codex%2C+Cursor%2C+Copilot+CLI%2C+OpenClaw+and+29+more+coding+agents%2C+built+from+the+session+history+already+on+disk.+A+fix+found+in+one+agent+comes+bac&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu is a memory layer for coding agents that indexes session histories stored locally on disk. It enables cross-agent recall by allowing tools like Claude Code, Cursor, and Copilot to search and retrieve past technical decisions and conversation history.",
+  "description": "deja-vu is a memory layer for coding agents that indexes session histories stored on local disks. It enables cross-agent recall by allowing different tools to search and retrieve past decisions, commands, and fixes from previous sessions.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-09-24T12:01:26.000Z",
+  "dateModified": "2026-09-24T16:57:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 960
+    "userInteractionCount": 966
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,7 +120,7 @@
   <p class="project-desc">One memory shared by Claude Code, Codex, Cursor, Copilot CLI, OpenClaw and 29 more coding agents, built from the session history already on disk. A fix found in one agent comes back in any of them, including months of sessions from before you installed it. No LLM, no embeddings, one local Go binary.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 960</span>
+    <span class="stars">★ 966</span>
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes session histories stored locally on disk. It enables cross-agent recall by allowing tools like Claude Code, Cursor, and Copilot to search and retrieve past technical decisions and conversation history.</p>
+    <p class="summary-text">deja-vu is a memory layer for coding agents that indexes session histories stored on local disks. It enables cross-agent recall by allowing different tools to search and retrieve past decisions, commands, and fixes from previous sessions.</p>
     <ul class="summary-highlights">
-      <li>Indexes existing local history from 34 different coding agents.</li>
+      <li>Indexes local history from 34 different coding agents.</li>
       <li>Provides millisecond lookups over gigabytes of session data.</li>
-      <li>Strips keys and tokens during the indexing process.</li>
+      <li>Wires recall into agents via MCP tools and CLI skills.</li>
     </ul>
   </div>
 </section>
@@ -328,7 +328,11 @@ value becomes <code>[redacted:&lt;kind&gt;]</code> and the surrounding text stay
 <p>The source transcripts are not redacted: agents write command output there verbatim, so a
 <code>cat .env</code> or a pasted connection string stays in plaintext. <code>deja secrets</code> lists which
 sessions carry one and of what kind, from the markers redaction left; it never prints a
-value. One machine held 84 in 42 sessions (<a href="https://vshulcz.github.io/deja-vu/guide/credentials-in-transcripts.html">credentials in transcripts</a>).</p>
+value. One machine held 84 in 42 sessions (<a href="https://vshulcz.github.io/deja-vu/guide/credentials-in-transcripts.html">credentials in transcripts</a>).
+<code>deja secrets --scrub</code> rewrites the transcripts that still hold one, putting the same
+<code>[redacted:&lt;kind&gt;]</code> marker where the value was and keeping the original beside the file. It
+touches only the kinds the report names, refuses a session an agent is in, and says how many
+findings it could not reach: a store with no per-session file cannot be rewritten at all.</p>
 <p><code>deja forget</code> removes sessions from a rebuilt index and writes tombstones, so a later
 <code>deja index</code> cannot restore them from the source history. <code>--unforget</code> lifts a tombstone.
 Project exclusions are one pattern per line in <code>~/.config/deja/exclude</code>; a line prefixed
@@ -438,8 +442,8 @@ assumptions and release verification.</p>
 <td>Your agent work, wrapped. <code>--card</code> draws it in the terminal, <code>--card &lt;file&gt;.svg</code> writes one for a profile, <code>--html</code> a browsable timeline.</td>
 </tr>
 <tr>
-<td><code>deja secrets</code></td>
-<td>Which sessions' source transcripts carry credentials, and what kind. Never prints a value.</td>
+<td><code>deja secrets [--scrub]</code></td>
+<td>Which sessions' source transcripts carry credentials, and what kind. Never prints a value. <code>--scrub</code> rewrites the ones it can, original kept beside the file.</td>
 </tr>
 <tr>
 <td><code>deja doctor [--deep]</code></td>
@@ -1130,7 +1134,7 @@ sync all read that one index. Details in <a href="https://github.com/vshulcz/dej
 <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/SECURITY-MODEL.md#data-flows">data flows</a>.</p>
 <p><strong>What about secrets already in my logs?</strong> They stay in the original harness files, which
 are your agent's data; <code>deja secrets</code> names the sessions that carry them so you can rotate
-and delete. Known shapes — AWS keys, <code>api_key=</code>/<code>token=</code> assignments, bearer
+and delete, and <code>--scrub</code> rewrites the transcripts it can reach. Known shapes — AWS keys, <code>api_key=</code>/<code>token=</code> assignments, bearer
 tokens and bare JWTs, PEM blocks, provider tokens, high-entropy values — are stripped as
 the index is built, so they do not reach digests, shares or sync exports. Pattern matching
 is not secret detection: a shape it does not know can pass through. See the
@@ -1179,7 +1183,7 @@ auto-recall it already knows the project's prior decisions when the session open
 <p><a href="https://github.com/Gentleman-Programming/engram">engram</a> is the strongest of the
 record-forward tools and worth your time if that model fits you; it still starts empty and
 knows only what an agent chose to save. The
-<a href="https://vshulcz.github.io/deja-vu/guide/compare.html">full comparison</a> covers eleven of them.</p>
+<a href="https://vshulcz.github.io/deja-vu/guide/compare.html">full comparison</a> covers 15 of them.</p>
 <p><strong>Where is Claude Code session history stored, and can I search it?</strong> Under
 <code>~/.claude/projects</code>, one JSONL file per session; Codex keeps <code>~/.codex/sessions</code>, Cursor a
 SQLite <code>state.vscdb</code>. <code>deja search</code> reads them all in place, <code>deja last</code> lists the recent
@@ -1244,7 +1248,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 26.9K</div>
+        <div class="stars">★ 27.4K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1252,7 +1256,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 377</div>
+        <div class="stars">★ 378</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
