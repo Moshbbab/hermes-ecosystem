@@ -313,7 +313,7 @@ What it does
 
 `hermes journey list`
 
-List node ids — skill names and `memory:<source>:<index>` ids for memory chunks.
+List node ids — skill names and `memory:<source>:<index>:<fingerprint>` ids for memory chunks (pass one back exactly as printed).
 
 `hermes journey delete <node> [-y]`
 
@@ -369,6 +369,8 @@ Review staged writes from the CLI or any messaging platform:
 ```
 
 This is the answer to "the agent saved a wrong assumption about me": set `write_approval: true`, and every save — especially the unprompted background ones — waits for your yes/no before it ever enters your profile.
+
+A staged `replace` or `remove` (the background review stages these even with the gate off) records the full entry it targets, and `/memory pending` shows it. Approval applies to exactly that entry: if it changed after the write was staged, the write is refused and stays pending for you to reject. A `replace`/`remove` staged before this pinning existed has no verifiable target and is refused too: reject it and recreate the change. `/memory approve` lists the full text of every entry it overwrote or removed.
 
 ## Background review notifications (`display.memory_notifications`)
 
