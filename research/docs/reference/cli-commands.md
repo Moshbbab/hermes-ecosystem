@@ -1674,6 +1674,10 @@ Custom HMAC secret. Auto-generated if omitted.
 
 Skip the agent — deliver the rendered `--prompt` as the literal message. Zero LLM cost, sub-second delivery. Requires `--deliver` to be a real target (not `log`).
 
+`--mirror-to-session`
+
+Also write each delivered message into the target chat's session, so replying to it in that chat has context. Off by default; only enable it for sources whose content you trust in your conversation.
+
 `--script`
 
 Filter/transform script under `~/.hermes/scripts/`. The webhook payload is passed as JSON on stdin; JSON stdout replaces the payload, and empty stdout, `[SILENT]`, or a nonzero exit code ignores the webhook. See [Script Filters and Transforms](/docs/user-guide/messaging/webhooks#script-filters-and-transforms).
