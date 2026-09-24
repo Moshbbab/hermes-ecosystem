@@ -4,7 +4,7 @@
 
 **One subscription. Every tool built in.**
 
-The Tool Gateway is included with every paid [Nous Portal](https://portal.nousresearch.com) subscription. It routes Hermes' tool calls — web search, image generation, text-to-speech, and cloud browser automation — through infrastructure Nous already runs, so you don't have to sign up with Firecrawl, FAL, OpenAI, Browser Use, or anyone else just to make your agent useful.
+The Tool Gateway is included with every paid [Nous Portal](https://portal.nousresearch.com) subscription. It routes Hermes' tool calls — web search, image generation, text-to-speech, and cloud browser automation — through infrastructure Nous already runs, so you don't have to sign up with a web search vendor, FAL, OpenAI, Browser Use, or anyone else just to make your agent useful.
 
 [Start or manage subscription →](https://portal.nousresearch.com/manage-subscription)
 
@@ -18,7 +18,7 @@ What you get
 
 **Web search & extract**
 
-Agent-grade web search and full-page extraction via Firecrawl. No rate limits to worry about — the gateway handles scaling.
+Agent-grade web search and full-page extraction, managed by Nous. No rate limits to worry about — the gateway handles scaling.
 
 🎨
 
@@ -45,7 +45,7 @@ All four are pay-as-you-use billed against your Nous subscription. Use any combi
 Building an agent that can actually _do things_ means stitching together 5+ API subscriptions — each with their own signup, rate limits, billing, and quirks. The gateway collapses that into one account:
 
 -   **One bill.** Pay Nous; we handle the rest.
--   **One signup.** No Firecrawl, FAL, Browser Use, or OpenAI audio accounts to manage.
+-   **One signup.** No web search, FAL, Browser Use, or OpenAI audio accounts to manage.
 -   **One key.** Your Nous Portal OAuth covers every tool.
 -   **Same quality.** Same backends the direct-key route uses — just fronted by us.
 
@@ -113,7 +113,7 @@ The gateway is per-tool. Turn it on for just what you want:
 
 -   **All tools through Nous** — easiest; one subscription, done.
 -   **Gateway for web + images, bring your own TTS** — keep your ElevenLabs voice, let Nous handle the rest.
--   **Gateway only for things you don't have keys for** — "I already pay for Browserbase, but I don't want a Firecrawl account" works fine.
+-   **Gateway only for things you don't have keys for** — "I already pay for Browserbase, but I don't want a web search account" works fine.
 
 Switch any tool at any time via:
 

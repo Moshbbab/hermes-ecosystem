@@ -143,7 +143,7 @@ A fresh install with **no web credentials at all** gets working `web_search` and
 
 Nous Subscribers
 
-If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, web search and extract are available through the **[Tool Gateway](/docs/user-guide/features/tool-gateway)** via managed Firecrawl — no API key needed. New installs can run `hermes setup --portal` to log in and turn on all gateway tools at once; existing installs can flip just web via `hermes tools`.
+If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, web search and extract are available through the **[Tool Gateway](/docs/user-guide/features/tool-gateway)** as managed web search — no API key needed. New installs can run `hermes setup --portal` to log in and turn on all gateway tools at once; existing installs can flip just web via `hermes tools`.
 
 * * *
 
@@ -573,9 +573,13 @@ exa
 
 parallel
 
-`FIRECRAWL_API_KEY` or `FIRECRAWL_API_URL` (or the Nous Tool Gateway is ready)
+`FIRECRAWL_API_KEY` or `FIRECRAWL_API_URL`
 
 firecrawl
+
+Nous Tool Gateway ready (Portal subscription)
+
+managed web search via the Tool Gateway
 
 `SEARXNG_URL`
 
