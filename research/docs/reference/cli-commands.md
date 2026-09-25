@@ -2,6 +2,8 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/reference/cli-commands
 
+Python dependency commands on this page use a [PM-prepared source checkout](/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
+
 This page covers the **terminal commands** you run from your shell.
 
 For in-chat slash commands, see [Slash Commands Reference](/docs/reference/slash-commands).
@@ -1044,7 +1046,7 @@ Fetch secrets now and report what changed. Add `--apply` to actually export the 
 
 `install`
 
-Download and verify the pinned `bws` binary. `--force` re-downloads even if a managed copy already exists.
+Install or repair the PM-pinned `bws` binary. `--force` requests the same integrity check and repair, not an unconditional download.
 
 `disable`
 
@@ -1493,7 +1495,7 @@ Outbound credential-injection firewall for remote terminal sandboxes. Wraps the 
 
 ```
 hermes egress install                  # download the pinned iron-proxy binary
-hermes egress install --force          # re-download even if already installed
+hermes egress install --force          # check and repair the managed copy
 
 hermes egress setup                    # interactive wizard: CA, mappings, config
 hermes egress setup --tunnel-port N    # override the tunnel listener port (default 9090)
@@ -2647,7 +2649,7 @@ python -m acp_adapter
 Install support first:
 
 ```
-cd ~/.hermes/hermes-agent && uv pip install -e '.[acp]'
+cd ~/.hermes/hermes-agent && python -c "import pm; pm.sync_venv(['acp'], explicit=True)"
 ```
 
 See [ACP Editor Integration](/docs/user-guide/features/acp) and [ACP Internals](/docs/developer-guide/acp-internals).
@@ -2727,7 +2729,7 @@ Composite interactive UI — general plugin toggles + provider plugin configurat
 
 `install <identifier> [--force] [--ref COMMIT_SHA] [--allow-removed]`
 
-Install a plugin from the Hermes plugin catalog (bare entry name), a Git URL, or `owner/repo` shorthand. Catalog names resolve to the entry's repo at its pinned 40-hex commit SHA, show the declared capability summary, and record catalog provenance on the installer's `.install-metadata.json` record (a `.hermes-catalog.json` copy is written inside the plugin dir for convenience, but is never trusted). Raw URLs are flagged as custom (unreviewed) sources; `--ref` (full 40-character commit SHA) pins them, and on a catalog entry records the checked-out SHA rather than the reviewed pin. `--allow-removed` (DANGEROUS) bypasses the removed-plugin blocklist at install AND exempts that install from the update/enable/load-time kill-list checks.
+Install a plugin from the Hermes plugin catalog (bare entry name), a Git URL, or `owner/repo` shorthand. Catalog names resolve to the reviewed 40-hex commit SHA and show declared capabilities. Source, checked-out revision, and a nested catalog-provenance block are recorded in the installer's `plugins/.install-metadata.json`; the `.hermes-catalog.json` copy inside the plugin directory is only for convenience and is never trusted. Raw URLs are flagged as custom (unreviewed) sources. `--ref` selects a full-SHA custom pin and records the SHA actually checked out. `--allow-removed` (DANGEROUS) bypasses the removed-plugin blocklist at install and exempts that install from update, enable, and load-time kill-list checks.
 
 `search [term] [--json]`
 
@@ -2735,7 +2737,7 @@ Search the Hermes plugin catalog (matches entry names, descriptions, and declare
 
 `update <name>`
 
-Pull latest changes for an unpinned installed plugin. Pinned plugins must be reinstalled with `--force --ref <new-commit>` to move.
+Re-pin catalog installs to the reviewed catalog SHA, or update a custom Git install from its recorded source/feed. PM validates active-plugin dependencies before code publication. Explicit custom pins move only with `install --force --ref <new-commit>`.
 
 `remove <name>` (aliases: `rm`, `uninstall`)
 
@@ -3109,7 +3111,7 @@ Start the Hermes **backend server** — the JSON-RPC/WebSocket gateway the [desk
 hermes dashboard [options]
 ```
 
-Launch the web dashboard — a browser-based UI for managing configuration, API keys, and monitoring sessions. (For a headless backend with no browser UI — e.g. what the desktop app spawns — use [`hermes serve`](#hermes-serve) above.) Requires `cd ~/.hermes/hermes-agent && uv pip install -e ".[web]"` (FastAPI + Uvicorn). The embedded browser Chat tab is always available and additionally needs the `pty` extra (`cd ~/.hermes/hermes-agent && uv pip install -e ".[web,pty]"`) plus a POSIX PTY environment such as Linux, macOS, or WSL2. See [Web Dashboard](/docs/user-guide/features/web-dashboard) for full documentation.
+Launch the web dashboard to manage configuration, API keys, and sessions. For a headless backend, use [`hermes serve`](#hermes-serve). FastAPI, Uvicorn, and the platform PTY helper are core dependencies. The `web` extra adds exact HTTP-stack constraints and is selected by standard PM setup through `all`. If dependencies are damaged, run `hermes pm repair`. The embedded Chat tab requires a POSIX PTY environment, such as Linux, macOS, or WSL2. See [Web Dashboard](/docs/user-guide/features/web-dashboard).
 
 Option
 
@@ -3293,19 +3295,52 @@ hermes completion zsh >> ~/.zshrc
 hermes completion fish > ~/.config/fish/completions/hermes.fish
 ```
 
+## `hermes pm`
+
+Manage pinned tools, Python dependency environments, and their diagnostics. This command does not update the Hermes application itself.
+
+```
+hermes pm --help
+hermes pm doctor
+hermes pm status
+hermes pm repair
+hermes pm install
+hermes pm install chromium
+```
+
+For source development, run the setup script once, then activate the installed environment with `source ./activate` or PowerShell `. .\activate.ps1`. Use `deactivate` to restore the previous shell environment. See the [developer workflow](/docs/reference/package-management#developer-workflow) for preparation, daily commands, dependency refresh, and test environments.
+
+See [Package management](/docs/reference/package-management) for every subcommand, source-versus-bundle behavior, lazy-install policy, and maintainer commands.
+
 ## `hermes update`
 
 ```
 hermes update [--gateway] [--check] [--plan] [--no-backup] [--backup] [--yes]
 ```
 
-Pulls the latest `hermes-agent` code and reinstalls dependencies in the managed venv, then re-runs the post-install hooks (MCP servers, skills sync, completion install). Safe to run on a live install. Use `--check` to see whether your checkout is behind `origin/main` without installing.
+Updates an admitted source checkout and prepares dependencies through PM. Use `--check` to compare with its configured source target without applying the update. Desktop bundles, Docker, Nix, and Termux packages retain their external update owner. See [Updating & Uninstalling](/docs/getting-started/updating).
 
 `hermes update` pulls the configured update branch (default: `main`). If your checkout is on another branch, Hermes may check out the update branch before pulling. Commit branch work before updating when you want to keep it outside the update autostash flow.
 
 Option
 
 Description
+
+`--install-id`
+
+Print this installation's identity and path, then exit.
+
+`--set-channel CHANNEL`
+
+Persist `main`, `stable`, or `canary` for this source installation without applying an update. Bundled applications have a fixed build channel and refuse channel changes.
+
+`--channel CHANNEL`
+
+Select a source channel for this invocation only.
+
+`--branch NAME`
+
+Select a source branch for this invocation; takes precedence over source channel selection.
 
 `--gateway`
 
@@ -3356,7 +3391,7 @@ Print version information.
 
 Pull latest changes and reinstall dependencies.
 
-| `hermes uninstall [--full] [--gui] [--dry-run] [--yes]` | Remove Hermes, optionally deleting all config/data. `--gui` removes only the desktop Chat GUI, leaving the agent intact; `--full` also deletes config/data; `--dry-run` prints what would be removed without changing anything; `--yes` skips prompts. |
+| `hermes uninstall [--full] [--gui] [--data] [--dry-run] [--yes]` | Remove owned source-install files. `--gui` selects source-built desktop removal; `--full` also removes data. `--data` removes user data without deleting package-owned code. Sealed installs use their package owner for application removal. `--dry-run` previews the scope; `--yes` skips confirmation. |
 
 ## See also
 

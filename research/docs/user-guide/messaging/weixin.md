@@ -2,6 +2,8 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/messaging/weixin
 
+Python dependency commands on this page use a [PM-prepared source checkout](/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
+
 Connect Hermes to [WeChat](https://weixin.qq.com/) (微信), Tencent's personal messaging platform. The adapter uses Tencent's **iLink Bot API** for personal WeChat accounts — this is distinct from WeCom (Enterprise WeChat). Messages are delivered via long-polling, so no public endpoint or webhook is required.
 
 info
@@ -28,9 +30,8 @@ In practice, most deployments only get DMs to the iLink bot working reliably. If
 Install the required dependencies:
 
 ```
-pip install aiohttp cryptography
-# Optional: for terminal QR code display
-cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"
+# Includes aiohttp and terminal QR code support
+python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"
 ```
 
 ## Setup
@@ -511,7 +512,7 @@ Fix
 
 `Weixin startup failed: aiohttp and cryptography are required`
 
-Install both: `pip install aiohttp cryptography`
+Install both: `python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"`
 
 `Weixin startup failed: WEIXIN_TOKEN is required`
 
@@ -567,4 +568,4 @@ API error from the iLink service. Check your token validity and network connecti
 
 Terminal QR code doesn't render
 
-Reinstall with the messaging extra: `cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"`. Alternatively, open the URL printed above the QR
+Reinstall with the messaging extra: `cd ~/.hermes/hermes-agent && python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"`. Alternatively, open the URL printed above the QR

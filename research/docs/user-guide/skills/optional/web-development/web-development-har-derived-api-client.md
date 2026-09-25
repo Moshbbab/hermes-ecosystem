@@ -59,7 +59,7 @@ Covers **every Hermes browser pathway**: the default local `browser_navigate` ba
 ## Prerequisites
 
 -   Playwright + a browser binary (capture step only):
-    -   `pip install playwright` then `playwright install chromium`
+    -   `pip install playwright` then `playwright install chromium --no-shell`
     -   (If a system Playwright already has browsers under `~/.cache/ms-playwright`, reuse it.)
 -   `requests` or `httpx` for the replay step (stdlib `urllib` also works).
 -   No API keys. Any keys/tokens the client needs are the ones the HAR captured.

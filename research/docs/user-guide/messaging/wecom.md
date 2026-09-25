@@ -2,6 +2,8 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/messaging/wecom
 
+Python dependency commands on this page use a [PM-prepared source checkout](/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
+
 Connect Hermes to [WeCom](https://work.weixin.qq.com/) (企业微信), Tencent's enterprise messaging platform. The adapter uses WeCom's AI Bot WebSocket gateway for real-time bidirectional communication — no public endpoint or webhook needed.
 
 See also: [WeCom Callback](/docs/user-guide/messaging/wecom-callback) for inbound webhook setup.
@@ -300,7 +302,7 @@ WeCom encrypts some inbound media attachments with AES-256-CBC. The adapter hand
 -   When an inbound media item includes an `aeskey` field, the adapter downloads the encrypted bytes and decrypts them using AES-256-CBC with PKCS#7 padding.
 -   The AES key is the base64-decoded value of the `aeskey` field (must be exactly 32 bytes).
 -   The IV is derived from the first 16 bytes of the key.
--   This requires the `cryptography` Python package (`pip install cryptography`).
+-   This requires the `cryptography` Python package (`hermes pm repair`).
 
 No configuration is needed — decryption happens transparently when encrypted media is received.
 
@@ -483,11 +485,11 @@ Set both env vars or configure in setup wizard
 
 `WeCom startup failed: aiohttp not installed`
 
-Install aiohttp: `pip install aiohttp`
+Install aiohttp: `python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"`
 
 `WeCom startup failed: httpx not installed`
 
-Install httpx: `pip install httpx`
+Install httpx: `hermes pm repair`
 
 `invalid secret (errcode=40013)`
 
@@ -507,11 +509,11 @@ Check per-group `allow_from` lists in the `groups` config section
 
 Media decryption fails
 
-Install `cryptography`: `pip install cryptography`
+Install `cryptography`: `hermes pm repair`
 
 `cryptography is required for WeCom media decryption`
 
-The inbound media is AES-encrypted. Install: `pip install cryptography`
+The inbound media is AES-encrypted. Install: `hermes pm repair`
 
 Voice messages sent as files
 

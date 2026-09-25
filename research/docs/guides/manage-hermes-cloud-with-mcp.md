@@ -2,6 +2,8 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/guides/manage-hermes-cloud-with-mcp
 
+Python dependency commands on this page use a [PM-prepared source checkout](/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
+
 [Hermes Cloud](https://portal.nousresearch.com/cloud) runs hosted Hermes Agent instances for you. Normally you manage them from the `/agents` page in the [Nous Portal](/docs/integrations/nous-portal). This guide connects your **local** Hermes Agent to the Portal's MCP server so you can manage those cloud instances by just asking — "list my cloud agents", "restart the stopped one", "what's it costing me" — without leaving your terminal.
 
 It's a standard [MCP](/docs/user-guide/features/mcp) server hosted by Nous Research, gated by the same OAuth login you already use for the Portal. Once connected, Hermes gets two tools it can call on your behalf.
@@ -52,7 +54,7 @@ Every call runs against **your** org with your Portal identity, and membership i
     
     ```
     cd ~/.hermes/hermes-agent
-    uv pip install -e ".[mcp]"
+    python -c "import pm; pm.sync_venv(['mcp'], explicit=True)"
     ```
     
 

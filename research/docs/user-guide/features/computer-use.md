@@ -40,20 +40,20 @@ For the underlying contract — _why_ background mode matters, the no-foreground
 
 ## Enabling
 
-**Fresh installs already have the driver.** The Hermes installer (`install.sh` / `install.ps1`) pre-installs `cua-driver` (best-effort; pass `--skip-computer-use` / `-SkipComputerUse` to opt out), so enabling Computer Use is just a config flip:
+**The driver is a PM-managed tool.** `cua-driver` is pinned in `pm/lock.json`; the installer does not fetch it up front (there is no `--skip-computer-use` / `-SkipComputerUse` flag), and it is prepared the first time something enables Computer Use:
 
 -   **`hermes tools`** → pick `🖱️ Computer Use` — installs the driver automatically if it's still missing.
 -   **Dashboard / desktop app** → toggle the Computer Use toolset — if the driver is missing, the toggle kicks off the install in the background automatically (watch progress in the toolset panel).
 
-**Manual fallback (older installs, skipped installer step):**
+**Manual install / repair:**
 
 ```
 hermes computer-use install
 ```
 
-This fetches and runs the upstream cua-driver installer — `install.sh` on macOS/Linux, `install.ps1` on Windows. Use `hermes computer-use status` to verify the install.
+This asks PM to prepare the pinned `cua-driver` package (verified against `pm/lock.json`) — it does not run the upstream installer. Use `hermes computer-use status` to verify the install.
 
-Already have cua-driver? Hermes reuses it when it supports the 0.20 runtime contract. During setup, toolset enablement, `hermes update`, and the first `computer_use` call of a session, Hermes checks the local version and manifest. It repairs an old or incomplete standard installation through the upstream installer (at most once per session at runtime). A binary selected with `HERMES_CUA_DRIVER_CMD` stays under your control, so Hermes reports the incompatibility and leaves it unchanged.
+Already have cua-driver? Hermes reuses it when it supports the 0.20 runtime contract. During setup, toolset enablement, `hermes update`, and the first `computer_use` call of a session, Hermes checks the local version and manifest. It repairs an old or incomplete standard installation through PM (at most once per session at runtime). A binary selected with `HERMES_CUA_DRIVER_CMD` stays under your control, so Hermes reports the incompatibility and leaves it unchanged.
 
 If you install Cua Driver first, `cua-driver skills install` installs Cua's skill pack under `~/.cua-driver/skills/cua-driver`. Hermes autodetection is a planned cua-driver follow-up, so currently point Hermes at that directory or symlink it into your skill space. You can also register raw Cua MCP tools as a custom MCP server, but that is an alternative for users who need the low-level interface. The built-in toolset provides Hermes actions, configuration, approvals, and diagnostics.
 

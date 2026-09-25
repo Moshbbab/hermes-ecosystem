@@ -54,22 +54,9 @@ Bot joins VC, listens to users speaking, speaks replies back
 
 ### Python Packages
 
-```
-# CLI voice mode (microphone + audio playback)
-cd ~/.hermes/hermes-agent && uv pip install -e ".[voice]"
+Use `hermes tools` to configure voice providers. Missing built-in feature requirements go through PM, subject to `security.allow_lazy_installs` and the target's dependency support. Restart Hermes if the selected dependency environment changes.
 
-# Discord + Telegram messaging (includes discord.py[voice] for VC support)
-cd ~/.hermes/hermes-agent && uv pip install -e ".[messaging]"
-
-# Premium TTS (ElevenLabs)
-cd ~/.hermes/hermes-agent && uv pip install -e ".[tts-premium]"
-
-# Local TTS (NeuTTS, optional)
-python -m pip install -U neutts[all]
-
-# Everything at once
-cd ~/.hermes/hermes-agent && uv pip install -e ".[all]"
-```
+A bundled app includes its supported engine dependencies. Docker includes a curated subset and disables on-demand installs. Do not use pip to modify a signed payload or the system Python. For a manual development environment, select the required extras in the [development setup](/docs/developer-guide/contributing#development-setup).
 
 Extra
 
@@ -79,9 +66,9 @@ Required For
 
 `voice`
 
-`sounddevice`, `numpy`
+`sounddevice`, `numpy`, and Faster-Whisper where supported
 
-CLI voice mode
+CLI audio and optional local STT
 
 `messaging`
 
@@ -95,7 +82,9 @@ Discord & Telegram bots
 
 ElevenLabs TTS provider
 
-Optional local TTS provider: install `neutts` separately with `python -m pip install -U neutts[all]`. On first use it downloads the model automatically.
+Local Faster-Whisper is excluded on native Windows ARM64 and Intel macOS. Use a cloud or command-based STT provider on those targets. `audio-io` contains the microphone/playback dependencies without local STT. The `all` extra does not mean every voice or wake engine.
+
+NeuTTS is a separate optional runtime and downloads models on first use. Do not install its dependencies into a signed app or system Python.
 
 info
 
@@ -149,7 +138,7 @@ Add to `~/.hermes/.env`:
 
 ```
 # Speech-to-Text — local provider needs NO key at all
-# pip install faster-whisper          # Free, runs locally, recommended
+# PM prepares local Faster-Whisper on supported targets; no STT API key is needed.
 GROQ_API_KEY=your-key                 # Groq Whisper — fast, free tier (cloud)
 VOICE_TOOLS_OPENAI_KEY=your-key       # OpenAI Whisper — paid (cloud)
 
@@ -534,7 +523,7 @@ The bot auto-loads the codec from:
 DISCORD_BOT_TOKEN=your-bot-token
 DISCORD_ALLOWED_USERS=your-user-id
 
-# STT — local provider needs no key (pip install faster-whisper)
+# PM prepares local Faster-Whisper on supported targets; no STT API key is needed.
 # GROQ_API_KEY=your-key            # Alternative: cloud-based, fast, free tier
 
 # TTS — optional. Edge TTS and NeuTTS need no key.
@@ -656,7 +645,7 @@ tts:
 
 ```
 # Speech-to-Text providers (local needs no key)
-# pip install faster-whisper        # Free local STT — no API key needed
+# PM prepares local Faster-Whisper on supported targets; no STT API key is needed.
 GROQ_API_KEY=...                    # Groq Whisper (fast, free tier)
 VOICE_TOOLS_OPENAI_KEY=...         # OpenAI Whisper (paid)
 
