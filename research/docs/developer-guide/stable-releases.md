@@ -126,7 +126,9 @@ Nothing points a client at an attempt until publish. The updater compares versio
 
 The desktop workflow's optional `termux_upgrade_from_tag` input names an exact published release with a Termux R2 handoff. Explicit non-publishing desktop builds retain no downloadable job artifacts.
 
-The desktop workflow takes a `jobs` input with the groups `darwin-arm64`, `darwin-x64`, `win32-arm64`, `win32-x64`, `win32-bundle`, `linux-x64`, `linux-arm64`, and `termux`. Stable calls it once per group, except the linux groups, which wait for a real Linux build. Each Mac arch and the Windows bundle stage a receipt, and each install arm starts from its own receipt as soon as its own bytes are staged. `acceptance` is the one join that blocks publication. The `smoke-win32-universal` job is gone; the per-arch MSIX smokes cover each arch, and the Windows install arms install the `.msixbundle` on both arches.
+The desktop workflow takes a `jobs` input with the groups `darwin-arm64`, `darwin-x64`, `win32-arm64`, `win32-x64`, `win32-bundle`, `linux-x64`, `linux-arm64`, and `termux`. Stable calls it once per group, except the linux groups, which wait for a real Linux build. Each Mac arch and the Windows bundle stage a receipt, and each install arm starts from its own receipt as soon as its own bytes are staged. `acceptance` is the one join that blocks publication.
+
+Every gate and every candidate starts straight after `admit`. CI is a gate that `acceptance` requires, not a lock the signed builds wait behind, so a slow gate cannot delay a bundle; the price is that a broken `main` still pays for signed candidates that `acceptance` then refuses. The `smoke-win32-universal` job is gone; the per-arch MSIX smokes cover each arch, and the Windows install arms install the `.msixbundle` on both arches.
 
 ## Tag namespaces and receipts
 
