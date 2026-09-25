@@ -11,13 +11,13 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/raulvidis/hermes-android">
 <meta property="og:site_name" content="Hermes Atlas">
-<meta property="og:image" content="https://hermesatlas.com/api/og?title=hermes-android&amp;subtitle=Android+device+control+for+hermes-agent+%E2%80%94+bridge+app+%2B+Python+toolset&amp;kind=project+%C2%B7+integrations">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=hermes-android&amp;subtitle=Android+device+control+%E2%80%94+bridge+app+%2B+Python+toolset+for+mobile+automation&amp;kind=project+%C2%B7+integrations">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="raulvidis/hermes-android — Hermes Atlas">
 <meta name="twitter:description" content="Hermes-android provides remote device control for AI agents through a Kotlin-based Android bridge app and a Python toolset. The system enables command…">
-<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-android&amp;subtitle=Android+device+control+for+hermes-agent+%E2%80%94+bridge+app+%2B+Python+toolset&amp;kind=project+%C2%B7+integrations">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-android&amp;subtitle=Android+device+control+%E2%80%94+bridge+app+%2B+Python+toolset+for+mobile+automation&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -40,14 +40,11 @@
   "codeRepository": "https://github.com/raulvidis/hermes-android",
   "applicationCategory": "CommunicationApplication",
   "operatingSystem": "Cross-platform",
-  "programmingLanguage": "Python",
-  "license": "https://spdx.org/licenses/MIT.html",
   "author": {
     "@type": "Organization",
     "name": "raulvidis",
     "url": "https://github.com/raulvidis"
   },
-  "dateModified": "2026-09-25T06:12:51.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -117,14 +114,14 @@
   <h1 class="project-name">
     <span class="org">raulvidis</span><span class="slash">/</span>hermes-android
   </h1>
-  <p class="project-desc">Android device control for hermes-agent — bridge app + Python toolset</p>
+  <p class="project-desc">Android device control — bridge app + Python toolset for mobile automation</p>
 
   <div class="meta-row">
     <span class="stars">★ 511</span>
-    <span><span class="meta-label">lang</span>Python</span>
-    <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-25</span>
+    
+    
+    
   </div>
 
   <div class="actions">
@@ -153,442 +150,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>hermes-android</h2>
-<p>Give your AI agent hands. Remote Android device control for <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a>.</p>
-<h3>How it works</h3>
-<pre><code>Phone (home WiFi)  ──WebSocket──&gt;  Hermes Server (cloud)  &lt;──HTTP──  AI Agent
-                                   relay on port 8766
-</code></pre>
-<p>The phone connects <strong>out</strong> to your Hermes server — works behind any NAT, no port forwarding, no VPN, no USB. Just a 6-character pairing code.</p>
-<h3>Repository Structure</h3>
-<p>This repo contains <strong>two components</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Path</th>
-<th>Language</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Android bridge app</strong></td>
-<td><code>hermes-android-bridge/</code></td>
-<td>Kotlin</td>
-<td>Runs on the phone. Connects to server via WebSocket, executes commands via AccessibilityService</td>
-</tr>
-<tr>
-<td><strong>Python toolset</strong></td>
-<td><code>tools/</code>, <code>tests/</code></td>
-<td>Python</td>
-<td>Runs on the server. 42 <code>android_*</code> tools + WebSocket relay. Also lives in <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a> as the production copy</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>Note:</strong> The Python code exists here for standalone development and testing (<code>pip install -e .</code>, <code>pytest</code>). The production copy is in the hermes-agent repo. The Android app does not use or depend on the Python files.</p>
-</blockquote>
-<h3>Install as hermes-agent plugin (hermes-agent v0.3.0+)</h3>
-<pre><code class="language-bash">curl -sSL https://raw.githubusercontent.com/raulvidis/hermes-android/main/install.sh | bash
-</code></pre>
-<p>Or manually:</p>
-<pre><code class="language-bash">mkdir -p ~/.hermes/plugins
-cp -r hermes-android-plugin ~/.hermes/plugins/hermes-android
-</code></pre>
-<p>Restart hermes — run <code>/plugins</code> to verify. Should show: <code>✓ hermes-android v0.5.0 (42 tools)</code></p>
-<h3>Quick Start</h3>
-<h4>1. Install the bridge app on your phone</h4>
-<p><strong>Option A — Download the prebuilt APK (easiest).</strong> Every push to <code>main</code> automatically
-publishes a fresh debug APK to the <a href="https://github.com/raulvidis/hermes-android/releases/tag/latest-build"><strong>Latest Build</strong></a>
-release. Download the <code>hermes-android-&lt;version&gt;.apk</code> asset from there and install it — either
-by opening the file on the device (enable "Install unknown apps" for your browser/file
-manager when prompted) or via <code>adb install hermes-android-*.apk</code>.</p>
-<p><strong>Option B — Build from source:</strong></p>
-<pre><code class="language-bash">cd hermes-android-bridge
-./gradlew assembleDebug
-adb install app/build/outputs/apk/debug/hermes-android-*.apk
-</code></pre>
-<blockquote>
-<p>The APK is an unsigned <strong>debug</strong> build, which is why Android/Play Protect may warn on
-install — it is not yet published on the Play Store or F-Droid.</p>
-</blockquote>
-<h4>2. Grant permissions on the phone</h4>
-<ul>
-<li>Open Hermes Bridge app</li>
-<li>Tap <strong>Enable Accessibility Service</strong> → find Hermes Bridge → toggle ON</li>
-<li>Tap <strong>Enable Status Overlay</strong> → grant permission</li>
-<li>Tap <strong>Grant Screen Recording</strong> → approve the system dialog (needed for <code>android_screen_record</code>)</li>
-<li>Grant additional runtime permissions in <strong>Settings &gt; Apps &gt; Hermes Bridge &gt; Permissions</strong>:<ul>
-<li><strong>Microphone</strong> — for <code>android_mic_record</code></li>
-<li><strong>Location</strong> — for <code>android_location</code></li>
-<li><strong>Contacts</strong> — for <code>android_search_contacts</code></li>
-<li><strong>SMS</strong> — for <code>android_send_sms</code></li>
-<li><strong>Phone</strong> — for <code>android_call</code> (direct dialing)</li>
-</ul>
-</li>
-<li>Enable <strong>Notification Listener</strong> in <strong>Settings &gt; Apps &gt; Special app access &gt; Notification access</strong> → enable Hermes Bridge (for <code>android_notifications</code> / <code>android_events</code>)</li>
-</ul>
-<h4>3. Connect to your Hermes server</h4>
-<p>Tell hermes (via Telegram, Discord, etc):</p>
-<pre><code>Connect to my phone, code is &lt;CODE&gt;
-</code></pre>
-<p>Where <code>&lt;CODE&gt;</code> is the 6-character pairing code shown in the app.</p>
-<p>Hermes will reply with the server address. Enter it in the app and tap <strong>Connect</strong>.</p>
-<blockquote>
-<p>Full install detail (permission → tool mapping, AAOS, persistent systemd relay) lives in <a href="https://github.com/raulvidis/hermes-android/blob/main/docs/install.md">docs/install.md</a>.</p>
-</blockquote>
-<h4>4. Done</h4>
-<p>The agent can now control your phone. Try: "open Instagram", "take a screenshot", "what apps do I have?"</p>
-<h3>Android Automotive OS (Car Head Units)</h3>
-<p>The bridge app can run on Android Automotive OS (AAOS) car head units. Phone-specific features (SMS, calls, contacts) gracefully return errors when the hardware is unavailable.</p>
-<h4>Installation</h4>
-<ol>
-<li>Get the APK: download <code>hermes-android-&lt;version&gt;.apk</code> from the <a href="https://github.com/raulvidis/hermes-android/releases/tag/latest-build">Latest Build release</a>, or build it with <code>cd hermes-android-bridge &amp;&amp; ./gradlew assembleDebug</code></li>
-<li>Sideload via ADB: <code>adb install hermes-android-*.apk</code><ul>
-<li>USB: connect directly to the head unit's USB port</li>
-<li>WiFi: <code>adb connect &lt;head-unit-ip&gt;:5555</code> then install</li>
-</ul>
-</li>
-<li>Grant Accessibility Service: <strong>Settings &gt; Accessibility &gt; Hermes Bridge &gt; Enable</strong></li>
-<li>Grant overlay permission: <strong>Settings &gt; Apps &gt; Special access &gt; Draw over apps &gt; Hermes Bridge</strong></li>
-<li>Skip phone-specific permissions (SMS, calls, contacts) — not applicable</li>
-</ol>
-<h4>Connection</h4>
-<p>The car head unit needs network access to reach the relay server:</p>
-<ul>
-<li><strong>USB tethering</strong> (recommended): <code>adb forward tcp:8766 tcp:8766</code>, then enter <code>http://localhost:8766</code> in the app</li>
-<li><strong>WiFi</strong>: enter the relay server's <code>http://&lt;ip&gt;:8766</code> in the app (both devices on same network)</li>
-</ul>
-<h4>Limitations</h4>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Status on AAOS</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>android_send_sms</code></td>
-<td>Not available — returns error</td>
-</tr>
-<tr>
-<td><code>android_call</code></td>
-<td>Not available — returns error</td>
-</tr>
-<tr>
-<td><code>android_search_contacts</code></td>
-<td>Not available — returns error</td>
-</tr>
-<tr>
-<td><code>android_location</code></td>
-<td>Depends on car unit GPS configuration</td>
-</tr>
-<tr>
-<td><code>android_screen_record</code></td>
-<td>May behave differently (restricted MediaProjection on some OEMs)</td>
-</tr>
-</tbody></table>
-<p>All other tools (tap, swipe, type, screenshot, read screen, open apps, etc.) work normally.</p>
-<h3>Tools (42)</h3>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>android_setup</code></td>
-<td>Start relay and configure pairing code</td>
-</tr>
-<tr>
-<td><code>android_ping</code></td>
-<td>Check if phone is connected</td>
-</tr>
-<tr>
-<td><code>android_read_screen</code></td>
-<td>Get accessibility tree of current screen (System UI excluded by default; <code>include_system_ui=true</code> to include)</td>
-</tr>
-<tr>
-<td><code>android_screenshot</code></td>
-<td>Capture screenshot and send to user</td>
-</tr>
-<tr>
-<td><code>android_tap</code></td>
-<td>Tap by coordinates or node ID</td>
-</tr>
-<tr>
-<td><code>android_tap_text</code></td>
-<td>Tap element by visible text</td>
-</tr>
-<tr>
-<td><code>android_type</code></td>
-<td>Type into focused input field</td>
-</tr>
-<tr>
-<td><code>android_swipe</code></td>
-<td>Swipe up/down/left/right</td>
-</tr>
-<tr>
-<td><code>android_scroll</code></td>
-<td>Scroll screen or element</td>
-</tr>
-<tr>
-<td><code>android_open_app</code></td>
-<td>Launch app by package name</td>
-</tr>
-<tr>
-<td><code>android_press_key</code></td>
-<td>Press back, home, recents, etc.</td>
-</tr>
-<tr>
-<td><code>android_wait</code></td>
-<td>Wait for element to appear</td>
-</tr>
-<tr>
-<td><code>android_get_apps</code></td>
-<td>List installed apps</td>
-</tr>
-<tr>
-<td><code>android_current_app</code></td>
-<td>Get foreground app info</td>
-</tr>
-<tr>
-<td><code>android_long_press</code></td>
-<td>Long press by coordinates or node ID</td>
-</tr>
-<tr>
-<td><code>android_drag</code></td>
-<td>Drag from one point to another</td>
-</tr>
-<tr>
-<td><code>android_pinch</code></td>
-<td>Pinch zoom in/out at coordinates</td>
-</tr>
-<tr>
-<td><code>android_find_nodes</code></td>
-<td>Search accessibility nodes by text/class/clickable</td>
-</tr>
-<tr>
-<td><code>android_describe_node</code></td>
-<td>Get detailed info about a specific node</td>
-</tr>
-<tr>
-<td><code>android_screen_hash</code></td>
-<td>Get hash of current screen for change detection</td>
-</tr>
-<tr>
-<td><code>android_diff_screen</code></td>
-<td>Compare current screen against a previous hash</td>
-</tr>
-<tr>
-<td><code>android_location</code></td>
-<td>Get phone GPS location</td>
-</tr>
-<tr>
-<td><code>android_search_contacts</code></td>
-<td>Search contacts by name</td>
-</tr>
-<tr>
-<td><code>android_send_sms</code></td>
-<td>Send SMS to a phone number</td>
-</tr>
-<tr>
-<td><code>android_call</code></td>
-<td>Make a phone call or open dialer</td>
-</tr>
-<tr>
-<td><code>android_media</code></td>
-<td>Control media playback (play, pause, next, previous)</td>
-</tr>
-<tr>
-<td><code>android_macro</code></td>
-<td>Execute a sequence of android tool calls as ordered steps in one request</td>
-</tr>
-<tr>
-<td><code>android_send_intent</code></td>
-<td>Send an Android intent</td>
-</tr>
-<tr>
-<td><code>android_broadcast</code></td>
-<td>Send a broadcast intent</td>
-</tr>
-<tr>
-<td><code>android_clipboard_read</code></td>
-<td>Read clipboard contents</td>
-</tr>
-<tr>
-<td><code>android_clipboard_write</code></td>
-<td>Write text to clipboard</td>
-</tr>
-<tr>
-<td><code>android_notifications</code></td>
-<td>Read current notifications</td>
-</tr>
-<tr>
-<td><code>android_events</code></td>
-<td>Read recent accessibility events</td>
-</tr>
-<tr>
-<td><code>android_event_stream</code></td>
-<td>Stream accessibility events in real-time</td>
-</tr>
-<tr>
-<td><code>android_screen_record</code></td>
-<td>Record screen video for a duration</td>
-</tr>
-<tr>
-<td><code>android_mic_record</code></td>
-<td>Start a 16 kHz mono WAV recording (30-minute safety cap)</td>
-</tr>
-<tr>
-<td><code>android_mic_stop</code></td>
-<td>Stop and finalize the active recording</td>
-</tr>
-<tr>
-<td><code>android_mic_status</code></td>
-<td>Read recorder state and latest-file metadata</td>
-</tr>
-<tr>
-<td><code>android_mic_fetch</code></td>
-<td>Stream a completed WAV to a local <code>MEDIA:</code> file</td>
-</tr>
-<tr>
-<td><code>android_read_widgets</code></td>
-<td>Read home screen widgets</td>
-</tr>
-<tr>
-<td><code>android_speak</code></td>
-<td>Text-to-speech output</td>
-</tr>
-<tr>
-<td><code>android_speak_stop</code></td>
-<td>Stop text-to-speech</td>
-</tr>
-</tbody></table>
-<p>Microphone recordings use the speech-oriented Android audio source with bounded
-PCM gain. The bridge retains the 10 newest completed WAV files and removes older
-ones after successful finalization.</p>
-<h3>Permissions</h3>
-<table>
-<thead>
-<tr>
-<th>Permission</th>
-<th>How to Grant</th>
-<th>Required For</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Accessibility Service</td>
-<td>App button → Settings &gt; Accessibility</td>
-<td>All tools (core requirement)</td>
-</tr>
-<tr>
-<td>System Alert Window (Overlay)</td>
-<td>App button → Settings &gt; Draw over apps</td>
-<td>Status overlay display</td>
-</tr>
-<tr>
-<td>Screen Recording (MediaProjection)</td>
-<td>App button → approve system dialog</td>
-<td><code>android_screen_record</code></td>
-</tr>
-<tr>
-<td>Microphone</td>
-<td>Settings &gt; Apps &gt; Permissions &gt; Microphone</td>
-<td><code>android_mic_record</code></td>
-</tr>
-<tr>
-<td>Location</td>
-<td>Settings &gt; Apps &gt; Permissions &gt; Location</td>
-<td><code>android_location</code></td>
-</tr>
-<tr>
-<td>Read Contacts</td>
-<td>Settings &gt; Apps &gt; Permissions &gt; Contacts</td>
-<td><code>android_search_contacts</code></td>
-</tr>
-<tr>
-<td>Send SMS</td>
-<td>Settings &gt; Apps &gt; Permissions &gt; SMS</td>
-<td><code>android_send_sms</code></td>
-</tr>
-<tr>
-<td>Call Phone</td>
-<td>Settings &gt; Apps &gt; Permissions &gt; Phone</td>
-<td><code>android_call</code> (auto-dial)</td>
-</tr>
-<tr>
-<td>Notification Listener</td>
-<td>Settings &gt; Special app access &gt; Notification access</td>
-<td><code>android_notifications</code>, <code>android_events</code></td>
-</tr>
-</tbody></table>
-<h3>Architecture</h3>
-<p><strong>Android app (Kotlin):</strong></p>
-<ul>
-<li>AccessibilityService reads the UI tree and performs taps/types/swipes</li>
-<li>WebSocket client (OkHttp) connects out to the Hermes server</li>
-<li>Ktor HTTP server for local/USB development</li>
-<li>Pairing code authentication</li>
-<li>Screenshot capture via AccessibilityService API</li>
-<li>Terminal-themed UI</li>
-</ul>
-<p><strong>Server (Python):</strong></p>
-<ul>
-<li>WebSocket + HTTP relay (aiohttp) on port 8766</li>
-<li>Tools register into hermes-agent's tool registry</li>
-<li>Rate-limited authentication (5 attempts / 60s, then 5min block)</li>
-<li>Auto-detects server public IP for setup instructions</li>
-</ul>
-<h3>Security</h3>
-<p>See <a href="https://github.com/raulvidis/hermes-android/blob/main/SECURITY.md">SECURITY.md</a> for details. Key points:</p>
-<ul>
-<li>Pairing code authentication with rate limiting</li>
-<li>Phone connects out (never directly exposed)</li>
-<li>Currently unencrypted (<code>ws://</code>) — use TLS proxy for production</li>
-<li>Full device access once paired — only connect to trusted servers</li>
-</ul>
-<h3>Development</h3>
-<pre><code class="language-bash"># Python tests
-pip install -e ".[dev]"
-python -m pytest tests/
-
-# Android build
-cd hermes-android-bridge
-./gradlew assembleDebug
-</code></pre>
-<h3>Roadmap</h3>
-<p>This is a working prototype. The vision: <strong>give Hermes its own phone</strong> — a fully autonomous mobile presence.</p>
-<p>Shipped milestones live in the <a href="https://github.com/raulvidis/hermes-android/blob/main/CHANGELOG.md">CHANGELOG</a> — notifications, clipboard,
-direct SMS/calls, location, microphone recording, screen-wake key, text-to-speech,
-and a persistent systemd relay are all in. What's still ahead:</p>
-<h4>Upcoming</h4>
-<ul>
-<li>TLS/WSS support for encrypted phone↔server communication</li>
-<li>Server-side call counter to prevent tool call loops</li>
-<li>Better error reporting (screenshot + annotated explanation on failure)</li>
-<li>File transfer — send files/photos between phone and server</li>
-<li>Multiple phones — connect more than one device to the same relay</li>
-<li>Scheduled automations — "every morning, check my commute price on Bolt"</li>
-<li>Event triggers — "when a notification arrives from this app, do X"</li>
-<li>Macro recording — watch a workflow once, replay it on demand</li>
-<li>Phone call capability — answer and speak in calls using TTS/STT</li>
-<li>Voice assistant mode — always-listening on the phone, responds via speaker</li>
-<li>Call handling — answer, take a message, relay a callback</li>
-<li>Local model execution — run small models (Qwen 0.5B, Gemma 2B) on-device</li>
-<li>Offline fallback — basic commands work without server using an on-device model</li>
-<li>Hybrid routing — simple tasks locally, complex tasks to the server</li>
-<li>On-device app adapters — fast structured parsing without server round-trips</li>
-<li>iOS support via Shortcuts/accessibility bridge</li>
-<li>Web dashboard for monitoring phone activity</li>
-<li>Cross-app workflows — "find a restaurant on Maps, share on WhatsApp, book an Uber there"</li>
-<li>Dedicated "Hermes Phone" — a phone that boots straight into agent mode</li>
-</ul>
-<h3>Links</h3>
-<ul>
-<li><strong>hermes-agent</strong>: <a href="https://github.com/NousResearch/hermes-agent">github.com/NousResearch/hermes-agent</a></li>
-</ul>
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/raulvidis/hermes-android" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
@@ -616,11 +178,11 @@ and a persistent systemd relay are all in. What's still ahead:</p>
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 744</div>
+        <div class="stars">★ 743</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 244</div>
+        <div class="stars">★ 245</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

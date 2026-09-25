@@ -11,13 +11,13 @@
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/raulvidis/hermes-cloudflare">
 <meta property="og:site_name" content="Hermes Atlas">
-<meta property="og:image" content="https://hermesatlas.com/api/og?title=hermes-cloudflare&amp;subtitle=Cloudflare+Browser+Rendering+plugin+for+hermes-agent+%E2%80%94+crawl%2C+scrape%2C+extract+content+from+web+pages&amp;kind=project+%C2%B7+plugins">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=hermes-cloudflare&amp;subtitle=Cloudflare+Browser+Rendering+plugin+%E2%80%94+crawl%2C+scrape%2C+extract+content+from+web+pages&amp;kind=project+%C2%B7+plugins">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="raulvidis/hermes-cloudflare — Hermes Atlas">
 <meta name="twitter:description" content="This plugin for hermes-agent uses Cloudflare's Browser Rendering API to crawl, scrape, and extract content from web pages. It provides tools for generating…">
-<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-cloudflare&amp;subtitle=Cloudflare+Browser+Rendering+plugin+for+hermes-agent+%E2%80%94+crawl%2C+scrape%2C+extract+content+from+web+pages&amp;kind=project+%C2%B7+plugins">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-cloudflare&amp;subtitle=Cloudflare+Browser+Rendering+plugin+%E2%80%94+crawl%2C+scrape%2C+extract+content+from+web+pages&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -40,14 +40,11 @@
   "codeRepository": "https://github.com/raulvidis/hermes-cloudflare",
   "applicationCategory": "BrowserApplication",
   "operatingSystem": "Cross-platform",
-  "programmingLanguage": "Python",
-  "license": "https://spdx.org/licenses/MIT.html",
   "author": {
     "@type": "Organization",
     "name": "raulvidis",
     "url": "https://github.com/raulvidis"
   },
-  "dateModified": "2026-08-19T02:00:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -117,14 +114,14 @@
   <h1 class="project-name">
     <span class="org">raulvidis</span><span class="slash">/</span>hermes-cloudflare
   </h1>
-  <p class="project-desc">Cloudflare Browser Rendering plugin for hermes-agent — crawl, scrape, extract content from web pages</p>
+  <p class="project-desc">Cloudflare Browser Rendering plugin — crawl, scrape, extract content from web pages</p>
 
   <div class="meta-row">
     <span class="stars">★ 52</span>
-    <span><span class="meta-label">lang</span>Python</span>
-    <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-19</span>
+    
+    
+    
   </div>
 
   <div class="actions">
@@ -153,150 +150,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>hermes-cloudflare</h2>
-<p>Cloudflare Browser Rendering plugin for <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a> — crawl, scrape, and extract content from web pages using Cloudflare's headless browser API.</p>
-<blockquote>
-<p>ℹ️ Cloudflare has renamed Browser Rendering to <strong>Browser Run</strong> — same API, endpoints unchanged.</p>
-</blockquote>
-<h3>Tools</h3>
-<table>
-<thead>
-<tr>
-<th>Tool</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>cf_crawl</code></td>
-<td>Async website crawling with depth/limit controls, format selection (HTML/Markdown/JSON), include/exclude patterns, sitemap discovery</td>
-</tr>
-<tr>
-<td><code>cf_scrape</code></td>
-<td>CSS-selector-based element extraction (text, HTML, attributes, dimensions)</td>
-</tr>
-<tr>
-<td><code>cf_markdown</code></td>
-<td>Convert pages to clean Markdown (handles JS-heavy sites)</td>
-</tr>
-<tr>
-<td><code>cf_json_extract</code></td>
-<td>AI-powered structured data extraction (Workers AI / Llama 3.3 70B) with prompt + JSON schema</td>
-</tr>
-<tr>
-<td><code>cf_links</code></td>
-<td>Link discovery with visible-only and external domain filtering</td>
-</tr>
-<tr>
-<td><code>cf_content</code></td>
-<td>Fully rendered HTML after JavaScript execution</td>
-</tr>
-<tr>
-<td><code>cf_screenshot</code></td>
-<td>Page screenshots (full-page, element, viewport control, PNG/JPEG/WebP)</td>
-</tr>
-<tr>
-<td><code>cf_pdf</code></td>
-<td>Page-to-PDF with headers/footers, margins, scale</td>
-</tr>
-<tr>
-<td><code>cf_snapshot</code></td>
-<td>Multiple formats (HTML, screenshot, Markdown, a11y tree) in a single request</td>
-</tr>
-<tr>
-<td><code>cf_accessibility_tree</code></td>
-<td>Accessibility tree of a page (roles, names, values) after JS execution</td>
-</tr>
-<tr>
-<td><code>cf_ai_chat</code></td>
-<td>Workers AI text generation via REST (Llama models; needs "Workers AI - Read" token permission)</td>
-</tr>
-<tr>
-<td><code>cf_dns</code></td>
-<td>DNS-over-HTTPS record lookups (A, AAAA, MX, TXT, …) — no credentials needed</td>
-</tr>
-</tbody></table>
-<h4>Saving binary output</h4>
-<p>Screenshots and PDFs can exceed the inline response limit. Instead of returning
-base64, save them directly:</p>
-<ul>
-<li><code>output_path</code> — write the decoded file locally (supported by <code>cf_screenshot</code>, <code>cf_pdf</code>, <code>cf_snapshot</code>)</li>
-<li><code>r2_bucket</code> + <code>r2_key</code> — upload to an R2 bucket (requires "Workers R2 Storage - Edit" token permission)</li>
-</ul>
-<p><code>cf_pdf</code> also accepts raw <code>html</code> instead of a <code>url</code> for generating PDFs from custom HTML/CSS.</p>
-<h4>Reliability</h4>
-<p>Read endpoints are cached for 5 minutes (renders are billed per browser-second),
-and requests are automatically retried with backoff on rate limits (429) and
-transient server errors (5xx).</p>
-<h3>Installation</h3>
-<h4>Quick install (hermes-agent v0.3.0+)</h4>
-<pre><code class="language-bash">curl -sSL https://raw.githubusercontent.com/raulvidis/hermes-cloudflare/main/install.sh | bash
-</code></pre>
-<h4>Manual install</h4>
-<pre><code class="language-bash">git clone https://github.com/raulvidis/hermes-cloudflare.git
-mkdir -p ~/.hermes/plugins
-cp -r hermes-cloudflare/hermes-cloudflare-plugin ~/.hermes/plugins/hermes-cloudflare
-pip install httpx
-</code></pre>
-<h3>Configuration</h3>
-<p>Set these environment variables (in your shell profile or <code>.env</code>):</p>
-<pre><code class="language-bash">export CLOUDFLARE_API_TOKEN="your-api-token"
-export CLOUDFLARE_ACCOUNT_ID="your-account-id"
-</code></pre>
-<h4>Getting your credentials</h4>
-<ol>
-<li>Go to <a href="https://dash.cloudflare.com/profile/api-tokens">Cloudflare Dashboard</a></li>
-<li>Create a token with <strong>Browser Rendering - Edit</strong> permission
-(add <strong>Workers AI - Read</strong> for <code>cf_ai_chat</code> and <strong>Workers R2 Storage - Edit</strong> for R2 uploads)</li>
-<li>Copy your Account ID from the dashboard sidebar</li>
-</ol>
-<h3>Usage examples</h3>
-<p>Once installed, hermes-agent can use the tools directly:</p>
-<p><strong>Crawl a website:</strong></p>
-<blockquote>
-<p>Crawl <a href="https://docs.example.com">https://docs.example.com</a> and return the content as Markdown</p>
-</blockquote>
-<p><strong>Scrape specific elements:</strong></p>
-<blockquote>
-<p>Scrape all h1 tags and .price elements from <a href="https://shop.example.com">https://shop.example.com</a></p>
-</blockquote>
-<p><strong>Extract structured data with AI:</strong></p>
-<blockquote>
-<p>Extract all product names, prices, and ratings from <a href="https://store.example.com">https://store.example.com</a> as JSON</p>
-</blockquote>
-<p><strong>Get page as Markdown:</strong></p>
-<blockquote>
-<p>Convert <a href="https://blog.example.com/post">https://blog.example.com/post</a> to Markdown</p>
-</blockquote>
-<p><strong>Take a screenshot:</strong></p>
-<blockquote>
-<p>Take a full-page screenshot of <a href="https://example.com">https://example.com</a></p>
-</blockquote>
-<p><strong>Capture multiple formats at once:</strong></p>
-<blockquote>
-<p>Get the Markdown, screenshot, and accessibility tree of <a href="https://example.com">https://example.com</a> in one request</p>
-</blockquote>
-<p><strong>Inspect page structure:</strong></p>
-<blockquote>
-<p>Show me the accessibility tree of <a href="https://app.example.com">https://app.example.com</a> so I can see the interactive elements</p>
-</blockquote>
-<p><strong>Save a PDF of a page:</strong></p>
-<blockquote>
-<p>Render <a href="https://example.com/report">https://example.com/report</a> as a PDF and save it to /tmp/report.pdf</p>
-</blockquote>
-<p><strong>Resolve a DNS record:</strong></p>
-<blockquote>
-<p>What are the MX records for example.com?</p>
-</blockquote>
-<h3>Requirements</h3>
-<ul>
-<li>hermes-agent v0.3.0+</li>
-<li>Python 3.10+</li>
-<li><code>httpx</code> (installed automatically by install.sh)</li>
-<li>Cloudflare account with Browser Rendering enabled (available on Free and Paid plans)</li>
-</ul>
-<h3>License</h3>
-<p>MIT</p>
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/raulvidis/hermes-cloudflare" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
