@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu is a memory tool for coding agents that indexes existing session history stored on a machine's disk. It provides millisecond lookups across past…">
+<meta name="description" content="deja-vu is a memory tool for coding agents that indexes session history already stored on a user's disk. It allows agents to search and retrieve past solutions…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu is a memory tool for coding agents that indexes existing session history stored on a machine's disk. It provides millisecond lookups across past…">
+<meta property="og:description" content="deja-vu is a memory tool for coding agents that indexes session history already stored on a user's disk. It allows agents to search and retrieve past solutions…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu is a memory tool for coding agents that indexes existing session history stored on a machine's disk. It provides millisecond lookups across past…">
+<meta name="twitter:description" content="deja-vu is a memory tool for coding agents that indexes session history already stored on a user's disk. It allows agents to search and retrieve past solutions…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=One+memory+shared+by+Claude+Code%2C+Codex%2C+Cursor%2C+Copilot+CLI%2C+OpenClaw+and+29+more+coding+agents%2C+built+from+the+session+history+already+on+disk.+A+fix+found+in+one+agent+comes+bac&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu is a memory tool for coding agents that indexes existing session history stored on a machine's disk. It provides millisecond lookups across past sessions to allow agents to retrieve previous decisions and solutions without a separate capture step.",
+  "description": "deja-vu is a memory tool for coding agents that indexes session history already stored on a user's disk. It allows agents to search and retrieve past solutions across different platforms using millisecond lookups and an MCP-compatible architecture.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-09-26T10:26:35.000Z",
+  "dateModified": "2026-09-26T16:26:41.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1030
+    "userInteractionCount": 1040
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu is a memory tool for coding agents that indexes existing session history stored on a machine's disk. It provides millisecond lookups across past sessions to allow agents to retrieve previous decisions and solutions without a separate capture step.</p>
+    <p class="summary-text">deja-vu is a memory tool for coding agents that indexes session history already stored on a user's disk. It allows agents to search and retrieve past solutions across different platforms using millisecond lookups and an MCP-compatible architecture.</p>
     <ul class="summary-highlights">
-      <li>Indexes history from 34 different coding agents automatically.</li>
-      <li>Wires MCP recall into detected agents for session-start retrieval.</li>
-      <li>Redacts keys and tokens during the indexing process.</li>
+      <li>Indexes existing history from 34 different coding agents</li>
+      <li>Redacts keys and tokens during the indexing process</li>
+      <li>Provides millisecond lookups over gigabytes of session history</li>
     </ul>
   </div>
 </section>
@@ -270,7 +270,7 @@ to local files, and deja turns those files into one memory layer all of them rea
 </tr>
 <tr>
 <td><strong>It survives compaction</strong></td>
-<td>Measured over 43 compactions: the summary keeps 77% of the decisions and 0.2% of the commands you ran. deja hands back the other 99.8% — and on Claude Code and Codex it captures the task, the files and the commands as the compaction starts, then returns them once in the next session.</td>
+<td>Measured over 43 compactions: the summary keeps 77% of the decisions and 0.2% of the commands you ran. deja hands back the other 99.8% — and on Claude Code and Codex it captures the task, what was concluded, the commands and what is still open as the compaction starts, then hands them back once after it.</td>
 </tr>
 <tr>
 <td><strong>Recall at the point of action</strong></td>
@@ -384,7 +384,7 @@ assumptions and release verification.</p>
 </tr>
 <tr>
 <td><code>deja fix &lt;error&gt;</code></td>
-<td>What this machine ran after that same error before, when the error did not come back.</td>
+<td>What this machine ran after that same error before, when the error did not come back. Never a merge, a force push or a deletion.</td>
 </tr>
 <tr>
 <td><code>deja friction</code></td>
@@ -521,7 +521,7 @@ whether or not the tool is called.</p>
 <tr>
 <td><code>fix</code></td>
 <td>the failing output, verbatim</td>
-<td><code>project?</code>, <code>limit?</code></td>
+<td><code>limit?</code></td>
 <td>What this machine ran, or changed, after that same error before.</td>
 </tr>
 <tr>
@@ -548,8 +548,9 @@ whether or not the tool is called.</p>
 <h3>Supported harnesses</h3>
 <p>With auto-recall installed, Claude Code and Codex hand deja the transcript as a
 compaction starts, and it keeps what the summary is about to drop: the task, the
-conclusions, the files, the commands with what each one did, and what was left
-open. The next hook for the same session and workspace gives it back once, inside
+conclusions, the commands with what each one did, and what was left open, with a
+keep-until-closed list (questions waiting on you, open issue numbers, settled
+verdicts) carried from one compaction to the next until the transcript closes it. The next hook for the same session and workspace gives it back once, inside
 a 4 KB budget, with a line saying whether the repository moved since. <code>deja stats</code>
 counts the tool calls before the first edit after a compaction, which is the
 number this is measured against. See <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/compaction.md">automatic compaction
@@ -1026,7 +1027,7 @@ deja bench prompt     # what the per-prompt hook fires on, and what it fires on 
 deja bench ingest     # what an update costs: unchanged, a turn, a new transcript, a rename, a rewrite
 deja bench read       # what it costs to read a database-backed store, and what one long value does to it
 </code></pre>
-<p><code>bench block</code> asks the question the other three cannot: with the right session in
+<p><code>bench block</code> asks the question the others cannot: with the right session in
 hand, does the block carry what that session settled. Eight sessions discuss each
 subject and one of them settles it, in the middle of its own transcript rather
 than at the end — so the baseline arm, the newest turns of the top hit, scores
@@ -1112,7 +1113,7 @@ transcripts:</p>
 </thead>
 <tbody><tr>
 <td>Lookup, in process</td>
-<td><strong>0.7–0.8 ms</strong> median (<code>deja bench recall</code>, 100 queries, half of them Russian), ~19 ms on the LongMemEval-S haystacks</td>
+<td><strong>0.7–0.8 ms</strong> median (<code>deja bench recall</code>, 100 queries, half of them Russian), ~15 ms on the LongMemEval-S haystacks</td>
 </tr>
 <tr>
 <td><code>deja &lt;query&gt;</code>, end to end</td>
@@ -1146,7 +1147,7 @@ and delete, and <code>--scrub</code> rewrites the transcripts it can reach. Know
 tokens and bare JWTs, PEM blocks, provider tokens, high-entropy values — are stripped as
 the index is built, so they do not reach digests, shares or sync exports. Pattern matching
 is not secret detection: a shape it does not know can pass through. See the
-<a href="https://github.com/vshulcz/deja-vu/blob/main/docs/SECURITY-MODEL.md#redaction">security model</a>.</p>
+<a href="https://github.com/vshulcz/deja-vu/blob/main/docs/SECURITY-MODEL.md#redaction-boundary">security model</a>.</p>
 <p><strong>Will it slow my agent down?</strong> A recall is a lexical lookup against a local index:
 0.7–0.8 ms median, and nothing waits on a model. A hook adds the process start and a
 freshness check over your stores on top of that — tens of milliseconds on a store of
@@ -1256,7 +1257,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 30.6K</div>
+        <div class="stars">★ 31.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

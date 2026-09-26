@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
+<meta name="description" content="ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
+<meta property="og:description" content="ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
+<meta name="twitter:description" content="ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+OpenClaw+and+Hermes.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, decision capture, and context surfacing without cloud dependencies.",
+  "description": "ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and intent classification to store and retrieve project documentation, decisions, and session transcripts in a local SQLite vault.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-09-26T09:53:05.000Z",
+  "dateModified": "2026-09-26T16:26:10.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, decision capture, and context surfacing without cloud dependencies.</p>
+    <p class="summary-text">ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and intent classification to store and retrieve project documentation, decisions, and session transcripts in a local SQLite vault.</p>
     <ul class="summary-highlights">
-      <li>Uses hybrid retrieval including BM25 and vector search</li>
-      <li>Integrates via MCP server and native plugins</li>
-      <li>Captures decisions and preferences from session transcripts</li>
+      <li>Combines BM25, vector search, and cross-encoder reranking for retrieval.</li>
+      <li>Captures session decisions and preferences using a local GGUF observer model.</li>
+      <li>Operates entirely on-device with no cloud dependencies or API keys.</li>
     </ul>
   </div>
 </section>
@@ -566,7 +566,7 @@ CLAWMEM_API_TOKEN=secret ./bin/clawmem serve # with bearer token auth
 <tr>
 <td>GET</td>
 <td><code>/lifecycle/status</code></td>
-<td>Active/archived/pinned/snoozed counts</td>
+<td>Active/archived/forgotten/pinned/snoozed counts + <code>deactivation_reasons</code> (<code>absent</code>/<code>forget</code>/<code>archive</code>/<code>unknown_legacy</code>)</td>
 </tr>
 <tr>
 <td>POST</td>
@@ -962,7 +962,7 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>lifecycle_status</code></td>
-<td>Document lifecycle statistics: active, archived, forgotten, pinned, snoozed counts and policy summary</td>
+<td>Document lifecycle statistics: active, archived, forgotten, pinned, snoozed counts, the deactivation-reason breakdown, and policy summary</td>
 </tr>
 <tr>
 <td><code>lifecycle_sweep</code></td>
@@ -1057,8 +1057,7 @@ clawmem status                                  Quick index status
   → Intent-Aware Chunk Selection (intent terms at 0.5× weight alongside query terms at 1.0×)
   → Cross-Encoder Reranking (4000 char context; intent prepended; chunk dedup; batch cap=4)
   → Rerank/RRF Blend (blendRerank: 0.9·reranker + 0.1·normalized-RRF tiebreaker; reranker can promote over RRF #1; falls back to RRF order if reranker unavailable)
-  → Composite Scoring (query-tuned: (search × 0.70 + recency × 0.15 + confidence × 0.15) × qualityMultiplier × lengthNorm × coActivationBoost + pinBoost; recency-intent queries → 0.10/0.70/0.20; other tools keep the 0.50/0.25/0.25 default)
-  → MMR Diversity Filter (Jaccard bigram similarity &gt; 0.
+  → Composite Scoring (query-tuned: (search × 0.70 + recency × 0.15 + confidence × 0.15) × qualityMultiplier × lengthNorm × coActivationBoost + pinBoost; recency-intent queries →
 
 ---
 
@@ -1080,7 +1079,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 30.6K</div>
+        <div class="stars">★ 31.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

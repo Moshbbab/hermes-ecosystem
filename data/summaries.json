@@ -413,14 +413,14 @@
     "auditedAt": "2026-07-13T09:02:08.398Z"
   },
   "yoloshii/ClawMem": {
-    "summary": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, decision capture, and context surfacing without cloud dependencies.",
+    "summary": "ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and intent classification to store and retrieve project documentation, decisions, and session transcripts in a local SQLite vault.",
     "highlights": [
-      "Uses hybrid retrieval including BM25 and vector search",
-      "Integrates via MCP server and native plugins",
-      "Captures decisions and preferences from session transcripts"
+      "Combines BM25, vector search, and cross-encoder reranking for retrieval.",
+      "Captures session decisions and preferences using a local GGUF observer model.",
+      "Operates entirely on-device with no cloud dependencies or API keys."
     ],
-    "readmeHash": "2d6dc6e32f7408c544de5698aa32fadf288a9abc5ed821fc1ef19b1e59052ed0",
-    "generatedAt": "2026-09-26T11:35:11.954Z",
+    "readmeHash": "772edb4838fd8edb40cbb8fa5c2ea5c94e81583da15318fb72ca6196fa762557",
+    "generatedAt": "2026-09-26T16:33:52.934Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -828,18 +828,17 @@
     "auditedAt": "2026-07-13T09:05:03.761Z"
   },
   "ucsandman/DashClaw": {
-    "summary": "DashClaw is a decision infrastructure and fail-closed approval layer designed to intercept destructive or expensive AI agent actions before execution. It provides a signed ledger for decision records and allows users to remotely approve or deny tool calls via CLI, web inbox, or mobile integrations.",
+    "summary": "DashClaw is a decision infrastructure and fail-closed approval layer designed to intercept destructive or expensive AI agent actions before execution. It provides a signed ledger for decision records and allows users to remotely approve or deny tool calls via a web inbox, CLI, or mobile interfaces.",
     "highlights": [
-      "Intercepts tool calls from Claude Code, Codex, Hermes, and OpenClaw.",
+      "Intercepts tool calls at the execution seam before they run.",
       "Supports remote approvals via PWA, Telegram, Discord, and CLI.",
-      "Maintains a signed ledger of verifiable decision records and receipts."
+      "Provides verifiable decision records and Ed25519 signed receipts."
     ],
-    "readmeHash": "850f36d129a3b07ac3e52807292db6c285e79c6e8adbdab0d1195a0fbc4c09df",
-    "generatedAt": "2026-09-09T04:52:50.496Z",
+    "readmeHash": "711e3a30427219e9537267d5d4b273b16fb5ee7fb8e53c151af7f6d417702adc",
+    "generatedAt": "2026-09-26T16:33:58.319Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-09-14T14:28:46.136Z"
+    "audit": "pass"
   },
   "Lethe044/hermes-incident-commander": {
     "summary": "Hermes Incident Commander is an autonomous SRE agent designed to detect, diagnose, and remediate production infrastructure incidents. It operates as a standalone watchdog on Linux hosts using the Anthropic API to provide triage and optional auto-remediation for CPU, memory, disk, and network issues.",
@@ -1418,18 +1417,17 @@
     "auditedAt": "2026-07-13T09:07:36.876Z"
   },
   "jau123/MeiGen-AI-Design-MCP": {
-    "summary": "MeiGen AI Design MCP is a Model Context Protocol server for generating AI images and videos through remote or local backends. It integrates with AI coding tools to provide tools for background removal, upscaling, and ecommerce asset creation using curated prompt templates.",
+    "summary": "MeiGen AI Design MCP is an open-source MCP server for AI image and video generation compatible with hosts such as Claude Code, Cursor, and Windsurf. It supports multiple backends including MeiGen Cloud, OpenAI-compatible APIs, and local ComfyUI, and includes a library of 1,446 curated prompt templates.",
     "highlights": [
-      "Supports MeiGen Cloud, OpenAI-compatible APIs, and local ComfyUI backends.",
-      "Includes 1,446 curated prompt templates for image generation.",
-      "Provides five specialized skills including background removal and upscaling."
+      "Supports image and video generation via remote or local npm server",
+      "Includes five guided skills for ecommerce and image enhancement",
+      "Features parallel sub-agent orchestration and a standalone CLI mode"
     ],
-    "readmeHash": "60b78570d8055f4e46dbe038c4e4a0270677a6bd325bda412f2cf25f68e03934",
-    "generatedAt": "2026-09-18T11:32:20.874Z",
+    "readmeHash": "b954a4a7f5f69bd4cf7f1e6a6fb9119c1a333271b3bb46064440b512cef3923d",
+    "generatedAt": "2026-09-26T16:34:05.113Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
-    "audit": "pass",
-    "auditedAt": "2026-09-21T14:36:24.235Z"
+    "audit": "pass"
   },
   "alias8818/hermes-tool-slimmer": {
     "summary": "Hermes Tool Slimmer is a schema-selection optimization tool that reduces the token overhead caused by large tool catalogs in Hermes Agent. It creates an indexable corpus of tool schemas and uses local BM25 ranking with explicit boosts to select the smallest useful tool set for each turn. This approach lowers prompt token consumption while providing a dashboard for diagnostics, counters, and visibility. It is designed to complement or replace native tool search depending on the user's need for deterministic one-pass slimming.",
@@ -1502,14 +1500,14 @@
     "auditedAt": "2026-07-14T21:37:29.864Z"
   },
   "yantrikos/yantrikdb-hermes-plugin": {
-    "summary": "yantrikdb-hermes-plugin is a memory provider for Hermes Agent that features an embedded, in-process backend by default. It provides tools for canonicalizing duplicate entries, tracking contradictions, and surfacing explainable recall results with specific reasons for retrieval.",
+    "summary": "yantrikdb-hermes-plugin is a memory provider for Hermes Agent that uses an in-process backend by default. It provides tools for canonicalizing duplicates, tracking contradictions, and attaching retrieval reasons to recalled information. The plugin includes a self-directing loop that identifies knowledge gaps and generates tasks for the agent to resolve them.",
     "highlights": [
-      "Supports contradiction tracking and resolution primitives.",
-      "Includes a self-directing loop to identify and queue knowledge gaps.",
-      "Provides explainable recall with a why_retrieved tag for every result."
+      "Provides explainable recall with why_retrieved tags for every result.",
+      "Tracks contradictions and supports idempotent writes to prevent duplicates.",
+      "Includes a self-directing loop for gap identification and task management."
     ],
-    "readmeHash": "8707b89724bc95053f39ba75820a09d643257ea4a67a7cc5b1e6092440743741",
-    "generatedAt": "2026-09-21T14:38:56.704Z",
+    "readmeHash": "8b54b94fc50680c9cf43ef69969c03b6ab99dae9a28fa3d2e91ddc933ce15036",
+    "generatedAt": "2026-09-26T16:34:03.796Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
@@ -3388,14 +3386,14 @@
     "audit": "pass"
   },
   "vshulcz/deja-vu": {
-    "summary": "deja-vu is a memory tool for coding agents that indexes existing session history stored on a machine's disk. It provides millisecond lookups across past sessions to allow agents to retrieve previous decisions and solutions without a separate capture step.",
+    "summary": "deja-vu is a memory tool for coding agents that indexes session history already stored on a user's disk. It allows agents to search and retrieve past solutions across different platforms using millisecond lookups and an MCP-compatible architecture.",
     "highlights": [
-      "Indexes history from 34 different coding agents automatically.",
-      "Wires MCP recall into detected agents for session-start retrieval.",
-      "Redacts keys and tokens during the indexing process."
+      "Indexes existing history from 34 different coding agents",
+      "Redacts keys and tokens during the indexing process",
+      "Provides millisecond lookups over gigabytes of session history"
     ],
-    "readmeHash": "1dad96a365f82505fb410abbe92a7d377da7b90a2166753d4f65f682de35b854",
-    "generatedAt": "2026-09-25T17:22:50.822Z",
+    "readmeHash": "bfd7672fa4ac3689e9074029519a8557b0761d1b11c48b3c41edd2d60e068d14",
+    "generatedAt": "2026-09-26T16:34:14.336Z",
     "model": "google/gemma-4-31b-it:free",
     "version": 1,
     "audit": "pass"
