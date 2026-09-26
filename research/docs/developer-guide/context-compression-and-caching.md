@@ -255,7 +255,7 @@ Thread-compaction mode for Codex app-server sessions (see below)
 
 bool
 
-Opt in to OpenAI's server-side compaction on the Responses API. Engages for gpt-5.6-family models on the direct OpenAI API or a ChatGPT Codex subscription, and exact `gpt-6-astra` on official Codex OAuth (see below)
+Opt in to OpenAI's server-side compaction on the Responses API. Engages for gpt-5.6-family models on the direct OpenAI API or a ChatGPT Codex subscription, and `gpt-6-astra` (including its `-900k` picker alias) on official Codex OAuth (see below)
 
 `codex_responses_compact_threshold`
 
@@ -351,7 +351,7 @@ OpenAI's Responses API supports server-side compaction: when a request includes 
 
 Opt in with `compression.codex_responses_native: true`. The gate is deliberately narrow, re-checked on every request:
 
--   **Models:** the gpt-5.6 family, plus exact `gpt-6-astra` on official Codex subscription OAuth. Astra on the direct API, Astra variants and other GPT-6 models are excluded. gpt-5.1/5.2 return HTTP 500 or stall the stream when the field is present (no structured rejection to downgrade on, verified live Aug 2026).
+-   **Models:** the gpt-5.6 family, plus `gpt-6-astra` (and its `-900k` picker alias) on official Codex subscription OAuth. Astra on the direct API, other Astra variants and other GPT-6 models are excluded. gpt-5.1/5.2 return HTTP 500 or stall the stream when the field is present (no structured rejection to downgrade on, verified live Aug 2026).
 -   **Routes:** `api.openai.com` (OpenAI API key) or the ChatGPT Codex backend (Codex subscription OAuth) only. xAI, GitHub/Copilot, OpenRouter, relays, and local servers never see the field.
 
 For Astra, both the resolved `openai-codex` provider and an official HTTPS `chatgpt.com/backend-api/codex` endpoint are required. A trusted proxy override does not enable Astra compaction. This uses the existing automatic `context_management` path and does not add `configuration_update` history.
