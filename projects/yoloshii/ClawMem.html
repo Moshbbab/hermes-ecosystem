@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve…">
+<meta name="description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve…">
+<meta property="og:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve…">
+<meta name="twitter:description" content="ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+OpenClaw+and+Hermes.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve context from markdown notes, project documentation, and conversation exports.",
+  "description": "ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, decision capture, and context surfacing without cloud dependencies.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-08-18T19:28:18.000Z",
+  "dateModified": "2026-09-26T09:53:05.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-18</span>
+    <span><span class="meta-label">updated</span>2026-09-26</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to store and retrieve context from markdown notes, project documentation, and conversation exports.</p>
+    <p class="summary-text">ClawMem is an on-device memory layer designed for Claude Code, OpenClaw, Hermes, and other AI agents. It uses a local SQLite vault to provide retrieval-augmented search, decision capture, and context surfacing without cloud dependencies.</p>
     <ul class="summary-highlights">
       <li>Uses hybrid retrieval including BM25 and vector search</li>
-      <li>Integrates via MCP, Claude Code hooks, and plugins</li>
-      <li>Operates locally without API keys or cloud dependencies</li>
+      <li>Integrates via MCP server and native plugins</li>
+      <li>Captures decisions and preferences from session transcripts</li>
     </ul>
   </div>
 </section>
@@ -181,9 +181,13 @@
 <li><strong>Prevents context bleed in derived insights</strong> — the Phase 3 deductive synthesis pipeline validates every draft against an anti-contamination wrapper (deterministic entity contamination check + LLM validator + dedupe) before writing cross-session deductive observations (v0.7.1)</li>
 <li><strong>Frames surfaced facts as background knowledge</strong> — <code>context-surfacing</code> wraps injected content in <code>&lt;instruction&gt;</code> + <code>&lt;facts&gt;</code> + <code>&lt;relationships&gt;</code> blocks, telling the model to treat facts as already-known and exposing memory-graph edges between surfaced docs directly in-prompt (v0.7.1)</li>
 <li><strong>Injects knowledge-graph facts as structured triples</strong> — when the user's prompt mentions entities already known to the vault, <code>context-surfacing</code> resolves them via a three-path prompt-only extractor (canonical IDs, proper nouns, lowercased n-grams), queries the SPO graph for current-state triples, and appends a <code>&lt;vault-facts&gt;</code> block of raw <code>subject predicate object</code> lines to <code>&lt;vault-context&gt;</code> — off for <code>speed</code>, 200 tokens on <code>balanced</code>, 250 on <code>deep</code>, token-truncated at the triple boundary (v0.9.0)</li>
-<li><strong>Session-scoped focus topic boost</strong> — <code>clawmem focus set "&lt;topic&gt;" --session-id &lt;id&gt;</code> writes a per-session focus file that steers query expansion, reranking, chunk selection, snippet extraction, and post-composite-score topic boosting (1.4× match / 0.75× demote) for that session only — session-isolated, fail-open, never writes to SQLite or lifecycle columns (v0.9.0)</li>
+<li><strong>Session-scoped focus topic</strong> — <code>clawmem focus set "&lt;topic&gt;" --session-id &lt;id&gt;</code> writes a per-session focus file used as a snippet-selection intent: surfaced docs prefer sentences matching the topic. Presentation only since v0.38.0 — a focus never changes expansion, reranking, scoring, ordering, or the surfaced set — session-isolated, fail-open, never writes to SQLite or lifecycle columns (v0.9.0, narrowed v0.38.0)</li>
+<li><strong>Ranks hook injections on one channel-aware key</strong> — every retrieval leg (BM25, vector, file-aware, gated prior-turn, expansion variants) contributes a ranked lane; weighted reciprocal-rank fusion yields a single ordering key (current-support band, fused mass) that decides membership, final order, AND admission — no mixed raw-score sorts, no metadata reordering (v0.38.0)</li>
+<li><strong>Admits by relevance, abstains honestly</strong> — the context-surfacing hook admits candidates by a relative floor on the fused ordering key and abstains at query level when current-turn support is missing or keyword-degenerate, instead of surfacing weak lists (v0.38.0)</li>
+<li><strong>Guards the deep rerank lane</strong> — cross-encoder scores apply only under full candidate coverage AND a discriminating score set (degeneracy gate); the reranker joins the final order as a rank-fused lane, and remote rerank scores are cached only under an attested provider identity (<code>clawmem rerank-health</code>) (v0.38.0)</li>
+<li><strong>Keeps the hook's write path off your prompt latency</strong> — turn alignment is one early fail-closed row; recall attribution, token accounting, and vault mirrors are handed to a detached drainer process through an on-disk spool after the payload is emitted (v0.38.0)</li>
 <li><strong>Scores document quality</strong> using structure, keywords, and metadata richness signals</li>
-<li><strong>Boosts co-accessed documents</strong> — notes frequently surfaced together get retrieval reinforcement</li>
+<li><strong>Boosts co-accessed documents</strong> — notes frequently surfaced together get retrieval reinforcement on the composite MCP surfaces (removed from hook ordering in v0.38.0 — the injected order is the channel-aware fusion key alone)</li>
 <li><strong>Decomposes complex queries</strong> into typed retrieval clauses (BM25/vector/graph) for multi-topic questions</li>
 <li><strong>Cleans stale embeddings</strong> automatically before embed runs, removing orphans from deleted/changed documents</li>
 <li><strong>Transaction-safe indexing</strong> — crash mid-index leaves zero partial state (atomic commit with rollback)</li>
@@ -985,7 +989,7 @@ clawmem status                                  Quick index status
 <tbody><tr>
 <td><code>context-surfacing</code></td>
 <td>UserPromptSubmit</td>
-<td>Hybrid search → FTS supplement → file-aware search (E13) → snooze filter → spreading activation (E11) → memory type diversification (E10) → tiered injection (HOT/WARM/COLD) → <code>&lt;vault-context&gt;</code> + <code>&lt;vault-routing&gt;</code> hint. Profile-driven budget/results/timeout.</td>
+<td>Retrieval gate → lane-based hybrid search (BM25 + vector + file-aware (E13) + gated prior-turn + deep expansion variants) → weighted RRF fusion onto one channel-aware ordering key → snooze/noise filters → relevance admission with query-level abstention (v0.38.0) → tiered injection (HOT/WARM/COLD) → <code>&lt;vault-context&gt;</code> + <code>&lt;vault-routing&gt;</code> hint. Profile-driven budget/results/timeout; <code>CLAWMEM_HOOK_BUDGET_MS</code> is the authoritative internal deadline.</td>
 </tr>
 <tr>
 <td><code>postcompact-inject</code></td>
@@ -1054,58 +1058,12 @@ clawmem status                                  Quick index status
   → Cross-Encoder Reranking (4000 char context; intent prepended; chunk dedup; batch cap=4)
   → Rerank/RRF Blend (blendRerank: 0.9·reranker + 0.1·normalized-RRF tiebreaker; reranker can promote over RRF #1; falls back to RRF order if reranker unavailable)
   → Composite Scoring (query-tuned: (search × 0.70 + recency × 0.15 + confidence × 0.15) × qualityMultiplier × lengthNorm × coActivationBoost + pinBoost; recency-intent queries → 0.10/0.70/0.20; other tools keep the 0.50/0.25/0.25 default)
-  → MMR Diversity Filter (Jaccard bigram similarity &gt; 0.6 → demoted)
-  → Ranked Results
+  → MMR Diversity Filter (Jaccard bigram similarity &gt; 0.
+
+---
+
+*README truncated. [Continue reading on GitHub](https://github.com/yoloshii/ClawMem#readme)*
 </code></pre>
-<p>For agent-facing query optimization (tool selection, query string quality, intent parameter, candidateLimit), see <code>CLAUDE.md</code>.</p>
-<h4>Multi-Graph Traversal</h4>
-<p>For WHY and ENTITY queries, the search pipeline expands results through the memory graph:</p>
-<ol>
-<li>Start from top-10 baseline results as anchor nodes</li>
-<li>For each frontier node: get neighbors via any relation type</li>
-<li>Score transitions: <code>λ1·structure + λ2·semantic_affinity</code></li>
-<li>Apply decay: <code>new_score = parent_score * γ + transition_score</code></li>
-<li>Keep top-k (beam search), repeat until max depth or budget</li>
-</ol>
-<p><strong>Graph types:</strong></p>
-<ul>
-<li><strong>Semantic</strong> — vector similarity edges (threshold &gt; 0.7)</li>
-<li><strong>Temporal</strong> — chronological document ordering</li>
-<li><strong>Causal</strong> — LLM-inferred cause→effect from Observer facts + Beads <code>blocks</code>/<code>waits-for</code> deps</li>
-<li><strong>Supporting</strong> — LLM-analyzed document relationships + Beads <code>discovered-from</code> deps</li>
-<li><strong>Contradicts</strong> — LLM-analyzed document relationships. Additional <code>contradicts</code> edges are inserted by Phase 3 deductive synthesis when a new draft contradicts a prior deductive observation. <em>(Phase 2's merge-time gate does not insert edges — a blocked merge under <code>link</code> sets the old consolidated row's <code>invalidated_by</code> backlink instead.)</em></li>
-</ul>
-<h4>Content Type Scoring</h4>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Half-life</th>
-<th>Baseline</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>decision</code></td>
-<td>180d</td>
-<td>0.85</td>
-<td>Very slow ranking decay (§36.11) — silently-abandoned decisions stop winning ranking; attention-decay-exempt; lifecycle policy separate</td>
-</tr>
-<tr>
-<td><code>deductive</code></td>
-<td>∞</td>
-<td>0.85</td>
-<td>Never decays — cross-session derived insights with source provenance</td>
-</tr>
-<tr>
-<td>`prefer</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<hr>
-<p><em>README truncated. <a href="https://github.com/yoloshii/ClawMem#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1122,7 +1080,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 30.1K</div>
+        <div class="stars">★ 30.6K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

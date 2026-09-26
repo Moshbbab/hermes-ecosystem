@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript. It provides a three-panel layout for…">
+<meta name="description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript. It provides a three-panel layout for…">
+<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript. It provides a three-panel layout for…">
+<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript. It provides a three-panel layout for chat, session management, and workspace file browsing with full parity to the agent's CLI experience.",
+  "description": "Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It provides parity with the CLI experience, allowing users to interact with the agent's persistent memory, workspace files, and session tools through a three-panel browser layout.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-09-26T05:11:48.000Z",
+  "dateModified": "2026-09-26T06:00:20.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 18595
+    "userInteractionCount": 18599
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript. It provides a three-panel layout for chat, session management, and workspace file browsing with full parity to the agent's CLI experience.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It provides parity with the CLI experience, allowing users to interact with the agent's persistent memory, workspace files, and session tools through a three-panel browser layout.</p>
     <ul class="summary-highlights">
-      <li>Operates without build steps, frameworks, or bundlers.</li>
-      <li>Features a three-panel layout for sessions, chat, and file browsing.</li>
-      <li>Runs the Hermes agent in-process using existing configuration and models.</li>
+      <li>Provides 1:1 parity with Hermes CLI features in a web interface.</li>
+      <li>Built with Python and vanilla JS without bundlers or frameworks.</li>
+      <li>Includes a three-panel layout for chat, sessions, and workspace browsing.</li>
     </ul>
   </div>
 </section>
@@ -740,7 +740,14 @@ export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disable
 <code>HERMES_WEBUI_HOST</code>, <code>HERMES_WEBUI_PORT</code>, <code>HERMES_WEBUI_STATE_DIR</code>, <code>HERMES_HOME</code>, <code>HERMES_WEBUI_AGENT_DIR</code>, and <code>HERMES_WEBUI_PYTHON</code>.</p>
 <p>Set <code>environmentFiles</code> for secrets like API keys. Protected WebUI runtime keys from the module are rejected there, so keep host, port, state, and agent wiring in the module options. Keep reverse proxy and TLS configuration in your surrounding deployment module because those details are deployment-specific.</p>
 <h4>Remote access (SSH tunnel, Tailscale, phone)</h4>
-<p>The server binds to <code>127.0.0.1</code> by default. To reach it from another machine use an SSH tunnel (<code>ssh -N -L 8787:127.0.0.1:8787 user@host</code>, which <code>start.sh</code> prints for you over SSH), or join your server and phone to a <a href="https://tailscale.com">Tailscale</a> network and browse to <code>http://&lt;server-tailscale-ip&gt;:8787</code> with <code>HERMES_WEBUI_HOST=0.0.0.0</code> + <code>HERMES_WEBUI_PASSWORD</code> set. Full walkthrough (incl. a community ARM64-Android field report): <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access.md"><code>docs/remote-access.md</code></a>.</p>
+<p>The server binds to <code>127.0.0.1</code> by default. To reach it from another machine,
+use an SSH tunnel (<code>ssh -N -L 8787:127.0.0.1:8787 user@host</code>, which <code>start.sh</code>
+prints for you over SSH) or, on a single-operator or access-restricted tailnet,
+use the preferred <a href="https://tailscale.com/docs/features/tailscale-serve">Tailscale Serve</a>
+flow, which keeps WebUI on loopback behind tailnet-only HTTPS. Direct access to
+<code>http://&lt;server-tailscale-ip&gt;:8787</code> with <code>HERMES_WEBUI_HOST=0.0.0.0</code> and
+<code>HERMES_WEBUI_PASSWORD</code> is a fallback when Serve is unavailable. Full setup and
+the community ARM64-Android field report: <a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access.md"><code>docs/remote-access.md</code></a>.</p>
 <h4>Manual launch (without start.sh)</h4>
 <p>If you prefer to launch the server directly:</p>
 <pre><code class="language-bash">cd /path/to/hermes-agent          # or wherever sys.path can find Hermes modules
@@ -951,6 +958,7 @@ Full design notes and the endpoint catalog are in <a href="https://github.com/ne
 <p><strong>Deploying &amp; operating</strong></p>
 <ul>
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access.md"><code>docs/remote-access.md</code></a> — SSH tunnel, Tailscale, and phone access (incl. a community ARM64-Android field report)</li>
+<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access-zh.md"><code>docs/remote-access-zh.md</code></a> — 中文远程访问指南：Tailscale、SSH 隧道、Windows 原生部署（自启仅适用 WSL 用户）</li>
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/advanced-chat-setup.md"><code>docs/advanced-chat-setup.md</code></a> — optional dynamic recall-prefill and Gateway-backed browser chat for self-hosted deployments</li>
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a> — Docker compose setup, common failures, and bind-mount migration</li>
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/supervisor.md"><code>docs/supervisor.md</code></a> — launchd, systemd, supervisord, runit, and s6 process-supervisor setup</li>
@@ -1062,9 +1070,7 @@ Production Docker hardening (#1921, drops sudo-capable staging user), profile-sc
 <p><strong><a href="https://github.com/rodboev">@rodboev</a></strong> — Windows / cross-platform correctness + test reliability (83 PRs, <code>v0.51.223</code> → <code>v0.51.384</code>)
 A broad, sustained sweep with a strong focus on making the project work outside Linux: the <code>ctl.sh</code> Windows process-tree-kill fix (#3670), the local Windows full-suite signal/orphan-process work, slash-command autocomplete polish, and a long tail of frontend and infrastructure fixes shipped across dozens of release batches.</p>
 <p><strong><a href="https://github.com/bergeouss">@bergeouss</a></strong> — Provider management UI + Docker hardening (70 PRs, <code>v0.48.0</code> → <code>v0.51.385</code>)
-Provider management UI for adding/editing custom providers from Settings, OAuth provider status detection (#1552), two-container Docker setup, profile isolation hardening (per-profile <code>.env</code> secrets), the bulk of what users see when they touch Settings → Providers, Reveal-in-Finder context menu (#1551), gateway status card (#1552), auto-assign session to active project filter (#1550), "What's new?" link in update banner (#1549), OpenRouter free-tier live fetch (#1548), credential pool 401 self-heal (#1553), inline provider chip + group model count in model picker (#1644).</p>
-<p><strong><a href="https://github.com/ai-ag2026">@ai-ag2026</a></strong> — Session recovery + audit infrastructure (75 PRs, <code>v0.50.279</code> → <code>v0.51.367</code>)
-Autonomous-AI contributor (Hermes Agent-driven) focused on durability: <code>state.db</code>-backed sidecar reconciliation (#2041), orphan </p>
+Provider management UI for adding/editing custom providers from Settings, OAuth provider status detection (#1552), two-container Docker setup, profile isolation hardening (per-profile <code>.env</code> secrets), the bulk of what users see when they touch Settings → Providers, Reveal-in-Finder context menu (#1551), gateway status card (#1552), auto-assign session to active project filter (#1550), "What's new?" link in update banner (#1549), OpenRouter free-tier live fetch (#1548), credential pool 401 self-heal (#1553), inline provider chip + group model count in mo</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
