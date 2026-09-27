@@ -226,7 +226,7 @@ Page header
 
 `WORKSPACE_PAGE_HEADER_AREA`
 
-`render` via a mount-scoped `<Contribute>` inside your page
+`<WorkspacePageHeaderControl>` inside your page (inline in a split tile)
 
 ⌘K palette
 
@@ -330,7 +330,7 @@ Title-bar tools live in `TITLEBAR_AREAS.left | .center | .right` as `TitlebarToo
 
 Title-bar slots are **permanent mount points**: a component you register there stays mounted while the user moves between the chat and full pages (Capabilities, Messaging, Artifacts, contributed routes), so a `useEffect` that injects global side effects (a `<style>` tag, `html[data-*]` attributes, a `MutationObserver`) runs its setup once per registration and its cleanup once at dispose — never mid-navigation.
 
-Controls that belong to ONE page (the Kanban board switcher) go in `WORKSPACE_PAGE_HEADER_AREA` instead: it renders in the workspace panel's tab-header row while that page is on screen and is empty otherwise. Register it with a mount-scoped `<Contribute>` (below) so it leaves with the page.
+Controls that belong to ONE page (the Kanban board switcher) go in `WORKSPACE_PAGE_HEADER_AREA` instead: it renders in the workspace panel's tab-header row while that page is on screen and is empty otherwise. Wrap the control in `<WorkspacePageHeaderControl>` (below) inside your page's own header row. In the workspace pane it projects into the page header; when the page is opened in a split route tile, which has no page header, it renders inline where you placed it. A raw `<Contribute area={WORKSPACE_PAGE_HEADER_AREA}>` only shows up in the workspace pane.
 
 ### Palette commands and keybinds
 
@@ -667,6 +667,19 @@ jsx(Contribute, {
 ```
 
 It registers on mount and disposes on unmount automatically.
+
+For a page-header control, use `WorkspacePageHeaderControl` instead. It picks the placement from where the page renders: in the workspace pane it contributes to `WORKSPACE_PAGE_HEADER_AREA`, and anywhere else (a split route tile) it renders its children in place. Put it where the control should sit when inline:
+
+```
+import { WorkspacePageHeaderControl } from '@hermes/plugin-sdk'
+
+jsx(WorkspacePageHeaderControl, {
+  id: 'my-page:switcher', // namespace with your slug
+  children: jsx(MySwitcher, {})
+})
+```
+
+`WorkspacePageHeaderControl` is new in this release. Older desktop builds don't export it, and a named import of a missing SDK export stops the plugin module from loading. A plugin that must also run on older builds either feature-detects through a namespace import (`import * as sdk from '@hermes/plugin-sdk'`, then `sdk.WorkspacePageHeaderControl ?? …`) or keeps the raw `Contribute` form above.
 
 ### Sidebar nav visibility and order (`SIDEBAR_NAV_PREFS_AREA`)
 
@@ -1175,7 +1188,7 @@ Area payloads
 
 React / state
 
-`useValue`, `atom`, `computed`, `useQuery`, `useMutation`, `useQueryClient`, `queryClient`, `Contribute`
+`useValue`, `atom`, `computed`, `useQuery`, `useMutation`, `useQueryClient`, `queryClient`, `Contribute`, `WorkspacePageHeaderControl`
 
 Theming
 
@@ -1187,7 +1200,7 @@ UI kit
 
 Helpers
 
-`cn`, `icons`, `haptic`, `useI18n`, `profileColor`, `profileColorSoft`, `relativeTime`, `fmtDateTime`, `fmtDayTime`, `coarseElapsed`, `evaluateRuntimeReadiness`
+`cn`, `icons`, `haptic`, `useI18n`, `profileColor`, `profileColorSoft`, `relativeTime`, `fmtDateTime`, `fmtDayTime`, `coarseElapsed`, `evaluateRuntimeReadiness`, `catalogProviderMatches`
 
 The canonical, always-current export list is `apps/desktop/src/sdk/index.ts`.
 

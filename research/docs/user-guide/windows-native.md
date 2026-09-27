@@ -70,7 +70,7 @@ Inspect the stage protocol used by the bootstrap GUI.
 
 Run one stage and emit its result frame.
 
-The current script does not accept `-NoVenv`, `-SkipSetup`, or `-Tag`. To diagnose an unexpected short Windows path, use `-ShowResolvedPaths` first.
+The current script does not accept `-NoVenv` or `-Tag`. `-SkipSetup` is still accepted as a deprecated alias for `-NonInteractive` so older install wrappers keep binding. To diagnose an unexpected short Windows path, use `-ShowResolvedPaths` first.
 
 ### MSIX / App Installer and Microsoft Store
 

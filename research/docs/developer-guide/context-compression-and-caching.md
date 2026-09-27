@@ -465,7 +465,7 @@ Orphaned tool\_call/tool\_result pairs are cleaned up by `_sanitize_tool_pairs()
 
 On subsequent compressions, the previous summary is passed to the LLM with instructions to **update** it rather than summarize from scratch. This preserves information across multiple compactions — items move from "In Progress" to "Done", new progress is added, and obsolete information is removed.
 
-The `_previous_summary` field on the compressor instance stores the last summary text for this purpose.
+The `_previous_summary` field on the compressor instance stores the last summary text for this purpose. A deterministic fallback summary is stored there too, since it is the handoff the transcript now carries.
 
 ## Before/After Example
 

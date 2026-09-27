@@ -479,7 +479,7 @@ Full-text search across message content. Query parameter: `q`. Returns matching 
 
 ### DELETE /api/sessions/{session\_id}
 
-Deletes a session and its message history.
+Deletes a session and its message history. Returns `409 Conflict` if the session has an active turn lease or compression lock.
 
 ### GET /api/logs
 
