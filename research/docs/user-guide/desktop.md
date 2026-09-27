@@ -413,7 +413,7 @@ Override the Hermes source root the app uses (sets `HERMES_DESKTOP_HERMES_ROOT`)
 
 `--ignore-existing`
 
-Force the app to ignore any `hermes` CLI already on `PATH` during backend resolution
+Skip the installed Hermes runtime so no local backend starts; offer connect or install
 
 `--fake-boot`
 

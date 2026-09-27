@@ -2987,6 +2987,8 @@ A slot is taken when a session runs its **first turn**, not when a chat window i
 
 When the cap is reached, Hermes returns a direct limit message naming which surfaces hold the slots. Existing active sessions keep their normal behavior. Run `hermes status` to see the current slot usage and every holder.
 
+This is the only cap on concurrent gateway turns: the gateway runs each turn body on its own thread, so with the default (unset) every accepted turn starts immediately instead of queuing behind other running turns.
+
 The canonical key is top-level `max_concurrent_sessions`. Hermes also accepts `gateway.max_concurrent_sessions` as a fallback, but the top-level key wins when both are set.
 
 The cap is enforced with a local runtime lease file and is best-effort: Hermes fails open if the registry cannot be read or locked so users are not stranded. It is intended for a single host/profile runtime, not a shared `$HERMES_HOME` mounted across multiple machines. A lease whose owning process exists but whose liveness cannot be proved (for example an unreadable `/proc` entry inside a container after `hermes update` restarts the backend) still counts toward the cap and still fences its own session id, but it no longer blocks claiming or releasing a different session.

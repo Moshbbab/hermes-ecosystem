@@ -48,7 +48,7 @@ Override AI Gateway base URL (default: `https://ai-gateway.vercel.sh/v1`)
 
 `OPENAI_API_KEY`
 
-API key for custom OpenAI-compatible endpoints (used with `OPENAI_BASE_URL`)
+OpenAI API key (`openai-api` provider), or the key for a custom OpenAI-compatible endpoint when `OPENAI_BASE_URL` is set. Counts as an OpenRouter key only when it starts with `sk-or-`; put OpenRouter keys in `OPENROUTER_API_KEY`
 
 `OPENAI_BASE_URL`
 
@@ -2072,7 +2072,7 @@ Desktop source-checkout override used by `hermes desktop --hermes-root`; checked
 
 `HERMES_DESKTOP_IGNORE_EXISTING`
 
-Set to `1` to make Desktop ignore an existing `hermes` on `PATH` during backend resolution. Equivalent to `hermes desktop --ignore-existing`.
+Set to `1` to make Desktop skip the installed runtime (`~/.hermes/hermes-agent`, or `%LOCALAPPDATA%\hermes\hermes-agent` on Windows) during backend resolution, so no local backend starts and Desktop shows the connect-or-install choice. The bundled runtime, `HERMES_DESKTOP_HERMES_ROOT`, an unpackaged source checkout, and `HERMES_DESKTOP_HERMES` still win. A runtime installed during this launch is used. Equivalent to `hermes desktop --ignore-existing`.
 
 `HERMES_DESKTOP_CWD`
 

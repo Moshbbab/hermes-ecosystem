@@ -1549,6 +1549,12 @@ When
 
 Dispatcher successfully started a worker process.
 
+`worker_registered`
+
+`{pid, started_at}`
+
+The dispatcher died after starting the worker but before recording its pid, so the worker recorded it itself before its first model call. Liveness checks then see it and an expired claim is extended instead of spawning a second worker. A worker whose run was reclaimed before it got that far exits without working the card.
+
 `heartbeat`
 
 `{note?}`

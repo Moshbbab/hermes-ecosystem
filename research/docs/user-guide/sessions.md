@@ -544,6 +544,8 @@ hermes sessions delete 20250305_091523_a1b2c3d4
 hermes sessions delete 20250305_091523_a1b2c3d4 --yes
 ```
 
+Deleting a session that is still open in a running chat does not stop that chat: its next save recreates the session under the same id with the full in-memory transcript. Close the chat first if you want the session gone.
+
 ### Rename a Session
 
 ```
@@ -625,7 +627,7 @@ Archived sessions are skipped by default; pass `--include-archived` to delete th
 
 info
 
-Pruning only deletes **ended** sessions (sessions that have been explicitly ended or auto-reset). Active sessions are never pruned.
+Pruning only deletes **ended** sessions (sessions that have been explicitly ended or auto-reset). Active sessions are never pruned. A conversation that compression split into several sessions is pruned as a unit: its older segments stay while any later segment does.
 
 ### Bulk-Archive Sessions
 
@@ -687,6 +689,36 @@ Evidence rules:
 Anything ambiguous (two candidate predecessors, two orphans claiming the same predecessor) is reported with a reason and left untouched — a wrong adoption would splice one conversation into another chat. The superseded row is retired under `superseded_by_repair`, so restart recovery can never resurrect it.
 
 Repair is deliberately **not automatic**: if the chat has since built up a second history, choosing which thread it continues is your call. The stranded conversation stays readable via `/resume` and session search either way — routing is the only thing the repair changes. Back up first (`cp ~/.hermes/state.db ~/.hermes/state.db.bak`).
+
+### Repair Degraded Stored Prompts
+
+Older builds affected by #122822 could let gateway hygiene or gateway `/compress` persist a detached maintenance agent's reduced-toolset system prompt over the live session. After the root fix in PR #122825 is installed, use `hermes sessions repair-prompts` to find rows that were already degraded.
+
+The scan is conservative: it only proposes a repair when the stored prompt is missing the `## Skill Safety` guidance **and** the persisted `tools[]` pin contains `skill_manage` (which always emits that guidance). Rows with no readable pin, or with a `memory`\-only pin (which is also a legitimate `toolsets: [memory]` setup), are reported as **unverifiable** and are not changed by this scan; clear them explicitly by `SESSION_ID` if needed. A memory-only row also becomes repairable on its own: once the session is resumed, its `tools[]` pin re-pins the full tool surface, after which a scan sees `skill_manage` without the Skill Safety guidance and clears it.
+
+```
+# Report verified candidates and unverifiable rows; writes nothing
+hermes sessions repair-prompts
+
+# Clear verified degraded prompts after confirmation
+hermes sessions repair-prompts --apply
+
+# Machine-readable report
+hermes sessions repair-prompts --json
+
+# Non-interactive automation: apply and report the ids actually cleared
+hermes sessions repair-prompts --apply --json
+
+# Explicit destructive override for one session (id or unique prefix).
+# This clears the stored prompt even when it is healthy.
+hermes sessions repair-prompts SESSION_ID --apply
+```
+
+Clearing the prompt intentionally stores NULL; the next turn rebuilds and persists healthy bytes, which causes one expected `Stored system prompt ... is null; rebuilding from scratch` warning for each repaired session. That warning is the consequence of this explicit repair, not evidence of a new corruption.
+
+Run the repair only after the #122822 root fix is present; otherwise a later maintenance compaction can degrade the row again.
+
+A running gateway keeps each cached session's old prompt in memory, so restart the gateway after `--apply` (`hermes gateway restart`) for repaired rows to take effect.
 
 ### Repair State Crossed Between Profiles
 
@@ -1023,7 +1055,7 @@ sessions:
 
 Existing installs that already set any of these keys explicitly keep their values; only unset keys pick up the new defaults.
 
-Only **ended** sessions are ever deleted. Active sessions are never auto-pruned, regardless of age. Ended sessions are aged from their last activity — the freshest of live activity, latest message, or session start — so a long-lived conversation used recently is not deleted merely because it began before the retention window.
+Only **ended** sessions are ever deleted. Active sessions are never auto-pruned, regardless of age. Ended sessions are aged from their last activity — the freshest of live activity, latest message, or session start — so a long-lived conversation used recently is not deleted merely because it began before the retention window. The same holds for a conversation that compression split into several sessions: its older segments are kept while any later segment is, and are pruned together with it once the whole conversation qualifies.
 
 **Stale open sessions from automation.** Some producers — cron jobs, kanban workers, subagents, one-shot CLI runs — can die without ever marking their session ended, and pruning only deletes _ended_ rows. To keep those from accumulating forever, each auto-prune pass also _closes_ open sessions from those state-owned sources (`cli`, `cron`, `kanban`, `acp`, `api_server`, `subagent`, `tool`, plus the `recovered` placeholders that `hermes sessions recover` synthesizes for orphaned messages) whose last activity is older than `retention_days` (`end_reason: startup_orphan_reap`). Closing is non-destructive — the session stays resumable — and the row is aged from its close, so it is only deleted by a _later_ pass after a further full retention window. Messaging platform sessions (Telegram, Discord, …), TUI/desktop sessions, pinned sessions, and sessions with a live turn or compression in progress are never closed by this sweep.
 
