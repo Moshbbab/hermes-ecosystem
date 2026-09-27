@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It uses a multi-pass…">
+<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It uses a multi-pass…">
+<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It uses a multi-pass…">
+<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+Codex%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It uses a multi-pass editing process and a 112-entry word replacement table to replace complex terminology with plainer alternatives.",
+  "description": "avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a three-tier word replacement table and multiple editing modes to identify and replace specific linguistic markers with plainer alternatives.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-27T02:45:34.000Z",
+  "dateModified": "2026-09-27T19:02:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4736
+    "userInteractionCount": 4741
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -148,11 +148,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It uses a multi-pass editing process and a 112-entry word replacement table to replace complex terminology with plainer alternatives.</p>
+    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a three-tier word replacement table and multiple editing modes to identify and replace specific linguistic markers with plainer alternatives.</p>
     <ul class="summary-highlights">
       <li>Supports rewrite, detect-only, and edit-in-place modes.</li>
-      <li>Features five optional voice profiles including casual and technical.</li>
-      <li>Compatible with agents like Claude Code, OpenClaw, and Hermes.</li>
+      <li>Includes five optional voice profiles for prose tone adjustment.</li>
+      <li>Uses a two-pass editing process to verify and refine results.</li>
     </ul>
   </div>
 </section>
@@ -377,7 +377,7 @@ python3 scripts/validate-openai-plugin.py . --json
 <p>Trigger detect mode with: "detect," "flag only," "audit only," "just flag," "scan," or similar.</p>
 <h3>Pattern reference</h3>
 <blockquote>
-<p>Representative examples from the catalog — not the exhaustive list (that's <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/references/patterns.md"><code>references/patterns.md</code></a>). The skill's human-facing prose catalog and the <a href="./detector/">detector engine</a> use <strong>different counts on purpose</strong>: the engine implements 53 <code>type</code> categories because it splits the vocabulary tiers and adds stylometric/fingerprint signals (punctuation distribution, function-word entropy, bypass-trick detection) that work as math over a document rather than as a rule you'd look up. The two are mapped in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/CATEGORIES.md"><code>detector/CATEGORIES.md</code></a>; don't "fix" one count to match the other.</p>
+<p>Representative examples from the catalog — not the exhaustive list (that's <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/references/patterns.md"><code>references/patterns.md</code></a>). The skill's human-facing prose catalog and the <a href="./detector/">detector engine</a> use <strong>different counts on purpose</strong>: the engine implements 54 <code>type</code> categories because it splits the vocabulary tiers and adds stylometric/fingerprint signals (punctuation distribution, function-word entropy, bypass-trick detection) that work as math over a document rather than as a rule you'd look up. The two are mapped in <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/CATEGORIES.md"><code>detector/CATEGORIES.md</code></a>; don't "fix" one count to match the other.</p>
 </blockquote>
 <h4>Content Patterns</h4>
 <table>
@@ -977,6 +977,21 @@ const { score, label, issues } = AIDetector.analyzeText("Your text here…");
 <code>{ sourceMode: "rendered-markdown" }</code> to exclude initial YAML frontmatter and
 HTML comments from the score while keeping issue offsets aligned with the
 original file. Plain-text behavior remains the default.</p>
+<p>To keep a passage out of the score, such as a specimen of AI prose a page
+quotes on purpose, wrap it in ignore markers. They work in every source mode
+and in HTML source:</p>
+<pre><code class="language-html">&lt;!-- avoid-ai-writing:ignore-start --&gt;
+It's not just a search index, it's a foundation for trust.
+&lt;!-- avoid-ai-writing:ignore-end --&gt;
+</code></pre>
+<p>Each marker must sit on a line of its own. The markers and the text between
+them are blanked before scoring, and <code>stats.ignoredRegions</code> counts the regions.
+Markers inside code blocks, HTML <code>&lt;pre&gt;</code> or <code>&lt;code&gt;</code> elements, YAML
+frontmatter, inline prose, or quotations do nothing. Starts
+nest, so each needs its own end, and a start with no end runs to the end of the
+text. The
+detector reads source text, not rendered HTML, so an HTML-to-text step that
+drops comments also drops the markers.</p>
 <p>See <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/README.md"><code>detector/README.md</code></a> for the full <code>analyzeText</code> API
 and <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/CATEGORIES.md"><code>detector/CATEGORIES.md</code></a> for the rule ↔ category
 map that keeps <code>SKILL.md</code> and the engine in sync.</p>
@@ -1082,7 +1097,7 @@ guardrails first.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 33.4K</div>
+        <div class="stars">★ 33.5K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/wondelai/skills">

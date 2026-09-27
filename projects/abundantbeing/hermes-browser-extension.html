@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>abundantbeing/hermes-browser-extension — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes Browser Extension is a Chromium side panel that connects browser context to the Hermes Agent runtime via local gateways, Hermes Cloud, or self-hosted…">
+<meta name="description" content="Hermes Browser Extension is a side panel for Chromium-based browsers that connects web context to the Hermes Agent runtime. It supports local gateways, Hermes…">
 <link rel="canonical" href="https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension">
 <meta property="og:title" content="abundantbeing/hermes-browser-extension — Hermes Atlas">
-<meta property="og:description" content="Hermes Browser Extension is a Chromium side panel that connects browser context to the Hermes Agent runtime via local gateways, Hermes Cloud, or self-hosted…">
+<meta property="og:description" content="Hermes Browser Extension is a side panel for Chromium-based browsers that connects web context to the Hermes Agent runtime. It supports local gateways, Hermes…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="abundantbeing/hermes-browser-extension — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Browser Extension is a Chromium side panel that connects browser context to the Hermes Agent runtime via local gateways, Hermes Cloud, or self-hosted…">
+<meta name="twitter:description" content="Hermes Browser Extension is a side panel for Chromium-based browsers that connects web context to the Hermes Agent runtime. It supports local gateways, Hermes…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-browser-extension&amp;subtitle=Browser-native+side+panel+for+Hermes+Agent+%E2%80%94+connect+web+context+to+your+local+Hermes+runtime.&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension#software",
   "name": "hermes-browser-extension",
-  "description": "Hermes Browser Extension is a Chromium side panel that connects browser context to the Hermes Agent runtime via local gateways, Hermes Cloud, or self-hosted remote APIs. It enables multi-agent switching, session-synced chat histories, and the use of configured tools, memory, and MCP servers within the browser.",
+  "description": "Hermes Browser Extension is a side panel for Chromium-based browsers that connects web context to the Hermes Agent runtime. It supports local gateways, Hermes Cloud, and self-hosted remote APIs to utilize configured models, tools, and memory.",
   "url": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension",
   "codeRepository": "https://github.com/abundantbeing/hermes-browser-extension",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-09-26T17:43:40.000Z",
+  "dateModified": "2026-09-27T15:53:52.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1587
+    "userInteractionCount": 1588
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-26</span>
+    <span><span class="meta-label">updated</span>2026-09-27</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Browser Extension is a Chromium side panel that connects browser context to the Hermes Agent runtime via local gateways, Hermes Cloud, or self-hosted remote APIs. It enables multi-agent switching, session-synced chat histories, and the use of configured tools, memory, and MCP servers within the browser.</p>
+    <p class="summary-text">Hermes Browser Extension is a side panel for Chromium-based browsers that connects web context to the Hermes Agent runtime. It supports local gateways, Hermes Cloud, and self-hosted remote APIs to utilize configured models, tools, and memory.</p>
     <ul class="summary-highlights">
       <li>Connects active browser tabs to local or remote Hermes Agent runtimes.</li>
-      <li>Features multi-agent thread synchronization and intelligent tab-scoping controls.</li>
-      <li>Includes Hermes Assist for site-aware drafting in 31 writing environments.</li>
+      <li>Includes multi-agent switching, bot mode, and session-synced chat histories.</li>
+      <li>Provides opt-in browser control and site-aware drafting via Hermes Assist.</li>
     </ul>
   </div>
 </section>
@@ -239,7 +239,8 @@
 <li>Connects to a configurable local or self-hosted remote Hermes API server. Default: <code>http://127.0.0.1:8642</code>.</li>
 <li>Uses <strong>Trusted Dashboard Attach</strong> for Hermes Cloud: an explicitly selected, signed-in HTTPS agent tab mints a short-lived, single-use WebSocket ticket. Tickets stay memory-only and Cloud remains Chat-only.</li>
 <li>Supports the same ticketed WebSocket path for a self-hosted remote dashboard when Remote gateway is selected with no API key.</li>
-<li>Auto-syncs connected Hermes providers/models, profiles, skills, sessions, and capabilities.</li>
+<li>Auto-syncs connected Hermes providers/models, skills, sessions, and capabilities over the API connection.</li>
+<li>Profile switching and Bot Mode use the authenticated Hermes Dashboard <code>profiles.list</code> roster. A Remote API-only connection remains usable but cannot provide that roster; profile readiness is shown as degraded instead of implying the registry is empty. A successful empty roster response remains a valid <code>0 profiles</code> result. Dashboard-backed group rooms also require the Dashboard transport; preserved browser-local draft rooms cannot be opened until a Dashboard connection is available.</li>
 <li>Keeps runtime plugins available in the same Hermes session. For example, a connected social or messaging plugin can add account, post, and trend context while the extension supplies browser-page context.</li>
 <li>Shows a Hermes compatibility panel so older gateways degrade into explicit fallback/manual modes instead of broken route errors.</li>
 <li>Adds <strong>Copy Diagnostics</strong> for v0.3.0 support reports: browser family, version/build, extension origin, gateway origin, capability flags, context mode, selected model/provider, and last visible error with tokens/page content stripped.</li>

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>greyhaven-ai/autocontext — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="autocontext is a recursive harness for agent improvement that runs tasks against evaluations to capture useful lessons and discard dead ends. It generates…">
+<meta name="description" content="autocontext is a recursive harness designed to improve agent performance on specific tasks through iterative evaluation. It executes tasks against defined…">
 <link rel="canonical" href="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta property="og:description" content="autocontext is a recursive harness for agent improvement that runs tasks against evaluations to capture useful lessons and discard dead ends. It generates…">
+<meta property="og:description" content="autocontext is a recursive harness designed to improve agent performance on specific tasks through iterative evaluation. It executes tasks against defined…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/greyhaven-ai/autocontext">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="greyhaven-ai/autocontext — Hermes Atlas">
-<meta name="twitter:description" content="autocontext is a recursive harness for agent improvement that runs tasks against evaluations to capture useful lessons and discard dead ends. It generates…">
+<meta name="twitter:description" content="autocontext is a recursive harness designed to improve agent performance on specific tasks through iterative evaluation. It executes tasks against defined…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=autocontext&amp;subtitle=a+recursive+self-improving+harness+designed+to+help+your+agents+%28and+future+iterations+of+those+agents%29+succeed+on+any+task&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/greyhaven-ai/autocontext#software",
   "name": "autocontext",
-  "description": "autocontext is a recursive harness for agent improvement that runs tasks against evaluations to capture useful lessons and discard dead ends. It generates traces, reports, playbooks, and datasets that can be used for future agent iterations or local-model training.",
+  "description": "autocontext is a recursive harness designed to improve agent performance on specific tasks through iterative evaluation. It executes tasks against defined goals, retaining successful strategies and traces while discarding ineffective approaches to generate playbooks, datasets, and local-model training artifacts.",
   "url": "https://hermesatlas.com/projects/greyhaven-ai/autocontext",
   "codeRepository": "https://github.com/greyhaven-ai/autocontext",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "greyhaven-ai",
     "url": "https://github.com/greyhaven-ai"
   },
-  "dateModified": "2026-09-27T03:41:49.000Z",
+  "dateModified": "2026-09-27T21:17:43.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">autocontext is a recursive harness for agent improvement that runs tasks against evaluations to capture useful lessons and discard dead ends. It generates traces, reports, playbooks, and datasets that can be used for future agent iterations or local-model training.</p>
+    <p class="summary-text">autocontext is a recursive harness designed to improve agent performance on specific tasks through iterative evaluation. It executes tasks against defined goals, retaining successful strategies and traces while discarding ineffective approaches to generate playbooks, datasets, and local-model training artifacts.</p>
     <ul class="summary-highlights">
-      <li>Supports Python and TypeScript CLI, library, and Pi extension surfaces.</li>
-      <li>Provides filesystem-first artifacts including traces, playbooks, and context bundles.</li>
-      <li>Integrates with MCP clients, Pi, and self-hosted OpenAI-compatible endpoints.</li>
+      <li>Generates filesystem-first traces, reports, and outcome-gated context bundles.</li>
+      <li>Supports Anthropic, OpenAI-compatible, and self-hosted providers like vLLM and Ollama.</li>
+      <li>Provides entry points for Pi, MCP clients, and Hermes.</li>
     </ul>
   </div>
 </section>
@@ -185,15 +185,15 @@
 </thead>
 <tbody><tr>
 <td>Python CLI</td>
-<td><code>uv tool install autocontext==0.18.0</code></td>
+<td><code>uv tool install autocontext==0.19.0</code></td>
 </tr>
 <tr>
 <td>Python library/dev</td>
-<td><code>uv pip install autocontext==0.18.0</code></td>
+<td><code>uv pip install autocontext==0.19.0</code></td>
 </tr>
 <tr>
 <td>TypeScript/Node CLI</td>
-<td><code>bun add -g autoctx@0.18.0</code></td>
+<td><code>bun add -g autoctx@0.19.0</code></td>
 </tr>
 <tr>
 <td>Pi extension</td>
@@ -351,14 +351,14 @@ Tokens in endpoint URLs are rejected. See the
 <a href="https://github.com/greyhaven-ai/autocontext/blob/main/autocontext/docs/persistent-host.md#trust-and-credential-boundary">persistent-host security model</a>
 before exposing a server beyond one trusted operator.</p>
 
-<h3>What's New in 0.18.0</h3>
+<h3>What's New in 0.19.0</h3>
 <ul>
-<li><strong>TypeScript ships again:</strong> autoctx 0.18.0 is the first npm release since 0.17.3. The 0.17.4 tag never reached npm, so its WebSocket credential hardening and dependency security updates first arrive here.</li>
-<li><strong>OpenAI v7 support:</strong> autoctx accepts openai ^4 || ^7, and the SDK matrix exercises the integration and instrument suites against both majors.</li>
-<li><strong>Correct recent-feedback queries:</strong> human feedback and calibration lookups return the newest records instead of the oldest when timestamps tie.</li>
-<li><strong>More reliable Python runtimes:</strong> the compaction ledger mirror records every append, and concurrent outbox initialization no longer fails on a locked database.</li>
-<li><strong>Dependency security:</strong> sharp and hono advisories are resolved, better-sqlite3 moves to 13, and the Bun lockfile audited in CI matches what ships again.</li>
-<li><strong>Safer releases:</strong> CI now builds the Pi package, catching emit-only compiler errors before release rather than during it.</li>
+<li><strong>Safer run re-entry:</strong> autoctx resume continues a run with its stored scenario and target, completed runs stay unchanged, and re-entering under a different provider or executor mode is refused unless resume gets --allow-runtime-change. Agent-task runs, A/B tests and TypeScript runs refuse run ids that already exist.</li>
+<li><strong>Reliable shared databases:</strong> several processes can start against one new SQLite database without migration-ledger or WAL lock failures, and cross-runtime migrations keep runs.minimum_generations, re-adding it where an earlier migration dropped it.</li>
+<li><strong>Correct artifact paths:</strong> Python run artifacts no longer land at doubled paths under relative artifact roots, and artifact_write hooks in either runtime cannot redirect a write out of its managed root through a symlink.</li>
+<li><strong>Opt-in executable skills (Python):</strong> for a schema-migration pilot, context bundles can carry Docker-isolated executable skills routed with verified model fallback, and a complete routed policy is promoted only through a fail-closed quality and cost gate. Nothing is enabled automatically.</li>
+<li><strong>Evaluator provenance and human labels (Python):</strong> judge epochs bind an immutable serving specification that includes calibration examples, and autoctx labels collects human-only judge labels with random audits and protected holdout splits.</li>
+<li><strong>Measured reuse studies:</strong> archived GridCTF policy-reuse and schema-migration reuse studies report quality, fallback and resource costs. GridCTF dollar costs are unknown, the schema-migration study records model-credit charges but not full lifecycle cost, and neither study authorizes production promotion.</li>
 </ul>
 
 
@@ -468,15 +468,15 @@ contracts</a>, and the full
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 66.0K</div>
+        <div class="stars">★ 66.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 35.2K</div>
+        <div class="stars">★ 37.1K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 379</div>
+        <div class="stars">★ 380</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
@@ -484,7 +484,7 @@ contracts</a>, and the full
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 290</div>
+        <div class="stars">★ 295</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
