@@ -2095,6 +2095,12 @@ Dashboard / TUI-gateway / PTY-bridge / websocket events
 
 Electron desktop app — boot, backend spawn output, and recent Python tracebacks
 
+`mcp`
+
+`mcp-stderr.log`
+
+stderr of every stdio MCP server, one `starting MCP server` banner per launch
+
 ### Options
 
 Option
@@ -2128,6 +2134,8 @@ Show lines from a relative time ago: `30m`, `1h`, `2d`, etc. Supports `s` (secon
 `--component <NAME>`
 
 Filter by component: `gateway`, `agent`, `tools`, `cli`, `cron`.
+
+A line without its own timestamp, such as a traceback frame or the rest of a multi-line message, is shown or hidden together with the timestamped line above it.
 
 ### Examples
 

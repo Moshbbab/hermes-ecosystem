@@ -866,7 +866,7 @@ Override the container binary Hermes shells out to (e.g. `podman`, `/usr/local/b
 
 `TERMINAL_DOCKER_IMAGE`
 
-Docker image (default: `nikolaik/python-nodejs:python3.11-nodejs20`)
+Docker image (default: `nousresearch/hermes-sandbox:desktop`)
 
 `TERMINAL_DOCKER_FORWARD_ENV`
 

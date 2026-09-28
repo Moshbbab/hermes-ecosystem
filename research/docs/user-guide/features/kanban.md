@@ -37,7 +37,7 @@ Declare PR work at creation with `--completion-contract OWNER/REPO` (or an exact
 
 After publishing, pass `metadata.published_pr` to completion. The first matching URL binds the card permanently; retries cannot substitute a green sibling PR. CLI `show --json` and `kanban_show` expose the persisted contract.
 
-The shared `complete_task` boundary covers worker tools, CLI, review approval and dashboard completion. It reads classic branch protection and active ruleset required contexts, paginates exact-head check runs and legacy statuses, then re-reads the PR head/base. Optional failed/skipped telemetry does not veto accepted required checks. Missing, pending, failed, cancelled, timed-out, stale, skipped or neutral **required** evidence cannot complete the card. Neither can zero-run acceptance, unreadable policy or GitHub API failures. A repository without required checks needs a local-only contract. `gh` must be authenticated with read access to the repository's checks and rules; no remote writes are performed by this gate.
+The shared `complete_task` boundary covers worker tools, CLI, review approval and dashboard completion. It reads classic branch protection and active ruleset required contexts, paginates exact-head check runs and legacy statuses, then re-reads the PR head/base. Optional failed/skipped telemetry does not veto accepted required checks. Missing, pending, failed, cancelled, timed-out, stale, skipped or neutral **required** evidence cannot complete the card. Neither can zero-run acceptance, unreadable policy or GitHub API failures. A repository without required checks needs a local-only contract. `gh` must be authenticated with read access to the repository's checks and rules; no remote writes are performed by this gate. Acceptance reads run as the **assignee profile's** `gh` login — its `GH_TOKEN` / `GH_CONFIG_DIR` from the profile's own `.env`, never the ambient login of the process completing the card. On multi-profile hosts (one GitHub identity per org), sign `gh` in per profile (`GH_CONFIG_DIR` in that profile's `.env`). The token must live in the profile's `.env` (or a configured secret source): a `GH_TOKEN` merely exported in the shell or a systemd unit is scrubbed from the `gh` child and never re-added. An assignee profile with no `gh` login of its own — or one that no longer exists — is refused `not logged in` rather than falling through to `~/.config/gh`; unassigned cards still use the ambient login. A login that cannot see the repository is rejected with `classification=auth`, naming the profile and repository, instead of a retryable infra failure.
 
 Rejection retains the active card and workspace. Durable `pr_acceptance` events store PR URL, SHA, required contexts, check IDs/URLs, classifications and recovery instructions; `last_failure_error` surfaces the next step. Fix failures, rerun infrastructure checks or wait, then retry completion. Use `kanban_block` when human action is needed. Generic GitHub `failure` cannot establish whether a test or artifact upload failed; inspect its retained URL. Explicit infrastructure conclusions and API failures are classified separately. No extra worker is spawned.
 
@@ -1603,6 +1603,12 @@ Dispatcher refused to re-spawn this ready task this tick. Reasons: `infrastructu
 
 One spawn attempt failed (missing PATH, workspace unmountable, …). Counter increments; task returns to `ready` for retry.
 
+`skipped_nonspawnable`
+
+`{assignee}`
+
+Dispatcher refused to spawn because the assignee profile does not exist in this home (or is not in `kanban.dispatch_profiles`). Written once per card — repeated only when another event landed in between — so `show`/`tail` name the missing profile without a row per tick. The card stays in `ready`; reassign it or install the profile.
+
 `protocol_violation`
 
 `{pid, claimer, exit_code, protocol_violation, worker_output?}`
@@ -1613,7 +1619,7 @@ Worker exited successfully while the task was still `running`, usually because i
 
 `{failures, effective_limit, limit_source, error, terminal_provider?}`
 
-Circuit breaker fired after N consecutive non-successful attempts. Task auto-blocks with the last error. The effective limit resolves as task `max_retries`, then dispatcher `failure_limit` / `kanban.failure_limit`, then the built-in default. `terminal_provider: true` means the worker exited `78` on a provider error a retry cannot fix (credential revoked, model gone) and the breaker fired on that first attempt, sticky, regardless of the limit.
+Circuit breaker fired after N consecutive non-successful attempts. Task auto-blocks with the last error. The effective limit resolves as task `max_retries`, then dispatcher `failure_limit` / `kanban.failure_limit`, then the built-in default. `terminal_provider: true` means the worker exited `78` on a provider error a retry cannot fix (credential revoked, model gone) — including a startup credential failure that explicitly requires re-login (`hermes auth` / `setup`), which exits `78` before the first turn; other startup failures exit `1` — and the breaker fired on that first attempt, sticky, regardless of the limit.
 
 `hermes kanban tail <id>` shows these for a single task. `hermes kanban watch` streams them board-wide.
 

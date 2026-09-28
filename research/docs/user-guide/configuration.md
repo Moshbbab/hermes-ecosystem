@@ -184,9 +184,9 @@ terminal:
   home_mode: auto   # auto | real | profile — subprocess HOME policy
   env_passthrough: []  # Env var names to forward to sandboxed execution (terminal + execute_code)
   sync_back_max_bytes: 2147483648  # Remote backends: refuse to extract a state archive larger than this (bytes)
-  singularity_image: "docker://nikolaik/python-nodejs:python3.11-nodejs20"  # Container image for Singularity backend
-  modal_image: "nikolaik/python-nodejs:python3.11-nodejs20"                 # Container image for Modal backend
-  daytona_image: "nikolaik/python-nodejs:python3.11-nodejs20"               # Container image for Daytona backend
+  singularity_image: "docker://nousresearch/hermes-sandbox:desktop"  # Container image for Singularity backend
+  modal_image: "nousresearch/hermes-sandbox:desktop"                 # Container image for Modal backend
+  daytona_image: "nousresearch/hermes-sandbox:desktop"               # Container image for Daytona backend
 ```
 
 `terminal.temp_dir` controls where Hermes puts session temp artifacts on the local backend — background-process logs/pid/exit files, code-execution sandboxes, and spilled tool results. When it's empty (the default), Hermes honors an explicit `TMPDIR`/`TMP`/`TEMP` from the environment and otherwise uses a managed directory on real storage at `~/.hermes/cache/terminal` instead of `/tmp` — on many distros (Arch-based setups in particular) `/tmp` is a small RAM-backed tmpfs that Hermes session artifacts can fill under load. The managed directory is auto-pruned: artifacts idle for 24 hours (no write anywhere inside them) are swept hourly by gateway housekeeping and once per process on CLI-only installs. Set `temp_dir` to an existing absolute path to redirect session temp anywhere else; user-set paths are never auto-pruned.
@@ -348,7 +348,12 @@ Runs commands inside a Docker container with security hardening (all capabilitie
 ```
 terminal:
   backend: docker
-  docker_image: "nikolaik/python-nodejs:python3.11-nodejs20"
+  # Default: nikolaik/python-nodejs (Python 3.13 / Node 26) plus a display stack, so Bot Screen,
+  # computer_use and the browser run INSIDE this sandbox (Bot Screen → "Where the screen runs").
+  # Any other image works for shell work; the screen then needs bot_desktop.placement: gateway.
+  # Writing this key is a decision: a persisted container on another image is recreated on the next
+  # terminal call. Left unset, an existing container is kept and the CLI / Screen pane ask first.
+  docker_image: "nousresearch/hermes-sandbox:desktop"
   docker_mount_cwd_to_workspace: false  # Mount launch dir into /workspace
   docker_run_as_host_user: false   # See "Running container as host user" below
   docker_snap_compat: false        # See "Snap-packaged Docker (AppArmor)" below
@@ -712,7 +717,7 @@ Runs commands in a [Singularity/Apptainer](https://apptainer.org) container. Des
 ```
 terminal:
   backend: singularity
-  singularity_image: "docker://nikolaik/python-nodejs:python3.11-nodejs20"
+  singularity_image: "docker://nousresearch/hermes-sandbox:desktop"
   container_cpu: 1                 # CPU cores
   container_memory: 5120           # MB
   container_persistent: true       # Writable overlay persists across sessions
