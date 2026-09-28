@@ -55,9 +55,9 @@ Use the [Termux APT package](/docs/getting-started/termux) on aarch64 Android de
 
 ### What the source installer does
 
-The scripts clone the source, bootstrap uv, and delegate dependency preparation to PM. PM provides pinned Python, Node.js, npm, ripgrep, and FFmpeg. The source installation selects the `all` Python extra, not every optional extra. PM also installs the browser tools (`agent-browser` and its pinned Chromium) by default. If that download fails, the install still completes and prints the command to retry. Other optional tools use their feature-specific installation paths.
+The scripts clone the source, bootstrap uv, and delegate dependency preparation to PM. PM provides pinned Python, Node.js, npm, ripgrep, and FFmpeg. The source installation selects the `all` Python extra, not every optional extra. PM also installs the browser and computer-use tools by default: `agent-browser` and its pinned Chromium, the Browser Use CLI (the default browser driver), and `cua-driver` (the computer-use driver, on macOS, Windows and glibc Linux). If a download fails, the install still completes and prints the command to retry. Other optional tools use their feature-specific installation paths.
 
-To leave the browser tools out, pass `--skip-browser` on POSIX or `-SkipBrowser` on Windows. Hermes remembers this choice: later installs and `hermes update` do not add them back. Run `hermes pm install agent-browser` to install them and undo the choice.
+To leave the browser tools out, pass `--skip-browser` on POSIX or `-SkipBrowser` on Windows; for the computer-use driver, `--skip-computer-use` / `-SkipComputerUse`. Hermes remembers these choices: later installs and `hermes update` do not add them back. Run `hermes pm install agent-browser` or `hermes pm install cua-driver` to install them and undo the choice.
 
 The scripts create a launcher and prepare the data directory. Interactive runs also invoke setup and gateway configuration. `--non-interactive` on POSIX, or `-NonInteractive` on Windows, skips stages that need input. The optional `--include-desktop` / `-IncludeDesktop` stage builds the desktop from source.
 
@@ -155,7 +155,7 @@ You don't need to rebuild your setup from scratch. Restore a full backup with `h
 
 ## Prerequisites
 
-For the POSIX source script, provide Git, curl, tar, and SHA-256 utilities. Windows can bootstrap its pinned Git for Windows archive when Git is absent. An existing uv can bootstrap PM; otherwise the script downloads its verified pin.
+For the POSIX source script, provide Git, curl, tar, and SHA-256 utilities. Windows can bootstrap its pinned Git for Windows archive when Git is absent. The script always downloads its verified uv pin; a uv already on your PATH is never used.
 
 Current first-party installations run on **Python 3.14**. The broader `>=3.11,<3.15` range in `pyproject.toml` lets older Python installations run the updater before PM switches them to 3.14; it does not promise current runtime support on 3.11–3.13. PM selects the managed tool versions from `pm/lock.json`; it does not adopt arbitrary system Node versions as the installed runtime.
 

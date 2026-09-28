@@ -527,7 +527,7 @@ Delete a session
 
 `/api/sessions/{id}/messages`
 
-Message history for a session
+Message history for a session. `inline_images=false` renders image attachments as `[image]` placeholders instead of inline data URIs — the transcript travels in kilobytes, for clients reading over a network
 
 `POST`
 
