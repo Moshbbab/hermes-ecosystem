@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
+<meta name="description" content="ClawMem is a local-first memory and context engine for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
+<meta property="og:description" content="ClawMem is a local-first memory and context engine for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
+<meta name="twitter:description" content="ClawMem is a local-first memory and context engine for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+OpenClaw+and+Hermes.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and intent classification to store and retrieve project documentation, decisions, and session transcripts in a local SQLite vault.",
+  "description": "ClawMem is a local-first memory and context engine for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture for retrieval-augmented search, combining vector search, graph traversal, and intent classification to surface relevant context from local SQLite vaults.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-09-28T02:36:53.000Z",
+  "dateModified": "2026-09-28T15:51:08.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is a local-first memory and context layer for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and intent classification to store and retrieve project documentation, decisions, and session transcripts in a local SQLite vault.</p>
+    <p class="summary-text">ClawMem is a local-first memory and context engine for AI agents that integrates via Claude Code hooks, an MCP server, and plugins for OpenClaw and Hermes. It uses a hybrid architecture for retrieval-augmented search, combining vector search, graph traversal, and intent classification to surface relevant context from local SQLite vaults.</p>
     <ul class="summary-highlights">
-      <li>Combines BM25, vector search, and cross-encoder reranking for retrieval.</li>
-      <li>Captures session decisions and preferences using a local GGUF observer model.</li>
-      <li>Operates entirely on-device with no cloud dependencies or API keys.</li>
+      <li>Operates locally without cloud dependencies or API keys.</li>
+      <li>Fuses BM25, vector search, and multi-graph traversal for retrieval.</li>
+      <li>Captures decisions and preferences from session transcripts using local models.</li>
     </ul>
   </div>
 </section>
@@ -601,7 +601,7 @@ CLAWMEM_API_TOKEN=secret ./bin/clawmem serve # with bearer token auth
 <tr>
 <td>GET</td>
 <td><code>/export</code></td>
-<td>Full vault export as JSON</td>
+<td>Active-document export as JSON (<code>?full=true</code> includes legacy <code>precompact-state.md</code> snapshot copies)</td>
 </tr>
 <tr>
 <td>POST</td>
@@ -993,8 +993,8 @@ clawmem status                                  Quick index status
 </tr>
 <tr>
 <td><code>postcompact-inject</code></td>
-<td>SessionStart</td>
-<td>Re-injects authoritative context after compaction: precompact state + recent decisions + antipatterns + vault context (1200 token budget)</td>
+<td>SessionStart (compact)</td>
+<td>Re-injects context after compaction, framed as reference data: this session's pre-compaction state + recent decisions + antipatterns + vault context (1200 token budget)</td>
 </tr>
 <tr>
 <td><code>curator-nudge</code></td>
@@ -1004,7 +1004,7 @@ clawmem status                                  Quick index status
 <tr>
 <td><code>precompact-extract</code></td>
 <td>PreCompact</td>
-<td>Extracts decisions, file paths, open questions before auto-compaction → writes <code>precompact-state.md</code> to auto-memory</td>
+<td>Extracts the last typed request, decisions, file paths and open questions before compaction → the vault's session-keyed <code>compaction_state</code> row, taken once by the same session's <code>postcompact-inject</code></td>
 </tr>
 <tr>
 <td><code>decision-extractor</code></td>
@@ -1056,8 +1056,7 @@ clawmem status                                  Quick index status
   → Reciprocal Rank Fusion → slice to candidateLimit (default 30)
   → Intent-Aware Chunk Selection (intent terms at 0.5× weight alongside query terms at 1.0×)
   → Cross-Encoder Reranking (4000 char context; intent prepended; chunk dedup; batch cap=4)
-  → Rerank/RRF Blend (blendRerank: 0.9·reranker + 0.1·normalized-RRF tiebreaker; reranker can promote over RRF #1; falls back to RRF order if reranker unavailable)
-  → Composite Scoring (query-tuned: (search × 0.70 + recency × 0.15 + confidence × 0.15) × qualityMultiplier × lengthNorm × coActivationBoost + pinBoost; recency-intent queries →
+  → Rerank/RRF Blend (blendRerank: 0.9·reranker + 0.1·normalized-RRF tiebreaker; reranker can promote over RRF #1; falls back to RRF order if rer
 
 ---
 
@@ -1079,7 +1078,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 39.9K</div>
+        <div class="stars">★ 40.4K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
