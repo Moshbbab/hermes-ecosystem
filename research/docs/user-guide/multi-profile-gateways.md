@@ -106,7 +106,7 @@ hermes -p coder gateway restart  # reconnect coder with its current configuratio
 
 `stop` writes `gateway.parked` in the profile home before asking the host to stop that profile's adapters and exclude its cron jobs from subsequent ticks. The marker persists across host restarts. Its contents are ignored; an empty file is sufficient. Provisioning can pre-create `<profiles-root>/coder/gateway.parked` so an installed profile stays offline. Parking does not delete the profile, its sessions, or its scheduled jobs.
 
-`start` removes the marker, then asks a running host to serve the profile. Without a running host it removes the marker and follows the normal start path; start the host from the default profile if prompted. `restart` unserves and serves the profile without writing a parked marker, re-reading its config. These operations do not terminate work already dispatched by a cron tick.
+`start` removes the marker, then asks a running host to serve the profile. Without a running host it removes the marker and follows the normal start path; start the host from the default profile if prompted. `restart` unserves and serves the profile without writing a parked marker, re-reading its config. On a **parked** profile with no live per-profile gateway, `restart` behaves as `start`: it removes the marker and hot-serves the profile (a gateway started with `--force` beside the marker keeps its own restart instead). These operations do not terminate work already dispatched by a cron tick.
 
 The host also rescans every 30 seconds: adding the marker by hand unserves the profile; removing it by hand makes it eligible again. If the control socket does not confirm the request, the CLI says so and the next rescan applies the marker state. Adapter teardown or connection can take additional time. `hermes -p coder gateway status` reports `parked (hermes -p coder gateway start)` while the marker exists.
 
@@ -374,6 +374,12 @@ Authorization (`GATEWAY_ALLOW_ALL_USERS`, `GATEWAY_ALLOWED_USERS`, per-platform 
 The owning profile's `.env` and `config.yaml`
 
 Closed — a default-profile opt-in never opens a secondary's bot
+
+Slash-command gating (`allow_admin_from`, `user_allowed_commands`, `group_allow_admin_from`; see [Slash commands](/docs/reference/slash-commands))
+
+The profile whose bot received the message — a secondary's own platform `extra` block governs its bots, not the default profile's
+
+Fail closed: a served profile whose config the multiplexer has not loaded is gated with an **empty** admin list and no user-enabled commands, so only the always-allowed floor (`/help`, `/whoami`) runs — never the default profile's open policy
 
 HTTP endpoints (`/p/<profile>/api/...`, `/p/<profile>/webhooks/...`, platform event callbacks)
 

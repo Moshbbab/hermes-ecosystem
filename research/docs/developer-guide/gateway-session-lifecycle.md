@@ -664,7 +664,7 @@ When `shared_multi_user_session=True`, the system prompt omits a fixed user name
 
 ## 6\. Explicit Conversation Boundaries
 
-Inactivity and wall-clock time never rotate a conversation. `/new` and `/reset` create an explicit boundary; context compression continues to manage long histories. Legacy timer configuration is ignored. The existing `SessionResetPolicy` datatype is inert compatibility data, not a runtime policy.
+Inactivity and wall-clock time never rotate a conversation. `/new` and `/reset` create an explicit boundary; context compression continues to manage long histories. Legacy timer configuration is ignored.
 
 Explicit suspension still creates a boundary on the next inbound turn. Recovery respects explicit and historical finalized boundaries rather than reopening them. Resource-only eviction and WebSocket orphan reaping leave conversations resumable.
 

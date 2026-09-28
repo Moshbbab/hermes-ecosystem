@@ -468,6 +468,8 @@ OPENVIKING_ENDPOINT=http://127.0.0.1:1933
 
 OpenViking server settings live in `ov.conf` (`--config`, `OPENVIKING_CONFIG_FILE`, or `~/.openviking/ov.conf`). Client connection values live in `ovcli.conf` (`OPENVIKING_CLI_CONFIG_FILE` or `~/.openviking/ovcli.conf`).
 
+When the endpoint is local and nothing is listening, Hermes starts `openviking-server` in the background. That server gets your model-provider keys (for its embedding and VLM models), your `HOME` and `OPENVIKING_CONFIG_FILE`, but never bot, gateway or relay tokens, and not Hermes's `PYTHONPATH`. Put anything else the server needs in `ov.conf`.
+
 **Key features:**
 
 -   Tiered context loading: L0 (~100 tokens) → L1 (~2k) → L2 (full)
