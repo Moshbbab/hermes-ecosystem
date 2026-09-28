@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>chenwei791129/hermes-usage-hook — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Hermes Usage Hook is a Hermes Agent plugin that appends LLM provider rate-limit usage to the end of replies. It detects the provider from the model name and…">
+<meta name="description" content="Hermes Usage Hook is a plugin for the Hermes Agent that appends LLM provider rate-limit usage data to the end of every reply. It detects the provider based on…">
 <link rel="canonical" href="https://hermesatlas.com/projects/chenwei791129/hermes-usage-hook">
 <meta property="og:title" content="chenwei791129/hermes-usage-hook — Hermes Atlas">
-<meta property="og:description" content="Hermes Usage Hook is a Hermes Agent plugin that appends LLM provider rate-limit usage to the end of replies. It detects the provider from the model name and…">
+<meta property="og:description" content="Hermes Usage Hook is a plugin for the Hermes Agent that appends LLM provider rate-limit usage data to the end of every reply. It detects the provider based on…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/chenwei791129/hermes-usage-hook">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="chenwei791129/hermes-usage-hook — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Usage Hook is a Hermes Agent plugin that appends LLM provider rate-limit usage to the end of replies. It detects the provider from the model name and…">
+<meta name="twitter:description" content="Hermes Usage Hook is a plugin for the Hermes Agent that appends LLM provider rate-limit usage data to the end of every reply. It detects the provider based on…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-usage-hook&amp;subtitle=Hermes+Agent+footer+hook%3A+append+your+AI+provider%27s+rate-limit+usage+%28Codex%2C+MiniMax%2C+%E2%80%A6%29+under+each+reply.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/chenwei791129/hermes-usage-hook#software",
   "name": "hermes-usage-hook",
-  "description": "Hermes Usage Hook is a Hermes Agent plugin that appends LLM provider rate-limit usage to the end of replies. It detects the provider from the model name and displays usage for available windows, such as 5-hour or weekly windows.",
+  "description": "Hermes Usage Hook is a plugin for the Hermes Agent that appends LLM provider rate-limit usage data to the end of every reply. It detects the provider based on the model name and fetches usage statistics for Codex and MiniMax, including 5-hour and weekly windows.",
   "url": "https://hermesatlas.com/projects/chenwei791129/hermes-usage-hook",
   "codeRepository": "https://github.com/chenwei791129/hermes-usage-hook",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "chenwei791129",
     "url": "https://github.com/chenwei791129"
   },
-  "dateModified": "2026-09-04T15:56:57.000Z",
+  "dateModified": "2026-09-28T03:39:08.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-04</span>
+    <span><span class="meta-label">updated</span>2026-09-28</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Usage Hook is a Hermes Agent plugin that appends LLM provider rate-limit usage to the end of replies. It detects the provider from the model name and displays usage for available windows, such as 5-hour or weekly windows.</p>
+    <p class="summary-text">Hermes Usage Hook is a plugin for the Hermes Agent that appends LLM provider rate-limit usage data to the end of every reply. It detects the provider based on the model name and fetches usage statistics for Codex and MiniMax, including 5-hour and weekly windows.</p>
     <ul class="summary-highlights">
-      <li>Supports Codex and MiniMax providers</li>
-      <li>Appends usage data to agent replies</li>
-      <li>Skips footer if usage fetch fails</li>
+      <li>Appends usage percentages and reset times to agent replies.</li>
+      <li>Supports Codex and MiniMax providers via model name detection.</li>
+      <li>Requires pyyaml as the only runtime dependency.</li>
     </ul>
   </div>
 </section>
@@ -154,6 +154,7 @@
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
     <h2>Hermes Usage Hook</h2>
+<p><a href="https://github.com/chenwei791129/hermes-usage-hook/actions/workflows/release-please.yml"><img src="https://github.com/chenwei791129/hermes-usage-hook/actions/workflows/release-please.yml/badge.svg?branch=main" alt="release-please" loading="lazy" decoding="async"></a></p>
 <p>A <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> plugin that
 appends your <strong>LLM provider's rate-limit usage</strong> to the end of every reply.</p>
 <p>It detects which provider produced the reply, fetches that provider's current
@@ -265,12 +266,26 @@ metadata and all — into your plugins directory. Nothing visibly fails, because
 Hermes treats a manifest-less install directory as a namespace and finds the
 nested <code>plugin/plugin.yaml</code> one level down; you simply end up with a repo
 checkout where a plugin should be. Remove it and reinstall with the
-subdirectory.</p>
-<p>Either way the installed directory contains no <code>.git</code>, so <code>hermes plugins update</code> and the dashboard's update action report the plugin as not updatable —
-upgrading means removing and installing again. Upstream tracks this in
-<a href="https://github.com/NousResearch/hermes-agent/issues/65314">issue #65314</a> and
-<a href="https://github.com/NousResearch/hermes-agent/pull/65337">PR #65337</a>. The
-<code>install.py</code> path is equally <code>.git</code>-less, but re-running it upgrades in place.</p>
+subdirectory. (Observed on Hermes 0.19.0; automatic detection of the plugin
+subdirectory is proposed upstream in
+<a href="https://github.com/NousResearch/hermes-agent/pull/65337">PR #65337</a>, still
+unmerged; once it lands, this warning is obsolete.)</p>
+<p>This path installs the default branch's latest commit, not the latest release,
+and the installed directory contains no <code>.git</code>. Updating depends on your
+Hermes version:</p>
+<ul>
+<li><strong>Hermes v0.21.5 or later</strong> — <code>hermes plugins update</code> and the dashboard's
+update action re-install the plugin from its recorded source, per the fix for
+<a href="https://github.com/NousResearch/hermes-agent/issues/65314">issue #65314</a> in
+<a href="https://github.com/NousResearch/hermes-agent/pull/118838">PR #118838</a>. Pinned
+installs are still refused. This is taken from the upstream fix and has not
+been verified against this plugin.</li>
+<li><strong>Older Hermes</strong> — the plugin is reported as not updatable; upgrading means
+removing and installing again.</li>
+</ul>
+<p>A whole-repository install (identifier without <code>/plugin</code>) is not covered by
+that fix; remove and reinstall it with the subdirectory. The <code>install.py</code> path
+is equally <code>.git</code>-less, but re-running it upgrades in place.</p>
 <h3>After installing</h3>
 <p>Each provider reads its own credentials, and without them that provider's
 footer is skipped:</p>

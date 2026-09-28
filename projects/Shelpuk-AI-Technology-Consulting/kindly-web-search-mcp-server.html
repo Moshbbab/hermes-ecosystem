@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub…">
+<meta name="description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta property="og:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub…">
+<meta property="og:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server — Hermes Atlas">
-<meta name="twitter:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub…">
+<meta name="twitter:description" content="Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=kindly-web-search-mcp-server&amp;subtitle=Kindly+Web+Search+MCP+Server%3A+Web+search+%2B+robust+content+retrieval+for+AI+coding+tools+%28Claude+Code%2C+Codex%2C+Cursor%2C+GitHub+Copilot%2C+Gemini%2C+etc.%29+and+AI+agents+%28Claude+Desktop%2C+Op&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server#software",
   "name": "kindly-web-search-mcp-server",
-  "description": "Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub Issues. It retrieves search results and page content in LLM-optimized Markdown format using specialized API handlers and a headless browser.",
+  "description": "Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from platforms like StackOverflow and GitHub Issues, delivering structured Markdown content in a single call to reduce token waste and secondary scraping.",
   "url": "https://hermesatlas.com/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "codeRepository": "https://github.com/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "Shelpuk-AI-Technology-Consulting",
     "url": "https://github.com/Shelpuk-AI-Technology-Consulting"
   },
-  "dateModified": "2026-09-19T22:49:34.000Z",
+  "dateModified": "2026-09-28T05:07:31.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-19</span>
+    <span><span class="meta-label">updated</span>2026-09-28</span>
   </div>
 
   <div class="actions">
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content, including full conversations from StackExchange and GitHub Issues. It retrieves search results and page content in LLM-optimized Markdown format using specialized API handlers and a headless browser.</p>
+    <p class="summary-text">Kindly Web Search is an MCP server designed to provide AI coding agents with structured web content and documentation. It retrieves full conversations from platforms like StackOverflow and GitHub Issues, delivering structured Markdown content in a single call to reduce token waste and secondary scraping.</p>
     <ul class="summary-highlights">
       <li>Integrates StackExchange, GitHub, arXiv, and Wikipedia APIs for structured retrieval.</li>
-      <li>Returns full discussions, comments, and code snippets in one call.</li>
+      <li>Uses headless Chromium to parse webpages into LLM-optimized Markdown.</li>
       <li>Supports multiple search providers including Serper, Tavily, and SearXNG.</li>
     </ul>
   </div>
@@ -934,6 +934,7 @@ Compose network, or put a reverse proxy with TLS + auth in front.</p>
 <li><code>KINDLY_NODRIVER_REUSE_BROWSER=0</code> disables reuse (fresh Chromium per request).</li>
 <li><code>KINDLY_NODRIVER_BROWSER_POOL_SIZE=2</code> controls how many Chromium instances are kept warm.</li>
 <li><code>KINDLY_NODRIVER_ACQUIRE_TIMEOUT_SECONDS=30</code> controls how long to wait for a pooled slot before falling back to per-request Chromium.</li>
+<li><code>KINDLY_NODRIVER_BROWSER_IDLE_TIMEOUT_SECONDS=600</code> closes a pooled Chromium once it has sat unused that many seconds, so an idle server stops holding a browser's memory. The next request launches a fresh one, from a fresh profile, and pays a cold start (diagnostics emit <code>pool.slot_idle_closed</code>). With a pool larger than one, the most recently used running browser is handed out first, so light traffic keeps one browser warm and lets the rest close. Unset, the default, never closes a browser for being idle, and slots are handed out in turn as before.</li>
 <li>Optional: <code>KINDLY_NODRIVER_PORT_RANGE=45000-45100</code> restricts remote debugging ports.</li>
 <li>Pooled slots are health-checked before use and auto-restarted if the DevTools endpoint is stale (diagnostics emit <code>pool.slot_probe</code> and <code>pool.slot_restart</code>).</li>
 <li>If pool acquisition times out or fails, the server falls back to per-request Chromium and emits a <code>pool.acquire_timeout</code>/<code>pool.slot_error</code> diagnostic when diagnostics are enabled.</li>
