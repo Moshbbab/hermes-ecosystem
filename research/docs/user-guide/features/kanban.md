@@ -190,7 +190,7 @@ All dashboard API endpoints accept `?board=<slug>` for board scoping. The events
 
 ### Switching boards in the Desktop app
 
-In the Desktop app the board switcher sits in the header row at the top of the Kanban page, beside the page title: a **Board** control showing the current board's name and task count, with a chevron — hover it for "Switch board". Click it to pick another board, or to rename, configure, export, import, create, or archive boards. Like the dashboard, the desktop keeps its own selection (persisted locally) and does not move the CLI's `current` pointer.
+In the Desktop app the board switcher sits in the header row at the top of the Kanban page, beside the page title: a **Board** control showing the current board's name and task count, with a chevron — hover it for "Switch board". Click it to pick another board, or to rename, configure, export, import, create, or archive boards. When Kanban is open in a split tile, the same **Board** control sits in the board's own header row, after the task count. Like the dashboard, the desktop keeps its own selection (persisted locally) and does not move the CLI's `current` pointer.
 
 ## File attachments
 
@@ -888,7 +888,7 @@ Read `dashboard.kanban` preferences from `config.yaml` — `default_tenant`, `la
 
 `/events?since=<event_id>`
 
-Live stream of `task_events` rows
+Live stream of `task_events` rows. Without `since` the stream starts at the board's current tail (the `/board` snapshot already holds the past); pass `since=<latest_event_id>` to catch up from there, or `since=0` to replay history
 
 Every handler is a thin wrapper — the plugin is ~700 lines of Python (router + WebSocket tail + bulk batcher + config reader) and adds no new business logic. A tiny `_conn()` helper auto-initializes `kanban.db` on every read and write, so a fresh install works whether the user opened the dashboard first, hit the REST API directly, or ran `hermes kanban init`.
 
@@ -996,7 +996,7 @@ hermes kanban context <id>                             # what a worker sees
 hermes kanban specify [<id> | --all] [--tenant T]      # flesh out a triage-column idea
         [--author NAME] [--json]                       #   into a full spec and promote to todo
 hermes kanban gc [--event-retention-days N]            # workspaces + old events + old logs
-        [--log-retention-days N]
+        [--log-retention-days N]                       #   (negative N is rejected; 0 disables that sweep)
 ```
 
 All commands are also available as a slash command in the interactive CLI and in the messaging gateway (see [`/kanban` slash command](#kanban-slash-command) below).
@@ -1548,6 +1548,12 @@ When
 `{pid}`
 
 Dispatcher successfully started a worker process.
+
+`worker_registered`
+
+`{pid, started_at}`
+
+The dispatcher died after starting the worker but before recording its pid, so the worker recorded it itself before its first model call. Liveness checks then see it and an expired claim is extended instead of spawning a second worker. A worker whose run was reclaimed before it got that far exits without working the card.
 
 `heartbeat`
 

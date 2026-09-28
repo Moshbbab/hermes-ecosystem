@@ -364,7 +364,7 @@ Hard force-wipe signal. Set by `/stop` or stuck-loop escalation (3+ consecutive 
 
 `False`
 
-Soft recovery marker. Set by `suspend_recently_active()` (crash recovery) or drain timeout. On next access, preserves the existing `session_id` — the user continues on the same transcript. Cleared after the next successful turn completes.
+Soft recovery marker. Set by `recover_interrupted_turns()` (crash recovery of a marked, unreplied turn) or drain timeout. On next access, preserves the existing `session_id` — the user continues on the same transcript. Cleared after the next successful turn completes.
 
 `resume_reason`
 
@@ -475,9 +475,9 @@ Mark session as `resume_pending=True` (from drain timeout). Preserves session\_i
 
 Clear `resume_pending` after a successful resumed turn. Called from gateway after `run_conversation()` returns.
 
-`suspend_recently_active(max_age_seconds=120)`
+`recover_interrupted_turns(max_age_seconds)`
 
-Crash recovery: mark recently-active sessions as `resume_pending=True`. Skips already-pending and already-suspended entries. Called on startup after unclean shutdown.
+Crash recovery: promote durable active-turn markers the dead process left behind to `resume_pending=True` (`restart_interrupted`). Sessions without a marker finished their turn and are left alone. Called on startup after unclean shutdown.
 
 `prune_old_entries(max_age_days)`
 
@@ -687,8 +687,10 @@ Gateway starts
        │ Missing
        ▼
 ┌───────────────────────────────┐
-│ session_store                 │── Marks sessions updated within
-│ .suspend_recently_active()    │   last 120 seconds as resume_pending
+│ _recover_unclean_sessions()   │── Marked turn with a persisted reply
+│                               │   → delivery ledger (sent, marked);
+│                               │   marked turn without one →
+│                               │   resume_pending (once)
 └───────────────────────────────┘
        │
        ▼
@@ -714,13 +716,18 @@ Gateway starts
 └───────────────────────────────┘
 ```
 
-### suspend\_recently\_active(max\_age\_seconds=120)
+### Crash recovery (`_recover_unclean_sessions`)
 
-Called on gateway startup when no `.clean_shutdown` marker exists (indicating a crash or unexpected exit). For each session updated within the last 120 seconds:
+Called on gateway startup when no `.clean_shutdown` marker exists (a crash or unexpected exit). It acts only on durable active-turn markers, never on recency: a chat that was merely active shortly before the crash finished its turn and is not answered again.
 
--   Sets `resume_pending=True`, `resume_reason="restart_interrupted"`, `last_resume_marked_at=now`.
--   Skips entries already `resume_pending=True` (no double-mark).
--   Skips entries explicitly `suspended=True` (hard wipe should stay).
+The marker is set when a turn starts and is held until the final reply is in the delivery ledger (the adapter releases it right after `record_delivery_obligation`), or until nothing more is owed (streamed reply, suppressed or empty response). So a marker left at startup means one of two things:
+
+-   **The reply was persisted but never ledgered.** The stored transcript reply is recorded as an unowned ledger row and the marker is cleared; the boot sweep delivers it once with the "Recovered reply" notice. The turn is not regenerated. The reply is judged the way live delivery would have judged it: a bare silence marker (`[SILENT]`, `NO_REPLY`, ...) on an internal turn, or the reply to a diagnostic wake the chat's policy mutes, is owed nothing (the marker is cleared, nothing is sent or resumed). A human turn's bare silence marker becomes the same "returned only a silence marker" notice the live path sends.
+-   **No reply was persisted.** `recover_interrupted_turns()` sets `resume_pending=True`, `resume_reason="restart_interrupted"`, and the turn auto-resumes once.
+
+The marker's start time is stored as aware UTC and compared as epoch seconds, so a restart in a different local zone (DST change, container vs. unit `TZ`) neither drops a fresh marker as stale nor adopts the previous turn's reply as this one's. A marker written by an older build (naive local time) is read as host-local time.
+
+A turn already in the ledger is redelivered by the ledger sweep, which also clears any `resume_pending` for that session, so it is never both delivered and re-answered.
 
 ### Stuck-Loop Detection (`_suspend_stuck_loop_sessions`)
 
@@ -732,7 +739,7 @@ On graceful shutdown/restart, the drain system calls `mark_resume_pending()` for
 
 -   `"restart_timeout"` — killed during restart drain
 -   `"shutdown_timeout"` — killed during shutdown drain
--   `"restart_interrupted"` — crash recovery (from `suspend_recently_active`)
+-   `"restart_interrupted"` — crash recovery of a marked, unreplied turn (from `recover_interrupted_turns`)
 
 All three reasons are in `_AUTO_RESUME_REASONS` and eligible for startup auto-resume.
 
@@ -749,7 +756,7 @@ When `get_or_create_session()` encounters `resume_pending=True`:
 
 Written at the end of a graceful shutdown. On next startup:
 
--   If present: skip `suspend_recently_active()` entirely. Active agents were already drained, so no sessions are stuck.
+-   If present: skip crash recovery entirely and discard orphan turn markers. Active agents were already drained, so no sessions are stuck.
 -   Then delete the marker.
 
 This prevents unwanted auto-resets after `hermes update`, `hermes gateway restart`, or `/restart`.

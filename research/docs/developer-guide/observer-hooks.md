@@ -181,6 +181,14 @@ After a successful provider response.
 
 After a failed provider request or retryable error path.
 
+`pre_auxiliary_call`
+
+Before each provider attempt of an auxiliary LLM call (titling, compression, MoA, vision, ...). Carries `aux_task`; the `*_api_request` hooks stay main-loop only.
+
+`post_auxiliary_call`
+
+After that attempt returns or raises (`error` set on failure).
+
 `pre_api_request` includes:
 
 -   identity: `session_id`, `task_id`, `turn_id`, `api_request_id`

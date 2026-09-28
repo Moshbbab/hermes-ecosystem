@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/features/memory-providers
 
-Hermes Agent ships with 8 external memory provider plugins that give the agent persistent, cross-session knowledge beyond the built-in MEMORY.md and USER.md. Only **one** external provider can be active at a time — the built-in memory is always active alongside it.
+Hermes Agent ships with 7 external memory provider plugins that give the agent persistent, cross-session knowledge beyond the built-in MEMORY.md and USER.md, and more (such as Hindsight) are available from the [plugin catalog](/docs/user-guide/features/plugins). Only **one** external provider can be active at a time — the built-in memory is always active alongside it.
 
 ## Quick Start
 
@@ -18,7 +18,8 @@ Or set manually in `~/.hermes/config.yaml`:
 
 ```
 memory:
-  provider: openviking   # or honcho, mem0, hindsight, holographic, retaindb, byterover, supermemory
+  provider: openviking   # or honcho, mem0, holographic, retaindb, byterover, supermemory,
+                         # or hindsight (plugin catalog — run `hermes plugins install hindsight` first)
 ```
 
 ## How It Works
@@ -46,7 +47,7 @@ Multi-agent systems with cross-session context, user-agent alignment
 
 **Requires**
 
-`pip install honcho-ai` + [API key](https://app.honcho.dev) or self-hosted instance
+`hermes memory setup` prepares the Honcho SDK through PM; [API key](https://app.honcho.dev) or self-hosted instance
 
 **Data storage**
 
@@ -491,7 +492,7 @@ Hands-off memory management — Mem0 handles extraction automatically
 
 **Requires**
 
-`pip install mem0ai` + API key (platform), a running Mem0 server (self-hosted dashboard), or an LLM + vector store (OSS)
+`hermes memory setup` prepares the Mem0 SDK through PM; API key (platform), a running Mem0 server (self-hosted dashboard), or an LLM + vector store (OSS)
 
 **Data storage**
 
@@ -500,6 +501,8 @@ Mem0 Cloud (platform), your own Mem0 server (self-hosted dashboard), or in-proce
 **Cost**
 
 Mem0 pricing (platform) / free (self-hosted or OSS)
+
+The `mem0` SDK extra is excluded on native Windows ARM64. An external Mem0 server over HTTP is a separate mode; a remote service does not imply that the in-process SDK runs on that target.
 
 **Tools (4):** `mem0_search` (semantic search; optional reranking in platform mode, off by default), `mem0_add` (store verbatim facts), `mem0_update` (update by ID), `mem0_delete` (delete by ID)
 
@@ -617,6 +620,10 @@ qdrant (local/server), pgvector
 
 ### Hindsight
 
+Plugin catalog
+
+Hindsight is maintained by [vectorize-io](https://github.com/vectorize-io/hindsight) and installed from the [plugin catalog](/docs/user-guide/features/plugins) rather than bundled with Hermes. Setup details live in the upstream docs: [hindsight.vectorize.io/sdks/integrations/hermes](https://hindsight.vectorize.io/sdks/integrations/hermes).
+
 Long-term memory with knowledge graph, entity resolution, and multi-strategy retrieval. The `hindsight_reflect` tool provides cross-memory synthesis that no other provider offers. Automatically retains full conversation turns (including tool calls) with session-level document tracking.
 
 **Best for**
@@ -625,11 +632,11 @@ Knowledge graph-based recall with entity relationships
 
 **Requires**
 
-Cloud: API key from [ui.hindsight.vectorize.io](https://ui.hindsight.vectorize.io). Local: LLM API key (OpenAI, Groq, OpenRouter, etc.)
+`hermes plugins install hindsight`. Cloud: API key from [ui.hindsight.vectorize.io](https://ui.hindsight.vectorize.io). Local: LLM API key (OpenAI, Groq, OpenRouter, etc.)
 
 **Data storage**
 
-Hindsight Cloud or local embedded PostgreSQL
+Hindsight Cloud, local embedded PostgreSQL, or an external local Hindsight server
 
 **Cost**
 
@@ -640,13 +647,14 @@ Hindsight pricing (cloud) or free (local)
 **Setup:**
 
 ```
-hermes memory setup    # select "hindsight"
+hermes plugins install hindsight   # from the plugin catalog
+hermes memory setup                # select "hindsight"
 # Or manually:
 hermes config set memory.provider hindsight
 echo "HINDSIGHT_API_KEY=your-key" >> ~/.hermes/.env
 ```
 
-The setup wizard installs dependencies automatically and only installs what's needed for the selected mode (`hindsight-client` for cloud, `hindsight-all` for local). Requires `hindsight-client >= 0.4.22` (auto-upgraded on session start if outdated).
+The plugin lands in `~/.hermes/plugins/hindsight/` (per profile home) and is enabled under `plugins.enabled` in `config.yaml`. `hermes memory setup`, `hermes memory status`, `hermes plugins list` and the dashboard Memory settings all work with the catalog-installed plugin. In local embedded mode the plugin installs `hindsight-all` on first use through Hermes' lazy-install path, which honours `security.allow_lazy_installs`.
 
 **Local mode UI:** `hindsight-embed -p hermes ui start`
 
@@ -662,7 +670,7 @@ Description
 
 `cloud`
 
-`cloud` or `local`
+`cloud`, `local_embedded`, or `local_external`
 
 `bank_id`
 
@@ -736,7 +744,17 @@ Label used before assistant turns in auto-retained transcripts
 
 Tags to filter on recall
 
-See [plugin README](https://github.com/NousResearch/hermes-agent/blob/main/plugins/memory/hindsight/README.md) for the full configuration reference.
+See the [upstream Hermes integration docs](https://hindsight.vectorize.io/sdks/integrations/hermes) for the full configuration reference.
+
+#### Migrating from bundled Hindsight
+
+Hindsight used to ship inside the Hermes tree (and as the `hermes-agent[hindsight]` pip extra). If your `config.yaml` already has `memory.provider: hindsight`, there is nothing to do for most users:
+
+-   `hermes update` installs the catalog plugin into every profile home that names the provider (this runs even when `security.allow_lazy_installs` is `false`).
+-   If the plugin is still missing on the first agent start (`hermes chat`, the gateway, …), Hermes installs it and prints `✓ Memory provider 'hindsight' moved out of core — installed its plugin from the catalog (your memory.hindsight settings and data are unchanged).`
+-   With `security.allow_lazy_installs: false`, the agent-start path instead logs one line — ``Memory provider 'hindsight' is not installed; security.allow_lazy_installs is off — run `hermes plugins install hindsight`.`` — and you run `hermes plugins install hindsight` yourself.
+
+What changes on disk: the plugin appears in `~/.hermes/plugins/hindsight/` and `config.yaml` gains `plugins.enabled: [hindsight]`. `memory.provider`, `memory.hindsight.*`, `$HERMES_HOME/hindsight/config.json`, `HINDSIGHT_API_KEY` in `.env` and your memory bank data are untouched. Verify with `hermes memory status` (provider active) and `hermes plugins list` (plugin installed and enabled).
 
 * * *
 
@@ -890,7 +908,7 @@ Semantic recall with user profiling and session-level graph building
 
 **Requires**
 
-`pip install supermemory` + [cloud API key](http://app.supermemory.ai/integrations?connect=hermes), or a [self-hosted server](https://supermemory.ai/docs/self-hosting/overview)
+`hermes memory setup` prepares the Supermemory SDK through PM; [cloud API key](http://app.supermemory.ai/integrations?connect=hermes), or a [self-hosted server](https://supermemory.ai/docs/self-hosting/overview)
 
 **Data storage**
 
@@ -1026,7 +1044,7 @@ Agent-controlled recall with structured project and session attribution
 
 **Requires**
 
-`pip install hermes-memori` + `hermes-memori install` + [Memori API key](https://app.memorilabs.ai/signup)
+Externally supplied `hermes-memori` CLI and provider integration + [Memori API key](https://app.memorilabs.ai/signup)
 
 **Data storage**
 
@@ -1040,12 +1058,16 @@ Memori pricing
 
 **Setup:**
 
+`hermes-memori` is an external integration, not a managed PM tool name. Follow its publisher's instructions to install the CLI in an independent environment. Before running its installer, confirm that it targets the intended Hermes home and supplies a provider with declared Python dependencies. Do not let an external installer pip-install into Hermes's selected environment. CLI availability alone does not make the Python provider available inside Hermes; an entry-point-only distribution needs an owner-managed build that includes it.
+
 ```
-pip install hermes-memori
+# Run only after confirming the external installer's integration contract above.
 hermes-memori install
 hermes config set memory.provider memori
 hermes memory setup
 ```
+
+If the installer does not support PM-managed directory-provider admission, ask the publisher for that integration rather than inventing a `hermes pm install` package command. Restart Hermes after successful dependency preparation.
 
 * * *
 
@@ -1099,7 +1121,7 @@ Free/Paid
 
 Server-side LLM extraction + self-hosted/OSS modes
 
-**Hindsight**
+**Hindsight** (plugin catalog)
 
 Cloud/Local
 
@@ -1107,7 +1129,7 @@ Free/Paid
 
 3
 
-`hindsight-client`
+`hermes plugins install hindsight`
 
 Knowledge graph + reflect synthesis
 
@@ -1182,7 +1204,7 @@ Each provider's data is isolated per [profile](/docs/user-guide/profiles):
 
 ## Providers Moving to the Plugin Catalog
 
-Memory providers are moving out of the Hermes tree into their maintainers' own repositories, published through the [plugin catalog](/docs/user-guide/features/plugins). Nothing changes for you: the provider name, your `memory.<name>` settings, its data directory and its tools stay the same. When a provider you have configured stops shipping with Hermes, `hermes update` installs its catalog plugin for every profile that names it; if you update through the Desktop app, the agent does the same the first time it starts (unless `security.allow_lazy_installs` is `false`, in which case it prints the `hermes plugins install <name>` one-liner instead).
+Memory providers are moving out of the Hermes tree into their maintainers' own repositories, published through the [plugin catalog](/docs/user-guide/features/plugins) — Hindsight is the first (see [Migrating from bundled Hindsight](#migrating-from-bundled-hindsight)). Nothing changes for you: the provider name, your `memory.<name>` settings, its data directory and its tools stay the same. When a provider you have configured stops shipping with Hermes, `hermes update` installs its catalog plugin for every profile that names it; if you update through the Desktop app, the agent does the same the first time it starts (unless `security.allow_lazy_installs` is `false`, in which case it logs the `hermes plugins install <name>` one-liner instead).
 
 ## Building a Memory Provider
 

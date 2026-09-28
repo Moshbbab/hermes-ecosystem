@@ -110,7 +110,7 @@ All SSE streams (Chat Completions, Responses, `/api/sessions/{id}/chat/stream`, 
 
 **Tool progress in streams**:
 
--   **Chat Completions**: Hermes emits `event: hermes.tool.progress` for tool-start visibility without polluting persisted assistant text.
+-   **Chat Completions**: Hermes emits `event: hermes.tool.progress` for tool-start visibility without polluting persisted assistant text. Strict OpenAI clients that choke on named SSE events can turn these frames off with `gateway.platforms.api_server.tool_progress_events: false` (default `true`); content chunks are unaffected. The opt-out applies only to Chat Completions — `/v1/runs/{id}/events` always emits tool events, which is what the `tool_progress_events` feature in `/v1/capabilities` describes.
 -   **Responses**: Hermes emits spec-native `function_call` and `function_call_output` output items during the SSE stream, so clients can render structured tool UI in real time.
 
 **Model reasoning** (emitted only when the model actually produces reasoning and the resolved `reasoning` config allows it; the input-side opt-out is `model_options.reasoning.enabled: false`):
@@ -527,7 +527,7 @@ Delete a session
 
 `/api/sessions/{id}/messages`
 
-Message history for a session
+Message history for a session. `inline_images=false` renders image attachments as `[image]` placeholders instead of inline data URIs — the transcript travels in kilobytes, for clients reading over a network
 
 `POST`
 
@@ -545,7 +545,7 @@ Run one synchronous agent turn
 
 `/api/sessions/{id}/chat/stream`
 
-SSE wrapper over a single turn — emits `assistant.delta`, `assistant.commentary` (mid-turn commentary: `message_id`, `text`, `already_streamed`; never folded into `assistant.completed`), `tool.started`, `tool.completed`, then a terminal `run.completed` / `run.failed` / `run.cancelled` event that matches how the turn ended (see [Terminal run status](/docs/developer-guide/programmatic-integration#terminal-run-status))
+SSE wrapper over a single turn — emits `assistant.delta`, `assistant.commentary` (mid-turn commentary: `message_id`, `text`, `already_streamed`; never folded into `assistant.completed`), `tool.started`, `tool.completed`, `tool.failed` (a tool that finished with an error), then a terminal `run.completed` / `run.failed` / `run.cancelled` event that matches how the turn ended (see [Terminal run status](/docs/developer-guide/programmatic-integration#terminal-run-status))
 
 `/v1/capabilities` advertises the full surface via `session_*` feature flags and `endpoints.session_*` entries so external UIs can detect support and fall back safely. Inline images are supported in `chat` and `chat/stream` payloads (multimodal-aware path).
 
@@ -590,6 +590,8 @@ X-Hermes-Session-Key: agent:main:webui:dm:user-42
 ```
 
 Rules: max 256 chars, control characters (`\r`, `\n`, `\x00`) are rejected, and the value is echoed back on responses (JSON + SSE). `/v1/capabilities` advertises support via `"session_key_header": "X-Hermes-Session-Key"`. Without the key, Honcho's `per-session` strategy produces a different scope per `session_id` — exactly the behavior Hermes had before.
+
+Automatic recall follows the **transcript**: the memory provider is initialised once per session and kept across requests, so a continued session (`X-Hermes-Session-Id`, `previous_response_id`, or a declared `X-Hermes-Session-Key` conversation) receives the recall the provider prepared after the previous turn, exactly like a Telegram or Discord chat does. A request without any continuation starts a fresh session and, like the first turn of any new CLI session, has nothing queued yet. Idle sessions release their provider after the same idle TTL as the gateway agent cache (`agent.agent_cache.idle_ttl_secs`, default one hour).
 
 ## System Prompt Handling
 

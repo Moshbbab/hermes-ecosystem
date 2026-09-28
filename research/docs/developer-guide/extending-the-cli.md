@@ -97,11 +97,10 @@ if __name__ == "__main__":
     cli.run()
 ```
 
-Run it:
+Run it from your source checkout after selecting an isolated development home with the [PM developer workflow](/docs/reference/package-management#developer-workflow):
 
 ```
-cd ~/.hermes/hermes-agent
-source .venv/bin/activate
+source ./activate
 python my_cli.py
 ```
 

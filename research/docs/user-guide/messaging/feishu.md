@@ -2,6 +2,8 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/messaging/feishu
 
+Python dependency commands on this page use a [PM-prepared source checkout](/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
+
 Hermes Agent integrates with Feishu and Lark as a full-featured bot. Once connected, you can chat with the agent in direct messages or group chats, receive cron job results in a home chat, and send text, images, audio, and file attachments through the normal gateway flow.
 
 The integration supports both connection modes:
@@ -901,15 +903,15 @@ Fix
 
 `lark-oapi not installed`
 
-Install the SDK: `pip install lark-oapi`
+Install the SDK: `python -c "import pm; pm.sync_venv(['feishu'], explicit=True)"`
 
 `websockets not installed; websocket mode unavailable`
 
-Install websockets: `pip install websockets`
+Install websockets: `hermes pm repair`
 
 `aiohttp not installed; webhook mode unavailable`
 
-Install aiohttp: `pip install aiohttp`
+Install aiohttp: `python -c "import pm; pm.sync_venv(['messaging'], explicit=True)"`
 
 `FEISHU_APP_ID or FEISHU_APP_SECRET not set`
 

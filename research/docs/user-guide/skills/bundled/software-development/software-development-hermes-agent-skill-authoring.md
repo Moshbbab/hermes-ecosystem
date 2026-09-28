@@ -204,11 +204,12 @@ A skill exists to make the agent's process more predictable — the agent reliab
 4.  **Validate locally**:
     
     ```
-    import yaml, re, pathlib
+    import re, pathlib
+    from ruamel.yaml import YAML
     content = pathlib.Path("skills/<category>/<name>/SKILL.md").read_text()
     assert content.startswith("---")
     m = re.search(r'\n---\s*\n', content[3:])
-    fm = yaml.safe_load(content[3:m.start()+3])
+    fm = YAML(typ="safe").load(content[3:m.start()+3])
     assert "name" in fm and "description" in fm
     assert len(fm["description"]) <= 60, f"description {len(fm['description'])} chars — hardline is 60"
     assert fm["description"].endswith(".")

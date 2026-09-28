@@ -119,6 +119,14 @@ Article illustrations: type × style × palette consistency.
 
 Knowledge comics (知识漫画): educational, biography, tutorial.
 
+[**brag**](/docs/user-guide/skills/optional/creative/creative-brag)
+
+Project launch video via Hyperframes, upstream-maintained.
+
+[**brag-slim**](/docs/user-guide/skills/optional/creative/creative-brag-slim)
+
+Launch video from a project or URL, upstream-maintained.
+
 [**comfyui**](/docs/user-guide/skills/optional/creative/creative-comfyui)
 
 Generate images, video, and audio via diffusion workflows.

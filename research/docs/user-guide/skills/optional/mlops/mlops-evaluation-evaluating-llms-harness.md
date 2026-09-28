@@ -209,7 +209,7 @@ Training Progress Tracking:
 Evaluate every N training steps:
 
 ```
-#!/bin/bash
+#!/usr/bin/env bash
 # eval_checkpoint.sh
 
 CHECKPOINT_DIR=$1
@@ -316,7 +316,7 @@ microsoft/phi-2
 **Step 2: Run evaluations**
 
 ```
-#!/bin/bash
+#!/usr/bin/env bash
 # eval_all_models.sh
 
 TASKS="mmlu,gsm8k,hellaswag,truthfulqa"

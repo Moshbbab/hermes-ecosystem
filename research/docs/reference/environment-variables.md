@@ -48,7 +48,7 @@ Override AI Gateway base URL (default: `https://ai-gateway.vercel.sh/v1`)
 
 `OPENAI_API_KEY`
 
-API key for custom OpenAI-compatible endpoints (used with `OPENAI_BASE_URL`)
+OpenAI API key (`openai-api` provider), or the key for a custom OpenAI-compatible endpoint when `OPENAI_BASE_URL` is set. Counts as an OpenRouter key only when it starts with `sk-or-`; put OpenRouter keys in `OPENROUTER_API_KEY`
 
 `OPENAI_BASE_URL`
 
@@ -460,11 +460,7 @@ Default language hint for STT. Used by the `local` (faster-whisper) provider, `H
 
 `HERMES_HOME`
 
-Override Hermes config directory (default: `~/.hermes`). A literal `~` or `$VAR` in the value is expanded (fish does not expand `~` inside `VAR=~/…`), so it never resolves relative to the current directory. Also scopes the gateway PID file and systemd service name, so multiple installations can run concurrently
-
-`HERMES_GIT_BASH_PATH`
-
-**Windows only.** Override `bash.exe` discovery for the terminal tool. Points at any bash — full Git-for-Windows install, WSL bash via symlink, MSYS2, Cygwin. The installer sets this automatically to the PortableGit it provisioned. See the [Windows (Native) Guide](/docs/user-guide/windows-native#how-hermes-runs-shell-commands-on-windows)
+Select the configuration and user-data home. A literal `~` or `$VAR` in the value is expanded (fish does not expand `~` inside `VAR=~/…`), so it never resolves relative to the current directory. Defaults to `~/.hermes` on POSIX and `%LOCALAPPDATA%\hermes` on Windows; the official Docker image uses `/opt/data`. Profile/runtime context can select a more specific home.
 
 `HERMES_DISABLE_WINDOWS_UTF8`
 
@@ -642,7 +638,7 @@ ElevenLabs premium TTS voices ([elevenlabs.io](https://elevenlabs.io/))
 
 `PORCUPINE_ACCESS_KEY`
 
-Picovoice Porcupine wake-word engine ([console.picovoice.ai](https://console.picovoice.ai/)) — only for `wake_word.provider: porcupine`; the default openWakeWord and sherpa engines need no key
+Picovoice Porcupine wake-word engine ([console.picovoice.ai](https://console.picovoice.ai/)) — required when Porcupine is selected; openWakeWord and sherpa need no key
 
 `STT_GROQ_MODEL`
 
@@ -2068,7 +2064,7 @@ Requested OIDC scopes for the self-hosted OIDC provider (default `openid profile
 
 `HERMES_DESKTOP_HERMES`
 
-Desktop backend command override. Used by packagers/Nix or troubleshooting to point Electron at a specific `hermes` executable after backend probing.
+Desktop backend command override. Used by packagers/Nix or troubleshooting to point Electron at a specific `hermes` executable before checking the mutable managed install.
 
 `HERMES_DESKTOP_HERMES_ROOT`
 
@@ -2076,7 +2072,7 @@ Desktop source-checkout override used by `hermes desktop --hermes-root`; checked
 
 `HERMES_DESKTOP_IGNORE_EXISTING`
 
-Set to `1` to make Desktop ignore an existing `hermes` on `PATH` during backend resolution. Equivalent to `hermes desktop --ignore-existing`.
+Set to `1` to make Desktop skip the installed runtime (`~/.hermes/hermes-agent`, or `%LOCALAPPDATA%\hermes\hermes-agent` on Windows) during backend resolution, so no local backend starts and Desktop shows the connect-or-install choice. The bundled runtime, `HERMES_DESKTOP_HERMES_ROOT`, an unpackaged source checkout, and `HERMES_DESKTOP_HERMES` still win. A runtime installed during this launch is used. Equivalent to `hermes desktop --ignore-existing`.
 
 `HERMES_DESKTOP_CWD`
 
@@ -2093,6 +2089,10 @@ Vite dev-server URL the Electron shell loads instead of the packaged bundle (e.g
 `HERMES_DESKTOP_CDP_PORT`
 
 Overrides the Chrome DevTools Protocol port the renderer exposes on `127.0.0.1` for DOM/CSS inspection tooling (default `9222`). Dev-server runs (`npm run dev`, `hgui`) open it automatically; a packaged app never does, and no value here changes that. Set to `off` to disable it on a dev run. Anything that can reach the port can execute code in the renderer.
+
+`HERMES_DESKTOP_NVIDIA_SWIFTSHADER`
+
+(Desktop on Linux, NVIDIA only) Override for the EGL fallback that routes rendering through SwiftShader on driver series with a broken EGL probe (`580.x`, #40077): `1` forces the fallback on — the recovery hatch if a future series reintroduces the crash but is not yet in the closed list; `0` opts out and uses the native GPU path at your own risk. Force-on does not apply where another gate already disabled the GPU (remote display, WSLg, `HERMES_DESKTOP_DISABLE_GPU=0`).
 
 `HTTPS_PROXY` / `HTTP_PROXY` / `NO_PROXY`
 
@@ -2452,10 +2452,6 @@ Loopback port for the Node sidecar control + inbound channel (default `8789`).
 
 Spawn the Node sidecar on connect (`true`/`false`, default `true`).
 
-`PHOTON_NODE_BIN`
-
-Path to the node binary (default: `shutil.which('node')`).
-
 `PHOTON_DASHBOARD_HOST`
 
 Photon Dashboard API host (default `https://app.photon.codes`).
@@ -2626,7 +2622,7 @@ Compatibility/manual override for `discord.websocket_liveness_interval_seconds`.
 
 `HERMES_DISCORD_LIVENESS_FAILURE_THRESHOLD`
 
-Compatibility/manual override for `discord.websocket_liveness_failure_threshold`. Consecutive unhealthy WebSocket samples before forcing a reconnect (default: `2`). Prefer the `config.yaml` key.
+Compatibility/manual override for `discord.websocket_liveness_failure_threshold`. Consecutive unhealthy WebSocket samples before forcing a reconnect (default: `2`). Applies to soft signals only — a closed transport (`socket_closed` / `client_closed`) forces the reconnect on the first sample (#118487). Prefer the `config.yaml` key.
 
 `HERMES_MATRIX_TEXT_BATCH_DELAY_SECONDS` / `_SPLIT_DELAY_SECONDS`
 
@@ -2906,7 +2902,7 @@ Optional directory prefix that **hard-blocks** `write_file`/`patch` writes outsi
 
 `HERMES_DISABLE_LAZY_INSTALLS`
 
-Internal bridge var set automatically in the official Docker image to prevent runtime dependency installs into the immutable `/opt/hermes` tree. The user-facing equivalent is `security.allow_lazy_installs: false` in `config.yaml`; do not set this in `.env`.
+Internal PM policy used by tests and install probes. Truthy values refuse on-demand installation. It overrides the user-facing `security.allow_lazy_installs` setting. Do not put it in `.env`.
 
 `HERMES_DISABLE_FILE_STATE_GUARD`
 
@@ -2964,6 +2960,30 @@ export HERMES_WRITE_SAFE_ROOT=/path/to/project:/home/you/.hermes
 
 Unset the variable or remove it from `.env` to restore normal writes (still subject to the credential-path denylist — see [File write safety](/docs/user-guide/security#file-write-safety)).
 
+### Internal bridge variables
+
+Hermes sets these itself to carry state across a boundary where no `config.yaml` exists yet or where two processes need to agree. They are documented so you can recognise them in a process environment or a log; do not set them yourself, and never put them in `.env`.
+
+Variable
+
+Description
+
+`HERMES_DATA_DIR_SUFFIX`
+
+Baked into a desktop bundle's environment (`--bundle-env`, `HERMES_BUNDLE_ENV_JSON`, or channel builds with channel-specific data dirs, which use `-channel-build-<channel>`) so a test or channel build keeps its own data. It is appended literally to the default Hermes home and the default Electron `userData` directory, with no separator: `-channel-build-canary` selects `~/.hermes-channel-build-canary` on POSIX. Explicit `HERMES_HOME` and `HERMES_DESKTOP_USER_DATA_DIR` win and are not suffixed. It must be in the launch environment before startup, because it chooses the home that holds `.env` and `config.yaml`.
+
+`HERMES_REPO_URL`
+
+Git remote the installers (`scripts/install.sh`, `scripts/install.ps1`) clone from, and re-point `origin` to on a rerun. It is an environment variable because the installer runs before any Hermes config exists. Used by CI and rehearsal scripts to install from a fork or mirror; unset, the installers use the official repository.
+
+`HERMES_UPDATE_STATUS_FILE`
+
+Exported by the desktop update shim (`scripts/desktop-update/posix.sh`) with the path of the status JSON its progress window renders. The `hermes update` takeover children publish their long-running stages into that file so the window keeps moving. Absent (an older shim), they fall back to the status file named by the shim's pid in the update marker, and publish nothing when no UI is watching.
+
+`HERMES_UPDATE_UI_ACTIVE`
+
+Set to `1` by an update child after it opens the native macOS status panel for an old shim that has no window of its own. Children inherit it, so the panel is opened at most once per update chain.
+
 ## Interface
 
 Variable
@@ -3007,6 +3027,8 @@ Description
 `HERMES_AGENT`
 
 **Set to `true` by the CLI and gateway entry points** and exported into every terminal-tool shell so child processes can detect they run inside Hermes specifically. Don't set manually.
+
+Terminal session snapshots do not persist injected session/agent attribution variables. Hermes supplies the current values for each command; an export inside a previous terminal command does not redefine the next session identity.
 
 ## Context Compression (config.yaml only)
 

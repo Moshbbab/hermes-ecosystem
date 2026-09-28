@@ -129,7 +129,7 @@ Name for the new profile. Must be a valid directory name (alphanumeric, hyphens,
 
 `--clone`
 
-Copy `config.yaml`, `.env`, `SOUL.md`, skills, and the curated `memories/MEMORY.md` / `memories/USER.md` from the current profile. Sessions, `state.db` and cron jobs are not copied.
+Copy `config.yaml`, `.env`, `SOUL.md`, skills, the curated `memories/MEMORY.md` / `memories/USER.md`, and the active `memory.provider`'s own config (`<provider>/` or `<provider>.json`, e.g. `hindsight/config.json`) from the current profile. Sessions, `state.db` and cron jobs are not copied.
 
 `--clone-all`
 
@@ -590,7 +590,7 @@ distribution_owned:   # optional; defaults to SOUL.md, config.yaml,
 
 `hermes_requires` supports `>=`, `<=`, `==`, `!=`, `>`, `<`, or a bare version (treated as `>=`). Install fails with a clear error if the current Hermes version doesn't satisfy the spec.
 
-`distribution_owned` is optional. If set, only those paths are replaced on update; anything else in the profile stays user-owned. If omitted, the defaults above apply.
+`distribution_owned` is optional. If set, only those paths are updated; anything else in the profile stays user-owned. A directory of skills, such as `skills/` or a category like `skills/research/`, is merged per skill: the skills the distribution ships are replaced, and skills you added there stay. A skill the author later drops from the distribution is left in place on update, as with top-level `skills/`. If omitted, the defaults above apply.
 
 ### Publishing a distribution
 

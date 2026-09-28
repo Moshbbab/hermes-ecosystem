@@ -2,6 +2,8 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/features/web-search
 
+Python dependency commands on this page use a [PM-prepared source checkout](/docs/reference/package-management#developer-workflow). After a dependency change, reactivate the checkout and restart Hermes.
+
 Hermes Agent includes two model-callable web tools backed by multiple providers:
 
 -   **`web_search`** — search the web and return ranked results
@@ -131,7 +133,7 @@ Paid (SuperGrok or per-token)
 
 Requires a ChatGPT/Codex subscription
 
-Brave Search, DDGS, xAI, and OpenAI Native are **search-only** — pair any of them with Firecrawl/Tavily/Perplexity/Keenable/Exa/Parallel when you also need `web_extract`. DDGS uses the [`ddgs` Python package](https://pypi.org/project/ddgs/) under the hood; if it isn't already installed, run `pip install ddgs` (or let Hermes lazy-install it on first use). xAI runs Grok's server-side `web_search` tool on the Responses API — results are LLM-generated rather than index-backed, so titles, descriptions, and URL choice are all model output (see the [trust-model caveat](#xai-grok) below). OpenAI Native declares the same kind of provider-executed tool on the Codex Responses endpoint (see [below](#openai-native)).
+Brave Search, DDGS, xAI, and OpenAI Native are **search-only** — pair any of them with Firecrawl/Tavily/Perplexity/Keenable/Exa/Parallel when you also need `web_extract`. DDGS uses the [`ddgs` Python package](https://pypi.org/project/ddgs/) under the hood; if it isn't already installed, run `python -c "import pm; pm.sync_venv(['ddgs'], explicit=True)"` (or let Hermes lazy-install it on first use). xAI runs Grok's server-side `web_search` tool on the Responses API — results are LLM-generated rather than index-backed, so titles, descriptions, and URL choice are all model output (see the [trust-model caveat](#xai-grok) below). OpenAI Native declares the same kind of provider-executed tool on the Codex Responses endpoint (see [below](#openai-native)).
 
 **Per-capability split:** you can use different providers for search and extract independently — for example SearXNG (free) for search and Firecrawl for extract. See [Per-capability configuration](#per-capability-configuration) below.
 
@@ -143,7 +145,7 @@ A fresh install with **no web credentials at all** gets working `web_search` and
 
 Nous Subscribers
 
-If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, web search and extract are available through the **[Tool Gateway](/docs/user-guide/features/tool-gateway)** via managed Firecrawl — no API key needed. New installs can run `hermes setup --portal` to log in and turn on all gateway tools at once; existing installs can flip just web via `hermes tools`.
+If you have a paid [Nous Portal](https://portal.nousresearch.com) subscription, web search and extract are available through the **[Tool Gateway](/docs/user-guide/features/tool-gateway)** as managed web search — no API key needed. New installs can run `hermes setup --portal` to log in and turn on all gateway tools at once; existing installs can flip just web via `hermes tools`.
 
 * * *
 
@@ -573,9 +575,13 @@ exa
 
 parallel
 
-`FIRECRAWL_API_KEY` or `FIRECRAWL_API_URL` (or the Nous Tool Gateway is ready)
+`FIRECRAWL_API_KEY` or `FIRECRAWL_API_URL`
 
 firecrawl
+
+Nous Tool Gateway ready (Portal subscription)
+
+managed web search via the Tool Gateway
 
 `SEARXNG_URL`
 
@@ -609,11 +615,11 @@ Run `hermes setup` to see which web backend is detected:
 ✅ Web Search & Extract (searxng)
 ```
 
-Or check via the CLI:
+For a source checkout, you can also check the module after [PM activation](/docs/reference/package-management#developer-workflow). Use the home whose web configuration you intend to inspect:
 
 ```
-# Activate the venv and run the web tools module directly
-source ~/.hermes/hermes-agent/.venv/bin/activate
+# From the Hermes source checkout, in a clean shell
+source ./activate
 python -m tools.web_tools
 ```
 

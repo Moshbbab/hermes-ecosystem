@@ -102,9 +102,9 @@ What it does
 
 **Web search & extract**
 
-Firecrawl
+Nous-managed
 
-Agent-grade search and full-page extraction. No Firecrawl API key, no rate limit babysitting.
+Agent-grade search and full-page extraction. No search API key, no rate limit babysitting.
 
 **Image generation**
 
@@ -130,7 +130,7 @@ Modal
 
 Serverless terminal sandboxes for code execution (optional add-on).
 
-Without the gateway, hooking each of those up means a Firecrawl account, a FAL account, a Browser Use account, an OpenAI key, and a Modal account — five separate signups, five separate dashboards, five separate top-up flows. With the gateway, all of it routes through one subscription.
+Without the gateway, hooking each of those up means a web search account, a FAL account, a Browser Use account, an OpenAI key, and a Modal account — five separate signups, five separate dashboards, five separate top-up flows. With the gateway, all of it routes through one subscription.
 
 You can also enable just specific gateway tools (e.g. web search but not image generation) — see [Mixing the gateway with your own backends](#mixing-the-gateway-with-your-own-backends) below.
 
@@ -140,7 +140,7 @@ Because everything routes through one OAuth-authenticated Portal session, you do
 
 ### Cross-platform parity
 
-[Native Windows](/docs/user-guide/windows-native) makes per-tool API key setup its rough edge — installing a Firecrawl account, a FAL account, a Browser Use account, an OpenAI key from Windows is the highest-friction part of getting a useful agent. A Portal subscription smooths that out: one OAuth covers the model and every gateway tool, so Windows users get the same experience as macOS/Linux without manually configuring four backends.
+[Native Windows](/docs/user-guide/windows-native) makes per-tool API key setup its rough edge — installing a web search account, a FAL account, a Browser Use account, an OpenAI key from Windows is the highest-friction part of getting a useful agent. A Portal subscription smooths that out: one OAuth covers the model and every gateway tool, so Windows users get the same experience as macOS/Linux without manually configuring four backends.
 
 ## A note on Hermes 4
 
@@ -194,9 +194,7 @@ OAuth needs a browser, but the loopback callback runs on the machine where Herme
 
 ### Profile setup
 
-If you use [Hermes profiles](/docs/user-guide/profiles), the Portal refresh token is shared across profiles via a shared token store — but the store **refreshes an existing login, it does not create one**. Profiles are independent islands ([#111724](https://github.com/NousResearch/hermes-agent/issues/111724)), so a profile that has never signed in to the Portal has no Nous credentials of its own: at boot it fails closed with `Profile '<name>' is not connected to any AI provider yet` rather than silently adopting another profile's session.
-
-Sign in **once per profile** with `hermes -p <name> portal` (alias for `hermes -p <name> auth add nous --type oauth`). When a shared Portal session already exists on the machine, that command offers to import it — one confirmation, no browser round-trip. After that first import the profile keeps its own state, and the shared store keeps its token current whenever any profile refreshes or re-logs in. `hermes profile create <name> --clone-all` from a signed-in profile also carries the Portal login (only single-use grants such as Anthropic/Codex are stripped from clones).
+If you use [Hermes profiles](/docs/user-guide/profiles), the Portal refresh token is automatically shared across all profiles via a shared token store. Sign in once on any profile, and the rest pick it up automatically — no need to repeat the OAuth flow per profile.
 
 ## Using the Portal day-to-day
 
