@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conorbronsdon/avoid-ai-writing — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to remove detectable AI writing patterns. It supports…">
+<meta name="description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to remove detectable AI writing patterns. It supports…">
+<meta property="og:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="conorbronsdon/avoid-ai-writing — Hermes Atlas">
-<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to remove detectable AI writing patterns. It supports…">
+<meta name="twitter:description" content="avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=avoid-ai-writing&amp;subtitle=Skill+that+audits+and+rewrites+content+to+remove+AI+writing+patterns.+Use+it+with+your+favorite+agents+including+Claude+Code%2C+OpenClaw%2C+Codex%2C+and+Hermes.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing#software",
   "name": "avoid-ai-writing",
-  "description": "avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to remove detectable AI writing patterns. It supports English-language prose through three operational modes—Rewrite, Detect, and Edit—and includes optional voice profiles to adjust the tone of the output.",
+  "description": "avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a bundled detector engine and a 112-entry word replacement table to identify and replace specific linguistic markers with plainer alternatives.",
   "url": "https://hermesatlas.com/projects/conorbronsdon/avoid-ai-writing",
   "codeRepository": "https://github.com/conorbronsdon/avoid-ai-writing",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "conorbronsdon",
     "url": "https://github.com/conorbronsdon"
   },
-  "dateModified": "2026-09-29T04:55:36.000Z",
+  "dateModified": "2026-09-29T07:13:35.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4763
+    "userInteractionCount": 4767
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -148,11 +148,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents that audits and rewrites content to remove detectable AI writing patterns. It supports English-language prose through three operational modes—Rewrite, Detect, and Edit—and includes optional voice profiles to adjust the tone of the output.</p>
+    <p class="summary-text">avoid-ai-writing is a portable writing skill for AI agents designed to audit and rewrite English content to remove detectable AI patterns. It utilizes a bundled detector engine and a 112-entry word replacement table to identify and replace specific linguistic markers with plainer alternatives.</p>
     <ul class="summary-highlights">
-      <li>Audits and rewrites content to eliminate AI writing patterns.</li>
-      <li>Supports Rewrite, Detect, and Edit-in-place modes.</li>
-      <li>Compatible with agents like Claude Code, OpenClaw, and Hermes.</li>
+      <li>Supports detect-only, rewrite, and edit-in-place modes.</li>
+      <li>Features optional voice profiles including professional, technical, and casual.</li>
+      <li>Compatible with agentskills.io agents like Claude Code and Hermes.</li>
     </ul>
   </div>
 </section>
@@ -1007,13 +1007,17 @@ intentionally has no rewrite tool; rewriting stays in the skill, where the
 agent can apply the full editorial rules and preservation guardrails. See the
 <a href="https://github.com/conorbronsdon/avoid-ai-writing-mcp">MCP repository</a> for
 configuration examples for other MCP hosts.</p>
-<p>The engine also ships a preservation validator. <code>detector/validate.js</code> compares
-a rewrite against its original and fails when the edit touched something it
-shouldn't have: a code block, YAML frontmatter, a blockquote, a table cell,
-inline code, a URL, a file path, the heading structure, or when the rewrite ends
-with more flagged patterns than it started with.</p>
-<pre><code class="language-bash">node detector/validate.js before.md after.md   # exits 1 on a preservation error
+<p>The engine also ships a preservation validator. <code>detector/validate.js</code> checks
+protected content and structure, including code, frontmatter, blockquotes,
+tables, inline code, URLs, paths, and headings. The default gate also blocks
+residual pattern growth for compatibility; that quality signal does not prove
+content damage. Editorial workflows use the advisory policy:</p>
+<pre><code class="language-bash">node detector/validate.js --residual-policy warn before.md after.md
 </code></pre>
+<p>Mechanical errors still fail. Warnings and residual findings remain visible
+for review. A pass does not verify meaning; check facts and claims separately.
+See the <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/detector/README.md#validateoriginal-rewritten-options--result">validator API</a>
+for result fields, availability states, and the unchanged default gate.</p>
 <p><strong>Does it pass its own pass?</strong> <a href="https://github.com/conorbronsdon/avoid-ai-writing/blob/main/PROOF.md"><code>PROOF.md</code></a> scores this repo's
 documentation with this repo's detector and publishes the result, including two
 defects the scan found in our own work. <code>npm run self-scan</code> reproduces it, and
@@ -1097,7 +1101,7 @@ guardrails first.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 33.5K</div>
+        <div class="stars">★ 33.6K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/wondelai/skills">
@@ -1105,7 +1109,7 @@ guardrails first.</p>
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 373</div>
+        <div class="stars">★ 374</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
