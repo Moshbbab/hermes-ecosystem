@@ -4,15 +4,13 @@
 
 Hermes includes NeMo Relay as a normal runtime dependency on platforms for which Relay publishes a native wheel. The shared-metrics integration is built into Hermes and does not require a Hermes observability plugin. Hermes remains importable without Relay on other native targets. Those targets use an explicit reduced-capability no-op host: Hermes execution remains available, while Relay scopes, middleware, plugins, and subscribers are unavailable. The `hermes-agent[nemo-relay]` extra remains as a no-op compatibility alias for existing installation commands.
 
-> \[!WARNING\] This removes the Hermes `observability/nemo_relay` plugin. Existing users must remove `observability/nemo_relay` (or its legacy `nemo_relay` alias) from `plugins.enabled` and move exporter configuration into a Relay `plugins.toml` selected with `HERMES_NEMO_RELAY_PLUGINS_TOML`. The legacy `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables no longer activate exporters. Without the new variable, Hermes does not run Relay plugin discovery, configuration layering, middleware, or exporters.
+> \[!WARNING\] This removes the Hermes `observability/nemo_relay` plugin. Existing users must remove `observability/nemo_relay` (or its legacy `nemo_relay` alias) from `plugins.enabled` and move exporter configuration into a Relay `plugins.toml`. `HERMES_NEMO_RELAY_PLUGINS_TOML` can select an explicit file, and `hermes update` or `hermes migrate relay` creates one when migrating legacy `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` settings. Those legacy variables no longer configure Relay exporters themselves.
 
-Hermes requires NeMo Relay 0.8.3 or later within the 0.8 release line. That line provides the provider-codec and canonical tool-result contracts Hermes uses for managed provider and tool calls.
+On supported platforms, Hermes requires NeMo Relay 0.9 for managed provider and tool calls.
 
 ## Runtime Dependency and Data Boundary
 
-Hermes installs the platform-specific `nemo-relay` native wheel from the bounded `>=0.8.3,<0.9` dependency range. The published package is built from the [NVIDIA NeMo Relay repository](https://github.com/NVIDIA/NeMo-Relay). Unsupported platforms use the explicit no-op runtime described above rather than downloading a different implementation.
-
-Operator-supplied typed native plugins must be rebuilt for Relay 0.8. `grpc-v1` workers must be regenerated and rebuilt when they use tool callbacks, tool execution intercepts, or manual tool-end APIs.
+Hermes installs the platform-specific `nemo-relay` native wheel from the bounded `>=0.9,<0.10` dependency range. The published package is built from the [NVIDIA NeMo Relay repository](https://github.com/NVIDIA/NeMo-Relay). Unsupported platforms use the explicit no-op runtime described above rather than downloading a different implementation.
 
 When Relay managed execution is active, the provider request and response pass through that native module in the Hermes process so configured interceptors can operate on the real call. This is separate from the shared-metrics data contract. Shared-metrics mode installs no rich-observability network exporter, and its subscriber accepts only the versioned, allowlisted projection described below. The opt-in package sender described in Appendix A is the only outbound path, it transmits nothing unless the user enables both `enabled` and `send`, and it sends whole packages rather than live spans. Enabling a separately configured rich-observability or dynamic plugin can create a different data path and requires its own policy review.
 
@@ -26,7 +24,29 @@ telemetry:
 
 This choice is read from the profile's own `config.yaml`. A machine-managed configuration overlay cannot enable or disable shared metrics on the profile's behalf.
 
-Relay plugin activation is owned by the native runtime and remains explicitly opt-in. Set `HERMES_NEMO_RELAY_PLUGINS_TOML` to a selected `plugins.toml` to activate configured middleware, exporters, or dynamic plugins. When the variable is unset, Hermes does not invoke Relay's plugin initializer, so Relay does not perform plugin configuration discovery or layering. When it is set and the selected file loads successfully, Relay discovers supported user and system `plugins.toml` files and layers the selected static configuration over them. Repository-local `.nemo-relay/plugins.toml` files are ignored. Dynamic `[[plugins.dynamic]]` records are loaded from the selected file only. If the selected file cannot be loaded, Hermes reports the error and does not invoke Relay initialization or fall back to ambient discovery.
+Hermes uses Relay's normal process-wide plugin discovery. Relay reads these files, lowest precedence first:
+
+Layer
+
+Linux and macOS
+
+Windows
+
+User
+
+`$XDG_CONFIG_HOME/nemo-relay/plugins.toml`, or `~/.config/nemo-relay/plugins.toml`
+
+`%USERPROFILE%\.config\nemo-relay\plugins.toml` (`XDG_CONFIG_HOME` and then `HOME` take precedence when set)
+
+System
+
+`/etc/nemo-relay/plugins.toml`
+
+`%ProgramData%\nemo-relay\plugins.toml`
+
+`HERMES_NEMO_RELAY_PLUGINS_TOML` replaces the user file with an explicit file; the system file still applies above it. Repository-local configuration is ignored. If an explicitly selected file cannot be loaded, Hermes reports the error and continues without Relay plugins rather than falling back to another configuration.
+
+Run `hermes doctor` to see which files apply. Its **NeMo Relay Plugins** section lists each file Relay resolves, whether any plugin is enabled, and any problem Relay reports, without loading plugin code.
 
 ## Session-Span Segmentation for Continuous Sessions
 
@@ -68,10 +88,10 @@ The working directory is Relay scope input, so it is visible to every enabled Re
 
 ## Process-Wide Plugin Policy and Profile Isolation
 
-Relay plugin configuration is a process-level deployment choice, not a Hermes profile setting. The first hosted profile triggers lazy initialization, and every additional profile hosted by that Hermes process shares the resulting static middleware, dynamic plugins, subscribers, exporters, and guardrail policy. After initialization succeeds, Hermes logs:
+Relay plugin configuration is a process-level deployment choice, not a Hermes profile setting. The first hosted profile triggers lazy initialization, and every additional profile hosted by that Hermes process shares the resulting static middleware, dynamic plugins, subscribers, exporters, and guardrail policy. After initialization succeeds, Hermes logs the files it loaded:
 
 ```
-Relay plugins are active process-wide and apply to all profiles hosted by this Hermes process.
+The Relay plugin host is active process-wide and applies to all profiles hosted by this Hermes process. Configuration files: /home/user/.config/nemo-relay/plugins.toml; /etc/nemo-relay/plugins.toml
 ```
 
 Profile scopes still preserve causal isolation inside that shared policy. ATIF groups events by their top-level Agent scope, so simultaneous profile sessions produce separate trajectories rather than one mixed trajectory. ATOF and other global subscribers observe events from every hosted profile. Static and dynamic middleware likewise runs for managed calls from every profile.

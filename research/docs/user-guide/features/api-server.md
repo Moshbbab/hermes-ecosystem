@@ -527,7 +527,7 @@ Delete a session
 
 `/api/sessions/{id}/messages`
 
-Message history for a session. `inline_images=false` renders image attachments as `[image]` placeholders instead of inline data URIs — the transcript travels in kilobytes, for clients reading over a network
+Message history for a session. `include_compacted=true` also returns the turns a context compaction archived (default: live transcript only). `inline_images=false` renders image attachments as `[image]` placeholders instead of inline data URIs — the transcript travels in kilobytes, for clients reading over a network
 
 `POST`
 

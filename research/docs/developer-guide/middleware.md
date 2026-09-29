@@ -241,7 +241,7 @@ def annotate_tool_execution(**kwargs):
 
 Execution middleware may call `next_call(modified_args)` to pass a changed payload to later middleware and the base tool dispatcher.
 
-Plugin-specific examples should live with the plugin that owns the behavior. NeMo Relay execution middleware is installed through an explicitly selected Relay `plugins.toml`; see [Relay shared metrics](/docs/developer-guide/relay-shared-metrics).
+Plugin-specific examples should live with the plugin that owns the behavior. NeMo Relay execution middleware is installed through Relay's discovered user and system configuration, or through an explicit `plugins.toml` selected with `HERMES_NEMO_RELAY_PLUGINS_TOML`; see [Relay shared metrics](/docs/developer-guide/relay-shared-metrics).
 
 ## Safety Notes
 
