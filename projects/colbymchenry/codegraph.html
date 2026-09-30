@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It uses a…">
+<meta name="description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It uses a…">
+<meta property="og:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It uses a…">
+<meta name="twitter:description" content="CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+CoPilot%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+t&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It uses a Rust-powered kernel to perform cross-file resolution and maintains a pre-indexed local directory to support agent workflows.",
+  "description": "CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a Rust-powered kernel and maintains a pre-indexed directory that automatically updates as files are modified.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-09-29T22:05:41.000Z",
+  "dateModified": "2026-09-30T05:34:53.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 72380
+    "userInteractionCount": 72416
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>C</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-29</span>
+    <span><span class="meta-label">updated</span>2026-09-30</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It uses a Rust-powered kernel to perform cross-file resolution and maintains a pre-indexed local directory to support agent workflows.</p>
+    <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a Rust-powered kernel and maintains a pre-indexed directory that automatically updates as files are modified.</p>
     <ul class="summary-highlights">
-      <li>Operates 100% locally with a Rust-powered kernel.</li>
-      <li>Auto-configures MCP server integration for multiple AI coding agents.</li>
-      <li>Provides automated background indexing and synchronization of project files.</li>
+      <li>Operates 100% locally with no Node.js runtime requirement.</li>
+      <li>Provides an MCP server for integration with various coding agents.</li>
+      <li>Supports cross-file resolution for TypeScript, JavaScript, Python, Go, and Rust.</li>
     </ul>
   </div>
 </section>
@@ -602,7 +602,7 @@ codegraph init
 </tr>
 <tr>
 <td><strong>NestJS</strong></td>
-<td><code>@Controller</code> + <code>@Get/@Post/...</code>, GraphQL <code>@Resolver</code> + <code>@Query/@Mutation</code>, <code>@MessagePattern</code>/<code>@EventPattern</code>, <code>@SubscribeMessage</code></td>
+<td><code>@Controller</code> + <code>@Get/@Post/...</code> (with <code>RouterModule</code> prefixes, <code>setGlobalPrefix</code> and URI versioning), GraphQL <code>@Resolver</code> + <code>@Query/@Mutation</code>, <code>@MessagePattern</code>/<code>@EventPattern</code>, <code>@SubscribeMessage</code></td>
 </tr>
 <tr>
 <td><strong>Laravel</strong></td>
@@ -684,6 +684,11 @@ codegraph init
 <td><strong>SvelteKit</strong></td>
 <td><code>src/routes/**/+page.svelte</code> (<code>[slug]</code> → <code>:slug</code>, <code>[[opt]]</code> → <code>:opt?</code>), joined to the <code>+page.server.js</code> beside it so a loader's guard belongs to its page</td>
 <td><code>goto('/x')</code>, <code>redirect(status, '/x')</code> from a load or form action, and the plain <code>&lt;a href&gt;</code> that is a link in a SvelteKit app</td>
+</tr>
+<tr>
+<td><strong>Angular</strong></td>
+<td><code>Routes</code> arrays (<code>RouterModule.forRoot</code> / <code>forChild</code>, <code>provideRouter</code>, a routes file's default export) with <code>component</code> or a lazy <code>loadComponent</code>; <code>children</code> and lazy <code>loadChildren</code> (an NgModule's through its routing module) joined into full paths; paths written as route constants or <code>$localize</code> strings; a route with children is a layout around the screens inside it</td>
+<td><code>router.navigate([...])</code>, <code>navigateByUrl</code>, a guard's <code>createUrlTree</code> / <code>parseUrl</code> — a command array, a route constant, or a component property holding one — <code>routerLink</code> / <code>[routerLink]</code> in the component's template, and <code>redirectTo</code>. Each template's child components (<code>&lt;app-foo&gt;</code>) are linked to the component that renders them</td>
 </tr>
 </tbody></table>
 <p>In a repository holding several apps, each app's routes are matched only against navigation written inside that app.</p>
@@ -1071,19 +1076,8 @@ extension; there's nothing to wire up per language. The one optional file is for
 mapping <a href="#custom-file-extensions">custom file extensions</a>.</p>
 <p>What it skips out of the box:</p>
 <ul>
-<li><strong>Dependency, build, and cache directories</strong> — <code>node_modules</code>, <code>vendor</code>,
-<code>dist</code>, <code>build</code>, <code>target</code>, <code>.venv</code>, <code>Pods</code>, <code>.next</code>, and the like across every
-<a href="#supported-languages">supported stack</a> — so the graph is your code, not
-third-party noise. This holds even with no <code>.gitignore</code>.</li>
-<li><strong>Anything in your <code>.gitignore</code></strong> — honored in git repos via git, and in
-non-git projects by reading <code>.gitignore</code> directly (root and nested).</li>
-<li><strong>Files larger than 1 MB</strong> — generated bundles, minified JS, vendored blobs.</li>
+<li><strong>Dependency, build, and cache directories</strong> — <code>node_modules</code>, `</li>
 </ul>
-<p>To keep something else out, add it to <code>.gitignore</code>. To pull a default-excluded
-directory back <strong>in</strong> (say you really do want a vendored dependency indexed),
-add a negation — <code>!vendor/</code>. The defaults apply uniformly, so committing a
-dependency or build directory doesn't force it into the graph; the <code>.gitignore</code>
-negation is the explici</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 
@@ -1102,7 +1096,7 @@ negation is the explici</p>
         <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
       </a>
       <a class="related-row" href="/projects/liaohch3/claude-tap">
-        <div class="stars">★ 3.2K</div>
+        <div class="stars">★ 3.3K</div>
         <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
       </a>
       <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
