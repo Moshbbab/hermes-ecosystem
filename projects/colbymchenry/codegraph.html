@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-09-30T05:34:53.000Z",
+  "dateModified": "2026-09-30T12:44:06.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 72416
+    "userInteractionCount": 72450
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,7 +120,7 @@
   <p class="project-desc">Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local</p>
 
   <div class="meta-row">
-    <span class="stars">★ 72.4K</span>
+    <span class="stars">★ 72.5K</span>
     <span><span class="meta-label">lang</span>C</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -143,9 +143,9 @@
   <div>
     <p class="summary-text">CodeGraph is a local semantic code intelligence tool that builds a structural graph of a codebase to provide context for AI coding agents. It features a Rust-powered kernel and maintains a pre-indexed directory that automatically updates as files are modified.</p>
     <ul class="summary-highlights">
-      <li>Operates 100% locally with no Node.js runtime requirement.</li>
-      <li>Provides an MCP server for integration with various coding agents.</li>
-      <li>Supports cross-file resolution for TypeScript, JavaScript, Python, Go, and Rust.</li>
+      <li>Operates 100% locally with a Rust-powered kernel.</li>
+      <li>Supports auto-syncing to update the index on every file change.</li>
+      <li>Integrates with agents via a built-in MCP server.</li>
     </ul>
   </div>
 </section>
@@ -657,7 +657,7 @@ codegraph init
 </thead>
 <tbody><tr>
 <td><strong>Expo Router</strong></td>
-<td>Every screen file under <code>app/</code> (<code>app/item/[id].tsx</code> → <code>/item/[id]</code>, groups stripped), bound to its default-export component</td>
+<td>Every screen file under <code>app/</code> (<code>app/item/[id].tsx</code> → <code>/item/[id]</code>, groups stripped), bound to its default-export component; <code>+api</code> files are endpoints (<code>GET /hello</code>) bound to their handlers</td>
 <td><code>router.push</code> / <code>replace</code> / <code>navigate</code>, template hrefs, <code>{ pathname }</code> objects, and a helper's returned href</td>
 </tr>
 <tr>
@@ -668,7 +668,7 @@ codegraph init
 <tr>
 <td><strong>React Router</strong></td>
 <td><code>&lt;Route path component/element&gt;</code> (v5 and v6) and <code>createBrowserRouter([{ path, element }])</code></td>
-<td><code>history.push</code> / <code>replace</code>, <code>useNavigate</code>'s <code>navigate</code>, a loader's <code>redirect</code>, <code>&lt;Link to&gt;</code> / <code>&lt;NavLink to&gt;</code> / <code>&lt;Navigate to&gt;</code> / react-router-bootstrap's <code>&lt;LinkContainer to&gt;</code></td>
+<td><code>history.push</code> / <code>replace</code>, <code>useNavigate</code>'s <code>navigate</code>, a loader's <code>redirect</code>, <code>&lt;Link to&gt;</code> / <code>&lt;NavLink to&gt;</code> / <code>&lt;Navigate to&gt;</code> / v5's <code>&lt;Redirect to&gt;</code> / react-router-bootstrap's <code>&lt;LinkContainer to&gt;</code>, and a <code>styled(Link)</code> wrapper</td>
 </tr>
 <tr>
 <td><strong>TanStack Router</strong></td>
@@ -677,12 +677,12 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Vue Router</strong> / <strong>Nuxt</strong></td>
-<td><code>createRouter({ routes: [...] })</code> with the view each entry names, plus Nuxt <code>pages/</code> file-based routes, <code>server/api/</code> endpoints and route middleware</td>
-<td><code>router.push</code> / <code>replace</code>, <code>$router.push</code>, Nuxt's <code>navigateTo</code>, <code>&lt;router-link&gt;</code> / <code>&lt;RouterLink&gt;</code> / <code>&lt;NuxtLink&gt;</code> — <strong>by route name</strong> (<code>push({ name: 'profile' })</code>) as well as by path</td>
+<td><code>createRouter({ routes: [...] })</code> / <code>new Router(...)</code> and the route tables it's given (<code>export const constantRoutes = [...]</code>, per-module route files), with the view each entry names — a lazy <code>() =&gt; import(…)</code> bound to its file — and <code>children</code> joined onto their parent's path, the parent being the layout around them; plus Nuxt <code>pages/</code> file-based routes, <code>server/api/</code> endpoints and route middleware</td>
+<td><code>router.push</code> / <code>replace</code>, <code>this.$router.push</code>, Nuxt's <code>navigateTo</code>, <code>&lt;router-link&gt;</code> / <code>&lt;RouterLink&gt;</code> / <code>&lt;NuxtLink&gt;</code> — <strong>by route name</strong> (<code>push({ name: 'profile' })</code>) as well as by path</td>
 </tr>
 <tr>
 <td><strong>SvelteKit</strong></td>
-<td><code>src/routes/**/+page.svelte</code> (<code>[slug]</code> → <code>:slug</code>, <code>[[opt]]</code> → <code>:opt?</code>), joined to the <code>+page.server.js</code> beside it so a loader's guard belongs to its page</td>
+<td><code>src/routes/**/+page.svelte</code> (<code>[slug]</code> → <code>:slug</code>, <code>[[opt]]</code> → <code>:opt?</code>, <code>[id=matcher]</code> → <code>:id</code>, <code>(group)</code> folders stripped), joined to the <code>+page.server.js</code> beside it so a loader's guard belongs to its page</td>
 <td><code>goto('/x')</code>, <code>redirect(status, '/x')</code> from a load or form action, and the plain <code>&lt;a href&gt;</code> that is a link in a SvelteKit app</td>
 </tr>
 <tr>
@@ -736,9 +736,9 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Expo Modules</strong></td>
-<td>JS <code>requireNativeModule('X').fn(...)</code></td>
+<td>JS <code>requireNativeModule('X').fn(...)</code>, directly or through a binding (<code>export default requireNativeModule&lt;T&gt;('X')</code>)</td>
 <td>Swift / Kotlin <code>Module { Name("X"); AsyncFunction("fn") { ... } }</code></td>
-<td>Parses the Expo DSL literals; synthetic method nodes resolve via existing name-match</td>
+<td>Parses the Expo DSL literals into method nodes; a call on a binding resolves to module <code>X</code>'s <code>fn</code> on both platforms, else to the method on the binding's declared type</td>
 </tr>
 <tr>
 <td><strong>Fabric view components</strong></td>
@@ -748,9 +748,9 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Legacy Paper view managers</strong></td>
-<td>JSX <code>&lt;MyView prop={v}/&gt;</code></td>
+<td>JSX <code>&lt;MyView prop={v}/&gt;</code>, through a <code>requireNativeComponent('X')</code> module</td>
 <td>ObjC <code>RCT_EXPORT_VIEW_PROPERTY</code> · Java/Kotlin <code>@ReactProp</code></td>
-<td>Same as Fabric — Paper-era declarations also produce <code>component</code> + <code>property</code> nodes</td>
+<td>Same as Fabric — <code>requireNativeComponent('X')</code> is a JS <code>component</code> node, and Paper-era declarations also produce <code>component</code> + <code>property</code> nodes</td>
 </tr>
 </tbody></table>
 <p><strong>Validated on real codebases</strong> (small + medium + large for each bridge):</p>
@@ -794,7 +794,7 @@ codegraph init
 <td><a href="https://github.com/Shopify/react-native-skia">react-native-skia</a></td>
 </tr>
 </tbody></table>
-<p>Each bridge emits edges tagged <code>provenance:'heuristic'</code> with <code>metadata.synthesizedBy:</code> set to a stable channel name (e.g. <code>swift-objc-bridge</code>, <code>rn-event-channel</code>, <code>fabric-native-impl</code>, <code>expo-module-extract</code>), so the agent can tell at a glance how a hop got into the graph.</p>
+<p>Every bridge hop says how it got into the graph. A hop matched by a bridge resolver carries <code>metadata.resolvedBy: 'framework'</code> and <code>metadata.framework</code> naming the resolver (<code>swift-objc-bridge</code>, <code>react-native-bridge</code>, <code>expo-modules-js</code>, <code>fabric-view</code>). A synthesized channel is tagged <code>provenance:'heuristic'</code> with <code>metadata.synthesizedBy</code> (<code>rn-event-channel</code>, <code>fabric-native-impl</code>).</p>
 <hr>
 <h3>Quick Start</h3>
 <h4>1. Run the Installer</h4>
@@ -1062,21 +1062,7 @@ that drive the graph directly: <code>DatabaseConnection</code>, <code>QueryBuild
 <li>Install from npm (<code>npm i @colbymchenry/codegraph</code>) so the matching
 per-platform package — which carries the compiled library and its
 dependencies — is fetched alongside the shim.</li>
-<li>The API runs on <strong>your</strong> runtime, so it needs <strong>Node 22.5+</strong> for the built-in
-<code>node:sqlite</code> (Electron qualifies when its bundled Node is 22.5+). The CLI and
-MCP server are unaffected — they run on the self-contained bundled runtime.</li>
-<li>TypeScript types ship with the package. As with any Node-targeting library,
-keep <code>@types/node</code> available and <code>skipLibCheck: true</code> (the common default).</li>
-</ul>
-<hr>
-<h3>Configuration</h3>
-<p>Next to none — CodeGraph is <strong>zero-config by default</strong>, with nothing to write or
-keep in sync to get started. Language support is automatic from the file
-extension; there's nothing to wire up per language. The one optional file is for
-mapping <a href="#custom-file-extensions">custom file extensions</a>.</p>
-<p>What it skips out of the box:</p>
-<ul>
-<li><strong>Dependency, build, and cache directories</strong> — <code>node_modules</code>, `</li>
+<li>Th</li>
 </ul>
 <hr>
 <p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
