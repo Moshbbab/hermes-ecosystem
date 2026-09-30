@@ -162,6 +162,12 @@ python scripts/release.py --channel pm-preview --build-commit my-branch --remote
 python scripts/release.py --channels --remote origin
 ```
 
+By default a preview channel installs as its own side-by-side app (`Hermes NAME`, its own package ID). To test an exact commit as the regular app instead, create the channel with `--branding stable`: it copies the published stable channel's name, icon and package ID, so the build installs over the official app, shares its desktop settings, and later updates follow the channel. Branding is fixed when the channel is created; repeat the flag on every dispatch of that channel and use a new channel name to change it. `--branding` needs `--channel`, since a plain one-off commit build always carries its `Hermes Agent <sha>` identity.
+
+```
+python scripts/release.py --channel my-commit --branding stable --build-commit SHA --remote origin --publish
+```
+
 Disposable R2 scoping is opt-in, for test runs only. Dispatch the desktop workflow with `disposable_channel` and `build_commit` to allocate a namespace under `ci-disposable/<repository-id>/<run-id>/`, then use the exact scoped build command from its summary. For local administration of that allocation, carry its `R2_DISPOSABLE_RUN` and `GITHUB_REPOSITORY_ID` in the command environment, with the configured public URL still at the unscoped root. These are test-run inputs, not persistent application settings; the repository ID is checked against the selected remote before credentials are read, so a scoped namespace still belongs to exactly one repository.
 
 The first publishing invocation creates the channel (during CI allocation), and later invocations retain its identity. Requests and artifacts live under `releases/channel-builds/BUILD_ID/`; the mutable pointer is `releases/channels/NAME.json`. A failed build leaves its previous head intact. Conditional writes reject stale publication and permanently retired channels. Retrying re-dispatches `--channel NAME --build-commit SHA --publish`, which allocates a fresh sequence slot in CI; there is no separate resume command.
