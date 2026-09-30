@@ -1858,7 +1858,7 @@ Print the report locally instead of uploading.
 
 Disable upload-time secret redaction. By default, uploads are redacted.
 
-The report includes system info (OS, Python version, Hermes version), recent agent, gateway, GUI/dashboard, and desktop logs (512 KB limit per file), and redacted API key status. By default, uploads are redacted so secrets are not included; this covers the system dump (including config values such as `fallback_providers` entries and credentials in their URLs) as well as the logs, and the gateway `/debug` report too.
+The report includes system info (OS, Python version, Hermes version), recent agent, gateway, GUI/dashboard, and desktop logs (512 KB limit per file), plus the update and Desktop update hand-off logs when present, and redacted API key status. By default, uploads are redacted so secrets are not included; this covers the system dump (including config values such as `fallback_providers` entries and credentials in their URLs) as well as the logs, and the gateway `/debug` report too.
 
 Default uploads use public paste services tried in order: paste.rs, dpaste.com. `--nous` uploads the same debug bundle to private Nous diagnostics storage instead; the returned viewer link is for the Nous team and auto-deletes after 14 days.
 
@@ -2101,6 +2101,18 @@ Electron desktop app — boot, backend spawn output, and recent Python traceback
 
 stderr of every stdio MCP server, one `starting MCP server` banner per launch
 
+`update`
+
+`update.log`
+
+Full stdout/stderr mirror of `hermes update` runs (append-only) — the root cause of update/dependency failures
+
+`handoff`
+
+`desktop-update-handoff.log`
+
+Desktop-driven update hand-off stages, including the Desktop rebuild retry output
+
 ### Options
 
 Option
@@ -2109,7 +2121,7 @@ Description
 
 `log_name`
 
-Which log to view: `agent` (default), `errors`, `gateway`, or `list` to show available files with sizes.
+Which log to view: `agent` (default), `errors`, `gateway`, `gui`, `desktop`, `update`, `handoff`, or `list` to show available files with sizes.
 
 `-n`, `--lines <N>`
 
