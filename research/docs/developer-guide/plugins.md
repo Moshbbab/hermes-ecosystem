@@ -140,6 +140,8 @@ The compatibility rules are:
 -   **Provider interfaces grow through defaults.** New provider methods have a default implementation. New callback context is optional and forwarded only when signature inspection shows that a provider accepts it. Adding an abstract method or an unconditionally forwarded argument requires a migration window rather than a flag-day signature change.
 -   **Version the contract that crosses a boundary.** A capability may carry its own schema version when it defines a wire payload or persisted format (for example, observer payloads or secret-source state). Keep fields additive within that local schema. Persisted plugin state and config must remain readable, or ship an explicit migration; resumed sessions written by the old format must still replay. Do not add version literals to unrelated callback or context values.
 
+The contract covers documented surfaces only. Replacing or wrapping core functions, methods, module attributes or private tables at runtime (assigning `AIAgent.<method>`, `setattr` on a Hermes module, writing into `sys.modules` or a core dict) is not a supported extension point. It breaks whenever the internals move, and it collides with every other plugin patching the same seam. The plugin catalog refuses it at admission (`hermes plugins validate`, `no core override` check). If a public hook you need is missing, open an issue describing it.
+
 ### Deprecation policy
 
 A documented native plugin behavior may be deprecated only with all of the following:
