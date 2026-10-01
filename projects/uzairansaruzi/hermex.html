@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>uzairansaruzi/Hermex — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for AI agents, ensuring…">
+<meta name="description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile control plane for AI agents, keeping compute…">
 <link rel="canonical" href="https://hermesatlas.com/projects/uzairansaruzi/hermex">
 <meta property="og:title" content="uzairansaruzi/Hermex — Hermes Atlas">
-<meta property="og:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for AI agents, ensuring…">
+<meta property="og:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile control plane for AI agents, keeping compute…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/uzairansaruzi/hermex">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="uzairansaruzi/Hermex — Hermes Atlas">
-<meta name="twitter:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for AI agents, ensuring…">
+<meta name="twitter:description" content="Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile control plane for AI agents, keeping compute…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=Hermex&amp;subtitle=Native+iPhone+app+for+your+Hermes+agent&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/uzairansaruzi/hermex#software",
   "name": "Hermex",
-  "description": "Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for AI agents, ensuring that compute tasks, tools, and data remain on the user's own hardware.",
+  "description": "Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile control plane for AI agents, keeping compute and data on the user's own hardware without subscriptions or tracking.",
   "url": "https://hermesatlas.com/projects/uzairansaruzi/hermex",
   "codeRepository": "https://github.com/uzairansaruzi/hermex",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "uzairansaruzi",
     "url": "https://github.com/uzairansaruzi"
   },
-  "dateModified": "2026-10-01T05:33:53.000Z",
+  "dateModified": "2026-10-01T22:50:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1431
+    "userInteractionCount": 1435
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It functions as a mobile control plane for AI agents, ensuring that compute tasks, tools, and data remain on the user's own hardware.</p>
+    <p class="summary-text">Hermex is a native SwiftUI iPhone app designed to control a self-hosted hermes-webui server. It serves as a mobile control plane for AI agents, keeping compute and data on the user's own hardware without subscriptions or tracking.</p>
     <ul class="summary-highlights">
-      <li>Requires iOS 18+ and a self-hosted hermes-webui server.</li>
-      <li>Supports real-time chat streaming with tool-call and thinking details.</li>
-      <li>Provides mobile management for tasks, skills, and server file systems.</li>
+      <li>Native SwiftUI app requiring iOS 18+ and Swift 5.9+.</li>
+      <li>Manages agent tasks, skills, sessions, and workspace files.</li>
+      <li>Supports real-time chat streaming with model and profile switching.</li>
     </ul>
   </div>
 </section>
@@ -216,6 +216,8 @@
 <ul>
 <li><strong>HTTPS via a tunnel or reverse proxy (recommended).</strong> Expose the server through Cloudflare Tunnel or any reverse proxy that terminates real TLS at a hostname you own. Real HTTPS keeps iOS App Transport Security happy with no exceptions. On a publicly reachable hostname the password is your only app-level defense — set a strong one.</li>
 <li><strong>Private HTTPS with Tailscale Serve.</strong> Keep the server password-protected and bound to <code>127.0.0.1:8787</code>, inspect existing Serve/Funnel routes, then add <code>tailscale serve --bg 8787</code> only when HTTPS port 443 at the root path is free. Install Tailscale on the iPhone and connect with the exact <code>https://…ts.net</code> URL reported by <code>tailscale serve status</code>. Direct binding to <code>0.0.0.0</code> over plain HTTP remains a manual fallback, not the default.</li>
+<li><strong>Another private network, such as NetBird.</strong> Install its app on the iPhone, keep it connected, and use the server's name or IP on that network.</li>
+<li><strong>Same Wi-Fi.</strong> On a home network you trust, use the machine's local address and port, such as <code>http://192.168.1.5:8787</code>. The server must listen on that address rather than only <code>127.0.0.1</code>, which exposes it to every device on the network, so keep the password strong.</li>
 <li><strong>Simulator-only local testing</strong> can use <code>http://localhost:8787</code> when the server runs on the same Mac.</li>
 </ul>
 <h4>Troubleshooting the connection</h4>
@@ -240,7 +242,7 @@
 <p>Local validation defaults for XcodeBuildMCP users live in <code>.xcodebuildmcp/config.yaml</code>; the standard post-change flow is in <a href="https://github.com/uzairansaruzi/hermex/blob/main/DEVELOPMENT.md"><code>DEVELOPMENT.md</code></a>.</p>
 <h3>Server compatibility</h3>
 <p>The app is developed and tested against the <code>hermes-webui</code> commit pinned in <a href="UPSTREAM_TESTED_SHA"><code>UPSTREAM_TESTED_SHA</code></a>. Upstream does not yet guarantee API stability (its README declares version skew unsupported pending their stable-API work), so newer or older server versions may break individual features — please include your server version in bug reports. The app decodes tolerantly (unknown fields never crash it) and endpoint shapes are verified against upstream source, never invented.</p>
-<p>Bot Mode's direct-Hermes connection has its own pin, <a href="HERMES_AGENT_TESTED_SHA"><code>HERMES_AGENT_TESTED_SHA</code></a>: line 1 is the tested <code>hermes-agent</code> commit and line 2 the release string its <code>/api/status</code> reports. When a host reports a different release, the Bot connection screen shows a one-line "Untested Hermes version" note. It never blocks signing in.</p>
+<p>Bot Mode's direct-Hermes connection has its own pin, <a href="HERMES_AGENT_TESTED_SHA"><code>HERMES_AGENT_TESTED_SHA</code></a>: line 1 is the tested <code>hermes-agent</code> commit and line 2 the release string its <code>/api/status</code> reports. Hermex refuses a host older than Hermes 0.21.3, the first release with the gateway contract it is built on, and asks you to update Hermes; 0.21.3 and later connect without a warning.</p>
 <h3>Documentation map</h3>
 <ul>
 <li><a href="https://github.com/uzairansaruzi/hermex/blob/main/AGENTS.md"><code>AGENTS.md</code></a>: the working agreement — product boundaries, server-contract rules, locked dependencies, verification, and PR flow.</li>
