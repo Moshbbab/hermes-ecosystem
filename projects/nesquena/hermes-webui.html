@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
+<meta name="description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, providing parity with its command-line interface. Built using Python and vanilla…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
+<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, providing parity with its command-line interface. Built using Python and vanilla…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It…">
+<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, providing parity with its command-line interface. Built using Python and vanilla…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It provides parity with the CLI experience, allowing users to interact with the agent's persistent memory, workspace files, and session tools through a three-panel browser layout.",
+  "description": "Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, providing parity with its command-line interface. Built using Python and vanilla JavaScript without frameworks or build steps, it allows users to manage sessions, browse workspace files, and monitor token usage through a three-panel browser layout.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-10-01T08:38:27.000Z",
+  "dateModified": "2026-10-01T13:20:18.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 18710
+    "userInteractionCount": 18715
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, built using Python and vanilla JavaScript with no build step or framework. It provides parity with the CLI experience, allowing users to interact with the agent's persistent memory, workspace files, and session tools through a three-panel browser layout.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed web interface for the Hermes Agent, providing parity with its command-line interface. Built using Python and vanilla JavaScript without frameworks or build steps, it allows users to manage sessions, browse workspace files, and monitor token usage through a three-panel browser layout.</p>
     <ul class="summary-highlights">
-      <li>Provides 1:1 parity with Hermes CLI features in a web interface.</li>
-      <li>Built with Python and vanilla JS without bundlers or frameworks.</li>
-      <li>Includes a three-panel layout for chat, sessions, and workspace browsing.</li>
+      <li>Provides 1:1 parity with the Hermes CLI experience.</li>
+      <li>Built with Python and vanilla JavaScript without frameworks or bundlers.</li>
+      <li>Features a three-panel layout for sessions, chat, and file browsing.</li>
     </ul>
   </div>
 </section>
@@ -513,6 +513,58 @@ If an AI assistant is helping with install, reinstall, bootstrap, provider setup
 <li>Arrow keys navigate, Tab/Enter select, Escape closes</li>
 <li>Unrecognized commands pass through to the agent</li>
 </ul>
+<h5>Model aliases in <code>/model</code></h5>
+<p><code>/model &lt;alias&gt;</code> accepts any alias configured for the profile, in either of Hermes's two formats:</p>
+<pre><code class="language-yaml">model_aliases:                     # canonical
+  sol:
+    model: gpt-5.6-sol
+    provider: openai-codex
+
+model:
+  provider: openrouter
+  aliases:                         # legacy
+    sol: openai-codex/gpt-5.6-sol  # provider-qualified
+    fast: gpt-4                    # unqualified
+</code></pre>
+<p>Alias resolution follows the format of the alias:</p>
+<ul>
+<li>A <strong>canonical <code>model_aliases</code> entry</strong> and a <strong>provider-qualified legacy target</strong> name their own
+route. The target is authoritative, so <code>/model sol</code> selects that provider even when a
+same-named model exists on another provider. A canonical entry also takes precedence over a
+legacy entry with the same name.</li>
+<li>An <strong>unqualified legacy target</strong> names only a model, so it keeps the ordinary lookup: the
+active provider first, then the normal fuzzy match. This is the behavior <code>/model</code> had before,
+and it is unchanged.</li>
+</ul>
+<p>Aliases that carry their own endpoint or credentials are resolved server-side; the browser only
+receives the model, the provider id, and an opaque route id, never a base URL or key.
+On the in-process backend, an alias with its own <code>base_url</code> follows Hermes's direct-alias
+credential rules: its declared <code>api_key</code>/<code>key_env</code> wins; otherwise only a credential resolved
+for that endpoint's own host is sent (for example an OpenRouter key to <code>openrouter.ai</code>), never
+the provider label's key to an unrelated host. The alias's provider still selects its wire protocol.</p>
+<p>Gateway and runner chat support <strong>provider-only aliases</strong> by sending the resolved target model
+and provider, not the alias name: their runtime does not share WebUI's alias registry. Aliases
+that explicitly declare <code>base_url</code>, <code>api_key</code>, or <code>key_env</code> need the in-process backend. External
+chat starts, wakeups, Gateway regeneration, and Gateway goal kickoffs reject them with HTTP 400 and
+<code>reason: model_alias_requires_in_process_backend</code> before dispatch; a new Gateway goal is not
+set. Runner regeneration remains unsupported (HTTP 409), regardless of alias selection.
+Ambient credentials resolved for a provider-only alias do not count as alias overrides.
+The session retains its target model and profile-bound opaque route id, including Gateway
+success/error writeback, so a later backend switch can still resolve the original alias.</p>
+<p>A session stores that opaque route id, not the endpoint, so an alias that is later deleted or renamed
+leaves the session pointing at a route nothing owns. That send fails closed — on every backend, the
+in-process worker, the gateway and the runner alike — with a controlled "model alias unavailable"
+error instead of quietly falling back to another provider; pick the model again to store a live route.</p>
+<p>With <code>HERMES_WEBUI_RUNTIME_ADAPTER=runner-local</code>, <code>/goal &lt;text&gt;</code> returns HTTP 501
+(<code>status: unsupported</code>) without changing an existing goal or starting a run. The
+runner contract does not yet provide atomic goal replacement and kickoff; WebUI
+never substitutes local goal execution. <code>/goal status</code>, <code>pause</code>, <code>resume</code>, and
+<code>clear</code> delegate to the runner when supported. Legacy-direct and legacy-journal
+goal kickoff behavior is unchanged for supported routes. Normal runner chat supports provider-only model aliases.</p>
+<p>Server-initiated turns retain the pre-session stale-Agent-runtime barrier. It
+runs before loading the session; named-profile alias and Gateway routing happen
+only after admission. A stale default local runtime can therefore reject a wakeup
+before the session's named-profile Gateway ownership is known.</p>
 <h4>Panels</h4>
 <ul>
 <li><strong>Chat</strong> -- session list, search, pin, archive, projects, new conversation</li>
@@ -1036,41 +1088,11 @@ Full design notes and the endpoint catalog are in <a href="https://github.com/ne
 </tr>
 <tr>
 <td>7</td>
-<td><a href="https://github.com/dso2ng">@dso2ng</a></td>
-<td align="right">43</td>
-<td><code>v0.50.227</code> → <code>v0.51.578</code></td>
-</tr>
-<tr>
-<td>8</td>
-<td><a href="https://github.com/starship-s">@starship-s</a></td>
-<td align="right">28</td>
-<td><code>v0.50.123</code> → <code>v0.51.763</code></td>
-</tr>
-<tr>
-<td>9</td>
-<td><a href="https://github.com/Sanjays2402">@Sanjays2402</a></td>
-<td align="right">27</td>
-<td><code>v0.50.292</code> → <code>v0.51.484</code></td>
-</tr>
-<tr>
-<td>10</td>
-<td><a href="https://github.com/allenliang2022">@allenliang2022</a></td>
-<td align="right">24</td>
-<td><code>v0.51.185</code> → <code>v0.51.869</code></td>
+<td>[@dso2ng](htt</td>
+<td align="right"></td>
+<td></td>
 </tr>
 </tbody></table>
-<p>See <a href="https://github.com/nesquena/hermes-webui/blob/main/CONTRIBUTORS.md"><code>CONTRIBUTORS.md</code></a> for the full ranked list of all 326 contributors — the 3+ PR tables, the 1–2 PR roll, and the special-thanks notes for design and architectural contributions.</p>
-
-
-<h4>Notable contributions</h4>
-<p><strong><a href="https://github.com/franksong2702">@franksong2702</a></strong> — Most prolific external contributor (180 PRs, <code>v0.49.3</code> → <code>v0.51.384</code>)
-Across the longest tenure of any external contributor: the session title guard (#301), breadcrumb workspace navigation (#302), embedded workspace terminal (#1099), worktree-backed session creation (#2053), onboarding documentation (#2052), composer footer container queries, streaming-session sidebar exemption (#1327), session sidecar repair, cron output preservation (#1295), profile default workspace persistence, manual <code>/compress</code> async start/status endpoints (#2128), worktree status surface (#2109) + guarded remove (#2156) for the lifecycle umbrella #2057, session post-render dedup (#2166), native-WebUI fast path (#2170), tail-window response trim (#2171), stale-stream guard extension (#2158), CSP report collector (#2160), and a long tail of polish across mobile/responsive, the session sidebar, and the workspace state machine.</p>
-<p><strong><a href="https://github.com/Michaelyklam">@Michaelyklam</a></strong> — Most prolific contributor of recent releases (118 PRs, <code>v0.50.240</code> → <code>v0.51.198</code>)
-Production Docker hardening (#1921, drops sudo-capable staging user), profile-scoped skills endpoints (#1903), gateway PID resolution under profile-scoped HERMES_HOME (#1901), profile-aware AIAgent cache (#1898/#1904), backslash LaTeX delimiters (#1848), Codex quota error surfacing (#1770), shell-route HTML 503 (#1836), stale Kanban client recovery (#1828), context auto-compression toast lifetime (#1988), <code>/goal</code> command (#1866), Kanban detail-view scrolling (#1916), CLI session tool metadata preservation (#1778), Traditional Chinese kanban locale backfill (#1979), v0.51.51 mobile Insights bucketing/layout (#2120/#2121), Hermes run adapter RFC (#2105 for #1925), fork-from-here absolute index (#2198 for #2184), opencode-go custom-provider overlap routing (#2204 for #1894).</p>
-<p><strong><a href="https://github.com/rodboev">@rodboev</a></strong> — Windows / cross-platform correctness + test reliability (83 PRs, <code>v0.51.223</code> → <code>v0.51.384</code>)
-A broad, sustained sweep with a strong focus on making the project work outside Linux: the <code>ctl.sh</code> Windows process-tree-kill fix (#3670), the local Windows full-suite signal/orphan-process work, slash-command autocomplete polish, and a long tail of frontend and infrastructure fixes shipped across dozens of release batches.</p>
-<p><strong><a href="https://github.com/bergeouss">@bergeouss</a></strong> — Provider management UI + Docker hardening (70 PRs, <code>v0.48.0</code> → <code>v0.51.385</code>)
-Provider management UI for adding/editing custom providers from Settings, OAuth provider status detection (#1552), two-container Docker setup, profile isolation hardening (per-profile <code>.env</code> secrets), the bulk of what users see when they touch Settings → Providers, Reveal-in-Finder context menu (#1551), gateway status card (#1552), auto-assign session to active project filter (#1550), "What's new?" link in update banner (#1549), OpenRouter free-tier live fetch (#1548), credential pool 401 self-heal (#1553), inline provider chip + group model count in mo</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
