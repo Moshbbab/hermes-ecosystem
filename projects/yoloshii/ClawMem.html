@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yoloshii/ClawMem — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="ClawMem is a local-first memory and context engine that stores agent session data, project documentation, and research in a SQLite vault. It uses a hybrid…">
+<meta name="description" content="ClawMem is a local-first memory layer that provides retrieval-augmented search and context management for AI agents including Claude Code, OpenClaw, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta property="og:description" content="ClawMem is a local-first memory and context engine that stores agent session data, project documentation, and research in a SQLite vault. It uses a hybrid…">
+<meta property="og:description" content="ClawMem is a local-first memory layer that provides retrieval-augmented search and context management for AI agents including Claude Code, OpenClaw, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yoloshii/ClawMem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yoloshii/ClawMem — Hermes Atlas">
-<meta name="twitter:description" content="ClawMem is a local-first memory and context engine that stores agent session data, project documentation, and research in a SQLite vault. It uses a hybrid…">
+<meta name="twitter:description" content="ClawMem is a local-first memory layer that provides retrieval-augmented search and context management for AI agents including Claude Code, OpenClaw, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=ClawMem&amp;subtitle=On-device+memory+layer+for+AI+agents.+Claude+Code%2C+OpenClaw+and+Hermes.+Hooks+%2B+MCP+server+%2B+hybrid+RAG+search.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yoloshii/ClawMem#software",
   "name": "ClawMem",
-  "description": "ClawMem is a local-first memory and context engine that stores agent session data, project documentation, and research in a SQLite vault. It uses a hybrid retrieval architecture combining vector search, BM25, and graph traversal to surface relevant facts and decisions to AI agents via MCP, Claude Code hooks, or plugins.",
+  "description": "ClawMem is a local-first memory layer that provides retrieval-augmented search and context management for AI agents including Claude Code, OpenClaw, and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and a local SQLite vault to capture and surface decisions, preferences, and milestones from session transcripts.",
   "url": "https://hermesatlas.com/projects/yoloshii/ClawMem",
   "codeRepository": "https://github.com/yoloshii/ClawMem",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yoloshii",
     "url": "https://github.com/yoloshii"
   },
-  "dateModified": "2026-10-01T15:22:11.000Z",
+  "dateModified": "2026-10-02T16:54:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-01</span>
+    <span><span class="meta-label">updated</span>2026-10-02</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">ClawMem is a local-first memory and context engine that stores agent session data, project documentation, and research in a SQLite vault. It uses a hybrid retrieval architecture combining vector search, BM25, and graph traversal to surface relevant facts and decisions to AI agents via MCP, Claude Code hooks, or plugins.</p>
+    <p class="summary-text">ClawMem is a local-first memory layer that provides retrieval-augmented search and context management for AI agents including Claude Code, OpenClaw, and Hermes. It uses a hybrid architecture combining vector search, graph traversal, and a local SQLite vault to capture and surface decisions, preferences, and milestones from session transcripts.</p>
     <ul class="summary-highlights">
-      <li>Local-only system with no cloud dependencies or API key requirements.</li>
-      <li>Hybrid retrieval using BM25, vector search, and multi-graph traversal.</li>
+      <li>Operates locally with no cloud dependencies or API keys.</li>
       <li>Integrates via MCP server, Claude Code hooks, and agent plugins.</li>
+      <li>Combines BM25, vector search, and multi-graph traversal for retrieval.</li>
     </ul>
   </div>
 </section>
@@ -287,13 +287,13 @@ ln -sf ~/clawmem/bin/clawmem ~/.bun/bin/clawmem
 <tr>
 <td><strong>2. Choose models</strong></td>
 <td>Pick embedding + reranker models based on your hardware</td>
-<td>16GB+ VRAM → SOTA stack (zembed-1 + zerank-2 sidecar). Less → QMD native combo. No GPU → cloud embedding or CPU fallback.</td>
+<td>16GB+ VRAM → SOTA stack (zembed-1 + zerank-2). Less → QMD native combo. No GPU → cloud embedding or CPU fallback.</td>
 <td><a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/inference-services.md">Inference services</a></td>
 </tr>
 <tr>
 <td><strong>3. Download models</strong></td>
-<td>Get the model files for your chosen stack (GGUFs for embedding/LLM/default-reranker; the zerank-2 SOTA reranker builds its own sidecar artifact)</td>
-<td><code>wget</code> from HuggingFace, let <code>node-llama-cpp</code> auto-download the QMD native models, or run the sidecar recipe</td>
+<td>Get the model files for your chosen stack (GGUFs for all three services; for zerank-2, only a GGUF that carries its score head works)</td>
+<td><code>wget</code> from HuggingFace, let <code>node-llama-cpp</code> auto-download the QMD native models, or build the zerank-2 bf16 sidecar</td>
 <td><a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/inference-services.md">Inference services</a></td>
 </tr>
 <tr>
@@ -470,14 +470,14 @@ vault_sync(vault="work", content_root="~/work/docs")
 <td>EmbeddingGemma-300M + qmd-query-expansion-1.7B + qwen3-reranker-0.6B</td>
 <td>~4 GB, or in-process</td>
 <td><strong>Permissive — commercial OK</strong></td>
-<td>Any GPU or none; commercial use; zero-config start</td>
+<td>Any GPU or none; zero-config start</td>
 </tr>
 <tr>
 <td><strong>z / SOTA</strong></td>
-<td>zembed-1 + qmd-query-expansion-1.7B + zerank-2 seq-cls <strong>sidecar</strong></td>
-<td>~16 GB</td>
-<td><strong>CC-BY-NC-4.0 — non-commercial only</strong></td>
-<td>16 GB+ GPU and non-commercial; best recall</td>
+<td>zembed-1 + qmd-query-expansion-1.7B + zerank-2 (<strong>Q8_0 GGUF</strong> that carries its score head)</td>
+<td>~13 GB</td>
+<td><strong>Apache-2.0 — commercial OK</strong></td>
+<td>16 GB+ GPU; best recall</td>
 </tr>
 <tr>
 <td><strong>Cloud embedding</strong></td>
@@ -487,7 +487,7 @@ vault_sync(vault="work", content_root="~/work/docs")
 <td>No local GPU for embedding; LLM + reranker stay local</td>
 </tr>
 </tbody></table>
-<p><strong>Heads-up before you serve:</strong> the zerank-2 <strong>GGUF is deprecated and inert</strong> — llama.cpp drops its score head, so the SOTA reranker must run as the <a href="extras/rerankers/zerank-2-seq/">seq-cls sidecar</a>, not a GGUF (verify with <code>clawmem rerank-health</code>). zembed-1 / reranking need <code>-ub</code> = <code>-b</code> (non-causal attention). Changing embedding dimensions requires <code>clawmem embed --force</code>. Set <code>CLAWMEM_NO_LOCAL_MODELS=true</code> to fail fast instead of silent CPU fallback.</p>
+<p><strong>Heads-up before you serve:</strong> most zerank-2 <strong>GGUFs are inert</strong> — llama.cpp's standard converter drops the score head. Serve the Q8_0 GGUF that carries it (<a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/inference-services.md#sota-stack--z-models-16-gb-gpu-apache-20">launch line</a>) or the bf16 <a href="extras/rerankers/zerank-2-seq/">seq-cls sidecar</a>, and verify with <code>clawmem rerank-health</code>. zembed-1 / reranking need <code>-ub</code> = <code>-b</code> (non-causal attention). Changing embedding dimensions requires <code>clawmem embed --force</code>. Set <code>CLAWMEM_NO_LOCAL_MODELS=true</code> to fail fast instead of silent CPU fallback.</p>
 <p>→ <strong>Full stack decision matrix, model/VRAM tables, and server-setup commands:</strong> <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/inference-services.md">docs/guides/inference-services.md</a>. Cloud providers, batch + TPM behavior: <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/cloud-embedding.md">docs/guides/cloud-embedding.md</a>. All environment variables: <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/reference/configuration.md">docs/reference/configuration.md</a>. Keeping servers running: <a href="https://github.com/yoloshii/ClawMem/blob/main/docs/guides/systemd-services.md">docs/guides/systemd-services.md</a>.</p>
 <h4>MCP Server</h4>
 <p>ClawMem exposes 33 MCP tools via the <a href="https://modelcontextprotocol.io">Model Context Protocol</a> and an optional HTTP REST API. Any MCP-compatible client or HTTP client can use it.</p>
@@ -1043,12 +1043,7 @@ clawmem status                                  Quick index status
 <tbody><tr>
 <td><code>session-bootstrap</code></td>
 <td>SessionStart</td>
-<td>Injects ~2000 tokens before user types anything. <code>context-surfacing</code> on first prompt is more precise.</td>
-</tr>
-<tr>
-<td><code>staleness-check</code></td>
-<td>SessionStart</td>
-<td>Red</td>
+<td>Injects ~2000 tokens before user types anything. <code>context-surfacing</code> o</td>
 </tr>
 </tbody></table>
 <hr>
@@ -1069,7 +1064,7 @@ clawmem status                                  Quick index status
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 44.5K</div>
+        <div class="stars">★ 44.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
