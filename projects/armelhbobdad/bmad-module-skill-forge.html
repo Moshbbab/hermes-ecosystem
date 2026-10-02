@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/armelhbobdad/bmad-module-skill-forge#software",
   "name": "bmad-module-skill-forge",
-  "description": "Skill Forge is a tool that converts code repositories, documentation, and developer discourse into verified instruction files for AI agents. It generates skills that link instructions to specific source code line numbers or documentation URLs to prevent API hallucinations.",
+  "description": "Skill Forge is a tool that converts code repositories, documentation, and developer discourse into verified instruction files for AI agents. It generates skills that link specific instructions back to source code line numbers at pinned commits or documentation URLs to prevent API hallucinations.",
   "url": "https://hermesatlas.com/projects/armelhbobdad/bmad-module-skill-forge",
   "codeRepository": "https://github.com/armelhbobdad/bmad-module-skill-forge",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "armelhbobdad",
     "url": "https://github.com/armelhbobdad"
   },
-  "dateModified": "2026-10-01T16:40:51.000Z",
+  "dateModified": "2026-10-02T11:38:17.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     
     
-    <span><span class="meta-label">updated</span>2026-10-01</span>
+    <span><span class="meta-label">updated</span>2026-10-02</span>
   </div>
 
   <div class="actions">
@@ -147,11 +147,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Skill Forge is a tool that converts code repositories, documentation, and developer discourse into verified instruction files for AI agents. It generates skills that link instructions to specific source code line numbers or documentation URLs to prevent API hallucinations.</p>
+    <p class="summary-text">Skill Forge is a tool that converts code repositories, documentation, and developer discourse into verified instruction files for AI agents. It generates skills that link specific instructions back to source code line numbers at pinned commits or documentation URLs to prevent API hallucinations.</p>
     <ul class="summary-highlights">
-      <li>Generates verified instruction files from code repositories and documentation.</li>
-      <li>Maps instructions to specific source lines or pinned documentation URLs.</li>
-      <li>Includes automated workflows for briefing, creating, testing, and exporting skills.</li>
+      <li>Generates verified instruction files with AST-based source code citations.</li>
+      <li>Supports skill creation from repositories, documentation, or SaaS APIs.</li>
+      <li>Includes an audit trail via provenance maps and evidence reports.</li>
     </ul>
   </div>
 </section>
@@ -202,7 +202,7 @@ results = await cognee.search(
     query_type=cognee.SearchType.GRAPH_COMPLETION
 )
 </code></pre>
-<p>The skill told the agent the real function name, the real parameters, and that the call is async, all traced to the exact source line. This example is from the real <a href="https://github.com/armelhbobdad/oh-my-skills/blob/main/skills/oms-cognee/1.0.0/oms-cognee/SKILL.md"><code>oms-cognee</code></a> skill in <a href="https://github.com/armelhbobdad/oh-my-skills"><strong>oh-my-skills</strong></a>, SKF's reference output. The <a href="#verifying-a-skill"><strong>Verifying a Skill</strong></a> section below shows how to walk the citation chain yourself.</p>
+<p>The skill told the agent the real function name, the real parameters, and that the call is async, all traced to the exact source line. This example is from the real <a href="https://github.com/armelhbobdad/oh-my-skills/blob/main/skills/oms-cognee/1.0.0/oms-cognee/SKILL.md"><code>oms-cognee</code></a> skill in <a href="https://github.com/armelhbobdad/oh-my-skills"><strong>oh-my-skills</strong></a>, SKF's reference output. That skill predates provenance labels that follow the tool: its provenance map records <code>search</code> as read by eye, which SKF 3.0.0 cites as <code>[SRC:...]</code>, keeping <code>[AST:...]</code> for a definition an ast-grep rule matched. The <a href="#verifying-a-skill"><strong>Verifying a Skill</strong></a> section below shows how to walk the citation chain yourself.</p>
 <h3>Install</h3>
 <p>Linux, Windows, and macOS supported (<a href="https://armelhbobdad.github.io/bmad-module-skill-forge/getting-started/#platform-support">platform details</a>). Requires <a href="https://nodejs.org/">Node.js</a> &gt;= 22, <a href="https://www.python.org/">Python</a> &gt;= 3.11, and <a href="https://docs.astral.sh/uv/">uv</a> (Python package runner).</p>
 <pre><code class="language-bash">npx bmad-module-skill-forge install
@@ -329,7 +329,7 @@ results = await cognee.search(
 <li><strong><a href="https://armelhbobdad.github.io/bmad-module-skill-forge/skill-model/">Skill Model</a></strong>: Capability tiers, confidence tiers, output format, dual-output strategy, ownership model</li>
 <li><strong><a href="https://armelhbobdad.github.io/bmad-module-skill-forge/agents/">Agents</a></strong>: Ferris, the single AI agent that runs every SKF workflow</li>
 <li><strong><a href="https://armelhbobdad.github.io/bmad-module-skill-forge/bmad-synergy/">BMAD Synergy</a></strong>: How SKF pairs with the BMAD Method's four phases and its optional modules: Test Architect (TEA), BMAD Builder (BMB), Game Dev Studio (GDS) and Creative Intelligence Suite (CIS)</li>
-<li><strong><a href="https://armelhbobdad.github.io/bmad-module-skill-forge/troubleshooting/">Troubleshooting</a></strong>: Common errors (forge setup, ecosystem checks, tier confidence) and how to resolve them</li>
+<li><strong><a href="https://armelhbobdad.github.io/bmad-module-skill-forge/troubleshooting/">Troubleshooting</a></strong>: Common errors (forge setup, skill briefs, tier confidence, run locks, campaigns) and how to resolve them</li>
 </ul>
 <h3>Acknowledgements</h3>
 <p>SKF builds on these excellent open-source tools:</p>
