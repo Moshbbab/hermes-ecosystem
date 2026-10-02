@@ -12,7 +12,7 @@ Hermes ships with a broad built-in tool registry covering web search, browser au
 
 note
 
-**Honcho cross-session memory** is available as a memory provider plugin (`plugins/memory/honcho/`), not as a built-in toolset. See [Plugins](/docs/user-guide/features/plugins) for installation.
+**Honcho cross-session memory** is available as a memory provider plugin from the plugin catalog (`hermes plugins install honcho`), not as a built-in toolset. See [Memory Providers](/docs/user-guide/features/memory-providers#honcho).
 
 High-level categories:
 

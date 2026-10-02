@@ -1058,8 +1058,8 @@ services.hermes-agent.extraDependencyGroups = [ "messaging" ];
 ```
 # Enable a memory provider
 services.hermes-agent = {
-  extraDependencyGroups = [ "honcho" ];
-  settings.memory.provider = "honcho";
+  extraDependencyGroups = [ "mem0" ];
+  settings.memory.provider = "mem0";
 };
 ```
 
@@ -1109,9 +1109,9 @@ AWS Bedrock (boto3)
 
 Azure Entra ID auth
 
-`honcho`
+`mem0`
 
-Honcho memory provider
+Mem0 memory provider
 
 `modal`
 
@@ -1182,7 +1182,7 @@ External flakes can override the package directly:
     nixpkgs.overlays = [ hermes-agent.overlays.default ];
     # Then:
     #   pkgs.hermes-agent.override { extraPythonPackages = [...]; }
-    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "honcho" ]; }
+    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "voice" ]; }
   };
 }
 ```
@@ -1601,7 +1601,7 @@ Python packages added to PYTHONPATH for entry-point plugin discovery. Use the se
 
 `[]`
 
-pyproject.toml optional extras to include in the sealed venv (e.g. `["honcho"]`). Resolved by uv — no collisions
+pyproject.toml optional extras to include in the sealed venv (e.g. `["voice"]`). Resolved by uv — no collisions
 
 `restart`
 

@@ -99,7 +99,7 @@ App Dashboard → WhatsApp → API Setup → near the top
 
 Numeric, 15+ digits
 
-Not required for messaging, useful for analytics.
+When set, inbound webhooks must match this business account.
 
 * * *
 
@@ -330,7 +330,7 @@ Optional, for future analytics integration.
 
 —
 
-Optional, for future analytics integration.
+Optional; when set, inbound webhooks must match this business account.
 
 `WHATSAPP_CLOUD_WEBHOOK_HOST`
 

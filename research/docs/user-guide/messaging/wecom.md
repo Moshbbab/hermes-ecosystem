@@ -318,7 +318,7 @@ Size limit
 
 Markdown text messages
 
-4000 chars
+4000 chars per message; longer text is split across messages
 
 `send_image` / `send_image_file`
 

@@ -363,6 +363,7 @@ When both exist the `pyproject.toml` wins. What Hermes does with them:
 -   **Updates retain the union** — `hermes update` includes enabled plugins while preparing its new generation. There is no post-update pip reinstall. `hermes plugins update` prepares active replacements before swapping their code and dependency generation together.
 -   **Requirement hygiene** — malformed PEP 508 requirements are refused. Environment markers remain intact for the target interpreter to evaluate. `hermes-agent` self-dependencies are omitted because the checkout supplies Hermes. Direct-URL requirements are not managed; use a plugin-owned external runtime for them.
 -   **`--no-deps`** downloads a new plugin without dependency consent and leaves it disabled, even with `--enable`. It cannot bypass PM admission when replacing an active plugin.
+-   **`--yes-deps`** answers the dependency question up front, so a headless install (CI, SSH automation, a container entrypoint) prepares the declared dependencies instead of being refused. It is mutually exclusive with `--no-deps`.
 -   **`python_runtime: external`** keeps a sidecar's dependencies out of the shared union. Hermes does not install that Python runtime or modify its declaration.
 -   **Nothing to load is an error** — `hermes plugins validate` rejects `plugin.yaml` without `__init__.py`, `desktop/plugin.js`, or `plugin.json` beside it. Pip-layout packages need a directory-plugin wrapper.
 -   `security.allow_lazy_installs: false` blocks on-demand acquisition. Explicit dependency consent and explicit enablement authorize PM preparation; discovery never installs.
@@ -992,7 +993,7 @@ def reset_client():
     _slot.reset()
 ```
 
-Both serialize concurrent first calls with double-checked locking and run the factory at most once. If the factory raises, nothing is cached and the next call retries. The honcho memory plugin (`plugins/memory/honcho/client.py`) is the reference consumer.
+Both serialize concurrent first calls with double-checked locking and run the factory at most once. If the factory raises, nothing is cached and the next call retries. The [Honcho memory plugin](https://github.com/plastic-labs/honcho/tree/main/hermes-plugin-honcho) (`client.py`) is the reference consumer.
 
 > Rule of thumb: any time you write `global _something` followed by a `is None` check and a build, reach for one of these instead.
 

@@ -4,9 +4,9 @@
 
 [Honcho](https://github.com/plastic-labs/honcho) is an AI-native memory backend that adds dialectic reasoning and deep user modeling on top of Hermes's built-in memory system. Instead of simple key-value storage, Honcho maintains a running model of who the user is — their preferences, communication style, goals, and patterns — by reasoning about conversations after they happen.
 
-Honcho is a Memory Provider Plugin
+Honcho is a catalog Memory Provider Plugin
 
-Honcho is integrated into the [Memory Providers](/docs/user-guide/features/memory-providers) system. All features below are available through the unified memory provider interface.
+Honcho is maintained by Plastic Labs and installed from the [plugin catalog](/docs/user-guide/features/plugins) (`hermes plugins install honcho`); source lives in [plastic-labs/honcho](https://github.com/plastic-labs/honcho/tree/main/hermes-plugin-honcho). It plugs into the [Memory Providers](/docs/user-guide/features/memory-providers) system, so all features below are available through the unified memory provider interface. Homes upgraded from a release that bundled Honcho get the plugin installed automatically — config and memory carry over untouched.
 
 ## What Honcho Adds
 
@@ -67,7 +67,8 @@ Search across history
 ## Setup
 
 ```
-hermes memory setup    # select "honcho" from the provider list
+hermes plugins install honcho   # from the plugin catalog
+hermes memory setup             # select "honcho" from the provider list
 ```
 
 Or configure manually:

@@ -360,7 +360,7 @@ Instead, the scheduler **parks the job**: the one failure alert says the window 
 
 ### Failure incidents: alert once, remind on a cooldown, acknowledge
 
-A recurring job that keeps failing with the _same_ error alerts you **once**, not on every run. Each failure is recorded as a durable **incident**, keyed by the job plus a normalized signature of the error text, in the same per-profile ledger database as the execution history; the first failure of a signature is always delivered, and repeats are then withheld while the incident is `alerted` (the run is still recorded — `hermes cron runs` and the failure streak see it, only the ping is held back).
+A recurring job that keeps failing with the _same_ error alerts you **once**, not on every run. Each failure is recorded as a durable **incident**, keyed by the job plus a normalized signature of the error text (case, whitespace and measured durations such as `idle for 603s` are ignored), in the same per-profile ledger database as the execution history; the first failure of a signature is always delivered, and repeats are then withheld while the incident is `alerted` (the run is still recorded — `hermes cron runs` and the failure streak see it, only the ping is held back).
 
 ```
 cron:

@@ -252,6 +252,12 @@ Composer
 
 render slots, or middleware / attachment providers
 
+Model menu rows
+
+`MODEL_MENU_ROW_AREA`
+
+`data: ModelMenuRowContribution` — a leading icon / trailing badge per model
+
 Appearance settings
 
 `APPEARANCE_AREAS.extra`
@@ -403,6 +409,27 @@ host.onEvent('gateway.ready', () => {
 ```
 
 Both doors persist per profile, so a plugin-driven switch sticks exactly like a manual pick. To tint the _active_ theme rather than replace it, use `setAccentOverride(hex)` and clear it in `ctx.onDispose` — the standalone [Accent Picker](https://github.com/NousResearch/hermes-desktop-accent-picker) plugin is the worked example (it is also a complete, installable disk plugin).
+
+#### Styling the chat switch — `data-session-switching`
+
+Opening a chat places its transcript in steps: the session loads, the rows land, then the restored scroll position settles a few frames later. A theme that wants that hidden (or faded) targets one documented attribute instead of watching the route or the DOM: core sets `data-session-switching="true"` on the chat surface root (`[data-chat-surface]`) from the frame the switch starts until the new transcript's rows are on screen and its scroll position has settled, then removes it.
+
+```
+/* Hide the transcript while it is being placed, fade it in when it lands. */
+:root[data-hermes-theme="noir"] [data-chat-surface] [data-slot="aui_thread-viewport"] {
+  transition: opacity 0.12s ease-out;
+}
+:root[data-hermes-theme="noir"] [data-chat-surface][data-session-switching] [data-slot="aui_thread-viewport"] {
+  opacity: 0;
+  transition: none;
+}
+```
+
+-   **Per surface.** The primary chat and every tile has its own `[data-chat-surface]`; the attribute marks only the one switching. Narrow to the primary pane with `[data-composer-target="main"]`.
+-   **Always ends.** It is held by core's own load and scroll-restore phases: the load phase ends when the transcript arrives or the resume gives up, the restore phase on settle (a bounded number of frames) or the first user scroll/key/pointer input, and both on unmount — a theme that hides content under it cannot strand the chat hidden. A brand-new empty draft never sets it.
+-   **The contract is the attribute.** Target `[data-session-switching]` and the `data-chat-surface` / `data-slot` hooks; internal class names are not a contract and change without notice. Do not toggle the attribute yourself or reproduce it with a route listener or `MutationObserver` (catalog rule 8).
+
+This replaces the t3-code-theme `installSwitchFade` pattern (a focus-store listener plus a `requestAnimationFrame` loop that polled the transcript's rows and scroll position, then toggled its own root attribute): the CSS above is the whole migration.
 
 ### Composer extensions
 
@@ -574,6 +601,41 @@ register(ctx) {
 ```
 
 The reasoning-pill visibility CSS the plugin also injected has no hook; it is only needed if the app ever hides that label at narrow widths.
+
+#### Model menu row decorations
+
+`MODEL_MENU_ROW_AREA` puts a per-model mark inside the native model menu — the one the composer's pill opens, and every other surface that renders `ModelCatalogMenu`. A contribution supplies `decorate(row)`; core paints what it returns in two fixed slots of the row: a **leading icon** before the model name and a **trailing badge** after core's own chips. The row's markup, name, star, submenu and click stay core's.
+
+```
+import { MODEL_MENU_ROW_AREA, type ModelMenuRowContribution } from '@hermes/plugin-sdk'
+
+interface ModelMenuRowContext {
+  provider: string  // provider slug: 'anthropic', 'openrouter', …
+  model: string     // the model id the row commits
+  label: string     // the display name core paints on the row
+}
+interface ModelMenuRowDecoration {
+  icon?: ReactNode  // element (<img>, <svg>, a component) or short text, drawn in a 1rem box
+  badge?: string    // plain text chip
+}
+
+ctx.register({
+  area: MODEL_MENU_ROW_AREA,
+  id: 'provider-marks',
+  data: {
+    decorate: ({ provider }) => {
+      const src = PROVIDER_ICONS[provider]   // data: URL of an SVG mark
+      return src ? { icon: <img alt="" src={src} /> } : null
+    }
+  } satisfies ModelMenuRowContribution
+})
+```
+
+**Arbitration.** Decorators run in registry order, **per slot**: the first one that returns a usable `icon` fills the icon slot, the first usable `badge` the badge slot, so an icon plugin and a pricing-badge plugin compose on the same row. `null` (or nothing usable) declines. Only a React element or a non-empty string is an icon and only a non-empty string is a badge; anything else is ignored rather than rendered. A decorator that **throws** declines too, and an icon component that throws while rendering blanks only its own slot (it sits in its own error boundary) — a broken plugin can never take the menu down. `decorate()` re-runs only when the registry or the row's provider/model/label changes, so keep it a pure lookup.
+
+**Teardown.** An ordinary data contribution: the `ctx.register` disposer (and plugin disable/reload) removes it and the rows repaint bare.
+
+**Migrating t3-code-theme.** Its provider marks were painted into the open menu by a `MutationObserver` that located the rows in the menu's DOM and wrote mask images onto them. The same marks come from `decorate({ provider })` returning `{ icon: <img alt="" src={providerSvgDataUrl(provider)} /> }` — no DOM reads, and the row keeps working when the menu's markup changes.
 
 ### Appearance settings
 
@@ -1217,7 +1279,7 @@ Plugin contract
 
 Area constants
 
-`PANES_AREA`, `ROUTES_AREA`, `SIDEBAR_NAV_AREA`, `STATUSBAR_AREAS`, `TITLEBAR_AREAS`, `WORKSPACE_PAGE_HEADER_AREA`, `PALETTE_AREA`, `KEYBINDS_AREA`, `THEMES_AREA`, `COMPOSER_AREAS`, `SESSION_ROW_AREAS`, `SIDEBAR_NAV_PREFS_AREA`, `APPEARANCE_AREAS`
+`PANES_AREA`, `ROUTES_AREA`, `SIDEBAR_NAV_AREA`, `STATUSBAR_AREAS`, `TITLEBAR_AREAS`, `WORKSPACE_PAGE_HEADER_AREA`, `PALETTE_AREA`, `KEYBINDS_AREA`, `THEMES_AREA`, `COMPOSER_AREAS`, `MODEL_MENU_ROW_AREA`, `SESSION_ROW_AREAS`, `SIDEBAR_NAV_PREFS_AREA`, `APPEARANCE_AREAS`
 
 Area payloads
 

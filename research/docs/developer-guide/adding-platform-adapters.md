@@ -258,7 +258,7 @@ PII redaction
 
 `hermes status`
 
-Shows plugin platforms with `(plugin)` tag
+Lists plugin platforms alongside built-ins, one row each, using the gateway's own configured check
 
 `hermes gateway setup`
 

@@ -318,7 +318,7 @@ Background desktop control via cua-driver — screenshots (SOM / vision / AX), c
 
 note
 
-**Honcho tools** (`honcho_profile`, `honcho_search`, `honcho_context`, `honcho_reasoning`, `honcho_conclude`) are no longer built-in. They are available via the Honcho memory provider plugin at `plugins/memory/honcho/`. See [Memory Providers](/docs/user-guide/features/memory-providers) for installation and usage.
+**Honcho tools** (`honcho_profile`, `honcho_search`, `honcho_context`, `honcho_reasoning`, `honcho_conclude`) are no longer built-in. They are available via the Honcho memory provider plugin from the plugin catalog (`hermes plugins install honcho`). See [Memory Providers](/docs/user-guide/features/memory-providers) for installation and usage.
 
 ## `image_gen` toolset
 

@@ -2994,7 +2994,7 @@ max_concurrent_sessions: null  # null/0 = unlimited; positive integer = active s
 
 A slot is taken when a session runs its **first turn**, not when a chat window is opened. Opening, resuming or reconnecting to a chat costs nothing until you send a message, so idle desktop tabs (and the background resumes a flaky websocket triggers) cannot starve the messaging gateway that shares this cap.
 
-When the cap is reached, Hermes returns a direct limit message naming which surfaces hold the slots. Existing active sessions keep their normal behavior. Run `hermes status` to see the current slot usage and every holder.
+When the cap is reached, Hermes returns a direct limit message naming which surfaces hold the slots. Existing active sessions keep their normal behavior. Run `hermes status --full` to see the current slot usage and every holder.
 
 This is the only cap on concurrent gateway turns: the gateway runs each turn body on its own thread, so with the default (unset) every accepted turn starts immediately instead of queuing behind other running turns.
 

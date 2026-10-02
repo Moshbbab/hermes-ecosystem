@@ -1386,7 +1386,7 @@ Optional Meta App ID (for future analytics integration)
 
 `WHATSAPP_CLOUD_WABA_ID`
 
-Optional WhatsApp Business Account ID (for future analytics integration)
+Optional WhatsApp Business Account ID; when set, inbound webhooks must match it
 
 `WHATSAPP_CLOUD_WEBHOOK_HOST`
 
