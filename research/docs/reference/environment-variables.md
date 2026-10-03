@@ -48,7 +48,7 @@ Override AI Gateway base URL (default: `https://ai-gateway.vercel.sh/v1`)
 
 `OPENAI_API_KEY`
 
-OpenAI API key (`openai-api` provider), or the key for a custom OpenAI-compatible endpoint when `OPENAI_BASE_URL` is set. Counts as an OpenRouter key only when it starts with `sk-or-`; put OpenRouter keys in `OPENROUTER_API_KEY`
+OpenAI API key (`openai-api` provider), or the key for a custom OpenAI-compatible endpoint when `OPENAI_BASE_URL` is set; bound that way, it is sent only to that URL's exact origin (scheme, host and port), never to another port or to `http://` on the same host. Counts as an OpenRouter key only when it starts with `sk-or-`; put OpenRouter keys in `OPENROUTER_API_KEY`
 
 `OPENAI_BASE_URL`
 

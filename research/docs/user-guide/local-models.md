@@ -94,6 +94,7 @@ Models live in the machine-shared `models/` directory. Engine binaries live in P
 ## Requirements and limits
 
 -   **Windows:** CUDA on supported NVIDIA targets, Vulkan on x64, or CPU. **Linux:** Vulkan or CPU; the pinned release has no prebuilt CUDA archive. **macOS:** Metal or CPU. HIP/ROCm is an explicit choice on supported x64 targets. Unsupported backend/target pairs fail before any download.
+-   `backend: auto` prefers CUDA for NVIDIA and Vulkan for AMD and Intel GPUs, then falls back to the builds listed above for your platform (CPU when no GPU is found). Behind a Vulkan or HIP engine, a discrete card is sized from its own memory (system RAM is spill space) and each launch subtracts what other programs hold on it; an integrated GPU shares system RAM and is sized from that. Quickstart installs the engine before choosing the model, so the pick reflects the card.
 -   A GPU with 8 GB+ of memory runs the small catalog models comfortably; 16 GB+ runs the 27–35B models at high quality.
 -   Model completeness is checked against the server's response, not catalog size estimates. Interrupted transfers retain partials for resume; incomplete files are not published. Engine archives are SHA-256 verified before use.
 -   Deleting a model removes every file it staged, including vision adapters and speculative-decoding companions.
