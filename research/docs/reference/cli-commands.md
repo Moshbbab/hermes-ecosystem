@@ -3358,11 +3358,11 @@ Print this installation's identity and path, then exit.
 
 `--set-channel CHANNEL`
 
-Persist `main`, `stable`, or `canary` for this source installation without applying an update. Bundled applications have a fixed build channel and refuse channel changes.
+Persist the update channel for this source installation without applying an update. `main` is the only valid source channel. Bundled applications have a fixed build channel and refuse channel changes.
 
 `--channel CHANNEL`
 
-Select a source channel for this invocation only.
+Select a source channel for this invocation only (`main` is the only valid one).
 
 `--branch NAME`
 

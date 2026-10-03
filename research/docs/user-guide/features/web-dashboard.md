@@ -418,7 +418,7 @@ The web dashboard exposes a REST API that the frontend consumes. You can also ca
 
 Profile-scoped endpoints
 
-The management endpoint families — `/api/config`, `/api/env`, `/api/skills`, `/api/tools/toolsets`, `/api/mcp`, `/api/model/{info,options,auxiliary,set,recommended-default}`, `/api/cron/{delivery-targets,blueprints}`, `/api/audio/voice-config`, `/api/ops/debug-share`, `/api/learning/graph`, and `/api/dashboard/plugins/hub` — accept an optional `?profile=<name>` query parameter (or `"profile"` in the JSON body for writes) that scopes the read/write to that profile's `HERMES_HOME`. Omitted = the dashboard's own profile. Unknown profile names return `404`. The `/api/pty` WebSocket accepts the same parameter to spawn a chat under the selected profile.
+The management endpoint families — `/api/config`, `/api/env`, `/api/skills`, `/api/tools/toolsets`, `/api/mcp`, `/api/model/{info,options,auxiliary,set,recommended-default}`, `/api/cron/{delivery-targets,blueprints}`, `/api/audio/voice-config`, `/api/ops/debug-share`, `/api/learning/{graph,node}`, and `/api/dashboard/plugins/hub` — accept an optional `?profile=<name>` query parameter (or `"profile"` in the JSON body for writes) that scopes the read/write to that profile's `HERMES_HOME`. Omitted = the dashboard's own profile. Unknown profile names return `404`. The `/api/pty` WebSocket accepts the same parameter to spawn a chat under the selected profile.
 
 ### GET /api/status
 

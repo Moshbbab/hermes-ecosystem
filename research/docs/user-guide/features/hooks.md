@@ -2891,7 +2891,7 @@ Each time the event fires, Hermes spawns a subprocess for every matching hook (m
 // Silent no-op — any empty / non-matching output is fine:
 ```
 
-Malformed JSON, non-zero exit codes, and timeouts log a warning but never abort the agent loop.
+Except for `pre_tool_call` exit code 2 described below, malformed JSON, ordinary non-zero exit codes, and timeouts fail open by default: they log a warning but do not abort the agent loop. A `fail_closed` hook changes the behavior as described below.
 
 ### Exit code 2 = block (Claude Code / Cursor compatible)
 
@@ -2941,6 +2941,12 @@ warn, proceed
 **block**
 
 Timeout
+
+warn, proceed
+
+**block**
+
+Non-zero exit with no recognized directive
 
 warn, proceed
 

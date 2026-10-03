@@ -307,6 +307,12 @@ LM Studio (local)
 
 `LM_API_KEY` (or none for local) + `LM_BASE_URL`
 
+Local llama.cpp (managed)
+
+`llamacpp` (aliases `llama.cpp`, `llama-cpp`)
+
+The local model server Hermes manages (Desktop **Settings → Providers → Local models**), no `base_url` needed. If it is not running the entry is skipped — Hermes never sends the local model name to another provider
+
 Hugging Face
 
 `huggingface`
@@ -636,6 +642,12 @@ Active main provider configured
 Force Anthropic native
 
 `ANTHROPIC_API_KEY` or Claude Code credentials
+
+`"llamacpp"`
+
+Force the managed local llama.cpp server
+
+Local model server running; when it is off, the local model name is never sent to another provider
 
 ### Direct Endpoint Override
 
