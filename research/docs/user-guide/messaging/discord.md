@@ -360,7 +360,7 @@ Conditional
 
 —
 
-Comma-separated Discord user IDs allowed to interact with the bot. Without this **or** `DISCORD_ALLOWED_ROLES`, the gateway denies all users unless `DISCORD_ALLOW_ALL_USERS=true`, `GATEWAY_ALLOW_ALL_USERS=true`, or `DISCORD_ALLOWED_CHANNELS` explicitly scopes guild access.
+Comma-separated Discord user IDs allowed to interact with the bot. Without this **or** `DISCORD_ALLOWED_ROLES`, the gateway denies all users unless `DISCORD_ALLOW_ALL_USERS=true`, `GATEWAY_ALLOW_ALL_USERS=true`, or `DISCORD_ALLOWED_CHANNELS` explicitly scopes guild access. Usernames also work: they are resolved to IDs when the bot connects (requires the **Server Members Intent**). Display names and server nicknames are never matched, because any member can set them.
 
 `DISCORD_ALLOWED_ROLES`
 
