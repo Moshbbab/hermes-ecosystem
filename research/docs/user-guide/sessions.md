@@ -118,7 +118,7 @@ QQ Bot (Tencent QQ) via Official API v2
 
 `homeassistant`
 
-Home Assistant conversation
+Home Assistant events (plugin)
 
 `webhook`
 

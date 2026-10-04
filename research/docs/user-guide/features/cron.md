@@ -487,7 +487,9 @@ SMS via Twilio
 
 `"homeassistant"`
 
-Home Assistant
+Home Assistant (plugin)
+
+Uses `HASS_HOME_CHANNEL`; requires the [`homeassistant` plugin](/docs/user-guide/messaging/homeassistant)
 
 `"dingtalk"`
 

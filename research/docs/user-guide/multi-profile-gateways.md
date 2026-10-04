@@ -454,7 +454,7 @@ The profile's own `config.yaml` / `.env`
 
 Documented default — never the launch profile's cached value
 
-Cloud-SDK credential clients (Bedrock boto3 clients + model discovery, Azure Entra credential), credential-fetched catalogs (DeepInfra, Copilot context limits, Nous reasoning caps, Ramp Router efforts, xAI / OpenRouter image models, custom-endpoint `/models`), Camofox VNC address, computer-use aux-vision routing, skill-sync push, remote-backend probe text, learned image token costs, `display.skin`, guest-mint back-off, banner skills, Yuanbao "active" adapter, Langfuse client
+Cloud-SDK credential clients (Bedrock boto3 clients + model discovery, Azure Entra credential), credential-fetched catalogs (DeepInfra, Copilot context limits, Nous reasoning caps, Ramp Router efforts, xAI / OpenRouter image models, custom-endpoint `/models`), Camofox VNC address, computer-use aux-vision routing, remote-backend probe text, learned image token costs, `display.skin`, guest-mint back-off, banner skills, Yuanbao "active" adapter, Langfuse client
 
 The profile's own `.env` / `config.yaml` / `<home>/cache`
 

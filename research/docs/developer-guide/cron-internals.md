@@ -406,11 +406,11 @@ Mattermost
 
 Bare name delivers to Mattermost home
 
-Home Assistant
+Home Assistant (plugin)
 
-`homeassistant` or `homeassistant:<conversation>`
+`homeassistant` or `homeassistant:<notify target>`
 
-Bare name delivers to HA conversation
+Bare name delivers to `HASS_HOME_CHANNEL`; needs the `homeassistant` catalog plugin
 
 DingTalk
 

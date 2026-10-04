@@ -1524,6 +1524,10 @@ SMTP port
 
 Comma-separated email addresses allowed to message the bot
 
+`EMAIL_AUTHSERV_ID`
+
+Exact authserv-id on the receiving server's topmost `Authentication-Results` header; required unless sender authentication is disabled (`EMAIL_TRUST_FROM_HEADER=true`)
+
 `EMAIL_HOME_ADDRESS`
 
 Default recipient for proactive email delivery
@@ -1942,11 +1946,15 @@ Optional one-time path for a generated Matrix recovery key. Created with mode `0
 
 `HASS_TOKEN`
 
-Home Assistant Long-Lived Access Token (enables HA platform + tools)
+Home Assistant plugin: Long-Lived Access Token (enables the HA platform + tools; requires the `homeassistant` catalog plugin, see [Home Assistant](/docs/user-guide/messaging/homeassistant))
 
 `HASS_URL`
 
-Home Assistant URL (default: `http://homeassistant.local:8123`)
+Home Assistant plugin: Home Assistant URL (default: `http://homeassistant.local:8123`)
+
+`HASS_HOME_CHANNEL`
+
+Home Assistant plugin: default notify target for a bare `deliver: homeassistant` (cron, webhooks)
 
 `WEBHOOK_ENABLED`
 

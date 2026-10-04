@@ -8,7 +8,7 @@ Tools are functions that extend the agent's capabilities. They're organized into
 
 ## Available Tools
 
-Hermes ships with a broad built-in tool registry covering web search, browser automation, terminal execution, file editing, memory, delegation, scheduled tasks, Home Assistant, and more.
+Hermes ships with a broad built-in tool registry covering web search, browser automation, terminal execution, file editing, memory, delegation, scheduled tasks, and more. Plugins add more tools — for example Home Assistant device control comes from the `homeassistant` catalog plugin.
 
 note
 
@@ -72,9 +72,9 @@ Scheduled tasks with create/list/update/pause/resume/run/remove actions. Outboun
 
 **Integrations**
 
-`ha_*`, MCP server tools
+MCP server tools, plugin tools
 
-Home Assistant, MCP, and other integrations.
+MCP and plugin integrations, e.g. Home Assistant (`ha_*`, from the [`homeassistant` catalog plugin](/docs/user-guide/messaging/homeassistant)).
 
 For the authoritative code-derived registry, see [Built-in Tools Reference](/docs/reference/tools-reference) and [Toolsets Reference](/docs/reference/toolsets-reference).
 
@@ -95,7 +95,7 @@ hermes tools
 hermes tools
 ```
 
-Common toolsets include `web`, `search`, `terminal`, `file`, `browser`, `vision`, `image_gen`, `skills`, `tts`, `todo`, `memory`, `session_search`, `cronjob`, `code_execution`, `delegation`, `clarify`, `homeassistant`, `messaging`, `spotify`, `discord`, `discord_admin`, `debugging`, and `safe`.
+Common toolsets include `web`, `search`, `terminal`, `file`, `browser`, `vision`, `image_gen`, `skills`, `tts`, `todo`, `memory`, `session_search`, `cronjob`, `code_execution`, `delegation`, `clarify`, `messaging`, `spotify`, `discord`, `discord_admin`, `debugging`, and `safe`.
 
 See [Toolsets Reference](/docs/reference/toolsets-reference) for the full set, including platform presets such as `hermes-cli`, `hermes-telegram`, and dynamic MCP toolsets like `mcp-<server>`.
 

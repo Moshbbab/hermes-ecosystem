@@ -120,7 +120,7 @@ List of toolset keys (e.g. `["terminal", "file", "web"]`) that **replaces** the 
 
 No
 
-Where to send the response: `github_comment`, `telegram`, `discord`, `slack`, `signal`, `sms`, `whatsapp`, `matrix`, `mattermost`, `homeassistant`, `email`, `dingtalk`, `feishu`, `wecom`, `weixin`, `bluebubbles`, `qqbot`, or `log` (default).
+Where to send the response: `github_comment`, `telegram`, `discord`, `slack`, `signal`, `sms`, `whatsapp`, `matrix`, `mattermost`, `homeassistant` (plugin), `email`, `dingtalk`, `feishu`, `wecom`, `weixin`, `bluebubbles`, `qqbot`, or `log` (default).
 
 `deliver_extra`
 
@@ -443,7 +443,7 @@ Routes the response to Mattermost. Uses the home channel, or specify `chat_id` i
 
 `homeassistant`
 
-Routes the response to Home Assistant. Uses the home channel, or specify `chat_id` in `deliver_extra`.
+Routes the response to Home Assistant (requires the [`homeassistant` plugin](/docs/user-guide/messaging/homeassistant)). Uses the home channel (`HASS_HOME_CHANNEL`), or specify `chat_id` in `deliver_extra`.
 
 `email`
 

@@ -28,6 +28,10 @@ Meaning
 
 The catalog key you pass to `hermes plugins install`
 
+`description`
+
+One-line summary shown on cards and in the install prompt, including any reviewer disclosure
+
 `repo`
 
 The plugin's public git repository
@@ -75,6 +79,10 @@ Human name shown on cards, e.g. `NVIDIA App` (optional; defaults to `name`)
 `docs_url`
 
 External documentation link (optional)
+
+`known_issues`
+
+Short notes shown at the install prompt, e.g. an unsupported install mode. Informational; they never block the install (optional)
 
 `version`
 
