@@ -64,6 +64,8 @@ Your plugin's page at `/docs/plugins/<name>` is built from the same file. The RE
      
 15.  **No skins or forks of bundled plugins.** A change to a bundled plugin is a PR against `hermes-agent`, not a competing listing, and vendor-lookalike skins are not listed under Nous branding.
      
+16.  **One listing per plugin lineage.** A fork of a listed community plugin is listed only when it is materially different from the original: a different transport or architecture, or capability the original lacks and its author declined or has not answered a PR for 30 days. Improvements to a listed plugin go upstream as a PR to its author. A fork that renames, rebrands or adds small changes is declined in favour of the original. A listed fork names its origin in its disclosure line (`Derived from <entry>`).
+     
 
 ## Updating your entry
 
