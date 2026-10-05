@@ -25,6 +25,8 @@ Partial downloads use PM's writable `cache/partials` area, outside a signed app 
 
 That's the whole flow. The server starts and stops with Hermes, restarts survive app restarts, and switching back to a cloud provider is one click in the model picker.
 
+From a terminal, `hermes model` → **Local models** runs the same setup: it lists the catalog priced for your machine (★ marks the recommendation), installs the pinned engine, downloads the model with live progress, starts the server, and makes the model your default. Models already on disk are offered too. Ctrl+C pauses a download; choosing the model again resumes it.
+
 ## How Hermes picks what to download
 
 Every model in the catalog is priced against **your machine** before you download anything. Each row shows:
@@ -93,7 +95,8 @@ Models live in the machine-shared `models/` directory. Engine binaries live in P
 
 ## Requirements and limits
 
--   **Windows:** CUDA on supported NVIDIA targets, Vulkan on x64, or CPU. **Linux:** Vulkan or CPU; the pinned release has no prebuilt CUDA archive. **macOS:** Metal or CPU. HIP/ROCm is an explicit choice on supported x64 targets. Unsupported backend/target pairs fail before any download.
+-   **Windows:** CUDA on supported NVIDIA targets, Vulkan on x64, or CPU. **Linux:** CUDA on x64 and arm64 NVIDIA (needs a CUDA 13 driver), Vulkan, or CPU. **macOS:** Metal or CPU. HIP/ROCm is an explicit choice on supported x64 targets. Unsupported backend/target pairs fail before any download.
+-   `backend: auto` prefers CUDA for NVIDIA and Vulkan for AMD and Intel GPUs, then falls back to the builds listed above for your platform (CPU when no GPU is found). Behind a Vulkan or HIP engine, a discrete card is sized from its own memory (system RAM is spill space) and each launch subtracts what other programs hold on it; an integrated GPU shares system RAM and is sized from that. Quickstart installs the engine before choosing the model, so the pick reflects the card.
 -   A GPU with 8 GB+ of memory runs the small catalog models comfortably; 16 GB+ runs the 27–35B models at high quality.
 -   Model completeness is checked against the server's response, not catalog size estimates. Interrupted transfers retain partials for resume; incomplete files are not published. Engine archives are SHA-256 verified before use.
 -   Deleting a model removes every file it staged, including vision adapters and speculative-decoding companions.

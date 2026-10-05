@@ -330,7 +330,7 @@ hermes profile alias work --remove
 hermes profile rename <old-name> <new-name>
 ```
 
-Renames a profile. Updates the directory and shell alias.
+Renames a profile. Updates the directory and shell alias. A gateway service installed under the old name (`hermes -p <old-name> gateway install`) is removed, whether or not the gateway is running, because it would start the old name at the next login; reinstall it with `hermes -p <new-name> gateway install`. Inside the Docker image the s6 gateway slot moves to the new name.
 
 Argument
 
@@ -404,7 +404,7 @@ hermes profile purge-identity mybot
 hermes profile export <name> [options]
 ```
 
-Exports a profile as a compressed tar.gz archive — a portable snapshot you can back up, move to another machine, or hand to someone else. `auth.json` and `.env` are always excluded.
+Exports a profile as a compressed tar.gz archive — a portable snapshot you can back up, move to another machine, or hand to someone else. `auth.json`, `.env` and the other credential stores are always excluded; see [what an export file contains](/docs/user-guide/profile-distributions#what-an-export-file-contains).
 
 Also available in chat as [`/export`](/docs/reference/slash-commands), and in the desktop app via **⌘K → Export profile…** or a profile square's right-click menu. A desktop export additionally stages `desktop.json` (skin, light/dark mode, custom themes, rail color, window layout) into the archive.
 

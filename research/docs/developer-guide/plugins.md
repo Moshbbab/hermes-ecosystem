@@ -140,6 +140,8 @@ The compatibility rules are:
 -   **Provider interfaces grow through defaults.** New provider methods have a default implementation. New callback context is optional and forwarded only when signature inspection shows that a provider accepts it. Adding an abstract method or an unconditionally forwarded argument requires a migration window rather than a flag-day signature change.
 -   **Version the contract that crosses a boundary.** A capability may carry its own schema version when it defines a wire payload or persisted format (for example, observer payloads or secret-source state). Keep fields additive within that local schema. Persisted plugin state and config must remain readable, or ship an explicit migration; resumed sessions written by the old format must still replay. Do not add version literals to unrelated callback or context values.
 
+The contract covers documented surfaces only. Replacing or wrapping core functions, methods, module attributes or private tables at runtime (assigning `AIAgent.<method>`, `setattr` on a Hermes module, writing into `sys.modules` or a core dict) is not a supported extension point. It breaks whenever the internals move, and it collides with every other plugin patching the same seam. The plugin catalog refuses it at admission (`hermes plugins validate`, `no core override` check). If a public hook you need is missing, open an issue describing it.
+
 ### Deprecation policy
 
 A documented native plugin behavior may be deprecated only with all of the following:
@@ -153,13 +155,11 @@ Removal after the window must include any migration needed for persisted data or
 
 Hermes enforces this contract with frozen external-plugin fixtures discovered from an isolated `HERMES_HOME`. Those tests load and invoke the plugin through `PluginManager`; they assert real registration and callback outcomes rather than internal symbol lists or source-code shape.
 
-### Sep 2026 module decomposition: old import paths end 2026-09-14
+### Sep 2026 module decomposition: old import paths removed
 
-Hermes's internals were split into `<stem>_<topic>` sibling modules in Sep 2026 (PR #102117). **Internal import paths were never part of the plugin contract** above, but many plugins used them. Every moved name still resolves from its old module until **2026-09-14**, then the compatibility layer is removed.
+Hermes's internals were split into `<stem>_<topic>` sibling modules in Sep 2026 (PR #102117). **Internal import paths were never part of the plugin contract** above. A temporary compatibility layer kept the old paths resolving until 2026-09-14; it has been removed, so a plugin that still imports an old path fails to load with an `ImportError` (the reason shows in `hermes plugins list`).
 
--   **Check your plugin:** `hermes plugins compat /path/to/your/plugin` lists every `file:line` with the old path and the new one, and exits 1 while any remain. `COMPAT_MANIFEST.md` in the repo is the full map.
--   **What users see:** a notice under the CLI banner, in `hermes doctor` and after `hermes update`, and a one-time Desktop dialog naming the plugin. Each resolution through an old path also emits a `HermesPluginCompatWarning` once per process.
--   **From 2026-09-14:** plugins that still import old paths are **not loaded** (the reason shows in `hermes plugins list`). Users can force-load with `plugins.allow_deprecated_imports: true` until the layer is actually removed, at which point the old paths raise `ImportError`.
+To fix such a plugin, import the name from the module that defines it now, or better, use `ctx` and the documented ABCs instead of internals. The full old-to-new map is the [`COMPAT_MANIFEST.md`](https://github.com/NousResearch/hermes-agent/blob/5912ed81ed9/COMPAT_MANIFEST.md) from the last commit that shipped the layer.
 
 ## What you're building
 
@@ -311,6 +311,12 @@ list of str
 
 Free-form discovery tags (e.g. `[gateway, telegram]`).
 
+`provides_locales`
+
+list
+
+Language pack declaration: ids (`- pl`) or `{id, endonym, rtl}` mappings whose `locales/<id>[.tui|.desktop].yaml` the loader registers automatically — see [Ship a language pack](#ship-a-language-pack).
+
 ```
 # plugin.yaml — manifest v2 example
 name: my-plugin
@@ -357,6 +363,7 @@ When both exist the `pyproject.toml` wins. What Hermes does with them:
 -   **Updates retain the union** — `hermes update` includes enabled plugins while preparing its new generation. There is no post-update pip reinstall. `hermes plugins update` prepares active replacements before swapping their code and dependency generation together.
 -   **Requirement hygiene** — malformed PEP 508 requirements are refused. Environment markers remain intact for the target interpreter to evaluate. `hermes-agent` self-dependencies are omitted because the checkout supplies Hermes. Direct-URL requirements are not managed; use a plugin-owned external runtime for them.
 -   **`--no-deps`** downloads a new plugin without dependency consent and leaves it disabled, even with `--enable`. It cannot bypass PM admission when replacing an active plugin.
+-   **`--yes-deps`** answers the dependency question up front, so a headless install (CI, SSH automation, a container entrypoint) prepares the declared dependencies instead of being refused. It is mutually exclusive with `--no-deps`.
 -   **`python_runtime: external`** keeps a sidecar's dependencies out of the shared union. Hermes does not install that Python runtime or modify its declaration.
 -   **Nothing to load is an error** — `hermes plugins validate` rejects `plugin.yaml` without `__init__.py`, `desktop/plugin.js`, or `plugin.json` beside it. Pip-layout packages need a directory-plugin wrapper.
 -   `security.allow_lazy_installs: false` blocks on-demand acquisition. Explicit dependency consent and explicit enablement authorize PM preparation; discovery never installs.
@@ -823,6 +830,44 @@ Legacy pattern
 
 The old `shutil.copy2` pattern (copying a skill into `~/.hermes/skills/`) still works but creates name collision risk with built-in skills. Prefer `ctx.register_skill()` for new plugins.
 
+### Ship a language pack
+
+A plugin can add a UI language or override the wording of an existing one for every surface at once — Python (`agent.i18n.t()`: approval prompts, gateway replies, tool verbs, tips), the `hermes --tui` interface and the Desktop app. Declare `provides_locales` and ship the YAML; **no Python is needed**:
+
+```
+~/.hermes/plugins/hermes-lang-pl/
+├── plugin.yaml
+└── locales/
+    ├── pl.yaml            # core (Python) strings — same key tree as the bundled locales/en.yaml
+    ├── pl.tui.yaml        # optional: TUI strings (keys in locales/_keys.tui.json)
+    └── pl.desktop.yaml    # optional: Desktop strings (keys in locales/_keys.desktop.json)
+```
+
+```
+name: hermes-lang-pl
+version: 1.0.0
+description: Polish language pack
+provides_locales:
+  - id: pl              # lowercase BCP-47-style id: pl, pt-br, zh-hant
+    endonym: Polski     # what language switchers show
+    rtl: false
+```
+
+When `provides_locales` is declared the loader calls `ctx.register_locale_dir(<plugin>/locales)` before `register()` (a manifest-only pack with no `__init__.py` loads like a manifest-only Desktop plugin). Catalogs are **layered and partial**: pack → user overlay (`<HERMES_HOME>/locales/`) → bundled → English → key; a pack only needs the keys it changes, and the last pack loaded wins per key. Core values keep English's named `{placeholders}`; TUI/Desktop entries whose English value is a function are written as strings with positional `{0}`, `{1}` placeholders.
+
+Plugins with code can register programmatically — the handles are `PluginRegistration`s, so unloading the plugin removes the layer, and registration never changes `display.language`:
+
+```
+def register(ctx):
+    here = Path(__file__).parent
+    ctx.register_locale("pl", here / "locales" / "pl.yaml", endonym="Polski")        # YAML path
+    ctx.register_locale("pl", {"approval": {"denied": "      ✗ Odrzucono"}})          # mapping, nested or flat
+    ctx.register_locale("pl", here / "locales" / "pl.tui.yaml", surface="tui")       # core | tui | desktop
+    ctx.register_locale_dir(here / "locales")                                         # every <lang>[.surface].yaml
+```
+
+`hermes plugins validate` checks each declared id has a parseable, text-only `locales/<id>.yaml` (a non-text leaf is an error) and **warns** with the names of keys absent from the English catalog of that surface. Renderers fetch the pack layer through the `i18n.languages` / `i18n.catalog` RPCs. User-facing guide: [Language Packs](/docs/user-guide/features/language-packs).
+
 ### Gate on environment variables
 
 If your plugin needs an API key:
@@ -948,7 +993,7 @@ def reset_client():
     _slot.reset()
 ```
 
-Both serialize concurrent first calls with double-checked locking and run the factory at most once. If the factory raises, nothing is cached and the next call retries. The honcho memory plugin (`plugins/memory/honcho/client.py`) is the reference consumer.
+Both serialize concurrent first calls with double-checked locking and run the factory at most once. If the factory raises, nothing is cached and the next call retries. The [Honcho memory plugin](https://github.com/plastic-labs/honcho/tree/main/hermes-plugin-honcho) (`client.py`) is the reference consumer.
 
 > Rule of thumb: any time you write `global _something` followed by a `is None` check and a build, reach for one of these instead.
 
@@ -1540,6 +1585,49 @@ def register(ctx):
 ```
 
 For running a full `hermes <subcommand>` (e.g. `hermes kanban show`), shell out with the `terminal` tool via `ctx.dispatch_tool("terminal", {"command": "hermes kanban show ..."})` — there is no in-process slash-command bridge for headless worker sessions, and tools are the supported way to drive Hermes from a hook.
+
+### Know which cron run you are in
+
+`ctx.current_cron_execution()` returns the scheduled run the current code executes inside, or `None` outside cron. It works from any hook that fires during the run (`pre_tool_call`, `post_tool_call`, `pre_llm_call`, ...) and from tool handlers. The value is a frozen `CronExecution`:
+
+Field
+
+Meaning
+
+`job_id`, `job_name`
+
+The cron job.
+
+`execution_id`
+
+This run's row in the executions ledger (`hermes cron runs`).
+
+`source`
+
+Which path fired the run: `"builtin"` (the built-in scheduler), `"direct"` (a run fired outside it, e.g. `hermes cron run`), or an external scheduler's name.
+
+`scheduled_instant`
+
+The schedule occurrence this run fires. `None` for a manual or other off-schedule run, so check this field to tell a scheduled run from a manual one.
+
+`started_at`
+
+When the run started.
+
+`profile`
+
+The profile that owns the job.
+
+The scheduler sets it only after the run has won its execution claim, and clears it when the run ends. It is per-run, so two jobs or profiles firing at the same time never see each other's value. The model cannot forge it: hook arguments come from Hermes, and tool subprocesses (terminal, `execute_code`) run in a separate interpreter. Subagents spawned with `delegate_task` get `None` because they are not the scheduled run itself.
+
+```
+def register(ctx):
+    def guard(*, tool_name, args, **kw):
+        run = ctx.current_cron_execution()
+        if tool_name == "deploy" and (run is None or run.scheduled_instant is None):
+            return {"action": "block", "message": "deploy only runs from its scheduled cron job"}
+    ctx.register_hook("pre_tool_call", guard)
+```
 
 ### Handle Slack Block Kit button clicks
 

@@ -195,17 +195,29 @@ Bash
 
 `deactivate`
 
+fish
+
+`source ./activate.fish`
+
+`deactivate`
+
 PowerShell
 
 `. .\activate.ps1`
 
 `deactivate`
 
-The leading dot and space in PowerShell are required. Executing `.\activate.ps1` without dot-sourcing does not provide the same session scope. The POSIX script uses Bash syntax. Use Bash for this recipe rather than `sh`, fish, or assuming that a Zsh startup file has Bash semantics.
+The leading dot and space in PowerShell are required. Executing `.\activate.ps1` without dot-sourcing does not provide the same session scope. `activate` uses Bash syntax. Use Bash for this recipe rather than `sh`, or assuming that a Zsh startup file has Bash semantics; fish has its own `activate.fish`, which behaves the same.
 
 Each activation invokes PM's install/sync path and trusts the recorded tool digest instead of re-hashing every entry. PM still installs a missing tool and rebuilds a stale dependency generation; a deliberate install keeps the byte check. Run `python -m pm.cli install` or `hermes update` to re-check realized bytes. A setup failure returns an error before changing the activated shell environment, including when re-sourcing an already active environment.
 
 After sync, activation prepends installed PM tools to `PATH` and sets `PYTHONPATH` to this checkout and its selected dependency tree. It also defines `hermes` as a shell function for this worktree. The function runs this checkout's CLI and hides the installed command, including an MSIX alias. It runs only while the shell is inside this worktree and refuses outside it, so a sibling worktree does not inherit the command. The prompt gains a prefix naming the branch, and drops it outside the tree. It does not change an OS-wide PATH or install a conventional venv prompt. Start in a clean shell rather than nesting this inside another venv. `deactivate` restores the environment values captured by the activation script, and removes the function and the prompt prefix. It does not uninstall packages or stop processes that you started.
+
+To run one command or script in that environment without activating a shell, prefix it with `scripts/run-in-hermes-env`. It applies the same environment to that command only, syncing first when there is none to inherit or the inherited one is stale, and leaves your shell untouched. `scripts/run_tests.sh` re-runs itself this way, and the repo's Python scripts hand themselves to it from their shebang.
+
+```
+scripts/run-in-hermes-env python scripts/release.py --help
+```
 
 Verify the interpreter and source before doing work:
 
@@ -262,7 +274,7 @@ The first command installs a tool. The second adds a declared runtime extra to t
 
 ### Syncing after you edit pyproject.toml
 
-1.  Edit `pyproject.toml`. Pin every dependency as the [Dependency Pinning Policy](https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.md#dependency-pinning-policy) requires. Express platform limits with PEP 508 markers, or gate a whole extra in `[tool.hermes.extras-platforms]`.
+1.  Edit `pyproject.toml`. Pin every dependency as the [Dependency Pinning Policy](https://github.com/NousResearch/hermes-agent/blob/main/pm/AGENTS.md#dependency-pinning-policy) requires. Express platform limits with PEP 508 markers, or gate a whole extra in `[tool.hermes.extras-platforms]`.
     
 2.  Relock:
     

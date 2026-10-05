@@ -178,7 +178,7 @@ Email
 
 —
 
-Home Assistant
+Home Assistant (plugin)
 
 —
 
@@ -710,7 +710,7 @@ Disable with `gateway.delivery_ledger: false` in `config.yaml` (restores the old
 
 ### Session continuity
 
-Gateway conversations do not reset after inactivity or at a daily boundary. Use `/new` or `/reset` for an explicit new conversation; context compression remains automatic. Legacy `session_reset` settings, reset-policy overrides and reset-timer environment variables are ignored. Cached agents may be released to reclaim resources without replacing the durable conversation. Restart-recovery freshness limits automatic continuation, not the history loaded when you send a message.
+Gateway conversations do not reset after inactivity or at a daily boundary. Use `/new` or `/reset` for an explicit new conversation; context compression remains automatic. Core ignores legacy `session_reset` settings, reset-policy overrides and reset-timer environment variables. If your config still sets `session_reset.mode` to `idle`, `daily` or `both`, gateway startup and `hermes doctor` warn about it. To keep time-based resets, install the catalog plugin that reads the same block unchanged: `hermes plugins install hermes-session-reset-policy`. Cached agents may be released to reclaim resources without replacing the durable conversation. Restart-recovery freshness limits automatic continuation, not the history loaded when you send a message.
 
 ## Per-Channel Model & System Prompt Overrides
 
@@ -1186,11 +1186,11 @@ Email
 
 Full tools including terminal
 
-Home Assistant
+Home Assistant (plugin)
 
 `hermes-homeassistant`
 
-Full tools + HA device control (ha\_list\_entities, ha\_get\_state, ha\_call\_service, ha\_list\_services)
+Full tools + HA device control (ha\_list\_entities, ha\_get\_state, ha\_call\_service, ha\_list\_services) from the `homeassistant` catalog plugin
 
 Mattermost
 
@@ -1466,7 +1466,7 @@ Defaults to `false`. Only platforms whose adapter implements `delete_message` ho
 -   [Signal Setup](/docs/user-guide/messaging/signal)
 -   [SMS Setup (Twilio)](/docs/user-guide/messaging/sms)
 -   [Email Setup](/docs/user-guide/messaging/email)
--   [Home Assistant Integration](/docs/user-guide/messaging/homeassistant)
+-   [Home Assistant Integration](/docs/user-guide/messaging/homeassistant) (plugin catalog)
 -   [Mattermost Setup](/docs/user-guide/messaging/mattermost)
 -   [Matrix Setup](/docs/user-guide/messaging/matrix)
 -   [DingTalk Setup](/docs/user-guide/messaging/dingtalk)

@@ -104,7 +104,7 @@ python scripts/release.py publish --version 0.21.5 --remote origin
 python scripts/release.py abandon --version 0.21.5 --remote origin
 ```
 
-`publish` performs a synchronous supersession preflight, then dispatches the same ordered controller used by automatic recovery. It refuses a known burned version below a newer published release. `abandon` deletes the draft when one exists, writes an `abandoned-rc.<N>-vX.Y.Z` marker ref, and keeps the attempt ref. The marker is the record of abandonment; the attempt ref is never deleted. The version is not spent, so the next cut is `rc.<N+1>-vX.Y.Z`.
+`publish` performs a synchronous supersession preflight, then dispatches the same ordered controller used by automatic recovery. It refuses a known burned version below a newer published release. `abandon` force-cancels the attempt's in-progress `Stable Release` runs, deletes the draft when one exists, writes an `abandoned-rc.<N>-vX.Y.Z` marker ref, and keeps the attempt ref. The marker is the record of abandonment; the attempt ref is never deleted. The version is not spent, so the next cut is `rc.<N+1>-vX.Y.Z`.
 
 Do not manually dispatch `Stable Release` from a final tag. Recovery keeps the original claim ref, object SHA, commit, draft database ID, autopublish policy, and skip flags.
 
@@ -142,7 +142,7 @@ Canary source identity is only `v<stable>+canary.<YYYYMMDDTHHMMSSZ>`. Build meta
 
 Branding is selected from those build inputs, not from runtime settings: canary uses yellow/dark-yellow icons; one-off builds use red icons bearing the short SHA. All desktop icon formats derive from the same artwork.
 
-One-off stamps use `source: commit-build`. No app update feed or App Installer subscription is published for them, and both the GUI and bundled CLI refuse update requests. They direct the recipient to ask the developer for a new build. Source checkout channels are separate: `hermes update --set-channel` remains available there and selects the published release's source commit.
+One-off stamps use `source: commit-build`. No app update feed or App Installer subscription is published for them, and both the GUI and bundled CLI refuse update requests. They direct the recipient to ask the developer for a new build. Source checkouts are separate: `main` is their only valid channel.
 
 `--build-commit` prints its deterministic downloads-page URL before dispatch, including in dry runs: `https://hermes-assets.nousresearch.com/releases/commit/<full-sha>/index.html`. `CLOUDFLARE_R2_PUBLIC_URL` overrides the public origin. After admission, the commit summary runs even when a build or assembly job fails; it lists only receipt-backed existing downloads and marks missing binaries as not built. Missing binaries link to the workflow run under **View build run**, not to nonexistent downloads. Disabled platforms have no download or failure link. Page publication still requires working R2 access. The commit links to its source on GitHub; tag and channel pages link to the corresponding GitHub release tag. Commit pages also list explicit non-secret `--bundle-env` defaults and `--bundle-unset` clears passed to the desktop bundles, not the CI environment. Values are shown as JSON strings (including `""` for an empty value); clears are labeled **Unset**. The section is omitted when no overrides were supplied.
 
@@ -160,6 +160,12 @@ Preview a custom build, then explicitly dispatch it. Repository identity does no
 python scripts/release.py --channel pm-preview --build-commit my-branch --remote origin
 python scripts/release.py --channel pm-preview --build-commit my-branch --remote origin --publish
 python scripts/release.py --channels --remote origin
+```
+
+By default a preview channel installs as its own side-by-side app (`Hermes NAME`, its own package ID). To test an exact commit as the regular app instead, create the channel with `--branding stable`: it copies the published stable channel's name, icon and package ID, so the build installs over the official app, shares its desktop settings, and later updates follow the channel. Branding is fixed when the channel is created; repeat the flag on every dispatch of that channel and use a new channel name to change it. `--branding` needs `--channel`, since a plain one-off commit build always carries its `Hermes Agent <sha>` identity.
+
+```
+python scripts/release.py --channel my-commit --branding stable --build-commit SHA --remote origin --publish
 ```
 
 Disposable R2 scoping is opt-in, for test runs only. Dispatch the desktop workflow with `disposable_channel` and `build_commit` to allocate a namespace under `ci-disposable/<repository-id>/<run-id>/`, then use the exact scoped build command from its summary. For local administration of that allocation, carry its `R2_DISPOSABLE_RUN` and `GITHUB_REPOSITORY_ID` in the command environment, with the configured public URL still at the unscoped root. These are test-run inputs, not persistent application settings; the repository ID is checked against the selected remote before credentials are read, so a scoped namespace still belongs to exactly one repository.

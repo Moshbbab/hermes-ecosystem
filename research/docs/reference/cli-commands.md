@@ -1260,20 +1260,22 @@ Credentials resolve exactly as they do for `/usage` in a session with no live ag
 ## `hermes status`
 
 ```
-hermes status [--all] [--deep]
+hermes status [--full] [--deep]
 ```
+
+By default prints a one-screen summary: model, active provider, every provider with credentials (the same list the `/model` picker offers), gateway state, the messaging platforms the gateway would start, and scheduled jobs. No key values are printed.
 
 Option
 
 Description
 
-`--all`
+`--full`
 
-Show all details in a shareable redacted format.
+Print every section (API keys redacted, auth providers, terminal backend, sessions, ...). `--all` is an alias.
 
 `--deep`
 
-Run deeper checks that may take longer.
+Run deeper checks that may take longer. Implies `--full`.
 
 ## `hermes cron`
 
@@ -1775,7 +1777,7 @@ Cron job counts, installed skill count
 
 **Config overrides**
 
-Any config values that differ from defaults
+Any config values that differ from defaults. Credentials in them are redacted: a `fallback_providers` entry's `api_key`, and credentials in its `base_url` (userinfo, `key`/token query parameters, signed-URL signatures).
 
 ### Example output
 
@@ -1858,7 +1860,7 @@ Print the report locally instead of uploading.
 
 Disable upload-time secret redaction. By default, uploads are redacted.
 
-The report includes system info (OS, Python version, Hermes version), recent agent, gateway, GUI/dashboard, and desktop logs (512 KB limit per file), and redacted API key status. By default, uploads are redacted so secrets are not included.
+The report includes system info (OS, Python version, Hermes version), recent agent, gateway, GUI/dashboard, and desktop logs (512 KB limit per file), plus the update and Desktop update hand-off logs when present, and redacted API key status. By default, uploads are redacted so secrets are not included; this covers the system dump (including config values such as `fallback_providers` entries and credentials in their URLs) as well as the logs, and the gateway `/debug` report too.
 
 Default uploads use public paste services tried in order: paste.rs, dpaste.com. `--nous` uploads the same debug bundle to private Nous diagnostics storage instead; the returned viewer link is for the Nous team and auto-deletes after 14 days.
 
@@ -2095,6 +2097,24 @@ Dashboard / TUI-gateway / PTY-bridge / websocket events
 
 Electron desktop app — boot, backend spawn output, and recent Python tracebacks
 
+`mcp`
+
+`mcp-stderr.log`
+
+stderr of every stdio MCP server, one `starting MCP server` banner per launch
+
+`update`
+
+`update.log`
+
+Full stdout/stderr mirror of `hermes update` runs (append-only) — the root cause of update/dependency failures
+
+`handoff`
+
+`desktop-update-handoff.log`
+
+Desktop-driven update hand-off stages, including the Desktop rebuild retry output
+
 ### Options
 
 Option
@@ -2103,7 +2123,7 @@ Description
 
 `log_name`
 
-Which log to view: `agent` (default), `errors`, `gateway`, or `list` to show available files with sizes.
+Which log to view: `agent` (default), `errors`, `gateway`, `gui`, `desktop`, `update`, `handoff`, or `list` to show available files with sizes.
 
 `-n`, `--lines <N>`
 
@@ -2128,6 +2148,8 @@ Show lines from a relative time ago: `30m`, `1h`, `2d`, etc. Supports `s` (secon
 `--component <NAME>`
 
 Filter by component: `gateway`, `agent`, `tools`, `cli`, `cron`.
+
+A line without its own timestamp, such as a traceback frame or the rest of a multi-line message, is shown or hidden together with the timestamped line above it.
 
 ### Examples
 
@@ -2607,7 +2629,7 @@ See [Hooks](/docs/user-guide/features/hooks) for event signatures and payload sh
 hermes memory <subcommand>
 ```
 
-Set up and manage external memory provider plugins. Bundled providers: honcho, openviking, mem0, holographic, retaindb, byterover, supermemory; hindsight (plugin catalog) after `hermes plugins install hindsight`. Only one external provider can be active at a time. Built-in memory (MEMORY.md/USER.md) is always active.
+Set up and manage external memory provider plugins. Bundled providers: openviking, mem0, holographic, retaindb, byterover; honcho, hindsight and supermemory (plugin catalog) after `hermes plugins install <name>` (`hermes update` does this automatically for a provider already named in `memory.provider`). Only one external provider can be active at a time. Built-in memory (MEMORY.md/USER.md) is always active.
 
 Subcommands:
 
@@ -3336,11 +3358,11 @@ Print this installation's identity and path, then exit.
 
 `--set-channel CHANNEL`
 
-Persist `main`, `stable`, or `canary` for this source installation without applying an update. Bundled applications have a fixed build channel and refuse channel changes.
+Persist the update channel for this source installation without applying an update. `main` is the only valid source channel. Bundled applications have a fixed build channel and refuse channel changes.
 
 `--channel CHANNEL`
 
-Select a source channel for this invocation only.
+Select a source channel for this invocation only (`main` is the only valid one).
 
 `--branch NAME`
 

@@ -48,7 +48,7 @@ Override AI Gateway base URL (default: `https://ai-gateway.vercel.sh/v1`)
 
 `OPENAI_API_KEY`
 
-OpenAI API key (`openai-api` provider), or the key for a custom OpenAI-compatible endpoint when `OPENAI_BASE_URL` is set. Counts as an OpenRouter key only when it starts with `sk-or-`; put OpenRouter keys in `OPENROUTER_API_KEY`
+OpenAI API key (`openai-api` provider), or the key for a custom OpenAI-compatible endpoint when `OPENAI_BASE_URL` is set; bound that way, it is sent only to that URL's exact origin (scheme, host and port), never to another port or to `http://` on the same host. Counts as an OpenRouter key only when it starts with `sk-or-`; put OpenRouter keys in `OPENROUTER_API_KEY`
 
 `OPENAI_BASE_URL`
 
@@ -866,7 +866,7 @@ Override the container binary Hermes shells out to (e.g. `podman`, `/usr/local/b
 
 `TERMINAL_DOCKER_IMAGE`
 
-Docker image (default: `nikolaik/python-nodejs:python3.11-nodejs20`)
+Docker image (default: `nousresearch/hermes-sandbox:desktop`)
 
 `TERMINAL_DOCKER_FORWARD_ENV`
 
@@ -1386,7 +1386,7 @@ Optional Meta App ID (for future analytics integration)
 
 `WHATSAPP_CLOUD_WABA_ID`
 
-Optional WhatsApp Business Account ID (for future analytics integration)
+Optional WhatsApp Business Account ID; when set, inbound webhooks must match it
 
 `WHATSAPP_CLOUD_WEBHOOK_HOST`
 
@@ -1523,6 +1523,10 @@ SMTP port
 `EMAIL_ALLOWED_USERS`
 
 Comma-separated email addresses allowed to message the bot
+
+`EMAIL_AUTHSERV_ID`
+
+Exact authserv-id on the receiving server's topmost `Authentication-Results` header; required unless sender authentication is disabled (`EMAIL_TRUST_FROM_HEADER=true`)
 
 `EMAIL_HOME_ADDRESS`
 
@@ -1942,11 +1946,15 @@ Optional one-time path for a generated Matrix recovery key. Created with mode `0
 
 `HASS_TOKEN`
 
-Home Assistant Long-Lived Access Token (enables HA platform + tools)
+Home Assistant plugin: Long-Lived Access Token (enables the HA platform + tools; requires the `homeassistant` catalog plugin, see [Home Assistant](/docs/user-guide/messaging/homeassistant))
 
 `HASS_URL`
 
-Home Assistant URL (default: `http://homeassistant.local:8123`)
+Home Assistant plugin: Home Assistant URL (default: `http://homeassistant.local:8123`)
+
+`HASS_HOME_CHANNEL`
+
+Home Assistant plugin: default notify target for a bare `deliver: homeassistant` (cron, webhooks)
 
 `WEBHOOK_ENABLED`
 
@@ -2740,7 +2748,7 @@ Description
 
 `HERMES_NEMO_RELAY_PLUGINS_TOML`
 
-Explicit path to the standard NeMo Relay `plugins.toml` loaded process-wide by Hermes core. When unset, Hermes does not initialize Relay middleware, dynamic plugins, or exporters. The removed `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables are ignored (a `.env` that still carries them exports nothing); `hermes update` / `hermes migrate relay` converts them into `<hermes home>/relay-plugins.toml` and sets this variable — see the [migration note and full example](/docs/user-guide/features/built-in-plugins#nemo-relay-native-integration-migration-note). See [NeMo Relay observability configuration](https://docs.nvidia.com/nemo/relay/configure-plugins/observability/about).
+Optional explicit path to a standard NeMo Relay `plugins.toml` loaded process-wide by Hermes core. When unset, Relay uses its normal user configuration followed by the higher-precedence machine-wide system configuration. When set, this file replaces the user configuration while the system configuration still applies above it. The removed `HERMES_NEMO_RELAY_ATOF_*` and `HERMES_NEMO_RELAY_ATIF_*` variables are ignored; `hermes update` / `hermes migrate relay` converts them into `<hermes home>/relay-plugins.toml` and sets this variable — see the [migration note and full example](/docs/user-guide/features/built-in-plugins#nemo-relay-native-integration-migration-note). See [NeMo Relay observability configuration](https://docs.nvidia.com/nemo/relay/configure-plugins/observability/about).
 
 ## Agent Behavior
 

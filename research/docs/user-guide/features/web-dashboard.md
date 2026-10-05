@@ -85,6 +85,8 @@ Pass `--isolated` to opt out and run a dedicated server scoped to that profile (
 
 The **Chat** tab follows the switcher too: a scoped chat spawns its PTY child with the selected profile's `HERMES_HOME`, so the conversation runs with that profile's model, skills, memory, and session history. Switching profiles starts a fresh terminal session.
 
+Hub actions (skill install/update/uninstall, MCP install, toolset setup) run with the target profile's own secret scope — its `.env` and configured secret sources — not the dashboard process's environment; this includes actions targeting the `default` profile from the machine dashboard.
+
 What stays per-profile and is _not_ absorbed by the switcher: gateway processes (manage them via `hermes -p <name> gateway …`), each profile's session database, and cron schedulers (the Cron page already aggregates across profiles with its own filter).
 
 ## Prerequisites
@@ -416,7 +418,7 @@ The web dashboard exposes a REST API that the frontend consumes. You can also ca
 
 Profile-scoped endpoints
 
-The management endpoint families — `/api/config`, `/api/env`, `/api/skills`, `/api/tools/toolsets`, `/api/mcp`, and `/api/model/{info,options,auxiliary,set}` — accept an optional `?profile=<name>` query parameter (or `"profile"` in the JSON body for writes) that scopes the read/write to that profile's `HERMES_HOME`. Omitted = the dashboard's own profile. Unknown profile names return `404`. The `/api/pty` WebSocket accepts the same parameter to spawn a chat under the selected profile.
+The management endpoint families — `/api/config`, `/api/env`, `/api/skills`, `/api/tools/toolsets`, `/api/mcp`, `/api/model/{info,options,auxiliary,set,recommended-default}`, `/api/cron/{delivery-targets,blueprints}`, `/api/audio/voice-config`, `/api/ops/debug-share`, `/api/learning/{graph,node}`, and `/api/dashboard/plugins/hub` — accept an optional `?profile=<name>` query parameter (or `"profile"` in the JSON body for writes) that scopes the read/write to that profile's `HERMES_HOME`. Omitted = the dashboard's own profile. Unknown profile names return `404`. The `/api/pty` WebSocket accepts the same parameter to spawn a chat under the selected profile.
 
 ### GET /api/status
 
