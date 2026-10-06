@@ -355,9 +355,15 @@ await section("2. Public API contracts are semantically healthy", async () => {
   } else {
     const body = await bundleChat.text();
     const trailer = body.match(/‎__META__(.*?)__META__‎/);
-    let matched = [];
+    const headerMatches = (bundleChat.headers.get("x-atlas-use-cases") || "")
+      .split(",")
+      .map((slug) => slug.trim())
+      .filter((slug) => slug && slug !== "none");
+    let matched = headerMatches;
     try {
-      matched = trailer ? JSON.parse(trailer[1]).useCases || [] : [];
+      if (matched.length === 0) {
+        matched = trailer ? JSON.parse(trailer[1]).useCases || [] : [];
+      }
     } catch {}
     if (matched.length > 0) {
       pass("use-case bundle injection", `matched ${matched.join(", ")}`);
@@ -510,7 +516,7 @@ await section("3. Generated discovery artifacts are current", async () => {
     fail("llms.txt freshness", `HTTP ${llms.status}`, `${BASE}/llms.txt`);
   } else {
     const text = await llms.text();
-    const catalogCount = new RegExp(`\\b${repos.length}\\+?\\s+(?:tools|projects|repos)\\b`, "i");
+    const catalogCount = new RegExp(`\\b${repos.length}\\+?\\s+(?:tracked\\s+)?(?:tools|projects|repos)\\b`, "i");
     if (catalogCount.test(text)) {
       pass("llms.txt freshness", `states ${repos.length}-project catalog`);
     } else {

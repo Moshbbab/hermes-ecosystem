@@ -4,6 +4,7 @@ import { buildLatestReleaseBlock, detectLatestReleaseQuery } from "../lib/latest
 import { parseChunkStore } from "../lib/chunk-store.js";
 import { matchUseCases, buildUseCaseBlock, inferCategory } from "../lib/use-case-match.js";
 import { collectSourceLinks } from "../lib/source-links.js";
+import bundledUseCasesData from "../data/use-cases.json" with { type: "json" };
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -13,7 +14,7 @@ let corpusDimensions = null;
 let bm25Index = null;
 let reposData = null;
 let latestReleaseData = null;
-let useCasesData = null;
+const useCasesData = bundledUseCasesData;
 
 function loadChunks() {
   if (chunks) return chunks;
@@ -48,19 +49,7 @@ function loadRepos() {
 }
 
 function loadUseCases() {
-  if (useCasesData) return useCasesData;
-  try {
-    // Literal join(process.cwd(), ...) so Vercel's file tracer bundles it —
-    // same constraint as loadChunks above.
-    const raw = readFileSync(join(process.cwd(), "data", "use-cases.json"), "utf-8");
-    useCasesData = JSON.parse(raw);
-    return useCasesData;
-  } catch (e) {
-    // Missing bundles degrade to the pre-existing catalog-dump behavior.
-    console.error("Failed to load use-cases.json:", e.message);
-    useCasesData = [];
-    return useCasesData;
-  }
+  return useCasesData;
 }
 
 function loadLatestRelease() {
@@ -375,6 +364,17 @@ export default async function handler(req, res) {
     }
   }
 
+  // Resolve curated bundles before opening the stream and expose the result as
+  // a response header. This keeps deployment health observable even when the
+  // upstream model fails or terminates its stream before the metadata trailer.
+  const useCaseMatches = matchUseCases(message, loadUseCases());
+  res.setHeader(
+    "X-Atlas-Use-Cases",
+    useCaseMatches.length > 0
+      ? useCaseMatches.map((match) => match.useCase.slug).join(",")
+      : "none",
+  );
+
   // Set streaming headers EARLY so client gets response immediately
   // This prevents Vercel from killing the connection during slow LLM responses
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
@@ -447,7 +447,9 @@ export default async function handler(req, res) {
     // shared with the /use-cases/ page matcher so the two can't disagree.
     const repos = loadRepos();
     const repoIndex = new Map(repos.map((r) => [`${r.owner}/${r.repo}`, r]));
-    const useCaseMatches = matchUseCases(`${message}\n${searchQuery}`, loadUseCases());
+    // Match the user's original request, not the LLM-expanded search query.
+    // Expansion terms improve retrieval but can add generic vocabulary shared
+    // by several bundles, diluting an otherwise exact curated alias match.
     const useCaseBlock = buildUseCaseBlock(useCaseMatches, repoIndex);
     if (useCaseBlock) {
       console.log(`[RAG] Injected ${useCaseMatches.length} use-case bundle(s): ${useCaseMatches.map(m => `${m.useCase.slug}(${m.score})`).join(", ")}`);
