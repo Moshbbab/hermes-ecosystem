@@ -626,7 +626,7 @@ Config and state have different owners: settings are user-visible behavior in `c
 
 ### Settings form in the Desktop
 
-Every key you declare in the manifest's `config_schema` renders as a field in the Desktop app's **Capabilities → Plugins** tab (the gear on the plugin's row). No Desktop code is needed: the backend's `plugins.manage list` returns the schema plus each key's current value, and saving writes through the same writer as `ctx.set_config()`, so `plugins.entries.<id>.settings.<key>` is what your plugin reads back. The form is table-driven by `type`:
+Every key you declare in the manifest's `config_schema` renders as a row on the plugin's own page under the Desktop app's **Settings → Plugins** (the gear on the plugin's Capabilities → Plugins row opens it). No Desktop code is needed: the backend's `plugins.manage list` returns the schema plus each key's current value, and saving writes through the same writer as `ctx.set_config()`, so `plugins.entries.<id>.settings.<key>` is what your plugin reads back. The form is table-driven by `type`:
 
 Manifest `type`
 
@@ -658,7 +658,7 @@ masked input
 
 `env: MY_PLUGIN_TOKEN` — the `.env` variable it is stored under (default `<PLUGIN_ID>_<KEY>` upper-snaked)
 
-Every entry also accepts `label` (shown instead of the key), `description` (help text under the field), `default` and `required`.
+Every entry also accepts `label` (or `title`; without one the key is shown in sentence case, `maps_api_key` → "Maps API key"), `description` (help text under the label), `default` and `required` (marks the row **Required**).
 
 ```
 config_schema:

@@ -903,7 +903,7 @@ Meaning
 
 `{input_path}`
 
-Absolute path to the input audio file (original location, read-only)
+Absolute path to the input audio file (original location, read-only; a 16 kHz mono m4a when `normalize: true`)
 
 `{output_path}`
 
@@ -970,6 +970,12 @@ Forwarded to `{language}`. Defaults to `stt.language` then `en`.
 empty
 
 Forwarded to `{model}`. The `model=` argument to `transcribe_audio()` overrides this.
+
+`normalize`
+
+`false`
+
+Transcode the input to 16 kHz mono m4a (ffmpeg) before the command runs; `{input_path}` then points at the normalized file.
 
 #### STT command-provider behavior notes
 

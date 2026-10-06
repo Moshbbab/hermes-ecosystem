@@ -215,7 +215,7 @@ Perceived latency per provider/model.
 
 trigger, outcome, context-fill bucket
 
-How often compaction runs, how full contexts get, and whether it fails.
+How often compaction runs, how full contexts get, and whether it fails. `skipped` = nothing could fail: lock held elsewhere, nothing summarizable (no model call), user stop, or a newer attempt replaced it.
 
 `hermes.model_switch.count`
 
@@ -269,7 +269,7 @@ Which sandboxes carry real work and how reliable each is. Terminal backends are 
 
 platform, event (`connect_ok`/`connect_failed`/`reconnect`/`disconnect`), error class (`auth`/`network`/`rate_limited`/`config`/`other`)
 
-Which messaging platforms fail to connect or drop, and why. Classified from exception types, HTTP statuses and Hermes's own fatal codes, never error text.
+Which messaging platforms fail to connect or drop, and why. `connect_failed` counts a failed-connect episode once per profile, platform and UTC day (the reconnect watcher's retries are not new rows; the next success ends the episode, and a platform still failing the next day counts again), with the error class of the episode's first failure. Classified from exception types, HTTP statuses and Hermes's own fatal codes, never error text.
 
 `hermes.platform.delivery`
 
@@ -523,9 +523,9 @@ Which toolsets should be on by default: the model called a tool Hermes ships tha
 
 `hermes.provider_setup.count`
 
-provider (catalog name; custom endpoints read `custom`), surface (`cli_setup`, `cli_model`, `tui`, `desktop`, `dashboard`), event (`started`, `completed`, `failed`, `abandoned`), failure class (`auth`, `network`, `no_models`, `cancelled`, `other`; `none` unless failed)
+provider (catalog name; custom endpoints read `custom`), surface (`cli_setup`, `cli_model`, `tui`, `desktop`, `dashboard`), event (`started`, `completed`, `failed`, `abandoned`), failure class (`auth`, `network`, `no_models`, `other`; `none` unless failed; `cancelled` is no longer recorded, a cancel is `abandoned`)
 
-Where connecting a provider breaks down. `started` counts once a provider is picked; the flow's end is recorded by the surface that ran it. In the CLI pickers Esc ends the flow `failed`/`cancelled`; Back (Left arrow) keeps it open, so picking the same provider again continues it (one `started`), while picking another provider or leaving the command ends it `cancelled`. A flow nobody finished leaves a local marker that the next setup start or Hermes start in the profile reports as `abandoned` (its process is gone, or it has been pending over an hour); an OAuth device code left to expire is also `abandoned`. A new or changed provider API key saved from a form (TUI/Desktop/dashboard) and a newly added custom endpoint start and complete in one action; clearing a key, re-saving the same key, editing an existing endpoint, ecosystem tokens (`GITHUB_TOKEN`, `GH_TOKEN`, `HF_TOKEN`) and keys a tool's settings panel also asks for (e.g. `GEMINI_API_KEY`, `XAI_API_KEY`, `DEEPINFRA_API_KEY`) are not counted from the generic key form (the Desktop's onboarding and model settings mark their saves as a provider connection, so those count). Never a key, token, base URL or error text. Leaving the provider picker before choosing one is not counted.
+Where connecting a provider breaks down. `started` counts once a provider is picked; the flow's end is recorded by the surface that ran it. A flow the user walked away from is `abandoned`, never `failed`: Esc or Ctrl-C in the CLI pickers, Cancel/Back on a Desktop or dashboard sign-in, consent declined on the provider's page, and a sign-in code left to expire (any provider). Back (Left arrow) in the CLI keeps the flow open, so picking the same provider again continues it (one `started`), while picking another provider or leaving the command ends it `abandoned`. A flow nobody finished leaves a local marker that the next setup start or Hermes start in the profile reports as `abandoned` (its process is gone, or it has been pending over an hour). A Desktop/dashboard sign-in that dies mid-poll keeps the class of the error that ended it (`network` for a dropped connection, `auth` for a refusal), not a bare `other`. A new or changed provider API key saved from a form (TUI/Desktop/dashboard) and a newly added custom endpoint start and complete in one action; clearing a key, re-saving the same key, editing an existing endpoint, ecosystem tokens (`GITHUB_TOKEN`, `GH_TOKEN`, `HF_TOKEN`) and keys a tool's settings panel also asks for (e.g. `GEMINI_API_KEY`, `XAI_API_KEY`, `DEEPINFRA_API_KEY`) are not counted from the generic key form (the Desktop's onboarding and model settings mark their saves as a provider connection, so those count). Never a key, token, base URL or error text. Leaving the provider picker before choosing one is not counted.
 
 `hermes.feature_adoption.count`
 
