@@ -18,8 +18,8 @@ Or set manually in `~/.hermes/config.yaml`:
 
 ```
 memory:
-  provider: openviking   # or mem0, holographic, retaindb, byterover,
-                         # or honcho / hindsight / supermemory (plugin catalog — run
+  provider: openviking   # or holographic, retaindb, byterover,
+                         # or honcho / hindsight / supermemory / mem0 (plugin catalog — run
                          # `hermes plugins install <name>` first)
 ```
 
@@ -496,6 +496,10 @@ Hermes sends `User-Agent: openviking-memory-hermes/<version>` on OpenViking requ
 
 ### Mem0
 
+Plugin catalog
+
+Mem0 is maintained by Mem0 and installed from the [plugin catalog](/docs/user-guide/features/plugins) rather than bundled with Hermes. Source: [mem0ai/mem0 — integrations/hermes-plugin-mem0](https://github.com/mem0ai/mem0/tree/main/integrations/hermes-plugin-mem0). Existing setups are migrated automatically — see [Migrating from bundled Mem0](#migrating-from-bundled-mem0).
+
 Server-side LLM fact extraction with semantic search, reranking, and automatic deduplication. Three connection modes: **Platform** (Mem0 Cloud), **self-hosted dashboard** (a Mem0 server you run via Docker), and **OSS** (Mem0 in-process with your own LLM + vector store).
 
 **Best for**
@@ -504,7 +508,7 @@ Hands-off memory management — Mem0 handles extraction automatically
 
 **Requires**
 
-`hermes memory setup` prepares the Mem0 SDK through PM; API key (platform), a running Mem0 server (self-hosted dashboard), or an LLM + vector store (OSS)
+`hermes plugins install mem0` (installs the Mem0 SDK with the plugin); API key (platform), a running Mem0 server (self-hosted dashboard), or an LLM + vector store (OSS)
 
 **Data storage**
 
@@ -514,13 +518,14 @@ Mem0 Cloud (platform), your own Mem0 server (self-hosted dashboard), or in-proce
 
 Mem0 pricing (platform) / free (self-hosted or OSS)
 
-The `mem0` SDK extra is excluded on native Windows ARM64. An external Mem0 server over HTTP is a separate mode; a remote service does not imply that the in-process SDK runs on that target.
+The mem0ai SDK sends anonymous PostHog usage telemetry unless `MEM0_TELEMETRY=false` is set in your shell or `~/.hermes/.env`.
 
 **Tools (4):** `mem0_search` (semantic search; optional reranking in platform mode, off by default), `mem0_add` (store verbatim facts), `mem0_update` (update by ID), `mem0_delete` (delete by ID)
 
 **Setup (Platform):**
 
 ```
+hermes plugins install mem0   # from the plugin catalog
 hermes memory setup    # select "mem0" → "Platform"
 # Or manually:
 hermes config set memory.provider mem0
@@ -627,6 +632,16 @@ Vector Store
 qdrant (local/server), pgvector
 
 **Switching modes:** Re-run `hermes memory setup mem0 --mode <platform|selfhosted|oss>` or edit `mem0.json` directly.
+
+### Migrating from bundled Mem0
+
+Mem0 used to ship inside the Hermes tree (and as the `hermes-agent[mem0]` pip extra). If your `config.yaml` already has `memory.provider: mem0`, there is nothing to do for most users:
+
+-   `hermes update` installs the catalog plugin into every profile home that names the provider.
+-   If the plugin is still missing on the first agent start (`hermes chat`, the gateway, Desktop), Hermes installs it and tells you it did.
+-   With `security.allow_lazy_installs: false` the agent-start path does not install anything; it prints the exact `hermes plugins install mem0` command instead.
+
+`memory.provider`, `$HERMES_HOME/mem0.json`, the `MEM0_*` keys in `.env` and the memories stored in Mem0 Cloud, your Mem0 server or the local OSS store are untouched. Verify with `hermes memory status` and `hermes plugins list`.
 
 * * *
 
@@ -1141,7 +1156,7 @@ Free
 
 Filesystem hierarchy + tiered loading
 
-**Mem0**
+**Mem0** (plugin catalog)
 
 Cloud/Self-hosted
 
@@ -1149,7 +1164,7 @@ Free/Paid
 
 4
 
-`mem0ai`
+`hermes plugins install mem0`
 
 Server-side LLM extraction + self-hosted/OSS modes
 
@@ -1236,7 +1251,7 @@ Each provider's data is isolated per [profile](/docs/user-guide/profiles):
 
 ## Providers Moving to the Plugin Catalog
 
-Memory providers are moving out of the Hermes tree into their maintainers' own repositories, published through the [plugin catalog](/docs/user-guide/features/plugins). Hindsight moved first (see [Migrating from bundled Hindsight](#migrating-from-bundled-hindsight)), then Honcho (see [Upgrading from the bundled Honcho](#upgrading-from-the-bundled-honcho)) and Supermemory (see [Migrating from bundled Supermemory](#migrating-from-bundled-supermemory)). Nothing changes for you: the provider name, the settings it reads, its data directory and its tools stay the same. When a provider you have configured stops shipping with Hermes, `hermes update` installs its catalog plugin for every profile that names it; if you update through the Desktop app, the agent does the same the first time it starts. Every outcome is shown to you — in the terminal, in Desktop, or with the first reply on a messaging platform. If the install cannot happen (`security.allow_lazy_installs: false`, offline, declined), the warning includes the exact `hermes plugins install <name>` command.
+Memory providers are moving out of the Hermes tree into their maintainers' own repositories, published through the [plugin catalog](/docs/user-guide/features/plugins). Hindsight moved first (see [Migrating from bundled Hindsight](#migrating-from-bundled-hindsight)), then Honcho (see [Upgrading from the bundled Honcho](#upgrading-from-the-bundled-honcho)), Supermemory (see [Migrating from bundled Supermemory](#migrating-from-bundled-supermemory)) and Mem0 (see [Migrating from bundled Mem0](#migrating-from-bundled-mem0)). Nothing changes for you: the provider name, the settings it reads, its data directory and its tools stay the same. When a provider you have configured stops shipping with Hermes, `hermes update` installs its catalog plugin for every profile that names it; if you update through the Desktop app, the agent does the same the first time it starts. Every outcome is shown to you — in the terminal, in Desktop, or with the first reply on a messaging platform. If the install cannot happen (`security.allow_lazy_installs: false`, offline, declined), the warning includes the exact `hermes plugins install <name>` command.
 
 ## Building a Memory Provider
 

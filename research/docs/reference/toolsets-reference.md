@@ -178,6 +178,12 @@ Affordances that act on the Hermes desktop app itself — read/close the embedde
 
 Create and switch desktop [Projects](/docs/user-guide/cli) (named, multi-folder workspaces) via one `create`/`switch`/`list` action enum. GUI / desktop sessions only.
 
+`catalog`
+
+`manage_catalog`
+
+Search the plugin catalog and skills hub, and install items through the approval card into this chat's profile. Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions, even when a config list names it. `all` does not include it. Deferred behind `tool_search` by default. Remove it with `agent.disabled_toolsets: [catalog]`.
+
 `safe`
 
 `image_generate`, `vision_analyze`, `web_extract`, `web_search` (via `includes`)
@@ -195,12 +201,6 @@ Web search only (without extract).
 `session_search`
 
 Search past conversation sessions.
-
-`setup`
-
-`manage_catalog`
-
-Onboarding-only surface of the desktop setup profile: search the plugin catalog and skills hub, and install items through the approval card. Granted by the backend to sessions whose profile carries `role: setup` in its `profile.yaml`; stripped from every other profile even when a config list, `HERMES_TUI_TOOLSETS`, or `all` names it. Not configurable and not listed by `hermes tools`.
 
 `skills`
 
