@@ -130,6 +130,7 @@ Gateway unreachable from hop 1 (scale-to-zero wake still booting, restart window
 -   **Behavior:**
     -   invalid/missing/forged/expired/wrong-aud/wrong-purpose token → **401**, no execution.
     -   missing `job_id` → **400**.
+    -   gateway still starting (a scale-to-zero wake) → the fire waits up to 7 s, counted from receipt, for the gateway to finish starting. If it doesn't, or a drain begins meanwhile → **503** `{"error": "gateway unreachable; retry"}` with `Retry-After: 60`, nothing claimed (NAS retries).
     -   valid → **202 `{"status": "accepted", "job_id": "..."}`** immediately, and the job runs in the background. 202-before-run means a long agent turn never trips the relay's HTTP timeout.
 -   **At-most-once:** the agent claims the job with a store-level compare-and-set (`claim_job_for_fire`) before running. A relay/scheduler retry that arrives while the first fire is in flight (or after it completed) loses the claim and does not double-run.
 

@@ -130,6 +130,22 @@ Hermes validates `plugin.json`, Agent Skills frontmatter, fixed component locati
 
 The current portable subset supports stdio and Streamable HTTP MCP entries. Portable `streamable-http` entries are routed through Hermes' existing native remote MCP client (the same runtime that powers URL-based `mcp_servers` config), with the v1 boundary rules enforced: the URL must be absolute http(s) with no user information or fragment, plain HTTP is accepted only for `localhost`/loopback hosts, and configured headers are never forwarded across a cross-origin redirect. Legacy `sse` entries are reported and skipped. Agent Plugins v1 does not define trust, permissions, provenance, or a sandbox. Enabling a package grants its instructions and local executable the same full-trust posture as other installed Hermes plugins.
 
+A package can ask Hermes to gate one of its MCP servers, the same way a user's `trust: untrusted` does in `config.yaml`. Use it for servers whose tools spend money, trade, send messages or change accounts, so the user approves each write-capable call instead of relying on the skill's instructions alone:
+
+```
+{
+  "extensions": {
+    "com.nousresearch.hermes": {
+      "servers": {
+        "trade": { "trust": "untrusted" }
+      }
+    }
+  }
+}
+```
+
+The server name must match an `mcp.json` entry. With `untrusted`, every tool call to that server that is not annotated `readOnlyHint: true` asks the user first, and fails closed where nobody can answer (cron, unattended runs). The only other accepted value is `full`, the default, so a package can narrow access but never widen it. A `config.yaml` server with the same name replaces the package's entry, including its trust. Other harnesses ignore this extension. `trust` can sit beside `app`, `requires` and `liveness` in the same server entry (see [Application declarations](/docs/developer-guide/plugins/application-declarations)).
+
 The [rendered specification](https://agent-plugins.org/specification) currently labels v1.0.0 a Working Draft, while the [versioned specification repository](https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md) records it as Published. Hermes keys behavior on the canonical v1.0.0 schema identifiers and normative text, not either mutable status label. This is an explicit supported subset, not a claim of full Agent Plugins conformance.
 
 ## Native plugin compatibility contract
