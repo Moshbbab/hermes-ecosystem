@@ -555,9 +555,17 @@ Fetch Canvas LMS courses and assignments via API token.
 
 Turn an unanswerable decision into a questionnaire doc.
 
+[**first-task**](/docs/user-guide/skills/optional/productivity/productivity-first-task)
+
+Run the first task chat that setup hands off.
+
 [**here-now**](/docs/user-guide/skills/optional/productivity/productivity-here-now)
 
 Publish sites to {slug}.here.now and store files in Drives.
+
+[**initiate-setup**](/docs/user-guide/skills/optional/productivity/productivity-initiate-setup)
+
+Run the first-run setup chat in the Hermes desktop app.
 
 [**live-dashboard**](/docs/user-guide/skills/optional/productivity/productivity-live-dashboard)
 

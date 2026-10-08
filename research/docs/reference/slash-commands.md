@@ -302,6 +302,10 @@ Distill a reusable skill from anything you describe — a directory, a URL, the 
 
 Write a markdown implementation plan to `.hermes/plans/` in the active workspace — planning only, no execution. Empty argument infers the task from the conversation. (Formerly the bundled `plan` skill; now built-in so it survives the Telegram/Discord command-menu caps.)
 
+`/initiate-setup` (alias: `/initiate_setup`)
+
+Run the first-run setup: the agent learns about you and sets Hermes up around you. Sends the `initiate-setup` skill plus a short block of facts about this session and machine (surface, tools present, OS, CPU, RAM, GPU and language; see [What the setup chat knows about your computer](/docs/user-guide/desktop#what-the-setup-chat-knows-about-your-computer)), as one normal turn. In the Microsoft Store desktop app, the first message ever ends with a one-line offer to run it (see [Onboarding](/docs/user-guide/configuration#onboarding)). Works in the CLI, the messaging gateway, the TUI, and the desktop app. In the desktop app, Hermes itself asks the opening questions (your name, then an accent colour) before the model's first reply.
+
 `/init [notes]`
 
 Generate or update `AGENTS.md` project instructions from a repo scan (port of Codex `/init`). The agent inspects manifests, layout, and toolchain configs with its read-only tools, then writes a concise `AGENTS.md` — or, if one exists, merge-updates it preserving your content. Optional notes steer the emphasis. Works in the CLI, the messaging gateway, and the TUI.
@@ -703,6 +707,10 @@ Distill a reusable skill from anything you describe.
 `/plan [task]`
 
 Write a markdown implementation plan to `.hermes/plans/`; no execution.
+
+`/initiate-setup` (alias: `/initiate_setup`)
+
+Run the first-run setup: the agent learns about you and sets Hermes up around you. On Slack: `/hermes initiate-setup`.
 
 `/bundles`
 
