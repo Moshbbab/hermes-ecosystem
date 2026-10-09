@@ -78,12 +78,6 @@ standalone
 
 Microsoft Teams meeting pipeline — Graph-backed, transcript-first meeting summaries
 
-`spotify`
-
-backend (7 tools)
-
-Native Spotify playback, queue, search, playlists, albums, library
-
 `google_meet`
 
 standalone

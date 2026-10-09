@@ -41,7 +41,7 @@ Or in-session:
 ```
 /tools list
 /tools disable browser
-/tools enable spotify
+/tools enable discord
 ```
 
 ## Core Toolsets
@@ -219,12 +219,6 @@ Start a new desktop chat in an existing profile (this chat's own profile when no
 `skill_manage`, `skill_view`, `skills_list`
 
 Skill CRUD and browsing.
-
-`spotify`
-
-`spotify_albums`, `spotify_devices`, `spotify_library`, `spotify_playback`, `spotify_playlists`, `spotify_queue`, `spotify_search`
-
-Native Spotify control (playback, queue, search, playlists, albums, library). Registered by the bundled `spotify` plugin.
 
 `terminal`
 
