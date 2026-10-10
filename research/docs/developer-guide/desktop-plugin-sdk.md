@@ -162,6 +162,8 @@ interface PluginContext {
   addEventListener: (target: EventTarget, type: string, listener: EventListener, options?: AddEventListenerOptions | boolean) => () => void
   /** The curated OS door: native notification, open-external, reveal-in-file-manager, clipboard. */
   os: PluginOs
+  /** Lines in the core pet's speech bubble, attributed to this plugin (see "Pet bubble"). */
+  pet: PluginPet
   /** Plugin-scoped JSON persistence (keys live under `hermes.plugin.<id>.`). */
   storage: PluginStorage
 }
@@ -490,7 +492,7 @@ host.composer: {
 
 A multi-session plugin keeps its per-session state on its side (which session its panel is editing) and passes that id here; the bus guarantees one plugin write can never land in another session's composer.
 
-**Migrating off DOM reach-in** (the held catalog plugins that motivated this API):
+**Migrating off DOM reach-in** (the held catalog plugins that motivated this API and its siblings; the pet-wallet row uses the [pet bubble](#pet-bubble) door):
 
 Plugin
 
@@ -527,6 +529,12 @@ intelligent-tool-break (#115964)
 "Message" button only toasts "type /break" (no composer write)
 
 `host.composer.setDraft(host.state.focusedSessionId.get(), '/break ')` then `host.composer.focus(null)` restores the intended behaviour
+
+pet-wallet (#135178)
+
+`document.querySelector('canvas[aria-label$=" pet"]')` to find the core pet, a `position:fixed; z-index:9999` overlay on `document.body` that follows it every frame, document-wide capture-phase pointer listeners
+
+`ctx.pet.say(text, { id: 'balance', tone?, ttlMs? })` — the core bubble shows it over the pet, in-window and popped out, labelled with the plugin name; `ctx.pet.visible` tells you when there is no pet so you can fall back to your status-bar chip
 
 `sessionId` in the table is the id the plugin's UI is bound to; for a composer slot render it is `host.state.focusedSessionId.get()`.
 
@@ -849,6 +857,9 @@ ctx.os.notify({ title, body?, silent?, icon?, activate?, onActivate?, actions? }
 ctx.os.openExternal(url)                   // OS default handler (browser, mail, spotify:) → Promise<boolean>
 ctx.os.revealPath(path)                    // reveal in Finder / Explorer → Promise<boolean>
 ctx.os.writeClipboard(text)                // system clipboard → Promise<boolean>
+ctx.pet.say(text, { id?, tone?, ttlMs? })   // line in the core pet's speech bubble → disposer
+ctx.pet.clear(id?)                         // drop one line (or all of yours)
+ctx.pet.visible                            // ReadableAtom<boolean> — is a pet on screen?
 host.navigate('/route')                    // hash-route navigation
 host.openSession(id, { profile?, intent? }) // open a stored session core-style;
                                            //   profile: soft-swap to that profile's backend first
@@ -928,6 +939,51 @@ ctx.os.notify({
 `activate` is deeplink-compatible: `hermes://index-network/intent/1` and the hash path `/index-network/intent/1` resolve to the same in-app route (and the same `hermes://…` URL works as an OS deep link). Action buttons only render on signed macOS builds; elsewhere the body click still activates. Navigation only happens on user click — never from a background event alone.
 
 The other doors (`openExternal`, `revealPath`, `writeClipboard`) resolve `false` instead of throwing when the capability isn't available (older desktop shell, plain browser) — branch on the result rather than sniffing the bridge.
+
+### Pet bubble — `ctx.pet`
+
+The core pet (the petdex mascot, in-window or popped out into its own OS window) has a speech bubble. `ctx.pet` lets a plugin put a short line in it, so you never have to find the pet in the app DOM or float your own overlay over it:
+
+```
+register(ctx) {
+  // Shows "DeepSeek ¥12.40 left" over the pet for 8 s, labelled "Pet Wallet".
+  const dispose = ctx.pet.say('DeepSeek ¥12.40 left', { id: 'balance', ttlMs: 8000 })
+
+  // Same id → replaces the line in place (a refreshed balance, a countdown).
+  ctx.pet.say('DeepSeek ¥11.90 left', { id: 'balance' })
+
+  // Tones: 'info' (default), 'wait' (clock glyph), 'error' (alert glyph).
+  ctx.pet.say('Codex 5h quota at 90%', { id: 'quota', tone: 'wait' })
+
+  dispose()              // remove early, or
+  ctx.pet.clear('quota') // by id, or ctx.pet.clear() for all of yours
+
+  // No pet on screen? Fall back to your own status-bar chip or pane.
+  const visible = ctx.pet.visible.get()
+}
+```
+
+```
+interface PluginPet {
+  say(text: string, options?: { id?: string; tone?: 'info' | 'wait' | 'error'; ttlMs?: number }): () => void
+  clear(id?: string): void
+  visible: ReadableAtom<boolean>
+}
+```
+
+What the host guarantees, so you don't have to:
+
+-   **Plain text.** Control characters and bidi overrides are stripped, whitespace collapses to one line, and the text is capped at 120 characters. It renders as a text node; markup shows literally.
+-   **Attributed.** Your plugin's name (from the Plugins inventory) is printed above the line, so the user can tell your words from the pet's.
+-   **Short-lived.** Each line expires after `ttlMs` (default 6 s, clamped to 1–30 s). Re-`say` with the same `id` to keep a value up. At most 3 lines per plugin are live (the oldest is evicted) and the bubble shows the newest line from any plugin.
+-   **Rate-limited.** 10 `say` calls per plugin per 10 s; extra calls are dropped with a console warning and return a no-op disposer.
+-   **Core first.** When the agent hits an error or is waiting on the user, the core status bubble wins; your line shows again once that clears (if it hasn't expired).
+-   **The user's pet setting wins.** If no pet is adopted, or it is turned off, nothing shows. `ctx.pet.visible` lets you branch on that.
+-   **Cleaned up with you.** Disabling, unloading, or hot-reloading your plugin removes every line it still has up.
+
+In-window, the bubble appears only for plugin lines (the app itself shows the agent's status). In the popped-out overlay, plugin lines share the bubble with the core status lines. The overlay is a separate window that loads no plugin code; the main window sends it the live lines with the rest of the pet state.
+
+Pointer input on the pet (drag, shift-click pop-out, overlay click) belongs to the host and has no plugin hook. Use a palette command, a status-bar item, or your own pane for actions.
 
 ### Desktop appearance settings — `host.settings`
 
@@ -1340,7 +1396,7 @@ Host
 
 Plugin contract
 
-`HermesPlugin`, `PluginContext`, `PluginContribution`, `PluginStorage`, `PluginOs`, `PluginRestOptions`, `PluginNativeNotificationInput`, `PluginNotificationAction`, `HermesOpenTarget`, `Contribution`
+`HermesPlugin`, `PluginContext`, `PluginContribution`, `PluginStorage`, `PluginOs`, `PluginPet`, `PetSayOptions`, `PetMessageTone`, `PluginRestOptions`, `PluginNativeNotificationInput`, `PluginNotificationAction`, `HermesOpenTarget`, `Contribution`
 
 Area constants
 

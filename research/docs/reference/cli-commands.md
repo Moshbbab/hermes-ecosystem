@@ -336,7 +336,7 @@ Show version information.
 
 `hermes update`
 
-Pull latest code and reinstall dependencies. `--check` previews without installing; `--backup` takes a pre-pull `HERMES_HOME` snapshot.
+Update to the latest stable release (or the selected channel) and reinstall dependencies. `--check` previews without installing; `--backup` takes a pre-pull `HERMES_HOME` snapshot.
 
 `hermes uninstall`
 
@@ -3345,7 +3345,7 @@ hermes update [--gateway] [--check] [--plan] [--no-backup] [--backup] [--yes]
 
 Updates an admitted source checkout and prepares dependencies through PM. Use `--check` to compare with its configured source target without applying the update. Desktop bundles, Docker, Nix, and Termux packages retain their external update owner. See [Updating & Uninstalling](/docs/getting-started/updating).
 
-`hermes update` pulls the configured update branch (default: `main`). If your checkout is on another branch, Hermes may check out the update branch before pulling. Commit branch work before updating when you want to keep it outside the update autostash flow.
+`hermes update` follows this installation's update channel. A source checkout of the official repository defaults to `stable`, the latest published `vX.Y.Z` GitHub release at its exact commit; forks and mirrors default to `main`. To follow every commit on `main` instead, run `hermes update --set-channel main`; `hermes update --set-channel stable` switches back. On the `main` channel, a checkout on another branch may be switched to the update branch before pulling. Commit branch work before updating when you want to keep it outside the update autostash flow.
 
 Option
 
@@ -3357,11 +3357,11 @@ Print this installation's identity and path, then exit.
 
 `--set-channel CHANNEL`
 
-Persist the update channel for this source installation without applying an update. `main` is the only valid source channel. Bundled applications have a fixed build channel and refuse channel changes.
+Persist the update channel for this source installation without applying an update: `stable` (published releases) or `main` (every commit). Bundled applications have a fixed build channel and refuse channel changes.
 
 `--channel CHANNEL`
 
-Select a source channel for this invocation only (`main` is the only valid one).
+Select a source channel for this invocation only (`stable` or `main`); nothing is saved.
 
 `--branch NAME`
 
