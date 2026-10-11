@@ -9,9 +9,9 @@ The committed project version is always `0.0.0`. Release jobs derive the payload
 ## Order
 
 1.  Refresh `origin/main` and the remote attempt and marker refs (`rc.*` and `abandoned-rc.*`). Derive the next SemVer from the published release family seeded at `0.21.5` (the last legacy CalVer release, v2026.9.24) alone: the newer of the protected R2 stable head and the newest published non-prerelease GitHub release with a `vX.Y.Z` tag. A release that skipped bundles moves only the second. Attempts do not move the version line. A cut whose next version already has a final `vX.Y.Z` tag is refused until that publication finishes.
-2.  Push an annotated `rc.<N>-vX.Y.Z` attempt ref atomically, create one non-prerelease GitHub draft on it, and dispatch `Stable Release` on that exact ref. The attempt number comes from the existing attempt refs of that version. The claim message binds its commit, attempt number, autopublish policy, `skipBundles` and `skipTests` flags, and one monotonically allocated epoch. That epoch is the release date and native packaging clock for every matrix leg and retry. One outstanding attempt, of any version, blocks a new `release`.
+2.  Push an annotated `rc.<N>-vX.Y.Z` attempt ref atomically, create one non-prerelease GitHub draft on it, and dispatch `Stable Release` on that exact ref. The attempt number comes from the existing attempt refs of that version. The claim message binds its commit, attempt number, autopublish policy, `skipBundles`, `skipTests`, `includeMacosIntel` and `includeTermux` flags, and one monotonically allocated epoch. That epoch is the release date and native packaging clock for every matrix leg and retry. One outstanding attempt, of any version, blocks a new `release`.
 3.  Admit the exact remote annotated tag-object SHA, peeled commit, `GITHUB_REF`, `GITHUB_SHA`, checked-out `HEAD`, and ancestry on `origin/main`.
-4.  Run the whole source, Docker, Nix, PM bundle, install/update, Termux, Windows, signed-package, and native-upgrade acceptance graph.
+4.  Run the whole source, Docker, Nix, PM bundle, install/update, Windows, signed-package, and native-upgrade acceptance graph (plus macOS Intel and Termux when the claim opted into them).
 5.  Push immutable versioned Docker and R2 artifacts from the tested bytes. The Docker image is pushed as soon as its own tests pass, tagged by the attempt ref. Do not move `stable` or `latest` aliases yet and do not rebuild for publication.
 6.  Create the annotated final `vMAJOR.MINOR.PATCH` receipt at publish, not at green. It binds the winning attempt's ref, object, commit, archive prefix, candidate-manifest SHA256 (`null` when the claim skipped bundles), Docker manifest digest, and autopublish policy.
 7.  The stable publication controller resolves releases oldest first. It creates `vX.Y.Z`, retargets the still-draft release onto it, strips the warning blocks, makes the release public as the last call, then verifies and promotes the receipt-bound Docker digest and advances App Installer, macOS, APT, downloads-page, and protected R2 heads.
@@ -30,7 +30,7 @@ Start from an exact commit already on remote `main`:
 python scripts/release.py release --commit "$(git rev-parse origin/main)" --bump patch --remote origin
 ```
 
-`--bump` defaults to `patch`; pass `minor` or `major` only when that change is intentional. The selected commit must descend from the newest published `vX.Y.Z`. With no published tag, any commit already on remote `main` is accepted. An abandoned attempt puts no constraint on the next cut; it was often abandoned because its commit is bad. `release` also refuses while any attempt, of any version, is outstanding. The refusal prints the attempt's workflow run URL, the `abandon` command, and the rerun command before it raises.
+`--bump` defaults to `patch`; pass `minor` or `major` only when that change is intentional. The selected commit must descend from the newest published `vX.Y.Z`. With no published tag, any commit already on remote `main` is accepted. An abandoned attempt puts no constraint on the next cut; it was often abandoned because its commit is bad. `release` also refuses while any attempt, of any version, is outstanding. The refusal prints the attempt's workflow run URL, the `abandon` command, and the rerun command before it raises. In an interactive terminal it then asks `Abandon <ref> and cut a new attempt? [y/N]`; `y` abandons the attempt and cuts the next one, and the default is no. Anywhere stdin or stdout is not a terminal it raises without asking.
 
 The attempt ref is a public lock, not a SemVer prerelease. It reads `rc.1-v0.21.5`, not `v0.21.5-rc.1`. The package version stays plain `0.21.5`. `parse_attempt_ref` in `scripts/releases/versioning.py` is the one grammar for the shape.
 
@@ -97,6 +97,48 @@ The gates stay strict. `scripts.releases.stable gate` reads the flags and requir
 
 **`--skip-tests`.** Every artifact is built, signed, staged and published the same way as a normal release. The candidate manifest records each native smoke as `skipped`, never as passed. The next release uses that manifest as its upgrade baseline like any other. Every reader that knows the claim (`complete` and the protected R2 advance) refuses a manifest whose smoke results disagree with the claim's `skipTests` flag. Use it only for an emergency fix, and cut a normal release after it.
 
+### macOS Intel and Termux are opt-in
+
+A stable release does not build the macOS Intel (`darwin-x64`) desktop bundle or the Termux (Android aarch64) APT package unless the claim asks for them. Intel macOS is not supported on `main`, and its `macos-15-intel` bundle leg alone takes well over an hour. Both remain buildable:
+
+```
+python scripts/release.py release --commit "$(git rev-parse origin/main)" \
+  --include-macos-intel --include-termux --remote origin
+```
+
+default
+
+`--include-macos-intel`
+
+`--include-termux`
+
+`candidates-darwin-x64`, `transitions-darwin-x64`, `macos-packaged-x64`
+
+skipped
+
+run
+
+skipped
+
+`candidates-termux`, `termux-checks`
+
+skipped
+
+skipped
+
+run
+
+Like the skip flags, `--include-macos-intel` and `--include-termux` are written into the claim (`includeMacosIntel`, `includeTermux`) and `admit` emits them as `include-macos-intel` and `include-termux`. A claim without those keys, which includes every claim cut before they existed, reads them as `false`. The gate requires an opted-out job to report `skipped`, and `--skip-bundles` / `--skip-tests` still remove these jobs when the platform is opted in.
+
+When a platform is left out, its rows are absent from the candidate manifest, the release body's downloads table and the downloads page. The two channels behave differently:
+
+-   **macOS Intel:** there is one macOS stable feed (`releases/darwin/stable/stable-mac.yml`), and `promote` replaces it with the arm64 leg alone. Intel Macs on that feed get no update until a release is cut with `--include-macos-intel`. The protected R2 head carries three native packages, and a preview channel that ships macOS Intel cannot be retired into a stable head without it.
+-   **Termux:** the APT indexes are not rewritten, so the APT channel stays on its previous release.
+
+A release that opts macOS Intel back in after one that left it out has no published Intel baseline, so its Intel upgrade arm is skipped like a first release.
+
+The claim flags, the jobs they remove, the handoffs, targets and smoke jobs for both platforms are defined once in `scripts/releases/optional_platforms.py`.
+
 The claim push is the atomic version lock. Two callers may derive the same next version, but only one push wins; the loser reports the winning tagger, time, and commit. A rejected or abandoned claim remains spent. To publish or abandon:
 
 ```
@@ -126,7 +168,7 @@ Nothing points a client at an attempt until publish. The updater compares versio
 
 The desktop workflow's optional `termux_upgrade_from_tag` input names an exact published release with a Termux R2 handoff. Explicit non-publishing desktop builds retain no downloadable job artifacts.
 
-The desktop workflow takes a `jobs` input with the groups `darwin-arm64`, `darwin-x64`, `win32-arm64`, `win32-x64`, `win32-bundle`, `linux-x64`, `linux-arm64`, and `termux`. Stable calls it once per group, except the linux groups, which wait for a real Linux build. Each Mac arch and the Windows bundle stage a receipt, and each install arm starts from its own receipt as soon as its own bytes are staged. `acceptance` is the one join that blocks publication.
+The desktop workflow takes a `jobs` input with the groups `darwin-arm64`, `darwin-x64`, `win32-arm64`, `win32-x64`, `win32-bundle`, `linux-x64`, `linux-arm64`, and `termux`. Stable calls it once per group, except the linux groups, which wait for a real Linux build, and the opt-in `darwin-x64` and `termux` groups, which it calls only when the claim includes them. Each Mac arch and the Windows bundle stage a receipt, and each install arm starts from its own receipt as soon as its own bytes are staged. `acceptance` is the one join that blocks publication.
 
 Every gate and every candidate starts straight after `admit`. CI is a gate that `acceptance` requires, not a lock the signed builds wait behind, so a slow gate cannot delay a bundle; the price is that a broken `main` still pays for signed candidates that `acceptance` then refuses. The `smoke-win32-universal` job is gone; the per-arch MSIX smokes cover each arch, and the Windows install arms install the `.msixbundle` on both arches.
 
