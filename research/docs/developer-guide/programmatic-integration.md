@@ -109,6 +109,10 @@ Required whenever an ordinal, message ID, or row ID is sent. Declares that this 
 
 Additionally required when the cut would leave the transcript empty (ordinal `0`).
 
+`confirm_deep_truncate`
+
+Send it when the cut would archive more than one user turn (anything deeper than regenerating or editing the last turn), after asking the user. This release logs an unconfirmed deep cut and still runs it, so older clients keep working. The next release will refuse it with code `4033` (`error.data` carries `archived_messages` and `archived_user_turns`, and nothing is written).
+
 A truncation parameter without `confirm_truncate` is refused with code `4004` or `4029` and nothing is written. Hosts that implement rewind must set the flag at the moment the user asks for it, and must never keep truncation parameters in state across ordinary submits. Prefer `truncate_before_row_id` (from resume `row_id` / `_row_id`) over ordinals; keep the ordinal as a back-compat / optimistic-row path only when no durable id is available yet.
 
 A truncating submit is never absorbed by the busy-input policy. While a turn is still running, an ordinary `prompt.submit` is steered, redirected, or queued (`display.busy_input_mode`), but a rewind / edit / regenerate refuses with code `4009` (`session busy`) instead — queueing it would drop the history cut and run the edit as a plain follow-up after the un-edited turn. Hosts call `session.interrupt` and retry the same submit until it lands; the Desktop app does this automatically, so editing a message while Hermes is still thinking stops the live turn and reruns from the edited prompt.

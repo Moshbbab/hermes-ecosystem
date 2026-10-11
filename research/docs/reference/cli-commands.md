@@ -274,6 +274,10 @@ Run Hermes as an ACP server for editor integration.
 
 Manage MCP server configurations and run Hermes as an MCP server.
 
+`hermes connectors`
+
+List, connect, rename and disconnect hosted connector accounts.
+
 `hermes plugins`
 
 Manage Hermes Agent plugins (install, enable, disable, remove).
@@ -2728,6 +2732,40 @@ Toggle tool selection for a server.
 Force re-authentication for an OAuth-based MCP server.
 
 See [MCP Config Reference](/docs/reference/mcp-config-reference), [Use MCP with Hermes](/docs/guides/use-mcp-with-hermes), and [MCP Server Mode](/docs/user-guide/features/mcp#running-hermes-as-an-mcp-server).
+
+## `hermes connectors`
+
+```
+hermes connectors <subcommand>
+```
+
+Manage hosted connector accounts (apps such as Gmail reached through the Nous tool gateway). Needs a Nous Portal sign-in. One app can have several named accounts; see [Multiple connector accounts](/docs/user-guide/features/tool-gateway#multiple-connector-accounts).
+
+Subcommand
+
+Description
+
+`list`
+
+List connectors and whether each is connected.
+
+`accounts [app] [--all]`
+
+List accounts, for one app or all of them. `--all` includes retired accounts.
+
+`connect <app> [--alias NAME] [--reconnect [--force]]`
+
+Print the link to connect an account, then wait until it is connected or the deadline passes. Ctrl-C stops waiting. `--alias` names the account; a new name adds another account. `--reconnect` repairs the named account and deletes nothing; on an account that is already connected it says so and does nothing unless `--force` is given.
+
+`rename <app> <name-or-label> --to <new>`
+
+Rename an account. An unnamed account is matched by its app label.
+
+`disconnect <app> [--alias NAME] [--yes]`
+
+Remove an account. Asks to confirm unless you pass `--yes`.
+
+Rename needs a Nous Portal version that supports it. Until then it reports "This Nous Portal cannot rename connector accounts yet."
 
 ## `hermes plugins`
 

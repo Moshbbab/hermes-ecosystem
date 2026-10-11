@@ -74,7 +74,7 @@ Run Python scripts that call Hermes tools programmatically.
 
 `manage_connections`
 
-Connect the user to apps: managed connector accounts through the Nous gateway, and local MCP servers from the catalog. On the desktop every action is a card that blocks until the user settles it; off the desktop managed actions return a connect link per app.
+Connect the user to apps: managed connector accounts through the Nous gateway, and local MCP servers from the catalog. It can add a second named account of an app and rename accounts. On the desktop every action is a card that blocks until the user settles it; off the desktop managed actions return a connect link per app.
 
 `coding`
 

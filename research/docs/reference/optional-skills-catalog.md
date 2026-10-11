@@ -95,6 +95,10 @@ Description
 
 Make a verified AI presenter video from script + image.
 
+[**anatomy**](/docs/user-guide/skills/optional/creative/creative-anatomy)
+
+Explain an idea as an interactive isometric machine figure.
+
 [**archify**](/docs/user-guide/skills/optional/creative/creative-archify)
 
 Validated interactive HTML diagrams, upstream-maintained.

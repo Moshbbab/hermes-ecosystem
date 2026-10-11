@@ -334,6 +334,10 @@ Drive the multi-profile, multi-project collaboration board without leaving chat.
 
 Reload MCP servers from config.yaml and re-probe tool availability (credentials/daemons that appeared mid-session)
 
+`/connectors`
+
+TUI-only. Open the connector accounts list: one row per account, `app · name · status`. Keys: ↑/↓ select, `r` rename (inline input; Enter saves, Esc cancels), `a` add another account (pick the app, enter a name, then open the link), `c` reconnect the selected account (offered only when it needs repair: failed, expired, revoked or inactive), `x` remove (asks to confirm), Tab show or hide retired accounts, Esc or `q` close. See [Multiple connector accounts](/docs/user-guide/features/tool-gateway#multiple-connector-accounts).
+
 `/reload-skills` (alias: `/reload_skills`)
 
 Re-scan `~/.hermes/skills/` for newly installed or removed skills
@@ -547,6 +551,10 @@ Show session info, followed by a local **Session recap** block (recent turn coun
 `/stop`
 
 Kill all running background processes and interrupt the running agent.
+
+`/pause [reason | off]`
+
+Global emergency stop, the in-chat form of [`hermes pause`](/docs/reference/cli-commands): puts new cron, kanban and gateway work on hold until `/pause off`. In-flight work finishes normally, and slash commands keep working while paused, so a messaging-only operator can always lift it.
 
 `/model [provider:model]`
 
@@ -802,9 +810,10 @@ Invoke any installed skill by name.
 -   `/skills` is **CLI-only for search/browse/install**; its write-approval review subcommands (`pending`, `approve`, `reject`, `diff`, `approval`) also work on messaging platforms when `skills.write_approval` is on. `/memory` works on **both** surfaces.
 -   `/verbose` is **CLI-only by default**, but can be enabled for messaging platforms by setting `display.tool_progress_command: true` in `config.yaml`. When enabled, it cycles the `display.tool_progress` mode and saves to config.
 -   `/focus` and `/verbose` share one suppression path (`display.tool_progress`), so they can never contradict each other: `/focus on` pins tool progress to `off` and stashes your mode under `display.focus_saved_tool_progress`; `/focus off` restores it; cycling `/verbose` while focus is on takes the mode back and clears the focus badge. Focus view is display-only — it never changes conversation history, the system prompt, or anything sent to the model, so it has zero prompt-cache impact.
--   `/sethome`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, and `/commands` are **messaging-only** commands.
+-   `/sethome`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, `/pause`, and `/commands` are **messaging-only** commands.
 -   `/status`, `/egress`, `/version`, `/whoami`, `/bg`, `/btw`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/diff`, `/debug`, `/fast`, `/approvals`, `/busy`, `/footer`, `/curator`, `/kanban`, `/topup`, `/login`, `/suggestions`, `/blueprint`, `/learn`, `/init`, `/sessions`, `/loop`, and `/yolo` work in **both** the CLI and the messaging gateway.
 -   `/voice join`, `/voice channel`, and `/voice leave` are only meaningful on Discord.
+-   `/connectors` is **TUI-only**.
 -   In the TUI, `/sessions` shows live sessions in the current TUI process. Use `/resume [name]` or `hermes --tui --resume <id-or-title>` for saved or closed transcripts.
 
 ## Confirmation prompts for destructive commands

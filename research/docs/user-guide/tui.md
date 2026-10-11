@@ -159,6 +159,10 @@ Rich token / cost / context panel
 
 Observability overlay — live subagent tree with kill/pause controls, per-branch cost / token / file rollups, turn-by-turn history
 
+`/connectors`
+
+Connector accounts list: rename, add, reconnect or remove accounts, and show retired ones. See [Slash Commands](/docs/reference/slash-commands#tools--skills) for the keys
+
 `/reload`
 
 Re-reads `~/.hermes/.env` into the running TUI process so newly added API keys take effect without a restart
