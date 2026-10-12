@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>sourcevault-ai/sourcevault-code-tools — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="sourcevault-code-tools is a Hermes Agent plugin that provides local, private code memory for repositories. It enables semantic code search, file reading, and…">
+<meta name="description" content="sourcevault-code-tools is a Hermes Agent plugin that gives Hermes persistent memory of codebases through semantic code search, exact file reads, and question…">
 <link rel="canonical" href="https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools">
 <meta property="og:title" content="sourcevault-ai/sourcevault-code-tools — Hermes Atlas">
-<meta property="og:description" content="sourcevault-code-tools is a Hermes Agent plugin that provides local, private code memory for repositories. It enables semantic code search, file reading, and…">
+<meta property="og:description" content="sourcevault-code-tools is a Hermes Agent plugin that gives Hermes persistent memory of codebases through semantic code search, exact file reads, and question…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="sourcevault-ai/sourcevault-code-tools — Hermes Atlas">
-<meta name="twitter:description" content="sourcevault-code-tools is a Hermes Agent plugin that provides local, private code memory for repositories. It enables semantic code search, file reading, and…">
+<meta name="twitter:description" content="sourcevault-code-tools is a Hermes Agent plugin that gives Hermes persistent memory of codebases through semantic code search, exact file reads, and question…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=sourcevault-code-tools&amp;subtitle=Hermes+Agent+plugin+%E2%80%94+private+local+code+memory+for+your+repos+%28semantic+search%2C+file+reads%2C+grounded+Q%26A%29&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools#software",
   "name": "sourcevault-code-tools",
-  "description": "sourcevault-code-tools is a Hermes Agent plugin that provides local, private code memory for repositories. It enables semantic code search, file reading, and grounded Q&A with file-and-line citations through a connection to a SourceVault backend.",
+  "description": "sourcevault-code-tools is a Hermes Agent plugin that gives Hermes persistent memory of codebases through semantic code search, exact file reads, and question answering with file-and-line citations. Slash commands and LLM-callable tools work in Hermes CLI, Telegram, and Hermes Desktop, with all requests HMAC-signed over localhost. It is a client that requires a separate SourceVault server for indexing, embeddings, and retrieval.",
   "url": "https://hermesatlas.com/projects/sourcevault-ai/sourcevault-code-tools",
   "codeRepository": "https://github.com/sourcevault-ai/sourcevault-code-tools",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "sourcevault-ai",
     "url": "https://github.com/sourcevault-ai"
   },
-  "dateModified": "2026-08-21T21:05:26.000Z",
+  "dateModified": "2026-10-10T02:51:30.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">250·repos</span>
+    <span id="meta-count">255·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-08-21</span>
+    <span><span class="meta-label">updated</span>2026-10-10</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">sourcevault-code-tools is a Hermes Agent plugin that provides local, private code memory for repositories. It enables semantic code search, file reading, and grounded Q&amp;A with file-and-line citations through a connection to a SourceVault backend.</p>
+    <p class="summary-text">sourcevault-code-tools is a Hermes Agent plugin that gives Hermes persistent memory of codebases through semantic code search, exact file reads, and question answering with file-and-line citations. Slash commands and LLM-callable tools work in Hermes CLI, Telegram, and Hermes Desktop, with all requests HMAC-signed over localhost. It is a client that requires a separate SourceVault server for indexing, embeddings, and retrieval.</p>
     <ul class="summary-highlights">
-      <li>Adds deterministic slash commands for search, sync, and file reads.</li>
-      <li>Supports LLM-callable tools for models with structured tool use.</li>
-      <li>Requires a local SourceVault server for indexing and vector storage.</li>
+      <li>Provides slash commands like /code-search and /code-ask with citations</li>
+      <li>Requires a separately installed SourceVault backend server</li>
+      <li>Requests are HMAC-signed and travel over localhost only</li>
     </ul>
   </div>
 </section>
@@ -225,14 +225,14 @@ then <code>/code-read my-repo …</code> fails and <code>/code-read My-Repo …<
 discoverability.</p>
 <h3>Requires a SourceVault backend</h3>
 <p>This plugin is the Hermes-side client. Indexing, embeddings (Ollama +
-nomic-embed-text), the vector store (ChromaDB), and the signed API are
-provided by <strong>SourceVault</strong>, a local-first private code-memory server — the
+nomic-embed-text), the vector store (sqlite-vec by default, ChromaDB
+optional), and the signed API are provided by <strong>SourceVault</strong>, a local-first private code-memory server — the
 plugin is useless without it. The server's retrieval engine does the heavy
 lifting behind every answer: hybrid search with cross-encoder reranking,
 symbol-graph context, git-history answers ("why was this changed?"), and
 benchmark-verified grounding (see <a href="https://sourcevault.ai/benchmark/">sourcevault.ai/benchmark</a>).</p>
-<p>Get SourceVault (one-command private install, free 7-day trial, no
-per-seat fees): <strong><a href="https://sourcevault.ai">https://sourcevault.ai</a></strong></p>
+<p>Get SourceVault (one-command private install; free on one repository
+after a 7-day trial of the full Gateway bundle): <strong><a href="https://sourcevault.ai">https://sourcevault.ai</a></strong></p>
 <h3>Install</h3>
 <p>Clone (or download) this plugin, then copy the plugin folder into
 <code>~/.hermes/plugins/</code> — note the source path is the plugin directory, wherever
@@ -384,11 +384,11 @@ commercially licensed product.</p>
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 66.5K</div>
+        <div class="stars">★ 67.0K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 44.9K</div>
+        <div class="stars">★ 48.4K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -400,15 +400,15 @@ commercially licensed product.</p>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
-        <div class="stars">★ 212</div>
+        <div class="stars">★ 210</div>
         <div class="name"><span class="org">yoloshii /</span> ClawMem</div>
       </a>
       <a class="related-row" href="/projects/Signet-AI/signetai">
-        <div class="stars">★ 301</div>
+        <div class="stars">★ 305</div>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 297</div>
+        <div class="stars">★ 300</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">

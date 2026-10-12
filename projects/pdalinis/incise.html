@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pdalinis/incise — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections,…">
+<meta name="description" content="Incise is a CLI and agent-tool backend for making precise, byte-preserving edits to Markdown tables, lists, sections, and YAML frontmatter. Callers specify…">
 <link rel="canonical" href="https://hermesatlas.com/projects/pdalinis/incise">
 <meta property="og:title" content="pdalinis/incise — Hermes Atlas">
-<meta property="og:description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections,…">
+<meta property="og:description" content="Incise is a CLI and agent-tool backend for making precise, byte-preserving edits to Markdown tables, lists, sections, and YAML frontmatter. Callers specify…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/pdalinis/incise">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="pdalinis/incise — Hermes Atlas">
-<meta name="twitter:description" content="Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections,…">
+<meta name="twitter:description" content="Incise is a CLI and agent-tool backend for making precise, byte-preserving edits to Markdown tables, lists, sections, and YAML frontmatter. Callers specify…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=incise&amp;subtitle=Make+small+AI+models+reliable+at+editing+Markdown.+Incise+provides+safe%2C+semantic%2C+byte-preserving+edits+for+AI+agents.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/pdalinis/incise#software",
   "name": "incise",
-  "description": "Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections, and YAML frontmatter using semantic addresses rather than line numbers to ensure targeted edits.",
+  "description": "Incise is a CLI and agent-tool backend for making precise, byte-preserving edits to Markdown tables, lists, sections, and YAML frontmatter. Callers specify what should change by content-based addresses, and deterministic code handles formatting, boundaries, and the smallest possible splice. It is intended for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context.",
   "url": "https://hermesatlas.com/projects/pdalinis/incise",
   "codeRepository": "https://github.com/pdalinis/incise",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "pdalinis",
     "url": "https://github.com/pdalinis"
   },
-  "dateModified": "2026-09-30T00:13:17.000Z",
+  "dateModified": "2026-10-06T20:20:38.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 2
+    "userInteractionCount": 3
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">250·repos</span>
+    <span id="meta-count">255·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -120,11 +120,11 @@
   <p class="project-desc">Make small AI models reliable at editing Markdown. Incise provides safe, semantic, byte-preserving edits for AI agents.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 2</span>
+    <span class="stars">★ 3</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-09-30</span>
+    <span><span class="meta-label">updated</span>2026-10-06</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Incise is a CLI and agent-tool backend designed for precise, byte-preserving updates to Markdown files. It allows AI agents to modify tables, lists, sections, and YAML frontmatter using semantic addresses rather than line numbers to ensure targeted edits.</p>
+    <p class="summary-text">Incise is a CLI and agent-tool backend for making precise, byte-preserving edits to Markdown tables, lists, sections, and YAML frontmatter. Callers specify what should change by content-based addresses, and deterministic code handles formatting, boundaries, and the smallest possible splice. It is intended for AI-maintained documentation, Obsidian vaults, Markdown knowledge bases, and local models with limited context.</p>
     <ul class="summary-highlights">
-      <li>Performs minimal structural edits while preserving surrounding document bytes.</li>
-      <li>Supports semantic addressing for headings, rows, and list items.</li>
-      <li>Provides function schemas for AI agent tool integration.</li>
+      <li>Semantic addresses select headings, rows, items, and keys by content</li>
+      <li>Minimal edits change only the targeted structural range</li>
+      <li>Ambiguous or unsafe requests fail loudly with actionable refusals</li>
     </ul>
   </div>
 </section>
@@ -201,6 +201,8 @@ cargo install --locked --path crates/incise-cli
 incise outline vault/Projects.md
 </code></pre>
 <p>For exact values after structural discovery, use <code>incise rows notes.md --table Components</code>, <code>incise items notes.md --list Tasks</code>, or <code>incise keys notes.md</code>. Their JSON forms carry the structured rows, list items, or flattened frontmatter keys together with the file hash.</p>
+<h4>Check structural hazards</h4>
+<p>Run <code>incise check notes.md --json</code> to report structural hazards that can make Incise addressing ambiguous or force an edit to refuse. This is deliberately narrower than a Markdown style linter. Checking never writes. <code>incise check notes.md --fix-safe --if-match HASH --json</code> applies only repairs classified as <code>automatic</code>; explicit repairs still require the named semantic operation, and manual findings require user intent. The first release has no automatic repair rules, so safe-fix is a hash-guarded no-op until a rule earns that classification.</p>
 <h4>Make a semantic edit</h4>
 <pre><code class="language-bash">incise table-update-cell vault/Projects.md \
   --table Projects \
@@ -211,6 +213,11 @@ incise outline vault/Projects.md
 <p>The row is selected by <strong>content</strong>, not by a line number.</p>
 <p>If the new value requires the table to widen, Incise re-pads the table correctly while leaving the rest of the file untouched.</p>
 <hr>
+<p>Delete a complete table only through the confirmed CLI operation. An unconfirmed call prints a bounded preview and writes nothing; after checking the resolved heading, ordinal, columns, and rows, repeat it with <code>--confirm</code>:</p>
+<pre><code class="language-bash">incise table-delete vault/Projects.md --table Projects
+incise table-delete vault/Projects.md --table Projects --confirm
+</code></pre>
+<p>If several tables share the heading, add <code>--ordinal N</code>. Whole-table deletion is intentionally CLI-only in this release: the measured <code>table_edit</code> schema used by Pi and Hermes retains its four established actions.</p>
 <h3>What Incise can edit</h3>
 <table>
 <thead>
@@ -221,7 +228,7 @@ incise outline vault/Projects.md
 </thead>
 <tbody><tr>
 <td><strong>Tables</strong></td>
-<td>Add rows, update cells, delete rows, realign columns, query rows</td>
+<td>Add rows, update cells, delete rows or whole tables, realign columns, query rows</td>
 </tr>
 <tr>
 <td><strong>Lists &amp; tasks</strong></td>
@@ -237,7 +244,7 @@ incise outline vault/Projects.md
 </tr>
 <tr>
 <td><strong>Structure</strong></td>
-<td>Discover headings, tables, lists, frontmatter, rows, keys, and hashes</td>
+<td>Discover headings, tables, lists, frontmatter, rows, keys, hashes, and structural hazards</td>
 </tr>
 </tbody></table>
 <h3>Use Incise with an AI agent</h3>
@@ -549,7 +556,7 @@ incise outline vault/Projects.md
 </tbody></table>
 <p>These are scoped model measurements, not promises about every model or runtime. The reusable result is the failure class removed: character arithmetic, structural-boundary guesses, ambiguous targeting, and byte-for-byte document reconstruction.</p>
 <p>Read the <a href="https://pdalinis.github.io/incise/benchmarks/">benchmark summary</a>, the complete <a href="https://github.com/pdalinis/incise/blob/main/bench/FINDINGS.md"><code>bench/FINDINGS.md</code></a>, or inspect the <a href="https://github.com/pdalinis/incise/blob/main/bench/results/ornith_final_v2_safe_routed_20260923_analysis.json">Ornith final analysis</a>, <a href="https://github.com/pdalinis/incise/blob/main/bench/results/ornith_final_v2_routes_20260923_analysis.json">exact-route audit</a>, and <a href="https://github.com/pdalinis/incise/blob/main/bench/results/gemma_safe_routed_full_v8_20260922_analysis.json">Gemma v8 analysis</a>.</p>
-<p>The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across <strong>110,406 generated cases over 54 fixtures</strong>. Property invariants and 212 injected mutations provide additional evidence that preservation failures are detected.</p>
+<p>The dependency-free Rust core is checked byte-for-byte against an independent Python oracle across <strong>122,307 generated cases over 60 fixtures</strong>. Property invariants and 218 injected mutations provide additional evidence that preservation failures are detected.</p>
 <h3>Frequently asked questions</h3>
 <h4>What is byte-preserving Markdown editing?</h4>
 <p>Incise changes the smallest structural range required by an operation. Bytes outside that range remain identical, so an agent does not have to reproduce the rest of the document.</p>
@@ -559,6 +566,7 @@ incise outline vault/Projects.md
 <p>The agent first inspects document structure, then calls a semantic editor with a content-based address. Use <code>incise schema</code> for the function definitions or install the Hermes or Pi integration.</p>
 <h4>How do I update YAML frontmatter without reformatting?</h4>
 <p>Inspect keys with <code>incise keys FILE</code>, then call <code>incise frontmatter-set FILE --key PATH --value VALUE</code>. Incise preserves unrelated key order, comments, scalar formatting, and document content. See the <a href="https://pdalinis.github.io/incise/yaml-frontmatter-cli/">frontmatter guide</a>.</p>
+<p>Flow-style sequences and mappings such as <code>[one, two]</code> and <code>{mode: fast}</code> are reported as containers but kept opaque. Scalar <code>frontmatter-set</code> calls cannot replace them, so an array or object cannot silently become a quoted string. Quoted bracket-shaped text remains an ordinary scalar.</p>
 <h3>Documentation</h3>
 <p>The <a href="https://pdalinis.github.io/incise/">Incise documentation site</a> covers installation and the core workflow, with focused guides for <a href="https://pdalinis.github.io/incise/markdown-table-editor-for-ai-agents/">Markdown tables</a>, <a href="https://pdalinis.github.io/incise/yaml-frontmatter-cli/">YAML frontmatter</a>, and <a href="https://pdalinis.github.io/incise/obsidian-ai-agent-editing/">Obsidian vaults</a>.</p>
 <p>Run <code>incise --help</code> for every command or <code>incise &lt;command&gt; --help</code> for its arguments. Integration details live in the <a href="https://github.com/pdalinis/incise/blob/main/plugins/hermes/README.md">Hermes guide</a> and <a href="https://github.com/pdalinis/incise/blob/main/plugins/pi/README.md">Pi package guide</a>.</p>
@@ -605,15 +613,15 @@ python3 plugins/hermes/test_plugin.py
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 418</div>
+        <div class="stars">★ 426</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 520</div>
+        <div class="stars">★ 526</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
-        <div class="stars">★ 50</div>
+        <div class="stars">★ 48</div>
         <div class="name"><span class="org">FahrenheitResearch /</span> hermes-weather-plugin</div>
       </a>
       <a class="related-row" href="/projects/42-evey/evey-bridge-plugin">
@@ -625,7 +633,7 @@ python3 plugins/hermes/test_plugin.py
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 396</div>
+        <div class="stars">★ 398</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

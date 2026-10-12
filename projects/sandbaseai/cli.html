@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>sandbaseai/cli — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
-<meta name="description" content="@sandbaseai/cli is a command-line tool and local bridge that uses the Model Context Protocol to connect AI agents to over 2,000 models and APIs. It enables…">
+<meta name="description" content="SandBase CLI is an open-source command-line tool that connects AI clients to AI models and APIs through the Model Context Protocol. Running one connect command…">
 <link rel="canonical" href="https://hermesatlas.com/projects/sandbaseai/cli">
 <meta property="og:title" content="sandbaseai/cli — Hermes Atlas">
-<meta property="og:description" content="@sandbaseai/cli is a command-line tool and local bridge that uses the Model Context Protocol to connect AI agents to over 2,000 models and APIs. It enables…">
+<meta property="og:description" content="SandBase CLI is an open-source command-line tool that connects AI clients to AI models and APIs through the Model Context Protocol. Running one connect command…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/sandbaseai/cli">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="sandbaseai/cli — Hermes Atlas">
-<meta name="twitter:description" content="@sandbaseai/cli is a command-line tool and local bridge that uses the Model Context Protocol to connect AI agents to over 2,000 models and APIs. It enables…">
+<meta name="twitter:description" content="SandBase CLI is an open-source command-line tool that connects AI clients to AI models and APIs through the Model Context Protocol. Running one connect command…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=cli&amp;subtitle=Open-source+AI+CLI+and+local+MCP+server+connecting+25+clients%E2%80%94Claude+Code%2C+Cursor%2C+Codex%2C+ChatGPT%2C+Hermes%2C+and+OpenClaw%E2%80%94to+2%2C000%2B+models%2FAPIs%2C+with+OAuth+and+rollback.&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/sandbaseai/cli#software",
   "name": "cli",
-  "description": "@sandbaseai/cli is a command-line tool and local bridge that uses the Model Context Protocol to connect AI agents to over 2,000 models and APIs. It enables agents to access web search, social media data, and real-time information through a single browser-based authorization.",
+  "description": "SandBase CLI is an open-source command-line tool that connects AI clients to AI models and APIs through the Model Context Protocol. Running one connect command opens browser authorization, after which supported clients can discover, inspect, and run available SandBase models and APIs through a local MCP bridge. A read-only catalog command lists the 25 supported client targets.",
   "url": "https://hermesatlas.com/projects/sandbaseai/cli",
   "codeRepository": "https://github.com/sandbaseai/cli",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "sandbaseai",
     "url": "https://github.com/sandbaseai"
   },
-  "dateModified": "2026-08-28T12:39:42.000Z",
+  "dateModified": "2026-10-12T00:21:53.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">250·repos</span>
+    <span id="meta-count">255·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
-    <span><span class="meta-label">updated</span>2026-08-28</span>
+    <span><span class="meta-label">updated</span>2026-10-12</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">@sandbaseai/cli is a command-line tool and local bridge that uses the Model Context Protocol to connect AI agents to over 2,000 models and APIs. It enables agents to access web search, social media data, and real-time information through a single browser-based authorization.</p>
+    <p class="summary-text">SandBase CLI is an open-source command-line tool that connects AI clients to AI models and APIs through the Model Context Protocol. Running one connect command opens browser authorization, after which supported clients can discover, inspect, and run available SandBase models and APIs through a local MCP bridge. A read-only catalog command lists the 25 supported client targets.</p>
     <ul class="summary-highlights">
-      <li>Connects AI clients to 2,000+ models via Model Context Protocol</li>
-      <li>Supports 25 verified AI client targets</li>
-      <li>Provides a local MCP bridge with browser-based authorization</li>
+      <li>Connects AI clients to models and APIs via MCP</li>
+      <li>One-time browser authorization, then local MCP bridge</li>
+      <li>Read-only catalog command lists 25 client targets</li>
     </ul>
   </div>
 </section>
@@ -444,10 +444,22 @@ Skill, and local credential while retaining the shared bridge for other clients:
 <h3>Commands</h3>
 <h4>CLI Commands</h4>
 <pre><code class="language-sh">sandbase connect [--client &lt;name&gt;]    # Authorize + configure
-sandbase doctor [--client &lt;name&gt;]     # Health check
+sandbase setup                        # After upgrading: refresh the local bridge + Skill, test connectivity
+sandbase doctor [--client &lt;name&gt;]     # Local checks plus one real round trip to SandBase
 sandbase unregister [--client &lt;name&gt;] # Remove configuration
 sandbase catalog --json               # List all supported clients
 </code></pre>
+<h4>Agent Commands (shell transport, same capabilities as the MCP tools)</h4>
+<p>Agents without MCP, or with a broken MCP session, use the same catalog from a shell. Credentials come from <code>connect</code> automatically (or <code>SANDBASE_API_KEY</code> / <code>sandbase keys add -k &lt;key&gt;</code>).</p>
+<pre><code class="language-sh">sandbase discover -q "twitter posts"                       # search; -t api|llm|multimodal|embedding|service
+sandbase inspect sandbase_twitter_web_search_timeline       # fields, price, ready-to-run command
+sandbase run sandbase_twitter_web_search_timeline -i '{"keyword":"AI agents"}'
+sandbase run &lt;video_tool&gt; -i '{"prompt":"..."}' -w -o result.json   # wait with backoff, save output to disk
+sandbase runs get -r &lt;run_id&gt; -w -o result.json            # resume a long run instead of re-running it
+sandbase runs list | sandbase balance
+</code></pre>
+<p><code>-j</code> prints JSON; errors are <code>{"error":{"code","message","hint"}}</code> with the next step in <code>hint</code>. Exit codes: <code>0</code> success or still running, <code>1</code> failure (including a failed run), <code>2</code> usage.</p>
+<p>Sync tools (LLMs, most data APIs) return their result directly; async tools (image, video, audio jobs) return a run id — wait with <code>-w</code>, or fetch later with <code>sandbase runs get -r &lt;run_id&gt;</code>. If <code>api.sandbase.ai</code> is unreachable, the bridge keeps the SandBase tools visible with an actionable error instead of dropping the server.</p>
 <h4>MCP Tools (available to your agent after connecting)</h4>
 <table>
 <thead>
@@ -553,7 +565,7 @@ sandbase catalog --json               # List all supported clients
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/teknium1/hermes-miniverse">
-        <div class="stars">★ 55</div>
+        <div class="stars">★ 56</div>
         <div class="name"><span class="org">teknium1 /</span> hermes-miniverse</div>
       </a>
       <a class="related-row" href="/projects/Ridwannurudeen/hermes-council">
@@ -569,11 +581,11 @@ sandbase catalog --json               # List all supported clients
         <div class="name"><span class="org">kevinmarmstrong /</span> hermes-claude-code-rc</div>
       </a>
       <a class="related-row" href="/projects/AaronWong1999/hermesclaw">
-        <div class="stars">★ 746</div>
+        <div class="stars">★ 748</div>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 295</div>
+        <div class="stars">★ 333</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">
