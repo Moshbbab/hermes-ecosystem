@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill loads, approvals, and delegated sub-agents. It exports traces, token/cost/latency metrics, and optionally logs and structured events to any OTLP/HTTP backend, emitting attributes in both OpenInference and OTel GenAI conventions. The README lists many tested backends and notes that span data goes only to configured OTLP backends.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill loads, approvals, and delegated sub-agents. It emits token, cost, and latency metrics plus optional logs and structured events, exported to any OTLP/HTTP backend. Attributes are emitted in both OpenInference and OTel GenAI conventions.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-10-12T00:26:24.000Z",
+  "dateModified": "2026-10-12T05:57:03.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill loads, approvals, and delegated sub-agents. It exports traces, token/cost/latency metrics, and optionally logs and structured events to any OTLP/HTTP backend, emitting attributes in both OpenInference and OTel GenAI conventions. The README lists many tested backends and notes that span data goes only to configured OTLP backends.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill loads, approvals, and delegated sub-agents. It emits token, cost, and latency metrics plus optional logs and structured events, exported to any OTLP/HTTP backend. Attributes are emitted in both OpenInference and OTel GenAI conventions.</p>
     <ul class="summary-highlights">
       <li>Each Hermes turn becomes one OTel trace</li>
       <li>Exports to any OTLP/HTTP backend</li>
-      <li>Emits OpenInference and OTel GenAI attributes</li>
+      <li>Attributes emitted in OpenInference and OTel GenAI conventions</li>
     </ul>
   </div>
 </section>
@@ -227,7 +227,7 @@
 <tr>
 <td><code>api.{model}</code></td>
 <td>LLM</td>
-<td>Token counts in both conventions (incl. cache and reasoning buckets), duration, finish reason, request parameters. On failure: <code>ERROR</code> + exception + retry metadata</td>
+<td>Token counts in both conventions (incl. cache and reasoning buckets), duration, finish reason, request parameters. On failure: <code>ERROR</code> + exception + retry metadata. <code>hermes.query_source</code> says whether the call is the agent loop's own (<code>main</code>), a delegated child's (<code>subagent</code>) or one Hermes made on the agent's behalf (<code>auxiliary</code>: titling, compression, Mixture-of-Agents references and aggregator, vision, …), the last tagged with <code>hermes.auxiliary.task</code></td>
 </tr>
 <tr>
 <td><code>tool.{name}</code></td>
@@ -402,7 +402,7 @@ agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇�
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 398</div>
+        <div class="stars">★ 399</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">
