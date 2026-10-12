@@ -282,7 +282,7 @@ The first command installs a tool. The second adds a declared runtime extra to t
     hermes pm lock
     ```
     
-    This re-resolves `uv.lock` from `pyproject.toml` with the same settings CI checks, including the 14-day `exclude-newer` quarantine. It changes no environment. When the lock is already current, it says so and writes nothing. (`hermes pm lock --bump NAME VERSION` is a different operation: it pins a managed tool in `pm/lock.json` and does not touch `uv.lock`.)
+    This re-resolves `uv.lock` from `pyproject.toml` with the same settings CI checks, including the 3-day `exclude-newer` release-age check. It changes no environment. When the lock is already current, it says so and writes nothing. (`hermes pm lock --bump NAME VERSION` is a different operation: it pins a managed tool in `pm/lock.json` and does not touch `uv.lock`.)
     
 3.  Source the activation script again (`source ./activate`, or `. .\activate.ps1` in PowerShell) to sync the application venv and the test interpreter to the new lock. Activation covers `[all]`. If you added an opt-in extra outside `[all]`, `hermes pm lock` prints the command that also puts it in the test interpreter, for example `source ./activate --test-extras all,NAME`.
     
@@ -452,6 +452,12 @@ PM retries transient HTTP failures during tool downloads, artifact hashing and v
 Retryable HTTP statuses are 408, 429, 500, 502, 503 and 504. Connection resets, timeouts, temporary DNS failures and interrupted response bodies also retry. Ranged downloads retain completed bytes. Servers without range support require a fresh stream. Pause interrupts backoff and preserves the partial download.
 
 PM does not retry bad hashes, certificate failures, local filesystem errors or other permanent failures. A successful probe followed by a range GET 403 or 404 retains the CDN fallback: one serial attempt at the missing ranges. Extraction, verification and publication are not repeated. Python and npm package requests remain under uv and npm's own retry policies.
+
+## Release age and package mirrors
+
+Every Python package Hermes itself depends on must be at least three days old when Hermes locks it (uv's `exclude-newer`, enforced by CI's lock check), so a freshly published, possibly compromised release cannot reach `uv.lock`. Users install from that lock. Installing or enabling a plugin keeps every package Hermes locks at its locked version and never re-checks dates, so package mirrors that publish no upload times work. Set a mirror with `index-url` in `pip.conf`, which Hermes passes to uv, or with `UV_INDEX_URL`.
+
+`hermes pm lock` is the one step that applies the check. Run against a mirror without upload times, it stops with `has no publish time`; use `https://pypi.org/simple` for that step.
 
 ## Diagnostics
 

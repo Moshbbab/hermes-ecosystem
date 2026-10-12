@@ -243,7 +243,7 @@ Emacs-style alternate binding for the external editor (same behavior as `Ctrl+G`
 
 `Ctrl+C`
 
-Interrupt agent (double-press within 2s to force exit)
+Clear a typed draft first (even while the agent works); with an empty prompt, interrupt the agent (double-press within 2s to force exit)
 
 `Ctrl+T` / `F6`
 
@@ -507,7 +507,7 @@ Where the terminal cannot distinguish them, `Alt+Enter` and `Ctrl+J` continue to
 While the agent is working, you can send a correction without starting a new turn:
 
 -   **Type a new message + Enter** — redirects the active turn using your correction
--   **`Ctrl+C`** — interrupt the current operation (press twice within 2s to force exit)
+-   **`Ctrl+C`** — interrupt the current operation (press twice within 2s to force exit); if the prompt holds a draft, the first press clears it and the turn keeps running
 -   Completed tool work and reasoning already shown stay in context
 -   A running tool reaches its safe boundary before the correction is applied
 
