@@ -182,6 +182,12 @@ str
 
 Shown during first-run setup ("get an API key here")
 
+`hidden`
+
+bool
+
+Pre-release: kept off every discovery surface (provider pickers, setup list, dashboard accounts tab) until `listed()` is true — by default once the user signs in by name (`hermes auth add <name>` writes a pool row). Resolution by name is never gated
+
 `env_vars`
 
 `tuple[str, ...]`
@@ -697,6 +703,8 @@ Hermes then owns the whole lifecycle: `hermes auth add example-pkce [--no-browse
 
 Security boundary (enforced before any request, on login and refresh alike): both endpoints must be `https://` (plain `http://` is accepted only for a loopback-literal host — a local development IdP); the `token_url` host must be the `authorize_url` host or a subdomain of it (or listed in `allowed_hosts`); the listener binds the literal `127.0.0.1`; tokens, `state` and the PKCE verifier are never logged. Optional fields: `audience`, `extra_authorize_params`, `extra_token_params`, `redirect_path`, `timeout_seconds`, `label`.
 
+A confidential client whose secret lives behind your own broker sets `token_request` instead of `token_url`: Hermes calls it with the grant fields (`grant_type`, `code` / `refresh_token`, `redirect_uri`, `code_verifier`) and stores whatever token-endpoint JSON it returns, keeping the old `refresh_token` when the response omits one. Raise `AuthError(..., relogin_required=True)` for a grant the broker reports dead. Rows rotate ahead of their stored `expires_at_ms`, so opaque (non-JWT) access tokens refresh on time; the auxiliary client (compression, titles) leases the same pooled row.
+
 ## Recovery and error classification
 
 A `kind: model-provider` plugin is loaded by provider discovery, **not** by the generic plugin manager, so the `transform_api_error_classification` plugin hook is not reachable from it without shipping a second plugin component. The profile carries the equivalent seam instead:
@@ -726,7 +734,7 @@ Handled by the credential pool, no core edit: the failing pooled row is refreshe
 
 Auxiliary calls
 
-Auxiliary-client 401s take the same pool refresh (`try_refresh_current` → `refresh_credential`).
+An `oauth_external` / `oauth_device_code` plugin that ships `create_client` serves auxiliary tasks on its pooled row (an expiring row is rotated first); auxiliary 401s take the same pool refresh (`try_refresh_current` → `refresh_credential`).
 
 Recovery that remains name-keyed in core is behaviour with no safe generic shape (a provider-specific token store to re-sync, a plan-tier entitlement wall, a single-use refresh-token quarantine). A plugin that needs one of those owns it inside `refresh_credential` / `classify_api_error`.
 

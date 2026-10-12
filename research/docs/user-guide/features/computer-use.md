@@ -396,11 +396,7 @@ computer_use:
 
 You need this when driving Windows over SSH: Session 0 has no interactive desktop, so an on-demand driver cannot reach one ([windows-ssh](https://cua.ai/docs/how-to-guides/driver/windows-ssh) has the recipe). If the task exists but you want it gone, remove it with `cua-driver autostart disable` (or `schtasks /Delete /TN cua-driver-serve`) from an elevated shell — Hermes does not re-register it once `computer_use.autostart` is false.
 
-Swap the backend entirely (for testing):
-
-```
-HERMES_COMPUTER_USE_BACKEND=noop   # records calls, no side effects
-```
+Swap the driver entirely: `computer_use.backend` in `config.yaml` names the one active provider (`cua`, the default, or an installed provider plugin; see [computer-use backend plugins](/docs/developer-guide/plugins#computer-use-backend-plugins)). `hermes tools` → Computer Use lists every installed provider.
 
 ### Telemetry
 

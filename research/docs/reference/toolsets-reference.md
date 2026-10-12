@@ -41,7 +41,7 @@ Or in-session:
 ```
 /tools list
 /tools disable browser
-/tools enable spotify
+/tools enable discord
 ```
 
 ## Core Toolsets
@@ -74,7 +74,7 @@ Run Python scripts that call Hermes tools programmatically.
 
 `manage_connections`
 
-Connect the user to apps: managed connector accounts through the Nous gateway, and local MCP servers from the catalog. On the desktop every action is a card that blocks until the user settles it; off the desktop managed actions return a connect link per app.
+Connect the user to apps: managed connector accounts through the Nous gateway, and local MCP servers from the catalog. It can add a second named account of an app and rename accounts. On the desktop every action is a card that blocks until the user settles it; off the desktop managed actions return a connect link per app.
 
 `coding`
 
@@ -178,6 +178,12 @@ Affordances that act on the Hermes desktop app itself — read/close the embedde
 
 Create and switch desktop [Projects](/docs/user-guide/cli) (named, multi-folder workspaces) via one `create`/`switch`/`list` action enum. GUI / desktop sessions only.
 
+`catalog`
+
+`manage_catalog`
+
+Search the plugin catalog and skills hub, and install items through the approval card into this chat's profile. Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions, even when a config list names it. `all` does not include it. Deferred behind `tool_search` by default. Remove it with `agent.disabled_toolsets: [catalog]`.
+
 `safe`
 
 `image_generate`, `vision_analyze`, `web_extract`, `web_search` (via `includes`)
@@ -198,21 +204,21 @@ Search past conversation sessions.
 
 `setup`
 
-`manage_catalog`
+`setup_choose`
 
-Onboarding-only surface of the desktop setup profile: search the plugin catalog and skills hub, and install items through the approval card. Granted by the backend to sessions whose profile carries `role: setup` in its `profile.yaml`; stripped from every other profile even when a config list, `HERMES_TUI_TOOLSETS`, or `all` names it. Not configurable and not listed by `hermes tools`.
+Onboarding-only surface of the desktop setup profile: ask the user one question or picker card at a time. The setup profile's own config enables it (`platform_toolsets.cli`), and only desktop sessions get its tools. `all` does not include it. Not listed by `hermes tools`.
+
+`start_chat`
+
+`start_chat`
+
+Start a new desktop chat in an existing profile (this chat's own profile when none is named) and send it its first message, so the task runs there in view of the user. Every call opens another chat. A profile's own config enables it (`platform_toolsets.cli`), and only desktop sessions get its tool. `all` does not include it. Not listed by `hermes tools`. Subagents never get it.
 
 `skills`
 
 `skill_manage`, `skill_view`, `skills_list`
 
 Skill CRUD and browsing.
-
-`spotify`
-
-`spotify_albums`, `spotify_devices`, `spotify_library`, `spotify_playback`, `spotify_playlists`, `spotify_queue`, `spotify_search`
-
-Native Spotify control (playback, queue, search, playlists, albums, library). Registered by the bundled `spotify` plugin.
 
 `terminal`
 

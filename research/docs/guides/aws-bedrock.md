@@ -20,11 +20,17 @@ Anthropic SDK (`AnthropicBedrock`)
 
 Prompt caching, thinking budgets, adaptive thinking — features not exposed via Converse
 
-OpenAI GPT-5.5 / GPT-5.6 (Sol, Terra, Luna)
+OpenAI GPT-6 (Astra, Sol, Luna), GPT-6.1 Sol, GPT-5.6 (Sol, Terra, Luna), GPT-5.5 with a bare `openai.*` ID
 
 Bedrock Mantle **OpenAI Responses** endpoint (`bedrock-mantle.<region>.api.aws/openai/v1`)
 
-These models are Mantle-only — their model cards list bedrock-runtime/Converse as unsupported
+Bedrock Mantle serves the bare in-Region ID. `bedrock-runtime` does not accept it
+
+The same OpenAI models with a `us.` or `global.` inference-profile ID
+
+Native **Converse API** (`bedrock-runtime`)
+
+Cross-Region profiles exist only on `bedrock-runtime`, and the model cards list Converse as supported there
 
 Everything else (Nova, DeepSeek, Llama, GPT-OSS, …)
 
@@ -105,7 +111,7 @@ bedrock:
 
 The guardrail is attached on the Converse route (`guardrailConfig`) and on the Claude route (InvokeModel headers via the Anthropic Bedrock SDK, so prompt caching and thinking are kept). A blocked request surfaces as a content-filter refusal rather than as model text. `stream_processing_mode` only applies to Converse.
 
-AWS does not apply Guardrails to the Mantle Responses endpoint used by `openai.gpt-5.x` models ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)); use a Converse-served model when a guardrail is required.
+AWS does not apply Guardrails to the Mantle Responses endpoint used by bare `openai.gpt-*` IDs ([AWS docs](https://docs.aws.amazon.com/bedrock/latest/userguide/bedrock-mantle.html)). Use a Converse-served model, such as a `us.` or `global.` OpenAI inference profile, when a guardrail is required.
 
 ### Model Discovery
 
@@ -126,6 +132,8 @@ Hermes automatically applies prompt caching on the Bedrock **Converse API** path
 ### Context-window probing
 
 For models whose context window isn't in Hermes' static table, Hermes can probe the real limit by sending oversized requests at fixed tiers (~1.3M and ~2.2M tokens) and parsing the `maximum` reported in Bedrock's length-validation error. Probed values feed the same metadata cache as the static table; stale cached entries that under-report a model's window (e.g. entries seeded before a model's 1M window went GA) are dropped automatically in favor of the larger known value.
+
+When neither the probe nor the static table knows a model, Hermes uses a 128,000-token fallback and logs a WARNING naming the model. Set `model.context_length` in `config.yaml` to the model's real window.
 
 **Application inference profiles.** An ARN such as `arn:aws:bedrock:us-west-2:123456789012:application-inference-profile/abcdef123456` names no model, so neither the probe nor the static table can size it. Hermes calls `bedrock:GetInferenceProfile` in the ARN's region and sizes the window from the model the profile wraps (1M for a profile wrapping Claude Sonnet 4.6). Without that permission the 128,000-token default applies and a WARNING names the profile; set `model.context_length` explicitly to override either way.
 
@@ -157,29 +165,53 @@ Claude Haiku 4.5
 
 Fastest Claude
 
+OpenAI GPT-6 Astra
+
+`openai.gpt-6-astra`
+
+Most capable OpenAI model, 1,050,000-token window
+
+OpenAI GPT-6.1 Sol
+
+`openai.gpt-6.1-sol`
+
+1M-token window. Mantle in-Region access is `us-east-1` only
+
+OpenAI GPT-6 Sol
+
+`openai.gpt-6-sol`
+
+Coding and agentic work, 1,050,000-token window
+
+OpenAI GPT-6 Luna
+
+`openai.gpt-6-luna`
+
+Focused, high-volume tasks, 1,050,000-token window
+
 OpenAI GPT-5.6 Sol
 
 `openai.gpt-5.6-sol`
 
-OpenAI frontier model (via Bedrock Mantle)
+1,050,000-token window
 
 OpenAI GPT-5.6 Terra
 
 `openai.gpt-5.6-terra`
 
-Balanced (via Bedrock Mantle)
+Balanced, 1,050,000-token window
 
 OpenAI GPT-5.6 Luna
 
 `openai.gpt-5.6-luna`
 
-Fast, affordable (via Bedrock Mantle)
+Fast, affordable, 1,050,000-token window
 
 OpenAI GPT-5.5
 
 `openai.gpt-5.5`
 
-Previous OpenAI flagship (via Bedrock Mantle)
+Mantle only, no inference profiles
 
 Amazon Nova Pro
 
@@ -207,7 +239,9 @@ Meta's latest
 
 Cross-Region Inference
 
-Models prefixed with `us.` use cross-region inference profiles, which provide better capacity and automatic failover across AWS regions. Models prefixed with `global.` route across all available regions worldwide. OpenAI `openai.*` model IDs are served by Bedrock Mantle in the configured region and don't use inference-profile prefixes.
+Models prefixed with `us.` use cross-region inference profiles, which provide better capacity and automatic failover across AWS regions. Models prefixed with `global.` route across all available regions worldwide.
+
+OpenAI models have two endpoint forms. The bare `openai.*` ID is in-Region and Hermes sends it to Bedrock Mantle's Responses endpoint in the configured region. The `us.openai.*` and `global.openai.*` IDs are cross-Region inference profiles. Hermes sends them to `bedrock-runtime` through the Converse API, the same path as other inference profiles. Each AWS model card lists the profiles a model offers and the regions Mantle serves it in.
 
 ## Switching Models Mid-Session
 

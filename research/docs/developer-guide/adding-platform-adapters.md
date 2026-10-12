@@ -290,7 +290,7 @@ Profile clone credential strip
 
 ### Service adapters: `trusted_inbound`, `display_tier`, `shared_env_prefixes`
 
-Three optional `ctx.register_platform(...)` / `PlatformEntry` fields exist for adapters that bridge a service rather than a chat network. The [Home Assistant plugin](https://github.com/NousResearch/hermes-homeassistant) is the reference consumer.
+Three optional `ctx.register_platform(...)` / `PlatformEntry` fields exist for adapters that bridge a service rather than a chat network. The [Home Assistant plugin](https://github.com/NousResearch/hermes-official-plugins/tree/main/homeassistant) is the reference consumer.
 
 Field
 
