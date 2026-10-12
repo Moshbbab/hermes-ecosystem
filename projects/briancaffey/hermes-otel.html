@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports traces for agent turns, including model calls, API requests, tool calls, approvals, skill…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports traces for agent turns, including model calls, API requests, tool calls, approvals, skill…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports traces for agent turns, including model calls, API requests, tool calls, approvals, skill…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill loads, approvals, and delegated sub-agents. It emits token, cost, and latency metrics plus optional logs and structured events, exported to any OTLP/HTTP backend. Attributes are emitted in both OpenInference and OTel GenAI conventions.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports traces for agent turns, including model calls, API requests, tool calls, approvals, skill loads, and delegated sub-agents. It records token, cost, and latency metrics, with optional logs and structured events, and exports through OTLP/HTTP to supported backends.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,13 +47,13 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-10-12T17:13:05.000Z",
+  "dateModified": "2026-10-12T18:44:30.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 73
+    "userInteractionCount": 74
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">256·repos</span>
+    <span id="meta-count">255·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -120,7 +120,7 @@
   <p class="project-desc">OTel Plugin for Hermes Agent</p>
 
   <div class="meta-row">
-    <span class="stars">★ 73</span>
+    <span class="stars">★ 74</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>Apache-2.0</span>
     
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns each Hermes turn into one OTel trace, covering model calls, API requests, tool calls, skill loads, approvals, and delegated sub-agents. It emits token, cost, and latency metrics plus optional logs and structured events, exported to any OTLP/HTTP backend. Attributes are emitted in both OpenInference and OTel GenAI conventions.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that exports traces for agent turns, including model calls, API requests, tool calls, approvals, skill loads, and delegated sub-agents. It records token, cost, and latency metrics, with optional logs and structured events, and exports through OTLP/HTTP to supported backends.</p>
     <ul class="summary-highlights">
-      <li>Each Hermes turn becomes one OTel trace</li>
-      <li>Exports to any OTLP/HTTP backend</li>
-      <li>Attributes emitted in OpenInference and OTel GenAI conventions</li>
+      <li>Emits traces with OpenInference and OTel GenAI attributes.</li>
+      <li>Tested with Phoenix, Langfuse, Jaeger, and other backends.</li>
+      <li>Supports sending data to multiple backends at once.</li>
     </ul>
   </div>
 </section>
@@ -242,9 +242,10 @@
 <tr>
 <td><code>subagent.{role}</code></td>
 <td>AGENT</td>
-<td>Role, goal, status, duration, summary; the child run is nested so a multi-agent run is one connected trace</td>
+<td>Role, goal, status, duration, summary, the child's model and what its whole subtree cost; the child run is nested so a multi-agent run is one connected trace</td>
 </tr>
 </tbody></table>
+<p>Running several agents (delegated children, kanban workers on other profiles and models, a swarm, Mixture-of-Agents, cron)? <a href="https://briancaffey.github.io/hermes-otel/guides/observing-a-fleet">Observing a fleet</a> shows what each looks like in a backend and how to ask what each one cost. A kanban card's run is one trace from the dispatcher's claim through the worker's turn.</p>
 <p>Attributes are emitted in <strong>both</strong> conventions — OpenInference (<code>llm.*</code>, <code>input.value</code>) for Phoenix and OTel GenAI (<code>gen_ai.*</code>) for Langfuse, Weave and generic dashboards — so no backend needs custom mapping. Full lists: <a href="https://briancaffey.github.io/hermes-otel/reference/span-attributes">span attributes</a> · <a href="https://briancaffey.github.io/hermes-otel/reference/metrics">metrics</a> · <a href="https://briancaffey.github.io/hermes-otel/reference/hooks">hooks</a>.</p>
 <h3>Backends</h3>
 <p>Tested with: <a href="https://briancaffey.github.io/hermes-otel/backends/phoenix">Phoenix</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langfuse">Langfuse</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langsmith">LangSmith</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/signoz">SigNoz</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/jaeger">Jaeger</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/zipkin">Zipkin</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/greptime">GreptimeDB</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/clickstack">ClickStack</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/victoria">VictoriaMetrics family</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/aspire">Aspire Dashboard</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/gigapipe">Gigapipe</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/agenta">Agenta</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/tempo">Grafana Tempo</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/lgtm">Grafana LGTM</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/uptrace">Uptrace</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/openobserve">OpenObserve</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/parseable">Parseable</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/honeycomb">Honeycomb</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/weave">W&amp;B Weave</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/elastic">Elastic</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/openlit">OpenLIT</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/mlflow">MLflow</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/opik">Comet Opik</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/laminar">Laminar</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langwatch">LangWatch</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/latitude">Latitude</a>.</p>
