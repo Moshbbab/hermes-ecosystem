@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ksimback/hermes-ecosystem — Hermes Agent Guides &amp; Docs | Hermes Atlas</title>
-<meta name="description" content="Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent by Nous Research. It lists quality-filtered repos across…">
+<meta name="description" content="Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent. It offers categorized project listings with search and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/ksimback/hermes-ecosystem">
 <meta property="og:title" content="ksimback/hermes-ecosystem — Hermes Atlas">
-<meta property="og:description" content="Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent by Nous Research. It lists quality-filtered repos across…">
+<meta property="og:description" content="Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent. It offers categorized project listings with search and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/ksimback/hermes-ecosystem">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ksimback/hermes-ecosystem — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent by Nous Research. It lists quality-filtered repos across…">
+<meta name="twitter:description" content="Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent. It offers categorized project listings with search and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-ecosystem&amp;subtitle=Hermes+Atlas+%E2%80%94+the+decision+layer+for+Hermes+Agent%3A+install+guidance%2C+mode+%26+skill+picks%2C+and+a+curated+catalog+of+240%2B+ecosystem+tools+with+live+GitHub+data&amp;kind=project+%C2%B7+guides">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/ksimback/hermes-ecosystem#software",
   "name": "hermes-ecosystem",
-  "description": "Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent by Nous Research. It lists quality-filtered repos across multiple categories, shows live GitHub star counts and growth sparklines, and includes a RAG-powered chatbot that answers questions grounded in 27 research files. The site is built with vanilla HTML/CSS/JavaScript and deployed on Vercel with serverless functions.",
+  "description": "Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent. It offers categorized project listings with search and filters, GitHub star data, and a chatbot that answers questions using research files.",
   "url": "https://hermesatlas.com/projects/ksimback/hermes-ecosystem",
   "codeRepository": "https://github.com/ksimback/hermes-ecosystem",
   "applicationCategory": "ReferenceApplication",
@@ -46,13 +46,13 @@
     "name": "ksimback",
     "url": "https://github.com/ksimback"
   },
-  "dateModified": "2026-10-12T08:47:53.000Z",
+  "dateModified": "2026-10-12T12:34:45.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1314
+    "userInteractionCount": 1315
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent by Nous Research. It lists quality-filtered repos across multiple categories, shows live GitHub star counts and growth sparklines, and includes a RAG-powered chatbot that answers questions grounded in 27 research files. The site is built with vanilla HTML/CSS/JavaScript and deployed on Vercel with serverless functions.</p>
+    <p class="summary-text">Hermes Atlas is a community-curated directory of tools, skills, and integrations for Hermes Agent. It offers categorized project listings with search and filters, GitHub star data, and a chatbot that answers questions using research files.</p>
     <ul class="summary-highlights">
-      <li>80+ security-reviewed repos across 12 categories</li>
-      <li>Live star counts cached in Redis</li>
-      <li>RAG chatbot grounded in 27 research files</li>
+      <li>Lists quality-filtered projects across 12 categories.</li>
+      <li>Displays live GitHub star counts and growth over time.</li>
+      <li>Includes a research-grounded chatbot for Hermes Agent questions.</li>
     </ul>
   </div>
 </section>
@@ -180,7 +180,7 @@
 │                          ▼                    ▼              │
 │                   ┌──────────┐         ┌────────────┐       │
 │                   │  Redis   │         │ Nous Portal│       │
-│                   │  Cloud   │         │  (DeepSeek)│       │
+│                   │  Cloud   │         │(GPT-6 Luna)│       │
 │                   └────┬─────┘         └────────────┘       │
 │                        │                                     │
 │                        ▼                                     │
@@ -195,7 +195,7 @@
 <li><strong>Frontend:</strong> Vanilla HTML/CSS/JavaScript (no framework, no build step)</li>
 <li><strong>Hosting:</strong> Vercel (static + serverless functions)</li>
 <li><strong>Cache:</strong> Redis Cloud (1hr TTL on star counts, daily history snapshots)</li>
-<li><strong>LLM:</strong> Nous Portal with a client-side fallback chain (DeepSeek V4.1 Flash → Step 5 Preview)</li>
+<li><strong>LLM:</strong> Nous Portal with a client-side fallback chain (GPT-6 Luna → Claude Haiku 5.5)</li>
 <li><strong>Embeddings:</strong> OpenAI text-embedding-3-small (computed once at build time, cached as static JSON)</li>
 <li><strong>Retrieval:</strong> Hybrid BM25 + cosine similarity, MMR re-ranking, conversation-aware query rewriting</li>
 </ul>
@@ -264,12 +264,12 @@ NOUS_API_KEY=... node scripts/test-rag.js
 <tr>
 <td><code>CHAT_MODEL</code></td>
 <td>Override primary LLM model</td>
-<td>No (default: <code>deepseek/deepseek-v4.1-flash</code>)</td>
+<td>No (default: <code>openai/gpt-6-luna</code>)</td>
 </tr>
 <tr>
 <td><code>CHAT_FALLBACK_MODELS</code></td>
 <td>Comma-separated fallback chain</td>
-<td>No (default: <code>stepfun/step-5-preview</code>)</td>
+<td>No (default: <code>anthropic/claude-haiku-5.5</code>)</td>
 </tr>
 <tr>
 <td><code>LLM_BASE_URL</code> / <code>LLM_API_KEY</code></td>
@@ -326,7 +326,7 @@ NOUS_API_KEY=... node scripts/test-rag.js
         <div class="name"><span class="org">alchaincyf /</span> hermes-agent-orange-book</div>
       </a>
       <a class="related-row" href="/projects/OnlyTerp/hermes-optimization-guide">
-        <div class="stars">★ 690</div>
+        <div class="stars">★ 691</div>
         <div class="name"><span class="org">OnlyTerp /</span> hermes-optimization-guide</div>
       </a>
       <a class="related-row" href="/projects/metantonio/hermes-wsl-ubuntu">

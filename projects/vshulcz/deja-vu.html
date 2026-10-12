@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes the session history that coding agents already save to disk, making months of past sessions searchable across agents. It provides recall at…">
+<meta name="description" content="deja indexes coding-agent session histories stored on disk so users can search past sessions and share memory across supported agents. It can surface relevant…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes the session history that coding agents already save to disk, making months of past sessions searchable across agents. It provides recall at…">
+<meta property="og:description" content="deja indexes coding-agent session histories stored on disk so users can search past sessions and share memory across supported agents. It can surface relevant…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes the session history that coding agents already save to disk, making months of past sessions searchable across agents. It provides recall at…">
+<meta name="twitter:description" content="deja indexes coding-agent session histories stored on disk so users can search past sessions and share memory across supported agents. It can surface relevant…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Memory+for+Claude+Code%2C+Codex%2C+Cursor+and+38+more+coding+agents%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes the session history that coding agents already save to disk, making months of past sessions searchable across agents. It provides recall at session start, before file edits or commands, and after command failures, and can resume or continue sessions in other agents. It is distributed as a single Go binary for macOS, Linux and Windows.",
+  "description": "deja indexes coding-agent session histories stored on disk so users can search past sessions and share memory across supported agents. It can surface relevant history when sessions start or commands fail, resume or continue sessions in another agent, and runs locally without a model, embeddings, or a server.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-12T08:48:15.000Z",
+  "dateModified": "2026-10-12T12:37:48.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1178
+    "userInteractionCount": 1179
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes the session history that coding agents already save to disk, making months of past sessions searchable across agents. It provides recall at session start, before file edits or commands, and after command failures, and can resume or continue sessions in other agents. It is distributed as a single Go binary for macOS, Linux and Windows.</p>
+    <p class="summary-text">deja indexes coding-agent session histories stored on disk so users can search past sessions and share memory across supported agents. It can surface relevant history when sessions start or commands fail, resume or continue sessions in another agent, and runs locally without a model, embeddings, or a server.</p>
     <ul class="summary-highlights">
-      <li>Indexes months of existing agent session history</li>
-      <li>One shared index across forty-one agents</li>
-      <li>Local and private: no model, embeddings or server</li>
+      <li>Search past sessions across supported agents.</li>
+      <li>Recall can appear at session start and after command failures.</li>
+      <li>Local index; no model, embeddings, or server.</li>
     </ul>
   </div>
 </section>
@@ -385,7 +385,7 @@ as usual. <code>deja search &lt;query&gt;</code> skips the suggestion.</p>
 </tr>
 <tr>
 <td><code>deja resume &lt;id&gt;</code></td>
-<td>Reopen a found session in its native harness.</td>
+<td>Reopen a found session in its native harness. <code>--app</code> opens a Codex session in the ChatGPT desktop app.</td>
 </tr>
 <tr>
 <td><code>deja restore &lt;path&gt;</code></td>
@@ -489,7 +489,7 @@ whether or not the tool is called.</p>
 <td><code>context</code></td>
 <td>the same as recall</td>
 <td><code>harness?</code></td>
-<td>Markdown digest of the best-matching session.</td>
+<td>Markdown digest of the best-matching session, with the code it changed.</td>
 </tr>
 <tr>
 <td><code>blame</code></td>
@@ -1224,8 +1224,8 @@ is not secret detection: a shape it does not know can pass through. See the
 
 <p>A recall is a lexical lookup against a local index:
 0.7–0.8 ms median, and nothing waits on a model. A hook adds the process start and a
-freshness check over your stores on top of that — tens of milliseconds on a store of
-a few gigabytes.</p>
+freshness check over your stores on top of that: about 0.2 s end to end on a 1.9 GB
+store, and 0.59 s for the per-prompt hook on an index of 19k sessions.</p>
 </details>
 
 <details>
@@ -1366,7 +1366,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 48.6K</div>
+        <div class="stars">★ 48.7K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1374,7 +1374,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 380</div>
+        <div class="stars">★ 381</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
