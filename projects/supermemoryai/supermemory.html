@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>supermemoryai/supermemory — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Supermemory is a memory and context engine for AI that extracts facts from conversations, maintains user profiles, and handles knowledge updates and…">
+<meta name="description" content="Supermemory is a memory and context system for AI assistants and applications. It extracts and updates facts from conversations, supports memory search, user…">
 <link rel="canonical" href="https://hermesatlas.com/projects/supermemoryai/supermemory">
 <meta property="og:title" content="supermemoryai/supermemory — Hermes Atlas">
-<meta property="og:description" content="Supermemory is a memory and context engine for AI that extracts facts from conversations, maintains user profiles, and handles knowledge updates and…">
+<meta property="og:description" content="Supermemory is a memory and context system for AI assistants and applications. It extracts and updates facts from conversations, supports memory search, user…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/supermemoryai/supermemory">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="supermemoryai/supermemory — Hermes Atlas">
-<meta name="twitter:description" content="Supermemory is a memory and context engine for AI that extracts facts from conversations, maintains user profiles, and handles knowledge updates and…">
+<meta name="twitter:description" content="Supermemory is a memory and context system for AI assistants and applications. It extracts and updates facts from conversations, supports memory search, user…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=supermemory&amp;subtitle=Memory+and+context+engine+%2B+app+that+is+extremely+fast%2C+scalable%2C+and+can+be+run+fully+locally.+The+Memory+API+for+the+AI+era.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/supermemoryai/supermemory#software",
   "name": "supermemory",
-  "description": "Supermemory is a memory and context engine for AI that extracts facts from conversations, maintains user profiles, and handles knowledge updates and contradictions. It offers plugins and an MCP server for AI coding tools, plus an API for adding memory, RAG, user profiles, and connectors to applications. It can also be self-hosted as a single binary.",
+  "description": "Supermemory is a memory and context system for AI assistants and applications. It extracts and updates facts from conversations, supports memory search, user profiles, connectors, and file processing, and can be used through an API, plugins, or an MCP server.",
   "url": "https://hermesatlas.com/projects/supermemoryai/supermemory",
   "codeRepository": "https://github.com/supermemoryai/supermemory",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "supermemoryai",
     "url": "https://github.com/supermemoryai"
   },
-  "dateModified": "2026-10-12T18:59:36.000Z",
+  "dateModified": "2026-10-12T23:54:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">255·repos</span>
+    <span id="meta-count">256·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Supermemory is a memory and context engine for AI that extracts facts from conversations, maintains user profiles, and handles knowledge updates and contradictions. It offers plugins and an MCP server for AI coding tools, plus an API for adding memory, RAG, user profiles, and connectors to applications. It can also be self-hosted as a single binary.</p>
+    <p class="summary-text">Supermemory is a memory and context system for AI assistants and applications. It extracts and updates facts from conversations, supports memory search, user profiles, connectors, and file processing, and can be used through an API, plugins, or an MCP server.</p>
     <ul class="summary-highlights">
-      <li>Extracts facts from conversations and handles contradictions</li>
-      <li>Plugins for Claude Code, Cursor, Codex, and others</li>
-      <li>Single API for memory, RAG, and connectors</li>
+      <li>Offers plugins for several AI assistants, including Hermes.</li>
+      <li>Provides memory, RAG, profiles, and connectors through one API.</li>
+      <li>Supports document, image, video, and code processing.</li>
     </ul>
   </div>
 </section>
@@ -474,6 +474,17 @@ npx supermemory local
 <li><strong>Your data, one directory</strong> — everything lives in <code>./.supermemory</code>, easy to back up or move.</li>
 <li><strong>Same API as the platform</strong> — prototype locally, ship on the hosted platform by changing <code>baseURL</code>.</li>
 </ul>
+<h4>Run with Docker</h4>
+<p>Prebuilt images support Linux amd64 and arm64. You don’t need to build or clone the server source.</p>
+<p>For a new installation, run these commands in an empty directory and set your own LLM provider key:</p>
+<pre><code class="language-bash">release_url=https://github.com/supermemoryai/supermemory/releases
+curl -fL "$release_url/download/server-v0.0.9/compose.yaml" -o compose.yaml
+export OPENAI_API_KEY=your_openai_api_key_here
+export SUPERMEMORY_VERSION=0.0.9
+docker compose up -d --wait --wait-timeout 180
+</code></pre>
+<p>The API listens on <code>http://localhost:6767</code>. Data and credentials persist in the <code>supermemory_supermemory-data</code> volume. Get your local API key with <code>docker compose exec supermemory cat /data/api-key</code>; requests require it even on localhost.</p>
+<p>Read the <a href="https://github.com/supermemoryai/supermemory/blob/main/apps/docs/self-hosting/docker.mdx">Docker setup and upgrade instructions</a> for persistent provider configuration, backups and upgrades. Keep the existing volume and keys when upgrading; <strong>don’t run <code>docker compose down -v</code></strong>.</p>
 <p>Read the <a href="https://supermemory.ai/docs/self-hosting/overview">self-hosting docs</a> — quickstart, <a href="https://supermemory.ai/docs/self-hosting/configuration">configuration</a>, <a href="https://supermemory.ai/docs/self-hosting/embeddings">embeddings</a>, and <a href="https://supermemory.ai/docs/self-hosting/local-vs-enterprise">local vs. Enterprise</a>.</p>
 <hr>
 <h3>Benchmarks</h3>
@@ -554,7 +565,7 @@ npx supermemory local
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 67.0K</div>
+        <div class="stars">★ 67.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
