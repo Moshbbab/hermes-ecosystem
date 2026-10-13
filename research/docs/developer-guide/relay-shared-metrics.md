@@ -254,7 +254,7 @@ Unattributable.
 
 A run is `one_shot` or `background` when its process carries the `HERMES_SINGLE_QUERY_SESSION` marker that the one-shot paths set (the same marker the session source and `cache_ttl: auto` read). Engagement (`hermes.engagement.*`) and the attended-only rows (task cost, tool usage per session, model friction) treat `one_shot` like `interactive`, as they did before the value existed; `background` and `delegated` runs are unattended and excluded there. Packages written before `one_shot` existed carry these runs as `interactive` and still validate. `hermes -z` leaves through `os._exit`, so it closes its metrics session before exiting rather than relying on the atexit hook.
 
-Each tool invocation is represented by a Relay tool lifecycle named `hermes.tool_call`. The terminal counter contains only bounded tool category, outcome and approval outcome; the same event feeds `hermes.tool_call.latency` with tool category, latency bucket and explicit retry-count bucket (package v2 carried latency and retries on the terminal row, one row per few calls). Hermes derives the category from the toolset already declared in its runtime registry; custom and unrecognized toolsets collapse to `other` rather than exporting tool or plugin names. The same terminal event also feeds `hermes.tool.usage.count` with `tool_name`, `outcome` and `error_class`. `tool_name` is exported only for tools declared in the repository's static `toolsets.TOOLSETS` (`toolsets.BUILTIN_TOOL_NAMES`, captured before any runtime custom toolset is created); MCP tools report `mcp` and every plugin or custom tool reports `plugin`. `error_class` maps Hermes's own `error_type` values (`tool_error`, `timeout`, `interrupted`, `invalid_arguments`, `blocked`, `contract_violation`); any other value, such as an exception class name, collapses to `exception`. Hermes does not infer retries from repeated tool names or adjacent calls; when the hook does not provide an explicit retry relationship, the retry bucket is `unknown`. Approval decisions are emitted as `hermes.tool_approval` marks and recorded as attributed to a tool call or explicitly `unattributed`. Non-built-in tool names, call IDs, arguments, results, commands, descriptions, and error text are not included in shared-metrics events or packages. A started tool that is still open when its task terminates is closed as failed, timed out, or cancelled and remains in the task's tool-count bucket.
+Each tool invocation is represented by a Relay tool lifecycle named `hermes.tool_call`. The terminal counter contains only bounded tool category, outcome and approval outcome; the same event feeds `hermes.tool_call.latency` with tool category, latency bucket and explicit retry-count bucket (package v2 carried latency and retries on the terminal row, one row per few calls). Hermes derives the category from the toolset already declared in its runtime registry; custom and unrecognized toolsets collapse to `other` rather than exporting tool or plugin names. The same terminal event also feeds `hermes.tool.usage.count` with `tool_name`, `outcome` and `error_class`. `tool_name` is exported only for tools declared in the repository's static `toolsets.TOOLSETS` (`toolsets.BUILTIN_TOOL_NAMES`, captured before any runtime custom toolset is created) and for the Tool Search bridge tools (`tool_search`, `tool_describe`, `tool_call`); MCP tools report `mcp`, hosted connector tools (`connectors__*`) report `connector` with tool category `connector`, and every plugin or custom tool reports `plugin`. The connector slug and tool name are never exported. Each entry of a `tool_call` batch of connector calls is its own call: one row per entry, and the `tool_call` wrapper is not counted on top (a batch refused before any entry ran still counts once as `tool_call`). `error_class` maps Hermes's own `error_type` values (`tool_error`, `timeout`, `interrupted`, `invalid_arguments`, `blocked`, `contract_violation`); any other value, such as an exception class name, collapses to `exception`. A failed connector entry is classed by the tool gateway's error code in its result: `connection_required` (connection required or expired), `not_allowed`, `alias` (alias required or unknown), `invalid_arguments`, and `connector_backend` for every backend-family code (vendor error, rate limit, timeout, policy or gateway failure); other codes keep `tool_error`. Hermes does not infer retries from repeated tool names or adjacent calls; when the hook does not provide an explicit retry relationship, the retry bucket is `unknown`. Approval decisions are emitted as `hermes.tool_approval` marks and recorded as attributed to a tool call or explicitly `unattributed`. Non-built-in tool names, call IDs, arguments, results, commands, descriptions, and error text are not included in shared-metrics events or packages. A started tool that is still open when its task terminates is closed as failed, timed out, or cancelled and remains in the task's tool-count bucket.
 
 Successful skill mutations emit `hermes.skill.lifecycle` marks with only a bounded action and provenance. Successful loads emit `hermes.skill.load` marks with bounded provenance, first-use or reuse state, reuse-after-patch state, a use-count bucket and `skill_name`: the skill's name only when it is a skill Hermes ships (`skills/` or `optional-skills/`), otherwise `custom`. Hermes derives reuse and patch-generation continuity transactionally in its existing `skills/.usage.json` state; local or agent-created skill names and exact counts or generations never enter Relay metrics events, SQLite dimensions, or packages. A use after a new patch is counted once as `reused_after_patch`; later uses remain ordinary reuse until another patch. Task-outcome attribution after a patch remains deferred until its window and multi-skill semantics are defined.
 
@@ -488,6 +488,34 @@ Which models users fight with. Attributed to the model that produced the turn: `
 provider, model, peak fill bucket, window bucket (`lt_32k` … `gte_1m`), limit hit (`yes`/`no`)
 
 How close sessions get to each model's context window, and how often they overflow it. One row per closed conversation: the session ids a compression rotation hands it to report once, with the fullest segment; `limit_hit` means a primary call was rejected as too large (context overflow or HTTP 413), the rejections Hermes answers with a forced compression.
+
+#### Tool Search and connectors
+
+Added inside package schema v4. No connector slug, tool name or query text appears in any dimension.
+
+Metric
+
+Dimensions
+
+Question it answers
+
+`hermes.tool_search.count`
+
+scope (`local`, `connector`, `both`: which catalogs the search read), hits bucket (`0` … `gte_11`, distinct tools returned), outcome (`hits`, `no_hits`, `connector_unavailable`, `error`)
+
+Does `tool_search` find tools, and how often does the hosted connector leg fail. One row per `tool_search` call.
+
+`hermes.tool_batch.count`
+
+provider, model, size bucket (logical calls; each `tool_call` entry counts once), connector share (`none`, `some`, `all`)
+
+How many calls a model packs into one reply, and how much of it is connector work. One row per model reply that calls tools.
+
+`hermes.connector_chain.count`
+
+searches-before bucket (`tool_search` calls since the previous connector execute), described first (`yes`/`no`: the tool was named in an earlier `tool_describe` of the conversation), outcome (the tool outcome)
+
+Do models search and describe before they execute a connector tool, and does skipping it fail more. One row per executed connector entry.
 
 #### Agent-harness accuracy
 
