@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>garrytan/gbrain — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="GBrain is a memory system for existing AI agents that stores explicit facts with sources and supports corrections and withdrawal. It offers keyword retrieval,…">
+<meta name="description" content="GBrain stores explicit facts with their sources, supports corrections and withdrawal, and makes memory available across agents. It offers keyword retrieval,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:title" content="garrytan/gbrain — Hermes Atlas">
-<meta property="og:description" content="GBrain is a memory system for existing AI agents that stores explicit facts with sources and supports corrections and withdrawal. It offers keyword retrieval,…">
+<meta property="og:description" content="GBrain stores explicit facts with their sources, supports corrections and withdrawal, and makes memory available across agents. It offers keyword retrieval,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/garrytan/gbrain">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="garrytan/gbrain — Hermes Atlas">
-<meta name="twitter:description" content="GBrain is a memory system for existing AI agents that stores explicit facts with sources and supports corrections and withdrawal. It offers keyword retrieval,…">
+<meta name="twitter:description" content="GBrain stores explicit facts with their sources, supports corrections and withdrawal, and makes memory available across agents. It offers keyword retrieval,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=gbrain&amp;subtitle=Garry%27s+Opinionated+OpenClaw%2FHermes+Agent+Brain&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/garrytan/gbrain#software",
   "name": "gbrain",
-  "description": "GBrain is a memory system for existing AI agents that stores explicit facts with sources and supports corrections and withdrawal. It offers keyword retrieval, with optional semantic search, synthesis, and background enrichment, and can make memory available across agents.",
+  "description": "GBrain stores explicit facts with their sources, supports corrections and withdrawal, and makes memory available across agents. It offers keyword retrieval, with optional semantic search, synthesis, and a typed knowledge graph.",
   "url": "https://hermesatlas.com/projects/garrytan/gbrain",
   "codeRepository": "https://github.com/garrytan/gbrain",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "garrytan",
     "url": "https://github.com/garrytan"
   },
-  "dateModified": "2026-10-13T00:13:26.000Z",
+  "dateModified": "2026-10-13T12:10:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 30822
+    "userInteractionCount": 30835
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">256·repos</span>
+    <span id="meta-count">257·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">GBrain is a memory system for existing AI agents that stores explicit facts with sources and supports corrections and withdrawal. It offers keyword retrieval, with optional semantic search, synthesis, and background enrichment, and can make memory available across agents.</p>
+    <p class="summary-text">GBrain stores explicit facts with their sources, supports corrections and withdrawal, and makes memory available across agents. It offers keyword retrieval, with optional semantic search, synthesis, and a typed knowledge graph.</p>
     <ul class="summary-highlights">
-      <li>Stores sourced facts and supports corrections and withdrawal</li>
-      <li>Connects to existing agents and shares memory across agents</li>
-      <li>Optional semantic search, synthesis, and background enrichment</li>
+      <li>Stores facts with sources and supports corrections and withdrawal</li>
+      <li>Shares memory across agents</li>
+      <li>Offers optional semantic search, synthesis, and knowledge graph</li>
     </ul>
   </div>
 </section>
@@ -236,11 +236,11 @@ Schema not migrated (<a href="https://github.com/garrytan/gbrain/issues/218">#21
 Run <code>gbrain apply-migrations --yes --no-autopilot-install</code>; exit 1 means it's still
 behind: run <code>gbrain doctor --json</code>, not <code>--yes</code> again.</p>
 </blockquote>
-<p><strong>Claude Code, fastest path:</strong></p>
+<p><strong>Claude Code or Codex, fastest path:</strong></p>
 <pre><code class="language-bash">bun install -g github:garrytan/gbrain
-gbrain setup claude-code   # --dry-run previews, --remove undoes
+gbrain setup claude-code   # or codex; --dry-run previews, --remove undoes
 </code></pre>
-<p><code>setup</code> shows the brain, source, launcher and owner it resolved before writing, runs <code>gbrain init --pglite --no-embedding</code> only when no brain exists, writes the stdio MCP entry and read-context hooks (owned by hash) and smoke-tests them. Capture and providers stay off unless accepted; a hosted brain keeps <code>gbrain connect --install</code>. <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/setup.md">Setup guide</a>.</p>
+<p><code>setup</code> shows the brain, source, launcher and owner it resolved before writing, runs <code>gbrain init --pglite --no-embedding</code> only when no brain exists, writes the stdio MCP entry and read-context hooks (owned by hash, plus Codex hook trust) and smoke-tests them. Capture and providers stay off unless accepted; a hosted brain keeps <code>gbrain connect --install</code>. <a href="https://github.com/garrytan/gbrain/blob/main/docs/guides/setup.md">Setup guide</a>.</p>
 <p>Start with the agent you already use. For Grok Bot and Muse, the dedicated guides above install an isolated launcher, repairable runtime, and memory in a verified persistent directory. For a coding agent, paste:</p>
 <pre><code class="language-text">Add GBrain memory to this existing agent. Read and follow:
 https://raw.githubusercontent.com/garrytan/gbrain/master/INSTALL_FOR_AGENTS.md
@@ -294,7 +294,7 @@ https://raw.githubusercontent.com/garrytan/gbrain/master/INSTALL_FOR_AGENTS.md
 <p><strong>Never set up an AI agent platform before?</strong> The <a href="https://github.com/garrytan/gbrain/blob/main/docs/tutorials/personal-brain.md">personal-brain tutorial</a> walks the whole path end-to-end — picking OpenClaw vs Hermes, deploying it, pointing it at INSTALL_FOR_AGENTS.md, getting the API keys, and verifying the first query. Start there if any of the above is new.</p>
 </blockquote>
 <h4>Lighter ways in</h4>
-<p><strong>Just want a memory for your coding agent — no identity, no repo.</strong> On Claude Code run <code>gbrain setup claude-code</code> (above). By hand: <code>gbrain init --pglite --no-embedding</code>, then <code>codex mcp add gbrain -- "$(command -v gbrain)" serve --surface full</code> (<code>claude mcp add</code> takes the same argv; <code>--surface verbs</code> or <code>starter</code> for a harness that caps its tool count). Saved memories are brain-wide by default; pass <code>visibility: "private"</code> for local-only facts.</p>
+<p><strong>Just want a memory for your coding agent — no identity, no repo.</strong> On Claude Code or Codex use <code>gbrain setup</code> (above). By hand: <code>gbrain init --pglite --no-embedding</code>, then <code>codex mcp add gbrain -- "$(command -v gbrain)" serve --surface full</code> (<code>claude mcp add</code> takes the same argv; <code>--surface verbs</code> or <code>starter</code> for a harness that caps its tool count). Saved memories are brain-wide by default; pass <code>visibility: "private"</code> for local-only facts.</p>
 <p><strong>Already have a brain on a remote host</strong> (OpenClaw, Hermes, or any <code>gbrain serve --http</code>)? Point your laptop agents at it with one command each — <code>--install</code> wires it up and smoke-tests the token before handoff:</p>
 <pre><code class="language-bash">gbrain connect https://your-host/mcp --token gbrain_xxx --install               # Claude Code
 gbrain connect https://your-host/mcp --token gbrain_xxx --agent codex --install # Codex
@@ -508,7 +508,7 @@ for installation, data flow, per-harness limitations, and removal.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 48.8K</div>
+        <div class="stars">★ 49.0K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -528,7 +528,7 @@ for installation, data flow, per-harness limitations, and removal.</p>
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 300</div>
+        <div class="stars">★ 303</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
