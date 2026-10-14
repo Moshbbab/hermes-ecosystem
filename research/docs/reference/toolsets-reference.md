@@ -168,9 +168,9 @@ Persistent cross-session memory management.
 
 `desktop_ui`
 
-`annotate_preview`, `apply_layout`, `close_terminal`, `desktop_preview`, `drive_preview`, `focus_pane`, `gui_tour`, `react_to_message`, `read_terminal`, `read_window_below`, `show_tip`
+`annotate_preview`, `close_terminal`, `desktop_preview`, `drive_preview`, `focus_pane`, `gui_tour`, `react_to_message`, `read_terminal`, `read_window_below`, `set_theme`, `show_tip`
 
-Affordances that act on the Hermes desktop app itself — read/close the embedded terminal pane, open, read, close, interact with, and annotate the in-app browser, identify the OS window behind the app, reveal a pane, react to a message, run a guided tour (highlight + narrate UI elements in the app or the preview pane), and apply a layout preset. Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions.
+Affordances that act on the Hermes desktop app itself — read/close the embedded terminal pane, open, read, close, interact with, and annotate the in-app browser, identify the OS window behind the app, reveal a pane, react to a message, run a guided tour (highlight + narrate UI elements in the app or the preview pane), and set the accent colour, light/dark mode and layout (or show a picker card for the user to choose). Enabled for sessions whose source is the desktop app, whichever backend it's connected to (local, SSH, URL, or Hermes Cloud). Never present on CLI, TUI, messaging, or cron sessions.
 
 `project`
 
@@ -201,18 +201,6 @@ Web search only (without extract).
 `session_search`
 
 Search past conversation sessions.
-
-`setup`
-
-`setup_choose`
-
-Onboarding-only surface of the desktop setup profile: ask the user one question or picker card at a time. The setup profile's own config enables it (`platform_toolsets.cli`), and only desktop sessions get its tools. `all` does not include it. Not listed by `hermes tools`.
-
-`start_chat`
-
-`start_chat`
-
-Start a new desktop chat in an existing profile (this chat's own profile when none is named) and send it its first message, so the task runs there in view of the user. Every call opens another chat. A profile's own config enables it (`platform_toolsets.cli`), and only desktop sessions get its tool. `all` does not include it. Not listed by `hermes tools`. Subagents never get it.
 
 `skills`
 

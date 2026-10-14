@@ -136,7 +136,7 @@ hermes plugins install touchdesigner
 hermes plugins enable touchdesigner   # same as: hermes plugins enable td
 ```
 
-In the Desktop app a package with both an agent half and a Desktop half (`desktop/plugin.js`) is one row with one switch per half. Turning the package on (the install dialog's **Enable agent plugin after install**, or the row's **Agent** switch) turns its Desktop half on as well, unless you switched that half off yourself. Turning it off stays per half, because the Desktop half is shared by every profile.
+In the Desktop app a package with both an agent half and a Desktop half (`desktop/plugin.js`) is one row with one switch per half. Turning the package on (installing it from the install dialog, which turns it on, or the row's **Agent** switch) turns its Desktop half on as well, unless you switched that half off yourself. Turning it off stays per half, because the Desktop half is shared by every profile.
 
 Portable packages can also carry a stdio MCP server. The `snyk` entry pins the Snyk CLI (`npx -y snyk@<version> mcp`) and bundles the `snyk-security-scan` skill, so one install gives Hermes code, dependency, container and IaC scanning plus the workflow for using it; the catalog name and manifest name match:
 
