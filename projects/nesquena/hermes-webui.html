@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it…">
+<meta name="description" content="Hermes Web UI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near-full parity with the CLI. It provides chat, session…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it…">
+<meta property="og:description" content="Hermes Web UI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near-full parity with the CLI. It provides chat, session…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it…">
+<meta name="twitter:description" content="Hermes Web UI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near-full parity with the CLI. It provides chat, session…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing Hermes agent and models, and provides controls for profiles, settings, and sessions.",
+  "description": "Hermes Web UI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near-full parity with the CLI. It provides chat, session navigation, workspace file browsing, and controls for models, profiles, and workspaces; the README says it uses the existing Hermes setup without additional setup.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-10-14T03:32:02.000Z",
+  "dateModified": "2026-10-14T11:26:08.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 18909
+    "userInteractionCount": 18918
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,10 +141,10 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing Hermes agent and models, and provides controls for profiles, settings, and sessions.</p>
+    <p class="summary-text">Hermes Web UI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near-full parity with the CLI. It provides chat, session navigation, workspace file browsing, and controls for models, profiles, and workspaces; the README says it uses the existing Hermes setup without additional setup.</p>
     <ul class="summary-highlights">
       <li>Three-panel layout for sessions, chat, and workspace files</li>
-      <li>Includes a workspace browser with inline previews</li>
+      <li>Includes a workspace file browser with inline previews</li>
       <li>Built with Python and vanilla JavaScript; no build step</li>
     </ul>
   </div>
@@ -407,6 +407,7 @@ If an AI assistant is helping with install, reinstall, bootstrap, provider setup
 <li>Cancel a running task directly from the composer footer (Stop button next to Send)</li>
 <li>Tool call cards inline -- each shows the tool name, args, and result snippet; expand/collapse all toggle for multi-tool turns</li>
 <li>Subagent delegation cards -- child agent activity shown with distinct icon and indented border</li>
+<li>Detached child results are delivered to the parent as internal wakeups. Their raw prompts and completion toasts do not appear as messages from the user; the parent can summarize the results in its own reply. Ordinary background-process wakeups remain visible. A completed parent reply does not, by itself, cancel or suppress outstanding children; a later result may still start a follow-up turn.</li>
 <li>Mermaid diagram rendering inline (flowcharts, sequence diagrams, gantt charts)</li>
 <li>Thinking/reasoning display -- collapsible gold-themed cards for Claude extended thinking and o3 reasoning blocks</li>
 <li>Approval card for dangerous shell commands (allow once / session / always / deny)</li>
@@ -606,11 +607,11 @@ before the session's named-profile Gateway ownership is known.</p>
 </thead>
 <tbody><tr>
 <td>Hermes agent dir</td>
-<td><code>HERMES_WEBUI_AGENT_DIR</code>, then known checkout paths, the <code>hermes</code> launcher on <code>PATH</code>, and finally the installed <code>run_agent</code> module exposed by <code>HERMES_WEBUI_PYTHON</code></td>
+<td><code>HERMES_WEBUI_AGENT_DIR</code>, then valid authoritative <code>run_agent.py</code> checkouts, the <code>hermes</code> launcher, the selected Python, valid fallback checkouts, and finally marker-only roots</td>
 </tr>
 <tr>
 <td>Python executable</td>
-<td>Agent venv first, then <code>.venv</code> in this repo, then system <code>python3</code></td>
+<td><code>HERMES_WEBUI_PYTHON</code>, Agent venv, interpreter that proved the Agent root, <code>.venv</code> in this repo, then system Python</td>
 </tr>
 <tr>
 <td>State directory</td>
@@ -635,6 +636,7 @@ export HERMES_WEBUI_PORT=9000
 export HERMES_WEBUI_AUTO_INSTALL=1  # enable auto-install of agent deps (disabled by default)
 ./start.sh
 </code></pre>
+<p>Auto-install requires the selected Agent to match <code>HERMES_WEBUI_AGENT_DIR</code> or the Agent under <code>HERMES_HOME</code>, and still checks ownership and permissions.</p>
 <p>Or inline:</p>
 <pre><code class="language-bash">HERMES_WEBUI_AGENT_DIR=/custom/path ./start.sh 9000
 </code></pre>
@@ -1024,13 +1026,7 @@ Full design notes and the endpoint catalog are in <a href="https://github.com/ne
 </ul>
 <p><strong>Deploying &amp; operating</strong></p>
 <ul>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access.md"><code>docs/remote-access.md</code></a> — SSH tunnel, Tailscale, and phone access (incl. a community ARM64-Android field report)</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access-zh.md"><code>docs/remote-access-zh.md</code></a> — 中文远程访问指南：Tailscale、SSH 隧道、Windows 原生部署（自启仅适用 WSL 用户）</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/advanced-chat-setup.md"><code>docs/advanced-chat-setup.md</code></a> — optional dynamic recall-prefill and Gateway-backed browser chat for self-hosted deployments</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a> — Docker compose setup, common failures, and bind-mount migration</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/supervisor.md"><code>docs/supervisor.md</code></a> — launchd, systemd, supervisord, runit, and s6 process-supervisor setup</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/wsl-autostart.md"><code>docs/wsl-autostart.md</code></a> — WSL2 auto-start at Windows login</li>
-<li>[`docs/onboarding-agent</li>
+<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/remote-access.md"><code>docs/remote-access.md</code></a> — SSH tunnel, Tailscale, and phone access (incl. a community ARM64-Android</li>
 </ul>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
