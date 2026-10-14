@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near 1:1 parity with the CLI. It provides a three-panel…">
+<meta name="description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near 1:1 parity with the CLI. It provides a three-panel…">
+<meta property="og:description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near 1:1 parity with the CLI. It provides a three-panel…">
+<meta name="twitter:description" content="Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near 1:1 parity with the CLI. It provides a three-panel layout for sessions and navigation, chat, and workspace file browsing, with model, profile, and workspace controls in the composer footer.",
+  "description": "Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing Hermes agent and models, and provides controls for profiles, settings, and sessions.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-10-13T12:28:14.000Z",
+  "dateModified": "2026-10-14T03:32:02.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 18895
+    "userInteractionCount": 18909
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-13</span>
+    <span><span class="meta-label">updated</span>2026-10-14</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, described as offering near 1:1 parity with the CLI. It provides a three-panel layout for sessions and navigation, chat, and workspace file browsing, with model, profile, and workspace controls in the composer footer.</p>
+    <p class="summary-text">Hermes WebUI is a lightweight, dark-themed browser interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing Hermes agent and models, and provides controls for profiles, settings, and sessions.</p>
     <ul class="summary-highlights">
-      <li>Browser-based interface with no build step or framework</li>
-      <li>Three-panel layout with chat and workspace file browser</li>
-      <li>Access through an SSH tunnel is documented</li>
+      <li>Three-panel layout for sessions, chat, and workspace files</li>
+      <li>Includes a workspace browser with inline previews</li>
+      <li>Built with Python and vanilla JavaScript; no build step</li>
     </ul>
   </div>
 </section>
@@ -428,6 +428,7 @@ If an AI assistant is helping with install, reinstall, bootstrap, provider setup
 <li>Pinned-conversation limits apply separately to each session's owning profile; root/default aliases share a limit. Unpin an empty session before switching its profile through chat or <code>/goal</code>.</li>
 <li>Archive sessions (hide without deleting, toggle to show)</li>
 <li>Session projects -- named groups with colors for organizing sessions; delegated subagent sessions have no project of their own and follow their nearest ancestor's project in the project filter and the Unassigned chip; forks and other child sessions keep their own project, so a fork moved to "No project" stays Unassigned</li>
+<li>Project bindings -- right-click a project chip and pick <strong>Project settings…</strong> to pin a default workspace (or several workspaces, with one marked default) and a model. The chip's <strong>+</strong> (and New Chat while the project filter is active) then opens a session already in that workspace/model. The reasoning-effort binding stays in the API (<code>POST /api/projects/bind</code>) but is dormant: the dialog no longer offers the row, and nothing applies a stored value to a new session any more — the only mechanism would be the <strong>profile-wide</strong> reasoning-effort preference (the same <code>agent.reasoning_effort</code> setting the <code>/reasoning</code> command writes), so a row inside a per-project dialog read as per-project while silently moving the whole profile's effort; it comes back with per-session effort (#7881)</li>
 <li>Session tags -- add #tag to titles for colored chips and click-to-filter</li>
 <li>Grouped by Today / Yesterday / Earlier in the sidebar (collapsible date groups)</li>
 <li>Download as Markdown transcript, full JSON export, or import from JSON</li>
@@ -1029,16 +1030,7 @@ Full design notes and the endpoint catalog are in <a href="https://github.com/ne
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/docker.md"><code>docs/docker.md</code></a> — Docker compose setup, common failures, and bind-mount migration</li>
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/supervisor.md"><code>docs/supervisor.md</code></a> — launchd, systemd, supervisord, runit, and s6 process-supervisor setup</li>
 <li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/wsl-autostart.md"><code>docs/wsl-autostart.md</code></a> — WSL2 auto-start at Windows login</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/onboarding-agent-checklist.md"><code>docs/onboarding-agent-checklist.md</code></a> — safety rules and pass/fail checks for assistant-led install/reinstall support</li>
-</ul>
-<p><strong>Contributing &amp; design</strong></p>
-<ul>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a> — contribution style, PR expectations, and local verification</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/ARCHITECTURE.md"><code>ARCHITECTURE.md</code></a> — system design, all API endpoints, implementation notes</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/TESTING.md"><code>TESTING.md</code></a> — manual browser test plan and automated coverage reference</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/DESIGN.md"><code>DESIGN.md</code></a> — design tokens and the calm-console direction</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/UIUX-GUIDE.md"><code>docs/UIUX-GUIDE.md</code></a> — UI/UX principles sourced from the design docs and visual inventories</li>
-<li><a href="https://github.com/nesquena/hermes-webui/blob/main/docs/sse-streams.md"><code>docs/sse-streams.md</code></a> — cross-client SSE endpoint reference: session streaming, gateway SSE probe scope, heartbeats, and proxy</li>
+<li>[`docs/onboarding-agent</li>
 </ul>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
