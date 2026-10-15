@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jezue/fitatu_library — Hermes Agent Integrations &amp; Bridges | Hermes Atlas</title>
-<meta name="description" content="fitatu-api is an unofficial Python client for Fitatu that reads and writes food diaries, activities, body measurements, and water, and reads goals, summaries,…">
+<meta name="description" content="fitatu-api is an unofficial Python client for Fitatu that reads and writes food diary entries, activities, body measurements, water, and goals, and reads…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Jezue/fitatu_library">
 <meta property="og:title" content="Jezue/fitatu_library — Hermes Atlas">
-<meta property="og:description" content="fitatu-api is an unofficial Python client for Fitatu that reads and writes food diaries, activities, body measurements, and water, and reads goals, summaries,…">
+<meta property="og:description" content="fitatu-api is an unofficial Python client for Fitatu that reads and writes food diary entries, activities, body measurements, water, and goals, and reads…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Jezue/fitatu_library">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Jezue/fitatu_library — Hermes Atlas">
-<meta name="twitter:description" content="fitatu-api is an unofficial Python client for Fitatu that reads and writes food diaries, activities, body measurements, and water, and reads goals, summaries,…">
+<meta name="twitter:description" content="fitatu-api is an unofficial Python client for Fitatu that reads and writes food diary entries, activities, body measurements, water, and goals, and reads…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=fitatu_library&amp;subtitle=Unofficial+Python+API+client+for+Fitatu+%E2%80%94+built+for+AI+agents+and+automation&amp;kind=project+%C2%B7+integrations">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Jezue/fitatu_library#software",
   "name": "fitatu_library",
-  "description": "fitatu-api is an unofficial Python client for Fitatu that reads and writes food diaries, activities, body measurements, and water, and reads goals, summaries, and the food catalog. It includes FitatuTools for exposing 40 tools to language models, plus an MCP server that provides the same tools to MCP hosts.",
+  "description": "fitatu-api is an unofficial Python client for Fitatu that reads and writes food diary entries, activities, body measurements, water, and goals, and reads summaries and the food catalog. Its FitatuTools interface exposes tools for language models, and the project also provides an MCP server for compatible hosts.",
   "url": "https://hermesatlas.com/projects/Jezue/fitatu_library",
   "codeRepository": "https://github.com/Jezue/fitatu_library",
   "applicationCategory": "CommunicationApplication",
@@ -47,7 +47,7 @@
     "name": "Jezue",
     "url": "https://github.com/Jezue"
   },
-  "dateModified": "2026-10-15T11:43:12.000Z",
+  "dateModified": "2026-10-15T14:45:55.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">fitatu-api is an unofficial Python client for Fitatu that reads and writes food diaries, activities, body measurements, and water, and reads goals, summaries, and the food catalog. It includes FitatuTools for exposing 40 tools to language models, plus an MCP server that provides the same tools to MCP hosts.</p>
+    <p class="summary-text">fitatu-api is an unofficial Python client for Fitatu that reads and writes food diary entries, activities, body measurements, water, and goals, and reads summaries and the food catalog. Its FitatuTools interface exposes tools for language models, and the project also provides an MCP server for compatible hosts.</p>
     <ul class="summary-highlights">
-      <li>Supports diary, activity, measurement, and water operations.</li>
-      <li>Includes JSON Schema tools for language models.</li>
-      <li>MCP server runs over stdio.</li>
+      <li>Supports Python 3.11 and newer.</li>
+      <li>Provides 47 tools with JSON Schema inputs.</li>
+      <li>MCP server supports stdio and HTTP.</li>
     </ul>
   </div>
 </section>
@@ -153,7 +153,11 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>fitatu-api</h2>
+    <p align="center">
+  <img src="https://raw.githubusercontent.com/Jezue/fitatu_library/main/docs/assets/banner.png" alt="fitatu-api: your Fitatu food diary for AI agents (unofficial)" width="100%">
+</p>
+
+<h2>fitatu-api</h2>
 
 
 <p><img src="https://img.shields.io/pypi/v/fitatu-api" alt="PyPI" loading="lazy" decoding="async">
@@ -163,7 +167,8 @@
 <img src="https://github.com/Jezue/fitatu_library/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" decoding="async"></p>
 <p>An unofficial Python client for the API of <a href="https://www.fitatu.com">Fitatu</a>, the calorie
 counter, built to be driven by AI agents and scripts. It reads and writes the food diary,
-activities, body measurements and water, and reads goals, summaries and the food catalog.
+activities, body measurements and water, reads and sets goals, and reads summaries and the food
+catalog.
 <code>FitatuTools</code> turns the diary into tools a language model can call. The session handling
 follows <a href="https://github.com/cyberjunky/python-garminconnect">python-garminconnect</a>: log in once,
 keep one session file, let the client refresh it.</p>
@@ -208,9 +213,11 @@ with FitatuApiClient.from_session() as client:  # closes the HTTP connections at
     print("added row", added["row_id"])
 </code></pre>
 <p>How writes, row ids and removals work: <a href="https://github.com/Jezue/fitatu_library/blob/main/docs/PLANNER.md">docs/PLANNER.md</a>.</p>
+<p>To copy a catering diet's menu into the diary (safe to run again), use <code>catering_sync.py</code> from
+the repository: <a href="https://github.com/Jezue/fitatu_library/blob/main/docs/PLANNER.md#importing-a-catering-menu">Importing a catering menu</a>.</p>
 <h3>For AI agents</h3>
-<p><code>FitatuTools</code> exposes 40 tools (read the day, search food, log food, weight, water,
-workouts and private recipes, ...) with JSON Schema inputs and read-only / destructive / idempotent annotations.
+<p><code>FitatuTools</code> exposes 47 tools (read the day, search food, log food, weight, water,
+workouts, private recipes and products, ...) with JSON Schema inputs and read-only / destructive / idempotent annotations.
 <code>call()</code> never raises: it returns <code>{"ok": true, "data": ...}</code> or <code>{"ok": false, "error": {"error_type", "message", "retryable", "hint", ...}}</code>, so the model can read what went wrong.
 <code>SYSTEM_PROMPT</code> is the recommended system prompt: the rules the model needs on top of the tool
 descriptions (read before writing, users' own meal names, <code>data.ok</code>, confirmations). The model
@@ -253,7 +260,7 @@ if response.stop_reason != "end_turn":  # max_tokens or refusal: the answer is c
 print("".join(block.text for block in response.content if block.type == "text"))
 </code></pre>
 <p>The write tools (log food, update, move, copy and delete rows, weight, water, workouts, private
-recipes) need a loop
+recipes and products) need a loop
 that asks the user before destructive calls; it is in
 <a href="https://github.com/Jezue/fitatu_library/blob/main/docs/AGENTS.md">docs/AGENTS.md</a>, with the
 tool table, the calls never to expose (session tokens, catalog writes), how to make writes safe
@@ -267,6 +274,9 @@ stdio, with <code>SYSTEM_PROMPT</code> as its instructions and three Polish slas
 fitatu-api login
 claude mcp add fitatu --scope user -- fitatu-mcp   # fitatu-mcp --read-only: the read tools only
 </code></pre>
+<p><code>fitatu-mcp --http</code> serves the same tools over HTTP, with a token, for n8n, another computer or
+Docker (the repository has a <code>Dockerfile</code>):
+<a href="https://github.com/Jezue/fitatu_library/blob/main/docs/AGENTS.md#remote-http-and-docker">docs/AGENTS.md</a>.</p>
 <p>Without an account, <code>fitatu-mcp --demo</code> (or <code>FitatuTools.demo()</code>) serves a small made-up diary
 kept in memory. For Claude Desktop, each <a href="https://github.com/Jezue/fitatu_library/releases/latest">GitHub release</a>
 has <code>fitatu-&lt;version&gt;.mcpb</code>, installed with a double click (log in with <code>fitatu-api login</code> first). Without installing anything, <code>uvx --from "fitatu-api[mcp]" fitatu-mcp</code> runs the server. It is
@@ -299,17 +309,17 @@ Claude Desktop, uvx and what the server does:
 <tr>
 <td>Foods</td>
 <td><code>search_food</code>, <code>get_product_details</code>, <code>get_recipe</code>, recipe catalog and its search, <code>client.foods</code> (favourites, recent)</td>
-<td><code>search_food</code>, <code>search_recipes</code>, <code>find_by_barcode</code>, <code>get_food_measures</code>, <code>get_recent_foods</code>, <code>get_favorite_foods</code>, <code>set_favorite</code></td>
+<td><code>search_food</code>, <code>search_recipes</code>, <code>get_recipe</code>, <code>find_by_barcode</code>, <code>get_food_measures</code>, <code>get_recent_foods</code>, <code>get_favorite_foods</code>, <code>set_favorite</code></td>
 </tr>
 <tr>
 <td>The user's own foods</td>
-<td><code>search_user_food</code>, <code>create_recipe</code>, <code>update_recipe</code>, <code>delete_recipe</code></td>
-<td><code>get_my_foods</code>; <code>create_recipe</code>, <code>update_recipe</code> and <code>delete_recipe</code> for private recipes only, the user's own</td>
+<td><code>search_user_food</code>, <code>create_product</code>, <code>update_product</code>, <code>delete_product</code>, <code>create_recipe</code>, <code>update_recipe</code>, <code>delete_recipe</code></td>
+<td><code>get_my_foods</code>; <code>create_food</code>, <code>update_food</code>, <code>delete_food</code> and the recipe tools for the user's own private foods only</td>
 </tr>
 <tr>
 <td>Measurements</td>
 <td><code>client.measurements</code>: weight and body sizes per day, history, charts</td>
-<td><code>get_weight_history</code>, <code>get_body_measurements</code>, <code>log_weight</code>, <code>log_measurements</code></td>
+<td><code>get_weight_history</code>, <code>get_body_measurements</code>, <code>get_measurement_history</code>, <code>log_weight</code>, <code>log_measurements</code></td>
 </tr>
 <tr>
 <td>Water</td>
@@ -329,11 +339,11 @@ Claude Desktop, uvx and what the server does:
 <tr>
 <td>Goals and settings</td>
 <td><code>client.user_settings</code>: targets, BMR/TMR, profile</td>
-<td><code>get_targets</code></td>
+<td><code>get_targets</code>, <code>set_targets</code> (the manual or automatic goal, macro split, glass size), <code>get_profile</code> (height, weight, goal, BMI, Premium; nothing that identifies the user)</td>
 </tr>
 <tr>
 <td>Catalog writes</td>
-<td><code>create_product</code>, <code>create_recipe(shared=True)</code>, <code>delete_product</code>, <code>set_product_proposal</code>, duplicate cleanup</td>
+<td><code>create_recipe(shared=True)</code>, <code>set_product_proposal</code>, duplicate cleanup</td>
 <td>none, on purpose</td>
 </tr>
 </tbody></table>
@@ -356,23 +366,28 @@ instead of raising, is deprecated and will be removed in 1.0: for results that n
 <td>✅</td>
 </tr>
 <tr>
-<td>Search, barcode, food measures, recipe search, private recipes, favourites, recent foods</td>
+<td>Search, barcode, food measures, recipe search by words and <code>max_energy_kcal</code>, recipes in full, private recipes and products, favourites, recent foods</td>
 <td>✅</td>
 <td>✅</td>
 </tr>
 <tr>
-<td>Goals (<code>get_targets</code>), progress (<code>get_progress</code>), reports (<code>get_report</code>), range totals (<code>get_range_summary</code>)</td>
+<td>Recipe search filters (<code>min_protein_g</code>, <code>max_carbohydrate_g</code>, <code>max_cooking_time</code>, <code>diets</code>, <code>meal</code>) and premium catalog recipes (<code>get_recipe</code>, <code>get_food_measures</code>, <code>add_food</code>, <code>add_foods</code>; the shopping list leaves out their ingredients)</td>
+<td>❌ "needs Fitatu Premium": the tools follow the app</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Goals: read and set (<code>get_targets</code>, <code>set_targets</code>), progress (<code>get_progress</code>), reports (<code>get_report</code>), range totals (<code>get_range_summary</code>)</td>
 <td>✅ (progress: a request per day, at most 31 days)</td>
 <td>✅</td>
 </tr>
 <tr>
-<td>Weight history, fasting and habits (read), shopping list</td>
+<td>Weight and body measurement history, profile, fasting and habits (read), shopping list</td>
 <td>✅</td>
 <td>✅</td>
 </tr>
 <tr>
 <td>Top foods (<code>get_top_foods</code>, <code>summary.get_top_products()</code>)</td>
-<td>❌ 403: "needs Fitatu Premium"</td>
+<td>❌ 403: needs Fitatu Premium</td>
 <td>✅</td>
 </tr>
 <tr>
@@ -393,11 +408,16 @@ instead of raising, is deprecated and will be removed in 1.0: for results that n
 <li><code>summary.get_top_products()</code>, and so the <code>get_top_foods</code> tool;</li>
 <li><code>summary.export_diary()</code>, and so <code>fitatu-api export</code>, which then says so in one line.</li>
 </ul>
+<p>Fitatu serves the recipe search filters and premium catalog recipes to any account, but its app
+keeps them for Premium, and so do the tools: they check the account's <code>accessControl</code> flags and
+answer a <code>forbidden</code> error without them. The client itself does not check.</p>
 <p><code>get_progress</code> and <code>get_report</code> work on every account: when the macros' day-by-day route is
 refused, they read each day's own summary instead (a request per day, at most 31 days), and
 <code>get_report</code> gives <code>top_foods</code> null with a <code>top_foods_note</code>. A free account's macro goals are a
 range (<code>target_min</code> below <code>target_max</code>); on a Premium account a one-day summary gave the two
-equal (the day-by-day route <code>get_progress</code> reads there agrees, checked live). <code>fitatu-api doctor</code>
+equal (the day-by-day route <code>get_progress</code> reads there agrees, checked live). It takes a manual
+goal and its own macro split too (<code>set_targets</code>, checked live 2026-10-15); with a split, its
+macro goals are single numbers. <code>fitatu-api doctor</code>
 says whether the account has a premium plan. See
 <a href="https://github.com/Jezue/fitatu_library/blob/main/docs/AGENTS.md#free-and-premium-accounts">Free and Premium accounts</a>
 in docs/AGENTS.md for the tools.</p>
@@ -604,14 +624,21 @@ exception into the JSON-safe dict that <code>FitatuTools.call()</code> (and the 
 <td><code>sync_rejected</code></td>
 </tr>
 <tr>
+<td><code>FitatuPremiumRequiredError</code></td>
+<td>A tool for what the Fitatu app keeps for Premium, on an account without it; nothing was sent for it.</td>
+<td><code>forbidden</code></td>
+</tr>
+<tr>
 <td><code>FitatuApiError</code></td>
 <td>Any other HTTP error: <code>status_code</code>, <code>body</code>, <code>codename</code> (e.g. <code>NUMBER_OF_USES_EXCEEDED</code>).</td>
 <td><code>forbidden</code> (403), <code>validation</code> (400/409/422), <code>server</code></td>
 </tr>
 </tbody></table>
-<p>Messages read <code>METHOD /path -&gt; status CODENAME: server message</code>. A 403 whose body is an HTML page
-comes from a firewall in front of the API (e.g. Cloudflare), not from Fitatu's premium or key
-checks, and its <code>hint</code> says so. Any other exception, such as a <code>TypeError</code> raised inside the
+<p>Messages read <code>METHOD /path -&gt; status CODENAME: server message</code>. In <code>describe_error()</code>'s message
+the user id is <code>&lt;user&gt;</code> (<code>GET /diet-plan/&lt;user&gt;/days -&gt; 403</code>), and with <code>user_id=</code> (which
+<code>FitatuTools.call()</code> passes) wherever else it appears, so a result does not carry it to the
+model provider. A 403 whose body is an HTML page comes from a firewall in front of the API (e.g.
+Cloudflare), not from Fitatu's premium or key checks, and its <code>hint</code> says so. Any other exception, such as a <code>TypeError</code> raised inside the
 library, is <code>unexpected</code>: a bug to report, since <code>FitatuTools.call()</code> checks the arguments first.</p>
 <p>Retries: network errors, 429, 500/502/503/504 and Cloudflare's 520 to 524 are retried for <code>GET</code>, <code>HEAD</code> and <code>OPTIONS</code>,
 and for writes marked idempotent: the day sync (all planner writes; it upserts by row id),
@@ -640,15 +667,15 @@ again afterwards to set <code>ok</code>. Requests per agent tool call, before re
 </tr>
 <tr>
 <td>1</td>
-<td>the other read tools; <code>set_water</code>; <code>set_favorite</code>; <code>preview_removal</code> and <code>remove_items</code> with <code>dry_run</code>; <code>delete_recipe</code> of a recipe already deleted</td>
+<td>the other read tools; <code>set_water</code>; <code>set_favorite</code>; <code>preview_removal</code> and <code>remove_items</code> with <code>dry_run</code>; <code>delete_recipe</code> of a recipe already deleted, <code>delete_food</code> of a product already deleted</td>
 </tr>
 <tr>
 <td>2</td>
-<td><code>get_range_summary</code>, <code>get_fasting</code> (3 when the settings name the scheme by id), <code>get_habits</code>, <code>find_by_barcode</code> (1 without a product hit), <code>add_food</code> for a recipe in portions, <code>add_custom_item</code>, <code>log_weight</code>, <code>delete_recipe</code>; <code>add_foods</code>, plus 1 for each item with <code>unit</code> or <code>measure_id</code>; <code>create_recipe</code>, plus 1 for each ingredient</td>
+<td><code>get_range_summary</code>, <code>get_profile</code>, <code>get_fasting</code> (3 when the settings name the scheme by id), <code>get_habits</code>, <code>find_by_barcode</code> (1 without a product hit), <code>add_food</code> for a recipe in portions (plus 1 for the Premium flags, the first such call in 10 minutes; without Fitatu Premium 1 more, as it reads the recipe first), <code>add_custom_item</code>, <code>log_weight</code>, <code>delete_recipe</code>, <code>set_targets</code>, <code>create_food</code>, <code>delete_food</code>; <code>add_foods</code>, plus 1 for each item with <code>unit</code> or <code>measure_id</code> and, without Fitatu Premium, for each recipe in portions (and 1 for the Premium flags as for <code>add_food</code>); <code>create_recipe</code>, plus 1 for each ingredient; <code>search_recipes</code> with a filter but <code>max_energy_kcal</code>, and <code>get_recipe</code> and <code>get_food_measures</code> of a premium recipe, the first such call on a <code>FitatuTools</code> in 10 minutes (it reads the account's Premium flags; 1 afterwards)</td>
 </tr>
 <tr>
 <td>3</td>
-<td><code>add_food</code> with <code>unit</code> or <code>measure_id</code> (reads the food first), <code>log_measurements</code> (reads the size unit from the profile), <code>copy_meal</code> within a day, <code>remove_items</code>, <code>add_activity</code>, <code>remove_activity</code>, <code>set_note</code>; <code>update_recipe</code>, plus 1 for each new ingredient</td>
+<td><code>add_food</code> with <code>unit</code> or <code>measure_id</code> (reads the food first), <code>log_measurements</code> (reads the size unit from the profile), <code>copy_meal</code> within a day, <code>remove_items</code>, <code>add_activity</code>, <code>remove_activity</code>, <code>set_note</code>, <code>update_food</code>; <code>update_recipe</code>, plus 1 for each new ingredient</td>
 </tr>
 <tr>
 <td>4</td>
@@ -668,7 +695,7 @@ again afterwards to set <code>ok</code>. Requests per agent tool call, before re
 </tr>
 <tr>
 <td>1 a day</td>
-<td><code>get_shopping_list</code>, plus 1 for each recipe planned in the range; <code>get_progress</code> and <code>get_report</code> without Fitatu Premium, plus 1 for the range (none for a single day) and <code>get_report</code>'s weigh-ins, and the first such call on a <code>FitatuTools</code> in 10 minutes 1 more, which Fitatu refuses</td>
+<td><code>get_shopping_list</code>, plus 1 for each recipe planned in the range (and 1 for the Premium flags when one is premium); <code>get_progress</code> and <code>get_report</code> without Fitatu Premium, plus 1 for the range (none for a single day) and <code>get_report</code>'s weigh-ins, and the first such call on a <code>FitatuTools</code> in 10 minutes 1 more, which Fitatu refuses</td>
 </tr>
 </tbody></table>
 <h3>Privacy &amp; logging</h3>
@@ -686,7 +713,9 @@ from Fitatu looks expired, so the local clock is off; refreshing ahead of expiry
 client keeps its own). From <code>fitatu_api.agent</code>, <code>fitatu_api.facade</code> and
 <code>fitatu_api.mcp_server</code>, a call whose result reports an <code>unexpected</code> error (with the
 traceback), an <code>auth</code> or a <code>maintenance</code> error: <code>get_day failed (auth): ...</code>. From
-<code>fitatu_api.auth</code>, a token store (usually the session file) that could not be read.</li>
+<code>fitatu_api.auth</code>, a token store (usually the session file) that could not be read. From
+<code>fitatu_api.mcp_server</code> under <code>--http</code>, each request refused for its token, with the client's
+address (never the token); uvicorn adds its start and stop lines.</li>
 <li><code>DEBUG</code> (<code>fitatu_api.client</code>): every request as JSON lines: <code>fitatu.request.start</code> (method,
 path, query parameters such as search phrases), <code>fitatu.request.retry</code> before each retry's
 wait (the failed <code>attempt</code>, <code>delay_seconds</code>, and the <code>reason</code>: the status or the network
@@ -726,11 +755,13 @@ day on or before today is refused. Water and the note on that day are set back, 
 and measurements written on <code>FITATU_LIVE_MEASUREMENT_DAY</code> are deleted. <code>-k ReadOnly</code> runs only
 the tests that read.
 Logging catalog foods adds them to the account's recent foods, which is not undone. With
-<code>FITATU_LIVE_RUN_WRITE_ACCOUNT=1</code> the suite also changes and restores the water glass size and
-creates, then deletes, a catalog product and two private recipes (one through the tools, logged
-on <code>FITATU_LIVE_DAY</code> and removed). Recipe deletes are soft, so like the recent foods they are
-not fully undone: both recipes stay on the account, marked deleted and hidden from your foods
-and searches. The full list is in the module docstring of <code>tests/test_live_all.py</code>. Never point <code>FITATU_LIVE_DAY</code> at a day with entries you care about.</p>
+<code>FITATU_LIVE_RUN_WRITE_ACCOUNT=1</code> the suite also changes and restores the water glass size and the
+daily goals (Fitatu keeps the restored goals as a new version from today), and creates, then
+deletes, a private product and two private recipes (one through the tools, logged on
+<code>FITATU_LIVE_DAY</code> and removed) and a private product through the tools (logged on
+<code>FITATU_LIVE_DAY</code>, changed, removed). Product and recipe deletes are soft, so like the recent
+foods they are not fully undone: they stay on the account, marked deleted and hidden from your
+foods and searches. The full list is in the module docstring of <code>tests/test_live_all.py</code>. Never point <code>FITATU_LIVE_DAY</code> at a day with entries you care about.</p>
 <p><code>scripts/check_contract.py</code> tells, reading only, whether the live API still answers with the
 structure the recording holds: it prints route and key names, never values, and exits 1 when a
 key is gone, a type changed or a route fails. The <em>Live contract</em> workflow runs it and the
@@ -788,7 +819,7 @@ code only, not the Fitatu service, its API or the data it returns.</p>
         <div class="name"><span class="org">AaronWong1999 /</span> hermesclaw</div>
       </a>
       <a class="related-row" href="/projects/Codename-11/hermes-relay">
-        <div class="stars">★ 352</div>
+        <div class="stars">★ 353</div>
         <div class="name"><span class="org">Codename-11 /</span> hermes-relay</div>
       </a>
       <a class="related-row" href="/projects/kfa-ai/hermes-timetree-sync">

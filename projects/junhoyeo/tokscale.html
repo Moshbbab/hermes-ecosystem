@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>junhoyeo/tokscale — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists…">
+<meta name="description" content="Tokscale is a CLI tool and visualization dashboard for tracking and analyzing token usage and costs across multiple AI coding agents. Its README lists support…">
 <link rel="canonical" href="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists…">
+<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard for tracking and analyzing token usage and costs across multiple AI coding agents. Its README lists support…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists…">
+<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard for tracking and analyzing token usage and costs across multiple AI coding agents. Its README lists support…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=tokscale&amp;subtitle=%F0%9F%9B%B0%EF%B8%8F+Track+token+usage+across+AI+coding+agents+from+your+terminal.+%F0%9F%8F%85+Global+leaderboard+with+trillions+of+tokens+tracked.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists support for clients including Claude Code, OpenClaw, Codex CLI, Hermes Agent, Gemini CLI, and others.",
+  "description": "Tokscale is a CLI tool and visualization dashboard for tracking and analyzing token usage and costs across multiple AI coding agents. Its README lists support for agents including Claude Code, OpenClaw, Codex, Hermes Agent, and Gemini CLI, among others.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-10-15T06:33:46.000Z",
+  "dateModified": "2026-10-15T17:09:19.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5682
+    "userInteractionCount": 5686
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists support for clients including Claude Code, OpenClaw, Codex CLI, Hermes Agent, Gemini CLI, and others.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard for tracking and analyzing token usage and costs across multiple AI coding agents. Its README lists support for agents including Claude Code, OpenClaw, Codex, Hermes Agent, and Gemini CLI, among others.</p>
     <ul class="summary-highlights">
-      <li>Tracks token usage and costs across multiple agents</li>
-      <li>Includes CLI and visualization dashboard</li>
-      <li>Supports a range of coding-agent clients</li>
+      <li>Tracks token consumption and costs across multiple AI coding agents.</li>
+      <li>Includes CLI views for sessions, models, daily summaries, and stats.</li>
+      <li>Can submit usage data to a leaderboard and create a public profile.</li>
     </ul>
   </div>
 </section>
@@ -315,7 +315,7 @@
 <tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-amp.png" alt="Amp"></td>
 <td><a href="https://ampcode.com/">Amp (AmpCode)</a></td>
-<td><code>~/.local/share/amp/threads/</code></td>
+<td><code>~/.config/tokscale/amp-cache/threads/</code> (<code>tokscale amp sync</code>)</td>
 </tr>
 <tr>
 <td><img width="48px" src="https://raw.githubusercontent.com/junhoyeo/tokscale/main/.github/assets/client-codebuff.png" alt="Codebuff"></td>
@@ -1168,17 +1168,12 @@ tokscale cursor logout --all
 # Logout from all accounts and delete cached usage
 tokscale cursor logout --all --purge-cache
 </code></pre>
-<p>By default, Tokscale aggregates usage across all saved Cursor accounts by reading <code>cursor-cache/usage*.json</code>. The active account syncs to <code>usage.json</code>; additional accounts sync to <code>usage.&lt;account&gt;.json</code>. Legacy CSV caches from older Tokscale versions (<code>usage.csv</code>, <code>usage.&lt;account&gt;.csv</code>) are still read for an account that has no JSON cache yet. The next successful sync of that account writes its JSON cache and moves the CSV to <code>cursor-cache/archive/</code>.</p>
+<p>By default, Tokscale aggregates usage across all saved Cursor accounts by reading <code>cursor-cache/usage*.json</code>. The active account syncs to <code>usage.json</code>; additional accounts use <code>usage.account-&lt;sha256-of-exact-account-id&gt;.json</code>. Each new cache records its account owner, so different IDs cannot share cached history or incremental sync progress merely because their sanitized names match.</p>
+<p>On the first sync or account change after upgrading, unmarked legacy JSON and CSV caches cannot prove which account owns their history. Tokscale preserves their original bytes and filenames in unique directories under <code>cursor-cache/archive/</code>, then fetches each account independently from the beginning. These backups are excluded from reports to avoid attributing ambiguous history to the wrong account. If a fetch fails, the backup remains recoverable; reauthenticate that account and sync again. Offline reports can still read legacy caches until this upgrade step runs. A backup failure stops the sync or account change before any cache is overwritten.</p>
 <p>When you log out, Tokscale moves cached usage to <code>cursor-cache/archive/</code> so it is no longer aggregated. Use <code>--purge-cache</code> to delete cached usage instead.</p>
-<p><code>tokscale cursor sync</code> downloads each saved account's usage history page by page and gives each account one overall time budget. By default the budget starts at 120 seconds and grows with the number of usage events Cursor reports for the account, up to 1800 seconds (30 minutes). To use a fixed budget instead, pass <code>--timeout &lt;SECONDS&gt;</code> for one run, or save <code>cursor.syncTimeoutSeconds</code> in <code>settings.json</code> (by default <code>~/.config/tokscale/settings.json</code>; see <a href="#configuration">Configuration</a> for Windows, <code>XDG_CONFIG_HOME</code> and <code>TOKSCALE_CONFIG_DIR</code>). Both take a whole number of seconds from 1 to 86400. If the setting holds any other value, <code>tokscale cursor sync</code> run without <code>--timeout</code> prints a warning and uses the default budget. The flag takes precedence over the setting, and the setting takes precedence over the default budget.</p>
-<pre><code class="language-json">{
-  "cursor": {
-    "
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/junhoyeo/tokscale#readme)*
-</code></pre>
+<p><code>tokscale cursor sync</code> downloads each saved account's usage history page by page and gives each account one overall time budget. By default the budget starts at 120 seconds and grows with the number of usage events Cursor reports for the accoun</p>
+<hr>
+<p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
