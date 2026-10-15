@@ -23,16 +23,20 @@ No admin rights required. The installer goes to `%LOCALAPPDATA%\hermes\` and add
 **Installer options** use a scriptblock:
 
 ```
-& ([scriptblock]::Create((irm https://hermes-agent.nousresearch.com/install.ps1))) -NonInteractive -Branch main
+& ([scriptblock]::Create((irm https://hermes-agent.nousresearch.com/install.ps1))) -NonInteractive -Channel main
 ```
 
 Parameter
 
 Purpose
 
+`-Channel stable|main`
+
+`stable` (default): the latest published release. `main`: every commit, saved like `hermes update --set-channel main`. `$env:HERMES_INSTALL_CHANNEL` sets it for a plain `irm | iex`.
+
 `-Branch NAME`
 
-Select the source branch; default `main`.
+Select the source branch; default `main`. Another branch is installed at its tip.
 
 `-Commit SHA`
 
