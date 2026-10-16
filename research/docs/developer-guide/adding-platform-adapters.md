@@ -926,7 +926,7 @@ Complexity
 
 Good reference for
 
-`bluebubbles.py`
+`plugins/platforms/bluebubbles/adapter.py`
 
 REST + webhook
 
@@ -934,7 +934,7 @@ Medium
 
 Simple REST API integration
 
-`weixin.py`
+`plugins/platforms/weixin/adapter.py`
 
 Long-poll + CDN
 
