@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions when an agent…">
+<meta name="description" content="deja-vu indexes coding-agent session history already saved on disk and makes it searchable, including sessions from before installation. It shares recalled…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions when an agent…">
+<meta property="og:description" content="deja-vu indexes coding-agent session history already saved on disk and makes it searchable, including sessions from before installation. It shares recalled…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions when an agent…">
+<meta name="twitter:description" content="deja-vu indexes coding-agent session history already saved on disk and makes it searchable, including sessions from before installation. It shares recalled…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+39+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions when an agent starts, help resume or continue sessions, and run locally without a model, embeddings, or server.",
+  "description": "deja-vu indexes coding-agent session history already saved on disk and makes it searchable, including sessions from before installation. It shares recalled context across supported agents, provides a terminal search interface, and can pass session summaries to agents at session start.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-16T02:57:50.000Z",
+  "dateModified": "2026-10-16T11:24:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1206
+    "userInteractionCount": 1216
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions when an agent starts, help resume or continue sessions, and run locally without a model, embeddings, or server.</p>
+    <p class="summary-text">deja-vu indexes coding-agent session history already saved on disk and makes it searchable, including sessions from before installation. It shares recalled context across supported agents, provides a terminal search interface, and can pass session summaries to agents at session start.</p>
     <ul class="summary-highlights">
-      <li>Searches months of indexed session history across agents</li>
-      <li>Provides a terminal search interface and command-line summaries</li>
-      <li>Supports local indexing and SSH sync between machines</li>
+      <li>Search and resume sessions from a terminal interface.</li>
+      <li>Share indexed session history across supported agents.</li>
+      <li>Runs locally without a model or server.</li>
     </ul>
   </div>
 </section>
@@ -212,6 +212,7 @@ the list narrows as you type.</p>
 <li>The box takes filters: an agent with a colon (<code>codex:</code>), <code>today</code>, <code>yesterday</code>, <code>week</code>, <code>month</code>, and <code>in:&lt;project&gt;</code>.</li>
 <li><code>r</code> resumes the session in the agent that wrote it. <code>o</code> continues it in any other agent, which starts with what the session asked, decided and left open.</li>
 <li><code>tab</code> switches between this project, all projects and Deleted, the sessions their agent deleted that deja still holds; <code>R</code> puts one back.</li>
+<li>Memory, the last tab, is what every agent starting in this project reads first: decisions promoted in deja and what Claude Code wrote in its own auto-memory, which deja hands to Codex, opencode and the other agents at session start. <code>x</code> stops a line being handed on.</li>
 <li><code>?</code> lists every key, <code>^k</code> has the rest (copy the session id or project path, forget a session), <code>q</code> quits from the list; <code>esc</code> steps back and quits from an empty search box.</li>
 </ul>
 <p>With <code>DEJA_TUI=0</code> it prints the text summary instead, which is also <code>deja brief</code>. Piped, it
@@ -225,7 +226,7 @@ prints what is indexed and which command to run next.</p>
 <li><strong>Indexes the work, not just the talk.</strong> The files each turn opened, the commands with their exit status, the exact spans an edit replaced.</li>
 <li><strong>Knows what held.</strong> <code>deja promote &lt;id&gt; --state rejected</code> marks a reverted decision, and every later hit says it was tried and why it was dropped; <code>--state accepted</code> takes the mark back.</li>
 <li><strong>Says when the ground moved.</strong> A hit reports <em>4 files this session touched have changed since</em>, and stays quiet when it cannot tell.</li>
-<li><strong>Local and private.</strong> No model, no embeddings, no server. Keys and tokens are stripped as the index is built (<a href="#privacy">privacy</a>).</li>
+<li><strong>Local and private.</strong> No model and no server; embeddings only if you turn on <a href="#semantic-recall-optional">semantic recall</a>. Keys and tokens are stripped as the index is built (<a href="#privacy">privacy</a>).</li>
 <li><strong>Moves with you.</strong> <code>deja sync ssh laptop</code> between machines, no cloud in between; <code>deja handoff --to codex</code> to continue in another agent.</li>
 <li><strong>One Go binary.</strong> macOS, Linux and Windows, through Homebrew, Scoop, winget, npm or <code>go install</code>.</li>
 </ul>
@@ -300,7 +301,8 @@ harness supports, aider's read-only context file, and the Windows <code>cmd /c d
 the version check in <code>deja doctor</code>, <code>deja embed</code> against an endpoint you configure (and,
 once it has built the semantic sidecar, each search, which sends the query to that
 endpoint), and a once-a-day look at the latest release from an interactive command. That look sends no
-session data; <code>DEJA_OFFLINE=1</code> or <code>DEJA_NO_UPDATE_NOTICE=1</code> turns it off.</p>
+session data; <code>DEJA_OFFLINE=1</code> turns it off, and so does <code>DEJA_NO_UPDATE_NOTICE</code> set to any
+value, which also hides the note a new version prints on its first run.</p>
 <p>Credentials are stripped as the index is built: cloud and provider keys, tokens and JWTs,
 PEM blocks, passwords in URLs or stated in prose. Each becomes <code>[redacted:&lt;kind&gt;]</code> and the
 text around it stays searchable. The source transcripts still hold them
@@ -1384,7 +1386,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 50.1K</div>
+        <div class="stars">★ 50.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
