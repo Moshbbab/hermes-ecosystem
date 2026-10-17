@@ -262,7 +262,7 @@ Toggle the live work dock between its multi-row preview and a single summary lin
 
 `Ctrl+D`
 
-Exit
+Exit (on an empty prompt; with text it deletes under the cursor). While the gateway runs a turn, it exits and leaves the turn running: the gateway finishes it, ends the session afterwards, and `hermes --resume` shows the reply. A turn that asks a question (approval or clarify) meanwhile waits for its timeout or for you to resume. Use `Ctrl+C` to stop the turn instead.
 
 `Ctrl+Z`
 
