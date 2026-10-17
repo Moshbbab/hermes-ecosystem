@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>abundantbeing/hermes-browser-extension — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes Browser Extension is a Chrome, Edge, and other Chromium-browser side panel for connecting to the Hermes Agent runtime through a local gateway, Hermes…">
+<meta name="description" content="Hermes Browser Extension is a Chromium side panel for connecting browser context to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension">
 <meta property="og:title" content="abundantbeing/hermes-browser-extension — Hermes Atlas">
-<meta property="og:description" content="Hermes Browser Extension is a Chrome, Edge, and other Chromium-browser side panel for connecting to the Hermes Agent runtime through a local gateway, Hermes…">
+<meta property="og:description" content="Hermes Browser Extension is a Chromium side panel for connecting browser context to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="abundantbeing/hermes-browser-extension — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Browser Extension is a Chrome, Edge, and other Chromium-browser side panel for connecting to the Hermes Agent runtime through a local gateway, Hermes…">
+<meta name="twitter:description" content="Hermes Browser Extension is a Chromium side panel for connecting browser context to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-browser-extension&amp;subtitle=Browser-native+side+panel+for+Hermes+Agent+%E2%80%94+connect+web+context+to+your+local+Hermes+runtime.&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension#software",
   "name": "hermes-browser-extension",
-  "description": "Hermes Browser Extension is a Chrome, Edge, and other Chromium-browser side panel for connecting to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a self-hosted remote gateway. It can use configured Hermes tools and context features, including page context, attachments, and tab screenshots; some connection modes are Chat-only, and browser control is Chromium-only.",
+  "description": "Hermes Browser Extension is a Chromium side panel for connecting browser context to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a self-hosted remote gateway. It supports agent chats, page-context capture, file attachments, and browser controls; some features, including Hermes Control, are limited by connection mode or browser.",
   "url": "https://hermesatlas.com/projects/abundantbeing/hermes-browser-extension",
   "codeRepository": "https://github.com/abundantbeing/hermes-browser-extension",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "abundantbeing",
     "url": "https://github.com/abundantbeing"
   },
-  "dateModified": "2026-10-16T16:42:19.000Z",
+  "dateModified": "2026-10-17T20:23:53.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1676
+    "userInteractionCount": 1675
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-16</span>
+    <span><span class="meta-label">updated</span>2026-10-17</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Browser Extension is a Chrome, Edge, and other Chromium-browser side panel for connecting to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a self-hosted remote gateway. It can use configured Hermes tools and context features, including page context, attachments, and tab screenshots; some connection modes are Chat-only, and browser control is Chromium-only.</p>
+    <p class="summary-text">Hermes Browser Extension is a Chromium side panel for connecting browser context to the Hermes Agent runtime through a local gateway, Hermes Cloud, or a self-hosted remote gateway. It supports agent chats, page-context capture, file attachments, and browser controls; some features, including Hermes Control, are limited by connection mode or browser.</p>
     <ul class="summary-highlights">
-      <li>Connects to local, Cloud, or self-hosted remote Hermes gateways</li>
-      <li>Supports agent chats, file attachments, and page context</li>
-      <li>Chromium-only Hermes Control can operate browser tabs</li>
+      <li>Supports local, Hermes Cloud, and remote connections</li>
+      <li>Captures page context and selected tab screenshots</li>
+      <li>Bot Mode supports agent switching and group chats</li>
     </ul>
   </div>
 </section>
@@ -336,7 +336,8 @@ curl -H "Authorization: Bearer $HERMES_API_TOKEN" "$HERMES_GATEWAY_URL/v1/models
 <li>Click <strong>service worker</strong> / <strong>Inspect views</strong> only for debugging; it is not the version source.</li>
 </ol>
 <h4>Skills or profiles do not load</h4>
-<p>Startup shows Skills and Profiles separately. A current Hermes connection can load profiles and skills through its API routes when no dashboard is available. Older connections keep the dashboard path, and a missing route preserves the last loaded details instead of clearing them. A connected gateway does not guarantee that every catalog route is available.</p>
+<p>Startup shows Skills and Profiles separately. A current Hermes connection can load profiles and skills through its API routes when no dashboard is available. Older connections keep the dashboard path, and a missing route preserves the last loaded details instead of clearing them. A connected gateway does not guarantee that every catalog route is available, and each route is advertised on its own.</p>
+<p>Images attached earlier in a session load again when the gateway serves its stored files. On a gateway that does not, the panel keeps the previews it still has and shows the file names for the rest.</p>
 <p>After the Hermes backend is responding again, reopen the panel or use <strong>Test connection</strong> to retry. Existing skills and profiles are not deleted by a catalog timeout.</p>
 <h4>Voice dictation records but no text appears</h4>
 <p>Hermes transcription needs an advertised API transcription route or a reachable dashboard transcription route. If neither is available, the panel uses browser speech when that browser supports it. A slow or unavailable browser speech download now falls through instead of leaving the click waiting, but browser speech itself depends on the browser.</p>
@@ -429,7 +430,7 @@ dist/               generated unpacked build (load this one)
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
       <a class="related-row" href="/projects/nickvasilescu/hermes-desktop-os1">
-        <div class="stars">★ 530</div>
+        <div class="stars">★ 529</div>
         <div class="name"><span class="org">nickvasilescu /</span> hermes-desktop-os1</div>
       </a>
     </div>
