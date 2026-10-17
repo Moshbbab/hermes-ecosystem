@@ -8,7 +8,7 @@ The plugin catalog is a curated, human-reviewed directory of Hermes plugins you 
 hermes plugins install <name>
 ```
 
-Browse it visually at **[/docs/plugins](/docs/plugins)** — entries are shelved by category (Memory, Desktop, Platforms, Web & Browser, Tools, Voice, Automation, Models), with search, tier filters (Official / Community), capability chips, and copyable install commands for every entry.
+Browse it visually at **[/docs/plugins](/docs/plugins)** — entries are shelved by category (Memory, Desktop, Platforms, Web & Browser, Tools, Voice, Automation, Models), with search, tier filters (Official / Verified / Community), capability chips, and copyable install commands for every entry.
 
 Every entry also has its own page at `/docs/plugins/<name>` (click a card): the full description and any disclosure, the pinned commit, tools, hooks and environment variables, the Desktop install button and CLI command, optional screenshots and the README from the reviewed commit, plus a **More by this author** shelf. Authors have a page at `/docs/plugins/by/<maintainer>` listing everything they maintain in the catalog. Both are generated at build time from the same catalog files, so a merged PR is the only way a page changes.
 
@@ -46,7 +46,7 @@ Path to the plugin inside the repo for monorepos — a plain relative path match
 
 `tier`
 
-`official` (maintained by NousResearch) or `community`
+`official` (maintained by NousResearch), `verified` (verified by the Nous team to come from the reputable company whose product it integrates), or `community`. Only Nous maintainers set `official` or `verified`
 
 `category`
 

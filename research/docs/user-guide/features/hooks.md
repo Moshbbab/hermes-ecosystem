@@ -800,7 +800,7 @@ Summary and redacted tool-history metadata may reveal project structure.
 
 Directive/control
 
-Incoming non-internal message before auth/pairing/dispatch; first valid `skip`, `rewrite`, or `allow` controls flow.
+Once per incoming non-internal message, at ingress: platform-adapter messages before auth/pairing/dispatch; webhook and relay deliveries after their authorization, before the admission commits; never for local CLI/TUI/Desktop or API turns, a retry of a committed delivery, or a queued admission when it executes. First valid `skip`, `rewrite`, or `allow` controls flow.
 
 `event`, `gateway`, `session_store`
 
@@ -830,7 +830,7 @@ Normalized plain-dict envelope only; raw SDK objects, adapter handles, and bot c
 
 Observer
 
-Recognized slash command about to be dispatched, before the handler runs, on CLI and gateway cold-path dispatch; return ignored in v1 (directive-shaped dicts are logged at debug). Gateway running-agent intercept commands (`/stop`, `/approve` during an active run) are deliberately excluded — control-plane escape hatches must stay outside plugin reach.
+Recognized slash command about to be dispatched, before the handler runs, on CLI and gateway cold-path dispatch; return ignored in v1 (directive-shaped dicts are logged at debug). A command the classic CLI, TUI or Desktop sends to the gateway through `slash.exec` or `command.dispatch` fires it once, in the gateway, with `surface` and `platform` both `"cli"` as before (Ink and Desktop fired it through the CLI slash worker) and `session_key` the session id. A recognized command the classic CLI runs itself is reported to the gateway (`command.observe`) once it has run, and so are these TUI commands: `/help`, `/history`, `/clear`, `/new`, `/tools` (not `enable`/`disable`), `/usage` and `/reasoning` (a level once the gateway accepts it). The gateway fires it there after replying, so neither client loads plugin code; a command either client refuses fires nothing. This is a deliberate change from the classic CLI before the unified gateway, which fired it for every recognized command just before dispatch: now a command fires it only if it runs, so one that is refused or that the client has no handler for (`/handoff` in a gateway session, `/start`) fires nothing. A TUI change the gateway applies, such as `/reasoning high`, fires it once the gateway accepts the change, so after the change has taken effect. A gateway older than the client fires no hook for those commands (the classic CLI prints a one-time notice). Known gap: Desktop's own pickers, actions and dedicated RPCs (commands it answers without `slash.exec`) fire nothing yet, and neither do the other commands the TUI answers itself or through a dedicated gateway call, such as `/title`, `/undo`, `/retry`, `/model`, `/compress`, `/branch`, `/save`, `/copy`, `/queue`, `/steer`, `/bg`, `/btw`, `/skin`, `/yolo`, `/busy`, `/fast`, `/verbose`, `/rollback`, `/reload-mcp`, `/quit` and `/reasoning --global`. During a local session's turn every command that still runs fires it except `/stop`, `/approve` and `/deny`; a command that is refused (rejected while busy, or named as unavailable on the gateway) fires nothing. Each callback is timeout-bounded (`plugins.hook_callback_timeout`); each delivery waits on a thread of its own, never a worker shared with other sessions or the event loop's executor. One session's commands reach it in order, and a callback still running for that session (hung) is skipped for its later commands instead of running out of order, without holding up other sessions. Gateway running-agent intercept commands (`/stop`, `/approve` during an active run) are deliberately excluded — control-plane escape hatches must stay outside plugin reach.
 
 `surface` (`"cli"` | `"gateway"`), `command` (canonical name), `alias_used`, `args_raw`, `session_key`, `platform`
 
@@ -2104,7 +2104,7 @@ With heavy delegation (e.g. orchestrator roles × 5 leaves × nested depth), `su
 
 ### `pre_gateway_dispatch`
 
-Fires **once per incoming `MessageEvent`** in the gateway, after the internal-event guard but **before** auth/pairing and agent dispatch. This is the interception point for gateway-level message-flow policies (listen-only windows, human handover, per-chat routing, etc.) that don't fit cleanly into any single platform adapter.
+Fires **once per incoming `MessageEvent`** in the gateway, at ingress, after the internal-event guard and before the message is admitted or dispatched. Where it runs relative to authorization depends on how the message arrived (see **Fires** below). This is the interception point for gateway-level message-flow policies (listen-only windows, human handover, per-chat routing, etc.) that don't fit cleanly into any single platform adapter.
 
 **Callback signature:**
 
@@ -2136,7 +2136,27 @@ The active gateway runner, so plugins can call `gateway.adapters[platform].send(
 
 For silent transcript ingestion via `session_store.append_to_transcript(...)`.
 
-**Fires:** In `gateway/run.py`, inside `GatewayRunner._handle_message()`, immediately after `is_internal` is computed. **Internal events skip the hook entirely** (they are system-generated — background-process completions, etc. — and must not be gate-kept by user-facing policy).
+**Fires:** **Internal events skip the hook entirely** (they are system-generated — background-process completions, etc. — and must not be gate-kept by user-facing policy). Otherwise:
+
+Path
+
+When the hook runs
+
+Platform adapters (Telegram, Discord, Slack, …) and relay slash commands
+
+In `GatewayRunner._handle_message()` (`_hm_admit_event` in `gateway/run_inbound.py`), **before** auth/pairing, so a plugin can handle unauthorized senders.
+
+Webhook deliveries and relay messages
+
+In `admit_producer` (`gateway/platforms/webhook_ingress.py`), **after** the delivery's authorization and **before** its admission commits: a refused sender never reaches the hook, a skipped delivery is never admitted, and a rewrite is what gets admitted. A provider retry or relay re-send of a delivery that was already admitted resolves to that admission without calling the hook again. On the relay, admission with a registered hook runs off the relay socket reader, so a callback may await `gateway.adapters[...].send(...)`; one chat's messages still wait for each other, in arrival order.
+
+Local CLI, TUI, Desktop and API-server turns
+
+Never.
+
+A queued admission when it executes (first run or restart replay)
+
+Never: the message already passed the hook at ingress, so a `skip` can't drop admitted input.
 
 **Return value:** `None` or a dict. The first recognized action dict wins; remaining plugin results are ignored. Exceptions in plugin callbacks are caught and logged; the gateway always falls through to normal dispatch on error.
 
@@ -2148,7 +2168,7 @@ Effect
 
 `{"action": "skip", "reason": "..."}`
 
-Drop the message — no agent reply, no pairing flow, no auth. Plugin is assumed to have handled it (e.g. silent-ingested into the transcript).
+Drop the message — no agent reply, no pairing flow, no auth (a webhook or relay delivery is acknowledged and never admitted). Plugin is assumed to have handled it (e.g. silent-ingested into the transcript).
 
 `{"action": "rewrite", "text": "new text"}`
 
@@ -2156,11 +2176,11 @@ Replace `event.text`, then continue normal dispatch with the modified event. Use
 
 `{"action": "allow"}` / `None`
 
-Normal dispatch — runs the full auth / pairing / agent-loop chain.
+Normal dispatch — runs the rest of the auth / pairing / agent-loop chain.
 
 **Use cases:** Listen-only group chats (only respond when tagged; buffer ambient messages into context); human handover (silent-ingest customer messages while owner handles the chat manually); per-profile rate limiting; policy-driven routing.
 
-**Example — drop unauthorized DMs silently without triggering the pairing code:**
+**Example — drop unauthorized DMs silently without triggering the pairing code** (platform-adapter messages; a refused webhook or relay sender never reaches the hook):
 
 ```
 def deny_unauthorized_dms(event, **kwargs):
@@ -2362,7 +2382,7 @@ Session identifier, useful for scoping notifications per-chat
 
 `str`
 
-`"cli"` for classic interactive-CLI prompts (dangerous commands, protected agent-instruction writes, consent prompts), `"gateway"` for async platform approvals (the Ink TUI and Desktop app also report `"gateway"` today), `"smart"` for auxiliary-LLM auto approve/deny decisions, or the caller's consent surface for MCP/vault prompts (`"mcp-elicitation/<server>"`, `"mcp-trust/<server>"`, `"vault-payment"`)
+`"cli"` for classic CLI sessions (dangerous commands, protected agent-instruction writes, consent prompts; also when the gateway renders the prompt for that session), `"gateway"` for async platform approvals (the Ink TUI and Desktop app also report `"gateway"` today), `"smart"` for auxiliary-LLM auto approve/deny decisions, or the caller's consent surface for MCP/vault prompts (`"mcp-elicitation/<server>"`, `"mcp-trust/<server>"`, `"vault-payment"`)
 
 **Return value:** ignored. Hooks here are observer-only; they cannot veto or pre-answer the approval. Use [`pre_tool_call`](#pre_tool_call) to block a tool before it reaches the approval system.
 

@@ -252,6 +252,10 @@ Toggle the gateway runtime-metadata footer on final replies (shows model, contex
 
 Control what happens when you message while Hermes is working — queue the new message, steer mid-turn, or interrupt immediately. Works in the CLI and messaging gateway.
 
+`/autoprune [on|off|later|status]`
+
+Decide automatic pruning of old ended sessions (off by default). Hermes asks once when the disk holding `state.db` runs low; `on`/`off` save `sessions.auto_prune` and end the question, `later` reminds you in a week. Works in the CLI, TUI, Desktop and messaging gateway (on Slack: `/hermes autoprune`).
+
 `/indicator [kaomoji|emoji|unicode|ascii]`
 
 CLI-only: pick the TUI busy-indicator style.
