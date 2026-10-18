@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carlo1911/skill-evolution — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Skill Evolution reads past sessions, compares them with installed skills, and produces structured improvement proposals. Proposals are review-only by default;…">
+<meta name="description" content="Skill Evolution analyzes past agent sessions against installed skills and creates structured proposal files for review. Approved proposals can be applied…">
 <link rel="canonical" href="https://hermesatlas.com/projects/Carlo1911/skill-evolution">
 <meta property="og:title" content="Carlo1911/skill-evolution — Hermes Atlas">
-<meta property="og:description" content="Skill Evolution reads past sessions, compares them with installed skills, and produces structured improvement proposals. Proposals are review-only by default;…">
+<meta property="og:description" content="Skill Evolution analyzes past agent sessions against installed skills and creates structured proposal files for review. Approved proposals can be applied…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/Carlo1911/skill-evolution">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Carlo1911/skill-evolution — Hermes Atlas">
-<meta name="twitter:description" content="Skill Evolution reads past sessions, compares them with installed skills, and produces structured improvement proposals. Proposals are review-only by default;…">
+<meta name="twitter:description" content="Skill Evolution analyzes past agent sessions against installed skills and creates structured proposal files for review. Approved proposals can be applied…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=skill-evolution&amp;subtitle=Self-improvement+feedback+loop+for+AI+agent+skills+%E2%80%94+analyzes+past+sessions%2C+drafts+structured+improvement+proposals%2C+and+gates+auto-apply+behind+an+evaluation+framework.+Host-agno&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/Carlo1911/skill-evolution#software",
   "name": "skill-evolution",
-  "description": "Skill Evolution reads past sessions, compares them with installed skills, and produces structured improvement proposals. Proposals are review-only by default; an evaluation gate can be run before applying an approved proposal. The README documents adapters for Hermes and Claude Code and an extensible interface for other hosts.",
+  "description": "Skill Evolution analyzes past agent sessions against installed skills and creates structured proposal files for review. Approved proposals can be applied through an evaluation gate; adapters are provided for Hermes and Claude Code.",
   "url": "https://hermesatlas.com/projects/Carlo1911/skill-evolution",
   "codeRepository": "https://github.com/Carlo1911/skill-evolution",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "Carlo1911",
     "url": "https://github.com/Carlo1911"
   },
-  "dateModified": "2026-10-18T03:18:03.000Z",
+  "dateModified": "2026-10-18T16:02:50.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Skill Evolution reads past sessions, compares them with installed skills, and produces structured improvement proposals. Proposals are review-only by default; an evaluation gate can be run before applying an approved proposal. The README documents adapters for Hermes and Claude Code and an extensible interface for other hosts.</p>
+    <p class="summary-text">Skill Evolution analyzes past agent sessions against installed skills and creates structured proposal files for review. Approved proposals can be applied through an evaluation gate; adapters are provided for Hermes and Claude Code.</p>
     <ul class="summary-highlights">
-      <li>Fetches sessions and indexes installed skills</li>
-      <li>Writes proposals for review</li>
-      <li>Evaluation gate checks proposals before application</li>
+      <li>Fetches sessions and indexes installed skills.</li>
+      <li>Proposals are review-only by default.</li>
+      <li>Evaluation gate supports deterministic, LLM-judge, and regression evaluators.</li>
     </ul>
   </div>
 </section>
@@ -223,8 +223,13 @@ pipeline to actually work end to end rather than silently doing nothing or getti
 </tr>
 <tr>
 <td><code>SKILL_EVOLUTION_CLAUDE_CODE_HOME</code></td>
-<td><code>~/.claude</code></td>
+<td><code>$CLAUDE_CONFIG_DIR</code>, else <code>~/.claude</code></td>
 <td>Only read when <code>SKILL_EVOLUTION_HOST=claude_code</code></td>
+</tr>
+<tr>
+<td><code>SKILL_EVOLUTION_MAX_SESSIONS</code></td>
+<td><code>200</code></td>
+<td>Most unprocessed sessions one fetch run returns (any host); <code>--max-sessions</code> overrides it</td>
 </tr>
 <tr>
 <td><code>SKILL_EVOLUTION_HISTORY_PATH</code></td>
@@ -287,6 +292,7 @@ python3 scripts/skill_index.py &gt; /tmp/skills.json
 # 3. Inspect what got proposed
 python3 scripts/proposal.py --list
 python3 scripts/proposal.py --show 20260804-001
+python3 scripts/proposal.py --validate proposals/20260804-001.md   # exit 1 if it cannot be applied as written
 
 # 4. Review the proposal file and, if you agree with it, approve it by hand:
 #    edit proposals/20260804-001.md, change `status: proposed` to `status: approved`
