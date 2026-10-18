@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tool calls, skill loads, approvals, and delegated…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tool calls, skill loads, approvals, and delegated…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tool calls, skill loads, approvals, and delegated…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tool calls, skill loads, approvals, and delegated sub-agents—into traces. It records token, cost, and latency metrics and can optionally export logs and structured events to OTLP/HTTP backends.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into traces. It records token, cost, and latency metrics, with optional logs and structured events, and exports data to OTLP backends.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-10-18T01:11:10.000Z",
+  "dateModified": "2026-10-18T20:55:38.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tool calls, skill loads, approvals, and delegated sub-agents—into traces. It records token, cost, and latency metrics and can optionally export logs and structured events to OTLP/HTTP backends.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into traces. It records token, cost, and latency metrics, with optional logs and structured events, and exports data to OTLP backends.</p>
     <ul class="summary-highlights">
-      <li>Traces cover agent turns and delegated sub-agents.</li>
-      <li>Supports OTLP/HTTP backends, including Phoenix, Langfuse, Jaeger, and LangSmith.</li>
-      <li>Emits OpenInference and OTel GenAI attributes.</li>
+      <li>Captures agent turns as connected traces.</li>
+      <li>Includes token, cost, and latency metrics.</li>
+      <li>Supports OTLP/HTTP and OTLP/gRPC endpoints.</li>
     </ul>
   </div>
 </section>
@@ -249,12 +249,12 @@
 <p>Attributes are emitted in <strong>both</strong> conventions — OpenInference (<code>llm.*</code>, <code>input.value</code>) for Phoenix and OTel GenAI (<code>gen_ai.*</code>) for Langfuse, Weave and generic dashboards — so no backend needs custom mapping. Full lists: <a href="https://briancaffey.github.io/hermes-otel/reference/span-attributes">span attributes</a> · <a href="https://briancaffey.github.io/hermes-otel/reference/metrics">metrics</a> · <a href="https://briancaffey.github.io/hermes-otel/reference/hooks">hooks</a>.</p>
 <h3>Backends</h3>
 <p>Tested with: <a href="https://briancaffey.github.io/hermes-otel/backends/phoenix">Phoenix</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langfuse">Langfuse</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langsmith">LangSmith</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/signoz">SigNoz</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/jaeger">Jaeger</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/zipkin">Zipkin</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/greptime">GreptimeDB</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/clickstack">ClickStack</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/victoria">VictoriaMetrics family</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/aspire">Aspire Dashboard</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/gigapipe">Gigapipe</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/agenta">Agenta</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/tempo">Grafana Tempo</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/lgtm">Grafana LGTM</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/uptrace">Uptrace</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/openobserve">OpenObserve</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/parseable">Parseable</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/honeycomb">Honeycomb</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/weave">W&amp;B Weave</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/elastic">Elastic</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/openlit">OpenLIT</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/mlflow">MLflow</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/opik">Comet Opik</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/laminar">Laminar</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langwatch">LangWatch</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/latitude">Latitude</a>.</p>
-<p>Any OTLP/HTTP endpoint works as <code>type: otlp</code>. Several can be fed at once, each with its own export queue. Which backend carries which signal (Phoenix, Jaeger, Zipkin, Tempo, Langfuse, Weave, MLflow, Opik, Latitude and Agenta are traces-only; Laminar takes traces and logs) is in the <a href="https://briancaffey.github.io/hermes-otel/backends/overview">backends overview</a>. Every self-hostable backend, plus the candidates tracked in #232, has a ready-made Compose stack under <a href="docker-compose/"><code>docker-compose/</code></a>, one folder per backend; <a href="https://github.com/briancaffey/hermes-otel/blob/main/docker-compose/README.md"><code>docker-compose/README.md</code></a> is the manual with the comparison table and port map.</p>
+<p>Any OTLP/HTTP or OTLP/gRPC endpoint works as <code>type: otlp</code> (HTTP/protobuf by default; set <code>protocol: grpc</code> for gRPC). Both transports support TLS and client-certificate authentication; see <a href="https://briancaffey.github.io/hermes-otel/backends/otlp#grpc-and-tls">gRPC and TLS</a>. Several can be fed at once, each with its own export queue. Which backend carries which signal (Phoenix, Jaeger, Zipkin, Tempo, Langfuse, Weave, MLflow, Opik, Latitude and Agenta are traces-only; Laminar takes traces and logs) is in the <a href="https://briancaffey.github.io/hermes-otel/backends/overview">backends overview</a>. Every self-hostable backend, plus the candidates tracked in #232, has a ready-made Compose stack under <a href="docker-compose/"><code>docker-compose/</code></a>, one folder per backend; <a href="https://github.com/briancaffey/hermes-otel/blob/main/docker-compose/README.md"><code>docker-compose/README.md</code></a> is the manual with the comparison table and port map.</p>
 <h3>Install</h3>
 <pre><code class="language-bash">hermes plugins install hermes_otel        # from the Hermes plugin catalog
 hermes plugins enable hermes_otel         # the manifest name; installing does not enable
 </code></pre>
-<p>Hermes 0.21+ installs the plugin's Python dependencies (the three <code>opentelemetry-*</code> packages) into its own virtualenv automatically and re-applies them after every <code>hermes update</code>. Restart the gateway afterwards if one is running. <code>hermes plugins update hermes_otel</code> moves a catalog install to the newest reviewed commit.</p>
+<p>Hermes 0.21+ installs the plugin's Python dependencies (the OTel API, SDK, and HTTP/gRPC exporters) into its own virtualenv automatically and re-applies them after every <code>hermes update</code>. Restart the gateway afterwards if one is running. <code>hermes plugins update hermes_otel</code> moves a catalog install to the newest reviewed commit.</p>
 <p><strong>What leaves your machine.</strong> Span data goes only to the OTLP backends you configure. By default (<code>content_capture: full</code>) that includes the complete prompt and response of every model call, unclipped, plus previews of tool arguments and output clipped to 1200 characters. With none configured the plugin keeps a local SQLite store under <code>$HERMES_HOME</code> for the dashboard and sends nothing. <code>content_capture: preview</code> keeps only the clipped previews and <code>content_capture: off</code> drops content entirely while keeping the structure; see <a href="https://briancaffey.github.io/hermes-otel/configuration/conversation-capture">Conversation capture</a> and <a href="https://briancaffey.github.io/hermes-otel/configuration/privacy">Privacy mode</a>. The dashboard's <strong>Settings</strong> tab shows every setting in force, where each came from (file, environment variable or default) and the config file itself.</p>
 <p>To run the newest code before it reaches the catalog pin, install from this repository instead (same plugin, newest <code>main</code>, not catalog-reviewed):</p>
 <pre><code class="language-bash">hermes plugins install briancaffey/hermes-otel/hermes_otel --enable
@@ -383,11 +383,11 @@ agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇�
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/robbyczgw-cla/hermes-web-search-plus">
-        <div class="stars">★ 430</div>
+        <div class="stars">★ 431</div>
         <div class="name"><span class="org">robbyczgw-cla /</span> hermes-web-search-plus</div>
       </a>
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 531</div>
+        <div class="stars">★ 532</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
