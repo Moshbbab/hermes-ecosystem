@@ -1318,7 +1318,7 @@ control
 
 HermesCLI.\_handle\_voice\_command
 
-canonical route
+sidecar: voice.toggle; `tts` refused
 
 unavailable: composer-voice
 

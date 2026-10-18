@@ -494,7 +494,7 @@ Fields
 
 `result`
 
-`session_id`, `exit_code`, `text`, `tokens` (`input`, `output`, `total`, `cache_read`, `cache_write`), `duration_ms`; `error` when the turn failed
+`session_id`, `exit_code`, `text`, `tokens` (`input`, `output`, `total`, `cache_read`, `cache_write`), `duration_ms`; `error` when the turn failed; `replay_gap: true` when the run fell behind the gateway's stream and re-attached, so its `text` events stopped early (`text` here is still the whole reply)
 
 Once a conversation starts, its terminal record is always `result` — including `exit_code: 130` when it is interrupted with Ctrl-C. Treat that record as the completion signal; the process exit code matches its `exit_code`.
 
