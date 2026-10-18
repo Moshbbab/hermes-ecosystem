@@ -135,6 +135,10 @@ CLI or gateway tears down an active session identity.
 
 CLI or gateway moves from an old session identity to a new one.
 
+`on_session_delete`
+
+A session delete or deliberate archive committed (`reason` says which).
+
 Common fields include `session_id`, `completed`, `interrupted`, `reason`, `old_session_id`, and `new_session_id` where available.
 
 `on_session_end` is turn/run scoped. It is not necessarily the final lifetime boundary for a chat identity. Use `on_session_finalize` and `on_session_reset` for lifecycle cleanup that must happen once per session identity.
