@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>briancaffey/hermes-otel — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into…">
+<meta name="description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that records agent turns as traces, including model calls, tool calls, approvals, skill loads, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into…">
+<meta property="og:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that records agent turns as traces, including model calls, tool calls, approvals, skill loads, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/briancaffey/hermes-otel">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="briancaffey/hermes-otel — Hermes Atlas">
-<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into…">
+<meta name="twitter:description" content="hermes-otel is an OpenTelemetry plugin for Hermes Agent that records agent turns as traces, including model calls, tool calls, approvals, skill loads, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-otel&amp;subtitle=OTel+Plugin+for+Hermes+Agent&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/briancaffey/hermes-otel#software",
   "name": "hermes-otel",
-  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into traces. It records token, cost, and latency metrics, with optional logs and structured events, and exports data to OTLP backends.",
+  "description": "hermes-otel is an OpenTelemetry plugin for Hermes Agent that records agent turns as traces, including model calls, tool calls, approvals, skill loads, and delegated sub-agents. It captures token, cost, and latency metrics, with optional logs and structured events, and exports over OTLP HTTP or gRPC to supported backends.",
   "url": "https://hermesatlas.com/projects/briancaffey/hermes-otel",
   "codeRepository": "https://github.com/briancaffey/hermes-otel",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "briancaffey",
     "url": "https://github.com/briancaffey"
   },
-  "dateModified": "2026-10-18T20:55:38.000Z",
+  "dateModified": "2026-10-18T23:24:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that turns agent activity—including model calls, tools, approvals, and delegated sub-agents—into traces. It records token, cost, and latency metrics, with optional logs and structured events, and exports data to OTLP backends.</p>
+    <p class="summary-text">hermes-otel is an OpenTelemetry plugin for Hermes Agent that records agent turns as traces, including model calls, tool calls, approvals, skill loads, and delegated sub-agents. It captures token, cost, and latency metrics, with optional logs and structured events, and exports over OTLP HTTP or gRPC to supported backends.</p>
     <ul class="summary-highlights">
-      <li>Captures agent turns as connected traces.</li>
-      <li>Includes token, cost, and latency metrics.</li>
-      <li>Supports OTLP/HTTP and OTLP/gRPC endpoints.</li>
+      <li>Records a turn as a connected trace</li>
+      <li>Exports over OTLP HTTP or gRPC</li>
+      <li>Supports sending data to multiple backends</li>
     </ul>
   </div>
 </section>
@@ -164,14 +164,14 @@
   <a href="https://github.com/briancaffey/hermes-otel/actions/workflows/deploy-site.yml"><img src="https://github.com/briancaffey/hermes-otel/actions/workflows/deploy-site.yml/badge.svg" alt="Docs site"></a>
   <a href="https://github.com/briancaffey/hermes-otel/releases"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fbriancaffey%2Fhermes-otel%2Fmain%2Fpyproject.toml&amp;query=%24.project.version&amp;prefix=v&amp;label=version&amp;color=3fb950" alt="Version"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.9%E2%80%933.13-3776AB?logo=python&amp;logoColor=white" alt="Python 3.9 to 3.13"></a>
-  <a href="https://opentelemetry.io/docs/specs/otlp/"><img src="https://img.shields.io/badge/OpenTelemetry-OTLP%2FHTTP-425cc7?logo=opentelemetry&amp;logoColor=white" alt="OpenTelemetry OTLP/HTTP"></a>
+  <a href="https://opentelemetry.io/docs/specs/otlp/"><img src="https://img.shields.io/badge/OpenTelemetry-OTLP%20HTTP%20%7C%20gRPC-425cc7?logo=opentelemetry&amp;logoColor=white" alt="OpenTelemetry OTLP over HTTP or gRPC"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/briancaffey/hermes-otel?color=58a6ff" alt="License: Apache-2.0"></a>
 </p>
 
 <p align="center">
   <b>OpenTelemetry plugin for <a href="https://github.com/nousresearch/hermes-agent">Hermes Agent</a>.</b><br>
   Every Hermes turn — model calls, API requests, tool calls, skill loads, approvals, delegated sub-agents — becomes one OTel trace,
-  with token / cost / latency metrics and (optionally) logs and structured events, exported to any OTLP/HTTP backend.
+  with token, cost and latency metrics and (optionally) logs and structured events, exported to any OTLP backend over HTTP or gRPC.
 </p>
 
 <p align="center">
@@ -195,10 +195,10 @@
 ├── skill.{name}                      ← a loaded skill; spans load → turn end
 └── llm.{model}                       ← one run_conversation
     ├── api.{model}                   ← one HTTP round-trip; tokens, cost, finish reason
-    │   ├── tool.{name}               ← each tool call; args, result, outcome
-    │   └── approval.{pattern}        ← human / smart-guardian approval wait
+    ├── tool.{name}                   ← each tool call; args, result, outcome
+    ├── approval.{pattern}            ← human / smart-guardian approval wait
     ├── subagent.{role}               ← delegate_task; the child's own trace nests here
-    │   └── agent → llm → api → tool …
+    │   └── agent → llm → api, tool …
     └── api.{model}                   ← final response
 </code></pre>
 <table>
@@ -237,7 +237,7 @@
 <tr>
 <td><code>approval.{pattern}</code></td>
 <td>CHAIN</td>
-<td>Decision wait time, choice (<code>once</code> / <code>session</code> / <code>always</code> / <code>deny</code> / <code>timeout</code> / <code>smart_approve</code> / <code>smart_deny</code>), who decided</td>
+<td>Decision wait time, choice (<code>once</code> / <code>session</code> / <code>always</code> / <code>deny</code> / <code>timeout</code> / <code>smart_approve</code> / <code>smart_deny</code> / <code>smart_escalate</code>), who decided</td>
 </tr>
 <tr>
 <td><code>subagent.{role}</code></td>
@@ -249,7 +249,8 @@
 <p>Attributes are emitted in <strong>both</strong> conventions — OpenInference (<code>llm.*</code>, <code>input.value</code>) for Phoenix and OTel GenAI (<code>gen_ai.*</code>) for Langfuse, Weave and generic dashboards — so no backend needs custom mapping. Full lists: <a href="https://briancaffey.github.io/hermes-otel/reference/span-attributes">span attributes</a> · <a href="https://briancaffey.github.io/hermes-otel/reference/metrics">metrics</a> · <a href="https://briancaffey.github.io/hermes-otel/reference/hooks">hooks</a>.</p>
 <h3>Backends</h3>
 <p>Tested with: <a href="https://briancaffey.github.io/hermes-otel/backends/phoenix">Phoenix</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langfuse">Langfuse</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langsmith">LangSmith</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/signoz">SigNoz</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/jaeger">Jaeger</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/zipkin">Zipkin</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/greptime">GreptimeDB</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/clickstack">ClickStack</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/victoria">VictoriaMetrics family</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/aspire">Aspire Dashboard</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/gigapipe">Gigapipe</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/agenta">Agenta</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/tempo">Grafana Tempo</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/lgtm">Grafana LGTM</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/uptrace">Uptrace</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/openobserve">OpenObserve</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/parseable">Parseable</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/honeycomb">Honeycomb</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/weave">W&amp;B Weave</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/elastic">Elastic</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/openlit">OpenLIT</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/mlflow">MLflow</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/opik">Comet Opik</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/laminar">Laminar</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/langwatch">LangWatch</a> · <a href="https://briancaffey.github.io/hermes-otel/backends/latitude">Latitude</a>.</p>
-<p>Any OTLP/HTTP or OTLP/gRPC endpoint works as <code>type: otlp</code> (HTTP/protobuf by default; set <code>protocol: grpc</code> for gRPC). Both transports support TLS and client-certificate authentication; see <a href="https://briancaffey.github.io/hermes-otel/backends/otlp#grpc-and-tls">gRPC and TLS</a>. Several can be fed at once, each with its own export queue. Which backend carries which signal (Phoenix, Jaeger, Zipkin, Tempo, Langfuse, Weave, MLflow, Opik, Latitude and Agenta are traces-only; Laminar takes traces and logs) is in the <a href="https://briancaffey.github.io/hermes-otel/backends/overview">backends overview</a>. Every self-hostable backend, plus the candidates tracked in #232, has a ready-made Compose stack under <a href="docker-compose/"><code>docker-compose/</code></a>, one folder per backend; <a href="https://github.com/briancaffey/hermes-otel/blob/main/docker-compose/README.md"><code>docker-compose/README.md</code></a> is the manual with the comparison table and port map.</p>
+<p>Any other OTLP endpoint works as <code>type: otlp</code>. It sends HTTP/protobuf by default; set <code>protocol: grpc</code> for gRPC. Both transports support TLS and client certificates (mTLS); see <a href="https://briancaffey.github.io/hermes-otel/backends/otlp#grpc-and-tls">gRPC and TLS</a>. You can send to several backends at once, and each gets its own export queue.</p>
+<p>Not every backend takes every signal. Phoenix, Langfuse, LangSmith, Jaeger, Zipkin, Tempo, W&amp;B Weave, MLflow, Opik, Latitude and Agenta take traces only; Laminar takes traces and logs; the rest take traces, metrics and logs. The <a href="https://briancaffey.github.io/hermes-otel/backends/overview">backends overview</a> has the full table. Every self-hostable backend, plus the candidates tracked in <a href="https://github.com/briancaffey/hermes-otel/issues/232">#232</a>, has a ready-made Compose stack under <a href="docker-compose/"><code>docker-compose/</code></a>, one folder per backend; <a href="https://github.com/briancaffey/hermes-otel/blob/main/docker-compose/README.md"><code>docker-compose/README.md</code></a> has the comparison table and the port map.</p>
 <h3>Install</h3>
 <pre><code class="language-bash">hermes plugins install hermes_otel        # from the Hermes plugin catalog
 hermes plugins enable hermes_otel         # the manifest name; installing does not enable
@@ -292,7 +293,7 @@ agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇�
 └── skill.observability           10.97 s    ▇▇▇▇▇▇▇▇▇▇▇▇▇   skill_view · completed
 ── 10 spans · 13.22 s · 39,919 tokens
 </code></pre>
-<p><code>status</code>, <code>traces</code>, <code>trace</code>, <code>span</code>, <code>sessions</code>, <code>stats</code>, <code>metrics</code>, <code>logs</code> and read-only <code>sql</code>, each with <code>--json</code>, <code>--since</code> and <code>--source &lt;backend&gt;</code>: see <a href="https://briancaffey.github.io/hermes-otel/skill">The observability skill</a>. Traces on Jaeger or Tempo can also be searched from Claude Code, Cursor or Hermes itself through Traceloop's <code>opentelemetry-mcp</code> server: <a href="https://briancaffey.github.io/hermes-otel/configuration/mcp-query-server">Query your traces over MCP</a>.</p>
+<p>The commands are <code>status</code>, <code>traces</code>, <code>trace</code>, <code>span</code>, <code>sessions</code>, <code>stats</code>, <code>metrics</code>, <code>logs</code>, read-only <code>sql</code> and <code>mcp-config</code>. Most take <code>--json</code>, a time window (<code>--since</code>, <code>--until</code>) and <code>--source &lt;backend&gt;</code>; see <a href="https://briancaffey.github.io/hermes-otel/skill">The observability skill</a>. Traces on Jaeger or Tempo can also be searched from Claude Code, Cursor or Hermes itself through Traceloop's <code>opentelemetry-mcp</code> server: <a href="https://briancaffey.github.io/hermes-otel/configuration/mcp-query-server">Query your traces over MCP</a>.</p>
 <h3>How it works</h3>
 <p>Hermes fires lifecycle hooks; the plugin maps them onto spans, metrics and logs through one <code>TracerProvider</code> fanned out to every configured backend, and never blocks the agent: span end is a non-blocking enqueue, exporters run on their own threads, hooks fail open. The turn summary, tool identity inference, orphan sweep and batch export are described under <a href="https://briancaffey.github.io/hermes-otel/architecture/overview">Architecture</a>; known gaps under <a href="https://briancaffey.github.io/hermes-otel/reference/limitations">Limitations</a>. Linking MCP-server spans into the agent's trace is implemented on the plugin side but waits on Hermes, see <a href="https://briancaffey.github.io/hermes-otel/configuration/mcp-trace-propagation">MCP trace propagation</a>.</p>
 <h3>How this relates to Hermes' built-in telemetry</h3>
@@ -316,7 +317,7 @@ agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇�
 <td>Backends</td>
 <td>Any OTLP receiver (<code>monitoring.export.otlp</code>)</td>
 <td>Langfuse only</td>
-<td>19 backend types plus generic OTLP, fanned out in parallel</td>
+<td>26 backend types plus generic OTLP, fanned out in parallel</td>
 </tr>
 <tr>
 <td>Coexists with hermes-otel</td>
@@ -344,7 +345,7 @@ agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇�
 </tr>
 <tr>
 <td><code>tests/</code></td>
-<td>Unit and integration tiers run in CI; <code>e2e/</code> and <code>smoke/</code> need real backends</td>
+<td>Unit, integration and the credential-free <code>e2e_ci/</code> tier run in CI; <code>e2e/</code> and <code>smoke/</code> need real backends</td>
 </tr>
 <tr>
 <td><code>docker-compose/</code></td>
@@ -356,7 +357,7 @@ agent                             13.22 s  ▇▇▇▇▇▇▇▇▇▇▇▇�
 </tr>
 <tr>
 <td><code>scripts/</code></td>
-<td>The Hermes plugin security scanner, the docs generators and the catalog-entry renderer CI runs</td>
+<td>Tools CI runs (the plugin security scanner, the docs and vocabulary generators, the coverage floors, the catalog-entry renderer) and live-check harnesses (<code>scenarios/</code>, <code>dashboard_verify/</code>, <code>kanban_demo/</code>, <code>refactor_check/</code>)</td>
 </tr>
 <tr>
 <td><code>docs/</code></td>

@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>yonro/hermes-xmemo-plugin — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit tools for searching and saving memories,…">
+<meta name="description" content="hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit search and memory tools, mirroring writes from…">
 <link rel="canonical" href="https://hermesatlas.com/projects/yonro/hermes-xmemo-plugin">
 <meta property="og:title" content="yonro/hermes-xmemo-plugin — Hermes Atlas">
-<meta property="og:description" content="hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit tools for searching and saving memories,…">
+<meta property="og:description" content="hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit search and memory tools, mirroring writes from…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/yonro/hermes-xmemo-plugin">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="yonro/hermes-xmemo-plugin — Hermes Atlas">
-<meta name="twitter:description" content="hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit tools for searching and saving memories,…">
+<meta name="twitter:description" content="hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit search and memory tools, mirroring writes from…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-xmemo-plugin&amp;subtitle=XMemo+memory+provider+for+Hermes+Agent+%E2%80%94+durable+cross-session+AI+memory+with+semantic+search&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/yonro/hermes-xmemo-plugin#software",
   "name": "hermes-xmemo-plugin",
-  "description": "hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit tools for searching and saving memories, mirroring writes from Hermes’ built-in memory tool, and session-end snapshots.",
+  "description": "hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit search and memory tools, mirroring writes from Hermes’ built-in memory tool, and session-end snapshots. It also uses a local SQLite reliability layer for caching and queued writes.",
   "url": "https://hermesatlas.com/projects/yonro/hermes-xmemo-plugin",
   "codeRepository": "https://github.com/yonro/hermes-xmemo-plugin",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "yonro",
     "url": "https://github.com/yonro"
   },
-  "dateModified": "2026-10-18T15:13:32.000Z",
+  "dateModified": "2026-10-19T04:37:29.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-18</span>
+    <span><span class="meta-label">updated</span>2026-10-19</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit tools for searching and saving memories, mirroring writes from Hermes’ built-in memory tool, and session-end snapshots.</p>
+    <p class="summary-text">hermes-xmemo is a native XMemo memory provider for Hermes Agent. It supports pre-turn memory recall, explicit search and memory tools, mirroring writes from Hermes’ built-in memory tool, and session-end snapshots. It also uses a local SQLite reliability layer for caching and queued writes.</p>
     <ul class="summary-highlights">
-      <li>Injects a bounded, ranked context pack before turns.</li>
-      <li>Provides tools to search, retrieve, list, and save memories.</li>
-      <li>Uses a local SQLite reliability layer for cache and outbox.</li>
+      <li>Injects bounded, ranked memory context before turns.</li>
+      <li>Provides tools to search, retrieve, save, and update memories.</li>
+      <li>Supports temporal filters for search and context recall.</li>
     </ul>
   </div>
 </section>
@@ -423,8 +423,8 @@ when you deliberately want the portable MCP fallback as well.</p>
 <code>query_mode=activity_log</code> requires <strong>both</strong> <code>since</code> and <code>until</code>. Invalid or missing
 required bounds are rejected locally without sending a request.</p>
 <p>Omit unused fields; do not send empty strings. Existing calls without temporal
-fields remain backward compatible, including their cache keys. Temporal requests
-use separate cache keys. Background prefetch does not infer temporal filters from
+fields remain backward compatible. Read-cache keys bind account identity and
+temporal fields. Background prefetch does not infer temporal filters from
 text such as “last week”, “yesterday”, or “上周”; use explicit tool arguments when
 you need a bounded time interval.</p>
 <h4>Optional workflow tools</h4>
@@ -617,8 +617,12 @@ network failures degrade safely.</p>
 </tr>
 </thead>
 <tbody><tr>
-<td>Fresh read cache</td>
-<td>Reuses matching recall/search results for 5 minutes</td>
+<td>Fresh search cache</td>
+<td>Search reuses matching results for 5 minutes</td>
+</tr>
+<tr>
+<td>Recall and prefetch</td>
+<td>Online first; cached context is used only for offline/transient-failure fallback</td>
 </tr>
 <tr>
 <td>Stale fallback</td>
@@ -648,6 +652,17 @@ network failures degrade safely.</p>
 <p>Fallback responses are explicitly marked with <code>stale: true</code> and
 <code>source: "cache"</code> so the agent does not confuse an offline cache result with
 fresh cloud state.</p>
+<p>Read-cache entries are isolated by endpoint (<code>base_url</code>), a one-way credential
+and agent identity fingerprint, and retrieval parameters including temporal
+filters. Changing credentials invalidates reuse. Legacy entries without identity
+and entries beyond the 24-hour fallback window are removed when the cache opens;
+queued writes are preserved. A fresh search hit does not contact the server, so
+remote permission changes are observed on the next online request.</p>
+<p>Queued writes are bound to a one-way fingerprint of the initiating credentials
+and agent identity. After an account switch, another identity cannot replay
+them; they remain queued for the original identity to return. On upgrade,
+unsent legacy writes without an owner identity are preserved as <code>held</code> with automatic
+replay disabled, for manual recovery.</p>
 <blockquote>
 <p>[!WARNING]
 <code>xmemo_cache.db</code> contains cached memory responses and queued write payloads as
@@ -776,7 +791,7 @@ README whenever installation or configuration behavior changes.</p>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 51.2K</div>
+        <div class="stars">★ 51.3K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
