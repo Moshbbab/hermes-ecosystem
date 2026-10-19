@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface and…">
+<meta name="description" content="deja-vu indexes coding-agent session histories saved on disk so they can be searched across agents and projects. It can surface relevant history when an agent…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface and…">
+<meta property="og:description" content="deja-vu indexes coding-agent session histories saved on disk so they can be searched across agents and projects. It can surface relevant history when an agent…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface and…">
+<meta name="twitter:description" content="deja-vu indexes coding-agent session histories saved on disk so they can be searched across agents and projects. It can surface relevant history when an agent…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+39+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface and can return relevant past-session context during agent work; the README describes it as local, with no model or server required.",
+  "description": "deja-vu indexes coding-agent session histories saved on disk so they can be searched across agents and projects. It can surface relevant history when an agent starts or a command fails, and lets users resume or hand off sessions.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-19T01:45:15.000Z",
+  "dateModified": "2026-10-19T12:58:19.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1244
+    "userInteractionCount": 1251
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,7 +120,7 @@
   <p class="project-desc">Coding agent memory for Claude Code, Codex, Cursor and 39 more, built from the session history already on your disk. Local search, MCP and hooks, no LLM, one Go binary.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 1.2K</span>
+    <span class="stars">★ 1.3K</span>
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface and can return relevant past-session context during agent work; the README describes it as local, with no model or server required.</p>
+    <p class="summary-text">deja-vu indexes coding-agent session histories saved on disk so they can be searched across agents and projects. It can surface relevant history when an agent starts or a command fails, and lets users resume or hand off sessions.</p>
     <ul class="summary-highlights">
-      <li>Searches months of indexed session history.</li>
-      <li>Shares one index across supported agents.</li>
-      <li>Offers session search and continuation in the terminal.</li>
+      <li>Searches session history across supported agents.</li>
+      <li>Offers a terminal interface for finding and resuming sessions.</li>
+      <li>Runs locally without a model or server.</li>
     </ul>
   </div>
 </section>
@@ -1079,6 +1079,16 @@ deja embed
 </code></pre>
 <p><code>DEJA_EMBED_KEY</code> takes precedence. <code>OPENAI_API_KEY</code> is used automatically only for an
 HTTPS <code>api.openai.com</code> URL; it is never implicitly sent to local or third-party endpoints.</p>
+<p>Models trained with instruction prefixes, such as the multilingual E5 family, need them on
+both sides. <code>DEJA_EMBED_QUERY_PREFIX</code> goes in front of every search query and
+<code>DEJA_EMBED_PASSAGE_PREFIX</code> in front of every indexed text; both are empty by default:</p>
+<pre><code class="language-sh">export DEJA_EMBED_MODEL='multilingual-e5-small'
+export DEJA_EMBED_QUERY_PREFIX='query: '
+export DEJA_EMBED_PASSAGE_PREFIX='passage: '
+deja embed
+</code></pre>
+<p>The passage prefix is part of the sidecar's model name, so changing it embeds everything
+again, and search ignores vectors made with another model or prefix (it says so once).</p>
 <p>The sidecar sits beside the index as <code>.vectors.bin</code>, not inside <code>index.db</code>. Float32 vectors
 cost roughly 4 MB per 1k messages for a 1,024 dimension model. A remote endpoint receives
 the redacted indexed text, truncated to about 2k characters, but never raw source files.
@@ -1386,7 +1396,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 51.4K</div>
+        <div class="stars">★ 51.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
