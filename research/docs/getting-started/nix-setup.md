@@ -836,7 +836,7 @@ macOS has no equivalent option. A `launchd` agent with `RunAtLoad` starts at log
 
 ### Running the Desktop / Dashboard Backend
 
-`gateway.enable` runs the messaging gateway for Telegram, Discord, Slack and the other platforms. Hermes Desktop and the web dashboard connect to a _different_ process, which is `hermes serve` or `hermes dashboard`. `backend.mode` runs that process with the gateway:
+`gateway.enable` runs the messaging gateway for Telegram, Discord, Slack and the other platforms. A Hermes Desktop **remote** connection and the web dashboard connect to a _different_ process, which is `hermes serve` or `hermes dashboard`. (A Desktop running on the same host attaches to the gateway itself via `hermes gateway ensure`.) `backend.mode` runs that process with the gateway:
 
 ```
 {
@@ -1609,7 +1609,7 @@ The systemd `RestartSec=` value. macOS does not use it.
 
 ### Backend (`hermes serve` / `hermes dashboard`)
 
-This option runs the process that Hermes Desktop and the web dashboard connect to, with the gateway. You cannot use it with `container.enable`.
+This option runs the process that a remote Hermes Desktop connection and the web dashboard connect to, with the gateway. You cannot use it with `container.enable`.
 
 Option
 

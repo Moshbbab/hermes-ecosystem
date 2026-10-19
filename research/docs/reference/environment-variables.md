@@ -780,7 +780,7 @@ Tenor API key for GIF search.
 
 ### Langfuse Observability
 
-Environment variables for the bundled [`observability/langfuse`](/docs/user-guide/features/built-in-plugins#observabilitylangfuse) plugin. Set these in `~/.hermes/.env`. The plugin must also be enabled (`hermes plugins enable observability/langfuse`, or check the box in `hermes plugins`) before any of these take effect.
+Environment variables for the official [`langfuse`](https://github.com/NousResearch/hermes-official-plugins/tree/main/langfuse) catalog plugin (formerly bundled as `observability/langfuse`). Set these in `~/.hermes/.env`. The plugin must be installed (`hermes plugins install langfuse`) before any of these take effect.
 
 Variable
 
@@ -817,6 +817,10 @@ Per-field truncation for serialized payloads (default: `12000`)
 `HERMES_LANGFUSE_MAX_DEPTH`
 
 Nesting depth kept in captured tool inputs/outputs before values become `<max-depth>` (default: `4`; invalid values warn and keep the default)
+
+`HERMES_LANGFUSE_CAPTURE`
+
+Content capture mode: `metadata` (no content), `sanitized` (default: secret redaction + truncation) or `full` (truncation only)
 
 `HERMES_LANGFUSE_DEBUG`
 
@@ -2780,7 +2784,7 @@ Skip auto-injection of `AGENTS.md`, `SOUL.md`, `.cursorrules`, memory, and prelo
 
 `HERMES_SAFE_MODE`
 
-Troubleshooting mode: disable ALL customizations — skips plugin discovery, MCP server loading, and shell-hook registration. Set automatically by `--safe-mode` (which also sets the two flags above).
+Legacy in-process troubleshooting switch: skips plugin discovery, MCP server loading, and shell-hook registration for that process. `hermes chat --safe-mode` no longer sets it — the gateway freezes the safe policy into the session and executes it in an isolated worker instead, so the running daemon's environment is never mutated.
 
 `HERMES_TOOL_PROGRESS`
 
@@ -2808,7 +2812,7 @@ Set by the kanban dispatcher when spawning a worker (task UUID). Workers and the
 
 `HERMES_ACP_SKIP_CONFIGURED_MCP`
 
-Set by an [ACP host](/docs/user-guide/features/acp#host-integration) on the Hermes subprocess it spawns. `1` skips starting the globally configured `config.yaml` MCP servers before the ACP JSON-RPC loop, for hosts that pass the session's MCP servers through `session/new` themselves. Servers supplied by the ACP session are still registered; any other value keeps the default. Don't set manually.
+Obsolete. No longer read, and has no effect. `hermes acp` is a viewer of the gateway daemon and never starts `config.yaml` MCP servers itself. The gateway starts its profile's `mcp_servers` at boot (filtered for ACP by `platform_toolsets.acp`), and the editor's `session/new` `mcpServers` are attached by the gateway either way. See [ACP host integration](/docs/user-guide/features/acp#host-integration).
 
 `HERMES_API_TIMEOUT`
 

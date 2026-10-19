@@ -8,7 +8,7 @@ The plugin catalog is a curated, human-reviewed directory of Hermes plugins you 
 hermes plugins install <name>
 ```
 
-Browse it visually at **[/docs/plugins](/docs/plugins)** — entries are shelved by category (Memory, Desktop, Platforms, Web & Browser, Tools, Voice, Automation, Models), with search, tier filters (Official / Community), capability chips, and copyable install commands for every entry.
+Browse it visually at **[/docs/plugins](/docs/plugins)** — entries are shelved by category (Memory, Desktop, Platforms, Web & Browser, Tools, Voice, Automation, Models), with search, tier filters (Official / Verified / Community), capability chips, and copyable install commands for every entry.
 
 Every entry also has its own page at `/docs/plugins/<name>` (click a card): the full description and any disclosure, the pinned commit, tools, hooks and environment variables, the Desktop install button and CLI command, optional screenshots and the README from the reviewed commit, plus a **More by this author** shelf. Authors have a page at `/docs/plugins/by/<maintainer>` listing everything they maintain in the catalog. Both are generated at build time from the same catalog files, so a merged PR is the only way a page changes.
 
@@ -46,7 +46,7 @@ Path to the plugin inside the repo for monorepos — a plain relative path match
 
 `tier`
 
-`official` (maintained by NousResearch) or `community`
+`official` (maintained by NousResearch), `verified` (verified by the Nous team to come from the reputable company whose product it integrates), or `community`. Only Nous maintainers set `official` or `verified`
 
 `category`
 
@@ -136,7 +136,7 @@ hermes plugins install touchdesigner
 hermes plugins enable touchdesigner   # same as: hermes plugins enable td
 ```
 
-In the Desktop app a package with both an agent half and a Desktop half (`desktop/plugin.js`) is one row with one switch per half. Turning the package on (the install dialog's **Enable agent plugin after install**, or the row's **Agent** switch) turns its Desktop half on as well, unless you switched that half off yourself. Turning it off stays per half, because the Desktop half is shared by every profile.
+In the Desktop app a package with both an agent half and a Desktop half (`desktop/plugin.js`) is one row with one switch per half. Turning the package on (installing it from the install dialog, which turns it on, or the row's **Agent** switch) turns its Desktop half on as well, unless you switched that half off yourself. Turning it off stays per half, because the Desktop half is shared by every profile.
 
 Portable packages can also carry a stdio MCP server. The `snyk` entry pins the Snyk CLI (`npx -y snyk@<version> mcp`) and bundles the `snyk-security-scan` skill, so one install gives Hermes code, dependency, container and IaC scanning plus the workflow for using it; the catalog name and manifest name match:
 

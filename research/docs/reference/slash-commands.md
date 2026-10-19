@@ -164,7 +164,7 @@ Branch the current session into an independent copy (explore a different path). 
 
 `/worktree [new [name]|list]`
 
-**CLI only.** Inspect or create isolated git worktrees mid-session (inspired by Copilot CLI's `/worktree new`). Bare `/worktree` shows the active worktree; `/worktree list` lists the repo's worktrees; `/worktree new [name]` creates a worktree under `.worktrees/` (branched from the freshly-fetched remote tip, honoring `worktree_sync`) and retargets the session's terminal and file tools into it. Named trees use your name (`hermes/<name>` branch); unnamed ones get a random `hermes-<id>`. On exit the tree is kept only if it has unpushed commits — same lifecycle as `hermes -w`. See [Git Worktrees](/docs/user-guide/git-worktrees).
+**CLI only.** Inspect or create isolated git worktrees mid-session (inspired by Copilot CLI's `/worktree new`). Bare `/worktree` shows the active worktree; `/worktree list` lists the repo's worktrees; `/worktree new [name]` creates a worktree under `.worktrees/` (branched from the freshly-fetched remote tip, honoring `worktree_sync`) and retargets the session's terminal and file tools into it. Named trees use your name (`hermes/<name>` branch); unnamed ones get a random `hermes-<id>`. On exit a dirty or unpushed tree triggers the keep / archive / remove question — same lifecycle as `hermes -w`. See [Git Worktrees](/docs/user-guide/git-worktrees).
 
 `/handoff <platform>`
 
@@ -252,6 +252,10 @@ Toggle the gateway runtime-metadata footer on final replies (shows model, contex
 
 Control what happens when you message while Hermes is working — queue the new message, steer mid-turn, or interrupt immediately. Works in the CLI and messaging gateway.
 
+`/autoprune [on|off|later|status]`
+
+Decide automatic pruning of old ended sessions (off by default). Hermes asks once when the disk holding `state.db` runs low; `on`/`off` save `sessions.auto_prune` and end the question, `later` reminds you in a week. Works in the CLI, TUI, Desktop and messaging gateway (on Slack: `/hermes autoprune`).
+
 `/indicator [kaomoji|emoji|unicode|ascii]`
 
 CLI-only: pick the TUI busy-indicator style.
@@ -301,10 +305,6 @@ Distill a reusable skill from anything you describe — a directory, a URL, the 
 `/plan [task]`
 
 Write a markdown implementation plan to `.hermes/plans/` in the active workspace — planning only, no execution. Empty argument infers the task from the conversation. (Formerly the bundled `plan` skill; now built-in so it survives the Telegram/Discord command-menu caps.)
-
-`/initiate-setup` (alias: `/initiate_setup`)
-
-Run the first-run setup: the agent learns about you and sets Hermes up around you. Sends the `initiate-setup` skill plus a short block of facts about this session and machine (surface, tools present, OS, CPU, RAM, GPU and language; see [What the setup chat knows about your computer](/docs/user-guide/desktop#what-the-setup-chat-knows-about-your-computer)), as one normal turn. In the Microsoft Store desktop app, the first message ever ends with a one-line offer to run it (see [Onboarding](/docs/user-guide/configuration#onboarding)). Works in the CLI, the messaging gateway, the TUI, and the desktop app. In the desktop app, Hermes itself asks the opening questions (your name, then an accent colour) before the model's first reply.
 
 `/init [notes]`
 
@@ -715,10 +715,6 @@ Distill a reusable skill from anything you describe.
 `/plan [task]`
 
 Write a markdown implementation plan to `.hermes/plans/`; no execution.
-
-`/initiate-setup` (alias: `/initiate_setup`)
-
-Run the first-run setup: the agent learns about you and sets Hermes up around you. On Slack: `/hermes initiate-setup`.
 
 `/bundles`
 
