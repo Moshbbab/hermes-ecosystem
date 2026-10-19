@@ -88,7 +88,7 @@ Kill all running background processes
 
 `/queue <prompt>` (alias: `/q`)
 
-Queue a prompt for the next turn (doesn't interrupt the current agent response). In the CLI, `/queue` with no arguments lists the pending queue, and `/queue list`, `/queue edit N <new prompt>`, `/queue rm N`, `/queue move A B`, and `/queue clear` inspect and manage queued prompts before they are sent. Prompts that begin with a management word can be force-queued with `/queue add <prompt>`.
+Queue a prompt for the next turn (doesn't interrupt the current agent response). In the CLI, `/queue` with no arguments lists the pending queue, and `/queue list`, `/queue edit N <new prompt>`, `/queue rm N`, `/queue move A B`, and `/queue clear` inspect and manage queued prompts before they are sent. Prompts that begin with a management word can be force-queued with `/queue add <prompt>`. On the gateway's session, prompts queued mid-run live in the gateway's shared queue for the session: `list`/`rm`/`edit`/`clear` act on every prompt queued there (other windows' too), and `move` is refused for prompts the gateway holds, because it runs them in order.
 
 `/steer <prompt>`
 
