@@ -2664,7 +2664,7 @@ Max concurrent image **encode/resize** bursts across the whole process (override
 
 `HERMES_RESTART_DRAIN_TIMEOUT`
 
-Gateway: seconds to wait for active runs to drain on `/restart` before forcing the restart (default: `900`).
+Gateway: overrides `agent.restart_drain_timeout`, the seconds in-flight chat turns may keep running once the gateway stops or restarts before they are interrupted (default: `0`, interrupt at once). See [Gateway Restart Drain](/docs/user-guide/configuration#gateway-restart-drain).
 
 `HERMES_GATEWAY_PLATFORM_CONNECT_TIMEOUT`
 

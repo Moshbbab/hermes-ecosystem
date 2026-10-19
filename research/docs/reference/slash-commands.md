@@ -552,6 +552,10 @@ Show session info, followed by a local **Session recap** block (recent turn coun
 
 Kill all running background processes and interrupt the running agent.
 
+`/discard`
+
+Drop a turn Hermes lost in a restart so this chat's queued messages run again. The lost turn is not re-run (only you know whether to send it again); it is recorded as interrupted. Hermes offers this when it pauses a conversation on a lost turn. On Slack use `/hermes discard`.
+
 `/pause [reason | off]`
 
 Global emergency stop, the in-chat form of [`hermes pause`](/docs/reference/cli-commands): puts new cron, kanban and gateway work on hold until `/pause off`. In-flight work finishes normally, and slash commands keep working while paused, so a messaging-only operator can always lift it.
@@ -806,7 +810,7 @@ Invoke any installed skill by name.
 -   `/skills` is **CLI-only for search/browse/install**; its write-approval review subcommands (`pending`, `approve`, `reject`, `diff`, `approval`) also work on messaging platforms when `skills.write_approval` is on. `/memory` works on **both** surfaces.
 -   `/verbose` is **CLI-only by default**, but can be enabled for messaging platforms by setting `display.tool_progress_command: true` in `config.yaml`. When enabled, it cycles the `display.tool_progress` mode and saves to config.
 -   `/focus` and `/verbose` share one suppression path (`display.tool_progress`), so they can never contradict each other: `/focus on` pins tool progress to `off` and stashes your mode under `display.focus_saved_tool_progress`; `/focus off` restores it; cycling `/verbose` while focus is on takes the mode back and clears the focus badge. Focus view is display-only — it never changes conversation history, the system prompt, or anything sent to the model, so it has zero prompt-cache impact.
--   `/sethome`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, `/pause`, and `/commands` are **messaging-only** commands.
+-   `/sethome`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, `/pause`, `/discard`, and `/commands` are **messaging-only** commands.
 -   `/status`, `/egress`, `/version`, `/whoami`, `/bg`, `/btw`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/diff`, `/debug`, `/fast`, `/approvals`, `/busy`, `/footer`, `/curator`, `/kanban`, `/topup`, `/login`, `/suggestions`, `/blueprint`, `/learn`, `/init`, `/sessions`, `/loop`, and `/yolo` work in **both** the CLI and the messaging gateway.
 -   `/voice join`, `/voice channel`, and `/voice leave` are only meaningful on Discord.
 -   `/connectors` is **TUI-only**.
