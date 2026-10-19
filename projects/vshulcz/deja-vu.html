@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session histories so they can be searched across projects and agents. It can surface relevant past sessions during an agent’s…">
+<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions during agent work,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session histories so they can be searched across projects and agents. It can surface relevant past sessions during an agent’s…">
+<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions during agent work,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session histories so they can be searched across projects and agents. It can surface relevant past sessions during an agent’s…">
+<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions during agent work,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+39+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session histories so they can be searched across projects and agents. It can surface relevant past sessions during an agent’s work, resume or continue sessions, and share an index between machines using SSH.",
+  "description": "deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions during agent work, resume or hand off sessions, and sync indexes between machines without a cloud service.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-19T15:08:14.000Z",
+  "dateModified": "2026-10-19T18:19:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">261·repos</span>
+    <span id="meta-count">262·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session histories so they can be searched across projects and agents. It can surface relevant past sessions during an agent’s work, resume or continue sessions, and share an index between machines using SSH.</p>
+    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk and makes them searchable across agents. It can surface relevant past sessions during agent work, resume or hand off sessions, and sync indexes between machines without a cloud service.</p>
     <ul class="summary-highlights">
-      <li>Search session histories across supported agents.</li>
-      <li>Recall past sessions during agent work.</li>
-      <li>Sync between machines over SSH.</li>
+      <li>Searches session history across supported agents.</li>
+      <li>Provides terminal search, filters, and session resume options.</li>
+      <li>Runs locally; semantic recall is optional.</li>
     </ul>
   </div>
 </section>
@@ -1256,6 +1256,15 @@ store, and 0.59 s for the per-prompt hook on an index of 19k sessions.</p>
 </details>
 
 <details>
+<summary><b>Can I stop it reindexing on its own?</b></summary>
+
+<p>Yes. On a busy server, <code>DEJA_NO_AUTO_INDEX=1</code> or <code>"auto_index": false</code> in
+<code>~/.config/deja/policy.json</code> stops every automatic update. Search, MCP recall and hooks
+answer from the last finished index and say when it was updated, and nothing deja starts
+on its own writes it. Run <code>deja index</code> from cron or a systemd timer.</p>
+</details>
+
+<details>
 <summary><b>Do I have to change how I work?</b></summary>
 
 <p>No. The agent calls recall itself, and with
@@ -1392,7 +1401,7 @@ anywhere, and how to exclude a project or forget a session is under
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 67.4K</div>
+        <div class="stars">★ 67.5K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
