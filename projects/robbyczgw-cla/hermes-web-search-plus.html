@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>robbyczgw-cla/hermes-web-search-plus — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Web Search Plus is a Hermes plugin that provides tools for web search and page extraction. It connects multiple search and extraction providers, can route…">
+<meta name="description" content="Web Search Plus is a Hermes plugin that adds tools to search the web and extract clean text from pages. It supports multiple search and extraction providers,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus">
 <meta property="og:title" content="robbyczgw-cla/hermes-web-search-plus — Hermes Atlas">
-<meta property="og:description" content="Web Search Plus is a Hermes plugin that provides tools for web search and page extraction. It connects multiple search and extraction providers, can route…">
+<meta property="og:description" content="Web Search Plus is a Hermes plugin that adds tools to search the web and extract clean text from pages. It supports multiple search and extraction providers,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="robbyczgw-cla/hermes-web-search-plus — Hermes Atlas">
-<meta name="twitter:description" content="Web Search Plus is a Hermes plugin that provides tools for web search and page extraction. It connects multiple search and extraction providers, can route…">
+<meta name="twitter:description" content="Web Search Plus is a Hermes plugin that adds tools to search the web and extract clean text from pages. It supports multiple search and extraction providers,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-web-search-plus&amp;subtitle=Give+your+Hermes+agent+the+web+as+real+sources%2C+never+a+made-up+answer+%E2%80%94+multi-provider+search+and+extraction+with+an+optional+local%2C+key-free+DonSeTch+option.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus#software",
   "name": "hermes-web-search-plus",
-  "description": "Web Search Plus is a Hermes plugin that provides tools for web search and page extraction. It connects multiple search and extraction providers, can route searches by query type, and can try another provider if one fails or returns no results.",
+  "description": "Web Search Plus is a Hermes plugin that adds tools to search the web and extract clean text from pages. It supports multiple search and extraction providers, can route queries between providers and try another when one fails, and works with a single configured provider.",
   "url": "https://hermesatlas.com/projects/robbyczgw-cla/hermes-web-search-plus",
   "codeRepository": "https://github.com/robbyczgw-cla/hermes-web-search-plus",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "robbyczgw-cla",
     "url": "https://github.com/robbyczgw-cla"
   },
-  "dateModified": "2026-10-18T09:36:34.000Z",
+  "dateModified": "2026-10-20T11:20:59.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-18</span>
+    <span><span class="meta-label">updated</span>2026-10-20</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Web Search Plus is a Hermes plugin that provides tools for web search and page extraction. It connects multiple search and extraction providers, can route searches by query type, and can try another provider if one fails or returns no results.</p>
+    <p class="summary-text">Web Search Plus is a Hermes plugin that adds tools to search the web and extract clean text from pages. It supports multiple search and extraction providers, can route queries between providers and try another when one fails, and works with a single configured provider.</p>
     <ul class="summary-highlights">
-      <li>Adds `web_search_plus` and `web_extract_plus` tools.</li>
-      <li>Supports 15 search and 9 extraction providers.</li>
-      <li>Provider keys are read from the active Hermes profile.</li>
+      <li>Adds the `web_search_plus` and `web_extract_plus` tools.</li>
+      <li>Returns links to original sources.</li>
+      <li>Includes optional local search providers such as SearXNG.</li>
     </ul>
   </div>
 </section>
@@ -174,12 +174,13 @@
 <blockquote>
 <p>Ported from <a href="https://github.com/robbyczgw-cla/web-search-plus-plugin">web-search-plus-plugin</a> for the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> plugin API.</p>
 </blockquote>
-<p>Current release: <strong>v5.1.2</strong>. Version history: <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/CHANGELOG.md">Changelog</a>.</p>
+<p>Current release: <strong>v5.1.3</strong>. Version history: <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/CHANGELOG.md">Changelog</a>.</p>
 <h4>What's new in 5.1</h4>
 <ul>
+<li><strong>5.1.3:</strong> upgrading from 5.0 no longer loses your key silently (<code>status</code> and the tools say where the old <code>.env</code> is and what to run), and <code>status</code> explains how to make Hermes' own <code>web_search</code> use your keys (<code>hermes config set web.search_backend wsp</code>). See the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V513.md">5.1.3 release notes</a>.</li>
 <li><strong>5.1.2:</strong> batch extraction keeps the pages it already fetched when a provider hits a rate limit mid-batch, every requested URL gets an answer, multi-line snippets can no longer pass for the next result, and the search header ends with machine-readable <code>results=</code>, <code>elapsed_ms=</code> and <code>fallback_from=</code> bits. See the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V512.md">5.1.2 release notes</a>.</li>
 <li><strong>5.1.1:</strong> refused URLs stay out of Hermes' keyless rescue, provider keys stay in the active profile, and extraction returns one result per requested URL. See the <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/RELEASE_NOTES_V511.md">5.1.1 release notes</a>.</li>
-<li><strong>Keys come through Hermes.</strong> Web Search Plus reads provider keys from your active Hermes profile and no longer reads <code>.env</code> files itself. Store keys with <code>hermes config set BRAVE_API_KEY &lt;key&gt;</code> or in Hermes Desktop (Settings &gt; Plugins &gt; Web Search Plus). Keys kept only in the plugin folder's <code>.env</code> or <code>~/.hermes/plugins/.env</code> must move: see <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/CHANGELOG.md#breaking-changes">Breaking changes in 5.1</a>.</li>
+<li><strong>Keys come through Hermes.</strong> Web Search Plus reads provider keys from your active Hermes profile and no longer reads <code>.env</code> files itself. Store keys with <code>hermes config set BRAVE_API_KEY &lt;key&gt;</code> or in Hermes Desktop (Settings &gt; Plugins &gt; Web Search Plus). Keys kept only in the plugin folder's <code>.env</code> or <code>~/.hermes/plugins/.env</code> must move: see <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/CHANGELOG.md#breaking-changes">Breaking changes in 5.1</a>. <code>hermes web-search-plus status</code> now points at such a leftover <code>.env</code>. To let Hermes' own <code>web_search</code> use your keys, run <code>hermes config set web.search_backend wsp</code> (see <a href="https://github.com/robbyczgw-cla/hermes-web-search-plus/blob/main/docs/NATIVE_BACKEND.md">Native Hermes backend</a>).</li>
 <li><strong>Setup runs inside Hermes.</strong> <code>hermes web-search-plus status</code> and <code>hermes web-search-plus setup</code> show which keys the active profile sees and print the <code>hermes config set</code> command for each missing one.</li>
 <li><strong>Research mode says why a provider was skipped</strong>, for example "Out of credits", instead of "did not return a payload".</li>
 </ul>
@@ -327,7 +328,7 @@ python3 -m compileall -q __init__.py search.py setup.py scripts tests
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/42-evey/hermes-plugins">
-        <div class="stars">★ 533</div>
+        <div class="stars">★ 532</div>
         <div class="name"><span class="org">42-evey /</span> hermes-plugins</div>
       </a>
       <a class="related-row" href="/projects/FahrenheitResearch/hermes-weather-plugin">
@@ -343,7 +344,7 @@ python3 -m compileall -q __init__.py search.py setup.py scripts tests
         <div class="name"><span class="org">nativ3ai /</span> hermes-payguard</div>
       </a>
       <a class="related-row" href="/projects/Shelpuk-AI-Technology-Consulting/kindly-web-search-mcp-server">
-        <div class="stars">★ 399</div>
+        <div class="stars">★ 400</div>
         <div class="name"><span class="org">Shelpuk-AI-Technology-Consulting /</span> kindly-web-search-mcp-server</div>
       </a>
       <a class="related-row" href="/projects/stainlu/hermes-labyrinth">

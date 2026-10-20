@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace file browsing. The README…">
+<meta name="description" content="Hermes Web UI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace files. The README…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace file browsing. The README…">
+<meta property="og:description" content="Hermes Web UI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace files. The README…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace file browsing. The README…">
+<meta name="twitter:description" content="Hermes Web UI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace files. The README…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a browser-based interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace file browsing. The README says it uses the existing Hermes setup and models, and provides CLI-parity features without a build step or JavaScript framework.",
+  "description": "Hermes Web UI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace files. The README says it provides near-parity with the CLI, uses the existing Hermes setup and models, and can be accessed securely through an SSH tunnel.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-10-19T22:26:35.000Z",
+  "dateModified": "2026-10-20T11:27:45.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 19042
+    "userInteractionCount": 19052
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -120,11 +120,11 @@
   <p class="project-desc">Hermes WebUI: The best way to use Hermes Agent from the web or from your phone!</p>
 
   <div class="meta-row">
-    <span class="stars">★ 19.0K</span>
+    <span class="stars">★ 19.1K</span>
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-19</span>
+    <span><span class="meta-label">updated</span>2026-10-20</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a browser-based interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace file browsing. The README says it uses the existing Hermes setup and models, and provides CLI-parity features without a build step or JavaScript framework.</p>
+    <p class="summary-text">Hermes Web UI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, navigation, and workspace files. The README says it provides near-parity with the CLI, uses the existing Hermes setup and models, and can be accessed securely through an SSH tunnel.</p>
     <ul class="summary-highlights">
-      <li>Three-panel layout with chat, sessions, and file browsing</li>
-      <li>Uses the existing Hermes agent and models</li>
-      <li>Built with Python and vanilla JavaScript</li>
+      <li>Built with Python and vanilla JavaScript; no build step or framework.</li>
+      <li>Includes session management and workspace file browsing.</li>
+      <li>Offers a dark theme and a light mode.</li>
     </ul>
   </div>
 </section>
@@ -418,6 +418,7 @@ If an AI assistant is helping with install, reinstall, bootstrap, provider setup
 <li>Syntax highlighting via Prism.js (Python, JS, bash, JSON, SQL, and more)</li>
 <li>Safe HTML rendering in AI responses (bold, italic, code converted to markdown)</li>
 <li>Bare HTTP(S) URLs are auto-linked without absorbing adjacent CJK prose; Unicode IDN host separators and raw-CJK IRI paths remain linkable</li>
+<li>Local file links: a <code>file:///</code> URI in a reply renders through the media route (inline preview for images/audio/video, download otherwise). Windows drive-letter URIs (<code>file:///C:/...</code>) resolve to the drive path on a Windows server; on a POSIX server the leading separator is preserved so a <code>/C:/...</code> request stays absolute and can never alias a workspace-relative file. Only local authorities are served — a <code>file://&lt;host&gt;/...</code> UNC reference is rejected (never silently rewired to a local path), and the file must live under an allowed root (<code>HERMES_HOME</code>, <code>/tmp</code>, the active workspace, or <code>MEDIA_ALLOWED_ROOTS</code>)</li>
 <li>rAF-throttled token streaming for smoother rendering during long responses</li>
 <li>Context usage indicator in composer footer -- token count, cost, and fill bar (model-aware)</li>
 </ul>
@@ -1008,11 +1009,8 @@ Full design notes and the endpoint catalog are in <a href="https://github.com/ne
 <p><strong>Compatibility policy</strong></p>
 <ul>
 <li>WebUI release branches are tested against the matching Hermes Agent release available at that WebUI release time.</li>
-<li><strong>Upgrade both together</strong>: upgrade or pin WebUI and hermes-agent together (same release train/version/date), especially before enabling production traffic.</li>
-<li>Running pinned older/newer combinations is <strong>untested and unsupported</strong> until the stable API boundary work in <a href="https://github.com/nesquena/hermes-webui/issues/1925">#1925</a> / <a href="https://github.com/nesquena/hermes-webui/issues/2491">#2491</a> is in place.</li>
-<li>Record the full <code>hermes-agent</code> + <code>hermes-webui</code> versions in issue reports when upgrade mismatches are suspected.</li>
+<li><strong>Upgrade both together</strong>: upgrade or pin WebUI</li>
 </ul>
-<p><strong>Docker users</strong>: pin both image tags (or corresponding pinned source revisions) rather than using <code>latest</code> on one side and a fixed tag on</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
@@ -1055,7 +1053,7 @@ Full design notes and the endpoint catalog are in <a href="https://github.com/ne
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 905</div>
+        <div class="stars">★ 906</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>
