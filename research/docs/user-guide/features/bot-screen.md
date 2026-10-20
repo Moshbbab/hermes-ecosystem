@@ -111,7 +111,13 @@ The terminal, the screen, the browser and `computer_use` all share the machine r
 
 Xvnc + Xfce, Chromium and cua-driver run in the container / on the SSH host, spawned through the same `docker exec` / `ssh` channel the terminal uses. The pane streams the sandbox's screen; nothing of the host desktop is reachable.
 
-`modal`, `daytona`, `vercel_sandbox`
+A plugin backend that declares `supports_streams`
+
+**inside the sandbox**
+
+Same as above, through the plugin's own exec channel.
+
+`modal`, `daytona`, `vercel_sandbox`, other plugin backends
 
 **refused**
 

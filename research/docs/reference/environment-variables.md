@@ -626,7 +626,7 @@ Image generation ([fal.ai](https://fal.ai/))
 
 `KREA_API_KEY`
 
-Krea API key for Krea 2 image generation ([krea.ai](https://krea.ai/))
+Krea API key for Krea 3 and Krea 2 image generation ([krea.ai](https://krea.ai/))
 
 `GROQ_API_KEY`
 
