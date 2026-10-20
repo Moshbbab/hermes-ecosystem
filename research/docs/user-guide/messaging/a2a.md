@@ -140,7 +140,7 @@ Shared token; identity falls back to caller IP
 
 `127.0.0.1`
 
-Bind host — only widens when a token is set
+Bind host — only widens when a token is set. IPv6 literals such as `::1` or `::` work too, bare or bracketed (`[::1]`)
 
 `A2A_PORT`
 

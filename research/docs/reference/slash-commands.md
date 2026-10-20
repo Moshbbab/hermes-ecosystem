@@ -80,7 +80,7 @@ Show git changes in the working directory. Default: unstaged changes plus untrac
 
 `/snapshot [create|restore <id>|prune]` (alias: `/snap`)
 
-Create or restore state snapshots of Hermes config/state. `create [label]` saves a snapshot, `restore <id>` reverts to it, `prune [N]` removes old snapshots, or list all with no args. Database restores write through SQLite's backup API so live processes (gateway, dashboard) see the restored data safely; if that path fails while another process still holds the database open, the restore refuses instead of risking corruption — stop the holder and retry.
+Create or restore state snapshots of Hermes config/state. `create [label]` saves a snapshot, `restore <id>` reverts to it, `prune [N]` removes old snapshots, or list all with no args. In classic `hermes chat`, restore closes the local readers and drains the local gateway before restoring offline, then reconnects with the restored history (or creates a new session if the snapshot predates it). A multiplexed secondary profile is stopped and re-served without restarting the other profiles; restoring the launch profile drains the whole gateway. Database restoration retains its exclusive-maintenance gate and SQLite backup safety checks: a holder that cannot be stopped still prevents restoration.
 
 `/stop`
 
