@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nujovich/hermes-telemetry#software",
   "name": "hermes-telemetry",
-  "description": "hermes-telemetry is an opt-in plugin for Hermes Agent that records API and tool-call usage, including tokens, estimated cost, and latency. It enforces configured budgets by notifying at a soft limit and blocking further tool calls at a hard limit; a breached cron-job budget also pauses that job.",
+  "description": "hermes-telemetry is an opt-in plugin for Hermes Agent that records API and tool-call usage, including tokens, estimated cost, and latency. It enforces configured budgets by notifying at soft limits and blocking further tool calls at hard limits; a breached cron-job budget also pauses that job.",
   "url": "https://hermesatlas.com/projects/nujovich/hermes-telemetry",
   "codeRepository": "https://github.com/nujovich/hermes-telemetry",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "nujovich",
     "url": "https://github.com/nujovich"
   },
-  "dateModified": "2026-10-21T10:53:06.000Z",
+  "dateModified": "2026-10-21T15:56:47.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">hermes-telemetry is an opt-in plugin for Hermes Agent that records API and tool-call usage, including tokens, estimated cost, and latency. It enforces configured budgets by notifying at a soft limit and blocking further tool calls at a hard limit; a breached cron-job budget also pauses that job.</p>
+    <p class="summary-text">hermes-telemetry is an opt-in plugin for Hermes Agent that records API and tool-call usage, including tokens, estimated cost, and latency. It enforces configured budgets by notifying at soft limits and blocking further tool calls at hard limits; a breached cron-job budget also pauses that job.</p>
     <ul class="summary-highlights">
-      <li>Records usage in SQLite with WAL mode.</li>
-      <li>Provides `/stats`, `/budget`, and `/setup` surfaces.</li>
-      <li>Automatically syncs OpenRouter pricing.</li>
+      <li>Records usage in SQLite with WAL mode</li>
+      <li>Provides `/stats` and `/budget` commands</li>
+      <li>Automatically syncs OpenRouter pricing</li>
     </ul>
   </div>
 </section>
@@ -166,7 +166,7 @@
 <p><img src="https://raw.githubusercontent.com/nujovich/hermes-telemetry/main/docs/budget_enforcement.gif" alt="Budget enforcement demo: a $0.001 daily global cap is set, current spend already exceeds it, and the next marketing cron run is blocked by the resulting hard breach" loading="lazy" decoding="async"></p>
 <p><em><code>/budget set global daily 0.001</code> writes the cap to <code>budget.yaml</code>; current spend ($0.0102) already exceeds it, so <code>/budget</code> re-renders at 1020% <code>[daily]</code> — a hard breach — and the next marketing cron run is blocked by the budget.</em></p>
 <p><a href="https://raw.githubusercontent.com/NousResearch/hermes-agent/HEAD/assets/banner.png"><img src="https://raw.githubusercontent.com/NousResearch/hermes-agent/HEAD/assets/banner.png" alt="Hermes Agent" loading="lazy" decoding="async"></a></p>
-<p><a href="https://camo.githubusercontent.com/08cef40a9105b6526ca22088bc514fbfdbc9aac1ddbf8d4e6c750e3a88a44dca/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d626c75652e737667"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"></a> <a href="https://img.shields.io/badge/Tests-731%20passing-green.svg"><img src="https://img.shields.io/badge/Tests-731%20passing-green.svg" alt="Tests: 731 passing" loading="lazy" decoding="async"></a> <a href="https://img.shields.io/badge/Providers-OpenRouter-orange.svg"><img src="https://img.shields.io/badge/Providers-OpenRouter-orange.svg" alt="Provider Support" loading="lazy" decoding="async"></a> <a href="https://camo.githubusercontent.com/d0c993fdf35127e435629279025d4b1892e351f5e04ce1547329686aa4223366/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4865726d65732532304167656e742d4368616c6c656e6765253230456e7472792d707572706c652e737667"><img src="https://img.shields.io/badge/Hermes%20Agent-Challenge%20Entry-purple.svg" alt="Challenge Entry" loading="lazy" decoding="async"></a></p>
+<p><a href="https://camo.githubusercontent.com/08cef40a9105b6526ca22088bc514fbfdbc9aac1ddbf8d4e6c750e3a88a44dca/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c6963656e73652d4d49542d626c75652e737667"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT" loading="lazy" decoding="async"></a> <a href="https://img.shields.io/badge/Tests-744%20passing-green.svg"><img src="https://img.shields.io/badge/Tests-744%20passing-green.svg" alt="Tests: 744 passing" loading="lazy" decoding="async"></a> <a href="https://img.shields.io/badge/Providers-OpenRouter-orange.svg"><img src="https://img.shields.io/badge/Providers-OpenRouter-orange.svg" alt="Provider Support" loading="lazy" decoding="async"></a> <a href="https://camo.githubusercontent.com/d0c993fdf35127e435629279025d4b1892e351f5e04ce1547329686aa4223366/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4865726d65732532304167656e744d4368616c6c656e6765253230456e7472792d707572706c652e737667"><img src="https://img.shields.io/badge/Hermes%20Agent-Challenge%20Entry-purple.svg" alt="Challenge Entry" loading="lazy" decoding="async"></a></p>
 <hr>
 <p>Hermes Agent runs autonomously — across sessions, platforms, and cron jobs — which
 means it can keep spending even when you're not watching.
@@ -368,7 +368,7 @@ always an estimate computed from a local pricing table; see
 pip install pytest pyyaml
 pytest tests/ -v
 </code></pre>
-<p><strong>Test suite (731 tests, 731 passing):</strong></p>
+<p><strong>Test suite (744 tests, 744 passing):</strong></p>
 <table>
 <thead>
 <tr>
@@ -449,7 +449,7 @@ pytest tests/ -v
 </tr>
 <tr>
 <td><code>test_init.py</code></td>
-<td>41</td>
+<td>54</td>
 <td>Cron session ID regex, tool success/failure parsing, free→paid transition alert (detection, queueing, injection, backfill), v18 hook wiring (turn identity + failure ledger), hot-path error-log throttling</td>
 </tr>
 <tr>
@@ -538,7 +538,7 @@ pytest tests/ -v
 <td>Lint toolchain pin: <code>.ruff-version</code> is the single source of truth, CI installs from it, the pre-commit hook warns on version skew, <code>*.md</code> excluded from formatting</td>
 </tr>
 </tbody></table>
-<p>Counts above are per-file collected totals, measured on this branch with <code>pytest tests/ -q</code> and the optional <code>fastapi</code> test dependency installed (731 passed, 0 skipped). CI installs only <code>pytest</code> + <code>pyyaml</code>, so <code>test_dashboard_plugin_api.py</code> skips there and the same command reports <strong>697 passed, 34 skipped</strong>.</p>
+<p>Counts above are per-file collected totals, measured on this branch with <code>pytest tests/ -q</code> and the optional <code>fastapi</code> test dependency installed (744 passed, 0 skipped). CI installs only <code>pytest</code> + <code>pyyaml</code>, so <code>test_dashboard_plugin_api.py</code> skips there and the same command reports <strong>710 passed, 34 skipped</strong>.</p>
 <p>No live Hermes is required — all tests are self-contained with in-memory SQLite.</p>
 <hr>
 <h3>License</h3>
