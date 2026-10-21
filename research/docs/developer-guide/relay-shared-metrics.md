@@ -753,7 +753,7 @@ telemetry:
 -   `send` requires `enabled`. It does **not** imply it: a transmission flag must not silently switch on collection. `send: true` with `enabled: false` warns and does nothing.
 -   Like `enabled`, `send` is profile-owned and is not overridden by managed-scope configuration.
 
-Both keys are asked once per profile, with the same three answers everywhere (Send to Nous / Local only / No thanks):
+Both keys are asked once per profile, with the same two answers everywhere (Share with Nous / No thanks). Each answer sets both keys: "Share with Nous" writes `enabled: true, send: true`, "No thanks" writes both false. The keys stay separate so the sender keeps its own gate. Collecting without sending is no longer offered; a hand-edited config can still set it.
 
 Surface
 
@@ -777,7 +777,9 @@ A banner above every page, for the profile being managed.
 
 "No thanks" is the default in the terminal, so pressing Enter never opts anyone in. Esc in the terminal and the dashboard banner's ✕ leave the question open, so it is asked again next time. The Desktop strip appears only after first-run onboarding is finished or skipped. Answering on any surface writes both keys to the profile's `config.yaml`, plus `offer_version`, and a profile that already carries either key is never asked again. A managed install is never offered.
 
-One exception: before the type-ahead fix, an Enter pressed while `hermes chat` was starting could save "No thanks" before the question appeared. A "No thanks" recorded without `offer_version` is therefore offered once more on every surface, with a note saying why. Any response settles it for good, including Esc or the banner's ✕, which keep "No thanks". Answers that opted in are never re-asked. To change the answer later, use `hermes setup telemetry`, `hermes tools`, or Desktop's Settings › Safety › Privacy & network.
+One exception: before the type-ahead fix, an Enter pressed while `hermes chat` was starting could save "No thanks" before the question appeared. A "No thanks" recorded without `offer_version` is therefore offered once more on every surface, with a note saying why. Any response settles it for good, including Esc or the banner's ✕, which keep "No thanks". Answers that opted in are never re-asked.
+
+The offer used to have a third answer that collected without sending ("Local only" / "Keep on this computer"). Profiles that chose it keep it and are not asked again; nothing is sent. Desktop's switch reads off for them and the `hermes tools` row reads "collecting locally". To change the answer later, use `hermes setup telemetry`, `hermes tools`, or Desktop's Settings › Safety › Privacy & network; each offers the same single on/off choice.
 
 **A package is only sent when its whole period falls inside a recorded consent window.** Consent is stored as explicit intervals in the shared- metrics SQLite store (`send_consent_windows`): a window opens when `send: true` is first observed, is confirmed forward by every later observation, and closes — at the last _confirmed_ moment, never at the wall clock — when `send: false` is observed. A single reconciler derives this table from the config on every process start, so wizard changes, hand-edits to `config.yaml`, and mid-pass revocations all take the same path, and no transition can be missed by any of them.
 

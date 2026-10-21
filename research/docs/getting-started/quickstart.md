@@ -676,6 +676,7 @@ Resume last session
 
 ## Next Steps
 
+-   **[User Stories](/docs/user-stories)**: real setups from the community, a good place to start if you're not sure what to hand Hermes first
 -   **[CLI Guide](/docs/user-guide/cli)** — Master the terminal interface
 -   **[Configuration](/docs/user-guide/configuration)** — Customize your setup
 -   **[Messaging Gateway](/docs/user-guide/messaging/)** — Connect Telegram, Discord, Slack, WhatsApp, Signal, Email, Home Assistant, Teams, and more
