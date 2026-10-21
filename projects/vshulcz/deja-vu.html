@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and shared between agents. It provides a terminal search…">
+<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and shared between agents. It provides a terminal search…">
+<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and shared between agents. It provides a terminal search…">
+<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+39+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and shared between agents. It provides a terminal search interface, can surface relevant past work during sessions, and supports resuming or handing off sessions to another agent.",
+  "description": "deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can supply relevant history at session start and after command failures, and supports resuming or handing off sessions.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-20T22:04:12.000Z",
+  "dateModified": "2026-10-21T10:08:30.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1263
+    "userInteractionCount": 1268
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">263·repos</span>
+    <span id="meta-count">264·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Go</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-20</span>
+    <span><span class="meta-label">updated</span>2026-10-21</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and shared between agents. It provides a terminal search interface, can surface relevant past work during sessions, and supports resuming or handing off sessions to another agent.</p>
+    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can supply relevant history at session start and after command failures, and supports resuming or handing off sessions.</p>
     <ul class="summary-highlights">
-      <li>Search session histories across agents and projects.</li>
-      <li>Resume sessions or continue them in another agent.</li>
-      <li>Runs locally without a model or server.</li>
+      <li>Searches past sessions across supported coding agents.</li>
+      <li>Offers filters, session navigation, resume, and handoff.</li>
+      <li>Runs locally; semantic recall is optional.</li>
     </ul>
   </div>
 </section>
@@ -1218,12 +1218,15 @@ transcripts:</p>
 A cold full build over it takes 71 s and writes a 232 MB index — 4% of the
 corpus, because the share falls as transcripts repeat themselves — and the
 end-to-end median is unchanged at 0.25 s.</p>
-<p>The index is incremental. When a session file grows, only that file is re-read.</p>
+<p>The index is incremental. When a session file grows, only that file is re-read. When one is
+rewritten, its new records are appended and the old ones zeroed in place. On a
+40,000-session store a pass over 20 rewritten transcripts takes 1.7 s and peaks under 1 GB,
+and a search for a word most sessions hold takes about a second.</p>
 </details>
 
 <h3>How it works</h3>
 <p>Local inverted index in <code>~/.cache/deja</code>: parse the JSONL and SQLite stores, redact
-credentials, write <code>records.bin</code> plus token buckets, and track per-file state in
+credentials, write an append-only <code>records.bin</code> plus token buckets, and track per-file state in
 <code>manifest.gob</code> so repeat runs only ingest what changed. The MCP server, stats, share and
 sync all read that one index. Details in <a href="https://github.com/vshulcz/deja-vu/blob/main/docs/ARCHITECTURE.md">docs/ARCHITECTURE.md</a>.</p>
 <h3>FAQ</h3>
@@ -1412,11 +1415,11 @@ anywhere, and how to exclude a project or forget a session is under
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 67.5K</div>
+        <div class="stars">★ 67.6K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 52.1K</div>
+        <div class="stars">★ 52.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1436,7 +1439,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">Signet-AI /</span> signetai</div>
       </a>
       <a class="related-row" href="/projects/plur-ai/plur">
-        <div class="stars">★ 306</div>
+        <div class="stars">★ 307</div>
         <div class="name"><span class="org">plur-ai /</span> plur</div>
       </a>
       <a class="related-row" href="/projects/amanning3390/flowstate-qmd">
