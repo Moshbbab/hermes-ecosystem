@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nicolasestrem/hermes-model-switcher — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that displays supported model routes across profiles in a filterable matrix and model…">
+<meta name="description" content="Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that shows supported model routes across profiles in a searchable, filterable matrix.…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nicolasestrem/hermes-model-switcher">
 <meta property="og:title" content="nicolasestrem/hermes-model-switcher — Hermes Atlas">
-<meta property="og:description" content="Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that displays supported model routes across profiles in a filterable matrix and model…">
+<meta property="og:description" content="Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that shows supported model routes across profiles in a searchable, filterable matrix.…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nicolasestrem/hermes-model-switcher">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nicolasestrem/hermes-model-switcher — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that displays supported model routes across profiles in a filterable matrix and model…">
+<meta name="twitter:description" content="Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that shows supported model routes across profiles in a searchable, filterable matrix.…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-model-switcher&amp;subtitle=One-click+cross-profile+model+switching+plugin+for+the+Hermes+Agent+Web+Dashboard&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nicolasestrem/hermes-model-switcher#software",
   "name": "hermes-model-switcher",
-  "description": "Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that displays supported model routes across profiles in a filterable matrix and model catalog. Users can preview routing changes, apply them, save presets, inspect per-profile results, and use revision-guarded Undo.",
+  "description": "Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that shows supported model routes across profiles in a searchable, filterable matrix. Users can preview route changes, apply them, save presets, inspect per-profile results, and use revision-guarded Undo.",
   "url": "https://hermesatlas.com/projects/nicolasestrem/hermes-model-switcher",
   "codeRepository": "https://github.com/nicolasestrem/hermes-model-switcher",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,7 +47,7 @@
     "name": "nicolasestrem",
     "url": "https://github.com/nicolasestrem"
   },
-  "dateModified": "2026-10-21T09:59:20.000Z",
+  "dateModified": "2026-10-21T11:42:45.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that displays supported model routes across profiles in a filterable matrix and model catalog. Users can preview routing changes, apply them, save presets, inspect per-profile results, and use revision-guarded Undo.</p>
+    <p class="summary-text">Hermes Model Switcher is a community plugin for the Hermes Web Dashboard that shows supported model routes across profiles in a searchable, filterable matrix. Users can preview route changes, apply them, save presets, inspect per-profile results, and use revision-guarded Undo.</p>
     <ul class="summary-highlights">
-      <li>Shows supported routes across profiles in a filterable matrix.</li>
-      <li>Previews changes before applying them.</li>
-      <li>Supports saved presets and revision-guarded Undo.</li>
+      <li>Shows configured model routes across profiles in one matrix.</li>
+      <li>Previews changes before applying them and supports saved presets.</li>
+      <li>Provides per-profile results and revision-guarded Undo.</li>
     </ul>
   </div>
 </section>
@@ -179,33 +179,75 @@ If a write fails, the engine attempts to restore completed steps and flags any
 unresolved conflict as <code>recovery_required</code>.</li>
 </ul>
 <p>Built for the Hermes Dashboard, using its themes and authenticated transport. MIT licensed.</p>
+<h3>Screenshots</h3>
+<p>Current <strong>0.3.0</strong> captures, taken 2026-10-21 at 1280x800 (the last one at 390x844).
+Boundary: <em>Dashboard SDK fixture with the plugin's real backend and Hermes' own
+<code>/api/model/*</code> routers over an isolated lab home.</em> That is not a live Dashboard
+deployment and not provider execution: the plugin's real FastAPI backend performs
+real saves against a throwaway lab home, and no production configuration is
+touched. The lab uses two synthetic profiles (<code>default</code>, <code>research</code>); no private
+profile data, credentials, host paths or ports appear in the images. Every capture
+is a viewport screenshot at device scale 1, and the run asserts no console errors,
+no failed requests and no page-level horizontal overflow.</p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-0.3.0-dashboard.png" alt="Model Switcher routing matrix and change editor in the host's dark theme" loading="lazy" decoding="async"></p>
+<p><em>Idle workspace in the host's dark theme: the profile filter, the routing matrix
+and the change editor before any target is selected.</em></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-0.3.0-preview.png" alt="A reviewed change from anthropic/claude-sonnet-4-6 to zhipu/glm-5.3-flash" loading="lazy" decoding="async"></p>
+<p><em>Preview before Apply: the exact before → after route for <code>default/main</code> plus the
+persisted config diff, with the unknown-cost acknowledgement in place.</em></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-0.3.0-operation.png" alt="Operation drawer after Apply showing Applied + read back" loading="lazy" decoding="async"></p>
+<p><em>After Apply: per-profile <code>Applied + read back</code>, the operation reference, the
+revision transition, and the guarded Undo control.</em></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-0.3.0-catalog.png" alt="Provider-grouped model catalog with per-1M-token price columns" loading="lazy" decoding="async"></p>
+<p><em>The bird's-eye catalog, grouped by provider, with input/output price columns and a
+status per row. This offline lab host publishes no pricing fields, so rows read
+"price not published" — unknown is never treated as free. Prices, when a host
+supplies them, come from the public host options payload.</em></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-0.3.0-light.png" alt="The same interface following the host's light theme" loading="lazy" decoding="async"></p>
+<p><em>The plugin follows the host Dashboard theme; the same idle workspace under the
+light host tokens.</em></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-0.3.0-narrow.png" alt="The routing matrix on a 390px-wide viewport" loading="lazy" decoding="async"></p>
+<p><em>At 390x844 the editor stacks above the matrix and the matrix scrolls horizontally
+inside its own region; the page itself does not overflow.</em></p>
+<p>The images and their digests are recorded in
+<a href="https://github.com/nicolasestrem/hermes-model-switcher/blob/main/docs/images/catalog-captures.json"><code>docs/images/catalog-captures.json</code></a>; they are
+reproducible with <code>HMS_WRITE_CATALOG_CAPTURES=1</code> against the real-router harness.</p>
+<details>
+<summary>Earlier captures (pre-0.3.0, kept as history)</summary>
+
+<p>These predate 0.3.0 and are kept unchanged for comparison. Their captions describe
+the older interface.</p>
 <p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-dark-1440.png" alt="Model Switcher showing synthetic Hermes profiles in a dark theme" loading="lazy" decoding="async"></p>
-<p><em>The compiled plugin in a Dashboard SDK fixture with synthetic lab profiles. This
-screenshot demonstrates the interface; it is not evidence of live Dashboard
-deployment or provider inference.</em></p>
+<p><em>Pre-0.3.0 capture: the compiled plugin in a Dashboard SDK fixture with synthetic
+lab profiles. This screenshot demonstrates the interface; it is not evidence of live
+Dashboard deployment or provider inference.</em></p>
 <p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-light-1440.png" alt="The same interface following the host's light theme" loading="lazy" decoding="async"></p>
-<p><em>The plugin follows the host Dashboard's theme; the light theme is shown here.</em></p>
+<p><em>Pre-0.3.0 capture: the plugin follows the host Dashboard's theme; the light theme
+is shown here.</em></p>
 <p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-catalog-1440.png" alt="Model catalog with list prices per 1M tokens" loading="lazy" decoding="async"></p>
-<p><em>The provider-grouped catalog in the Dashboard SDK fixture with synthetic lab profiles.
-This is a pre-0.3.0 capture; current catalog prices come from the public host options
-payload, not direct plugin cache reads, inference or recorded spend.</em></p>
+<p><em>Pre-0.3.0 capture: the provider-grouped catalog in the Dashboard SDK fixture with
+synthetic lab profiles. Catalog prices come from the public host options payload,
+not direct plugin cache reads, inference or recorded spend.</em></p>
 <p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-catalog-375.png" alt="Model catalog on a narrow screen" loading="lazy" decoding="async"></p>
-<p><em>The same catalog on a narrow screen; a fixture render of the compiled plugin, not a
-live Dashboard deployment or provider execution.</em></p>
+<p><em>Pre-0.3.0 capture: the same catalog on a narrow screen; a fixture render of the
+compiled plugin, not a live Dashboard deployment or provider execution.</em></p>
 <p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-dark-375.png" alt="The routing matrix on a narrow screen" loading="lazy" decoding="async"></p>
-<p><em>On a narrow screen the matrix scrolls horizontally inside its own region.</em></p>
-<h4>In the real Hermes Dashboard</h4>
-<p>These pre-0.3.0 captures show an isolated lab with two synthetic profiles (default
-and research) and synthetic routes. They are historical evidence, not verification
-of the refactored host-step protocol:</p>
-<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-real-dashboard.png" alt="Routing matrix in the real Hermes Dashboard" loading="lazy" decoding="async"></p>
+<p><em>Pre-0.3.0 capture: on a narrow screen the matrix scrolls horizontally inside its
+own region.</em></p>
+<h5>Isolated lab Dashboard captures (pre-0.3.0)</h5>
+<p>Captured at commit <code>02703e3</code> from an isolated lab Hermes Dashboard with two synthetic
+profiles (default and research) and synthetic routes. They are historical evidence,
+not verification of the current host-step protocol:</p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-real-dashboard.png" alt="Routing matrix in the lab Hermes Dashboard" loading="lazy" decoding="async"></p>
 <p><em>Choose the slots you want to change; filters do not select edit targets.</em></p>
-<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-real-preview.png" alt="A real preview of one synthetic main-model change" loading="lazy" decoding="async"></p>
-<p><em>Review provider/model intent before writing. In 0.3.0, the main slot
-shows semantic intent; the exact persisted config diff appears only after readback.</em></p>
-<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-real-operation.png" alt="A real committed operation with verified readback" loading="lazy" decoding="async"></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-real-preview.png" alt="A lab preview of one synthetic main-model change" loading="lazy" decoding="async"></p>
+<p><em>Review provider/model intent before writing. In 0.3.0, the main slot shows semantic
+intent; the exact persisted config diff appears only after readback.</em></p>
+<p><img src="https://raw.githubusercontent.com/nicolasestrem/hermes-model-switcher/main/docs/images/model-switcher-real-operation.png" alt="A committed lab operation with verified readback" loading="lazy" decoding="async"></p>
 <p><em>Applied and read back. The lab's subsequent Undo restored the original configuration
 bytes exactly. These captures show configuration changes, not provider inference.</em></p>
+</details>
+
 <h3>Setup</h3>
 <p>You need a running Hermes installation with the Web Dashboard and plugin support, and
 a Python version compatible with your Hermes release. This plugin declares Python
@@ -242,13 +284,12 @@ hermes plugins update hermes-model-switcher
 Hermes plugin commands; the plugin does not ship a self-updater.</p>
 <p><strong>Pinned installs do not move with <code>update</code>.</strong> Hermes refuses that command rather
 than silently replacing your chosen revision. To move a pin, rerun <code>hermes plugins install</code> with the same repository, <code>--force</code>, and <code>--ref</code> followed by the new commit's
-full 40-character SHA. The guarded lab check verified that same-source reinstalls
-preserve untracked local state.</p>
+full 40-character SHA.</p>
 <p>The Dashboard bundle is already built and committed. If the installer reports that
 build-time Node dependencies were skipped, you do not need to install them to use
 these shipped assets; Node.js is needed when rebuilding the UI from source.</p>
 <h4>From the built package</h4>
-<pre><code class="language-sh">python scripts/build_package.py        # assembles dist-package/ (needs a built UI)
+<pre><code class="language-sh">python scripts/build_package.py        # in the source repository; assembles dist-package/ (needs a built UI)
 </code></pre>
 <p><code>dist-package/</code> contains the backend, the prebuilt Dashboard assets, and the
 documentation, and can be pointed at a Hermes plugin directory. The builder refuses
@@ -333,8 +374,9 @@ unknown or unsupported slots remain coverage gaps.</li>
 <li><strong>Prerequisite: connected credentials.</strong> A missing connection blocks the change.</li>
 <li><strong>Prices are informational.</strong> Catalog list prices can be stale or absent; they are
 not spend estimates, not cost approvals, and unknown cost is never treated as free.</li>
-<li><strong>Scale.</strong> Large profile sets increase first-request (cold discovery) time; 50
-synthetic profiles took about seven seconds in the lab. See
+<li><strong>Scale.</strong> Large profile sets increase first-request (cold discovery) time. No
+performance measurement from the pre-refactor candidate is carried forward as
+0.3.0 acceptance. See
 <a href="https://github.com/nicolasestrem/hermes-model-switcher/blob/main/docs/release-readiness.md">release readiness</a> and
 <a href="https://github.com/nicolasestrem/hermes-model-switcher/blob/main/docs/backlog.md">backlog</a>.</li>
 <li><strong>Platform scope.</strong> Linux is the verification target; macOS and native Windows are
