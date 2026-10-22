@@ -232,6 +232,14 @@ both
 
 Server-initiated user-input requests. `enabled` (default `true`) and `timeout` in seconds (default `300`). Form-mode requests route through the approval surface; URL-mode is declined (see MCP guide)
 
+`events`
+
+bool
+
+both
+
+Experimental MCP events client with webhook delivery (default: `false`). Registers `list_event_types`, `subscribe_event` and `unsubscribe_event` for this server. Needs `platforms.webhook.extra.public_url` (HTTPS) and a running gateway. Hermes refreshes subscriptions only while it is connected to the server, so with `lazy: true` or `idle_timeout_seconds` a subscription can lapse until the next connection resubscribes it. See [MCP Events](/docs/user-guide/features/mcp#mcp-events-experimental)
+
 `trust`
 
 string
@@ -395,6 +403,12 @@ Prompts:
 -   `list_prompts`
 -   `get_prompt`
 
+Events (only on servers with `events: true`):
+
+-   `list_event_types`
+-   `subscribe_event`
+-   `unsubscribe_event`
+
 ### Disable resources
 
 ```
@@ -418,6 +432,8 @@ So this is normal:
 -   you enable prompts
 -   but no prompt utilities appear
 -   because the server does not support prompts
+
+The event utilities are the exception. The MCP SDK drops a server's `events` capability while parsing it, so Hermes cannot check for it and registers them whenever `events: true` is set.
 
 ## `enabled: false`
 

@@ -272,7 +272,7 @@ Run Hermes as an ACP server for editor integration.
 
 `hermes mcp`
 
-Manage MCP server configurations and run Hermes as an MCP server.
+Manage MCP server configurations. Running Hermes as an MCP server is the [mcp-serve plugin](/docs/user-guide/features/mcp#running-hermes-as-an-mcp-server).
 
 `hermes connectors`
 
@@ -2700,7 +2700,7 @@ See [ACP Editor Integration](/docs/user-guide/features/acp) and [ACP Internals](
 hermes mcp <subcommand>
 ```
 
-Manage MCP (Model Context Protocol) server configurations and run Hermes as an MCP server.
+Manage MCP (Model Context Protocol) server configurations. Running Hermes itself as an MCP server moved to the `mcp-serve` plugin (`hermes plugins install mcp-serve`, then `hermes mcp-serve`); `hermes mcp serve` prints that new spelling.
 
 Subcommand
 
@@ -2717,10 +2717,6 @@ List Nous-approved MCPs (plain text, scriptable).
 `install <name>`
 
 Install a catalog entry (e.g. `hermes mcp install deepwiki`).
-
-`serve [-v|--verbose]`
-
-Run Hermes as an MCP server — expose conversations to other agents.
 
 `add <name> [--url URL] [--command CMD] [--auth oauth|header] [--args ...]`
 

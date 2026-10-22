@@ -427,6 +427,10 @@ Query without writing. Exit 1 can mean updates exist; inspect output to distingu
 
 Resolve versions for the specified target.
 
+`pm update --skip-target TARGET`
+
+Leave TARGET's pins unchanged (repeatable), for example `linux-arm64-bionic` while the termux pool lags upstream. Later runs still report the package as current. `pm lock --bump NAME VERSION` re-pins every target at a version, and `pm update --termux` repins a retired `linux-arm64-bionic` row.
+
 `pm update --uv` / `--npm`
 
 Also refresh the Python or npm dependency resolution.
@@ -455,7 +459,7 @@ PM does not retry bad hashes, certificate failures, local filesystem errors or o
 
 ## Release age and package mirrors
 
-Every Python package Hermes itself depends on must be at least three days old when Hermes locks it (uv's `exclude-newer`, enforced by CI's lock check), so a freshly published, possibly compromised release cannot reach `uv.lock`. Users install from that lock, and installing or enabling a plugin never re-checks dates, so package mirrors that publish no upload times work. Set a mirror with `index-url` in `pip.conf`, which Hermes passes to uv, or with `UV_INDEX_URL`.
+Every Python package Hermes itself depends on must be at least three days old when Hermes locks it (uv's `exclude-newer`, enforced by CI's lock check), so a freshly published, possibly compromised release cannot reach `uv.lock`. Users install from that lock, and installing or enabling a plugin never re-checks dates, so package mirrors that publish no upload times work. The one exemption is CA trust stores (`certifi`): a release that distrusts a compromised CA is locked the day it ships, since waiting keeps the bad root trusted. Set a mirror with `index-url` in `pip.conf`, which Hermes passes to uv, or with `UV_INDEX_URL`.
 
 `hermes pm lock` is the one step that applies the check. Run against a mirror without upload times, it stops with `has no publish time`; use `https://pypi.org/simple` for that step.
 
