@@ -206,6 +206,12 @@ str
 
 Explicit catalog URL (falls back to `{base_url}/models`)
 
+`supports_streaming`
+
+`bool | None`
+
+`None` (default) preserves transport defaults; `True` opts streaming-capable `external_process` clients into host streaming; `False` disables provider streaming. ACP URLs and session-level streaming disables still take precedence. Only opt in when the client implements the selected API mode's streaming contract, including cancellation and cleanup.
+
 `auth_type`
 
 str
