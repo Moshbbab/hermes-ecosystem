@@ -139,7 +139,7 @@ Common questions and solutions
 ## Key Features
 
 -   **A closed learning loop** — Agent-curated memory with periodic nudges, autonomous skill creation, skill self-improvement during use, FTS5 cross-session recall with LLM summarization, and [Honcho](https://github.com/plastic-labs/honcho) dialectic user modeling
--   **Runs anywhere, not just your laptop** — 7 terminal backends: local, Docker, SSH, Daytona, Singularity, Modal, Vercel Sandbox. Daytona and Modal offer serverless persistence — your environment hibernates when idle, costing nearly nothing
+-   **Runs anywhere, not just your laptop** — 6 built-in terminal backends (local, Docker, SSH, Daytona, Modal, Vercel Sandbox) plus plugin backends such as Singularity. Daytona and Modal offer serverless persistence — your environment hibernates when idle, costing nearly nothing
 -   **Lives where you do** — CLI, Telegram, Discord, Slack, WhatsApp, Signal, Matrix, Mattermost, Email, SMS, DingTalk, Feishu, WeCom, Weixin, QQ Bot, Yuanbao, BlueBubbles, Home Assistant, Microsoft Teams, Google Chat, and more — 20+ platforms from one gateway
 -   **Built by model trainers** — Created by [Nous Research](https://nousresearch.com), the lab behind Hermes, Nomos, and Psyche. Works with [Nous Portal](https://portal.nousresearch.com), [OpenRouter](https://openrouter.ai), OpenAI, or any endpoint
 -   **Scheduled automations** — Built-in cron with delivery to any platform
@@ -154,7 +154,7 @@ Common questions and solutions
 
 Machine-readable entry points to this documentation:
 
--   **[`/llms.txt`](/docs/assets/files/llms-b4c4b58a7933861a0a38fec16a3afa92.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
--   **[`/llms-full.txt`](/docs/assets/files/llms-full-0e4a3962c6f6d5c126e6379e1951c24c.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
+-   **[`/llms.txt`](/docs/assets/files/llms-36785b3bb6327bc45356e03c1c21a0b3.txt)** — curated index of every doc page with short descriptions. ~17 KB, safe to load into an LLM context.
+-   **[`/llms-full.txt`](/docs/assets/files/llms-full-e418143bbf932a5c422101bf04b6649e.txt)** — every doc page concatenated into a single markdown file for one-shot ingestion. ~1.8 MB.
 
 Both files also resolve at `/docs/llms.txt` and `/docs/llms-full.txt`. Generated fresh on every deploy.

@@ -862,7 +862,7 @@ Description
 
 `TERMINAL_ENV`
 
-Backend: `local`, `docker`, `ssh`, `singularity`, `modal`, `daytona`, `vercel_sandbox`
+Backend: `local`, `docker`, `ssh`, `modal`, `daytona`, `vercel_sandbox`, or a plugin backend (`singularity`)
 
 `HERMES_DOCKER_BINARY`
 
@@ -894,7 +894,7 @@ Advanced opt-in: mount the launch cwd into Docker `/workspace` (`true`/`false`, 
 
 `TERMINAL_SINGULARITY_IMAGE`
 
-Singularity image or `.sif` path
+Singularity image or `.sif` path (read by the [`singularity` plugin](https://github.com/NousResearch/hermes-official-plugins/tree/main/singularity))
 
 `TERMINAL_MODAL_IMAGE`
 
@@ -948,7 +948,7 @@ SSH port (default: 22)
 
 Path to private key
 
-## Container Resources (Docker, Singularity, Modal, Daytona)
+## Container Resources (Docker, Modal, Daytona, container plugin backends)
 
 Variable
 

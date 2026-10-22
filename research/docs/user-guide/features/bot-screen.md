@@ -2,7 +2,7 @@
 
 **Source:** https://hermes-agent.nousresearch.com/docs/user-guide/features/bot-screen
 
-On a headless Linux gateway host (a server, a cloud VM, Hermes Cloud) each bot gets its **own desktop**: an Xfce screen the bot's `computer_use` and headed browser act on, streamed live into Hermes Desktop. Watch what the bot does, **take over** when it hits a login, 2FA prompt, CAPTCHA or payment step, then **hand control back** and let it continue with the session you just signed in to. The bot keeps working after you close the app or turn off your laptop; the screen lives on the gateway host, not on your machine. If the gateway runs its `terminal` in a sandbox (`terminal.backend: docker`, `ssh` or `singularity`), the screen lives **inside that sandbox** instead, alongside the shell, so the bot's `computer_use` and browser never act outside the boundary you drew (see [Where the screen runs](#where-the-screen-runs)).
+On a headless Linux gateway host (a server, a cloud VM, Hermes Cloud) each bot gets its **own desktop**: an Xfce screen the bot's `computer_use` and headed browser act on, streamed live into Hermes Desktop. Watch what the bot does, **take over** when it hits a login, 2FA prompt, CAPTCHA or payment step, then **hand control back** and let it continue with the session you just signed in to. The bot keeps working after you close the app or turn off your laptop; the screen lives on the gateway host, not on your machine. If the gateway runs its `terminal` in a sandbox (`terminal.backend: docker`, `ssh`, or a streaming plugin backend such as `singularity`), the screen lives **inside that sandbox** instead, alongside the shell, so the bot's `computer_use` and browser never act outside the boundary you drew (see [Where the screen runs](#where-the-screen-runs)).
 
 Every Hermes profile ("bot") has its own screen, its own browser profile and its own cookies. Screens are work surfaces, not security boundaries: the bots share the host's user account, files and network (the same model as other hosted-agent products).
 
@@ -105,7 +105,7 @@ gateway host
 
 The terminal, the screen, the browser and `computer_use` all share the machine running the gateway.
 
-`docker`, `ssh`, `singularity`
+`docker`, `ssh`, `singularity` (plugin)
 
 **inside the sandbox**
 
