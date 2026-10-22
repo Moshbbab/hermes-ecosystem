@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NousResearch/hermes-agent — Hermes Agent Core &amp; Official | Hermes Atlas</title>
-<meta name="description" content="Hermes Agent is an AI agent with a learning loop that creates skills from experience, improves them during use, and uses memory and conversation search to…">
+<meta name="description" content="Hermes Agent is an AI agent with a learning loop that creates and improves skills, stores and searches knowledge across sessions, and builds a model of the…">
 <link rel="canonical" href="https://hermesatlas.com/projects/NousResearch/hermes-agent">
 <meta property="og:title" content="NousResearch/hermes-agent — Hermes Atlas">
-<meta property="og:description" content="Hermes Agent is an AI agent with a learning loop that creates skills from experience, improves them during use, and uses memory and conversation search to…">
+<meta property="og:description" content="Hermes Agent is an AI agent with a learning loop that creates and improves skills, stores and searches knowledge across sessions, and builds a model of the…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/NousResearch/hermes-agent">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="NousResearch/hermes-agent — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Agent is an AI agent with a learning loop that creates skills from experience, improves them during use, and uses memory and conversation search to…">
+<meta name="twitter:description" content="Hermes Agent is an AI agent with a learning loop that creates and improves skills, stores and searches knowledge across sessions, and builds a model of the…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-agent&amp;subtitle=The+agent+that+grows+with+you&amp;kind=project+%C2%B7+core">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/NousResearch/hermes-agent#software",
   "name": "hermes-agent",
-  "description": "Hermes Agent is an AI agent with a learning loop that creates skills from experience, improves them during use, and uses memory and conversation search to support recall across sessions. It can run through a terminal interface or messaging platforms, use different model providers, schedule automations, and delegate work to subagents.",
+  "description": "Hermes Agent is an AI agent with a learning loop that creates and improves skills, stores and searches knowledge across sessions, and builds a model of the user over time. It supports several model providers, terminal interfaces, messaging platforms, scheduled automations, subagents, and multiple terminal backends.",
   "url": "https://hermesatlas.com/projects/NousResearch/hermes-agent",
   "codeRepository": "https://github.com/NousResearch/hermes-agent",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "NousResearch",
     "url": "https://github.com/NousResearch"
   },
-  "dateModified": "2026-10-22T17:18:46.000Z",
+  "dateModified": "2026-10-22T21:48:53.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 256174
+    "userInteractionCount": 256220
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -146,11 +146,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Agent is an AI agent with a learning loop that creates skills from experience, improves them during use, and uses memory and conversation search to support recall across sessions. It can run through a terminal interface or messaging platforms, use different model providers, schedule automations, and delegate work to subagents.</p>
+    <p class="summary-text">Hermes Agent is an AI agent with a learning loop that creates and improves skills, stores and searches knowledge across sessions, and builds a model of the user over time. It supports several model providers, terminal interfaces, messaging platforms, scheduled automations, subagents, and multiple terminal backends.</p>
     <ul class="summary-highlights">
-      <li>Creates and improves skills from experience</li>
-      <li>Supports Telegram, Discord, Slack, WhatsApp, Signal, and CLI</li>
-      <li>Includes six built-in terminal backends</li>
+      <li>Creates skills from experience and improves them during use.</li>
+      <li>Supports Telegram, Discord, Slack, WhatsApp, Signal, and CLI.</li>
+      <li>Includes local, Docker, SSH, Modal, Daytona, and Vercel Sandbox backends.</li>
     </ul>
   </div>
 </section>
@@ -250,7 +250,6 @@ hermes config set   # Set individual config values
 hermes config get   # Print individual config values
 hermes gateway      # Start the messaging gateway (Telegram, Discord, etc.)
 hermes setup        # Run the full setup wizard (configures everything at once)
-hermes claw migrate # Migrate from OpenClaw (if coming from OpenClaw)
 hermes update       # Update to the latest version
 hermes doctor       # Diagnose any issues
 </code></pre>
@@ -397,27 +396,28 @@ hermes doctor       # Diagnose any issues
 </tr>
 </tbody></table>
 <hr>
-<h3>Migrating from OpenClaw</h3>
-<p>If you're coming from OpenClaw, Hermes can automatically import your settings, memories, skills, and API keys.</p>
-<p><strong>During first-time setup:</strong> The setup wizard (<code>hermes setup</code>) automatically detects <code>~/.openclaw</code> and offers to migrate before configuration begins.</p>
+<h3>Migrating from OpenClaw or another agent</h3>
+<p>If you're coming from OpenClaw, Claude Code, Codex CLI or Cursor, Hermes can import your settings, memories and skills (and, for OpenClaw, API keys when you ask for them).</p>
+<p><strong>During setup:</strong> <code>hermes setup</code> asks whether to import from another agent, pre-selects the ones it finds (<code>~/.openclaw</code>, <code>~/.claude</code>, <code>~/.codex</code>, <code>~/.cursor</code>), installs the official <code>agent-importers</code> plugin and runs the import with a preview first.</p>
 <p><strong>Anytime after install:</strong></p>
-<pre><code class="language-bash">hermes claw migrate              # Interactive migration (full preset)
-hermes claw migrate --dry-run    # Preview what would be migrated
-hermes claw migrate --preset user-data   # Migrate without secrets
-hermes claw migrate --overwrite  # Overwrite existing conflicts
+<pre><code class="language-bash">hermes plugins install agent-importers          # once per profile
+hermes import-agent openclaw                    # interactive migration (full preset)
+hermes import-agent openclaw --dry-run          # preview what would be migrated
+hermes import-agent openclaw --migrate-secrets  # also bring allowlisted API keys
+hermes import-agent claude-code                 # or codex / cursor
 </code></pre>
-<p>What gets imported:</p>
+<p>What gets imported from OpenClaw:</p>
 <ul>
 <li><strong>SOUL.md</strong> — persona file</li>
 <li><strong>Memories</strong> — MEMORY.md and USER.md entries</li>
 <li><strong>Skills</strong> — user-created skills → <code>~/.hermes/skills/openclaw-imports/</code></li>
 <li><strong>Command allowlist</strong> — approval patterns</li>
 <li><strong>Messaging settings</strong> — platform configs, allowed users, working directory</li>
-<li><strong>API keys</strong> — allowlisted secrets (Telegram, OpenRouter, OpenAI, Anthropic, ElevenLabs)</li>
+<li><strong>API keys</strong> — allowlisted secrets (Telegram, OpenRouter, OpenAI, Anthropic, ElevenLabs), only with <code>--migrate-secrets</code></li>
 <li><strong>TTS assets</strong> — workspace audio files</li>
 <li><strong>Workspace instructions</strong> — AGENTS.md (with <code>--workspace-target</code>)</li>
 </ul>
-<p>See <code>hermes claw migrate --help</code> for all options, or use the <code>openclaw-migration</code> skill for an interactive agent-guided migration with dry-run previews.</p>
+<p><code>hermes claw migrate</code> still works as the older spelling. See the <a href="https://hermes-agent.nousresearch.com/docs/guides/migrate-from-openclaw">OpenClaw migration guide</a> and <a href="https://hermes-agent.nousresearch.com/docs/user-guide/import-from-other-agents">Import from Other Agents</a>.</p>
 <hr>
 <h3>Contributing</h3>
 <p>We welcome contributions! See the <a href="https://hermes-agent.nousresearch.com/docs/developer-guide/contributing">Contributing Guide</a> for development setup, code style, and PR process.</p>
