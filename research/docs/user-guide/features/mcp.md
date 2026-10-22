@@ -10,7 +10,7 @@ If you have ever wanted Hermes to use a tool that already exists somewhere else,
 
 Coming from Claude Code?
 
-The `mcpServers` block in your `~/.claude.json` maps to `mcp_servers` in Hermes' `config.yaml` — and `hermes import-agent claude-code` migrates it (along with skills and instructions) automatically. See [Import from Other Agents](/docs/user-guide/import-from-other-agents).
+The `mcpServers` block in your `~/.claude.json` maps to `mcp_servers` in Hermes' `config.yaml` — and `hermes import-agent claude-code` (from the `agent-importers` plugin) migrates it, along with skills and instructions. See [Import from Other Agents](/docs/user-guide/import-from-other-agents).
 
 ## What MCP gives you
 

@@ -56,6 +56,7 @@ API requests use the gateway's durable admission queue. Structured image content
 -   `/v1/runs` and `/v1/responses` retain the conversation declared by `X-Hermes-Session-Key`. An explicit session or response chain takes precedence and does not transfer its conversation identity to a different header.
 -   A nonempty `/v1/runs` `conversation_history` is authoritative, even with an explicit `session_id`. Otherwise session continuation loads history when the turn executes, after earlier queued work finishes.
 -   Runs polling and SSE agree on `cancelled` or `failed`. Responses uses the same terminal status and `response.cancelled` / `response.failed` events, including when diagnostic text is present. Chat Completions reports `finish_reason: "cancelled"` for interrupted turns and `"error"` for failures, not a successful `"stop"`.
+-   A turn that runs out of its iteration budget (`agent.max_turns`) still answers with the agent's wrap-up of what it found. Chat Completions delivers that text with `finish_reason: "length"` and `hermes.error_code: "iteration_budget_exhausted"`; Responses reports `status: "incomplete"`. Treat the content as a usable answer to a task that stopped short, not as a cancellation.
 -   Session-chat replies include `status`; their streams report matching terminal run events. An assistant finalization frame is not itself proof of successful execution.
 
 ## Idempotency keys
