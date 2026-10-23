@@ -42,9 +42,9 @@ Execute commands and manipulate files.
 
 **Browser**
 
-`browser_navigate`, `browser_snapshot`, `browser_vision`
+`browser_exec`, `browser_cdp`, `browser_dialog`, `browser_vault`
 
-Interactive browser automation with text and vision support.
+Browser automation: `browser_exec` drives Chromium with Python over CDP (screenshots included). The Camofox browser is a separate catalog plugin (`hermes plugins install camofox`).
 
 **Media**
 

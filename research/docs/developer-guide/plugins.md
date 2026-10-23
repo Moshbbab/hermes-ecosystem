@@ -200,7 +200,7 @@ A long-running server can also declare a Hermes-specific tool-call `timeout` (in
 
 The value must be a positive finite number within the platform's thread-wait limit. It maps to the native per-server `timeout`; omission preserves the existing `timeouts.mcp.tool_call` fallback. A same-name native `mcp_servers` entry still replaces the entire package entry, including its timeout. This extends the wait budget, not the cancellation or permission policy. Configure any server-internal analysis deadline separately and leave time for its result to reach the client. Other harnesses ignore this extension.
 
-A server entry key this Hermes does not know (one a newer release added) is ignored with a warning, which `hermes plugins validate` lists, and the package still installs. Releases from before this rule reject the package instead, and a release that ignores a key may behave less safely than intended, so declare a new key together with a catalog `requires_hermes` floor.
+A server entry key this Hermes does not know (one a newer release added) is ignored with a warning, which `hermes plugins validate` lists, and the package still installs. Releases from before this rule reject the package instead, and a release that ignores a key may behave less safely than intended, so declare a new key together with a catalog `requires_hermes` floor. `plugin.json` has no `requires_hermes` field, so that catalog floor is a portable package's only one: an install by catalog name refuses on an older Hermes, and `hermes plugins update` keeps the installed pin until Hermes is updated.
 
 An explicit per-server MCP call budget also reaches Hermes' outer tool executor. A call whose budget exceeds the shared concurrent-batch deadline becomes a sequential barrier, whether called directly or through tool search. It gets its own budget without extending unrelated tools in the same model response. Existing shorter MCP calls retain their normal parallel-admission policy; interruption and approval handling are unchanged.
 
@@ -1278,15 +1278,15 @@ ctx.register_tool(
 
 ### Overriding a built-in tool
 
-To replace a built-in tool with your own implementation (e.g. swap the default browser tool for a headed-Chrome CDP backend, or replace `web_search` with a custom corporate index), pass `override=True`:
+To replace a built-in tool with your own implementation (e.g. replace `web_search` with a custom corporate index), pass `override=True`:
 
 ```
 def register(ctx):
     ctx.register_tool(
-        name="browser_navigate",             # same name as the built-in
-        toolset="plugin_my_browser",         # your own toolset namespace
+        name="web_search",                   # same name as the built-in
+        toolset="plugin_my_search",          # your own toolset namespace
         schema={...},
-        handler=my_custom_navigate,
+        handler=my_corporate_search,
         override=True,                       # explicit opt-in
     )
 ```

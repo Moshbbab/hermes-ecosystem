@@ -54,9 +54,9 @@ Purpose
 
 `browser`
 
-`browser_back`, `browser_cdp`, `browser_click`, `browser_console`, `browser_dialog`, `browser_exec`, `browser_get_images`, `browser_navigate`, `browser_press`, `browser_scroll`, `browser_snapshot`, `browser_type`, `browser_vault`, `browser_vision`
+`browser_cdp`, `browser_dialog`, `browser_exec`, `browser_vault`
 
-Core browser automation. `browser_cdp` and `browser_dialog` are gated at runtime — registered only when a CDP endpoint is reachable at session start (via `/browser connect`, `browser.cdp_url` config, Browserbase, or Camofox). `browser_dialog` works together with the `pending_dialogs` and `frame_tree` fields that `browser_snapshot` adds when a CDP supervisor is attached. `browser_exec` replaces the other browser tools when `browser.backend` is `browser-use`; `browser_vault` rides with the browser for credential forms and is deferred behind tool search by default. Quick lookups belong to the `web`/`search` toolsets — `web_search` is deliberately NOT a member, so `disabled_toolsets: [browser]` cannot strip it (#64503).
+Core browser automation. `browser_exec` drives the browser by running Python with pre-imported helpers (offered only to sessions that also have `terminal`); `browser_cdp`, `browser_dialog` and `browser_vault` operate on the same browser session. `browser_vault` rides with the browser for credential forms and is deferred behind tool search by default. Disabling this toolset is how you turn browsing off. Quick lookups belong to the `web`/`search` toolsets — `web_search` is deliberately NOT a member, so `disabled_toolsets: [browser]` cannot strip it (#64503).
 
 `clarify`
 

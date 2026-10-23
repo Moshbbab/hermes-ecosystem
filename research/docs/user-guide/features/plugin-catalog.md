@@ -62,7 +62,7 @@ Declared tools, hooks, middleware, and required env vars
 
 `requires_hermes`
 
-Minimum Hermes version, e.g. `>=0.19` (optional)
+Minimum Hermes version, e.g. `>=0.19` (optional). Enforced: installing on an older Hermes is refused with the version it needs, and `hermes plugins update` keeps the installed version until you update Hermes. `search` and `info` still list the entry, marked as needing a newer Hermes
 
 `platforms`
 

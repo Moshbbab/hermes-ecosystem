@@ -36,7 +36,7 @@ OpenAI TTS voices wired into the `text_to_speech` tool. Drop voice notes into Te
 
 **Cloud browser automation**
 
-Headless Chromium sessions via Browser Use. `browser_navigate`, `browser_click`, `browser_type`, `browser_vision` — all the agent-driving primitives, no Browserbase account required.
+Headless cloud Chromium sessions via Browser Use, driven by `browser_exec` over CDP — no Browserbase account required.
 
 All four are pay-as-you-use billed against your Nous subscription. Use any combination — run the gateway for web and images while keeping your own ElevenLabs key for TTS, or route everything through Nous.
 
@@ -102,8 +102,8 @@ Some accounts are also entitled to a **free tool pool** — a small managed-tool
 
 Picking a Nous model (`hermes model`) offers a per-tool checklist of gateway backends. Its behavior respects your existing setup:
 
--   Tools you've explicitly pointed at another backend (e.g. `web.backend: searxng`, `browser.cloud_provider: camofox`) are **never offered** — your selection can't be accidentally overwritten.
--   Tools configured via environment variables alone (e.g. `SEARXNG_URL`, `CAMOFOX_URL`) are offered **unchecked**, labeled to keep your own backend.
+-   Tools you've explicitly pointed at another backend (e.g. `web.backend: searxng`, `browser.cloud_provider: browserbase`) are **never offered** — your selection can't be accidentally overwritten.
+-   Tools configured via environment variables alone (e.g. `SEARXNG_URL`, `BROWSER_USE_API_KEY`) are offered **unchecked**, labeled to keep your own backend.
 -   Only genuinely unconfigured tools come pre-checked.
 -   Declines stick: if you submit the checklist with a tool unchecked, it won't be pre-checked on future Nous model swaps (stored in `tool_gateway_declined_tools` in `config.yaml`; checking it later clears the decline).
 
