@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>junhoyeo/tokscale — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption across multiple AI coding agents. The README lists supported…">
+<meta name="description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists…">
 <link rel="canonical" href="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption across multiple AI coding agents. The README lists supported…">
+<meta property="og:description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/junhoyeo/tokscale">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="junhoyeo/tokscale — Hermes Atlas">
-<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption across multiple AI coding agents. The README lists supported…">
+<meta name="twitter:description" content="Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=tokscale&amp;subtitle=%F0%9F%9B%B0%EF%B8%8F+Track+token+usage+across+AI+coding+agents+from+your+terminal.+%F0%9F%8F%85+Global+leaderboard+with+trillions+of+tokens+tracked.&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption across multiple AI coding agents. The README lists supported clients including OpenCode, Claude Code, OpenClaw, Codex CLI, and GitHub Copilot CLI.",
+  "description": "Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists supported clients including Claude Code, OpenClaw, Codex CLI, Hermes Agent, and Gemini CLI.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-10-22T13:55:00.000Z",
+  "dateModified": "2026-10-23T03:34:04.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 5720
+    "userInteractionCount": 5722
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-22</span>
+    <span><span class="meta-label">updated</span>2026-10-23</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption across multiple AI coding agents. The README lists supported clients including OpenCode, Claude Code, OpenClaw, Codex CLI, and GitHub Copilot CLI.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists supported clients including Claude Code, OpenClaw, Codex CLI, Hermes Agent, and Gemini CLI.</p>
     <ul class="summary-highlights">
-      <li>Tracks token consumption across multiple AI coding agents.</li>
-      <li>Provides a visualization dashboard for usage analysis.</li>
-      <li>Supports clients including OpenCode, Claude Code, and Codex CLI.</li>
+      <li>Tracks token usage across multiple AI coding agents</li>
+      <li>Includes a visualization dashboard for usage analysis</li>
+      <li>Supports clients including Claude Code, Codex, and Gemini</li>
     </ul>
   </div>
 </section>
@@ -809,6 +809,12 @@ tokscale models --json &gt; report.json   # Save to file
 <td></td>
 <td>One row per client, session, and model — useful for multi-agent runners that join on <code>session_id</code></td>
 </tr>
+<tr>
+<td><strong>Machine + Model</strong></td>
+<td><code>--group-by machine,model</code></td>
+<td></td>
+<td>One row per machine label and model — see <a href="#per-machine-usage">Per-machine usage</a></td>
+</tr>
 </tbody></table>
 <p><strong><code>--group-by model</code></strong> (most consolidated)</p>
 <table>
@@ -919,6 +925,29 @@ tokscale models --light --group-by workspace,model --merge-worktrees --month
 tokscale models --json --group-by workspace,model --merge-worktrees
 </code></pre>
 <p>In the TUI, press <code>g</code> → <strong>Workspace + Model</strong>, then <code>w</code> to toggle worktree rollup (the footer shows <code>[w:worktrees]</code> or <code>[w:repos]</code>).</p>
+<h5>Per-machine usage</h5>
+<p>If you copy other machines' session folders into local directories and add them with <code>scanner.extraScanPaths</code>, give each folder a machine label with <code>scanner.machineLabels</code>. Every session file under a labeled folder counts toward that machine; everything else counts toward <code>scanner.localMachineLabel</code> (default <code>"local"</code>):</p>
+<pre><code class="language-json">{
+  "scanner": {
+    "extraScanPaths": {
+      "codex": ["/Users/me/mirrors/steven/.codex/sessions"],
+      "claude": ["/Users/me/mirrors/steven/.claude/projects"]
+    },
+    "machineLabels": {
+      "/Users/me/mirrors/steven": "steven"
+    },
+    "localMachineLabel": "laptop"
+  }
+}
+</code></pre>
+<p>A folder matches every file beneath it, compared on whole path components (case-insensitively on Windows); when folders nest, the longest one wins. Then group by machine:</p>
+<pre><code class="language-bash"># One row per (machine, model), with a Machine column
+tokscale models --light --group-by machine,model
+
+# JSON entries carry a `machine` field in this mode only
+tokscale models --json --group-by machine,model
+</code></pre>
+<p>In the TUI, press <code>g</code> → <strong>Machine + Model</strong>.</p>
 <p>Workspace rows are labeled <code>repo</code> or <code>repo ⑃ worktree</code>. Clients disagree about how they record a workspace — Claude Code stores a dash-mangled directory slug (<code>-Users-me-devpro-app</code>) while Codex and OpenCode store real paths — so tokscale resolves slugs back to their true path against the filesystem. Four consequences worth knowing:</p>
 <ul>
 <li><strong>Without <code>--merge-worktrees</code>, each git worktree is its own row.</strong> Agent CLIs that isolate every task into a worktree will therefore spread one repository across many rows; <code>--merge-worktrees</code> re-unites them (and also merges a repo recorded by different clients under different key formats).</li>
@@ -1132,30 +1161,8 @@ tokscale autosubmit disable
 <p>Cursor IDE support uses Cursor's usage-events API. Tokscale caches usage at <code>~/.config/tokscale/cursor-cache/usage.json</code> for the active account and <code>usage.account-&lt;sha256-of-exact-account-id&gt;.json</code> for each other account, with verified ownership metadata. Unmarked legacy JSON/CSV caches are preserved in <code>cursor-cache/archive/</code> before sync or an account change; see the migration details below. Tokscale does not parse local Cursor Agent CLI state under <code>~/.cursor</code>, and it does not treat the desktop SQLite DB as a usage ledger.</p>
 <p>When the Cursor desktop app is installed and signed in, reports, submit, and wrapped can import <code>cursorAuth/accessToken</code> from <code>state.vscdb</code> when no Cursor login is saved yet. Wrapped only does this when Cursor is included in the requested clients. Reports skip syncing while the usage cache is fresh. Whenever a sync runs, including explicit <code>tokscale cursor sync</code>, it refreshes the desktop token when available and can switch the active account to that desktop login. A saved login remains usable when no desktop session is available. Usage rows still come only from Cursor's usage-events API, not from local <code>~/.cursor</code> transcripts.</p>
 <p>Setup (desktop auto-login):</p>
-<ol>
-<li>Sign in to the Cursor desktop app.</li>
-<li>Optional: run <code>tokscale cursor login --name work</code> to save that desktop session under a name. Reports, submit, and sync import it automatically when no Cursor login is saved yet.</li>
-<li>Optional: run <code>tokscale cursor sync --json</code> to refresh <code>~/.config/tokscale/cursor-cache/usage.json</code> now. A report syncs on its own when the cache is stale.</li>
-<li>Run <code>tokscale --client cursor</code> or any report command.</li>
-</ol>
-<p>Fallback (manual browser cookie), if desktop login is unavailable:</p>
-<ol>
-<li>Open <a href="https://www.cursor.com/settings">https://www.cursor.com/settings</a> in your browser and sign in.</li>
-<li>Copy the <code>WorkosCursorSessionToken</code> cookie value:<ul>
-<li>Network tab: make any request to <code>cursor.com/api/*</code>, then copy the value after <code>WorkosCursorSessionToken=</code> from the <code>Cookie</code> request header.</li>
-<li>Application tab: open Cookies -&gt; <code>https://www.cursor.com</code>, then copy the <code>WorkosCursorSessionToken</code> value.</li>
-</ul>
-</li>
-<li>Run <code>tokscale cursor login --name work</code> and paste the token when prompted.</li>
-<li>Continue with <code>tokscale cursor sync --json</code> as above.</li>
-</ol>
-<p>Treat the session token like a password. It is stored locally in <code>~/.config/tokscale/cursor-credentials.json</code>.</p>
-<pre><code class="language-bash"># Login to Cursor (auto-detects Cursor desktop login; falls back to browser cookie 
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/junhoyeo/tokscale#readme)*
-</code></pre>
+<hr>
+<p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>
@@ -1168,7 +1175,7 @@ tokscale autosubmit disable
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/colbymchenry/codegraph">
-        <div class="stars">★ 74.7K</div>
+        <div class="stars">★ 74.9K</div>
         <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
       </a>
       <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
