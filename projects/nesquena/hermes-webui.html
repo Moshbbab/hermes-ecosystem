@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, and workspace files. The README says it offers…">
+<meta name="description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, and workspace files. The README says it offers…">
+<meta property="og:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, and workspace files. The README says it offers…">
+<meta name="twitter:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, and workspace files. The README says it offers near-parity with the CLI and can be accessed securely through an SSH tunnel, using an existing Hermes setup and models without additional setup.",
+  "description": "Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing Hermes agent and models, and provides controls for profiles, settings, and sessions.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-10-23T05:03:36.000Z",
+  "dateModified": "2026-10-23T09:41:27.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 19123
+    "userInteractionCount": 19127
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a lightweight browser interface for Hermes Agent, with a three-panel layout for chat, sessions, and workspace files. The README says it offers near-parity with the CLI and can be accessed securely through an SSH tunnel, using an existing Hermes setup and models without additional setup.</p>
+    <p class="summary-text">Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it uses the existing Hermes agent and models, and provides controls for profiles, settings, and sessions.</p>
     <ul class="summary-highlights">
-      <li>Three-panel interface for sessions, chat, and workspace files</li>
-      <li>Includes profile, model, and workspace controls</li>
-      <li>Built with Python and vanilla JavaScript; no build step</li>
+      <li>Three-panel layout for sessions, chat, and workspace files</li>
+      <li>Includes a workspace file browser with inline previews</li>
+      <li>Designed for access through an SSH tunnel</li>
     </ul>
   </div>
 </section>
@@ -432,7 +432,8 @@ If an AI assistant is helping with install, reinstall, bootstrap, provider setup
 <li>Session projects -- named groups with colors for organizing sessions; delegated subagent sessions have no project of their own and follow their nearest ancestor's project in the project filter and the Unassigned chip; forks and other child sessions keep their own project, so a fork moved to "No project" stays Unassigned</li>
 <li>Delegated subagent sessions nest under their parent row. When that parent is filtered out of the current view (project, source tab, hidden), the subagent is hidden with it rather than shown as a stray top-level "Subagent Session"; a subagent without the cross-surface flag (for example in the all-profiles view) stays a top-level row when its parent is in the other (CLI/TUI) tab, was never imported, or is itself shown as a top-level subagent row, and a subagent that matches an active sidebar search is always listed</li>
 <li>Project bindings -- right-click a project chip and pick <strong>Project settings…</strong> to pin a default workspace (or several workspaces, with one marked default) and a model. The chip's <strong>+</strong> (and New Chat while the project filter is active) then opens a session already in that workspace/model. The reasoning-effort binding stays in the API (<code>POST /api/projects/bind</code>) but is dormant: the dialog no longer offers the row, and nothing applies a stored value to a new session any more — the only mechanism would be the <strong>profile-wide</strong> reasoning-effort preference (the same <code>agent.reasoning_effort</code> setting the <code>/reasoning</code> command writes), so a row inside a per-project dialog read as per-project while silently moving the whole profile's effort; it comes back with per-session effort (#7881)</li>
-<li>Session tags -- add #tag to titles for colored chips and click-to-filter</li>
+<li>Session tags -- add #tag to titles for colored chips and click-to-filter
+Clicking a session tag chip filters the list without opening the conversation.</li>
 <li>Grouped by Today / Yesterday / Earlier in the sidebar (collapsible date groups)</li>
 <li>Download as Markdown transcript, full JSON export, or import from JSON</li>
 <li>Create a public read-only share link for the active conversation from the Control Center; shared pages show a sanitized transcript snapshot without workspace, profile, or live controls</li>
@@ -996,10 +997,7 @@ system/Homebrew interpreter.</p>
 <p>Tests run against an isolated server with a separate state directory.
 Production data and real cron jobs are never touched. Current snapshot:
 <strong>~11,500 tests collected</strong> across <strong>~1,150 test files</strong>, run in CI on Python 3.11,
-3.12, and 3.13 (3 parallel shards each).</p>
-<hr>
-<h3>Architecture</h3>
-<p>No build step, no fram</p>
+3.12,</p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
