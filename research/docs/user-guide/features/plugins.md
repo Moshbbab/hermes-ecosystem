@@ -148,6 +148,10 @@ Register an image-generation backend
 
 `ctx.register_image_gen_provider(provider)` — see [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin)
 
+Register a delegation strategy (how each `delegate_task` subagent is routed)
+
+`ctx.register_delegation_provider(provider)` — see [Delegation Provider Plugins](/docs/developer-guide/delegation-provider-plugin)
+
 Register a video-generation backend
 
 `ctx.register_video_gen_provider(provider)` — see [Video Generation Provider Plugins](/docs/developer-guide/video-gen-provider-plugin)
@@ -261,6 +265,12 @@ Gateway channel adapters (`ctx.register_platform()`)
 `plugins/image_gen/<name>/`
 
 Image-generation backends (`ctx.register_image_gen_provider()`)
+
+`PluginManager` (kind: `backend`, one level deeper)
+
+`plugins/delegation/<name>/`
+
+Delegation strategies (`ctx.register_delegation_provider()`); `default` is today's routing
 
 `PluginManager` (kind: `backend`, one level deeper)
 
@@ -567,6 +577,12 @@ An **image-generation backend** (DALL·E, SDXL, …)
 Backend plugin — `ctx.register_image_gen_provider()`
 
 [Image Generation Provider Plugins](/docs/developer-guide/image-gen-provider-plugin)
+
+A **delegation strategy** (a profile or named model per subagent)
+
+Backend plugin — `ctx.register_delegation_provider()`, selected by `delegation.backend`
+
+[Delegation Provider Plugins](/docs/developer-guide/delegation-provider-plugin)
 
 A **video-generation backend** (Veo, Kling, Pixverse, Grok-Imagine, Runway, …)
 

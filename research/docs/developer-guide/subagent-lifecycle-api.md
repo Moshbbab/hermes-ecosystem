@@ -40,3 +40,5 @@ Requests are fail-closed: goal/context/metadata sizes are capped, unknown or par
 ## Routing
 
 Children follow the `delegation` config (`provider`, `model`, `base_url`, `api_key`, `api_mode`, `request_overrides`) exactly as `delegate_task` children do. The request's `model` overrides the configured model. Its optional `provider` names a configured provider for this launch, with precedence request > delegation config > parent; the selected provider supplies its own credential bundle. An unresolvable provider raises `SubagentLifecycleError` before launch. Core does not expose `provider` to the model: the plugin chooses it, for example from operator config.
+
+The lifecycle API does not consult `delegation.backend`: the plugin that launches a child already chooses its route. To change how `delegate_task` routes the model's subagents, write a [delegation provider plugin](/docs/developer-guide/delegation-provider-plugin).

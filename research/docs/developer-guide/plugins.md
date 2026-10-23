@@ -56,6 +56,10 @@ A **cloud browser backend** (Browserbase-style CDP session provider)
 
 [Browser Provider Plugins](/docs/developer-guide/browser-provider-plugin)
 
+A **delegation strategy** (pick a profile or a named model per subagent)
+
+[Delegation Provider Plugins](/docs/developer-guide/delegation-provider-plugin) — `ctx.register_delegation_provider()`
+
 A **computer-use driver** (desktop control behind the `computer_use` tool)
 
 [Computer-use backend plugins](#computer-use-backend-plugins) — `ctx.register_computer_use_provider()`
@@ -1821,6 +1825,47 @@ from agent.runtime_cwd import resolve_agent_cwd
 def _handle_todo(raw_args: str) -> str:
     todo = resolve_agent_cwd() / "TODO.md"  # the session's folder, not the gateway's
     return todo.read_text() if todo.exists() else "No TODO.md here."
+```
+
+### Ask the user to pick an option
+
+A sync slash-command handler can ask the user who ran it to pick one option with `ctx.ask_choice(question, choices)`. It blocks until the user answers and returns the picked choice's `value`, or `None`. Each surface shows it the way it shows the agent's `clarify` questions:
+
+Surface
+
+What the user sees
+
+Telegram, Discord, Slack
+
+A card with one button per choice (plus "Other")
+
+Other messaging platforms
+
+A numbered list; the user replies with the number or the label
+
+Classic CLI, Ink TUI, Desktop
+
+The clarify picker
+
+A choice is a string (the label and the value) or a dict `{"value", "label", "description"}`; the description is shown after the label. A typed value or label, in any case, also picks that choice. `ask_choice` returns `None` when the user cancels, types something that is not a choice, or lets the clarify timeout (`agent.clarify_timeout`) pass. It also returns `None` when nothing can ask: a hook, a cron job, an async handler (blocking would stall the event loop that delivers the answer). The handler then falls back to its text usage:
+
+```
+_MODES = [
+    {"value": "default", "label": "Default", "description": "delegation.model / parent model"},
+    {"value": "model_map", "label": "Model routes", "description": "per-task model map"},
+    {"value": "profile_routes", "label": "Profiles", "description": "delegate to other profiles"},
+]
+
+def register(ctx):
+    def delegation(raw_args: str) -> str:
+        mode = raw_args.strip() or ctx.ask_choice("Delegation mode", _MODES)
+        if mode not in {m["value"] for m in _MODES}:
+            return "Usage: /delegation default|model_map|profile_routes"
+        ctx.set_config("mode", mode)
+        return f"Delegation mode: {mode}"
+
+    ctx.register_command("delegation", delegation, description="Switch the delegation mode",
+                         args_hint="[mode]")
 ```
 
 ### Dispatch tools from slash commands
