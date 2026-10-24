@@ -100,7 +100,7 @@ Always prompt the user for approval on dangerous commands.
 
 **off**
 
-Disable all approval checks — equivalent to running with `--yolo`. All commands execute without prompts.
+Disable all approval checks — equivalent to running with `--yolo`. All commands execute without prompts, and write calls on `trust: untrusted` MCP servers run without the trust prompt. An MCP server's declared spend limit still asks (see [YOLO mode](#yolo-mode)).
 
 warning
 
@@ -134,6 +134,12 @@ When YOLO is active, Hermes shows two persistent visual reminders so it's hard t
 danger
 
 YOLO mode disables **all** dangerous command safety checks for the session — **except** the hardline blocklist (see below). Use only when you fully trust the commands being generated (e.g., well-tested automation scripts in disposable environments).
+
+YOLO and `approvals.mode: off` also skip the [`trust: untrusted`](/docs/reference/mcp-config-reference) MCP prompt: a write-capable tool on an untrusted server runs without asking, with each source's usual reach. `/yolo` covers only the chat it was typed in (another chat is still asked); `--yolo` and `HERMES_YOLO_MODE` cover the sessions of the Hermes process they were given to; `approvals.mode: off` covers every chat and cron job of that profile. They do **not** skip:
+
+-   **An MCP server's spend limit.** A call that would take the chat past a declared [`spend_limit`](/docs/user-guide/features/mcp#tool-costs-and-spend-limits) still asks, and where nobody can answer (a cron job, `hermes chat -q`) it is refused. The limit is a budget you set, not a safety prompt.
+-   **Questions from an MCP server** ([elicitation](/docs/user-guide/features/mcp#mcp-elicitation-support)), which ask you for input rather than for permission.
+-   **Payment-card fill prompts** from the [credential vault](/docs/user-guide/features/credential-vault#paying-and-filling-addresses), which hand a card to a page, and MCP event subscriptions, which install a standing trigger.
 
 For destructive session slash commands (`/clear`, `/new` / `/reset`, `/undo`, `/quit --delete` — `/exit --delete` is an alias), the CLI also prompts for confirmation before running them. See [Slash Commands — Confirmation prompts for destructive commands](/docs/reference/slash-commands#confirmation-prompts-for-destructive-commands).
 

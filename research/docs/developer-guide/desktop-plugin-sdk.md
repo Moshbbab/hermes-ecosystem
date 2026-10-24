@@ -16,6 +16,7 @@ The SDK follows the VS Code module model. A plugin author imports exactly one mo
 
 -   **`host.state.*`** — readonly views over the app's live state (nanostore atoms): active session, per-session turn-busy, cwd, gateway socket status, model, profile, viewport. `gateway` is the WebSocket, not turn-busy.
 -   **`host.*` actions** — curated safe verbs: toast, navigate, tail logs, restart the gateway, subscribe to the gateway event stream.
+-   **`ctx.preview`** — run JavaScript in the focused session's preview Browser page. Closed by default: the plugin declares `capabilities: ['preview.executeJavaScript']` and the user allows it per page origin ([Preview page scripts](#preview-page-scripts)).
 -   **`host.request`** — the gateway JSON-RPC door: sessions, config, skills, cron — everything the app itself calls.
 -   **`captureGatewayFileDownload()`** — capture a gateway file-save action immediately before starting a REST read, and retain it alongside the returned data. The action `(storedPath, suggestedName) => Promise<void>` keeps that read's connection/profile scope even if the user switches hosts before clicking. Invoke only on an explicit user download gesture, using the backend's persisted file path, never a guessed workspace path. Electron handles authenticated streaming, the native save dialog, and older-gateway fallback; plugins never receive credentials or open remote paths with `file://`. The host shows the same "Saved" / "Download failed" toasts as the Files panel and stays quiet on cancel; the promise settles when the save does and never rejects.
 -   **`ctx.rest` / `ctx.socket`** — your plugin's own backend namespace (`/api/plugins/<id>`) if you ship a `plugin_api.py`.
@@ -131,6 +132,9 @@ interface HermesPlugin {
    *  for opt-in plugins: they inventory in Capabilities ▸ Plugins, off until the
    *  user flips the switch. */
   defaultEnabled?: boolean
+  /** Sensitive doors this plugin uses, declared up front. Today:
+   *  'preview.executeJavaScript' (ctx.preview). An undeclared door refuses. */
+  capabilities?: readonly string[]
   /** Called once at load; wire contributions through `ctx`. */
   register: (ctx: PluginContext) => void
 }
@@ -164,6 +168,9 @@ interface PluginContext {
   os: PluginOs
   /** Lines in the core pet's speech bubble, attributed to this plugin (see "Pet bubble"). */
   pet: PluginPet
+  /** Script in the preview Browser page — declared capability + per-origin user consent
+   *  (see "Preview page scripts"). */
+  preview: PluginPreview
   /** Plugin-scoped JSON persistence (keys live under `hermes.plugin.<id>.`). */
   storage: PluginStorage
 }
@@ -866,10 +873,26 @@ ctx.register({
   area: TRANSCRIPT_DIRECTIVE_AREA,
   data: {
     name: 'task', // the model writes ::task{id="BB-12"}
-    render: ({ attrs, streaming }) => jsx(TaskCard, { taskId: attrs.id, streaming })
+    render: ({ attrs, sessionId, streaming }) => jsx(TaskCard, { taskId: attrs.id, sessionId, streaming })
   }
 })
 ```
+
+`render` receives `{ attrs, source, streaming, sessionId }`. `sessionId` names the chat whose transcript shows the card (its stored id, else its runtime id; `null` while that chat has no session yet). Pass it to the `host.composer` verbs so a card action lands in **that** chat, even when another chat open side by side holds the active composer:
+
+```
+function TaskCard({ taskId, sessionId }) {
+  const next = () => {
+    // Older hosts don't pass sessionId (undefined): fall back to the active
+    // composer, which is what `null` addresses.
+    const sent = host.composer.submit(sessionId ?? null, `Continue task ${taskId}`)
+    if (!sent) host.notify({ kind: 'warning', message: 'Open that chat to continue' })
+  }
+  return jsx('button', { onClick: next, children: 'Next' })
+}
+```
+
+Addressed verbs fail closed: when the card's chat has no visible composer, `submit` returns `false` and nothing is sent anywhere else.
 
 Rules the host enforces so the surface stays safe:
 
@@ -986,6 +1009,8 @@ ctx.os.notify({ title, body?, silent?, icon?, activate?, onActivate?, actions? }
 ctx.os.openExternal(url)                   // OS default handler (browser, mail, spotify:) → Promise<boolean>
 ctx.os.revealPath(path)                    // reveal in Finder / Explorer → Promise<boolean>
 ctx.os.writeClipboard(text)                // system clipboard → Promise<boolean>
+ctx.files.requestFolder()                  // the app's folder picker → { ok, folder: { id, name, path } | null }
+ctx.files.readText(folder, 'notes/a.md')   // folder = 'data' or a granted folder's id; path is relative
 ctx.pet.say(text, { id?, tone?, ttlMs? })   // line in the core pet's speech bubble → disposer
 ctx.pet.clear(id?)                         // drop one line (or all of yours)
 ctx.pet.visible                            // ReadableAtom<boolean> — is a pet on screen?
@@ -1126,6 +1151,39 @@ ctx.os.notify({
 `activate` is deeplink-compatible: `hermes://index-network/intent/1` and the hash path `/index-network/intent/1` resolve to the same in-app route (and the same `hermes://…` URL works as an OS deep link). Action buttons only render on signed macOS builds; elsewhere the body click still activates. Navigation only happens on user click — never from a background event alone.
 
 The other doors (`openExternal`, `revealPath`, `writeClipboard`) resolve `false` instead of throwing when the capability isn't available (older desktop shell, plain browser) — branch on the result rather than sniffing the bridge.
+
+### Files — `ctx.files`
+
+`ctx.files` is the one sanctioned way for a plugin to touch files on the computer running Desktop. A plugin reaches exactly two kinds of folder:
+
+-   **Its own data folder**, handle `'data'`: private to the plugin, always available, no prompt. Use it for caches, indexes and exports that are too big for `ctx.storage`.
+-   **Folders the user granted it**: `ctx.files.requestFolder()` opens the app's own folder picker (titled with your plugin's name; you cannot change its copy). The grant is remembered for your plugin across restarts, listed under your plugin in **Capabilities → Plugins → Folder access**, and the user can revoke it there at any time. Uninstalling the plugin drops its grants.
+
+Every call names a folder handle and a path **relative to that folder**. The app's main process checks each call: `..`, absolute paths, drive letters and symlinks that resolve outside the folder are refused, never normalized, and nothing inside Hermes' own data (the Hermes home with `config.yaml`, `.env`, auth and profiles; the app data folder with every plugin's data and the grants record) is reachable. A folder that holds or sits inside Hermes data (however it is spelled: a bind mount, a macOS firmlink, a WSL share or a `\\localhost\C$` share counts), a key folder such as `~/.ssh`, or a kernel filesystem such as `/proc` (wherever it is mounted) cannot be granted at all; the app tells the user why. Only plain files are read or written: a pipe, a device or a hard-linked file is refused, and a file swapped for a link between the app's check and its open is refused rather than followed.
+
+```
+// First run: ask once, remember the handle.
+let vault = (await ctx.files.folders())[0]
+if (!vault) {
+  const picked = await ctx.files.requestFolder()
+  if (!picked.ok || !picked.folder) return   // cancelled, refused, or an older app
+  vault = picked.folder
+}
+
+const listing = await ctx.files.list(vault.id, 'notes')        // { ok, entries: [{ name, path, isDirectory }], truncated }
+const note = await ctx.files.readText(vault.id, 'notes/a.md')  // { ok, text, size, mtimeMs }
+await ctx.files.writeText(vault.id, 'notes/b.md', '# B\n', { exclusive: true }) // refuses to replace a file
+await ctx.files.rename(vault.id, 'notes/b.md', 'c.md')         // same folder only
+await ctx.files.trash(vault.id, 'notes/c.md')                  // OS trash, recoverable
+await ctx.files.readDataUrl(vault.id, 'img/cover.png')         // { ok, url: 'data:image/png;base64,…' }
+await ctx.files.stat(vault.id, 'notes/a.md')                   // { ok, exists, isDirectory?, size?, mtimeMs? }
+await ctx.files.writeText('data', 'index.json', JSON.stringify(index))
+await ctx.files.release(vault.id)                              // give the folder back
+```
+
+No member throws. `dataFolder` is the string `'data'`; `folders()` resolves an array of `{ id, name, path }` (empty when the app has no door); `release(id)` resolves `true` when it gave a folder back and `false` otherwise. Every other member resolves `{ ok: true, … }` or `{ ok: false, error, message }`, where `error` is one of `invalid-path`, `outside-folder`, `protected`, `not-granted` (revoked, or another plugin's folder), `folder-missing`, `folder-changed` (the granted folder was moved or replaced: ask again), `not-found`, `exists`, `is-directory`, `not-a-directory`, `not-a-file`, `binary`, `too-large`, `sensitive-file` (`.env`, SSH keys and similar are refused even inside a granted folder, under any spelling the OS treats as the same name, and cannot be renamed or trashed), `io-error`, or `unavailable` (an app build without the door: feature-detect with `ctx.files?.…`). Limits: text reads and writes up to 4 MiB, data URLs up to 16 MiB, listings up to 10,000 entries. Reads are refused past the limit, never truncated. A write needs its parent folder to exist.
+
+Paths are on the machine running Desktop, not on a remote backend. To work with the backend's files, go through your plugin's `ctx.rest` routes.
 
 ### Pet bubble — `ctx.pet`
 
@@ -1272,6 +1330,44 @@ Open Settings ▸ Keyboard Shortcuts
 Anything else is refused: `{ ok: false, reason: 'denied' }` for a real app action that is not on the list (archive, pin, profile / model / reasoning switches, terminals, new window, open folder, HUD, close tab, …), `reason: 'unknown'` for an id that does not exist. Either way nothing runs and a `[plugin:<id>] runAction: …` warning is logged. `reason: 'unavailable'` means the app shell that owns the handlers is not mounted yet (very early startup); retry from a user action. Destructive and privileged operations (deleting sessions, signing out, approvals, model/provider changes, updates, quitting) are not app actions a plugin can run.
 
 Feature-detect on older hosts: `ctx.runAction?.('view.showBrowser')`.
+
+### Preview page scripts — `ctx.preview`
+
+`ctx.preview.executeJavaScript(code)` runs `code` in the focused session's preview Browser tab (the same guest runner `drive_preview` and the preview tour use) and resolves the script's completion value. That page can be one the user is signed in to, so script there can read their session. The door is closed by default and the **app** arbitrates every call:
+
+1.  **Declare it.** The plugin's default export lists the capability:
+    
+    ```
+    export default {
+      id: 'page-tools',
+      name: 'Page Tools',
+      capabilities: ['preview.executeJavaScript'],
+      register(ctx) {
+        ctx.register({ area: PALETTE_AREA, id: 'title', data: {
+          id: 'pageTools.title', label: 'Copy page title',
+          run: async () => ctx.os.writeClipboard(String(await ctx.preview.executeJavaScript('document.title')))
+        } })
+      }
+    }
+    ```
+    
+    A plugin that did not declare it is refused on every call; nothing is asked and nothing runs.
+    
+2.  **The user allows it per origin.** The first call on a page origin raises an app-owned dialog naming the plugin and the origin (`https://mail.example.com`). _Allow on this site_ persists a grant for that plugin and origin; _Don't allow_ (or Esc) refuses for the rest of the app run, then asks again next launch. Grants are listed on the plugin's row in **Capabilities → Plugins**, each with its own revoke; a revoked origin asks again.
+    
+3.  **Web origins only.** `http(s)://host[:port]`; `about:blank`, `data:` and `file:` pages are refused because a grant could not be scoped to one site.
+    
+4.  **The origin is re-checked in the page.** The script runs behind an in-page `window.location.origin` guard, so a navigation between the consent check and the run refuses instead of landing on another site.
+    
+
+```
+ctx.preview.isAvailable()             // declared AND a live Browser page in this window (not consent)
+await ctx.preview.executeJavaScript(code)
+// rejects: undeclared · 'No preview page is open.' · non-web origin ·
+//          '<Plugin> is not allowed to run scripts on <origin>.' · page changed origin
+```
+
+Reach the page only through this door. Querying or creating a `<webview>` (`document.querySelector('webview')`) bypasses the declaration and the consent, and fails the catalog's `desktop surface` lint (`preview guest reach`). A popped-out Browser window is not bridged.
 
 ### Desktop appearance settings — `host.settings`
 
@@ -1649,6 +1745,8 @@ const tab = ctx.storage.get('lastTab', 'summary')
 ctx.storage.remove('lastTab')
 ```
 
+For files (a vault, a notes folder, exports) use [`ctx.files`](#plugin-files): your own data folder plus folders the user grants you.
+
 ## Bundled plugins
 
 A plugin can ship in-tree at `apps/desktop/src/plugins/<id>/plugin.tsx` (default export a `HermesPlugin`). It's discovered by `discoverBundledPlugins()` at boot — no import, no registry edit — and shares the exact inventory + live enable/disable contract as a disk plugin. The two differences:
@@ -1662,7 +1760,7 @@ No desktop plugins ship in the core tree today; the shipped app stays uncluttere
 
 A loaded plugin is evaluated as ESM in the renderer realm with **full app authority** — the React singleton, the whole SDK (`host.request` gateway RPC, `ctx.rest`, storage, `navigate`) and the `window.hermesDesktop` native bridge (files, git, terminal, installs). The isolation the loader provides is **error isolation only**: a plugin can't crash the app (contributions are error-bounded, listeners isolated, a throwing `register()` is rolled back and reported on the plugin's row), but it can do anything the app can. Plugin storage namespaces are a convention, not a wall.
 
-This is acceptable for **local** sources — a disk file can already run code on your machine — which is why the disk door only loads local files you (or your agent) wrote. For [catalog](/docs/user-guide/features/plugin-catalog#trust-model) installs the trust comes from admission — a human reviewed the exact pinned commit — backed by two tripwires: the `desktop surface` lint at admission and the loader's import allowlist (`@hermes/plugin-sdk` and `react*` only; a static or dynamic `import` of anything else, including `https:` URLs, fails the load). Neither is a sandbox. A future remote-source door will need a real boundary (iframe/worker + CSP + capability gating) before it can land; do not treat this pipeline as a trust boundary.
+This is acceptable for **local** sources — a disk file can already run code on your machine — which is why the disk door only loads local files you (or your agent) wrote. For [catalog](/docs/user-guide/features/plugin-catalog#trust-model) installs the trust comes from admission — a human reviewed the exact pinned commit — backed by two tripwires: the `desktop surface` lint at admission and the loader's import allowlist (`@hermes/plugin-sdk` and `react*` only; a static or dynamic `import` of anything else, including `https:` URLs, fails the load). Neither is a sandbox. Doors that touch user data outside the app are gated on top of that: `ctx.preview.executeJavaScript` needs a declared capability and the user's per-origin consent ([Preview page scripts](#preview-page-scripts)). File access follows the same rule: a catalog plugin should read and write through [`ctx.files`](#plugin-files), not the raw `window.hermesDesktop` file bridge. `ctx.files` is enforced in the main process, so a plugin that uses it (or untrusted text it handles, such as a note name from the model) cannot leave the folders the user granted; the raw bridge has no such limit, which is why catalog review asks for `ctx.files`. A future remote-source door will need a real boundary (iframe/worker + CSP + capability gating) before it can land; do not treat this pipeline as a trust boundary.
 
 ## Pitfalls
 
@@ -1692,7 +1790,7 @@ Host
 
 Plugin contract
 
-`HermesPlugin`, `PluginContext`, `PluginContribution`, `PluginStorage`, `PluginOs`, `PluginPet`, `PetSayOptions`, `PetMessageTone`, `PluginAppActionId`, `PluginAppActionInfo`, `PluginRunActionResult`, `PLUGIN_APP_ACTIONS`, `PluginRestOptions`, `PluginNativeNotificationInput`, `PluginNotificationAction`, `HermesOpenTarget`, `Contribution`
+`HermesPlugin`, `PluginContext`, `PluginContribution`, `PluginStorage`, `PluginFiles`, `PluginFolder`, `PluginFileEntry`, `PluginFilesResult`, `PluginOs`, `PluginPet`, `PetSayOptions`, `PetMessageTone`, `PluginAppActionId`, `PluginAppActionInfo`, `PluginRunActionResult`, `PLUGIN_APP_ACTIONS`, `PluginRestOptions`, `PluginNativeNotificationInput`, `PluginNotificationAction`, `HermesOpenTarget`, `Contribution`
 
 Area constants
 
