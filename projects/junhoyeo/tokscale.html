@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/junhoyeo/tokscale#software",
   "name": "tokscale",
-  "description": "Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists supported clients including Claude Code, OpenClaw, Codex CLI, Hermes Agent, and Gemini CLI.",
+  "description": "Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists support for clients including Claude Code, OpenClaw, Codex, Hermes Agent, and Gemini CLI.",
   "url": "https://hermesatlas.com/projects/junhoyeo/tokscale",
   "codeRepository": "https://github.com/junhoyeo/tokscale",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "junhoyeo",
     "url": "https://github.com/junhoyeo"
   },
-  "dateModified": "2026-10-23T18:55:43.000Z",
+  "dateModified": "2026-10-24T18:28:17.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Rust</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-23</span>
+    <span><span class="meta-label">updated</span>2026-10-24</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists supported clients including Claude Code, OpenClaw, Codex CLI, Hermes Agent, and Gemini CLI.</p>
+    <p class="summary-text">Tokscale is a CLI tool and visualization dashboard for monitoring and analyzing token consumption and costs across multiple AI coding agents. The README lists support for clients including Claude Code, OpenClaw, Codex, Hermes Agent, and Gemini CLI.</p>
     <ul class="summary-highlights">
-      <li>Tracks token usage across multiple AI coding agents</li>
-      <li>Includes a visualization dashboard for usage analysis</li>
-      <li>Supports clients including Claude Code, Codex, and Gemini</li>
+      <li>Tracks token usage across multiple AI coding agents.</li>
+      <li>Includes a usage visualization dashboard.</li>
+      <li>Supports Claude Code, OpenClaw, Codex, Hermes Agent, and Gemini CLI.</li>
     </ul>
   </div>
 </section>
@@ -709,6 +709,7 @@ bun run build:core
 <p><strong>Note</strong>: Native binaries are pre-built and included when you install via <code>bunx tokscale@latest</code>. Building from source is only needed for local development.</p>
 </blockquote>
 <h3>Usage</h3>
+<p>Use <code>tokscale --offline</code> for local reports without network requests. Prepare portable pricing caches with <code>tokscale pricing refresh --no-spinner</code> while connected. See <a href="https://github.com/junhoyeo/tokscale/blob/main/docs/offline.md">offline reporting</a> for supported commands and cache behavior.</p>
 <h4>Basic Commands</h4>
 <pre><code class="language-bash"># Launch interactive TUI (default)
 tokscale
@@ -1159,8 +1160,7 @@ tokscale autosubmit disable
 <p>Scheduled runs are non-interactive: they never prompt for GitHub auth or star confirmation. Run <code>tokscale login --token tt_xxx</code> once, or set <code>TOKSCALE_API_TOKEN</code> in the scheduler environment. Tokscale records scheduler state in <code>settings.json</code>, writes logs under <code>~/.config/tokscale/autosubmit/</code>, and uses a lock file so overlapping scheduler ticks do not submit twice.</p>
 <h4>Cursor IDE Commands</h4>
 <p>Cursor IDE support uses Cursor's usage-events API. Tokscale caches usage at <code>~/.config/tokscale/cursor-cache/usage.json</code> for the active account and <code>usage.account-&lt;sha256-of-exact-account-id&gt;.json</code> for each other account, with verified ownership metadata. Unmarked legacy JSON/CSV caches are preserved in <code>cursor-cache/archive/</code> before sync or an account change; see the migration details below. Tokscale does not parse local Cursor Agent CLI state under <code>~/.cursor</code>, and it does not treat the desktop SQLite DB as a usage ledger.</p>
-<p>When the Cursor desktop app is installed and signed in, reports, submit, and wrapped can import <code>cursorAuth/accessToken</code> from <code>state.vscdb</code> when no Cursor login is saved yet. Wrapped only does this when Cursor is included in the requested clients. Reports skip syncing while the usage cache is fresh. Whenever a sync runs, including explicit <code>tokscale cursor sync</code>, it refreshes the desktop token when available and can switch the active account to that desktop login. A saved login remains usable when no desktop session is available. Usage rows still come only from Cursor's usage-events API, not from local <code>~/.cursor</code> transcripts.</p>
-<p>Setup (desktop auto-login):</p>
+<p>When the Cursor desktop app is installed and signed in, reports, submit, and wrapped can import <code>cursorAuth/accessToken</code> from <code>state.vscdb</code> when no Cursor login is saved yet. Wrapped only does this when Cursor is included in the requested clients. Reports skip syncing while the usage cache is fresh. Whenever a sync runs, including explicit <code>tokscale cursor sync</code>, it refreshes the desktop token when available and </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/junhoyeo/tokscale#readme">Continue reading on GitHub</a></em></p>
 
