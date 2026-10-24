@@ -678,7 +678,7 @@ Re-run a prompt on a recurring interval in this session. Subcommands: `status`, 
 
 `/refine [focus]`
 
-Run the memory/skill self-improvement review now, optionally with focus instructions. On Slack use `/hermes refine …`.
+Run the memory/skill self-improvement review now, optionally with focus instructions. Works on a chat left idle (no message needed first): it reviews the stored conversation and posts the result in the same chat. On Slack use `/hermes refine …`.
 
 `/review [instructions]`
 
