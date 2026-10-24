@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>f-o-x11/deed-page-skill — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with a curl request, without requiring an account. It also…">
+<meta name="description" content="deed.page MCP server and agent skill let agents publish a file or folder to a permanent deed.page URL. The skill uses one curl request and is available for…">
 <link rel="canonical" href="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta property="og:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with a curl request, without requiring an account. It also…">
+<meta property="og:description" content="deed.page MCP server and agent skill let agents publish a file or folder to a permanent deed.page URL. The skill uses one curl request and is available for…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta name="twitter:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with a curl request, without requiring an account. It also…">
+<meta name="twitter:description" content="deed.page MCP server and agent skill let agents publish a file or folder to a permanent deed.page URL. The skill uses one curl request and is available for…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deed-page-skill&amp;subtitle=Agent+skill%3A+publish+files+to+a+permanent+deed.page+URL+with+one+curl+request.+No+account.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill#software",
   "name": "deed-page-skill",
-  "description": "This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with a curl request, without requiring an account. It also includes plugin manifests and instructions for connecting agents to deed.page’s hosted MCP server, which supports publishing and managing sites.",
+  "description": "deed.page MCP server and agent skill let agents publish a file or folder to a permanent deed.page URL. The skill uses one curl request and is available for agents that read SKILL.md files; the repo also includes plugin manifests for several agents.",
   "url": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill",
   "codeRepository": "https://github.com/f-o-x11/deed-page-skill",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "f-o-x11",
     "url": "https://github.com/f-o-x11"
   },
-  "dateModified": "2026-10-23T08:39:43.000Z",
+  "dateModified": "2026-10-24T13:58:20.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -80,7 +80,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">266·repos</span>
+    <span id="meta-count">271·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -123,7 +123,7 @@
     
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-23</span>
+    <span><span class="meta-label">updated</span>2026-10-24</span>
   </div>
 
   <div class="actions">
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with a curl request, without requiring an account. It also includes plugin manifests and instructions for connecting agents to deed.page’s hosted MCP server, which supports publishing and managing sites.</p>
+    <p class="summary-text">deed.page MCP server and agent skill let agents publish a file or folder to a permanent deed.page URL. The skill uses one curl request and is available for agents that read SKILL.md files; the repo also includes plugin manifests for several agents.</p>
     <ul class="summary-highlights">
-      <li>Publishes files or folders to permanent deed.page URLs.</li>
-      <li>Includes install instructions and manifests for multiple agents.</li>
-      <li>Hosted MCP server supports updating, versioning, and deleting sites.</li>
+      <li>Publishes static files to a permanent URL</li>
+      <li>Includes a hosted remote MCP server</li>
+      <li>Installable with npx skills add</li>
     </ul>
   </div>
 </section>
@@ -413,7 +413,7 @@ copilot plugin install deed-page@deed-page
 <h3>Network endpoints and credentials</h3>
 <ul>
 <li>The skill calls only <code>https://deed.page/v1/sites</code> with <code>curl</code>. The MCP server is <code>https://deed.page/mcp</code>. Published sites live at <code>https://&lt;slug&gt;.deed.page/</code>.</li>
-<li>No account or API key is needed. The first publish returns a site token once; the skill keeps it in <code>DEEDPAGE_TOKEN</code> for the session and sends it only to <code>https://deed.page</code> to update or delete that site.</li>
+<li>No account or API key is needed. The first publish returns a site token once; the skill saves it to <code>~/.config/deed-page/token</code> (mode 600), loads it into <code>DEEDPAGE_TOKEN</code> before later publishes so every site stays under one owner, and sends it only to <code>https://deed.page</code>.</li>
 <li>No install scripts, hooks, or executable code. See <a href="https://github.com/f-o-x11/deed-page-skill/blob/main/SECURITY.md">SECURITY.md</a>.</li>
 </ul>
 <h3>Privacy and support</h3>
@@ -450,7 +450,7 @@ copilot plugin install deed-page@deed-page
         <div class="name"><span class="org">wondelai /</span> skills</div>
       </a>
       <a class="related-row" href="/projects/DougTrajano/pydantic-ai-skills">
-        <div class="stars">★ 380</div>
+        <div class="stars">★ 381</div>
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
