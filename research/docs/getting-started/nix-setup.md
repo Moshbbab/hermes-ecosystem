@@ -438,11 +438,11 @@ Add MCP tool servers
 
 See [MCP Servers](#mcp-servers)
 
-Enable Discord/Telegram/Slack
+Add an optional extra the package does not ship
 
 `extraDependencyGroups`
 
-`[ "messaging" ]`
+`[ "google-meet" ]`
 
 Mount host directories into container
 
@@ -1048,12 +1048,14 @@ The package's `site-packages` is added to PYTHONPATH in the hermes wrapper. `imp
 
 ### Optional Dependency Groups (`extraDependencyGroups`)
 
-For optional extras declared in hermes-agent's `pyproject.toml`, use `extraDependencyGroups` to include them in the sealed venv at build time. This is required for any extra not in the default `[all]` set — on Nix, runtime installation into the read-only store is not possible.
+For optional extras declared in hermes-agent's `pyproject.toml`, use `extraDependencyGroups` to include them in the sealed venv at build time. This is required for any extra the selected package does not already ship — on Nix, runtime installation into the read-only store is not possible.
 
 ```
-# Enable Discord, Telegram, Slack
-services.hermes-agent.extraDependencyGroups = [ "messaging" ];
+# Add Google Meet support on top of what the package ships
+services.hermes-agent.extraDependencyGroups = [ "google-meet" ];
 ```
+
+`extraDependencyGroups` and `extraPythonPackages` **add to** the groups the selected package ships; they never replace them. The `default` package already ships `messaging`, `voice`, `exa` and the other groups in the table below, so naming one of those changes nothing. The same holds for `pkgs.hermes-agent.override { extraDependencyGroups = [ ... ]; }`. For a smaller build, start from a smaller package: `package = inputs.hermes-agent.packages.${system}.minimal;` (or `#messaging`), or `.override { defaultDependencyGroups = [ ]; }` to drop the shipped groups and list only the ones you want.
 
 These groups join the core dependency resolution at build time. Conflicting requirements can still fail that resolution. The table lists common groups; `pyproject.toml` is authoritative for the complete list and platform markers.
 
@@ -1170,7 +1172,9 @@ External flakes can override the package directly:
     nixpkgs.overlays = [ hermes-agent.overlays.default ];
     # Then:
     #   pkgs.hermes-agent.override { extraPythonPackages = [...]; }
-    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "voice" ]; }
+    #   pkgs.hermes-agent.override { extraDependencyGroups = [ "google-meet" ]; }
+    # Both add to the groups the default package ships. To drop those:
+    #   pkgs.hermes-agent.override { defaultDependencyGroups = [ ]; }
   };
 }
 ```
@@ -1589,7 +1593,7 @@ Python packages added to PYTHONPATH for entry-point plugin discovery. Use the se
 
 `[]`
 
-pyproject.toml optional extras to include in the sealed venv (e.g. `["voice"]`). Resolved by uv — no collisions
+pyproject.toml optional extras added to the groups `package` already ships (e.g. `["google-meet"]`). Resolved by uv — no collisions
 
 `restart`
 

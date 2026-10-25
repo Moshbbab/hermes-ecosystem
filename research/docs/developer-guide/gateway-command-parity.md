@@ -344,15 +344,13 @@ slash.exec
 
 refused
 
-messaging-only: unknown command
+HermesCLI.\_handle\_discard\_command
 
 slash.exec: refused
 
 slash.exec: refused
 
 prompt.resolve\_unknown
-
-messaging-only
 
 `/egress`
 

@@ -785,7 +785,7 @@ Legacy key (`plugins.entries.<id>.…`)
 
 `allow_platform_actions`
 
-A gate is open when _either_ the capability is granted _or_ the legacy key is set — existing configs keep working unchanged.
+A gate is open when _either_ the capability is granted _or_ the legacy key is set — existing configs keep working unchanged. `llm.side_question` has no legacy key: it is open only when declared and granted through the consent flow.
 
 Not a sandbox
 
@@ -935,7 +935,7 @@ plugins:
     launcher: []         # optional argv prefix for the host, e.g. a sandbox runner
 ```
 
-Plugins do not change. They receive the same `ctx` and register tools, hooks, slash commands, skills and provider objects (image/video generation, web search, browser, TTS/STT, memory, context engines, model-provider profiles) exactly as before; Hermes registers matching entries on its side that call into the host. Dashboard plugin APIs are served by the host too. Bundled plugins keep running in-process. In-process dashboard API handlers share the gateway's event loop, so they must not block it (see [Don't block the event loop](/docs/user-guide/features/extending-the-dashboard#dont-block-the-event-loop)).
+Plugins do not change. They receive the same `ctx` and register tools, hooks, slash commands, skills and provider objects (image/video generation, web search, browser, TTS/STT, memory, context engines, secret sources, `@` context references, model-provider profiles) exactly as before; Hermes registers matching entries on its side that call into the host, and values cross as the types the provider base class declares (a secret source's `fetch()` gets a `Path` and returns a `FetchResult`). Dashboard plugin APIs are served by the host too. Bundled plugins keep running in-process. In-process dashboard API handlers share the gateway's event loop, so they must not block it (see [Don't block the event loop](/docs/user-guide/features/extending-the-dashboard#dont-block-the-event-loop)).
 
 On a gateway serving several profiles, every profile other than the one the gateway started with runs its own dashboard plugins (installed under its own `plugins/` folder or the root `~/.hermes/plugins/`, the profile's own copy winning a same-name conflict, and enabled in its own config) in its own plugin host, whatever its `plugins.isolation` says: another profile's plugin code never runs inside the gateway. The host does not carry websockets yet, so such a plugin's websocket routes are refused (HTTP 501) for that profile; its HTTP routes work. A slow hosted handler holds only its own profile's plugin requests, and a request the host has not answered after 60 s gets HTTP 504. Such a host starts on the profile's first dashboard plugin request and runs until the gateway exits: one extra Python process for each profile that has used a dashboard plugin.
 
