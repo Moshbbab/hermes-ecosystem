@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can…">
+<meta name="description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and agents. It can surface relevant past sessions at the…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can…">
+<meta property="og:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and agents. It can surface relevant past sessions at the…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can…">
+<meta name="twitter:description" content="deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and agents. It can surface relevant past sessions at the…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+40+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can surface relevant history during agent sessions, and supports resuming or continuing sessions in another agent.",
+  "description": "deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and agents. It can surface relevant past sessions at the start of work, resume or hand off sessions, and run locally without a model or server.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-25T11:49:10.000Z",
+  "dateModified": "2026-10-25T15:08:41.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk so they can be searched and recalled across agents. It provides a terminal search interface, can surface relevant history during agent sessions, and supports resuming or continuing sessions in another agent.</p>
+    <p class="summary-text">deja-vu indexes coding-agent session histories stored on disk so they can be searched across projects and agents. It can surface relevant past sessions at the start of work, resume or hand off sessions, and run locally without a model or server.</p>
     <ul class="summary-highlights">
-      <li>Indexes and searches history across 43 agents.</li>
-      <li>Offers terminal search, session resume, and cross-agent handoff.</li>
-      <li>Runs locally without a model or server.</li>
+      <li>Search session histories across supported coding agents.</li>
+      <li>Recall past decisions and work across agents.</li>
+      <li>Sync indexed histories between machines over SSH.</li>
     </ul>
   </div>
 </section>
@@ -263,9 +263,10 @@ solved in that project when the session opens. To look for yourself, run <code>d
 or <code>npx @vshulcz/deja-vu "query"</code> to try it without installing anything. Desktop apps that
 take MCP servers as bundles can open the <code>.mcpb</code> from the
 <a href="https://github.com/vshulcz/deja-vu/releases/latest">latest release</a>; it carries the binary.</p>
-<p>Claude Code, Cursor, Qwen and OpenClaw can take the same plugin bundle from
+<p>Claude Code, Qwen and OpenClaw can take the same plugin bundle from
 their own marketplaces instead (Codex has a bundle of its own, in the table under
-<a href="#harnesses-with-a-package-of-their-own">Harnesses with a package of their own</a>).
+<a href="#harnesses-with-a-package-of-their-own">Harnesses with a package of their own</a>,
+and Cursor has one in <a href="cursor-plugin/"><code>cursor-plugin/</code></a>).
 Copilot CLI installs it too but takes only the skill, so use <code>deja install copilot-auto</code> there:</p>
 <pre><code class="language-sh">claude plugin marketplace add vshulcz/deja-vu &amp;&amp; claude plugin install deja-vu@deja-vu
 </code></pre>
@@ -452,7 +453,9 @@ as usual. <code>deja search &lt;query&gt;</code> skips the suggestion.</p>
 <p>The server exposes one tool, <code>deja</code>, with a <code>mode</code>; <code>deja install</code> wires it in. One tool
 costs 477 tokens of definitions a turn, against 8,283 for the largest of the seven servers
 measured in <a href="https://vshulcz.github.io/deja-vu/guide/day-zero.html">day zero</a>. The six
-older tool names (<code>recall</code>, <code>recall_context</code>, <code>blame</code>, <code>fix</code>, <code>how</code>, <code>remember</code>) still answer.</p>
+older tool names (<code>recall</code>, <code>recall_context</code>, <code>blame</code>, <code>fix</code>, <code>how</code>, <code>remember</code>) still answer.
+<code>deja mcp --context-search</code> is a separate server with a single <code>context_search</code> tool, for
+Qwen Code's External Context MCP Profile v1 (<a href="https://github.com/vshulcz/deja-vu/blob/main/docs/registry/qwen.md">Qwen page</a>).</p>
 <details>
 <summary>Arguments and return shapes</summary>
 
