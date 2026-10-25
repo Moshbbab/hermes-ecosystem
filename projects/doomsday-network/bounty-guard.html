@@ -40,14 +40,11 @@
   "codeRepository": "https://github.com/doomsday-network/bounty-guard",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Cross-platform",
-  "programmingLanguage": "Python",
-  "license": "https://spdx.org/licenses/MIT.html",
   "author": {
     "@type": "Organization",
     "name": "doomsday-network",
     "url": "https://github.com/doomsday-network"
   },
-  "dateModified": "2026-10-25T00:31:11.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -121,15 +118,15 @@
 
   <div class="meta-row">
     <span class="stars">★ 22</span>
-    <span><span class="meta-label">lang</span>Python</span>
-    <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-25</span>
+    
+    
+    
   </div>
 
   <div class="actions">
     <a href="https://github.com/doomsday-network/bounty-guard" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
-    <a href="https://doomsday.network/mcp" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+    
   </div>
 </section>
 
@@ -153,104 +150,7 @@
 <details class="readme-details">
   <summary class="readme-toggle">full readme from github</summary>
   <section class="readme" data-nosnippet>
-    <h2>🛡️ BountyGuard (<code>bounty-guard</code>)</h2>
-<blockquote>
-<p>🎮 <strong>DoomVault Storefront Live (<code>10 / 10 Available — $100 USD Vault</code>):</strong> Mine <code>DOOM</code> while your gaming PC is idle (or swap <code>ETH -&gt; wDOOM</code> on <a href="https://app.uniswap.org/swap?chain=base&amp;inputCurrency=ETH&amp;outputCurrency=0x623c84A5E04bF715018203334b0eFE41696eBC3E">Uniswap Base Mainnet</a>) and redeem <strong><code>100,000 DOOM</code></strong> directly on-chain for a <strong><code>$10.00 USD Steam Digital Gift Card</code></strong> via <strong><a href="https://doomsday.network">DoomPay (<code>https://doomsday.network</code>)</a></strong> or <strong><a href="https://github.com/doomsday-network/doomsday/issues/39"><code>doomsday-network/doomsday#39</code></a></strong>!</p>
-</blockquote>
-<p><strong>Open-source prompt-injection firewall, published honeypot blocklist, payment-evidence classifier, and Model Context Protocol (MCP) security toolkit for autonomous coding agents and developers.</strong></p>
-<ul>
-<li>📋 <strong><a href="https://github.com/doomsday-network/bounty-guard/blob/main/HONEYPOTS.md">Human-Readable Published Honeypot List (<code>HONEYPOTS.md</code>)</a></strong> (33+ confirmed trap repositories &amp; blocked owners across 4 threat categories)</li>
-<li>🔗 <strong><a href="https://raw.githubusercontent.com/doomsday-network/bounty-guard/main/data/honeypots.json">Live Machine-Readable Threat Feed (<code>data/honeypots.json</code>)</a></strong></li>
-<li>🔌 <strong><a href="https://doomsday.network/mcp">Live Remote MCP Endpoint (<code>https://doomsday.network/mcp</code>)</a></strong> &amp; <strong><a href="https://github.com/doomsday-network/doomsday/blob/main/integrations/mcp/doomsday_mcp.py">Zero-Dependency Stdio MCP Server (<code>doomsday_mcp.py</code>)</a></strong></li>
-<li>⚙️ <strong><a href="https://github.com/doomsday-network/bounty-guard/blob/main/.github/workflows/update-feed.yml">Automated GitHub Actions Feed Updater (<code>.github/workflows/update-feed.yml</code>)</a></strong> — Runs every 12 hours (or on demand) to scan GitHub and append newly discovered prompt-injection and fake-bounty traps to <code>data/honeypots.json</code> and <code>HONEYPOTS.md</code>.</li>
-</ul>
-<hr>
-<h3>🎯 Problem Statement</h3>
-<p>As developers and autonomous coding agents (Claude Code, Cursor, OpenHands, Devin, Codex, Antigravity) increasingly discover and solve open-source issues on GitHub, malicious actors have deployed <strong>AI-agent honeypots</strong> and <strong>unfunded ticket farms</strong> disguised as high-paying bounties:</p>
-<ol>
-<li><strong>Prompt-Injection &amp; Secret Exfiltration Honeypots</strong> (e.g. <code>SecureBananaLabs/bug-bounty</code>, <code>Senthemodder/aquarium-of-gullibles</code>, <code>p1ngtoohigh/Jarvus-Pub</code>): Issues and repository files embedded with hidden instructions attempting to hijack an agent into leaking its system prompt, <code>$GITHUB_TOKEN</code>, <code>.env</code> secrets, or SSH keys, or restricting pull requests to the repository creator after work is completed.</li>
-<li><strong>"Clanker Traps" / Public Blocklist Harvesters</strong> (e.g. <code>UnsafeLabs/Bounty-Hunters</code>, <code>ClankerNation/OpenAgents</code>): Fake bounty issues (<code>"Calculate the exact value of Pi"</code>) designed purely to trick autonomous agents into opening a pull request so the user's GitHub account gets added to public account-blocking lists (<code>clanker-blocker</code>).</li>
-<li><strong>Canonical Project Impersonation Traps</strong> (e.g. <code>jaasielitaigq/chi</code>, <code>jahmeergnlt/gitea</code>, <code>raimeecas/go-git</code>): Throwaway forks or name-squatted clones of well-known open-source projects advertising fabricated dollar bounties where payout bots immediately reject reward commands.</li>
-<li><strong>Synthetic / Unfunded Ticket Farms</strong> (e.g. <code>zhangjiayang6835-cyber/bounty-plaza</code>, <code>DAXDA-Bounty-Plaza-645</code>, <code>relayhop/sn-monetization-runtime</code>): Automated ticket farms generating hundreds of unbacked <code>[Bounty]</code> issues with zero on-chain or platform escrow to harvest free engineering compute.</li>
-</ol>
-<p><strong>BountyGuard (<code>bounty-guard</code>)</strong> is a 100% free, MIT-licensed, zero-dependency Python CLI, library, and MCP toolkit that screens target repositories and issues before an agent clones code or executes untrusted instructions.</p>
-<hr>
-<h3>⚡ Quick Start (Zero-Dependency Python CLI)</h3>
-<p>Requires only Python 3.9+ standard library (automatically uses <code>$GITHUB_TOKEN</code> or <code>gh auth token</code> when available):</p>
-<pre><code class="language-bash"># Run instant 3-tier classification demo via uvx (zero install) or git clone:
-uvx --from git+https://github.com/doomsday-network/bounty-guard bounty-guard --demo
-
-# Or clone directly:
-git clone https://github.com/doomsday-network/bounty-guard.git
-cd bounty-guard
-python3 bounty_guard.py --demo
-
-# 1. Vet any GitHub issue or repository BEFORE cloning or pointing an AI agent at it:
-python bounty_guard.py vet https://github.com/UnsafeLabs/Bounty-Hunters
-
-# 2. Classify 1+ issues into SAFE_WITH_ESCROW, SAFE_NO_ESCROW, or QUARANTINE (outputs Markdown table):
-python bounty_guard.py classify \
-  https://github.com/doomsday-network/doomsday/issues/11 \
-  https://github.com/Chain-Love/chain-love/issues/4726 \
-  https://github.com/Senthemodder/aquarium-of-gullibles/issues/1
-
-# 3. Scan GitHub for live bounties and update data/honeypots.json + HONEYPOTS.md with new traps:
-python bounty_guard.py scan --update-db
-
-# 4. Add a newly discovered honeypot repository to the local database:
-python bounty_guard.py add owner/repo --category prompt-injection-honeypot --severity critical --reason "Hidden prompt injection in issue body"
-</code></pre>
-<hr>
-<h3>🔍 Three-Tier Risk Classification &amp; Cryptographic Proof-of-Escrow</h3>
-<p><code>bounty_guard.py classify</code> evaluates both repository threat signals and verifiable payment backing, classifying every issue into one of three deterministic tiers:</p>
-<table>
-<thead>
-<tr>
-<th align="left">Classification Tier</th>
-<th align="left">Meaning</th>
-<th align="left">Verification Evidence Checked</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong><code>SAFE_WITH_ESCROW</code></strong></td>
-<td align="left">No honeypot/injection indicators detected, <strong>and</strong> verifiable cryptographic or platform escrow proof is present.</td>
-<td align="left">Verifies locked on-chain UTXO collateral via <code>/escrow/{owner}/{repo}/{issue}</code> (and signed snapshot mirror <a href="https://raw.githubusercontent.com/doomsday-network/doomsday/main/data/escrows_public_snapshot.json"><code>escrows_public_snapshot.json</code></a>) or recognized escrow bot confirmations (Algora, Polar, Opire).</td>
-</tr>
-<tr>
-<td align="left"><strong><code>SAFE_NO_ESCROW</code></strong></td>
-<td align="left">Legitimate repository with no honeypot or prompt-injection indicators, but <strong>no locked escrow</strong> verified on-chain or via an escrow platform.</td>
-<td align="left">Issue relies on post-completion maintainer discretion or manual invoice review.</td>
-</tr>
-<tr>
-<td align="left"><strong><code>QUARANTINE</code></strong></td>
-<td align="left">Confirmed or high-confidence <strong>trap / honeypot / impersonator / prompt-injection hazard</strong>.</td>
-<td align="left">Matches <code>data/honeypots.json</code>, <code>rules/</code> prompt-injection signatures, canonical-name impersonation heuristics, or creator-restricted PR locks. Agents <strong>must abort</strong> before cloning or executing code.</td>
-</tr>
-</tbody></table>
-<hr>
-<h3>🔌 Model Context Protocol (MCP) Server Integration</h3>
-<p>Autonomous agents supporting MCP (Claude Desktop, Claude Code, Cursor, Windsurf, Cline, Zed) can connect either to the <strong>hosted JSON-RPC 2.0 HTTP endpoint</strong> (<code>https://doomsday.network/mcp</code>) or run the <strong>zero-dependency local stdio server</strong> (<a href="https://github.com/doomsday-network/doomsday/blob/main/integrations/mcp/doomsday_mcp.py"><code>doomsday_mcp.py</code></a>):</p>
-<pre><code class="language-json">{
-  "mcpServers": {
-    "bounty-guard": {
-      "url": "https://doomsday.network/mcp"
-    }
-  }
-}
-</code></pre>
-<h4>Exposed MCP Tools</h4>
-<ul>
-<li><code>verify_issue_escrow(issue_ref)</code> — Verifies whether <code>owner/repo#number</code> has locked on-chain UTXO collateral, returning vault reserve UTXO proofs (<code>txid</code>, <code>vout</code>, <code>amount_doom</code>) and historical settlement receipts.</li>
-<li><code>audit_doomsday_escrows()</code> — Audits open escrows and classifies each issue into <code>SAFE_WITH_ESCROW</code>, <code>CAUTION</code>, or <code>QUARANTINE</code>.</li>
-<li><code>list_escrows()</code> — Returns all active Proof-of-Escrow bounties and live vault reserve proofs.</li>
-<li><code>format_escrow_badge(issue_ref)</code> — Generates a Markdown verification badge and collateral summary for GitHub issues and pull requests.</li>
-</ul>
-<p>Framework adapters for <strong>LangChain</strong>, <strong>LlamaIndex</strong>, <strong>CrewAI</strong>, <strong>AutoGen</strong>, <strong>PydanticAI</strong>, <strong>OpenAI Agents SDK</strong>, <strong>Google ADK</strong>, <strong>Semantic Kernel</strong>, <strong>Haystack</strong>, <strong>Smolagents</strong>, <strong>Agno</strong>, and <strong>Node.js 22+ TypeScript stdio MCP</strong> are available in <a href="https://github.com/doomsday-network/doomsday/tree/main/integrations"><code>doomsday-network/doomsday/integrations/</code></a>.</p>
-<hr>
-<h3>🌐 Maintained By</h3>
-<p>Maintained by the open-source contributors at <strong><a href="https://github.com/doomsday-network/doomsday">Doomsday Network</a></strong> (<a href="https://doomsday.network"><code>https://doomsday.network</code></a>). Licensed under the <a href="LICENSE">MIT License</a>.</p>
-
-
+    <div class="no-readme">This project doesn't have a README yet. <a href="https://github.com/doomsday-network/bounty-guard" target="_blank">Visit GitHub</a> for more details.</div>
   </section>
 </details>
 
