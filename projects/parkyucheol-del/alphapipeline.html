@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>parkyucheol-del/alphapipeline — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="AlphaPipeline provides paid, per-call endpoints for token risk checks and market data, using x402 payments on Base. It also exposes a remote MCP server that…">
+<meta name="description" content="AlphaPipeline provides paid, per-call APIs for token risk checks and market data, including DEX slippage, funding rates, Korea price premiums, and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/parkyucheol-del/alphapipeline">
 <meta property="og:title" content="parkyucheol-del/alphapipeline — Hermes Atlas">
-<meta property="og:description" content="AlphaPipeline provides paid, per-call endpoints for token risk checks and market data, using x402 payments on Base. It also exposes a remote MCP server that…">
+<meta property="og:description" content="AlphaPipeline provides paid, per-call APIs for token risk checks and market data, including DEX slippage, funding rates, Korea price premiums, and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/parkyucheol-del/alphapipeline">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="parkyucheol-del/alphapipeline — Hermes Atlas">
-<meta name="twitter:description" content="AlphaPipeline provides paid, per-call endpoints for token risk checks and market data, using x402 payments on Base. It also exposes a remote MCP server that…">
+<meta name="twitter:description" content="AlphaPipeline provides paid, per-call APIs for token risk checks and market data, including DEX slippage, funding rates, Korea price premiums, and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=alphapipeline&amp;subtitle=Quantitative+Risk+%26+Slippage+Guard+for+AI+Agents%3A+Polymarket+L2+VWAP%2C+On-chain+DEX+%26+Cross-Venue+Arbitrage+%28x402+Remote+MCP%29&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/parkyucheol-del/alphapipeline#software",
   "name": "alphapipeline",
-  "description": "AlphaPipeline provides paid, per-call endpoints for token risk checks and market data, using x402 payments on Base. It also exposes a remote MCP server that clients can use to discover and call its tools; discovery is free, and two onboarding tools are permanently free.",
+  "description": "AlphaPipeline provides paid, per-call APIs for token risk checks and market data, including DEX slippage, funding rates, Korea price premiums, and prediction-market signals. It is available through REST with x402 payments on Base and as a remote MCP server; discovery and two onboarding tools are free.",
   "url": "https://hermesatlas.com/projects/parkyucheol-del/alphapipeline",
   "codeRepository": "https://github.com/parkyucheol-del/alphapipeline",
   "applicationCategory": "DeveloperApplication",
@@ -47,7 +47,7 @@
     "name": "parkyucheol-del",
     "url": "https://github.com/parkyucheol-del"
   },
-  "dateModified": "2026-10-26T06:15:58.000Z",
+  "dateModified": "2026-10-26T11:54:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">AlphaPipeline provides paid, per-call endpoints for token risk checks and market data, using x402 payments on Base. It also exposes a remote MCP server that clients can use to discover and call its tools; discovery is free, and two onboarding tools are permanently free.</p>
+    <p class="summary-text">AlphaPipeline provides paid, per-call APIs for token risk checks and market data, including DEX slippage, funding rates, Korea price premiums, and prediction-market signals. It is available through REST with x402 payments on Base and as a remote MCP server; discovery and two onboarding tools are free.</p>
     <ul class="summary-highlights">
-      <li>Checks token honeypot, tax, and liquidity risk.</li>
-      <li>Provides market data including DEX slippage and funding rates.</li>
-      <li>Offers REST endpoints and a remote MCP server.</li>
+      <li>Token checks return raw risk data without a buy/no-buy verdict.</li>
+      <li>MCP clients can discover tools without payment.</li>
+      <li>Payments use USDC on Base.</li>
     </ul>
   </div>
 </section>
@@ -598,6 +598,7 @@ trade-off (it travels in the URL query string).</p>
 </ol>
 <p><strong>If it doesn't clear 2 of 3</strong>: don't force a paid launch on a thin signal. Turn it into a free public dashboard instead and use it as a traffic funnel into the rest of AlphaPipeline.</p>
 <p><strong>Secondary, free feed</strong>: the same cron also snapshots Kalshi's <code>KXBTC15M</code> 15-minute/hourly crypto prediction markets (public, no-auth API) into <code>data-public/kalshi_btc15m_log.jsonl</code>, to compare against <code>prediction.hip4_snapshot</code>'s own BTC probability later. No extra infrastructure cost; not part of the launch/hold decision above.</p>
+<p><strong>New sub-feed, started 2026-10-26 — EQX spot vs Hyperliquid perp gap</strong>: EQX Labs listed 11 tokenized US stocks/ETFs (EQSPY, EQQQQ, EQAAPL, EQAMZN, EQGOOG, EQMETA, EQMSFT, EQNVDA, EQTSLA, EQMU, EQSPCX) as native Hyperliquid HIP-1 spot tokens on 2026-10-26 22:30 KST. Unlike the Base-vs-Hyperliquid comparison above (two different chains, bridge/settlement noise included), this is spot and perp on the <em>same</em> HyperCore venue, so the gap is a cleaner read on pure after-hours arbitrage-unavailability. Same hourly cron now also writes <code>data-public/eqx_gap_log.jsonl</code> (<code>collect_eqx_gap_rows()</code> in the same script). Not a paid endpoint yet — watching whether the after-hours/weekend gap is consistently larger than the regular-hours gap before deciding. No official EQX token ID registry was public at launch, so rows are matched by token name only (<code>EQ</code> + ticker) — revisit once EQX publishes IDs.</p>
 <hr>
 <h3>Disclaimer</h3>
 <p>AlphaPipeline provides quantitative market data and analytics for informational and research purposes only. It does not execute trades, place orders, hold custody of user funds, or provide brokerage/betting/gambling services of any kind — it is a read-only data layer. Users are solely responsible for ensuring their use of this data complies with the laws and regulations applicable in their own jurisdiction.</p>
@@ -664,7 +665,7 @@ trade-off (it travels in the URL query string).</p>
 </main>
 
 <footer class="page-footer">
-  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="/about">about</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues/new?template=suggest-repo.yml">suggest a repo</a> · <a href="/privacy">privacy</a></div>
   <div>v2 · 2026.04</div>
 </footer>
 
