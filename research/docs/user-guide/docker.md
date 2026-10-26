@@ -656,7 +656,7 @@ The image uses Debian 13.4 and includes:
 -   Prebuilt TUI/dashboard assets and baked Photon sidecar dependencies.
 -   s6-overlay for supervision and zombie-process cleanup.
 
-Chromium is staged through PM, not `npx playwright install`. The build records its resolved executable in `/etc/hermes/agent-browser-executable-path`. `PLAYWRIGHT_BROWSERS_PATH` names `/opt/hermes/tools`, outside the data mount.
+Chromium is staged through PM, not `npx playwright install`. The build records its resolved executable in `/etc/hermes/chromium-executable-path`, which Hermes reads when it launches the browser. `PLAYWRIGHT_BROWSERS_PATH` names `/opt/hermes/tools`, outside the data mount.
 
 Every image, including the unsuffixed (non-`-desktop`) tags, carries the full Chromium build rather than Playwright's lighter headless shell: one pinned, checksummed browser serves both headless browsing and headed Bot Screen sessions. The cost is image size — the full build is larger than the headless shell earlier images shipped.
 
@@ -1014,7 +1014,7 @@ docker exec -u root hermes chmod 0755 /opt/hermes
 
 ### Browser tools not working
 
-Playwright needs shared memory. Add `--shm-size=1g` to your Docker run command:
+Chromium needs shared memory. Add `--shm-size=1g` to your Docker run command:
 
 ```
 docker run -d \

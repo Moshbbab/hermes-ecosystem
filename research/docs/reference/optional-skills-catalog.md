@@ -367,16 +367,6 @@ Manual OAuth for remote MCP servers on headless gateways.
 
 List, auth, and call MCP servers/tools from the terminal.
 
-## migration
-
-Skill
-
-Description
-
-[**openclaw-migration**](/docs/user-guide/skills/optional/migration/migration-openclaw-migration)
-
-Import an OpenClaw setup (memories, skills) into Hermes.
-
 ## mlops
 
 Skill

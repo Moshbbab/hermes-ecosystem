@@ -206,6 +206,12 @@ str
 
 Explicit catalog URL (falls back to `{base_url}/models`)
 
+`supports_streaming`
+
+`bool | None`
+
+`None` (default) preserves transport defaults; `True` opts streaming-capable `external_process` clients into host streaming; `False` disables provider streaming. ACP URLs and session-level streaming disables still take precedence. Only opt in when the client implements the selected API mode's streaming contract, including cancellation and cleanup.
+
 `auth_type`
 
 str
@@ -252,7 +258,7 @@ Per-model capability declarations in the `model_overrides` schema — see [Decla
 
 `dict[str, str]`
 
-Sent on every request (e.g. Copilot's `Editor-Version`); also forwarded by the default `fetch_models()` catalog request
+Sent on every request (e.g. Copilot's `Editor-Version`); also forwarded by the default `fetch_models()` catalog request. A value that is costly to compute at import (a User-Agent carrying the release) can be deferred with `providers.base.LazyHeaders({"User-Agent": lambda: hermes_user_agent("MyAgent")})`, a `dict` whose callable values run on first read (`hermes_user_agent` is in `hermes_cli.version_info`)
 
 `fixed_temperature`
 

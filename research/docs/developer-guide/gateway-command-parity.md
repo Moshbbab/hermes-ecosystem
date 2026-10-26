@@ -6,7 +6,7 @@ Every local client (classic CLI, Ink TUI, Desktop, ACP) attaches to the one gate
 
 **Gateway (`slash.exec`)**: `read` = the real handler runs for a local session (proved by `tests/gateway/test_session_read_commands.py`); `control` = admission-fenced write (`/approve` `/deny` resolve this session's waiting approval, `tests/gateway/test_session_approval_commands.py`); `refused`. **Notes**: `per-session setting (gateway handler)` = the messaging handler runs and applies the setting to this local session (its next turn and `config.get`), saving config.yaml only where the handler does; `client-local (cli_only)` commands are terminal/UI features of a client.
 
-103 registry commands: 29 control, 18 read, 56 refused.
+104 registry commands: 29 control, 19 read, 56 refused.
 
 Command
 
@@ -30,7 +30,7 @@ HermesCLI.\_handle\_agents\_command
 
 delegation.pause
 
-slash.exec: refused
+action: agents
 
 slash.exec: refused
 
@@ -238,9 +238,9 @@ refused
 
 HermesCLI.show\_config
 
-slash.exec: refused
+canonical route
 
-unavailable: terminal
+action: config
 
 slash.exec: refused
 
@@ -276,7 +276,7 @@ client-local (cli\_only)
 
 `/cron`
 
-refused
+read (bare / `list`; add/edit/pause/resume/run/remove control, from the classic CLI's own command socket only)
 
 HermesCLI.\_handle\_cron\_command
 
@@ -284,9 +284,9 @@ slash.exec
 
 unavailable: terminal
 
-slash.exec: refused
+slash.exec
 
-TUI session: bare `/cron` and `/cron list [--all]` read the profile's jobs; client-local (cli\_only)
+client-local (cli\_only)
 
 `/curator`
 
@@ -340,6 +340,18 @@ slash.exec
 
 slash.exec
 
+`/discard`
+
+refused
+
+HermesCLI.\_handle\_discard\_command
+
+slash.exec: refused
+
+slash.exec: refused
+
+prompt.resolve\_unknown
+
 `/egress`
 
 control
@@ -360,7 +372,7 @@ HermesCLI.\_handle\_export\_command
 
 slash.exec: refused
 
-slash.exec: refused
+action: export
 
 slash.exec: refused
 
@@ -480,7 +492,7 @@ HermesCLI.show\_history
 
 local
 
-unavailable: terminal
+action: history
 
 slash.exec: refused
 
@@ -508,7 +520,7 @@ HermesCLI.\_handle\_import\_command
 
 slash.exec: refused
 
-slash.exec: refused
+action: import
 
 slash.exec: refused
 
@@ -670,7 +682,7 @@ HermesCLI.\_open\_command\_palette
 
 slash.exec: refused
 
-slash.exec: refused
+action: palette
 
 slash.exec: refused
 
@@ -898,7 +910,7 @@ refused
 
 HermesCLI.\_confirm\_and\_reload\_mcp
 
-refused: not available yet
+canonical route
 
 unavailable: advanced
 
@@ -976,7 +988,7 @@ HermesCLI.\_handle\_rollback\_command
 
 rollback.diff, rollback.list, rollback.restore
 
-slash.exec: refused
+action: rollback
 
 slash.exec: refused
 
@@ -988,13 +1000,13 @@ refused
 
 HermesCLI.save\_conversation
 
-session.save
+canonical route
 
-rpc session.save
+action: save
 
 slash.exec: refused
 
-writes an export file on the gateway host
+the gateway handler writes its file on the gateway host; Desktop saves `session.export` text through its own dialog
 
 `/sessions`
 
@@ -1176,9 +1188,9 @@ refused
 
 HermesCLI.\_handle\_timestamps\_command
 
-slash.exec: refused
+config.set
 
-slash.exec: refused
+action: timestamps
 
 slash.exec: refused
 
@@ -1318,7 +1330,7 @@ control
 
 HermesCLI.\_handle\_voice\_command
 
-sidecar: voice.toggle; `tts` refused
+config.get, slash.exec; sidecar: voice.toggle; `tts` refused
 
 unavailable: composer-voice
 
@@ -1360,7 +1372,7 @@ HermesCLI.\_handle\_worktree\_command
 
 slash.exec: refused
 
-slash.exec: refused
+unavailable: terminal
 
 slash.exec: refused
 

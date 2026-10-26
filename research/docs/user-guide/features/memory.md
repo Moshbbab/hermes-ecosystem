@@ -447,7 +447,7 @@ auxiliary:
     enabled: true              # false = skip automatic post-turn forks
 ```
 
-With `enabled: false`, automatic post-turn forks do not spawn; manual `/refine` still works.
+With `enabled: false`, automatic post-turn forks do not spawn; manual `/refine` still works, with or without focus text.
 
 ### Capping review cost (`max_input_tokens`)
 

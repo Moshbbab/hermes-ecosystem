@@ -80,7 +80,7 @@ Show git changes in the working directory. Default: unstaged changes plus untrac
 
 `/snapshot [create|restore <id>|prune]` (alias: `/snap`)
 
-Create or restore state snapshots of Hermes config/state. `create [label]` saves a snapshot, `restore <id>` reverts to it, `prune [N]` removes old snapshots, or list all with no args. Database restores write through SQLite's backup API so live processes (gateway, dashboard) see the restored data safely; if that path fails while another process still holds the database open, the restore refuses instead of risking corruption — stop the holder and retry.
+Create or restore state snapshots of Hermes config/state. `create [label]` saves a snapshot, `restore <id>` reverts to it, `prune [N]` removes old snapshots, or list all with no args. In classic `hermes chat`, restore closes the local readers and drains the local gateway before restoring offline, then reconnects with the restored history (or creates a new session if the snapshot predates it). A multiplexed secondary profile is stopped and re-served without restarting the other profiles; restoring the launch profile drains the whole gateway. Database restoration retains its exclusive-maintenance gate and SQLite backup safety checks: a holder that cannot be stopped still prevents restoration.
 
 `/stop`
 
@@ -88,7 +88,7 @@ Kill all running background processes
 
 `/queue <prompt>` (alias: `/q`)
 
-Queue a prompt for the next turn (doesn't interrupt the current agent response). In the CLI, `/queue` with no arguments lists the pending queue, and `/queue list`, `/queue edit N <new prompt>`, `/queue rm N`, `/queue move A B`, and `/queue clear` inspect and manage queued prompts before they are sent. Prompts that begin with a management word can be force-queued with `/queue add <prompt>`.
+Queue a prompt for the next turn (doesn't interrupt the current agent response). In the CLI, `/queue` with no arguments lists the pending queue, and `/queue list`, `/queue edit N <new prompt>`, `/queue rm N`, `/queue move A B`, and `/queue clear` inspect and manage queued prompts before they are sent. Prompts that begin with a management word can be force-queued with `/queue add <prompt>`. On the gateway's session, prompts queued mid-run live in the gateway's shared queue for the session: `list`/`rm`/`edit`/`clear` act on every prompt queued there (other windows' too), and `move` is refused for prompts the gateway holds, because it runs them in order.
 
 `/steer <prompt>`
 
@@ -552,6 +552,10 @@ Show session info, followed by a local **Session recap** block (recent turn coun
 
 Kill all running background processes and interrupt the running agent.
 
+`/discard`
+
+Drop a turn Hermes lost in a restart so this chat's queued messages run again. The lost turn is not re-run (only you know whether to send it again); it is recorded as interrupted. Hermes offers this when it pauses a conversation on a lost turn. On Slack use `/hermes discard`.
+
 `/pause [reason | off]`
 
 Global emergency stop, the in-chat form of [`hermes pause`](/docs/reference/cli-commands): puts new cron, kanban and gateway work on hold until `/pause off`. In-flight work finishes normally, and slash commands keep working while paused, so a messaging-only operator can always lift it.
@@ -674,7 +678,7 @@ Re-run a prompt on a recurring interval in this session. Subcommands: `status`, 
 
 `/refine [focus]`
 
-Run the memory/skill self-improvement review now, optionally with focus instructions. On Slack use `/hermes refine …`.
+Run the memory/skill self-improvement review now, optionally with focus instructions. Works on a chat left idle (no message needed first): it reviews the stored conversation and posts the result in the same chat. On Slack use `/hermes refine …`.
 
 `/review [instructions]`
 
@@ -806,7 +810,7 @@ Invoke any installed skill by name.
 -   `/skills` is **CLI-only for search/browse/install**; its write-approval review subcommands (`pending`, `approve`, `reject`, `diff`, `approval`) also work on messaging platforms when `skills.write_approval` is on. `/memory` works on **both** surfaces.
 -   `/verbose` is **CLI-only by default**, but can be enabled for messaging platforms by setting `display.tool_progress_command: true` in `config.yaml`. When enabled, it cycles the `display.tool_progress` mode and saves to config.
 -   `/focus` and `/verbose` share one suppression path (`display.tool_progress`), so they can never contradict each other: `/focus on` pins tool progress to `off` and stashes your mode under `display.focus_saved_tool_progress`; `/focus off` restores it; cycling `/verbose` while focus is on takes the mode back and clears the focus badge. Focus view is display-only — it never changes conversation history, the system prompt, or anything sent to the model, so it has zero prompt-cache impact.
--   `/sethome`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, `/pause`, and `/commands` are **messaging-only** commands.
+-   `/sethome`, `/restart`, `/approve`, `/deny`, `/topic`, `/platform`, `/pause`, `/discard`, and `/commands` are **messaging-only** commands.
 -   `/status`, `/egress`, `/version`, `/whoami`, `/bg`, `/btw`, `/queue`, `/steer`, `/voice`, `/reload-mcp`, `/reload-skills`, `/rollback`, `/diff`, `/debug`, `/fast`, `/approvals`, `/busy`, `/footer`, `/curator`, `/kanban`, `/topup`, `/login`, `/suggestions`, `/blueprint`, `/learn`, `/init`, `/sessions`, `/loop`, and `/yolo` work in **both** the CLI and the messaging gateway.
 -   `/voice join`, `/voice channel`, and `/voice leave` are only meaningful on Discord.
 -   `/connectors` is **TUI-only**.

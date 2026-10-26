@@ -454,7 +454,7 @@ The profile's own `config.yaml` / `.env`
 
 Documented default — never the launch profile's cached value
 
-Cloud-SDK credential clients (Bedrock boto3 clients + model discovery, Azure Entra credential), credential-fetched catalogs (DeepInfra, Copilot context limits, Nous reasoning caps, Ramp Router efforts, xAI / OpenRouter image models, custom-endpoint `/models`), Camofox VNC address, computer-use aux-vision routing, remote-backend probe text, learned image token costs, `display.skin`, guest-mint back-off, banner skills, Yuanbao "active" adapter, Langfuse client
+Cloud-SDK credential clients (Bedrock boto3 clients + model discovery, Azure Entra credential), credential-fetched catalogs (DeepInfra, Copilot context limits, Nous reasoning caps, Ramp Router efforts, xAI / OpenRouter image models, custom-endpoint `/models`), computer-use aux-vision routing, remote-backend probe text, learned image token costs, `display.skin`, guest-mint back-off, banner skills, Yuanbao "active" adapter, Langfuse client
 
 The profile's own `.env` / `config.yaml` / `<home>/cache`
 
@@ -920,6 +920,8 @@ hermes config set gateway.auto_multiplex_migration false
 ```
 
 `hermes update` then leaves per-profile gateways exactly as they are, with no output and no changes, however eligible the install looks. The setting lives in config, so it survives updates — the decision is made once rather than re-litigated on every release. It is read from the effective config like every other setting, so a value pinned in the managed scope (`/etc/hermes/config.yaml`) wins over the profile's own file. It governs the **automatic** path only: `hermes gateway migrate --multiplex` is an explicit request and still migrates (and is the supported way to opt back in). Absent or `true` keeps the default behaviour described above.
+
+The same setting covers a gateway that booted with only the default profile. Normally, once you create a second profile (Desktop's New Agent or `hermes profile create`), that gateway starts serving every profile in place, with no restart. With `auto_multiplex_migration: false` it keeps serving only its own profile, and the new profile is refused with that reason until you run `hermes gateway migrate --multiplex` or set the key back to `true`. The key is re-read on every profile rescan, so setting it back takes effect within about 30 seconds, with no restart.
 
 The explicit command is different: `hermes gateway migrate --multiplex` with two or more profiles and **no** standalone secondary gateway still applies the one remaining step — it sets `gateway.multiplex_profiles: true` and (re)starts the default gateway. You asked for multiplex; you get multiplex.
 
