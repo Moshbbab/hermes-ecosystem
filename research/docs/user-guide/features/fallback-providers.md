@@ -91,18 +91,6 @@ OpenAI Codex
 
 `hermes model` → **ChatGPT or Codex Subscription** (ChatGPT OAuth)
 
-GitHub Copilot
-
-`copilot`
-
-`COPILOT_GITHUB_TOKEN`, `GH_TOKEN`, or `GITHUB_TOKEN`
-
-GitHub Copilot ACP
-
-`copilot-acp`
-
-External process (editor integration)
-
 Anthropic
 
 `anthropic`

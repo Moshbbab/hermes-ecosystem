@@ -349,18 +349,6 @@ Nemotron models via build.nvidia.com or local NIM
 
 Set `NVIDIA_API_KEY` (optional: `NVIDIA_BASE_URL`)
 
-**GitHub Copilot**
-
-GitHub Copilot subscription (GPT-5.x, Claude, Gemini, etc.)
-
-OAuth via `hermes model`, or `COPILOT_GITHUB_TOKEN` / `GH_TOKEN`
-
-**GitHub Copilot ACP**
-
-Copilot ACP agent backend (spawns local `copilot` CLI)
-
-`hermes model` (requires `copilot` CLI + `copilot login`)
-
 **Vercel AI Gateway**
 
 Vercel AI Gateway routing
