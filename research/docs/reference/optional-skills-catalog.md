@@ -671,7 +671,7 @@ Find accounts for a username across 400+ platforms.
 
 [**unbroker**](/docs/user-guide/skills/optional/security/security-unbroker)
 
-Autonomously remove your info from data-broker sites.
+Remove your info from data-broker sites, by name or phone.
 
 [**web-pentest**](/docs/user-guide/skills/optional/security/security-web-pentest)
 
