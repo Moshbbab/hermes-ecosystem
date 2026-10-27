@@ -1994,7 +1994,7 @@ scrypt password hash for the basic provider (preferred — no plaintext at rest)
 
 `HERMES_DASHBOARD_BASIC_AUTH_SECRET`
 
-HMAC key (32+ bytes, base64/hex/raw) signing the basic provider's stateless session tokens. Set explicitly so sessions survive restarts / span multiple workers; blank → random per-process (you'll be logged out on every restart). Overrides `dashboard.basic_auth.secret`.
+HMAC key (32+ bytes, base64/hex/raw) signing the basic provider's stateless session tokens. Set explicitly so sessions survive restarts / span multiple workers; blank → random per-process (you'll be logged out on every restart). A value that still holds unexpanded shell text such as `$(openssl rand -base64 32)` is ignored with an error and a random per-process key is used instead. Overrides `dashboard.basic_auth.secret`.
 
 `HERMES_DASHBOARD_BASIC_AUTH_TTL_SECONDS`
 

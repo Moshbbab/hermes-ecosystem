@@ -855,6 +855,26 @@ Binding to an address other than loopback
 
 The default address is `127.0.0.1`. Each other address starts the authentication gate of the dashboard. The server also refuses each request with a `Host` header that is different from the address that the server bound to. This is a defence against DNS rebinding. Bind to the name or the address that your client uses.
 
+### Running the Webapp
+
+The package ships the [Webapp](/docs/user-guide/desktop#use-the-desktop-workspace-from-a-browser) (Hermes Desktop in a browser) prebuilt, so nothing is built at run time; the store is read-only. The gateway serves it when its settings turn it on (see [Configuration → Webapp](/docs/user-guide/configuration#webapp)):
+
+```
+{
+  services.hermes-agent = {
+    enable = true;
+    gateway.enable = true;
+    settings.webapp = {
+      enabled = true;
+      host = "127.0.0.1";
+      port = 9120;
+    };
+  };
+}
+```
+
+Open it with `hermes webapp`. A non-loopback `host` or a `public_url` needs one of the [dashboard's sign-in providers](/docs/user-guide/features/web-dashboard#authentication-gated-mode), as for the dashboard. `nix build .#webapp` builds the bundle on its own. The wrapper points `HERMES_WEBAPP_DIST` at it, so `hermes webapp --force-build` has nothing to rebuild and says so.
+
 ### Verify It Works
 
 ```
