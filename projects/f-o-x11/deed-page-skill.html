@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>f-o-x11/deed-page-skill — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with one curl request, plus documentation for deed.page’s…">
+<meta name="description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted…">
 <link rel="canonical" href="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta property="og:description" content="This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with one curl request, plus documentation for deed.page’s…">
+<meta property="og:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta name="twitter:description" content="This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with one curl request, plus documentation for deed.page’s…">
+<meta name="twitter:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deed-page-skill&amp;subtitle=Agent+skill%3A+publish+files+to+a+permanent+deed.page+URL+with+one+curl+request.+No+account.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill#software",
   "name": "deed-page-skill",
-  "description": "This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with one curl request, plus documentation for deed.page’s hosted remote MCP server. The MCP server supports publishing and managing sites, and the README documents installation for several agents and MCP clients.",
+  "description": "This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted remote MCP server. The server can publish and manage sites, including updating, versioning, password-protecting, and deleting them; the skill and plugins support several agent tools.",
   "url": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill",
   "codeRepository": "https://github.com/f-o-x11/deed-page-skill",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "f-o-x11",
     "url": "https://github.com/f-o-x11"
   },
-  "dateModified": "2026-10-26T13:10:31.000Z",
+  "dateModified": "2026-10-27T19:14:05.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-26</span>
+    <span><span class="meta-label">updated</span>2026-10-27</span>
   </div>
 
   <div class="actions">
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with one curl request, plus documentation for deed.page’s hosted remote MCP server. The MCP server supports publishing and managing sites, and the README documents installation for several agents and MCP clients.</p>
+    <p class="summary-text">This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted remote MCP server. The server can publish and manage sites, including updating, versioning, password-protecting, and deleting them; the skill and plugins support several agent tools.</p>
     <ul class="summary-highlights">
-      <li>Publishes files or folders to permanent deed.page URLs.</li>
-      <li>Documents a hosted remote MCP server at deed.page/mcp.</li>
-      <li>Includes agent-specific installation instructions.</li>
+      <li>Publishes files or folders to permanent deed.page URLs</li>
+      <li>Documents a hosted remote MCP server with no auth to start</li>
+      <li>Includes agent skill and plugin installation instructions</li>
     </ul>
   </div>
 </section>
@@ -213,7 +213,7 @@
 </ul>
 <p>Keep the token secret. <code>rotate_token</code> replaces it and <code>revoke_token</code> revokes it.</p>
 <h4>Tools</h4>
-<p>26 tools:</p>
+<p>27 tools:</p>
 <table>
 <thead>
 <tr>
@@ -271,7 +271,7 @@
 </tr>
 <tr>
 <td><code>site_analytics</code></td>
-<td>Cookieless view counts, top paths, referrers, and AI crawler counts for a site.</td>
+<td>Cookieless view counts, top paths, referrers, and AI crawler counts for a site. 90 days per request on Free and Hobby; 365 days and CSV on Pro.</td>
 </tr>
 <tr>
 <td><code>add_domain</code></td>
@@ -303,7 +303,7 @@
 </tr>
 <tr>
 <td><code>claim_share_credit</code></td>
-<td>Free only, once per token: send the URL of the user's public X or Reddit post about deed.page for +25 sites and 50 MB per site.</td>
+<td>Free only, once per token: send the URL of the user's public X or Reddit post about deed.page for +25 sites and 50 MB per site. An X post that links to deed.page (at most 7 days old) also turns the badge off for 30 days, once per account.</td>
 </tr>
 <tr>
 <td><code>rotate_token</code></td>
@@ -312,6 +312,10 @@
 <tr>
 <td><code>revoke_token</code></td>
 <td>Revoke the current token or all tokens.</td>
+</tr>
+<tr>
+<td><code>agent_seats</code></td>
+<td>Pro: list, create, or revoke up to 5 named agent seats (separate tokens on one owner).</td>
 </tr>
 <tr>
 <td><code>create_webhook</code></td>
