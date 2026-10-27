@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hashgraph-online/hol-guard — Hermes Agent Developer Tools | Hermes Atlas</title>
+<meta name="description" content="HOL Guard is a local-first security layer that reviews AI agent actions, including shell commands, file access, package installs, and MCP tool calls. It can…">
+<link rel="canonical" href="https://hermesatlas.com/projects/hashgraph-online/hol-guard">
+<meta property="og:title" content="hashgraph-online/hol-guard — Hermes Atlas">
+<meta property="og:description" content="HOL Guard is a local-first security layer that reviews AI agent actions, including shell commands, file access, package installs, and MCP tool calls. It can…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://hermesatlas.com/projects/hashgraph-online/hol-guard">
+<meta property="og:site_name" content="Hermes Atlas">
+<meta property="og:image" content="https://hermesatlas.com/api/og?title=hol-guard&amp;subtitle=Open-source+antivirus+for+AI+agents%3A+block+risky+tools%2C+secret+access%2C+prompt+injection%2C+malicious+packages%2C+MCP+servers%2C+plugins%2C+and+skills+at+runtime.&amp;kind=project+%C2%B7+developer+tools">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="hashgraph-online/hol-guard — Hermes Atlas">
+<meta name="twitter:description" content="HOL Guard is a local-first security layer that reviews AI agent actions, including shell commands, file access, package installs, and MCP tool calls. It can…">
+<meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hol-guard&amp;subtitle=Open-source+antivirus+for+AI+agents%3A+block+risky+tools%2C+secret+access%2C+prompt+injection%2C+malicious+packages%2C+MCP+servers%2C+plugins%2C+and+skills+at+runtime.&amp;kind=project+%C2%B7+developer+tools">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "home", "item": "https://hermesatlas.com/" },
+    { "@type": "ListItem", "position": 2, "name": "developer tools", "item": "https://hermesatlas.com/lists/developer-tools" },
+    { "@type": "ListItem", "position": 3, "name": "hol-guard" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://hermesatlas.com/projects/hashgraph-online/hol-guard#software",
+  "name": "hol-guard",
+  "description": "HOL Guard is a local-first security layer that reviews AI agent actions, including shell commands, file access, package installs, and MCP tool calls. It can allow, block, or request approval based on policy, and provides a CLI and local dashboard for managing protection and reviewing decision history.",
+  "url": "https://hermesatlas.com/projects/hashgraph-online/hol-guard",
+  "codeRepository": "https://github.com/hashgraph-online/hol-guard",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "programmingLanguage": "Python",
+  "license": "https://spdx.org/licenses/Apache-2.0.html",
+  "author": {
+    "@type": "Organization",
+    "name": "hashgraph-online",
+    "url": "https://github.com/hashgraph-online"
+  },
+  "dateModified": "2026-10-27T14:46:22.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 1000
+  },
+  "isPartOf": {
+    "@id": "https://hermesatlas.com/#website"
+  }
+}
+</script>
+<link rel="alternate" type="application/rss+xml" title="Hermes Atlas — new projects" href="/rss.xml">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script src="/assets/js/theme-init.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
+  <div class="mast-meta" aria-label="Site metadata">
+    <span id="meta-count">281·repos</span>
+    <span id="meta-version">hermes·v0.21.5</span>
+    <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
+  </div>
+  <nav class="mast-nav" aria-label="Primary">
+    <a href="/">home</a>
+    <a href="/ecosystem/" class="active">ecosystem</a>
+    <a href="/lists/">lists</a>
+    <a href="/skills/">skills</a>
+    <a href="/use-cases/">use cases</a>
+    <a href="/guide/">handbook</a>
+    <a href="/masterclass/">masterclass</a>
+    <a href="/dev/">dev</a>
+    <a href="/reports/">reports</a>
+    <a href="https://github.com/ksimback/hermes-ecosystem">source</a>
+  </nav>
+  <button id="theme-toggle" class="mast-toggle" aria-label="Toggle light/dark theme" title="Toggle theme">
+    <span class="tt-icon tt-light" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v2.25M12 19.75V22M4.93 4.93l1.59 1.59M17.48 17.48l1.59 1.59M2 12h2.25M19.75 12H22M4.93 19.07l1.59-1.59M17.48 6.52l1.59-1.59"/></svg>
+    </span>
+    <span class="tt-icon tt-dark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false"><path d="M20.2 15.1A8.4 8.4 0 0 1 8.9 3.8 8.5 8.5 0 1 0 20.2 15.1Z"/></svg>
+    </span>
+  </button>
+</header>
+
+<div class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">home</a><span class="sep">/</span><a href="/lists/developer-tools">developer tools</a><span class="sep">/</span>hol-guard
+</div>
+
+<main id="main">
+
+<section class="project">
+  <h1 class="project-name">
+    <span class="org">hashgraph-online</span><span class="slash">/</span>hol-guard
+  </h1>
+  <p class="project-desc">Open-source antivirus for AI agents: block risky tools, secret access, prompt injection, malicious packages, MCP servers, plugins, and skills at runtime.</p>
+
+  <div class="meta-row">
+    <span class="stars">★ 1.0K</span>
+    <span><span class="meta-label">lang</span>Python</span>
+    <span><span class="meta-label">license</span>Apache-2.0</span>
+    
+    <span><span class="meta-label">updated</span>2026-10-27</span>
+  </div>
+
+  <div class="actions">
+    <a href="https://github.com/hashgraph-online/hol-guard" target="_blank" rel="noopener" class="btn-primary">view on github →</a>
+    <a href="https://hol.org/guard" target="_blank" rel="noopener" class="btn-secondary">homepage</a>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="project-summary">
+  <div class="section-label">overview</div>
+  <div>
+    <p class="summary-text">HOL Guard is a local-first security layer that reviews AI agent actions, including shell commands, file access, package installs, and MCP tool calls. It can allow, block, or request approval based on policy, and provides a CLI and local dashboard for managing protection and reviewing decision history.</p>
+    <ul class="summary-highlights">
+      <li>Screens for secret exposure, destructive operations, and prompt injection.</li>
+      <li>Tracks local artifacts and reviews tools before launch.</li>
+      <li>Supports native agent hooks and managed MCP proxies.</li>
+    </ul>
+  </div>
+</section>
+
+<details class="readme-details">
+  <summary class="readme-toggle">full readme from github</summary>
+  <section class="readme" data-nosnippet>
+    <h2>HOL Guard: Open-Source Antivirus for AI Agents</h2>
+
+
+<p><a href="https://pypi.org/project/hol-guard/"><img src="https://img.shields.io/pypi/v/hol-guard.svg?logo=pypi&amp;logoColor=white&amp;cacheSeconds=300" alt="HOL Guard Version" loading="lazy" decoding="async"></a>
+<a href="https://pypi.org/project/plugin-scanner/"><img src="https://img.shields.io/pypi/v/plugin-scanner.svg?logo=pypi&amp;logoColor=white&amp;cacheSeconds=300" alt="Plugin Scanner Version" loading="lazy" decoding="async"></a>
+<a href="https://pypi.org/project/hol-guard/"><img src="https://img.shields.io/pypi/dm/hol-guard?logo=pypi&amp;logoColor=white" alt="HOL Guard Downloads" loading="lazy" decoding="async"></a>
+<a href="https://pypi.org/project/plugin-scanner/"><img src="https://img.shields.io/pypi/dm/plugin-scanner?logo=pypi&amp;logoColor=white" alt="Plugin Scanner Downloads" loading="lazy" decoding="async"></a>
+<a href="#install-hol-guard"><img src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&amp;logoColor=white" alt="Python 3.10+" loading="lazy" decoding="async"></a>
+<a href="https://github.com/hashgraph-online/hol-guard/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/hashgraph-online/hol-guard/ci.yml?branch=main&amp;label=CI&amp;logo=githubactions&amp;logoColor=white" alt="CI" loading="lazy" decoding="async"></a>
+<a href="https://github.com/hashgraph-online/hol-guard/actions/workflows/publish.yml"><img src="https://img.shields.io/github/actions/workflow/status/hashgraph-online/hol-guard/publish.yml?branch=main&amp;label=Publish&amp;logo=githubactions&amp;logoColor=white" alt="Publish" loading="lazy" decoding="async"></a>
+<a href="https://github.com/hashgraph-online/hol-guard/pkgs/container/hol-guard"><img src="https://img.shields.io/badge/ghcr-hol--guard-2496ED?logo=docker&amp;logoColor=white" alt="Container Image" loading="lazy" decoding="async"></a>
+<a href="https://scorecard.dev/viewer/?uri=github.com/hashgraph-online/hol-guard"><img src="https://api.scorecard.dev/projects/github.com/hashgraph-online/hol-guard/badge" alt="OpenSSF Scorecard" loading="lazy" decoding="async"></a>
+<a href="https://vercel.com/oss"><img src="https://vercel.com/oss/program-badge.svg" alt="Vercel OSS Program" loading="lazy" decoding="async"></a>
+<a href="./LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License" loading="lazy" decoding="async"></a>
+<a href="https://github.com/hashgraph-online/hol-guard/stargazers"><img src="https://img.shields.io/github/stars/hashgraph-online/hol-guard?style=social" alt="GitHub Stars" loading="lazy" decoding="async"></a>
+<a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/badge/lint-ruff-D7FF64.svg" alt="Lint: ruff" loading="lazy" decoding="async"></a>
+<a href="https://deepwiki.com/hashgraph-online/hol-guard"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki" loading="lazy" decoding="async"></a></p>
+<table>
+<thead>
+<tr>
+<th align="left"><img src="https://hol.org/brand/Logo_Whole_Dark.png" alt="HOL whole dark logo" loading="lazy" decoding="async"></th>
+<th align="left"><strong>Stop risky AI actions before they compromise your machine.</strong> HOL Guard is a local-first security layer for AI agents, tools, plugins, skills, MCP servers, and package installs.<br><br><a href="https://hol.org/guard/activate">Install HOL Guard</a><br><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/get-started.md">Read the documentation</a><br><a href="https://pypi.org/project/hol-guard/">PyPI Package (<code>hol-guard</code>)</a><br><a href="https://github.com/hashgraph-online/hol-guard/issues">Report an Issue</a></th>
+</tr>
+</thead>
+</table>
+<p>HOL Guard reviews agent actions before they run: shell commands, file access, package installs, and MCP tool calls. It detects secret exposure, destructive operations, prompt injection, and supply-chain risks, then allows, blocks, or requests approval according to your policy.</p>
+<p>Run it locally without an account. Use the CLI and local dashboard to manage protection, resolve approvals, and inspect decision history. Optional <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/local-vs-cloud.md">Guard Cloud</a> adds shared history, team policy, and fleet management.</p>
+<p><a href="#install-hol-guard">Get started</a> · <a href="#supported-ai-agents">Supported agents</a> · <a href="#plugin-scanner">Plugin scanner</a> · <a href="#documentation">Documentation</a> · <a href="#contribute-a-new-extension">Contribute an extension</a> · <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/adapter-contributions.md">Contribute an adapter</a> · <a href="#development">Development</a></p>
+
+
+
+<h3>Install HOL Guard</h3>
+<p>Requires Python 3.10 or newer, <a href="https://pipx.pypa.io/stable/installation/">pipx</a>, and a matching native runtime. Check the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/get-started.md#platform-support">platform support and Windows ARM64 setup notes</a> before installing.</p>
+<pre><code class="language-bash">pipx install hol-guard
+hol-guard init
+</code></pre>
+<p>The first-run wizard discovers supported agents and walks you through protection setup. It asks before each setup change, including opening the dashboard, installing agent integrations, and connecting optional cloud services.</p>
+<p>Check your installation:</p>
+<pre><code class="language-bash">hol-guard --version
+hol-guard status
+</code></pre>
+<p>To update an existing installation:</p>
+<pre><code class="language-bash">hol-guard update
+</code></pre>
+<p>For manual setup, see the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/get-started.md">installation guide</a>. Annotated release notes with upgrade context live at <a href="https://hol.org/guard/releases">hol.org/guard/releases</a>; raw releases and prereleases are on the <a href="https://github.com/hashgraph-online/hol-guard/releases">GitHub releases page</a>.</p>
+<h3>What HOL Guard Protects</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Surface</th>
+<th align="left">Protection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Shell commands and file access</strong></td>
+<td align="left">Reviews destructive operations, sensitive file access, credential exposure, and suspicious outbound commands.</td>
+</tr>
+<tr>
+<td align="left"><strong>Package installs</strong></td>
+<td align="left">Evaluates supported package-manager operations against supply-chain intelligence before installation.</td>
+</tr>
+<tr>
+<td align="left"><strong>Plugins, skills, and agent configuration</strong></td>
+<td align="left">Inventories local artifacts and reviews new or changed tools before launch.</td>
+</tr>
+<tr>
+<td align="left"><strong>MCP servers and tools</strong></td>
+<td align="left">Inspects server configuration and reviews tool calls through supported hooks and managed proxies.</td>
+</tr>
+<tr>
+<td align="left"><strong>Prompts and tool results</strong></td>
+<td align="left">Screens supported events for prompt injection and sensitive content.</td>
+</tr>
+<tr>
+<td align="left"><strong>Approvals and evidence</strong></td>
+<td align="left">Routes decisions to native prompts or the approval center, and records local receipts for review.</td>
+</tr>
+</tbody></table>
+<p>Guard connects through native agent hooks, managed MCP proxies, and launch integrations. Coverage depends on the events each agent exposes; the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/harness-support.md">support matrix</a> documents enforcement, approval delivery, and failure behavior per integration.</p>
+<h3>Supported AI Agents</h3>
+<p>Codex, Claude Code, GitHub Copilot CLI, Cursor, Cline, Gemini CLI, Grok, Hermes, Kimi Code, Pi, oh-my-pi, OpenClaw, OpenCode, Antigravity, ZCode, and Devin. <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/paseo.md">Paseo</a> is supported through these native provider integrations, with per-provider coverage.</p>
+<p>For example, to set up Codex explicitly:</p>
+<pre><code class="language-bash">hol-guard install codex
+hol-guard run codex --dry-run
+hol-guard run codex
+</code></pre>
+<p>The dry run records the current artifact state before launch. For Codex, Guard installs native pre-tool hooks and refuses a managed launch if those hooks are missing or disabled.</p>
+<p><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/harness-support.md">Agent support matrix</a> · <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/troubleshooting.md">Troubleshooting</a></p>
+<p><a id="guard-operations"></a></p>
+<h3>Everyday Use</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Task</th>
+<th align="left">Command</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Check protection status</td>
+<td align="left"><code>hol-guard status</code></td>
+</tr>
+<tr>
+<td align="left">Diagnose an agent integration</td>
+<td align="left"><code>hol-guard doctor codex</code></td>
+</tr>
+<tr>
+<td align="left">Inspect changes before launch</td>
+<td align="left"><code>hol-guard diff codex</code></td>
+</tr>
+<tr>
+<td align="left">Review pending approvals</td>
+<td align="left"><code>hol-guard approvals</code></td>
+</tr>
+<tr>
+<td align="left">Approve or deny a request</td>
+<td align="left"><code>hol-guard approvals approve &lt;request-id&gt;</code> / <code>hol-guard approvals deny &lt;request-id&gt;</code></td>
+</tr>
+<tr>
+<td align="left">Read decision history</td>
+<td align="left"><code>hol-guard receipts</code></td>
+</tr>
+<tr>
+<td align="left">List tracked artifacts</td>
+<td align="left"><code>hol-guard inventory</code></td>
+</tr>
+<tr>
+<td align="left">Export an AI bill of materials</td>
+<td align="left"><code>hol-guard abom --format json</code></td>
+</tr>
+<tr>
+<td align="left">Scan workspace dependencies</td>
+<td align="left"><code>hol-guard supply-chain scan</code></td>
+</tr>
+<tr>
+<td align="left">Connect optional cloud sync</td>
+<td align="left"><code>hol-guard connect</code></td>
+</tr>
+</tbody></table>
+<p><a id="guard-troubleshooting"></a>
+<a id="inspect-command-protection-without-running-it"></a></p>
+<h4>Understand a paused command</h4>
+<p>Inspect the command's classification and matching rules:</p>
+<pre><code class="language-bash">hol-guard command test 'rm -rf ./build'
+hol-guard command explain 'git clean -ndx'
+hol-guard command extensions command.git --json
+</code></pre>
+<p><code>command test</code> and <code>command explain</code> inspect the command without executing it or creating an approval. Use <code>hol-guard approvals</code> to resolve a pending request and <code>hol-guard receipts</code> to review the recorded decision.</p>
+<p>The <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extensions/README.md">Extension directory</a> lists command coverage generated from the Rust-compiled catalog. External contributions require explicit opt-in; required core protections remain enabled. To add coverage, follow the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extensions/contributing.md">Extension contribution guide</a>.</p>
+<h4>Check a package</h4>
+<pre><code class="language-bash">hol-guard supply-chain sync
+hol-guard supply-chain scan
+hol-guard supply-chain explain minimist@1.2.5 --ecosystem npm
+</code></pre>
+<p>The package verdict includes the available advisory evidence and ecosystem coverage. See the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/get-started.md">get-started guide</a> for package-manager interception and the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/remediation.md">remediation guide</a> for handling false positives.</p>
+<p><a id="scanner-quickstart"></a>
+<a id="choose-the-right-package"></a></p>
+<h3>Plugin Scanner</h3>
+<p>This repository also ships <code>plugin-scanner</code>, a CLI for maintainers who want security and quality checks before publishing agent plugins, skills, and MCP integrations.</p>
+<pre><code class="language-bash">pipx install plugin-scanner
+plugin-scanner scan .
+plugin-scanner lint .
+plugin-scanner verify .
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Command</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>scan</code></td>
+<td align="left">Security findings and a quality report across detected package surfaces.</td>
+</tr>
+<tr>
+<td align="left"><code>lint</code></td>
+<td align="left">Rule-level authoring feedback.</td>
+</tr>
+<tr>
+<td align="left"><code>verify</code></td>
+<td align="left">Install-surface and runtime readiness checks.</td>
+</tr>
+<tr>
+<td align="left"><code>submit</code></td>
+<td align="left">A submission artifact for one plugin package.</td>
+</tr>
+<tr>
+<td align="left"><code>doctor</code></td>
+<td align="left">Component diagnostics and troubleshooting bundles.</td>
+</tr>
+</tbody></table>
+<p>The scanner detects Codex, Claude Code, DeepSeek Harness, Gemini CLI, Kimi Code, and OpenCode package formats. Use <code>plugin-scanner --list-ecosystems</code> to list them or <code>--ecosystem</code> to select one. At a Codex marketplace root, it discovers local plugin entries automatically.</p>
+<p>Checks cover manifests, secrets, MCP transport and command configuration, approval defaults, skills, dependency lockfiles, and GitHub Actions permissions. Optional Cisco integrations add skill and MCP analysis. Reports support text, JSON, Markdown, and SARIF.</p>
+<pre><code class="language-bash">plugin-scanner scan . --format sarif --output plugin-scanner.sarif
+plugin-scanner scan . --fail-on-severity high
+</code></pre>
+<p>Quality grades use the checks applicable to each package. Trust scoring has separate provenance and weights; see the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/trust/skill-trust-local.md">skill</a>, <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/trust/mcp-trust-draft.md">MCP</a>, and <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/trust/plugin-trust-draft.md">plugin</a> scoring references.</p>
+<p><a id="ci-and-automation"></a></p>
+<h4>Package a plugin for every runtime</h4>
+<p><code>hol-guard plugin</code> is the Plugin Kit. Point it at one plugin source, such as a Claude Code plugin, Codex plugin, Gemini CLI extension, MCP Registry <code>server.json</code> or a folder of skills, and it checks the source and writes a ready-to-load copy for each agent runtime that can use it. It runs locally, reads only the folder you name and makes no network calls.</p>
+<pre><code class="language-bash">hol-guard plugin check            # what marketplaces and runtime loaders would reject
+hol-guard plugin package          # writes dist/hol-plugin/&lt;runtime&gt;/ for each runtime
+hol-guard plugin convert --to agent-plugins   # Agent Plugins 1.0 package, checked against the spec
+hol-guard plugin links            # install commands per runtime, plus listing links
+hol-guard plugin card             # draft .well-known plugin card as JSON
+hol-guard plugin init --name my-plugin   # scaffold a new plugin in an empty folder
+</code></pre>
+<p>Runtimes: <code>claude-code</code>, <code>codex</code>, <code>gemini-cli</code>, <code>cursor</code>, <code>vscode</code>, <code>opencode</code>, <code>mcp-registry</code>, <code>agent-skills</code> and <code>agent-plugins</code>. See <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/plugin-kit.md">the Plugin Kit guide</a>.</p>
+<h4>GitHub Actions</h4>
+<p>Add the scanner to a plugin repository:</p>
+<pre><code class="language-yaml">name: Plugin security
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: hashgraph-online/ai-plugin-scanner-action@fdb49f9d85321a2ced2933301b395dd3c1ce9c8f # v1.2.631
+        with:
+          plugin_dir: "."
+          min_score: 80
+          fail_on_severity: high
+</code></pre>
+<p>See the <a href="https://github.com/hashgraph-online/ai-plugin-scanner-action">action documentation</a> for SARIF uploads, submission workflows, and machine-readable outputs. The action source is maintained in <a href="action/"><code>action/</code></a>.</p>
+<p><a id="install-the-package-you-need"></a>
+<a id="resolver-safe-cisco-extra"></a></p>
+<h4>Optional Cisco analysis</h4>
+<p>The baseline packages work without Cisco dependencies. To add Cisco skill scanning, use Python 3.11 through 3.14 and install the extra in an isolated environment:</p>
+<pre><code class="language-bash">pipx install 'plugin-scanner[cisco]'
+</code></pre>
+<p>For Cisco MCP analysis, use the repository's <a href="Dockerfile">Docker image</a> or the <code>cisco-mcp</code> dependency group:</p>
+<pre><code class="language-bash">uv sync --extra dev --extra cisco --group cisco-mcp --python 3.13
+uv run plugin-scanner scan . --cisco-skill-scan on --cisco-mcp-scan on
+</code></pre>
+<p>The published <code>cisco</code> extra provides skill scanning; the separate <code>cisco-mcp</code> group supplies the MCP scanner. Dependency versions and Python constraints are maintained in <a href="https://github.com/hashgraph-online/hol-guard/blob/main/pyproject.toml"><code>pyproject.toml</code></a>.</p>
+<h3>Ecosystem Support</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Ecosystem</th>
+<th align="left">Detection surfaces</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Codex</td>
+<td align="left"><code>.codex-plugin/plugin.json</code>, <code>marketplace.json</code>, <code>.agents/plugins/marketplace.json</code></td>
+</tr>
+<tr>
+<td align="left">Claude Code</td>
+<td align="left"><code>.claude-plugin/plugin.json</code>, <code>.claude-plugin/marketplace.json</code></td>
+</tr>
+<tr>
+<td align="left">DeepSeek Harness</td>
+<td align="left"><code>package.json</code> with <code>dsh.bundle</code>, declared patches, and Cordis <code>apply(ctx)</code> exports, or <code>dsh.bundle.mode</code> set to <code>"patch"</code> for patch-only bundles</td>
+</tr>
+<tr>
+<td align="left">Gemini CLI</td>
+<td align="left"><code>gemini-extension.json</code>, <code>commands/**/*.toml</code></td>
+</tr>
+<tr>
+<td align="left">Kimi Code</td>
+<td align="left"><code>kimi.plugin.json</code>, <code>.kimi-plugin/plugin.json</code>, declared skills, agents, commands, prompts, and MCP servers</td>
+</tr>
+<tr>
+<td align="left">OpenCode</td>
+<td align="left"><code>opencode.json</code>, <code>opencode.jsonc</code>, <code>.opencode/commands</code>, <code>.opencode/plugins</code></td>
+</tr>
+</tbody></table>
+<p>Use <code>--ecosystem auto</code> to detect supported packages in a repository, or select an ecosystem explicitly:</p>
+<pre><code class="language-bash">plugin-scanner scan ./plugins-repo --ecosystem claude
+plugin-scanner scan ./dsh-plugin --ecosystem deepseek-harness
+</code></pre>
+<h3>What The Scanner Checks</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Category</th>
+<th align="left">Coverage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Manifest validation</td>
+<td align="left">Required fields, versions, declared paths, interface metadata, links, and assets.</td>
+</tr>
+<tr>
+<td align="left">Security</td>
+<td align="left">Hardcoded secrets, unsafe MCP commands and transports, and risky approval defaults.</td>
+</tr>
+<tr>
+<td align="left">Operational security</td>
+<td align="left">GitHub Actions permissions and pinned dependencies, privileged checkout patterns, Dependabot, and lockfiles.</td>
+</tr>
+<tr>
+<td align="left">Plugin packaging</td>
+<td align="left">README and license files, skill frontmatter, ignore rules, and accidentally committed environment files.</td>
+</tr>
+<tr>
+<td align="left">Marketplace</td>
+<td align="left">Manifest validity, local package discovery, and safe source paths.</td>
+</tr>
+<tr>
+<td align="left">Skill and MCP analysis</td>
+<td align="left">Analyzer availability, findings, and analyzability from optional Cisco integrations.</td>
+</tr>
+<tr>
+<td align="left">Code quality</td>
+<td align="left">Dynamic code execution and shell-injection patterns.</td>
+</tr>
+</tbody></table>
+<h3>How Trust Scoring Works</h3>
+<p>Plugin Scanner reports a quality grade alongside trust provenance. Quality scores are normalized across applicable checks, so optional surfaces do not inflate a package's grade.</p>
+<p>Skill trust uses the HCS-28 baseline adapter IDs, weights, and denominator rules. MCP and Codex plugin trust use explicit adapters, weights, and contribution modes documented in the local specifications:</p>
+<ul>
+<li><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/trust/skill-trust-local.md">Skill Trust Local Draft</a></li>
+<li><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/trust/mcp-trust-draft.md">MCP Trust Draft</a></li>
+<li><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/trust/plugin-trust-draft.md">Codex Plugin Trust Draft</a></li>
+</ul>
+<p><a id="quality-suite-commands"></a></p>
+<h3>CLI Usage</h3>
+<pre><code class="language-bash"># Structured security report
+plugin-scanner scan ./my-plugin --format json --profile public-marketplace
+
+# Inspect authoring rules
+plugin-scanner lint ./my-plugin --list-rules
+plugin-scanner lint ./my-plugin --explain README_MISSING
+
+# Apply supported mechanical fixes
+plugin-scanner lint ./my-plugin --fix --profile strict-security
+
+# Verify package readiness; --online permits live probes
+plugin-scanner verify ./my-plugin --format json
+plugin-scanner verify ./my-plugin --online --format text
+
+# Generate a submission artifact for one plugin
+plugin-scanner submit ./my-plugin --profile public-marketplace --attest dist/plugin-quality.json
+
+# Collect component diagnostics
+plugin-scanner doctor ./my-plugin --component mcp --bundle dist/doctor.zip
+</code></pre>
+<p>For a repository marketplace, <code>scan</code>, <code>lint</code>, <code>verify</code>, and <code>doctor</code> can target the root. <code>submit</code> targets one plugin package.</p>
+<h3>Codex Spec Alignment</h3>
+<p>The scanner recognizes Codex plugin manifests, interface metadata, declared assets, and marketplace packages:</p>
+<ul>
+<li>Local manifest paths use <code>./</code> prefixes; <code>lint --fix</code> preserves or adds them.</li>
+<li><code>.agents/plugins/marketplace.json</code> is the preferred marketplace location, with root <code>marketplace.json</code> supported for compatibility.</li>
+<li>Interface validation checks declared links and assets without requiring an undocumented <code>type</code> field.</li>
+<li><code>verify --online</code> checks HTTP remote reachability. Stdio server execution is skipped for manual review.</li>
+</ul>
+<p>See the <a href="https://developers.openai.com/codex/plugins">Codex plugin documentation</a> and <a href="https://modelcontextprotocol.io">Model Context Protocol specification</a> for upstream formats.</p>
+<h3>Config + Baseline Example</h3>
+<p>Configure the scanner in <code>.plugin-scanner.toml</code>:</p>
+<pre><code class="language-toml">[scanner]
+profile = "public-marketplace"
+baseline_file = "baseline.txt"
+ignore_paths = ["tests/*", "fixtures/*"]
+
+[rules]
+disabled = ["README_MISSING"]
+severity_overrides = { CODEXIGNORE_MISSING = "low" }
+</code></pre>
+<p>The GitHub Action requires <code>trust_repository_policy: true</code> before repository-owned configuration and baselines can change its verdict. Enable that option only for policy you intend the workflow to trust.</p>
+<h3>Report Formats</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Format</th>
+<th align="left">Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>text</code></td>
+<td align="left">Terminal summaries with category totals and findings.</td>
+</tr>
+<tr>
+<td align="left"><code>json</code></td>
+<td align="left">Structured reports for scripts and integrations.</td>
+</tr>
+<tr>
+<td align="left"><code>markdown</code></td>
+<td align="left">Review-ready reports for pull requests and issues.</td>
+</tr>
+<tr>
+<td align="left"><code>sarif</code></td>
+<td align="left">GitHub code scanning and security automation.</td>
+</tr>
+</tbody></table>
+<h3>GitHub Action</h3>
+<p>The <a href="https://github.com/hashgraph-online/ai-plugin-scanner-action">AI Plugin Scanner Action</a> supports security gates, SARIF uploads, submission intake, and registry payloads. Its source lives in <a href="action/"><code>action/</code></a>, and the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/.github/workflows/publish-action-repo.yml">publication workflow</a> distributes the action bundle.</p>
+<p>The legacy <a href="https://github.com/hashgraph-online/hol-codex-plugin-scanner-action">HOL Codex Plugin Scanner Action</a> remains available for existing workflows.</p>
+<h4>Plugin Author Submission Flow</h4>
+<p>Use <code>submission_enabled: true</code> to open or reuse a submission issue when a plugin meets the configured threshold. <code>submission_token</code> must have permission to create issues in the target submission repository. The action emits submission status and issue URLs as outputs.</p>
+<p>See the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/action/action.yml">action's input reference</a> for <code>submission_score_threshold</code>, <code>submission_token</code>, and the target repository options.</p>
+<h4>Registry Payload For Plugin Ecosystem Automation</h4>
+<p>Set <code>registry_payload_output</code> to write a machine-readable payload for a registry or badge pipeline. The action also exposes <code>score</code>, <code>grade</code>, <code>grade_label</code>, <code>max_severity</code>, and <code>findings_total</code> outputs and can write a job summary.</p>
+<p>The <a href="https://github.com/hashgraph-online/registry-broker-codex-plugin">HOL Registry Broker plugin</a> is an example of an agent plugin in the <a href="https://hol.org/registry/plugins">HOL Plugin Registry</a>. Its <a href="https://hol.org/registry/plugins/hol%2Fregistry-broker-codex-plugin">registry listing</a> provides current trust information.</p>
+<h3>Why HOL Guard</h3>
+<p>AI agents can run commands, install dependencies, read files, and call external tools within one session. HOL Guard reviews those actions at supported execution points and keeps the policy decision, approval request, and receipt together.</p>
+<p>Use it for AI agent security on a developer machine, MCP security around connected tools, and supply-chain checks for packages and plugins. Teams can add Guard Cloud for shared approvals and policy management while retaining local protection.</p>
+<h3>Frequently Asked Questions</h3>
+<h4>What is HOL Guard?</h4>
+<p>HOL Guard is open-source antivirus and runtime protection for AI agents. It reviews supported tool calls, shell commands, file access, and package operations for risks such as secret exposure, prompt injection, destructive actions, and malicious dependencies.</p>
+<h4>Does HOL Guard work without a cloud account?</h4>
+<p>Yes. Local protection, CLI commands, approvals, and receipts work without signing in. Guard Cloud is optional and adds synchronized evidence, team controls, and fleet visibility. See <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/local-vs-cloud.md">Local Guard vs. Guard Cloud</a> for the feature boundary.</p>
+<h4>Which AI agents does HOL Guard support?</h4>
+<p>Guard includes adapters for Codex, Claude Code, GitHub Copilot CLI, Cursor, Cline, Gemini CLI, Grok, Hermes, Kimi Code, Pi, oh-my-pi, OpenClaw, OpenCode, Antigravity, ZCode, and Devin. <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/paseo.md">Paseo</a> is supported through these native provider integrations, with per-provider coverage. The <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/harness-support.md">support matrix</a> explains which events and enforcement paths each adapter supports.</p>
+<h4>What is the difference between HOL Guard and Plugin Scanner?</h4>
+<p>Install <code>hol-guard</code> to protect agent activity on your machine. Install <code>plugin-scanner</code> to inspect plugin packages and enforce security and quality checks in CI. This repository builds and publishes both distributions.</p>
+<h4>How does HOL Guard protect MCP servers?</h4>
+<p>Guard inspects MCP server configuration and reviews supported MCP tool calls through agent hooks and managed proxies. Plugin Scanner checks MCP configuration and HTTP remote reachability; optional Cisco MCP analysis adds static security findings.</p>
+<h4>Why did Guard pause my command?</h4>
+<p>The action may need approval under your active policy, or its tools or artifacts may have changed. Start with <code>hol-guard approvals</code>, inspect the command with <code>hol-guard command explain '&lt;command&gt;'</code>, and use <code>hol-guard receipts</code> to review the recorded decision.</p>
+<h3>Documentation</h3>
+<p>For enrollment or stale native authority errors, see <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-control-recovery.md">extension-control recovery</a>.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Guide</th>
+<th align="left">Contents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/get-started.md">Get started</a></td>
+<td align="left">Installation, manual setup, package protection, and common commands.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/harness-support.md">Agent support</a></td>
+<td align="left">Integration coverage and approval behavior.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/architecture.md">Architecture</a></td>
+<td align="left">Runtime components and decision flow.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/spec/guard-policy/v1alpha1/README.md">Policy specification</a></td>
+<td align="left">GuardPolicy document format.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/policy-recipes.md">Policy recipes</a></td>
+<td align="left">Configuration examples for common workflows.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extensions/README.md">Extensions</a></td>
+<td align="left">Built-in command rules and contribution guidance.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/README.md">Native extension authoring</a></td>
+<td align="left">Canonical JSON sources, the Rust compiler, portable fixtures, and review kits.</td>
+</tr>
+<tr>
+<td align="left"><a href="#contribute-a-new-extension">Contribute an extension</a></td>
+<td align="left">Generate, review, integrate, and test a new extension with the CLI.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/local-vs-cloud.md">Local vs. cloud</a></td>
+<td align="left">Local capabilities and optional cloud services.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/troubleshooting.md">Troubleshooting</a></td>
+<td align="left">Diagnosis and recovery.</td>
+</tr>
+<tr>
+<td align="left"><a href="https://github.com/hashgraph-online/hol-guard/blob/main/SECURITY.md">Security</a></td>
+<td align="left">Vulnerability reporting and disclosure policy.</td>
+</tr>
+</tbody></table>
+<h3>Contribute a New Extension</h3>
+<p>To integrate a new AI coding agent or IDE, use the separate <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/adapter-contributions.md">harness adapter contribution guide</a>. Harness adapters provide discovery, managed setup, and event integration. The command extensions below add policy coverage for CLI tools and do not install agent hooks.</p>
+<p>Command extensions are authored as <strong>declarative JSON compiled and evaluated by Rust</strong>. Add metadata, permissions, matcher trees, and safe variants in <code>contributions/command-sources/command.&lt;name&gt;.json</code>, then verify behavior with portable JSON fixtures. Most extensions compose existing native operations; a new Rust operation is needed only when the existing matcher contracts cannot express the behavior.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Contribution</th>
+<th align="left">Authoring input</th>
+<th align="left">Verification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Command coverage</td>
+<td align="left"><code>contributions/command-sources/command.&lt;name&gt;.json</code></td>
+<td align="left">Portable fixtures evaluated by <code>guard-command-source test</code>.</td>
+</tr>
+<tr>
+<td align="left">MCP server knowledge</td>
+<td align="left"><code>contributions/mcp-servers/&lt;id&gt;.json</code></td>
+<td align="left">MCP contribution tests and native catalog validation.</td>
+</tr>
+<tr>
+<td align="left">New matcher semantics</td>
+<td align="left">Reviewed Rust changes in <code>rust/crates/guard-command/</code></td>
+<td align="left">Native contract, admission, evaluation, and regression tests.</td>
+</tr>
+</tbody></table>
+<p>The Rust compiler generates command descriptors, the catalog, and the native matcher program. Python remains part of the CLI, build orchestration, and tests; new command coverage does not require a Python detector or registry registration. See the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/README.md">authoring guide</a> for direct source authoring and the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/command-extension-architecture.md">architecture</a> for the runtime boundary.</p>
+<p>The <strong>Extension Builder CLI</strong> can create those command sources and portable fixtures from exported command metadata. It also supports MCP inventories. It works offline and reads the export without importing or running the target tool.</p>
+<p>Use the Builder's plan-and-apply flow to create the canonical source and fixture. Open a draft
+PR early for scope review. Before marking that PR ready for review, run
+<code>scripts/prepare_extension_contribution.py --source ... --fixture ...</code> to synchronize deterministic
+projections, then run <code>hol-guard extensions handoff --repo . --source ... --fixture ...</code>. The handoff
+check catches missing generated descriptors, catalog entries, and source bindings before final review.</p>
+<p><strong>1. Define the coverage in the PR.</strong> Check the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extensions/README.md">Extension directory</a> and current <a href="https://github.com/hashgraph-online/hol-guard/pulls">open pull requests</a> for existing or overlapping coverage. For a new capability, open a draft PR with the <strong>Command extension</strong> template and include the proposed <code>command.&lt;name&gt;</code> ID, supported operations, destructive examples, safe counterparts, and upstream references. Scope review happens on the PR; a separate issue is not required. Extend an existing extension when it already owns the operation.</p>
+<p>Follow the <a href="#development">development setup</a>, then run the examples below from your HOL Guard checkout. <code>uv run --no-sync</code> uses that checkout's installed development version.</p>
+<p><strong>2. Generate a contribution kit.</strong> This example uses the checked-in, synthetic <code>samplectl</code> inventory. For your own contribution, replace the input and metadata with your tool's export and public publisher details.</p>
+<pre><code class="language-bash">uv run --no-sync hol-guard extensions generate --from cli \
+  --input docs/guard/extension-builder/examples/cli-surface.json \
+  --slug samplectl --executable samplectl --name 'Sample CLI' \
+  --publisher community.example --publisher-name 'Example Maintainer' \
+  --homepage https://example.test/samplectl \
+  --upstream-version 1.0.0 --output samplectl-kit
+
+uv run --no-sync hol-guard extensions validate samplectl-kit
+</code></pre>
+<p>The output directory must be new, with an existing parent directory. A command kit includes <code>discovery.json</code>, <code>review.json</code>, <code>report.json</code>, the canonical JSON source, a portable native fixture, a generated descriptor, and a file manifest. MCP kits contain their contribution metadata and generated Python tests.</p>
+<p>Other inputs: <code>--from help</code> reads saved command help; <code>--from click</code> reads a Click <code>Context.to_info_dict()</code> export; <code>--from oclif</code> reads <code>oclif.manifest.json</code>; <code>--from mcp</code> reads a complete exported <code>tools/list</code> result; and <code>--from snapshot</code> replays <code>discovery.json</code>. The <code>cli</code> example above uses normalized <code>guard.cli-surface.v1</code> JSON.</p>
+<p>For MCP contributions, the generator uses <code>--launcher</code> and <code>--package</code> instead of <code>--executable</code>. See the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/README.md#generate-an-mcp-kit">MCP kit example</a> for a complete command and pagination requirements.</p>
+<p><strong>3. Review the operations and regenerate.</strong> Read <code>report.json</code> and compare the discovered operations with the upstream implementation. Copy the review file before editing:</p>
+<pre><code class="language-bash">cp samplectl-kit/review.json samplectl-review.json
+</code></pre>
+<p>Edit <code>samplectl-review.json</code>, keeping its discovery binding and operation IDs intact. CLI operations use <code>review</code> or <code>block</code>; the root operation stays <code>review</code>. Set <code>reviewed: true</code> for entries you have assessed, with rationale and a public HTTPS evidence reference. Add <code>safeArgv</code> only for exact, verified safe invocations. The <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/README.md#review-and-recompile">review format</a> includes a complete entry example.</p>
+<p>Recompile the saved snapshot after reviewing it:</p>
+<pre><code class="language-bash">uv run --no-sync hol-guard extensions generate --from snapshot \
+  --input samplectl-kit/discovery.json \
+  --review samplectl-review.json --output samplectl-reviewed
+
+uv run --no-sync hol-guard extensions validate samplectl-reviewed
+uv run --no-sync hol-guard extensions diff samplectl-kit samplectl-reviewed
+
+"$HOL_GUARD_NATIVE_SOURCE_COMPILER" test \
+  &lt; samplectl-reviewed/artifacts/tests/fixtures/command-source-samplectl.v1.json
+</code></pre>
+<p><code>diff</code> exits <code>0</code> for equal kits and <code>1</code> when valid kits differ. The Rust fixture runner evaluates command text without executing it. If the upstream export changes, generate and review a new snapshot.</p>
+<p><strong>4. Preview and apply the integration.</strong> On your contribution branch, preview the changes to the current checkout:</p>
+<pre><code class="language-bash">uv run --no-sync hol-guard extensions apply samplectl-reviewed --repo .
+</code></pre>
+<p>Inspect the listed paths and generated files. Copy the printed plan digest into the following command before running it:</p>
+<pre><code class="language-bash">uv run --no-sync hol-guard extensions apply samplectl-reviewed --repo . \
+  --expected-plan THE_PRINTED_PLAN_DIGEST \
+  --write
+</code></pre>
+<p>The write integrates the canonical source, fixture, generated contribution descriptor, external trust map, packaging, and authoring ownership records. Regenerate the complete program and catalog in the next step. Existing IDs or conflicting files stop integration for review.</p>
+<p><strong>5. Test and submit a pull request.</strong> Follow the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/VALIDATION.md">native validation sequence</a> to regenerate the complete catalog, rebuild the compiler and runtime against that program, and run the contribution's fixtures against the integrated sources. This also covers updating an existing extension, where an addition to the packaged baseline would conflict with the existing ID. Then run the contribution checks and regenerate the public directory:</p>
+<pre><code class="language-bash">uv run --no-sync python scripts/release/stage_guard_cloud_review_artifacts.py
+uv run --no-sync pytest -q \
+  tests/test_guard_extension_contribution.py \
+  tests/test_guard_extension_trust.py \
+  tests/test_native_source_program.py \
+  tests/test_guard_command_extension_registry.py
+uv run --no-sync python scripts/export_extension_directory.py
+uv run --no-sync python scripts/export_extension_directory.py --check
+uv run --no-sync python scripts/render_command_extension_directory.py
+uv run --no-sync python scripts/render_command_extension_directory.py --check
+git diff --check
+</code></pre>
+<p>Add fixture cases for destructive operations, safe previews, aliases, reordered flags, quoting, malformed input, and compound commands. Run the Rust checks when changing native semantics and the relevant Python checks when changing tooling. Inspect the final diff, commit the canonical inputs, generated projections, fixtures, and authoring records, and update the existing draft PR against <code>main</code> with the test results. Mark it ready for review after the handoff check passes. Keep scratch kit directories and raw upstream exports out of the PR.</p>
+<p><strong>Community contributions remain External and off by default.</strong> Tests must prove they are inert until a local administrator enables them. Generating, applying, or merging a contribution does not activate it, and its rules cannot weaken Guard's required protections.</p>
+<p><a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/README.md">Full builder reference</a> · <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extensions/contributing.md">Contribution review requirements</a> · <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-contributions.md">External extension contract</a> · <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/VALIDATION.md">Builder validation</a></p>
+<p><a id="quick-start-for-contributors"></a></p>
+<h3>Development</h3>
+<p>The development toolchain includes Python 3.10 or newer, <a href="https://docs.astral.sh/uv/">uv</a>, and Rust 1.88.0, pinned in <a href="https://github.com/hashgraph-online/hol-guard/blob/main/rust/rust-toolchain.toml"><code>rust/rust-toolchain.toml</code></a>. Rust builds the native runtime and extension compiler; Python supplies the CLI and development tooling. The commands below use a POSIX shell from the repository root. See <a href="https://github.com/hashgraph-online/hol-guard/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for Windows setup and the checks for each kind of change.</p>
+<pre><code class="language-bash">git clone https://github.com/hashgraph-online/hol-guard.git
+cd hol-guard
+uv sync --frozen --extra dev
+rustup toolchain install 1.88.0 --profile minimal --component rustfmt --component clippy
+cargo +1.88.0 build --locked --release --manifest-path rust/Cargo.toml \
+  -p guard-command --bin guard-command-source
+cargo +1.88.0 build --locked --release --manifest-path rust/Cargo.toml \
+  -p hol-guard-runtime
+
+export HOL_GUARD_NATIVE_SOURCE_COMPILER="$PWD/rust/target/release/guard-command-source"
+export HOL_GUARD_NATIVE_TEST_SOURCE_COMPILER="$HOL_GUARD_NATIVE_SOURCE_COMPILER"
+export HOL_GUARD_NATIVE_BINARY="$PWD/rust/target/release/hol-guard-runtime"
+
+uv run --no-sync python scripts/build_native_command_program.py \
+  --compiler "$HOL_GUARD_NATIVE_SOURCE_COMPILER" --check
+uv run --no-sync pytest tests/test_guard_extension_builder_public_docs.py \
+  tests/test_native_source_program.py --tb=short
+</code></pre>
+<p>Those compiler overrides are for an editable checkout. Installed native wheels use their bundled compiler and verify its manifest. After changing canonical sources or Rust semantics, regenerate the projections and rebuild as described in the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/extension-builder/VALIDATION.md">validation guide</a>.</p>
+<p>For Python tooling and package changes:</p>
+<pre><code class="language-bash">uv run --no-sync ruff check src tests
+uv run --no-sync ruff format --check src tests
+uv build
+</code></pre>
+<p>For optional Cisco coverage, use the dependency group command above. See <a href="https://github.com/hashgraph-online/hol-guard/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a> for contribution requirements and the <a href="https://github.com/hashgraph-online/hol-guard/blob/main/docs/guard/testing-matrix.md">testing matrix</a> for integration tests.</p>
+<h3>Resources</h3>
+<ul>
+<li><a href="https://hol.org/registry/plugins">HOL Plugin Registry</a></li>
+<li><a href="https://huggingface.co/datasets/HashgraphOnline/hol-plugin-security">HOL Plugin Security dataset on Hugging Face</a></li>
+<li><a href="https://hol.org/docs/standards">HOL Standards Documentation</a></li>
+<li><a href="https://developers.openai.com/codex/plugins">OpenAI Codex Plugin Documentation</a></li>
+<li><a href="https://modelcontextprotocol.io">Model Context Protocol Documentation</a></li>
+<li><a href="https://pypi.org/project/cisco-ai-skill-scanner/">Cisco AI Skill Scanner</a></li>
+<li><a href="https://pypi.org/project/cisco-ai-mcp-scanner/">Cisco AI MCP Scanner</a></li>
+<li><a href="https://github.com/hashgraph-online">HOL GitHub Organization</a></li>
+</ul>
+<h3>Community</h3>
+<p>Maintained by <a href="https://github.com/hashgraph-online">HOL</a>.</p>
+<ul>
+<li><a href="https://github.com/hashgraph-online/hol-guard/issues">Report a bug or request a feature</a></li>
+<li><a href="https://hol.org/guard/releases">Browse release notes</a></li>
+<li><a href="https://hol.org/guard/contributors">See who builds Guard</a></li>
+<li><a href="https://github.com/hashgraph-online/hol-guard/releases">Browse raw GitHub releases</a></li>
+<li><a href="https://huggingface.co/datasets/HashgraphOnline/hol-plugin-security">Explore the plugin security dataset</a></li>
+</ul>
+<h3>License</h3>
+<p>Licensed under <a href="LICENSE">Apache-2.0</a>.</p>
+
+  </section>
+</details>
+
+<aside class="related" aria-label="Related repos">
+  <div>
+    <div class="section-label">more in developer tools</div>
+    <div class="section-sub">other repos in this category, ranked by stars.</div>
+  </div>
+  <div>
+    <div class="related-list">
+      <a class="related-row" href="/projects/colbymchenry/codegraph">
+        <div class="stars">★ 75.6K</div>
+        <div class="name"><span class="org">colbymchenry /</span> codegraph</div>
+      </a>
+      <a class="related-row" href="/projects/Salomondiei08/oh-my-hermes">
+        <div class="stars">★ 878</div>
+        <div class="name"><span class="org">Salomondiei08 /</span> oh-my-hermes</div>
+      </a>
+      <a class="related-row" href="/projects/liaohch3/claude-tap">
+        <div class="stars">★ 3.3K</div>
+        <div class="name"><span class="org">liaohch3 /</span> claude-tap</div>
+      </a>
+      <a class="related-row" href="/projects/adityahimaone/hermes-agent-rtk-caveman">
+        <div class="stars">★ 82</div>
+        <div class="name"><span class="org">adityahimaone /</span> hermes-agent-rtk-caveman</div>
+      </a>
+      <a class="related-row" href="/projects/junhoyeo/tokscale">
+        <div class="stars">★ 5.8K</div>
+        <div class="name"><span class="org">junhoyeo /</span> tokscale</div>
+      </a>
+      <a class="related-row" href="/projects/joeynyc/hermes-skins">
+        <div class="stars">★ 621</div>
+        <div class="name"><span class="org">joeynyc /</span> hermes-skins</div>
+      </a>
+      <a class="related-row" href="/projects/AlexAI-MCP/hermes-CCC">
+        <div class="stars">★ 134</div>
+        <div class="name"><span class="org">AlexAI-MCP /</span> hermes-CCC</div>
+      </a>
+      <a class="related-row" href="/projects/unmodeled-tyler/vessel-browser">
+        <div class="stars">★ 137</div>
+        <div class="name"><span class="org">unmodeled-tyler /</span> vessel-browser</div>
+      </a>
+    </div>
+    <p class="list-link"><a href="/lists/developer-tools">see all developer tools →</a></p>
+  </div>
+</aside>
+
+</main>
+
+<footer class="page-footer">
+  <div class="fn-left">hermes atlas · curated by <a href="https://github.com/ksimback">ksimback</a> · <a href="/about">about</a> · <a href="https://github.com/ksimback/hermes-ecosystem/issues/new?template=suggest-repo.yml">suggest a repo</a> · <a href="/privacy">privacy</a></div>
+  <div>v2 · 2026.04</div>
+</footer>
+
+<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/assets/js/masthead-fetch.js" defer></script>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "fe0d4d79280b4386b6b0cd99b2d94dbc"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</body>
+</html>

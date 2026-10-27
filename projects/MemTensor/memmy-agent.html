@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MemTensor/memmy-agent — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Memmy is a desktop app and CLI/TUI for local memory and AI-agent tasks. Its Memory Service stores and retrieves information, while its agent features can carry…">
+<meta name="description" content="Memmy provides a local memory service and an agent runtime for carrying project context and unfinished work across supported AI tools. It can be used through a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/MemTensor/memmy-agent">
 <meta property="og:title" content="MemTensor/memmy-agent — Hermes Atlas">
-<meta property="og:description" content="Memmy is a desktop app and CLI/TUI for local memory and AI-agent tasks. Its Memory Service stores and retrieves information, while its agent features can carry…">
+<meta property="og:description" content="Memmy provides a local memory service and an agent runtime for carrying project context and unfinished work across supported AI tools. It can be used through a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/MemTensor/memmy-agent">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MemTensor/memmy-agent — Hermes Atlas">
-<meta name="twitter:description" content="Memmy is a desktop app and CLI/TUI for local memory and AI-agent tasks. Its Memory Service stores and retrieves information, while its agent features can carry…">
+<meta name="twitter:description" content="Memmy provides a local memory service and an agent runtime for carrying project context and unfinished work across supported AI tools. It can be used through a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=memmy-agent&amp;subtitle=%F0%9F%8D%99++A+personal+AI+agent+%26+local+memory+hub+for+all+AI+agents%2C+gives+every+AI+one+shared%2C+fully+controlled+memory+and+persistent+context+%E2%80%94+all+AI+remember+the+same+you.+Now+supports&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/MemTensor/memmy-agent#software",
   "name": "memmy-agent",
-  "description": "Memmy is a desktop app and CLI/TUI for local memory and AI-agent tasks. Its Memory Service stores and retrieves information, while its agent features can carry project context between supported tools, including Claude Code, Codex, OpenClaw, and Hermes.",
+  "description": "Memmy provides a local memory service and an agent runtime for carrying project context and unfinished work across supported AI tools. It can be used through a desktop app, CLI/TUI, or memory CLI, and includes options to connect agents to the memory service.",
   "url": "https://hermesatlas.com/projects/MemTensor/memmy-agent",
   "codeRepository": "https://github.com/MemTensor/memmy-agent",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "MemTensor",
     "url": "https://github.com/MemTensor"
   },
-  "dateModified": "2026-10-27T12:18:26.000Z",
+  "dateModified": "2026-10-27T12:55:14.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -81,7 +81,7 @@
 <header class="masthead">
   <a href="/" class="brand" aria-label="Hermes Atlas — home">hermes atlas</a>
   <div class="mast-meta" aria-label="Site metadata">
-    <span id="meta-count">280·repos</span>
+    <span id="meta-count">281·repos</span>
     <span id="meta-version">hermes·v0.21.5</span>
     <a class="mast-star" id="meta-atlas" href="https://github.com/ksimback/hermes-ecosystem" target="_blank" rel="noopener" aria-label="Star Hermes Atlas on GitHub">★ star this repo</a>
   </div>
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Memmy is a desktop app and CLI/TUI for local memory and AI-agent tasks. Its Memory Service stores and retrieves information, while its agent features can carry project context between supported tools, including Claude Code, Codex, OpenClaw, and Hermes.</p>
+    <p class="summary-text">Memmy provides a local memory service and an agent runtime for carrying project context and unfinished work across supported AI tools. It can be used through a desktop app, CLI/TUI, or memory CLI, and includes options to connect agents to the memory service.</p>
     <ul class="summary-highlights">
-      <li>Provides a local Memory Service and memory CLI.</li>
-      <li>Offers a desktop app, CLI, and interactive TUI.</li>
-      <li>README lists integrations with multiple AI coding agents.</li>
+      <li>Connects with tools including Claude Code, Codex, Cursor, and OpenClaw.</li>
+      <li>Memory CLI supports searching, adding, and retrieving memories.</li>
+      <li>CLI can run an OpenAI-compatible API.</li>
     </ul>
   </div>
 </section>
@@ -225,11 +225,12 @@ When the trial credits run out, switch to BYOK mode and use your own model API.<
 </blockquote>
 <h5>2. Use the <code>memmy</code> CLI / TUI</h5>
 <p><img src="https://raw.githubusercontent.com/MemTensor/memmy-agent/main/docs/assets/tui.png" alt="Memmy TUI" loading="lazy" decoding="async"></p>
-<p>On Linux x64 or arm64 with Node.js 22 or newer and an available systemd user session:</p>
+<p>On Linux x64 or arm64 with an available systemd user session, use Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+ (26.x). Other major versions are not accepted by the installer:</p>
 <pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/MemTensor/memmy-agent/main/scripts/install.sh | bash
 memmy
 </code></pre>
 <p>The installer enables the local Memory Service immediately as <code>memmy-memory.service</code>. The first bare <code>memmy</code> invocation opens the model setup wizard when needed, then enables <code>memmy-gateway.service</code>, waits for it to become ready, and enters the TUI. Both are <code>systemd --user</code> services bound to localhost and remain available after the TUI or terminal exits. They start again on later logins; the installer does not enable linger. Only the installer launcher activates this service management, so source-built Linux CLIs keep their existing behavior.</p>
+<p>During Gateway startup, temporary HTTP 503 responses from the bootstrap endpoint are retried until the Gateway becomes ready or the startup wait times out.</p>
 <p>Before starting or reconnecting to the Gateway, <code>memmy</code> refreshes a private <code>~/.memmy/systemd/gateway.env</code> file (mode <code>0600</code>) with configuration-referenced environment variables, common Provider credentials, and the terminal <code>PATH</code>. If those values change, the next bare <code>memmy</code> invocation restarts the user service with the new environment.</p>
 <pre><code class="language-bash">systemctl --user status memmy-memory.service
 systemctl --user status memmy-gateway.service
@@ -321,7 +322,7 @@ bash scripts/dev-start.sh
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 54.3K</div>
+        <div class="stars">★ 54.4K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
