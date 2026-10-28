@@ -438,6 +438,18 @@ Default language hint for STT. Used by the `local` (faster-whisper) provider, `H
 
 Select the configuration and user-data home. A literal `~` or `$VAR` in the value is expanded (fish does not expand `~` inside `VAR=~/…`), so it never resolves relative to the current directory. Defaults to `~/.hermes` on POSIX and `%LOCALAPPDATA%\hermes` on Windows; the official Docker image uses `/opt/data`. Profile/runtime context can select a more specific home.
 
+`HERMES_CONFIG_BACKEND`
+
+Select where the profile's `config.yaml` user layer is read and written. `file` (the default) is the local `config.yaml`; `remote` is [Remote Config](/docs/user-guide/remote-config). Any other value, or a remote backend that cannot serve config, stops Hermes at startup with an error instead of falling back to defaults. An explicitly empty value in a `.env` resets a stale shell value to `file`. Read from the launch environment, the launch home's `.env` and the managed `.env`, never from `config.yaml`. See [Config backend](/docs/developer-guide/config-backend).
+
+`HERMES_CONFIG_REMOTE_URL`
+
+Base URL of the [Remote Config](/docs/user-guide/remote-config) plane (default `https://config-config.nousresearch.com`; `https://` only, plain `http://` only to loopback, no user info). An env var because it is needed before any config can be read: it says where config comes from.
+
+`HERMES_CONFIG_INSTANCE_ID`
+
+This agent's id in the [Remote Config](/docs/user-guide/remote-config) plane; required with `HERMES_CONFIG_BACKEND=remote`. An env var because the plane needs it to serve the first config read.
+
 `HERMES_DISABLE_WINDOWS_UTF8`
 
 **Windows only.** Set to `1` to disable the UTF-8 stdio shim (`configure_windows_stdio()`) and fall back to the console's locale code page. Useful for bisecting encoding bugs; rarely the right setting in normal operation
