@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>nesquena/hermes-webui — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it provides near-parity…">
+<meta name="description" content="Hermes WebUI is a browser-based interface for Hermes Agent, designed to provide near-parity with its CLI using the existing agent setup and models. It has a…">
 <link rel="canonical" href="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta property="og:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it provides near-parity…">
+<meta property="og:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, designed to provide near-parity with its CLI using the existing agent setup and models. It has a…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/nesquena/hermes-webui">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="nesquena/hermes-webui — Hermes Atlas">
-<meta name="twitter:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it provides near-parity…">
+<meta name="twitter:description" content="Hermes WebUI is a browser-based interface for Hermes Agent, designed to provide near-parity with its CLI using the existing agent setup and models. It has a…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-webui&amp;subtitle=Hermes+WebUI%3A+The+best+way+to+use+Hermes+Agent+from+the+web+or+from+your+phone%21&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/nesquena/hermes-webui#software",
   "name": "hermes-webui",
-  "description": "Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it provides near-parity with the CLI and uses the existing Hermes agent setup and models without additional setup.",
+  "description": "Hermes WebUI is a browser-based interface for Hermes Agent, designed to provide near-parity with its CLI using the existing agent setup and models. It has a three-panel layout for sessions, chat, and workspace files, with controls and session tools in the Hermes Control Center; the README says it can be accessed securely through an SSH tunnel.",
   "url": "https://hermesatlas.com/projects/nesquena/hermes-webui",
   "codeRepository": "https://github.com/nesquena/hermes-webui",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,13 +47,13 @@
     "name": "nesquena",
     "url": "https://github.com/nesquena"
   },
-  "dateModified": "2026-10-27T20:47:57.000Z",
+  "dateModified": "2026-10-28T04:47:46.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 19216
+    "userInteractionCount": 19224
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-27</span>
+    <span><span class="meta-label">updated</span>2026-10-28</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes WebUI is a browser-based interface for Hermes Agent, with chat, session navigation, and workspace file browsing. The README says it provides near-parity with the CLI and uses the existing Hermes agent setup and models without additional setup.</p>
+    <p class="summary-text">Hermes WebUI is a browser-based interface for Hermes Agent, designed to provide near-parity with its CLI using the existing agent setup and models. It has a three-panel layout for sessions, chat, and workspace files, with controls and session tools in the Hermes Control Center; the README says it can be accessed securely through an SSH tunnel.</p>
     <ul class="summary-highlights">
-      <li>Three-panel layout with sessions, chat, and workspace browsing</li>
-      <li>Includes light and dark themes</li>
-      <li>Can be accessed remotely through an SSH tunnel</li>
+      <li>Three-panel layout for sessions, chat, and workspace files</li>
+      <li>Uses the existing Hermes agent setup and models</li>
+      <li>Built with Python and vanilla JavaScript; no build step</li>
     </ul>
   </div>
 </section>
@@ -469,6 +469,7 @@ and a late failure is surfaced in the status line (#6710)</li>
 <li>Auto-stops after ~2s of silence</li>
 <li>Appends to existing textarea content (doesn't replace)</li>
 <li>Hidden when browser doesn't support Web Speech API (Chrome, Edge, Safari)</li>
+<li>A saved fallback from browser speech recognition to server-side recording expires after 24 hours. Preferences stored by older versions get a 24-hour window on first use after upgrading. On reload after expiry, the mic returns to normal capture selection: server transcription takes priority when available; otherwise it uses browser speech recognition.</li>
 </ul>
 <h4>Profiles</h4>
 <ul>
@@ -978,14 +979,7 @@ and set <code>HERMES_WEBUI_PASSWORD</code> to enable authentication.</p>
 </blockquote>
 <hr>
 <h3>Running tests</h3>
-<p>Tests discover the repo and the Hermes agent dynamically -- no hardcoded paths.
-Use the repo test runner so local runs do not accidentally use an unsupported
-system Python. It creates/uses <code>.venv</code> with Python 3.11, 3.12, or 3.13 and
-installs the dev test dependencies from <code>requirements-dev.txt</code> when missing.</p>
-<pre><code class="language-bash">cd hermes-webui
-./scripts/test.sh
-</code></pre>
-<p>Pass normal pytest arguments </p>
+<p>Tests discover the repo and the </p>
 <hr>
 <p><em>README truncated. <a href="https://github.com/nesquena/hermes-webui#readme">Continue reading on GitHub</a></em></p>
 
