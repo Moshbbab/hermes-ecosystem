@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>f-o-x11/deed-page-skill — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted…">
+<meta name="description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s…">
 <link rel="canonical" href="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta property="og:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted…">
+<meta property="og:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta name="twitter:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted…">
+<meta name="twitter:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deed-page-skill&amp;subtitle=Agent+skill%3A+publish+files+to+a+permanent+deed.page+URL+with+one+curl+request.+No+account.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill#software",
   "name": "deed-page-skill",
-  "description": "This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted remote MCP server. The server can publish and manage sites, including updating, versioning, password-protecting, and deleting them; the skill and plugins support several agent tools.",
+  "description": "This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s hosted remote MCP server, which agents can use to publish and manage sites, and includes plugin manifests for several agents.",
   "url": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill",
   "codeRepository": "https://github.com/f-o-x11/deed-page-skill",
   "applicationCategory": "DeveloperApplication",
@@ -46,7 +46,7 @@
     "name": "f-o-x11",
     "url": "https://github.com/f-o-x11"
   },
-  "dateModified": "2026-10-27T19:14:05.000Z",
+  "dateModified": "2026-10-28T15:36:26.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -123,7 +123,7 @@
     
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-27</span>
+    <span><span class="meta-label">updated</span>2026-10-28</span>
   </div>
 
   <div class="actions">
@@ -140,11 +140,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request, and documents deed.page’s hosted remote MCP server. The server can publish and manage sites, including updating, versioning, password-protecting, and deleting them; the skill and plugins support several agent tools.</p>
+    <p class="summary-text">This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s hosted remote MCP server, which agents can use to publish and manage sites, and includes plugin manifests for several agents.</p>
     <ul class="summary-highlights">
       <li>Publishes files or folders to permanent deed.page URLs</li>
-      <li>Documents a hosted remote MCP server with no auth to start</li>
-      <li>Includes agent skill and plugin installation instructions</li>
+      <li>Includes a skill and hosted MCP server setup instructions</li>
+      <li>Supports agent plugins and skills.sh installation</li>
     </ul>
   </div>
 </section>
@@ -331,7 +331,7 @@
 </tr>
 </tbody></table>
 <h4>Use</h4>
-<p>Ask your agent to "publish this folder to deed.page" or "host this report and give me a link". The agent calls <code>publish_site</code> with the files and answers with the live URL. To change the site later, it calls <code>update_site</code> with the same slug and token.</p>
+<p>Ask your agent to "publish this folder to deed.page" or "host this report and give me a link". The agent calls <code>publish_site</code> with the files and answers with the live URL. A request that only says "make a website" or "build a page" stays a local draft until you ask to publish or confirm the public URL and the exact file list. An unattended run publishes only when its instructions explicitly say to. To change the site later, it calls <code>update_site</code> with the same slug and token.</p>
 <p>Free plan: 25 sites, 25 MB per site, 60 publishes per hour. Free sites are public, so do not publish secrets. Static files only. Free sites show a small "Published with deed.page" badge; Hobby ($3/mo) and Pro never do.</p>
 <h3>Skill and plugins</h3>
 <p>The skill is one file: <a href="https://github.com/f-o-x11/deed-page-skill/blob/main/skills/deed-page/SKILL.md"><code>skills/deed-page/SKILL.md</code></a>. The repo is also a plugin that bundles the skill with the hosted deed.page MCP server, with manifests for each agent:</p>
@@ -421,7 +421,7 @@ copilot plugin install deed-page@deed-page
 <p>Ask your agent to "publish this", "host this report", or "give me a link". The agent runs:</p>
 <pre><code class="language-bash">curl -sS -T index.html "https://deed.page/v1/sites?slug=my-report-7f3a2c&amp;ref=skill-gh" -H "X-Client: &lt;agent name&gt;"
 </code></pre>
-<p>and answers with the <code>url</code> from the JSON response. The first publish returns a <code>token</code> once. It is the key to update or delete that site, so keep it safe.</p>
+<p>and answers with the <code>url</code> from the JSON response. The first publish returns a <code>token</code> once. It is the key to update or delete that site, so keep it safe. A request that only says "make a website" or "build a page" produces a local draft. The agent offers to publish and uploads after you ask to publish or confirm the public URL and the exact file list. An unattended run publishes only when its instructions explicitly say to.</p>
 <ul>
 <li>Free plan: 25 sites, 25 MB per site, 60 publishes per hour.</li>
 <li>Free sites are public. Do not publish secrets.</li>

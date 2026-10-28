@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>plur-ai/plur — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams that users can inspect, correct, and delete. It runs locally and…">
+<meta name="description" content="PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams stored locally. It integrates with MCP tools and offers local search,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:title" content="plur-ai/plur — Hermes Atlas">
-<meta property="og:description" content="PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams that users can inspect, correct, and delete. It runs locally and…">
+<meta property="og:description" content="PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams stored locally. It integrates with MCP tools and offers local search,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/plur-ai/plur">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="plur-ai/plur — Hermes Atlas">
-<meta name="twitter:description" content="PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams that users can inspect, correct, and delete. It runs locally and…">
+<meta name="twitter:description" content="PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams stored locally. It integrates with MCP tools and offers local search,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=plur&amp;subtitle=Shared+memory+for+AI+agents&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/plur-ai/plur#software",
   "name": "plur",
-  "description": "PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams that users can inspect, correct, and delete. It runs locally and integrates with MCP tools, including Claude Code, Codex, and Cursor.",
+  "description": "PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams stored locally. It integrates with MCP tools and offers local search, with keyword-search fallback when the search model is unavailable.",
   "url": "https://hermesatlas.com/projects/plur-ai/plur",
   "codeRepository": "https://github.com/plur-ai/plur",
   "applicationCategory": "UtilitiesApplication",
@@ -47,7 +47,7 @@
     "name": "plur-ai",
     "url": "https://github.com/plur-ai"
   },
-  "dateModified": "2026-10-28T10:01:34.000Z",
+  "dateModified": "2026-10-28T21:55:15.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams that users can inspect, correct, and delete. It runs locally and integrates with MCP tools, including Claude Code, Codex, and Cursor.</p>
+    <p class="summary-text">PLUR provides persistent, shared memory for AI agents through plain-text YAML engrams stored locally. It integrates with MCP tools and offers local search, with keyword-search fallback when the search model is unavailable.</p>
     <ul class="summary-highlights">
-      <li>Stores agent memories as plain YAML files.</li>
-      <li>Supports local search, with keyword search as a fallback.</li>
-      <li>Provides CLI setup and an MCP server.</li>
+      <li>Engrams can be read, corrected, and deleted.</li>
+      <li>Memory can persist across sessions and tools.</li>
+      <li>Setup uses the PLUR CLI and MCP server.</li>
     </ul>
   </div>
 </section>
@@ -801,6 +801,18 @@ plur-ai                Python SDK — direct learn/recall/inject for scripts and
 └── engrams.db       # optional SQLite read index (auto-generated)
 </code></pre>
 <p><code>PLUR_PATH</code> overrides the default location.</p>
+<h4>Who wrote this engram</h4>
+<p>Every engram records the actor that wrote it, in <code>provenance.origin</code>. Set the
+identity for this machine in <code>config.yaml</code>:</p>
+<pre><code class="language-yaml">provenance:
+  identity: agent:claude-code    # agent:&lt;name&gt; — one per writing actor
+</code></pre>
+<p>With no identity configured, engrams are stamped <code>agent:unidentified</code>. That is
+recorded honestly rather than guessed, so a store written by several actors
+still shows that it was — but the attribution is only useful once each writer
+names itself. <code>plur status</code> reports the value in effect.</p>
+<p>For a store several agents write to (a shared team store, or one machine
+running an MCP server alongside a CLI), give each writer its own identity.</p>
 <p>Indexing is on by default (<code>index: true</code>) and the backend is chosen from the
 size of your store, so there is normally nothing to configure:</p>
 <table>
@@ -877,7 +889,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 54.6K</div>
+        <div class="stars">★ 55.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -885,7 +897,7 @@ pnpm install &amp;&amp; pnpm build &amp;&amp; pnpm test
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 382</div>
+        <div class="stars">★ 383</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">

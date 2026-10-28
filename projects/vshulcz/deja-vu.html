@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session transcripts already stored on disk and makes relevant history searchable across supported agents. It provides local…">
+<meta name="description" content="deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session transcripts already stored on disk and makes relevant history searchable across supported agents. It provides local…">
+<meta property="og:description" content="deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session transcripts already stored on disk and makes relevant history searchable across supported agents. It provides local…">
+<meta name="twitter:description" content="deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+40+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session transcripts already stored on disk and makes relevant history searchable across supported agents. It provides local search, MCP and hooks for returning context, and can resume or hand off sessions; the README says it runs as a Go binary without an LLM or server.",
+  "description": "deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and hooks, and includes a terminal search interface for browsing and resuming sessions. The README describes it as a local Go binary that works without an LLM or server.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-28T12:47:31.000Z",
+  "dateModified": "2026-10-28T18:29:24.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1323
+    "userInteractionCount": 1326
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session transcripts already stored on disk and makes relevant history searchable across supported agents. It provides local search, MCP and hooks for returning context, and can resume or hand off sessions; the README says it runs as a Go binary without an LLM or server.</p>
+    <p class="summary-text">deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and hooks, and includes a terminal search interface for browsing and resuming sessions. The README describes it as a local Go binary that works without an LLM or server.</p>
     <ul class="summary-highlights">
-      <li>Indexes past sessions across 43 supported agents.</li>
-      <li>Searches session history from a terminal interface.</li>
-      <li>Supports session handoffs between agents.</li>
+      <li>Indexes existing session history from supported agents.</li>
+      <li>Shares one searchable index across agents.</li>
+      <li>Supports session search, resume, and cross-agent handoff.</li>
     </ul>
   </div>
 </section>
@@ -182,7 +182,7 @@ deja install --auto
 <tbody><tr>
 <td align="center" width="33%">Recall<br><b>97.2% R@5</b> on LongMemEval-S<br><sub>MemPalace publishes 96.6%, agentmemory 95.2%</sub></td>
 <td align="center" width="33%">Tokens<br><b>half the tokens</b> of agentmemory<br><sub>on a task this machine had already solved</sub></td>
-<td align="center" width="33%">Index time<br><b>17.6 s</b> to index 19,195 sessions<br><sub>the next of seven tools takes 72 s</sub></td>
+<td align="center" width="33%">Index time<br><b>13.6 s</b> to index 19,195 sessions<br><sub>the next of seven tools takes 72 s</sub></td>
 </tr>
 </tbody></table>
 
@@ -386,7 +386,7 @@ as usual. <code>deja search &lt;query&gt;</code> skips the suggestion.</p>
 </tr>
 <tr>
 <td><code>deja recall &lt;words&gt;</code></td>
-<td>The page the MCP recall tool gives an agent: about 4 KB, this project first. For skills and scripts that run deja through the shell.</td>
+<td>The page the MCP recall tool gives an agent: about 4 KB, this project first (<code>DEJA_RECALL_GLOBAL=1</code> ranks every project the same). For skills and scripts that run deja through the shell.</td>
 </tr>
 <tr>
 <td><code>deja resume &lt;id&gt;</code></td>
@@ -488,7 +488,7 @@ whether or not the tool is called.</p>
 </thead>
 <tbody><tr>
 <td><code>recall</code></td>
-<td>the question, or an exact error string, name or flag</td>
+<td>1-3 exact terms: a file path, an error string, a flag or identifier</td>
 <td><code>harness?</code>, <code>limit?</code>, <code>offset?</code></td>
 <td>Dense matching snippets, capped at 4KB.</td>
 </tr>
@@ -1111,8 +1111,8 @@ With Ollama or LM Studio, embedding stays local and needs no key.</p>
 </details>
 
 <h3>Proof</h3>
-<p>Millisecond lookups, and on LongMemEval-S 88.1% hit@1 (470-question cleaned set) and 87.4% hit@1 on all 500 questions;
-on LoCoMo retrieval, 70.5% hit@1. On a task this machine had already solved, 58% fewer
+<p>Millisecond lookups, and on LongMemEval-S 88.9% hit@1 (470-question cleaned set) and 88.2% hit@1 on all 500 questions;
+on LoCoMo retrieval, 71.9% hit@1. On a task this machine had already solved, 58% fewer
 tokens: eleven runs an arm, 53,558 against 126,222 with nothing wired, and 52,815 against
 103,443 on a later build with the arms alternated. Both retrieval harnesses ship in this repo
 and run on the public datasets in minutes: <a href="https://vshulcz.github.io/deja-vu/guide/benchmarks.html">benchmarks</a> ·
@@ -1232,7 +1232,8 @@ transcripts:</p>
 <p>The same store has since grown to 2,754 sessions, 358k messages and 5.7 GB.
 A cold full build over it takes 71 s and writes a 232 MB index — 4% of the
 corpus, because the share falls as transcripts repeat themselves — and the
-end-to-end median is unchanged at 0.25 s.</p>
+end-to-end median is unchanged at 0.25 s. Since 0.23.2 records are compressed
+from 256 bytes, which takes a 19k-session index from 277 to 185 MB.</p>
 <p>The index is incremental. When a session file grows, only that file is re-read. When one is
 rewritten, its new records are appended and the old ones zeroed in place. On a
 40,000-session store a pass over 20 rewritten transcripts takes 1.7 s and peaks under 1 GB,
@@ -1270,7 +1271,8 @@ is not secret detection: a shape it does not know can pass through. See the
 <p>A recall is a lexical lookup against a local index:
 0.7–0.8 ms median, and nothing waits on a model. A hook adds the process start and a
 freshness check over your stores on top of that: about 0.2 s end to end on a 1.9 GB
-store, and 0.59 s for the per-prompt hook on an index of 19k sessions.</p>
+store. On an index of 19k sessions the per-prompt hook takes 107 ms at the median,
+and a recall through <code>deja mcp</code> 85 ms.</p>
 </details>
 
 <details>
@@ -1418,7 +1420,7 @@ Windows the notes are in <code>%AppData%\deja</code>).</p>
 <li><a href="https://vshulcz.github.io/deja-vu/guide/day-zero.html">What each memory tool knows the day you install it</a> · <a href="https://vshulcz.github.io/deja-vu/guide/compare.html">Memory plugins compared</a></li>
 <li><a href="https://vshulcz.github.io/deja-vu/guide/after-compaction.html">What compaction drops</a> · <a href="https://vshulcz.github.io/deja-vu/guide/switching-agents.html">Switching agents</a> · <a href="https://vshulcz.github.io/deja-vu/guide/auditing-agents.html">Auditing an agent</a> · <a href="https://vshulcz.github.io/deja-vu/guide/export-conversations.html">Exporting a conversation</a> · <a href="https://vshulcz.github.io/deja-vu/guide/sync-across-machines.html">Across machines</a> · <a href="https://vshulcz.github.io/deja-vu/guide/token-cost.html">What memory costs</a></li>
 </ul>
-<p>Per harness: <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-claude-code.html">Claude Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-codex.html">Codex</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-cursor.html">Cursor</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-windsurf.html">Windsurf</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-opencode.html">opencode</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-dsh.html">DeepSeek Harness</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kimi.html">Kimi Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-zed.html">Zed</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-grok.html">Grok Build</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-gemini.html">Gemini CLI</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-qwen.html">Qwen Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-openclaw.html">OpenClaw</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-goose.html">Goose</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-cline.html">Cline</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-pi.html">pi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-hermes.html">Hermes</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-copilot.html">Copilot CLI</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-copilot-chat.html">Copilot Chat</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-aider.html">aider</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-amp.html">Amp</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-antigravity.html">Antigravity</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-continue.html">Continue</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-crush.html">Crush</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-roo.html">Roo Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kilocode.html">Kilo Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kiro.html">Kiro</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-cherrystudio.html">Cherry Studio</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-omp.html">Oh My Pi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-prime.html">prime-agent</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-senpi.html">Senpi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kimchi.html">Kimchi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-commandcode.html">Command Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-zcode.html">ZCode</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-gjc.html">gjc</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-codewhale.html">CodeWhale</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-reasonix.html">Reasonix</a></p>
+<p>Per harness: <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-claude-code.html">Claude Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-codex.html">Codex</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-cursor.html">Cursor</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-windsurf.html">Windsurf</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-opencode.html">opencode</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-dsh.html">DeepSeek Harness</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kimi.html">Kimi Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-zed.html">Zed</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-grok.html">Grok Build</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-gemini.html">Gemini CLI</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-qwen.html">Qwen Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-openclaw.html">OpenClaw</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-goose.html">Goose</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-cline.html">Cline</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-pi.html">pi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-hermes.html">Hermes</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-copilot.html">Copilot CLI</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-copilot-chat.html">Copilot Chat</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-aider.html">aider</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-amp.html">Amp</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-antigravity.html">Antigravity</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-continue.html">Continue</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-crush.html">Crush</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-roo.html">Roo Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kilocode.html">Kilo Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kiro.html">Kiro</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-cherrystudio.html">Cherry Studio</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-omp.html">Oh My Pi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-prime.html">prime-agent</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-senpi.html">Senpi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-kimchi.html">Kimchi</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-commandcode.html">Command Code</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-zcode.html">ZCode</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-gjc.html">gjc</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-codewhale.html">CodeWhale</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-reasonix.html">Reasonix</a> · <a href="https://vshulcz.github.io/deja-vu/guide/memory-for-trae.html">TRAE CLI</a></p>
 <h3>Try it on your own history</h3>
 <pre><code class="language-sh">curl -fsSL https://raw.githubusercontent.com/vshulcz/deja-vu/main/install.sh | sh
 deja install --auto
@@ -1454,7 +1456,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 54.6K</div>
+        <div class="stars">★ 55.5K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">
@@ -1462,7 +1464,7 @@ anywhere, and how to exclude a project or forget a session is under
         <div class="name"><span class="org">greyhaven-ai /</span> autocontext</div>
       </a>
       <a class="related-row" href="/projects/elkimek/honcho-self-hosted">
-        <div class="stars">★ 382</div>
+        <div class="stars">★ 383</div>
         <div class="name"><span class="org">elkimek /</span> honcho-self-hosted</div>
       </a>
       <a class="related-row" href="/projects/yoloshii/ClawMem">
