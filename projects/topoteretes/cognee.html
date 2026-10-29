@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>topoteretes/cognee — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. Its local quickstart…">
+<meta name="description" content="Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. It supports local text…">
 <link rel="canonical" href="https://hermesatlas.com/projects/topoteretes/cognee">
 <meta property="og:title" content="topoteretes/cognee — Hermes Atlas">
-<meta property="og:description" content="Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. Its local quickstart…">
+<meta property="og:description" content="Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. It supports local text…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/topoteretes/cognee">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="topoteretes/cognee — Hermes Atlas">
-<meta name="twitter:description" content="Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. Its local quickstart…">
+<meta name="twitter:description" content="Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. It supports local text…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=cognee&amp;subtitle=Cognee+is+the+open-source+AI+memory+platform+for+agents.+Give+your+AI+agents+persistent+long-term+memory+with+small+models+for+free&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/topoteretes/cognee#software",
   "name": "cognee",
-  "description": "Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. Its local quickstart builds and queries memory using local extraction and embedding models without an LLM; generated answers require additional LLM configuration.",
+  "description": "Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. It supports local text ingestion and retrieval without an LLM, with optional LLM configuration for generated answers.",
   "url": "https://hermesatlas.com/projects/topoteretes/cognee",
   "codeRepository": "https://github.com/topoteretes/cognee",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "topoteretes",
     "url": "https://github.com/topoteretes"
   },
-  "dateModified": "2026-10-29T13:33:20.000Z",
+  "dateModified": "2026-10-29T22:24:43.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 32886
+    "userInteractionCount": 32901
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. Its local quickstart builds and queries memory using local extraction and embedding models without an LLM; generated answers require additional LLM configuration.</p>
+    <p class="summary-text">Cognee turns documents, code, and conversations into a self-hosted knowledge graph that agents can search and reuse across sessions. It supports local text ingestion and retrieval without an LLM, with optional LLM configuration for generated answers.</p>
     <ul class="summary-highlights">
-      <li>Structures text as entities, relationships, and searchable chunks.</li>
-      <li>Supports custom data models and ontologies.</li>
-      <li>Offers plugins and MCP for connecting agents.</li>
+      <li>Builds connected memory from documents, code, and conversations</li>
+      <li>Supports local ingestion and retrieval without an LLM</li>
+      <li>Offers plugins and MCP for connecting agents</li>
     </ul>
   </div>
 </section>
@@ -300,7 +300,7 @@ cognee-cli recall "Where was Marie Curie born?" -d local_quickstart
 <p><strong>3. Add an LLM</strong> to get generated answers instead of retrieved passages:</p>
 <pre><code class="language-python">import os
 
-os.environ["LLM_API_KEY"] = "YOUR OPENAI_API_KEY"
+os.environ["LLM_API_KEY"] = "YOUR_OPENAI_API_KEY"
 </code></pre>
 <p>Alternatively, create a <code>.env</code> file using our <a href="https://github.com/topoteretes/cognee/blob/main/.env.template">template</a>.</p>
 <p>Once a key is set, Cognee uses OpenAI for language models and embeddings, and processing and generated answers make provider calls. See <a href="https://docs.cognee.ai/getting-started/installation">installation</a>, <a href="https://docs.cognee.ai/setup-configuration/llm-providers">other providers</a>, or <a href="https://docs.cognee.ai/guides/local-ollama">local Ollama models</a> for other setups.</p>
@@ -366,7 +366,7 @@ hooks = true
 <pre><code class="language-bash">codex plugin marketplace add topoteretes/cognee-integrations --ref main
 codex plugin add cognee@cognee
 </code></pre>
-<p>Follow the <a href="https://github.com/topoteretes/cognee-integrations/tree/main/integrations/claude-code">plugin setup guide</a> to configure local or remote memory.</p>
+<p>Follow the setup guide for <a href="https://github.com/topoteretes/cognee-integrations/tree/main/integrations/claude-code">Claude Code</a> or <a href="https://github.com/topoteretes/cognee-integrations/tree/main/integrations/codex">Codex</a> to configure local or remote memory.</p>
 <table>
 <thead>
 <tr>
@@ -377,6 +377,10 @@ codex plugin add cognee@cognee
 <tbody><tr>
 <td>Claude Code memory plugin</td>
 <td><a href="https://github.com/topoteretes/cognee-integrations/tree/main/integrations/claude-code">Install and configure the plugin</a></td>
+</tr>
+<tr>
+<td>Codex memory plugin</td>
+<td><a href="https://github.com/topoteretes/cognee-integrations/tree/main/integrations/codex">Install and configure the plugin</a></td>
 </tr>
 <tr>
 <td>OpenClaw memory plugin</td>
@@ -499,11 +503,11 @@ codex plugin add cognee@cognee
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 68.0K</div>
+        <div class="stars">★ 68.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 56.0K</div>
+        <div class="stars">★ 56.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

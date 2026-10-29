@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>vshulcz/deja-vu — Hermes Agent Memory &amp; Context | Hermes Atlas</title>
-<meta name="description" content="deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and…">
+<meta name="description" content="deja-vu is a local memory tool that indexes coding-agent session transcripts stored on disk and returns relevant history through MCP and hooks. It provides…">
 <link rel="canonical" href="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta property="og:description" content="deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and…">
+<meta property="og:description" content="deja-vu is a local memory tool that indexes coding-agent session transcripts stored on disk and returns relevant history through MCP and hooks. It provides…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/vshulcz/deja-vu">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="vshulcz/deja-vu — Hermes Atlas">
-<meta name="twitter:description" content="deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and…">
+<meta name="twitter:description" content="deja-vu is a local memory tool that indexes coding-agent session transcripts stored on disk and returns relevant history through MCP and hooks. It provides…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deja-vu&amp;subtitle=Coding+agent+memory+for+Claude+Code%2C+Codex%2C+Cursor+and+40+more%2C+built+from+the+session+history+already+on+your+disk.+Local+search%2C+MCP+and+hooks%2C+no+LLM%2C+one+Go+binary.&amp;kind=project+%C2%B7+memory">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/vshulcz/deja-vu#software",
   "name": "deja-vu",
-  "description": "deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and hooks, and includes a terminal search interface for browsing and resuming sessions. The README describes it as a local Go binary that works without an LLM or server.",
+  "description": "deja-vu is a local memory tool that indexes coding-agent session transcripts stored on disk and returns relevant history through MCP and hooks. It provides searchable session history across supported agents, with optional semantic recall and tools for resuming, handing off, syncing, and managing sessions.",
   "url": "https://hermesatlas.com/projects/vshulcz/deja-vu",
   "codeRepository": "https://github.com/vshulcz/deja-vu",
   "applicationCategory": "UtilitiesApplication",
@@ -47,13 +47,13 @@
     "name": "vshulcz",
     "url": "https://github.com/vshulcz"
   },
-  "dateModified": "2026-10-29T13:24:09.000Z",
+  "dateModified": "2026-10-29T21:21:07.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 1332
+    "userInteractionCount": 1337
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">deja-vu indexes coding-agent session transcripts stored on disk and makes relevant history searchable across agents. It returns session context through MCP and hooks, and includes a terminal search interface for browsing and resuming sessions. The README describes it as a local Go binary that works without an LLM or server.</p>
+    <p class="summary-text">deja-vu is a local memory tool that indexes coding-agent session transcripts stored on disk and returns relevant history through MCP and hooks. It provides searchable session history across supported agents, with optional semantic recall and tools for resuming, handing off, syncing, and managing sessions.</p>
     <ul class="summary-highlights">
-      <li>Indexes existing session history from supported agents.</li>
-      <li>Shares one searchable index across agents.</li>
-      <li>Supports session search, resume, and cross-agent handoff.</li>
+      <li>Indexes existing session history across 43 agents.</li>
+      <li>Searches sessions through a terminal interface or CLI.</li>
+      <li>Runs locally as a Go binary.</li>
     </ul>
   </div>
 </section>
@@ -264,12 +264,15 @@ solved in that project when the session opens. To look for yourself, run <code>d
 or <code>npx @vshulcz/deja-vu "query"</code> to try it without installing anything. Desktop apps that
 take MCP servers as bundles can open the <code>.mcpb</code> from the
 <a href="https://github.com/vshulcz/deja-vu/releases/latest">latest release</a>; it carries the binary.</p>
-<p>Claude Code, Qwen and OpenClaw can take the same plugin bundle from
-their own marketplaces instead (Codex has a bundle of its own, in the table under
+<p>Codex CLI, opencode, Claude Code, Qwen and OpenClaw can also install the plugin
+bundle directly from their own marketplaces or registries (see
 <a href="#harnesses-with-a-package-of-their-own">Harnesses with a package of their own</a>,
-and Cursor has one in <a href="cursor-plugin/"><code>cursor-plugin/</code></a>).
-Copilot CLI installs it too but takes only the skill, so use <code>deja install copilot-auto</code> there:</p>
-<pre><code class="language-sh">claude plugin marketplace add vshulcz/deja-vu &amp;&amp; claude plugin install deja-vu@deja-vu
+plus <a href="cursor-plugin/"><code>cursor-plugin/</code></a> for Cursor). Copilot CLI installs the
+marketplace bundle too, though it takes only the skill there — use
+<code>deja install copilot-auto</code> for hooks and MCP:</p>
+<pre><code class="language-sh">codex plugin marketplace add https://github.com/vshulcz/deja-vu &amp;&amp; codex plugin add deja-vu@deja-vu
+opencode plugin opencode-deja
+claude plugin marketplace add vshulcz/deja-vu &amp;&amp; claude plugin install deja-vu@deja-vu
 </code></pre>
 <p>On Windows the install script exits with <code>unsupported OS</code> — it is a shell script. Use
 Scoop, from the main bucket every Scoop install already has, or winget, which ships with Windows:</p>
@@ -1452,11 +1455,11 @@ anywhere, and how to exclude a project or forget a session is under
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mem0ai/mem0">
-        <div class="stars">★ 68.0K</div>
+        <div class="stars">★ 68.1K</div>
         <div class="name"><span class="org">mem0ai /</span> mem0</div>
       </a>
       <a class="related-row" href="/projects/vectorize-io/hindsight">
-        <div class="stars">★ 56.0K</div>
+        <div class="stars">★ 56.2K</div>
         <div class="name"><span class="org">vectorize-io /</span> hindsight</div>
       </a>
       <a class="related-row" href="/projects/greyhaven-ai/autocontext">

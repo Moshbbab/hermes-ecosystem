@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>f-o-x11/deed-page-skill — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s…">
+<meta name="description" content="This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with a curl request, and documents deed.page’s hosted…">
 <link rel="canonical" href="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta property="og:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s…">
+<meta property="og:description" content="This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with a curl request, and documents deed.page’s hosted…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/f-o-x11/deed-page-skill">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="f-o-x11/deed-page-skill — Hermes Atlas">
-<meta name="twitter:description" content="This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s…">
+<meta name="twitter:description" content="This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with a curl request, and documents deed.page’s hosted…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=deed-page-skill&amp;subtitle=Agent+skill%3A+publish+files+to+a+permanent+deed.page+URL+with+one+curl+request.+No+account.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,18 +35,19 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill#software",
   "name": "deed-page-skill",
-  "description": "This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s hosted remote MCP server, which agents can use to publish and manage sites, and includes plugin manifests for several agents.",
+  "description": "This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with a curl request, and documents deed.page’s hosted remote MCP server. The skill and server support publishing and managing sites, including updating, versioning, password-protecting, and deleting them.",
   "url": "https://hermesatlas.com/projects/f-o-x11/deed-page-skill",
   "codeRepository": "https://github.com/f-o-x11/deed-page-skill",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Cross-platform",
+  "programmingLanguage": "JavaScript",
   "license": "https://spdx.org/licenses/MIT.html",
   "author": {
     "@type": "Organization",
     "name": "f-o-x11",
     "url": "https://github.com/f-o-x11"
   },
-  "dateModified": "2026-10-28T15:36:26.000Z",
+  "dateModified": "2026-10-29T15:13:44.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -120,10 +121,10 @@
 
   <div class="meta-row">
     <span class="stars">★ 2</span>
-    
+    <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-28</span>
+    <span><span class="meta-label">updated</span>2026-10-29</span>
   </div>
 
   <div class="actions">
@@ -140,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">This repository contains an agent skill that publishes a file or folder to a permanent deed.page URL with one curl request. It also documents deed.page’s hosted remote MCP server, which agents can use to publish and manage sites, and includes plugin manifests for several agents.</p>
+    <p class="summary-text">This repository contains an agent skill that publishes files or folders to a permanent deed.page URL with a curl request, and documents deed.page’s hosted remote MCP server. The skill and server support publishing and managing sites, including updating, versioning, password-protecting, and deleting them.</p>
     <ul class="summary-highlights">
-      <li>Publishes files or folders to permanent deed.page URLs</li>
-      <li>Includes a skill and hosted MCP server setup instructions</li>
-      <li>Supports agent plugins and skills.sh installation</li>
+      <li>Skill supports agents that read SKILL.md files.</li>
+      <li>Includes optional scripts for publishing larger uploads.</li>
+      <li>Documents setup for multiple MCP clients and agent plugins.</li>
     </ul>
   </div>
 </section>
@@ -334,7 +335,7 @@
 <p>Ask your agent to "publish this folder to deed.page" or "host this report and give me a link". The agent calls <code>publish_site</code> with the files and answers with the live URL. A request that only says "make a website" or "build a page" stays a local draft until you ask to publish or confirm the public URL and the exact file list. An unattended run publishes only when its instructions explicitly say to. To change the site later, it calls <code>update_site</code> with the same slug and token.</p>
 <p>Free plan: 25 sites, 25 MB per site, 60 publishes per hour. Free sites are public, so do not publish secrets. Static files only. Free sites show a small "Published with deed.page" badge; Hobby ($3/mo) and Pro never do.</p>
 <h3>Skill and plugins</h3>
-<p>The skill is one file: <a href="https://github.com/f-o-x11/deed-page-skill/blob/main/skills/deed-page/SKILL.md"><code>skills/deed-page/SKILL.md</code></a>. The repo is also a plugin that bundles the skill with the hosted deed.page MCP server, with manifests for each agent:</p>
+<p>The skill is <a href="https://github.com/f-o-x11/deed-page-skill/blob/main/skills/deed-page/SKILL.md"><code>skills/deed-page/SKILL.md</code></a>. Since 1.7.0 it also ships two optional scripts in <a href="skills/deed-page/scripts/"><code>skills/deed-page/scripts/</code></a>: <code>publish.sh</code> publishes a file or folder and, above 4 MB, hands off to <code>publish-large.mjs</code> (Node 18+), which uploads through the manifest flow (<code>/v1/uploads</code>). They are the same files served at <a href="https://deed.page/cli/">https://deed.page/cli/</a>. The repo is also a plugin that bundles the skill with the hosted deed.page MCP server, with manifests for each agent:</p>
 <table>
 <thead>
 <tr>
@@ -432,7 +433,7 @@ copilot plugin install deed-page@deed-page
 <ul>
 <li>The skill calls only <code>https://deed.page/v1/sites</code> with <code>curl</code>. The MCP server is <code>https://deed.page/mcp</code>. Published sites live at <code>https://&lt;slug&gt;.deed.page/</code>.</li>
 <li>No account or API key is needed. The first publish returns a site token once; the skill saves it to <code>~/.config/deed-page/token</code> (mode 600), loads it into <code>DEEDPAGE_TOKEN</code> before later publishes so every site stays under one owner, and sends it only to <code>https://deed.page</code>.</li>
-<li>No install scripts, hooks, or executable code. See <a href="https://github.com/f-o-x11/deed-page-skill/blob/main/SECURITY.md">SECURITY.md</a>.</li>
+<li>No install scripts or hooks. The only executable code is the two optional publish scripts in <code>skills/deed-page/scripts/</code>, which run only when the agent publishes. Above 4 MB, <code>publish-large.mjs</code> PUTs file bytes to the Vercel Blob upload URLs that deed.page returns. See <a href="https://github.com/f-o-x11/deed-page-skill/blob/main/SECURITY.md">SECURITY.md</a>.</li>
 </ul>
 <h3>Privacy and support</h3>
 <ul>
@@ -484,7 +485,7 @@ copilot plugin install deed-page@deed-page
         <div class="name"><span class="org">tlehman /</span> litprog-skill</div>
       </a>
       <a class="related-row" href="/projects/esaradev/icarus-plugin">
-        <div class="stars">★ 158</div>
+        <div class="stars">★ 159</div>
         <div class="name"><span class="org">esaradev /</span> icarus-plugin</div>
       </a>
     </div>
