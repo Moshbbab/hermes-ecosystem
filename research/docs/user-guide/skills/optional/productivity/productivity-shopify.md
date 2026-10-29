@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`airtable`](/docs/user-guide/skills/bundled/productivity/productivity-airtable), [`xurl`](/docs/user-guide/skills/bundled/social-media/social-media-xurl)
+[`airtable`](/docs/user-guide/skills/optional/productivity/productivity-airtable), [`xurl`](/docs/user-guide/skills/bundled/social-media/social-media-xurl)
 
 ## Reference: full SKILL.md
 

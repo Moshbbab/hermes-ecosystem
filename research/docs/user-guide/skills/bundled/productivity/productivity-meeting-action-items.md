@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline), [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace), [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
+[`teams-meeting-pipeline`](/docs/user-guide/skills/bundled/productivity/productivity-teams-meeting-pipeline), [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace), [`notion`](/docs/user-guide/skills/optional/productivity/productivity-notion)
 
 ## Reference: full SKILL.md
 

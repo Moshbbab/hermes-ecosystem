@@ -53,6 +53,10 @@ Delegate coding to xAI Grok Build CLI (features, PRs).
 
 Configure and troubleshoot Honcho memory for Hermes.
 
+[**opencode**](/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-opencode)
+
+Delegate coding to OpenCode CLI (features, PR review).
+
 [**openhands**](/docs/user-guide/skills/optional/autonomous-ai-agents/autonomous-ai-agents-openhands)
 
 Delegate coding to OpenHands CLI (model-agnostic, LiteLLM).
@@ -107,10 +111,6 @@ Validated interactive HTML diagrams, upstream-maintained.
 
 ASCII art: pyfiglet, cowsay, boxes, image-to-ascii.
 
-[**audiocraft-audio-generation**](/docs/user-guide/skills/optional/creative/creative-audiocraft-audio-generation)
-
-AudioCraft: MusicGen text-to-music, AudioGen text-to-sound.
-
 [**auteur**](/docs/user-guide/skills/optional/creative/creative-auteur)
 
 Design and build cinematic, award-level web pages.
@@ -142,6 +142,10 @@ Generate flat, minimal educational SVG visuals as HTML.
 [**creative-ideation**](/docs/user-guide/skills/optional/creative/creative-creative-ideation)
 
 Generate ideas via named methods from creative practice.
+
+[**design-md**](/docs/user-guide/skills/optional/creative/creative-design-md)
+
+Author/validate/export Google's DESIGN.md token spec files.
 
 [**draw-your-font**](/docs/user-guide/skills/optional/creative/creative-draw-your-font)
 
@@ -367,6 +371,20 @@ Manual OAuth for remote MCP servers on headless gateways.
 
 List, auth, and call MCP servers/tools from the terminal.
 
+## media
+
+Skill
+
+Description
+
+[**gif-search**](/docs/user-guide/skills/optional/media/media-gif-search)
+
+Search/download GIFs from Tenor via curl + jq.
+
+[**songsee**](/docs/user-guide/skills/optional/media/media-songsee)
+
+Audio spectrograms/features (mel, chroma, MFCC) via CLI.
+
 ## mlops
 
 Skill
@@ -385,10 +403,6 @@ Axolotl: YAML LLM fine-tuning (LoRA, DPO, GRPO).
 
 Embedding database for RAG and semantic search.
 
-[**clip**](/docs/user-guide/skills/optional/mlops/mlops-clip)
-
-Zero-shot image classification and image-text search.
-
 [**dspy**](/docs/user-guide/skills/optional/mlops/mlops-research-dspy)
 
 DSPy: declarative LM programs, auto-optimize prompts, RAG.
@@ -405,22 +419,6 @@ Fast vector similarity search at billion scale.
 
 Speed up long-sequence transformer training and inference.
 
-[**guidance**](/docs/user-guide/skills/optional/mlops/mlops-guidance)
-
-Constrain LLM output with grammars; guarantee valid JSON.
-
-[**huggingface-hub**](/docs/user-guide/skills/optional/mlops/mlops-models-huggingface-hub)
-
-HuggingFace hf CLI: search/download/upload models, datasets.
-
-[**huggingface-tokenizers**](/docs/user-guide/skills/optional/mlops/mlops-huggingface-tokenizers)
-
-Fast BPE/WordPiece tokenization and custom vocab training.
-
-[**instructor**](/docs/user-guide/skills/optional/mlops/mlops-instructor)
-
-Structured LLM outputs validated with Pydantic.
-
 [**lambda-labs**](/docs/user-guide/skills/optional/mlops/mlops-lambda-labs)
 
 On-demand GPU cloud instances for ML training.
@@ -428,10 +426,6 @@ On-demand GPU cloud instances for ML training.
 [**llama-cpp**](/docs/user-guide/skills/optional/mlops/mlops-inference-llama-cpp)
 
 llama.cpp local GGUF inference + HF Hub model discovery.
-
-[**llava**](/docs/user-guide/skills/optional/mlops/mlops-llava)
-
-Vision-language chat: VQA, captioning, image dialogue.
 
 [**modal**](/docs/user-guide/skills/optional/mlops/mlops-modal)
 
@@ -445,17 +439,9 @@ Curate LLM training data: dedupe, filter, PII redaction.
 
 OBLITERATUS: abliterate LLM refusals (diff-in-means).
 
-[**outlines**](/docs/user-guide/skills/optional/mlops/mlops-inference-outlines)
-
-Outlines: structured JSON/regex/Pydantic LLM generation.
-
 [**peft**](/docs/user-guide/skills/optional/mlops/mlops-peft)
 
 Fine-tune large LLMs with LoRA on limited GPU memory.
-
-[**pinecone**](/docs/user-guide/skills/optional/mlops/mlops-pinecone)
-
-Managed vector DB for production RAG and search.
 
 [**pytorch-fsdp**](/docs/user-guide/skills/optional/mlops/mlops-pytorch-fsdp)
 
@@ -464,10 +450,6 @@ Fully sharded data-parallel training for large models.
 [**pytorch-lightning**](/docs/user-guide/skills/optional/mlops/mlops-pytorch-lightning)
 
 Clean training loops with built-in distributed support.
-
-[**qdrant**](/docs/user-guide/skills/optional/mlops/mlops-qdrant)
-
-Vector search engine for production RAG systems.
 
 [**saelens**](/docs/user-guide/skills/optional/mlops/mlops-saelens)
 
@@ -489,10 +471,6 @@ Reference-free preference alignment, simpler than DPO.
 
 RL post-training for LLMs with Megatron and SGLang.
 
-[**stable-diffusion**](/docs/user-guide/skills/optional/mlops/mlops-stable-diffusion)
-
-Text-to-image generation, inpainting, and img2img.
-
 [**tensorrt-llm**](/docs/user-guide/skills/optional/mlops/mlops-tensorrt-llm)
 
 High-throughput LLM inference on NVIDIA GPUs.
@@ -501,21 +479,9 @@ High-throughput LLM inference on NVIDIA GPUs.
 
 Pretrain LLMs at scale with PyTorch 4D parallelism.
 
-[**trl-fine-tuning**](/docs/user-guide/skills/optional/mlops/mlops-training-trl-fine-tuning)
-
-TRL: SFT, DPO, GRPO, RLOO reward modeling for LLM RLHF.
-
 [**unsloth**](/docs/user-guide/skills/optional/mlops/mlops-training-unsloth)
 
 Unsloth: 2-5x faster LoRA/QLoRA fine-tuning, less VRAM.
-
-[**weights-and-biases**](/docs/user-guide/skills/optional/mlops/mlops-evaluation-weights-and-biases)
-
-W&B: log ML experiments, sweeps, model registry, dashboards.
-
-[**whisper**](/docs/user-guide/skills/optional/mlops/mlops-whisper)
-
-Transcribe and translate speech in 99 languages.
 
 ## payments
 
@@ -541,6 +507,14 @@ Skill
 
 Description
 
+[**airtable**](/docs/user-guide/skills/optional/productivity/productivity-airtable)
+
+Airtable REST API via curl. Records CRUD, filters, upserts.
+
+[**box**](/docs/user-guide/skills/optional/productivity/productivity-box)
+
+Box manages cloud files, sharing, search, and metadata.
+
 [**canvas**](/docs/user-guide/skills/optional/productivity/productivity-canvas)
 
 Fetch Canvas LMS courses and assignments via API token.
@@ -560,6 +534,10 @@ Build self-updating dashboards from live sources.
 [**memento-flashcards**](/docs/user-guide/skills/optional/productivity/productivity-memento-flashcards)
 
 Spaced-repetition flashcards: create, review, quiz, export.
+
+[**notion**](/docs/user-guide/skills/optional/productivity/productivity-notion)
+
+Notion API + ntn CLI: pages, databases, markdown, Workers.
 
 [**property-listings**](/docs/user-guide/skills/optional/productivity/productivity-property-listings)
 
@@ -615,6 +593,10 @@ Free keyless web, news, and image search via ddgs.
 
 Serve an interactive codebase knowledge graph web UI.
 
+[**llm-wiki**](/docs/user-guide/skills/optional/research/research-llm-wiki)
+
+Karpathy's LLM Wiki: build/query interlinked markdown KB.
+
 [**osint-investigation**](/docs/user-guide/skills/optional/research/research-osint-investigation)
 
 Follow the money via public records and sanctions data.
@@ -622,10 +604,6 @@ Follow the money via public records and sanctions data.
 [**parallel-cli**](/docs/user-guide/skills/optional/research/research-parallel-cli)
 
 Agent-native web search, deep research, and enrichment.
-
-[**pinecone-research**](/docs/user-guide/skills/optional/research/research-pinecone-research)
-
-Agent RAG and long-term memory with Pinecone.
 
 [**qmd**](/docs/user-guide/skills/optional/research/research-qmd)
 
@@ -715,9 +693,25 @@ Generate wiki docs + Mermaid diagrams for any codebase.
 
 Adversarial plan interview before implementation.
 
+[**hermes-agent-skill-authoring**](/docs/user-guide/skills/optional/software-development/software-development-hermes-agent-skill-authoring)
+
+Author in-repo SKILL.md files: frontmatter and structure.
+
+[**inspecting-hermes-desktop-dom**](/docs/user-guide/skills/optional/software-development/software-development-inspecting-hermes-desktop-dom)
+
+Read the live Hermes desktop DOM/CSS over CDP.
+
+[**node-inspect-debugger**](/docs/user-guide/skills/optional/software-development/software-development-node-inspect-debugger)
+
+Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
+
 [**pr-lens**](/docs/user-guide/skills/optional/software-development/software-development-pr-lens)
 
 Draw code changes as animated architecture/data-flow SVGs.
+
+[**python-debugpy**](/docs/user-guide/skills/optional/software-development/software-development-python-debugpy)
+
+Debug Python: pdb REPL + debugpy remote (DAP).
 
 [**rest-graphql-debug**](/docs/user-guide/skills/optional/software-development/software-development-rest-graphql-debug)
 

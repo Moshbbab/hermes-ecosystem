@@ -450,7 +450,7 @@ Description
 
 `/<skill-name>`
 
-Load any installed skill as an on-demand command. Example: `/gif-search`, `/github-pr-workflow`, `/excalidraw`.
+Load any installed skill as an on-demand command. Example: `/youtube-content`, `/github-pr-workflow`, `/excalidraw`.
 
 `/skills ...`
 

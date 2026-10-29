@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`obsidian`](/docs/user-guide/skills/bundled/note-taking/note-taking-obsidian), [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion), [`airtable`](/docs/user-guide/skills/bundled/productivity/productivity-airtable), [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace), [`email-inbox-triage`](/docs/user-guide/skills/bundled/email/email-email-inbox-triage)
+[`obsidian`](/docs/user-guide/skills/bundled/note-taking/note-taking-obsidian), [`notion`](/docs/user-guide/skills/optional/productivity/productivity-notion), [`airtable`](/docs/user-guide/skills/optional/productivity/productivity-airtable), [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace), [`email-inbox-triage`](/docs/user-guide/skills/bundled/email/email-email-inbox-triage)
 
 ## Reference: full SKILL.md
 

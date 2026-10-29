@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`popular-web-designs`](/docs/user-guide/skills/bundled/creative/creative-popular-web-designs), [`design-md`](/docs/user-guide/skills/bundled/creative/creative-design-md), [`p5js`](/docs/user-guide/skills/bundled/creative/creative-p5js)
+[`popular-web-designs`](/docs/user-guide/skills/bundled/creative/creative-popular-web-designs), [`design-md`](/docs/user-guide/skills/optional/creative/creative-design-md), [`p5js`](/docs/user-guide/skills/bundled/creative/creative-p5js)
 
 ## Reference: full SKILL.md
 

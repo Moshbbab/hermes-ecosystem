@@ -333,6 +333,10 @@ Refresh an explicit project's lock without selecting an environment.
 
 Prepare and select an isolated dependency generation. Return its Python path.
 
+`pm.ensure_project_environment(name, project, extras=..., explicit=True)`
+
+Prepare and select an isolated generation of a project's locked dependencies, without installing the project. Return its Python path.
+
 `pm.ensure_python_tool(name, requirements, executable, explicit=True)`
 
 Prepare an isolated tool and return its executable path.
@@ -388,6 +392,10 @@ Check installed tool identities, files, and digests against the lock.
 `pm repair`
 
 Rebuild the recorded Python dependency set in a new generation, validate it, then select it. Does not update pins, features, or plugin configuration.
+
+`pm environment NAME --extra EXTRA` / `--requirement REQ`
+
+Make the isolated side environment `HERMES_HOME/environments/NAME` current and print only its Python path on stdout (progress goes to stderr), for shell callers such as skills: `PY="$(hermes pm environment documents --extra documents --extra documents-pdf)"`. `--extra` installs the pinned requirements of extras declared in `pyproject.toml`; `--requirement` takes bounded ad hoc requirements. The environment records its own lock, and only a changed requirement set or Python pin builds a new generation. Concurrent calls serialize on the environment's lock, and a rebuild lands in a new generation, so a caller already using the previous one keeps its files. An explicit install: it runs even where lazy installs are off. Never `pip install` into the result.
 
 `pm status`
 

@@ -72,12 +72,6 @@ Use, configure, theme, extend, and orchestrate Hermes Agent.
 
 `autonomous-ai-agents/hermes-agent`
 
-[`opencode`](/docs/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-opencode)
-
-Delegate coding to OpenCode CLI (features, PR review).
-
-`autonomous-ai-agents/opencode`
-
 ## creative
 
 Skill
@@ -109,12 +103,6 @@ Infographics: 21 layouts x 21 styles (信息图, 可视化).
 Design one-off HTML artifacts (landing, deck, prototype).
 
 `creative/claude-design`
-
-[`design-md`](/docs/user-guide/skills/bundled/creative/creative-design-md)
-
-Author/validate/export Google's DESIGN.md token spec files.
-
-`creative/design-md`
 
 [`humanizer`](/docs/user-guide/skills/bundled/creative/creative-humanizer)
 
@@ -188,18 +176,6 @@ Description
 
 Path
 
-[`gif-search`](/docs/user-guide/skills/bundled/media/media-gif-search)
-
-Search/download GIFs from Tenor via curl + jq.
-
-`media/gif-search`
-
-[`songsee`](/docs/user-guide/skills/bundled/media/media-songsee)
-
-Audio spectrograms/features (mel, chroma, MFCC) via CLI.
-
-`media/songsee`
-
 [`youtube-content`](/docs/user-guide/skills/bundled/media/media-youtube-content)
 
 YouTube transcripts to summaries, threads, blogs.
@@ -228,29 +204,11 @@ Description
 
 Path
 
-[`airtable`](/docs/user-guide/skills/bundled/productivity/productivity-airtable)
-
-Airtable REST API via curl. Records CRUD, filters, upserts.
-
-`productivity/airtable`
-
-[`box`](/docs/user-guide/skills/bundled/productivity/productivity-box)
-
-Box manages cloud files, sharing, search, and metadata.
-
-`productivity/box`
-
 [`document-to-action-items`](/docs/user-guide/skills/bundled/productivity/productivity-document-to-action-items)
 
 Extract cited obligations, deadlines, tasks from documents.
 
 `productivity/document-to-action-items`
-
-[`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx)
-
-Create, read, edit, template, and review Word .docx files.
-
-`productivity/docx`
 
 [`google-workspace`](/docs/user-guide/skills/bundled/productivity/productivity-google-workspace)
 
@@ -270,23 +228,17 @@ Turn meeting notes into cited decisions, owners, tickets.
 
 `productivity/meeting-action-items`
 
-[`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
+[`microsoft-office`](/docs/user-guide/skills/bundled/productivity/productivity-microsoft-office)
 
-Notion API + ntn CLI: pages, databases, markdown, Workers.
+Create, read, and edit Word, PowerPoint, and Excel files.
 
-`productivity/notion`
+`productivity/microsoft-office`
 
 [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf)
 
 PDF files: create, read, merge, fill, OCR, edit text.
 
 `productivity/pdf`
-
-[`powerpoint`](/docs/user-guide/skills/bundled/productivity/productivity-powerpoint)
-
-Create, read, edit .pptx decks with python-pptx.
-
-`productivity/powerpoint`
 
 [`product-price-monitor`](/docs/user-guide/skills/bundled/productivity/productivity-product-price-monitor)
 
@@ -305,12 +257,6 @@ Teams meeting summaries, job replay, Graph subscriptions.
 Weekly reset: commitments, stalled work, next-week plan.
 
 `productivity/weekly-review-planning`
-
-[`xlsx`](/docs/user-guide/skills/bundled/productivity/productivity-xlsx)
-
-Create, read, edit Excel .xlsx workbooks and CSVs.
-
-`productivity/xlsx`
 
 ## research
 
@@ -337,12 +283,6 @@ Watch named companies for material news; cited digests.
 Ground answers and documents in cited, verifiable sources.
 
 `research/grounded-citations`
-
-[`llm-wiki`](/docs/user-guide/skills/bundled/research/research-llm-wiki)
-
-Karpathy's LLM Wiki: build/query interlinked markdown KB.
-
-`research/llm-wiki`
 
 ## social-media
 
@@ -383,30 +323,6 @@ Exploratory QA of web apps: find bugs, evidence, reports.
 GitHub via gh CLI: PRs, issues, reviews, repos, auth.
 
 `software-development/github`
-
-[`hermes-agent-skill-authoring`](/docs/user-guide/skills/bundled/software-development/software-development-hermes-agent-skill-authoring)
-
-Author in-repo SKILL.md files: frontmatter and structure.
-
-`software-development/hermes-agent-skill-authoring`
-
-[`inspecting-hermes-desktop-dom`](/docs/user-guide/skills/bundled/software-development/software-development-inspecting-hermes-desktop-dom)
-
-Read the live Hermes desktop DOM/CSS over CDP.
-
-`software-development/inspecting-hermes-desktop-dom`
-
-[`node-inspect-debugger`](/docs/user-guide/skills/bundled/software-development/software-development-node-inspect-debugger)
-
-Debug Node.js via --inspect + Chrome DevTools Protocol CLI.
-
-`software-development/node-inspect-debugger`
-
-[`python-debugpy`](/docs/user-guide/skills/bundled/software-development/software-development-python-debugpy)
-
-Debug Python: pdb REPL + debugpy remote (DAP).
-
-`software-development/python-debugpy`
 
 [`requesting-code-review`](/docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review)
 

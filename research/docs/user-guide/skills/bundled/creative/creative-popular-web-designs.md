@@ -43,7 +43,7 @@ The following is the complete skill definition that Hermes loads when this skill
 ## Related design skills
 
 -   **`claude-design`** — use for the design _process and taste_ (scoping a brief, producing variants, verifying a local HTML artifact, avoiding AI-design slop). Pair it with this skill when the user wants a thoughtfully-designed page styled after a known brand: `claude-design` drives the workflow, this skill supplies the visual vocabulary.
--   **`design-md`** — use when the deliverable is a formal DESIGN.md token spec file, not a rendered artifact.
+-   **`design-md`** (optional: `hermes skills install official/creative/design-md`) — use when the deliverable is a formal DESIGN.md token spec file, not a rendered artifact.
 
 ## How to Use
 

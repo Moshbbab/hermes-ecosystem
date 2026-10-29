@@ -36,7 +36,7 @@ Tags
 
 Related skills
 
-[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`docx`](/docs/user-guide/skills/bundled/productivity/productivity-docx), [`notion`](/docs/user-guide/skills/bundled/productivity/productivity-notion)
+[`pdf`](/docs/user-guide/skills/bundled/productivity/productivity-pdf), [`microsoft-office`](/docs/user-guide/skills/bundled/productivity/productivity-microsoft-office), [`notion`](/docs/user-guide/skills/optional/productivity/productivity-notion)
 
 ## Reference: full SKILL.md
 
@@ -46,7 +46,7 @@ The following is the complete skill definition that Hermes loads when this skill
 
 # Document to Action Items
 
-Turn documents into cited facts and proposed actions. Extraction is not legal advice, and low-confidence OCR or ambiguous language must remain visible. The `pdf` / `pdf` / `docx` skills own extraction mechanics; this skill owns what happens to the extracted content.
+Turn documents into cited facts and proposed actions. Extraction is not legal advice, and low-confidence OCR or ambiguous language must remain visible. The `pdf` and `microsoft-office` skills own extraction mechanics; this skill owns what happens to the extracted content.
 
 ## When to Use
 

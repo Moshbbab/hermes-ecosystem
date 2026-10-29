@@ -14,6 +14,10 @@ Purpose
 
 Job model, storage, atomic read/write to `jobs.json`
 
+`cron/jobs_time.py`
+
+Per-job `timezone` / `grace_minutes` knobs: validation, tolerant reads, due-scan zone
+
 `cron/scheduler.py`
 
 Scheduler loop — due-job detection, execution, repeat tracking
@@ -65,6 +69,14 @@ Standard 5-field cron syntax (minute, hour, day, month, weekday)
 One-shot, fires at the exact time
 
 The model-facing surface is a single `cronjob_manage` tool with action-style operations: `create`, `list`, `update`, `pause`, `resume`, `run`, `remove`.
+
+## Per-job timezone
+
+`compute_next_run(schedule, last_run_at, *, timezone=...)` resolves the zone as _job pin → profile `timezone` → base offset_, and **every** caller that advances `next_run_at` passes the job's pin (the advance sites, the claim path, resume/re-arm, the recovery paths, and the quota/unreachable planners). One missed site shows up as a burst re-run or a skipped slot, because the stored instant and the expression would be interpreted in different zones.
+
+The dispatch path needs the pin just as much as the compute does. `_evaluate_due_job` builds its `_DueJob` with `_ensure_aware(raw, zone_for_job(job))`, which gives every downstream predicate the job's clock; a job with a pinned zone **skips `_repair_timezone_shifted_cron` entirely**. That repair exists for jobs that FOLLOW the profile zone across a zone change: for a pinned job its stored offset legitimately differs from the profile's, and the repair's wall-clock comparison (`_stored_wall_clock_is_future`) then reads a due occurrence as still-in-the-future and re-anchors to the next one — the job silently never fires. This is why a fix to `compute_next_run` alone is not enough.
+
+`timezone` and `grace_minutes` are top-level record fields (not inside `schedule`), validated by `jobs_time.normalize_*` at both the create and update door. A corrupt persisted value degrades to the profile zone with one warning per value — the 60s scan must not die on one bad record. No migration is needed: the keys simply do not exist in older stores, and every reader uses `.get()`.
 
 ## Job Storage
 

@@ -91,7 +91,7 @@ vault:
 
 ## What this does and does not guarantee
 
-**Does:** the password never enters the model's context through Hermes: not in tool results, logs, the session database, or the CLI arguments of any process. Fills happen over the supervised browser session's direct CDP socket and are refused unless the page origin exactly matches the saved origin, checked again inside the page immediately before the write.
+**Does:** the password never enters the model's context through Hermes: not in tool results, logs, the session database, or the CLI arguments of any process. Fills happen over the supervised browser session's direct CDP socket and are refused unless the page origin exactly matches the saved origin, checked again inside the page immediately before the write. With the Camofox browser plugin, which has no CDP endpoint, the same checks run and the fill goes to the Camofox tab through its REST evaluate endpoint, only when `CAMOFOX_URL` is loopback or HTTPS.
 
 **Does not:** protect against the page itself. Once a password is typed into a site, that site (and any script it runs) has it, exactly as when you type it yourself. On a cloud browser backend the vendor's browser sees the page like any other. The origin binding is the guard against filling on the wrong site, not against a compromised right one.
 
