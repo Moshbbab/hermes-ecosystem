@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>rafreid/keryx — Hermes Agent Workspaces &amp; GUIs | Hermes Atlas</title>
-<meta name="description" content="Keryx is a read-only visual activity monitor for Hermes Agent that reads the agent’s SQLite state, cron store, and logs. It presents sessions, tools,…">
+<meta name="description" content="Keryx is a read-only visual activity monitor for Hermes Agent. It reads the agent’s records and presents sessions, tools, subagents, models, cron jobs, health…">
 <link rel="canonical" href="https://hermesatlas.com/projects/rafreid/keryx">
 <meta property="og:title" content="rafreid/keryx — Hermes Atlas">
-<meta property="og:description" content="Keryx is a read-only visual activity monitor for Hermes Agent that reads the agent’s SQLite state, cron store, and logs. It presents sessions, tools,…">
+<meta property="og:description" content="Keryx is a read-only visual activity monitor for Hermes Agent. It reads the agent’s records and presents sessions, tools, subagents, models, cron jobs, health…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/rafreid/keryx">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="rafreid/keryx — Hermes Atlas">
-<meta name="twitter:description" content="Keryx is a read-only visual activity monitor for Hermes Agent that reads the agent’s SQLite state, cron store, and logs. It presents sessions, tools,…">
+<meta name="twitter:description" content="Keryx is a read-only visual activity monitor for Hermes Agent. It reads the agent’s records and presents sessions, tools, subagents, models, cron jobs, health…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=keryx&amp;subtitle=Live%2C+read-only+3D+activity+monitor+for+Hermes+Agent%3A+sessions%2C+tools%2C+subagents%2C+models+and+cron+jobs+from+the+agent%27s+own+records.+An+Aflux+Systems+LLC+open-source+project.&amp;kind=project+%C2%B7+workspaces">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/rafreid/keryx#software",
   "name": "keryx",
-  "description": "Keryx is a read-only visual activity monitor for Hermes Agent that reads the agent’s SQLite state, cron store, and logs. It presents sessions, tools, subagents, models, cron jobs, and health information in a live 3D or 2D dashboard, with updates when Hermes files change.",
+  "description": "Keryx is a read-only visual activity monitor for Hermes Agent. It reads the agent’s records and presents sessions, tools, subagents, models, cron jobs, health information, and logs in a live 3D or 2D dashboard.",
   "url": "https://hermesatlas.com/projects/rafreid/keryx",
   "codeRepository": "https://github.com/rafreid/keryx",
   "applicationCategory": "DesktopEnhancementApplication",
@@ -47,7 +47,14 @@
     "name": "rafreid",
     "url": "https://github.com/rafreid"
   },
-  "dateModified": "2026-10-30T18:34:23.000Z",
+  "dateModified": "2026-10-30T21:45:57.000Z",
+  "interactionStatistic": {
+    "@type": "InteractionCounter",
+    "interactionType": {
+      "@type": "LikeAction"
+    },
+    "userInteractionCount": 1
+  },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
   }
@@ -113,7 +120,7 @@
   <p class="project-desc">Live, read-only 3D activity monitor for Hermes Agent: sessions, tools, subagents, models and cron jobs from the agent's own records. An Aflux Systems LLC open-source project.</p>
 
   <div class="meta-row">
-    <span class="stars">★ 0</span>
+    <span class="stars">★ 1</span>
     <span><span class="meta-label">lang</span>JavaScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
@@ -134,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Keryx is a read-only visual activity monitor for Hermes Agent that reads the agent’s SQLite state, cron store, and logs. It presents sessions, tools, subagents, models, cron jobs, and health information in a live 3D or 2D dashboard, with updates when Hermes files change.</p>
+    <p class="summary-text">Keryx is a read-only visual activity monitor for Hermes Agent. It reads the agent’s records and presents sessions, tools, subagents, models, cron jobs, health information, and logs in a live 3D or 2D dashboard.</p>
     <ul class="summary-highlights">
-      <li>Runs as a container or with Python.</li>
-      <li>Provides session details, logs, analytics, and notifications.</li>
-      <li>Serves the dashboard on port 9120.</li>
+      <li>Updates when Hermes files change</li>
+      <li>Includes session reading and search views</li>
+      <li>Runs in Docker or with Python 3.11+</li>
     </ul>
   </div>
 </section>
@@ -223,7 +230,7 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 </thead>
 <tbody><tr>
 <td>Health header</td>
-<td>gateway heartbeat, Telegram connection, cron scheduler (incidents, missed slots, undelivered results), error log, session states. Green / amber / red per check; the worst one drives the title dot. Token totals with the spend, marked <code>~</code> when estimated.</td>
+<td>gateway heartbeat, Telegram connection, cron scheduler (incidents, missed slots, undelivered results), error log, session states, storage (size of <code>state.db</code>, its WAL and the logs, free space on the data disk). Green / amber / red per check; the worst one drives the title dot. Token totals with the spend, marked <code>~</code> when estimated.</td>
 </tr>
 <tr>
 <td>Right now</td>
@@ -235,7 +242,7 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 </tr>
 <tr>
 <td>Side panel</td>
-<td><strong>overview</strong> (health, recent file changes, tokens by model, legend), <strong>sessions</strong> (grouped by platform, live ones pinned), <strong>tasks</strong> (delegations board, scheduled jobs with run history and missed slots, Hermes' cron incidents and delivery queue), <strong>analytics</strong> (daily trend, model share), <strong>logs</strong> (filterable tails of every log file Hermes writes; lines logged inside a session link to it). Selecting a node shows its details, context gauge, the agent's plan (its <code>todo_list</code>), files touched and the turn-by-turn trace with tool arguments and results.</td>
+<td><strong>overview</strong> (health, recent file changes with lines added and removed, tokens by model, legend), <strong>sessions</strong> (grouped by platform, time or project; <code>#tags</code> from titles as filter chips; ☆ pins; the search box also looks inside conversations through Hermes' full-text index), <strong>tasks</strong> (delegations board, scheduled jobs with run history and missed slots, Hermes' cron incidents and delivery queue), <strong>analytics</strong> (daily trend, a year heatmap, per-day cost, model share, Hermes' skill ledger), <strong>logs</strong> (filterable tails of every log file Hermes writes; lines logged inside a session link to it), <strong>memory</strong> (Hermes' <code>MEMORY.md</code> and <code>USER.md</code>, read-only, opt-in). Selecting a node shows its details, context gauge, the agent's plan (its <code>todo_list</code>), files touched, the command to resume the conversation in a terminal, and the session as a reading view (below).</td>
 </tr>
 <tr>
 <td>Notifications</td>
@@ -243,6 +250,7 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 </tr>
 </tbody></table>
 <p><strong>Compacted conversations.</strong> When Hermes compacts a long chat it ends the session and continues in a child session. Keryx folds that lineage into one node: it starts when the first segment started, takes its colour from the latest segment, and its trace shows every segment with a ⟲ marker where the context was compacted. The node keeps the first segment's id, so a <code>#session:…</code> link to any segment opens the same node. Branches the user made (<code>/branch</code>) stay separate sessions joined to their origin by a teal link; delegated subagents keep their purple link.</p>
+<p><strong>Reading a session.</strong> The trace is shown as turns: your question, a collapsible <strong>steps · N</strong> block (every tool call with a kind glyph, a one-line title such as the command or path, duration, exit code, and <code>+added −removed</code> for file edits; Hermes' own events; intermediate notes), then Hermes' reply. An <strong>outline</strong> lists every question with its step count, failures and edits and jumps to it. <strong>all / chat / changes</strong> shows the whole thing, the conversation alone, or only the file edits. <strong>find in session</strong> dims everything that does not match. <strong>⎘ md</strong> copies the session as Markdown and <strong>⤓</strong> downloads it. Busy turns start collapsed; failed or running ones start open.</p>
 <p><strong>Session colours:</strong> <strong>running</strong>, <strong>waiting for you</strong> (open, last message is Hermes' reply: the next move is yours), <strong>stale</strong> (mid-turn and idle for 30 min), <strong>ended</strong>, <strong>closed by user</strong>, <strong>orphaned</strong> (killed by a gateway restart), <strong>failed</strong> (ended with tool errors). Tool failures come from the JSON result Hermes stores, not keyword matching.</p>
 <h3>Using it</h3>
 <p><strong>Reading the graph.</strong> Hover highlights a neighbourhood. Click a node to select it; sessions fan their tools out in a ring facing you. Click a platform to collapse it. Search dims everything that does not match. The legend in the overview tab has checkboxes to hide any kind or status.</p>
@@ -278,7 +286,7 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 <td>clear the selection</td>
 </tr>
 </tbody></table>
-<p><strong>Other buttons.</strong> 🔔 enables desktop notifications. 📱 shows a QR code of the current page for your phone. ☾/☀ toggles the theme. ⤓ diagnostics (overview tab) downloads a redacted snapshot to attach to a bug report.</p>
+<p><strong>Other buttons.</strong> 🔔 enables desktop notifications. 📱 shows a QR code of the current page for your phone; Keryx ships a web-app manifest, so "add to home screen" keeps it as an app there. ☾/☀ toggles the theme. ⤓ diagnostics (overview tab) downloads a redacted snapshot to attach to a bug report.</p>
 <h3>Configuration</h3>
 <p>All settings are environment variables.</p>
 <table>
@@ -310,6 +318,11 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 <td>optional shared secret; when set, every <code>/api</code> route except <code>/api/health</code> requires it (see Security)</td>
 </tr>
 <tr>
+<td><code>KERYX_SHOW_MEMORY</code></td>
+<td>unset</td>
+<td><code>1</code> adds a read-only <strong>memory</strong> tab showing Hermes' <code>memories/MEMORY.md</code> and <code>USER.md</code> entries with their character budgets. These are personal notes about you and your environment, so the tab is off until you ask for it; the diagnostics download never includes them</td>
+</tr>
+<tr>
 <td><code>ACTIVE_WINDOW</code></td>
 <td><code>300</code></td>
 <td>seconds; a session touched this recently is "active" and its links carry particles</td>
@@ -327,7 +340,7 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 </tbody></table>
 <p>Colours and labels live in <code>frontend/src/util.js</code>; rebuild after changing them.</p>
 <h3>What Keryx reads</h3>
-<p>Everything comes from the Hermes data directory, read-only: <code>state.db</code> (and its WAL), <code>cron/jobs.json</code>, <code>cron/executions.db</code>, <code>cron/incidents.db</code>, <code>cron/deliveries.db</code>, <code>cron/ticker_heartbeat</code> and <code>logs/*.log</code>. Files that an older Hermes does not write are skipped, and columns are feature-detected, so Keryx works across Hermes versions. The volume is mounted read-write only because SQLite in WAL mode must be able to create its <code>-shm</code> file; Keryx itself never writes.</p>
+<p>Everything comes from the Hermes data directory, read-only: <code>state.db</code> (and its WAL, including Hermes' full-text index <code>messages_fts</code> when present), <code>cron/jobs.json</code>, <code>cron/executions.db</code>, <code>cron/incidents.db</code>, <code>cron/deliveries.db</code>, <code>cron/ticker_heartbeat</code>, <code>logs/*.log</code>, <code>skills/.usage.json</code> (the skill ledger) and, only with <code>KERYX_SHOW_MEMORY=1</code>, <code>memories/MEMORY.md</code>, <code>memories/USER.md</code> and the <code>memory:</code> section of <code>config.yaml</code>. Files that an older Hermes does not write are skipped, and columns are feature-detected, so Keryx works across Hermes versions. The volume is mounted read-write only because SQLite in WAL mode must be able to create its <code>-shm</code> file; Keryx itself never writes.</p>
 <h3>Security</h3>
 <p>Keryx shows everything Hermes recorded, including prompts, replies and tool output. Keep it on a private network: bind the port to <code>127.0.0.1</code> and reach it over an SSH tunnel, or use a VPN such as Tailscale. Do not expose it to the internet.</p>
 <p>Setting <code>KERYX_TOKEN</code> adds a shared secret on top of that: every <code>/api</code> route then needs <code>Authorization: Bearer &lt;token&gt;</code>, a <code>keryx_token</code> cookie, or <code>?token=</code>. The page asks for the token once and keeps it as a cookie; <code>curl</code> and scripts send the header. <code>/api/health</code> stays open for liveness probes but omits the data path without the token. This is a lock on the door, not a user system: there is one token, and anyone with it sees everything.</p>
@@ -368,6 +381,18 @@ docker compose pull keryx &amp;&amp; docker compose up -d keryx      # Docker
 <td>The page asks for a token</td>
 <td><code>KERYX_TOKEN</code> is set on the server; paste it once.</td>
 </tr>
+<tr>
+<td>Sessions tab says <code>slow search (no FTS index)</code></td>
+<td>your Hermes predates the <code>messages_fts</code> index; Keryx falls back to a <code>LIKE</code> scan, which works but is slower on a big <code>state.db</code>.</td>
+</tr>
+<tr>
+<td>Memory tab says the panel is off</td>
+<td>expected: set <code>KERYX_SHOW_MEMORY=1</code> to show Hermes' memory files.</td>
+</tr>
+<tr>
+<td>Health shows <code>storage</code> amber with a large WAL</td>
+<td>Hermes' SQLite checkpoints are not landing (usually a reader holding the database open for a long time); restart Hermes' gateway and the WAL folds back into <code>state.db</code>.</td>
+</tr>
 </tbody></table>
 <p>Attach <code>/api/diagnostics</code> (the ⤓ link in the overview tab) to a bug report; it contains no message content.</p>
 <h3>Developing</h3>
@@ -396,8 +421,10 @@ docs/      the project website (GitHub Pages) and screenshots
 <li><code>GET /api/status</code>  health checks and dashboard links</li>
 <li><code>GET /api/cost?hours=24</code>  tokens/cost per model; <code>cost_basis</code> says whether the money is provider-reported (<code>actual</code>), priced from a table (<code>estimated</code>), <code>included</code> in a subscription or <code>unknown</code></li>
 <li><code>GET /api/tasks</code>  delegations (goals, children, duration, delivery), cron jobs (next run, history, missed slots, open incidents), scheduler heartbeat, incidents, delivery queue</li>
-<li><code>GET /api/analytics?days=30</code>  daily trend, model share, totals</li>
-<li><code>GET /api/session/{id}/trace?limit=300[&amp;tool=name]</code>  ordered steps (user / assistant / tool call with args + result / event / compaction), across every segment of a compacted conversation</li>
+<li><code>GET /api/analytics?days=30</code>  daily trend with per-day cost, a 53-week <code>heatmap</code>, model share, Hermes' skill ledger (<code>skills</code>), totals</li>
+<li><code>GET /api/search?q=text&amp;limit=30</code>  sessions whose conversation mentions the text (Hermes' FTS5 index, <code>LIKE</code> fallback), with snippets; segments of a compacted conversation fold into one hit</li>
+<li><code>GET /api/memory</code>  <code>MEMORY.md</code> / <code>USER.md</code> entries with character budgets; <code>enabled: false</code> unless <code>KERYX_SHOW_MEMORY=1</code></li>
+<li><code>GET /api/session/{id}/trace?limit=300[&amp;tool=name]</code>  ordered steps (user / assistant / tool call with args + result / event / compaction), across every segment of a compacted conversation; tool calls carry <code>tool_kind</code>, <code>title</code>, <code>diff</code> (<code>added</code>/<code>removed</code> lines for <code>write_file</code> and <code>patch</code>), <code>exit_code</code>, <code>lines</code></li>
 <li><code>GET /api/session/{id}/todo</code>  the agent's current plan: the newest <code>todo_list</code> result in the conversation</li>
 <li><code>GET /api/logs?file=&lt;stem of any logs/*.log&gt;&amp;level=WARNING&amp;q=text&amp;lines=200</code>  entries carry the session id when Hermes logged the line inside a session</li>
 <li><code>GET /api/diagnostics</code>  redacted JSON snapshot for bug reports</li>
@@ -450,7 +477,7 @@ docs/      the project website (GitHub Pages) and screenshots
         <div class="name"><span class="org">Felix-Forever /</span> hermes-agent-desktop</div>
       </a>
       <a class="related-row" href="/projects/jazzyalex/agent-sessions">
-        <div class="stars">★ 926</div>
+        <div class="stars">★ 927</div>
         <div class="name"><span class="org">jazzyalex /</span> agent-sessions</div>
       </a>
     </div>
