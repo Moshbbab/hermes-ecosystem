@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>aidatatools-dev/astro-agents-mcp — Hermes Agent Skills &amp; Skill Registries | Hermes Atlas</title>
-<meta name="description" content="Astro Agents is an MCP server that returns planetary positions, astrology charts, and celestial event data using NASA/JPL DE440. Its results are deterministic…">
+<meta name="description" content="Astro Agents is an MCP server that provides planetary timing data and Western and Vedic astrology results using NASA/JPL DE440. It returns deterministic,…">
 <link rel="canonical" href="https://hermesatlas.com/projects/aidatatools-dev/astro-agents-mcp">
 <meta property="og:title" content="aidatatools-dev/astro-agents-mcp — Hermes Atlas">
-<meta property="og:description" content="Astro Agents is an MCP server that returns planetary positions, astrology charts, and celestial event data using NASA/JPL DE440. Its results are deterministic…">
+<meta property="og:description" content="Astro Agents is an MCP server that provides planetary timing data and Western and Vedic astrology results using NASA/JPL DE440. It returns deterministic,…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/aidatatools-dev/astro-agents-mcp">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="aidatatools-dev/astro-agents-mcp — Hermes Atlas">
-<meta name="twitter:description" content="Astro Agents is an MCP server that returns planetary positions, astrology charts, and celestial event data using NASA/JPL DE440. Its results are deterministic…">
+<meta name="twitter:description" content="Astro Agents is an MCP server that provides planetary timing data and Western and Vedic astrology results using NASA/JPL DE440. It returns deterministic,…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=astro-agents-mcp&amp;subtitle=Deterministic+Western+%2B+Vedic+astrology+MCP+server+for+AI+agents.+JPL+DE440%2C+no+LLM%2C+SHA-256+verifiable+results.+x402+%2B+MPP.&amp;kind=project+%C2%B7+skills">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/aidatatools-dev/astro-agents-mcp#software",
   "name": "astro-agents-mcp",
-  "description": "Astro Agents is an MCP server that returns planetary positions, astrology charts, and celestial event data using NASA/JPL DE440. Its results are deterministic and include SHA-256 hashes for verification; tools cover Western and Vedic astrology as well as planetary timing data for analysis and backtesting.",
+  "description": "Astro Agents is an MCP server that provides planetary timing data and Western and Vedic astrology results using NASA/JPL DE440. It returns deterministic, structured results with SHA-256 hashes that can be verified, and supports pay-per-call or prepaid credits.",
   "url": "https://hermesatlas.com/projects/aidatatools-dev/astro-agents-mcp",
   "codeRepository": "https://github.com/aidatatools-dev/astro-agents-mcp",
   "applicationCategory": "DeveloperApplication",
@@ -45,7 +45,7 @@
     "name": "aidatatools-dev",
     "url": "https://github.com/aidatatools-dev"
   },
-  "dateModified": "2026-10-29T19:34:31.000Z",
+  "dateModified": "2026-10-30T07:51:08.000Z",
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
   }
@@ -115,7 +115,7 @@
     
     
     
-    <span><span class="meta-label">updated</span>2026-10-29</span>
+    <span><span class="meta-label">updated</span>2026-10-30</span>
   </div>
 
   <div class="actions">
@@ -132,11 +132,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Astro Agents is an MCP server that returns planetary positions, astrology charts, and celestial event data using NASA/JPL DE440. Its results are deterministic and include SHA-256 hashes for verification; tools cover Western and Vedic astrology as well as planetary timing data for analysis and backtesting.</p>
+    <p class="summary-text">Astro Agents is an MCP server that provides planetary timing data and Western and Vedic astrology results using NASA/JPL DE440. It returns deterministic, structured results with SHA-256 hashes that can be verified, and supports pay-per-call or prepaid credits.</p>
     <ul class="summary-highlights">
-      <li>Uses NASA/JPL DE440 for planetary positions.</li>
-      <li>Results include SHA-256 hashes for verification.</li>
-      <li>Provides Western and Vedic astrology tools.</li>
+      <li>Offers planetary positions, celestial events, charts, and astrology tools.</li>
+      <li>MCP endpoint uses Streamable HTTP and requires no authentication.</li>
+      <li>Provides x402/MPP payments and REST API prepaid credits.</li>
     </ul>
   </div>
 </section>
@@ -153,6 +153,16 @@
 <li><strong>REST API:</strong> <code>https://astro-agent.dev/v1/catalog</code> (free catalog with schemas and examples)</li>
 <li><strong>Docs for agents:</strong> <a href="https://astro-agent.dev/llms.txt">llms.txt</a> · <a href="https://astro-agent.dev/openapi.json">OpenAPI 3.1</a> · <a href="https://astro-agent.dev/.well-known/agent-card.json">A2A agent card</a></li>
 </ul>
+<h3>What's new in 1.7.0 (2026-10-30)</h3>
+<ul>
+<li><strong>Birth-sky analogues:</strong> <code>sky_analogues</code> takes <code>reference: {"birth": {"datetime": "1990-05-15T14:30", "latitude": 48.8566, "longitude": 2.3522}}</code> to compare a birth sky to past/future dates — data only. Same result and hash as passing those positions by hand (<code>meta.reference_resolution.equivalent_request</code>).</li>
+</ul>
+<h3>What's new in 1.6.0 (2026-10-29)</h3>
+<ul>
+<li><strong>Sky analogues</strong> (<code>sky_analogues</code>, $0.25): the past or future dates whose planetary positions best match a reference sky, ranked by a stated angular distance (formula in every response).</li>
+<li>For trading bots and agents: <a href="https://astro-agent.dev/trading-bots">astro-agent.dev/trading-bots</a> — x402 pay-per-call (USDC on Solana or Base), this MCP endpoint, prepaid credits, an n8n template and a LangChain recipe.</li>
+</ul>
+<p>Data for your own analysis — never a signal or forecast.</p>
 <h3>What's new in 1.5.0 (2026-10-29)</h3>
 <ul>
 <li><strong>Prepaid credit packs</strong> for the REST API: pay once with x402 or MPP, then spend call by call with a token, no signature per call.<ul>
@@ -367,7 +377,7 @@ hermes skills install aidatatools-dev/astro-agents-mcp/skills/astrology   # opti
   <div>
     <div class="related-list">
       <a class="related-row" href="/projects/mukul975/Anthropic-Cybersecurity-Skills">
-        <div class="stars">★ 35.2K</div>
+        <div class="stars">★ 35.3K</div>
         <div class="name"><span class="org">mukul975 /</span> Anthropic-Cybersecurity-Skills</div>
       </a>
       <a class="related-row" href="/projects/conorbronsdon/avoid-ai-writing">
@@ -383,7 +393,7 @@ hermes skills install aidatatools-dev/astro-agents-mcp/skills/astrology   # opti
         <div class="name"><span class="org">DougTrajano /</span> pydantic-ai-skills</div>
       </a>
       <a class="related-row" href="/projects/Agents365-ai/drawio-skill">
-        <div class="stars">★ 10.4K</div>
+        <div class="stars">★ 10.5K</div>
         <div class="name"><span class="org">Agents365-ai /</span> drawio-skill</div>
       </a>
       <a class="related-row" href="/projects/smartcontractkit/chainlink-agent-skills">
