@@ -180,13 +180,13 @@ How long an in-process or disk fetch result is reused. Set to `0` to disable fre
 
 `false`
 
-Store the last successful fetch in an AES-GCM encrypted cache at `~/.hermes/cache/bws_cache.enc.json`.
+Store the last successful fetch in an AES-GCM encrypted cache at `~/.hermes/bws_cache.enc.json`.
 
 `encrypted_cache.max_stale_seconds`
 
 `0`
 
-When encrypted caching is enabled, allow that cache to be used only after network/timeout failures, up to this age. Authentication failures never use stale secrets. A successful encrypted write removes the legacy plaintext `cache/bws_cache.json`.
+When encrypted caching is enabled, allow that cache to be used only after network/timeout failures, up to this age. Authentication failures never use stale secrets. A successful encrypted write removes the plaintext `bws_cache.json`.
 
 `override_existing`
 
