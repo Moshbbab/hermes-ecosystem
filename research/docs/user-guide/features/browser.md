@@ -268,7 +268,7 @@ browser:
   auto_local_for_private_urls: false
 ```
 
-With auto-routing disabled, private URLs are rejected with `"Blocked: URL targets a private or internal address"` unless you also set `security.allow_private_urls: true` (or the legacy `browser.allow_private_urls: true`), which hands them to the cloud provider — usually useless, since Browserbase etc. can't reach your LAN. Cloud-metadata URLs (`169.254.169.254`, `metadata.google.internal`) written in `browser_exec` code or raw CDP params are refused on every route, sidecar included; a page that redirects there on its own is not (see [Security](/docs/user-guide/security#what-allow_private_urls-covers-and-what-it-doesnt)).
+With auto-routing disabled, private URLs are rejected with `"Blocked: URL targets a private or internal address"` unless you also set `security.allow_private_urls: true` (or the legacy `browser.allow_private_urls: true`), which hands them to the cloud provider — usually useless, since Browserbase etc. can't reach your LAN. Cloud-metadata URLs (`169.254.169.254`, `metadata.google.internal`) written in `browser_exec` code or in a URL a raw CDP call fetches are refused on every route, sidecar included; a page that redirects there on its own is not (see [Security](/docs/user-guide/security#what-allow_private_urls-covers-and-what-it-doesnt)).
 
 The sidecar is the same local Chromium described [above](#local-chromium-default), so it needs that Chromium installed. Routing is decided from the URLs written in the `browser_exec` code: a public page that later redirects to a private address stays on the cloud browser, which cannot reach your network.
 
