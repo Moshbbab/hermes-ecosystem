@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TheSmokeDev/hermes-talk — Hermes Agent Plugins &amp; Extensions | Hermes Atlas</title>
-<meta name="description" content="Hermes Talk is a realtime, duplex voice plugin for Hermes Agent, available in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop.…">
+<meta name="description" content="Hermes Talk is a voice plugin for Hermes Agent that supports interruptible, two-way speech and calls the agent’s tools during a conversation. It runs in the…">
 <link rel="canonical" href="https://hermesatlas.com/projects/TheSmokeDev/hermes-talk">
 <meta property="og:title" content="TheSmokeDev/hermes-talk — Hermes Atlas">
-<meta property="og:description" content="Hermes Talk is a realtime, duplex voice plugin for Hermes Agent, available in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop.…">
+<meta property="og:description" content="Hermes Talk is a voice plugin for Hermes Agent that supports interruptible, two-way speech and calls the agent’s tools during a conversation. It runs in the…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/TheSmokeDev/hermes-talk">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="TheSmokeDev/hermes-talk — Hermes Atlas">
-<meta name="twitter:description" content="Hermes Talk is a realtime, duplex voice plugin for Hermes Agent, available in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop.…">
+<meta name="twitter:description" content="Hermes Talk is a voice plugin for Hermes Agent that supports interruptible, two-way speech and calls the agent’s tools during a conversation. It runs in the…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=hermes-talk&amp;subtitle=Hermes+Talk%3A+realtime+duplex+voice+for+Hermes+Agent.+Rides+your+ChatGPT+or+X+Premium+subscription%2C+no+API+key+needed.+OpenAI%2C+Grok%2C+Gemini.+Terminal%2C+Discord%2C+dashboard.&amp;kind=project+%C2%B7+plugins">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/TheSmokeDev/hermes-talk#software",
   "name": "hermes-talk",
-  "description": "Hermes Talk is a realtime, duplex voice plugin for Hermes Agent, available in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop. It can call the agent’s tools, delegate background work while the conversation continues, report results aloud, and handle approval requests; supported providers and surfaces vary.",
+  "description": "Hermes Talk is a voice plugin for Hermes Agent that supports interruptible, two-way speech and calls the agent’s tools during a conversation. It runs in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop, with provider support varying by surface.",
   "url": "https://hermesatlas.com/projects/TheSmokeDev/hermes-talk",
   "codeRepository": "https://github.com/TheSmokeDev/hermes-talk",
   "applicationCategory": "BrowserApplication",
@@ -47,7 +47,7 @@
     "name": "TheSmokeDev",
     "url": "https://github.com/TheSmokeDev"
   },
-  "dateModified": "2026-10-27T07:40:50.000Z",
+  "dateModified": "2026-10-31T02:25:01.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-27</span>
+    <span><span class="meta-label">updated</span>2026-10-31</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">Hermes Talk is a realtime, duplex voice plugin for Hermes Agent, available in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop. It can call the agent’s tools, delegate background work while the conversation continues, report results aloud, and handle approval requests; supported providers and surfaces vary.</p>
+    <p class="summary-text">Hermes Talk is a voice plugin for Hermes Agent that supports interruptible, two-way speech and calls the agent’s tools during a conversation. It runs in the terminal, Discord voice channels, the Hermes dashboard, and Hermes Desktop, with provider support varying by surface.</p>
     <ul class="summary-highlights">
+      <li>Delegates background work and reports results aloud.</li>
       <li>Supports OpenAI Realtime, xAI Grok Voice, and Gemini Live.</li>
-      <li>Shows live transcripts and background runs in the dashboard.</li>
-      <li>Can create, monitor, and steer Desktop sessions by voice.</li>
+      <li>Dashboard sessions show transcripts and background runs.</li>
     </ul>
   </div>
 </section>
@@ -273,6 +273,12 @@ the additional host support described in the <a href="https://github.com/TheSmok
 <td>terminal + <code>hermes realtime</code>; Discord refuses it for now</td>
 </tr>
 <tr>
+<td>Local models (<code>TALK_PROVIDER=local</code>)</td>
+<td>none by default — any self-hosted OpenAI-Realtime-compatible server, e.g. <a href="https://github.com/huggingface/speech-to-speech">speech-to-speech</a> with an Ollama LLM</td>
+<td>the server's own</td>
+<td>terminal (Discord not yet verified)</td>
+</tr>
+<tr>
 <td>Cascade voice (<code>TALK_VOICE_MODE=cascade</code>)</td>
 <td><code>TALK_ELEVENLABS_API_KEY</code> / <code>ELEVENLABS_API_KEY</code>, on top of the OpenAI Realtime lane</td>
 <td><code>eleven_flash_v2_5</code></td>
@@ -282,6 +288,7 @@ the additional host support described in the <a href="https://github.com/TheSmok
 <p>The provider knob is fail-closed and never inferred from which keys exist.
 Grok supports all 28 documented built-in voices through <code>TALK_GROK_VOICE</code>
 (for example, <code>carina</code>); see the <a href="https://github.com/TheSmokeDev/hermes-talk/blob/main/docs/PROVIDERS.md#provider-details--openai-default-grok-or-gemini">voice list</a>.
+Running fully local on your own GPU: <a href="https://github.com/TheSmokeDev/hermes-talk/blob/main/docs/LOCAL.md">docs/LOCAL.md</a>.
 Per-lane detail and the credential order: <a href="https://github.com/TheSmokeDev/hermes-talk/blob/main/docs/PROVIDERS.md">docs/PROVIDERS.md</a>.
 Speaking in a voice of your own: <a href="https://github.com/TheSmokeDev/hermes-talk/blob/main/docs/CASCADE.md">docs/CASCADE.md</a>.
 Experimental xAI speech effects and phrase wrappers, including how native Talk

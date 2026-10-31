@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>colbymchenry/codegraph — Hermes Agent Developer Tools | Hermes Atlas</title>
-<meta name="description" content="CodeGraph builds a local code graph for coding agents and exposes it through an MCP server. It supports multiple agents and languages, and automatically…">
+<meta name="description" content="CodeGraph builds a local code graph for a project and connects it to supported coding agents through an MCP server. It watches project files and updates the…">
 <link rel="canonical" href="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta property="og:description" content="CodeGraph builds a local code graph for coding agents and exposes it through an MCP server. It supports multiple agents and languages, and automatically…">
+<meta property="og:description" content="CodeGraph builds a local code graph for a project and connects it to supported coding agents through an MCP server. It watches project files and updates the…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/colbymchenry/codegraph">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="colbymchenry/codegraph — Hermes Atlas">
-<meta name="twitter:description" content="CodeGraph builds a local code graph for coding agents and exposes it through an MCP server. It supports multiple agents and languages, and automatically…">
+<meta name="twitter:description" content="CodeGraph builds a local code graph for a project and connects it to supported coding agents through an MCP server. It watches project files and updates the…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=codegraph&amp;subtitle=Pre-indexed+code+knowledge+graph%2C+auto+syncs+on+code+changes%2C+for+Claude+Code%2C+Codex%2C+Gemini%2C+Cursor%2C+OpenCode%2C+AntiGravity%2C+Kiro%2C+CoPilot%2C+and+Hermes+Agent+%E2%80%94+fewer+tokens%2C+fewer+t&amp;kind=project+%C2%B7+developer+tools">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/colbymchenry/codegraph#software",
   "name": "codegraph",
-  "description": "CodeGraph builds a local code graph for coding agents and exposes it through an MCP server. It supports multiple agents and languages, and automatically updates the graph when project files change.",
+  "description": "CodeGraph builds a local code graph for a project and connects it to supported coding agents through an MCP server. It watches project files and updates the graph automatically when they change.",
   "url": "https://hermesatlas.com/projects/colbymchenry/codegraph",
   "codeRepository": "https://github.com/colbymchenry/codegraph",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "colbymchenry",
     "url": "https://github.com/colbymchenry"
   },
-  "dateModified": "2026-10-30T22:31:18.000Z",
+  "dateModified": "2026-10-31T00:45:36.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 76013
+    "userInteractionCount": 76027
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>TypeScript</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-30</span>
+    <span><span class="meta-label">updated</span>2026-10-31</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">CodeGraph builds a local code graph for coding agents and exposes it through an MCP server. It supports multiple agents and languages, and automatically updates the graph when project files change.</p>
+    <p class="summary-text">CodeGraph builds a local code graph for a project and connects it to supported coding agents through an MCP server. It watches project files and updates the graph automatically when they change.</p>
     <ul class="summary-highlights">
-      <li>Provides structural extraction and cross-file resolution.</li>
-      <li>Connects to agents including Claude Code, Cursor, and Hermes Agent.</li>
-      <li>Creates and updates a project graph in a local `.codegraph/` directory.</li>
+      <li>Builds a project graph with `codegraph init`.</li>
+      <li>Auto-syncs the graph on file changes.</li>
+      <li>Supports multiple coding agents, including Hermes Agent.</li>
     </ul>
   </div>
 </section>
@@ -158,7 +158,7 @@
 <h2>CodeGraph</h2>
 <p>Already installed? Run <code>codegraph upgrade</code></p>
 <p>Follow <a href="https://x.com/getcodegraph">@getcodegraph</a> on X for updates.</p>
-<h4>Supercharge Claude Code, Cursor, Codex, OpenCode, Hermes Agent, Gemini, Antigravity, Kiro, and GitHub Copilot with Semantic Code Intelligence</h4>
+<h4>Supercharge Claude Code, Cursor, Codex, OpenCode, Hermes Agent, Gemini, Antigravity, Kiro, GitHub Copilot, and more with Semantic Code Intelligence</h4>
 <p><strong>The fastest complete code graph · surgical context · built for how agents actually work · 100% local</strong></p>
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/colbymchenry/codegraph/main/assets/rust-logo-dark.svg?v=1">
@@ -182,7 +182,16 @@
 <a href="#supported-agents"><img src="https://img.shields.io/badge/Gemini-supported-blueviolet.svg" alt="Gemini" loading="lazy" decoding="async"></a>
 <a href="#supported-agents"><img src="https://img.shields.io/badge/Antigravity-supported-blueviolet.svg" alt="Antigravity" loading="lazy" decoding="async"></a>
 <a href="#supported-agents"><img src="https://img.shields.io/badge/Kiro-supported-blueviolet.svg" alt="Kiro" loading="lazy" decoding="async"></a>
-<a href="#supported-agents"><img src="https://img.shields.io/badge/GitHub_Copilot-supported-blueviolet.svg" alt="GitHub Copilot" loading="lazy" decoding="async"></a></p>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/GitHub_Copilot-supported-blueviolet.svg" alt="GitHub Copilot" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/IBM_Bob-supported-blueviolet.svg" alt="IBM Bob" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Factory_Droid-supported-blueviolet.svg" alt="Factory Droid" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Windsurf-supported-blueviolet.svg" alt="Windsurf" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Qwen_Code-supported-blueviolet.svg" alt="Qwen Code" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/DeepSeek_Harness-supported-blueviolet.svg" alt="DeepSeek Harness" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Grok_Build-supported-blueviolet.svg" alt="Grok Build" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Kimi_Code-supported-blueviolet.svg" alt="Kimi Code" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Qoder-supported-blueviolet.svg" alt="Qoder" loading="lazy" decoding="async"></a>
+<a href="#supported-agents"><img src="https://img.shields.io/badge/Pi-supported-blueviolet.svg" alt="Pi" loading="lazy" decoding="async"></a></p>
 <br>
 
 <p><strong>The CodeGraph platform is coming</strong> — for every PR, know exactly what to test, what could break, which flows are affected, and whether business logic is compromised.</p>
@@ -236,7 +245,7 @@ irm https://raw.githubusercontent.com/colbymchenry/codegraph/main/install.ps1 | 
 <p>In a <strong>new terminal</strong>, run the installer to connect CodeGraph to the agents you use:</p>
 <pre><code class="language-bash">codegraph install
 </code></pre>
-<p><sub>Detects and auto-configures Claude Code, Cursor, Codex CLI, opencode, Hermes Agent, Gemini CLI, Antigravity IDE, Kiro, and GitHub Copilot (VS Code, Copilot CLI, JetBrains IDEs) — wiring the CodeGraph MCP server into each. <strong>This is the step that connects CodeGraph to your agent;</strong> installing the CLI in step 1 does not do it on its own. It only wires up your agent — it does <strong>not</strong> index any code; building each project's graph is the separate <code>codegraph init</code> in step 3. (Shortcut: <code>npx @colbymchenry/codegraph</code> downloads and runs this in one go.)</sub></p>
+<p><sub>Detects and auto-configures Claude Code, Cursor, Codex CLI, opencode, Hermes Agent, Gemini CLI, Antigravity IDE, Kiro, GitHub Copilot (VS Code, Copilot CLI, JetBrains IDEs), IBM Bob, Factory Droid, Windsurf, Qwen Code, DeepSeek Harness, Grok Build, Kimi Code, Qoder CLI, and Pi — wiring the CodeGraph MCP server into each. <strong>This is the step that connects CodeGraph to your agent;</strong> installing the CLI in step 1 does not do it on its own. It only wires up your agent — it does <strong>not</strong> index any code; building each project's graph is the separate <code>codegraph init</code> in step 3. (Shortcut: <code>npx @colbymchenry/codegraph</code> downloads and runs this in one go.)</sub></p>
 <h4>3. Initialize each project</h4>
 <pre><code class="language-bash">cd your-project
 codegraph init
@@ -548,6 +557,10 @@ codegraph init
 <td>Closes cross-language flows that static parsing misses: Swift ↔ ObjC bridging, React Native legacy bridge + TurboModules + Fabric view components, native → JS event emitters, Expo Modules</td>
 </tr>
 <tr>
+<td><strong>Tauri</strong></td>
+<td>Follows a desktop app across its web frontend and Rust core: <code>invoke('save_file')</code>, tauri-specta's typed <code>commands.saveFile()</code>, your own wrappers around <code>invoke</code>, and events in both directions</td>
+</tr>
+<tr>
 <td><strong>100% Local</strong></td>
 <td>No data leaves your machine. No API keys. No external services. SQLite database only</td>
 </tr>
@@ -611,7 +624,11 @@ codegraph init
 </tr>
 <tr>
 <td><strong>Drupal</strong></td>
-<td><code>*.routing.yml</code> routes (<code>_controller</code>, <code>_form</code>, entity handlers); <code>hook_*</code> implementations in <code>.module</code>/<code>.theme</code>/<code>.install</code>/<code>.inc</code></td>
+<td><code>*.routing.yml</code> routes (<code>_controller</code>, <code>_form</code>, entity handlers); <code>hook_*</code> implementations in <code>.module</code>/<code>.theme</code>/<code>.install</code>/<code>.inc</code> and <code>#[Hook]</code> methods; <code>*.services.yml</code> services, and calls through <code>\Drupal::service()</code>; plugin definitions, as attributes or annotations</td>
+</tr>
+<tr>
+<td><strong>CodeIgniter 3</strong></td>
+<td>Every public controller method by convention, <code>$route[...]</code> in <code>routes.php</code>, HMVC modules; <code>$this-&gt;load</code> models, libraries and views</td>
 </tr>
 <tr>
 <td><strong>Rails</strong></td>
@@ -803,11 +820,11 @@ codegraph init
 </code></pre>
 <p>The installer will:</p>
 <ul>
-<li>Ask which agent(s) to configure — auto-detects installed ones from: <strong>Claude Code</strong>, <strong>Cursor</strong>, <strong>Codex CLI</strong>, <strong>opencode</strong>, <strong>Hermes Agent</strong>, <strong>Gemini CLI</strong>, <strong>Antigravity IDE</strong>, <strong>Kiro</strong>, <strong>GitHub Copilot</strong> (VS Code, Copilot CLI, JetBrains IDEs)</li>
+<li>Ask which agent(s) to configure — auto-detects installed ones from: <strong>Claude Code</strong>, <strong>Cursor</strong>, <strong>Codex CLI</strong>, <strong>opencode</strong>, <strong>Hermes Agent</strong>, <strong>Gemini CLI</strong>, <strong>Antigravity IDE</strong>, <strong>Kiro</strong>, <strong>GitHub Copilot</strong> (VS Code, Copilot CLI, JetBrains IDEs), <strong>IBM Bob</strong>, <strong>Factory Droid</strong>, <strong>Windsurf</strong>, <strong>Qwen Code</strong>, <strong>DeepSeek Harness</strong>, <strong>Grok Build</strong>, <strong>Kimi Code</strong>, <strong>Qoder CLI</strong>, and <strong>Pi</strong></li>
 <li>Prompt to install <code>codegraph</code> on your PATH (so agents can launch the MCP server)</li>
 <li>Ask whether configs apply to all your projects or just this one</li>
-<li>Write each chosen agent's MCP server config, plus a small marker-fenced CodeGraph section in the agent's instructions file (<code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>GEMINI.md</code>) — that's how subagents and non-MCP agents learn the <code>codegraph explore</code> command, since the MCP server's own guidance only reaches the main agent. Removed cleanly by <code>codegraph uninstall</code>.</li>
-<li>Set up auto-allow permissions when Claude Code is one of the targets</li>
+<li>Write each chosen agent's MCP server config, plus a small marker-fenced CodeGraph section in the agent's instructions file (<code>CLAUDE.md</code> / <code>AGENTS.md</code> / <code>GEMINI.md</code> / <code>QWEN.md</code>) — that's how subagents and non-MCP agents learn the <code>codegraph explore</code> command, since the MCP server's own guidance only reaches the main agent. Removed cleanly by <code>codegraph uninstall</code>.</li>
+<li>Set up auto-allow permissions when Claude Code or Qwen Code is one of the targets</li>
 </ul>
 <p>The installer <strong>wires up your agents only — it does not index your code.</strong> After it finishes, build each project's graph yourself with <code>codegraph init</code> (step 3). One global <code>codegraph install</code> covers every project; you run <code>codegraph init</code> once per project.</p>
 <p><strong>Non-interactive (scripting / CI):</strong></p>
@@ -849,7 +866,7 @@ codegraph install --print-config copilot-vscode      # same, for Copilot in VS C
 </tr>
 <tr>
 <td><code>--no-permissions</code></td>
-<td>(boolean) skip Claude auto-allow list</td>
+<td>(boolean) skip the auto-allow list (Claude Code, Qwen Code)</td>
 <td>permissions on</td>
 </tr>
 <tr>
@@ -859,7 +876,7 @@ codegraph install --print-config copilot-vscode      # same, for Copilot in VS C
 </tr>
 </tbody></table>
 <h4>2. Restart Your Agent</h4>
-<p>Restart your agent (Claude Code / Cursor / Codex CLI / opencode / Hermes Agent / Gemini CLI / Antigravity IDE / Kiro / VS Code, the Copilot CLI, or your JetBrains IDE for GitHub Copilot) for the MCP server to load.</p>
+<p>Restart your agent (Claude Code / Cursor / Codex CLI / opencode / Hermes Agent / Gemini CLI / Antigravity IDE / Kiro / VS Code, the Copilot CLI, or your JetBrains IDE for GitHub Copilot / IBM Bob / Factory Droid / Windsurf / Qwen Code / DeepSeek Harness / Grok Build / Kimi Code / Qoder CLI / Pi) for the MCP server to load.</p>
 <h4>3. Initialize Projects</h4>
 <pre><code class="language-bash">cd your-project
 codegraph init
@@ -955,7 +972,7 @@ codegraph unlock [path]           # Remove a stale lock file that's blocking ind
 codegraph query &lt;search&gt;          # Search symbols (--kind, --limit, --json)
 codegraph explore &lt;query&gt;         # Relevant symbols' source + call paths in one shot (same output as the codegraph_explore MCP tool)
 codegraph node &lt;symbol|file&gt;      # One symbol's source + callers, or read a file with line numbers (same output as codegraph_node)
-codegraph files [path]            # Show file structure (--format, --filter, --max-depth, --json)
+codegraph files [path]            # Show file structure (--format, --filter, --max-depth, --tests, --json)
 codegraph callers &lt;symbol&gt;        # Find what calls a function/method (--limit, --json)
 codegraph callees &lt;symbol&gt;        # Find what a function/method calls (--limit, --json)
 codegraph impact &lt;symbol&gt;         # Analyze what code is affected by changing a symbol (--depth, --json)
@@ -1027,35 +1044,11 @@ fi
 </thead>
 <tbody><tr>
 <td><code>codegraph_explore</code></td>
-<td>Answer almost any question in one call — "how does X work", a flow ("how does X reach Y"), or surveying an area — returning the relevant symbols' verbatim source grouped by file, plus the call paths between them and a blast-radius summary. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can't follow. Name a file or symbol in the query to read its current line-numbered source, the same shape the Read tool gives you.</td>
+<td>Answer almost any question in one call — "how does X work", a flow ("how does X reach Y"), or surveying an area — returning the relevant symbols' verbatim source grouped by file, plus the call paths between them and a blast-radius summary. Surfaces dynamic-dispatch hops (callbacks, React re-render, interface→impl) grep can't follow. Name a file or symbol in the query to read its current li</td>
 </tr>
 </tbody></table>
-<p>The other tools (<code>codegraph_node</code>, <code>codegraph_search</code>, <code>codegraph_callers</code>, <code>codegraph_callees</code>, <code>codegraph_impact</code>, <code>codegraph_files</code>, <code>codegraph_status</code>) stay fully functional but <strong>unlisted by default</strong> — everything they return already arrives inline on <code>codegraph_explore</code> (its blast-radius section, the relationship map, a symbol's body as its callee list). Re-enable any of them for the MCP surface with the <code>CODEGRAPH_MCP_TOOLS</code> environment variable (e.g. <code>CODEGRAPH_MCP_TOOLS=explore,node,search,callers</code>), or use their CLI equivalents (<code>codegraph node</code> / <code>query</code> / <code>callers</code> / <code>callees</code> / <code>impact</code> / <code>files</code> / <code>status</code>).</p>
-<p>Even when the server's own root has no <code>.codegraph/</code> index, the tools stay available: pass <code>projectPath</code> to query any indexed project — a sub-service in a monorepo, or a second repo — in the same session. A path that has no index returns clean guidance to use built-in tools instead, so nothing fails loudly, and indexing stays your decision.</p>
 <hr>
-<h3>Library Usage</h3>
-<p>CodeGraph can be embedded directly. The npm package re-exports its programmatic
-API, so both <code>import</code> and <code>require</code> resolve the <code>CodeGraph</code> class in your own
-process — handy for embedding it in an app (e.g. an Electron main process).</p>
-<pre><code class="language-typescript">import CodeGraph from '@colbymchenry/codegraph';
-// CommonJS works too:
-//   const { CodeGraph } = require('@colbymchenry/codegraph');
-
-const cg = await CodeGraph.init('/path/to/project');
-// Or: const cg = await CodeGraph.open('/path/to/project');
-
-await cg.indexAll({
-  onProgress: (p) =&gt; console.log(`${p.phase}: ${p.current}/${p.total}`)
-});
-
-const results = cg.searchNodes('UserService');
-const callers = cg.getCallers(results[0].node.id);
-const context = await cg.buildContext('fix login bu
-
----
-
-*README truncated. [Continue reading on GitHub](https://github.com/colbymchenry/codegraph#readme)*
-</code></pre>
+<p><em>README truncated. <a href="https://github.com/colbymchenry/codegraph#readme">Continue reading on GitHub</a></em></p>
 
   </section>
 </details>

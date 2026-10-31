@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>rlaope/oh-my-hermes — Hermes Agent Multi-Agent &amp; Orchestration | Hermes Atlas</title>
-<meta name="description" content="oh-my-hermes is an operating layer for Hermes Agent that routes work lanes to configurable model chains and runs ready nodes from a `/dag-ulw` task graph in…">
+<meta name="description" content="oh-my-hermes is an operating layer for Hermes Agent that routes work to skills and model chains by category and can run task graphs in parallel. It also…">
 <link rel="canonical" href="https://hermesatlas.com/projects/rlaope/oh-my-hermes">
 <meta property="og:title" content="rlaope/oh-my-hermes — Hermes Atlas">
-<meta property="og:description" content="oh-my-hermes is an operating layer for Hermes Agent that routes work lanes to configurable model chains and runs ready nodes from a `/dag-ulw` task graph in…">
+<meta property="og:description" content="oh-my-hermes is an operating layer for Hermes Agent that routes work to skills and model chains by category and can run task graphs in parallel. It also…">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://hermesatlas.com/projects/rlaope/oh-my-hermes">
 <meta property="og:site_name" content="Hermes Atlas">
@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="rlaope/oh-my-hermes — Hermes Atlas">
-<meta name="twitter:description" content="oh-my-hermes is an operating layer for Hermes Agent that routes work lanes to configurable model chains and runs ready nodes from a `/dag-ulw` task graph in…">
+<meta name="twitter:description" content="oh-my-hermes is an operating layer for Hermes Agent that routes work to skills and model chains by category and can run task graphs in parallel. It also…">
 <meta name="twitter:image" content="https://hermesatlas.com/api/og?title=oh-my-hermes&amp;subtitle=%E2%9A%9A+The+coding+harness+with+Hermes+Agent+wired+into+IDE.&amp;kind=project+%C2%B7+multi-agent">
 <script type="application/ld+json">
 {
@@ -35,7 +35,7 @@
   "@type": "SoftwareApplication",
   "@id": "https://hermesatlas.com/projects/rlaope/oh-my-hermes#software",
   "name": "oh-my-hermes",
-  "description": "oh-my-hermes is an operating layer for Hermes Agent that routes work lanes to configurable model chains and runs ready nodes from a `/dag-ulw` task graph in parallel. It also provides on-demand specialist skills, optional language-server tools, reviewed long-term memory, and status reporting that distinguishes reported completion from verified work.",
+  "description": "oh-my-hermes is an operating layer for Hermes Agent that routes work to skills and model chains by category and can run task graphs in parallel. It also provides reviewed long-term memory, optional language-server tools, and status reporting that distinguishes reported completion from verified work.",
   "url": "https://hermesatlas.com/projects/rlaope/oh-my-hermes",
   "codeRepository": "https://github.com/rlaope/oh-my-hermes",
   "applicationCategory": "DeveloperApplication",
@@ -47,13 +47,13 @@
     "name": "rlaope",
     "url": "https://github.com/rlaope"
   },
-  "dateModified": "2026-10-30T18:41:41.000Z",
+  "dateModified": "2026-10-31T05:19:25.000Z",
   "interactionStatistic": {
     "@type": "InteractionCounter",
     "interactionType": {
       "@type": "LikeAction"
     },
-    "userInteractionCount": 4926
+    "userInteractionCount": 4944
   },
   "isPartOf": {
     "@id": "https://hermesatlas.com/#website"
@@ -124,7 +124,7 @@
     <span><span class="meta-label">lang</span>Python</span>
     <span><span class="meta-label">license</span>MIT</span>
     
-    <span><span class="meta-label">updated</span>2026-10-30</span>
+    <span><span class="meta-label">updated</span>2026-10-31</span>
   </div>
 
   <div class="actions">
@@ -141,11 +141,11 @@
 <section class="project-summary">
   <div class="section-label">overview</div>
   <div>
-    <p class="summary-text">oh-my-hermes is an operating layer for Hermes Agent that routes work lanes to configurable model chains and runs ready nodes from a `/dag-ulw` task graph in parallel. It also provides on-demand specialist skills, optional language-server tools, reviewed long-term memory, and status reporting that distinguishes reported completion from verified work.</p>
+    <p class="summary-text">oh-my-hermes is an operating layer for Hermes Agent that routes work to skills and model chains by category and can run task graphs in parallel. It also provides reviewed long-term memory, optional language-server tools, and status reporting that distinguishes reported completion from verified work.</p>
     <ul class="summary-highlights">
-      <li>Routes work lanes to configurable model chains and reasoning effort.</li>
-      <li>Runs ready DAG nodes in parallel with a separate goal check.</li>
-      <li>Memory candidates are kept, refused, or deferred with written reasons.</li>
+      <li>Runs ready task-graph nodes in parallel with separate write scopes.</li>
+      <li>Routes lanes to configurable model chains and reasoning effort.</li>
+      <li>Keeps or defers memory candidates with written reasons.</li>
     </ul>
   </div>
 </section>
@@ -205,14 +205,9 @@ A hundred-plus <code>omh-*</code> specialists: frontend, backend, Rust, security
 You never call them; the router loads the right ones into the run as tool calls.</p>
 </li>
 <li><p><strong>LSP in the loop.</strong><br>
-Definitions, references and renames come from the language server, not from text search.<br>
-The model renames what the code means, not what the text matches: aliases, re-exports and shadowed names included.<br>
+Definitions, references and renames come from the language server, not text search.<br>
+Aliases, re-exports and shadowed names are renamed by meaning, not by matching text.<br>
 Off by default; enable <code>lsp_tools</code> in the OMH plugin settings.</p>
-</li>
-<li><p><strong>Callers an edit broke, named before the turn ends, opt-in.</strong><br>
-When an edit changes a Python definition, OMH asks the language server about every file that imports it and hands back the new errors as <code>path:line</code> lines.<br>
-Hermes checks only the file it wrote. Measured, the gain is on callers that reach a function through a renamed package re-export, which models without the check missed; they mostly fixed aliased and module-level callers already. <code>lsp_diagnostics</code> re-checks a file or glob.<br>
-Off by default; turn on <code>impact_check</code> in the OMH plugin settings (<a href="https://github.com/rlaope/oh-my-hermes/blob/main/benchmarks/live-model-tools/v1/README.md">measurement</a>).</p>
 </li>
 <li><p><strong>Long-term memory you can trust.</strong><br>
 Nothing is remembered silently: each candidate is kept, refused or deferred with a written reason.<br>
